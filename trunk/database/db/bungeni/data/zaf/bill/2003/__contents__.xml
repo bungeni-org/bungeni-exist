@@ -1,0 +1,3 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/bungeni/data/zaf/bill/2003" owner="admin" group="dba" mode="755" created="2007-07-08T19:23:37+01:00" version="1">
+    <resource type="XMLResource" name="09-04_76_eng.xml" owner="admin" group="dba" mode="755" created="2007-07-08T19:24:11+01:00" modified="2007-07-08T20:33:09+01:00" filename="09-04_76_eng.xml" mimetype="text/xml"/>
+</collection>

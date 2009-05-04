@@ -1,10 +1,10 @@
 (:~
-:    Copyright  Adam Retter 2008 <adam.retter@googlemail.com>
+:    Copyright  Adam Retter 2009 <adam.retter@googlemail.com>
 :    
 :    Bungeni Configuration settings
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.0
+:    @version 1.2
 :)
 
 module namespace config = "http://exist.bungeni.org/query/config";
@@ -13,9 +13,17 @@ module namespace config = "http://exist.bungeni.org/query/config";
 (: user defined namespaces :)
 declare namespace an = "http://www.akomantoso.org/1.0";
 
+(: default language :)
+declare variable $config:default_language as xs:string := "eng";
+
+(: should we log errors to eXists log as well :)
+declare variable $config:log-to-exist_log as xs:boolean := true();
+
+
 (: collections in the database :)
 declare variable $config:bungeni_collection as xs:string := "/db/bungeni";
 declare variable $config:data_collection as xs:string  := concat($config:bungeni_collection, "/data");
+declare variable $config:errors_collection as xs:string  := concat($config:bungeni_collection, "/errors");
 declare variable $config:transformation_collection as xs:string  := concat($config:bungeni_collection, "/transformation");
 
 (: transformations :)

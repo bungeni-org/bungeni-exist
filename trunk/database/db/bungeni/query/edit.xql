@@ -1,5 +1,5 @@
 (:~
-:    Copyright  Adam Retter 2008 <adam.retter@googlemail.com>
+:    Copyright  Adam Retter 2009 <adam.retter@googlemail.com>
 :    
 :    Document Version Editor
 :    
@@ -7,7 +7,7 @@
 :    for client editing with Open Office
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.0
+:    @version 1.1
 :)
 xquery version "1.0";
 
@@ -139,7 +139,7 @@ declare function local:edit($originalURI as xs:string, $versionDate as xs:string
             else
             (
                 (: versioned document, but no version provided :)
-                error:response("You are trying to edit a versioned document, but no version was provided", $originalURI)
+                error:response("MIVEED0001")
             )
         )
         else
@@ -164,9 +164,9 @@ declare function local:edit($originalURI as xs:string, $versionDate as xs:string
 :    @param $akomantoso The akomantoso node of the document
 :    @param $originalURI The Manifestation URI of the original document of which this is a version
 :    @param $versionDate The date of this version
-:    @return <true/> if a valid version, otherwise <false>error message</false>
+:    @return returns <error>errorCode</error> is its not a valid version
 :)
-declare function local:isValidVersion($akomantoso as node(), $originalURI, $versionDate as xs:string) as element()
+declare function local:isValidVersion($akomantoso as node(), $originalURI, $versionDate as xs:string) as element(error)?
 {
     let $originalVersion := doc(local:ANManifestationURIToDBURI($originalURI)) return
 
@@ -195,31 +195,36 @@ declare function local:isValidVersion($akomantoso as node(), $originalURI, $vers
                             :)
                             if($akomantoso/an:act/an:meta/an:references/an:Original/@href eq $originalURI)then
                             (
-                                <true/>
+                                () (: sucess :)
                             )
                             else
                             (
-                                <false>Act documents reference to the original document is invalid</false>
+                                (: Act documents reference to the original document is invalid :)
+                                <error>INVDORE0001</error>
                             )
                         )
                         else
                         (
-                            <false>Act documents Manifestation uri is invalid</false>
+                            (: Act documents Manifestation uri is invalid :)
+                            <error>IVVMAU0001</error>
                         )
                     )
                 else
                 (
-                    <false>Act documents Expression uri is invalid</false>
+                    (: Act documents Expression uri is invalid :)
+                    <error>IVVEXU0001</error>
                 )
             )
             else
             (
-                <false>Act documents Work uri is invalid</false>
+                (:Act documents Work uri is invalid:)
+                <error>IVVWOU0001</error>
             )
         )
         else
         (
-            <false>Act document is not a single version</false>
+            (: Act document is not a single version :)
+            <error>IVVESV0001</error>
         )
 };
 
@@ -250,7 +255,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
             (
                 (: versioned XML document :)
                 let $valid := local:isValidVersion($data, $originalURI, $versionDate) return
-                    if(node-name($valid) eq xs:QName("true"))then
+                    if(empty($valid))then
                     (
                            (: save the versioned XML document :)
                            let $dbNewXMLDocURI := local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate)),
@@ -265,13 +270,13 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
                     )
                     else
                     (
-                        error:response($valid, $originalURI)
+                        error:response($valid)
                     )
             )
             else
             (
                 (: versioned document, but no version provided :)
-                error:response("You are trying to edit a versioned document, but no version was provided", $originalURI)
+                error:response("MIVEED0001")
             )
         )
         else
@@ -340,7 +345,8 @@ declare function local:new($newURI as xs:string, $data) as node()
             (: check the document does not already exist in the db :)
             if(doc-available($dbNewXMLDocURI))then
             (
-                error:response("Document already exists in the database, cannot overwrite!", $newURI)
+                (: Document already exists in the database, should not overwrite! :)
+                error:response("EXDODB0001")
             )
             else
             (
@@ -362,7 +368,7 @@ declare function local:new($newURI as xs:string, $data) as node()
     else
     (
         (: expression uri in the document does not correspond to the provided manifestation uri :)
-        error:response("Expression URI in the New document does not correspond to the provided Manifestation URI", $newURI)
+        error:response("EXUMAU0001")
     )
 };
 
@@ -387,6 +393,6 @@ else
     )
     else
     (
-        error:response("Editing a document requires a uri", ())
+        error:response("MIDUED0001")
     )
 )

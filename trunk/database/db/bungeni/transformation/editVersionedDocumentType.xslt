@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Copyright  Adam Retter 2007 <adam.retter@googlemail.com>
     

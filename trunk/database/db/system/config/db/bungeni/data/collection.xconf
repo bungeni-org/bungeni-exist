@@ -1,2 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <collection xmlns="http://exist-db.org/collection-config/1.0"><index xmlns:an="http://www.akomantoso.org/1.0"><fulltext default="none" attributes="false" alphanum="false"/><create qname="@href" type="xs:string"/></index></collection>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:handler="http://exist.bungeni.org/query/AkomaNtosoURIHandler" version="2.0">
     <!--
         Copyright  Adam Retter 2008 <adam.retter@googlemail.com>

@@ -1,5 +1,5 @@
 (:~
-:    Copyright  Adam Retter 2008 <adam.retter@googlemail.com>
+:    Copyright  Adam Retter 2009 <adam.retter@googlemail.com>
 :    
 :    Bungeni Configuration settings
 :    

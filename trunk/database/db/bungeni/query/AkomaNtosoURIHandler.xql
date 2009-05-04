@@ -8,7 +8,7 @@
 :    available from http://akn.web.cs.unibo.it/
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1
+:    @version 1.2
 :)
 xquery version "1.0";
 
@@ -49,7 +49,7 @@ declare function handler:buildCollectionURI($country as xs:string, $type as xs:s
 :    @param $country the country code
 :    @param $type the document type
 :    @param $date the date of the document
-:    @paran $number the number of the document if any
+:    @paran $number the number of the document (if any)
 :    @return xs:string of the AkomaNtoso Work URI
 :)
 declare function handler:buildWorkURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?) as xs:string
@@ -126,13 +126,13 @@ declare function handler:buildManifestationURI($country as xs:string, $type as x
 :    @param $date the date of the document
 :    @return one or more Expression elements
 :)
-declare function handler:work($country as xs:string, $type as xs:string, $date as xs:string) as element()*
+declare function handler:work($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?) as element(handler:results)?
 {   
     (: determine the collection URI :)
     let $collectionURI := handler:buildCollectionURI($country, $type, $date),
     
     (: determine the work uri :)
-    $workURI :=  handler:buildWorkURI($country, $type, $date, request:get-parameter("number", ())) return
+    $workURI :=  handler:buildWorkURI($country, $type, $date, $number) return
     
         (: return the expressions of the work :)
         element handler:results {
@@ -166,13 +166,13 @@ declare function handler:work($country as xs:string, $type as xs:string, $date a
 :    @param $date the date of the document
 :    @return one or more Manifestation elements
 :)
-declare function handler:expression($country as xs:string, $type as xs:string, $date as xs:string) as element()*
+declare function handler:expression($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $lang as xs:string, $version as xs:string?) as element(handler:results)?
 {
     (: determine the collection URI :)
     let $collectionURI := handler:buildCollectionURI($country, $type, $date),
     
     (: determine the expression uri :)
-    $expressionURI :=  handler:buildExpressionURI($country, $type, $date, request:get-parameter("number", ()), request:get-parameter("lang", ()), request:get-parameter("version", ())) return
+    $expressionURI :=  handler:buildExpressionURI($country, $type, $date, $number, $lang, $version) return
     
         (: return details of the expressions and links to the manifestation :)
         element handler:results{
@@ -206,19 +206,16 @@ declare function handler:expression($country as xs:string, $type as xs:string, $
 :    @param $date the date of the document
 :    @return one or more XML Manifestations or if a Binary Manifestation it is streamed directly to the HTTP Response
 :)
-declare function handler:manifestation($country as xs:string, $type as xs:string, $date as xs:string) as element()?
-{
-    (: get the dataformat :)
-    let $dataformat := request:get-parameter("dataformat", ()),
-    
+declare function handler:manifestation($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $lang as xs:string, $version as xs:string?, $dataformat as xs:string) as element()?
+{       
     (: determine the collection URI :)
-    $collectionURI := handler:buildCollectionURI($country, $type, $date),
+    let $collectionURI := handler:buildCollectionURI($country, $type, $date),
     
     (: determine the manifestation uri :)
-    $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, request:get-parameter("number", ()), request:get-parameter("lang", ()), request:get-parameter("version", ())),
+    $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, $number, $lang, $version),
     
     (: get the xml manifestation :)
-    $xmlManifestation := collection($collectionURI)/an:akomantoso[local-name(child::element()) eq $type][an:meta/an:identification/an:Manifestation/an:uri/@href eq $manifestationURI] return
+    $xmlManifestation := collection($collectionURI)/an:akomantoso[local-name(child::element()[an:meta/an:identification/an:Manifestation/an:uri/@href eq $manifestationURI]) eq $type] return
     
         (: what sort of Manifestation do we want? :)
         if($dataformat eq "xml")then
@@ -266,18 +263,81 @@ declare function handler:manifestation($country as xs:string, $type as xs:string
         )
 };
 
-(:~
-:    Error handler for when a uriType is not specified
-:)
-declare function handler:error($country as xs:string?, $type as xs:string?, $date as xs:string?) as element()
+
+declare function handler:process() as element()
 {
-    (: invalid URI :)
-    error:response("Invalid URI", request:get-query-string())
+    let $uriType := request:get-parameter("uriType",()),
+    $country := request:get-parameter("country", ()),
+    $type := request:get-parameter("type", ()),
+    $date := request:get-parameter("date", ()),
+    $number := request:get-parameter("number", ()) (: optional :)
+    return
+    
+        if($uriType = ("work", "expression", "manifestation")) then
+        (
+            (: check common parameters :)
+            if(empty($country)) then
+            (
+                error:response(concat("MICO", upper-case(substring($uriType, 1, 2)), "0001")) 
+            )
+            else if(empty($type)) then
+            (
+                error:response(concat("MITY", upper-case(substring($uriType, 1, 2)), "0001"))
+            )
+            else if(empty($date)) then
+            (
+                error:response(concat("MIDT", upper-case(substring($uriType, 1, 2)), "0001"))
+            )
+            else
+            (
+                if($uriType eq "work")then
+                (
+                    handler:work($country, $type, $date, $number)
+                )
+                else
+                (
+                    let $version := request:get-parameter("version",()), (: optional :)
+                    
+                    (: check lang parameter - common to expression and manifestation :)
+                    $lang := request:get-parameter("lang",()) return
+                        if(empty($lang))then
+                        (
+                            error:response(concat("MILA", upper-case(substring($uriType, 1, 2)), "0001"))
+                        )
+                        else
+                        (
+                            if($uriType eq "expression") then
+                            (
+                                handler:expression($country, $type, $date, $number, $lang, $version)
+                            )
+                            else if($uriType eq "manifestation") then
+                            (
+                                let $dataformat := request:get-parameter("dataformat",()) return
+                                    if(empty($dataformat))then
+                                    (
+                                        error:response("MIDFMA0001")
+                                    )
+                                    else
+                                    (
+                                        handler:manifestation($country, $type, $date, $number, $lang, $version, $dataformat)
+                                    )
+                            )
+                            else
+                            (
+                                error:response("IVDUTY0001")
+                            )
+                        )
+                )
+            )
+        )
+        else
+        (
+            error:response("IVDUTY0001")
+        )
 };
 
-
 (: main entry point - choose a function based on the uri type :)
-let $result := util:call(util:function(concat("handler:", request:get-parameter("uriType", "error")),3), request:get-parameter("country",()), request:get-parameter("type",()), request:get-parameter("date",())) return
+let $result := handler:process() return
     if(request:get-parameter("output", "xml") eq "xhtml")then
     (
         (: xhtml output :)
@@ -290,4 +350,3 @@ let $result := util:call(util:function(concat("handler:", request:get-parameter(
         util:declare-option("exist:serialize", "method=xml media-type=application/xml indent=yes omit-xml-declaration=no"),
         $result
     )
-

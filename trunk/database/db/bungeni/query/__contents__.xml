@@ -1,7 +1,7 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/bungeni/query" owner="admin" group="dba" mode="744" created="2007-07-05T12:05:52+01:00" version="1">
-    <resource type="BinaryResource" name="AkomaNtosoURIHandler.xql" owner="admin" group="dba" mode="755" created="2007-07-05T12:25:44+01:00" modified="2008-05-07T20:47:02+01:00" filename="AkomaNtosoURIHandler.xql" mimetype="application/xquery"/>
-    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="755" created="2007-07-08T18:35:20+01:00" modified="2008-05-07T20:30:30+01:00" filename="config.xqm" mimetype="application/xquery"/>
-    <resource type="BinaryResource" name="edit.xql" owner="admin" group="dba" mode="755" created="2007-07-19T12:50:41+01:00" modified="2008-05-07T20:33:12+01:00" filename="edit.xql" mimetype="application/xquery"/>
-    <resource type="BinaryResource" name="error.xqm" owner="admin" group="dba" mode="755" created="2007-07-19T12:48:24+01:00" modified="2008-05-07T20:29:21+01:00" filename="error.xqm" mimetype="application/xquery"/>
+    <resource type="BinaryResource" name="AkomaNtosoURIHandler.xql" owner="admin" group="dba" mode="755" created="2007-07-05T12:25:44+01:00" modified="2009-05-04T18:04:24+01:00" filename="AkomaNtosoURIHandler.xql" mimetype="application/xquery"/>
+    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="755" created="2007-07-08T18:35:20+01:00" modified="2009-05-04T19:54:05+01:00" filename="config.xqm" mimetype="application/xquery"/>
+    <resource type="BinaryResource" name="edit.xql" owner="admin" group="dba" mode="755" created="2007-07-19T12:50:41+01:00" modified="2009-05-04T18:57:07+01:00" filename="edit.xql" mimetype="application/xquery"/>
+    <resource type="BinaryResource" name="error.xqm" owner="admin" group="dba" mode="755" created="2007-07-19T12:48:24+01:00" modified="2009-05-04T19:53:58+01:00" filename="error.xqm" mimetype="application/xquery"/>
     <subcollection name="util" filename="util"/>
 </collection>

@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:error="http://exist.bungeni.org/query/error" version="2.0">
         <!--
-            Copyright  Adam Retter 2008 <adam.retter@googlemail.com>
+            Copyright  Adam Retter 2009 <adam.retter@googlemail.com>
             
             Akoma Ntoso Error Message Transformation for XML 1.0 to XHTML 1.1
             
             Author: Adam Retter
-            Version: 1.0
-        --><xsl:output encoding="UTF-8" doctype-public="-//W3C//DTD XHTML 1.1//EN" doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" indent="yes" omit-xml-declaration="no" method="xhtml" media-type="text/html"/><xsl:template match="error:error"><div class="error"><h1>An Error Has Occured</h1><xsl:apply-templates/></div></xsl:template><xsl:template match="error:message"><p class="errorMessage"><xsl:value-of select="."/></p><xsl:apply-templates/></xsl:template><xsl:template match="error:params"><div class="errorParams"><h2/><ul><xsl:for-each select="child::element()"><li><xsl:value-of select="local-name(.)"/>: <xsl:value-of select="."/></li></xsl:for-each></ul></div></xsl:template></xsl:stylesheet>
+            Version: 1.1
+        --><xsl:output encoding="UTF-8" doctype-public="-//W3C//DTD XHTML 1.1//EN" doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" indent="yes" omit-xml-declaration="no" method="xhtml" media-type="text/html"/><xsl:template match="error:error"><div class="error"><h1>An Error Has Occured</h1><xsl:apply-templates/></div></xsl:template><xsl:template match="error:code"><h2>error code = <xsl:value-of select="."/></h2></xsl:template><xsl:template match="error:message"><p class="errorMessage"><xsl:value-of select="."/></p></xsl:template><xsl:template match="error:http-context"><div><h3><xsl:apply-templates select="error:method | error:uri"/></h3><xsl:apply-templates select="error:parameters"/></div></xsl:template><xsl:template match="error:method"><xsl:value-of select="."/></xsl:template><xsl:template match="error:uri"><xsl:value-of select="."/></xsl:template><xsl:template match="error:parameters"><div class="errorParameters"><xsl:apply-templates/></div></xsl:template><xsl:template match="error:parameter"><div class="errorParameter"><span class="parameterName"><xsl:value-of select="@name"/></span><span class="parameterValues">(<xsl:apply-templates/>)</span></div></xsl:template><xsl:template match="error:value"><span class="parameterValue"><xsl:value-of select="."/></span></xsl:template></xsl:stylesheet>

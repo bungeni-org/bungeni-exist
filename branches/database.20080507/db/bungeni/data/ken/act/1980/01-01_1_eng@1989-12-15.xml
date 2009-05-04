@@ -1,0 +1,1053 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../../XSD/styles/kenya.xsl"?><!--Akoma_Ntoso document--><akomantoso xmlns="http://www.akomantoso.org/1.0" xmlns:cirsfid="http://www.cirsfid.unibo.it/proprietary" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><act contains="OriginalVersion"><meta><identification source="#au1"><Work><uri href="/ken/act/1980-01-01/1"/><date date="2007-02-22" name="Generation"/><author id="au1" href="http://www.cirsfid.unibo.it"/></Work><Expression><uri href="/ken/act/1980-01-01/1/eng"/><date date="2007-02-22" name="Generation"/><author href="#au1"/><components><component id="ce1" href="ken/act/1980-01-01/1/eng/main" showAs="main"/></components></Expression><Manifestation><uri href="/ken/act/1980-01-01/1/eng.xml"/><date date="2007-02-22" name="Generation"/><author href="#au1"/><components><component id="cm1" href="ken/act/1980-01-01/1/eng/main.xml" showAs="main"/></components></Manifestation></identification><publication name="" date="1980-01-01" showAs=""/><lifecycle source="#au1"><event id="e1" date="1980-01-01" source="#ro1" type="Generation"/></lifecycle><references source="#au1"><Original id="ro1" href="ken/act/1980-01-01/1/eng/main" showAs="Original"/></references><notes source="#au1"><note id="n1"><p>1. MY ANNOTATION</p></note></notes><proprietary source="#au1"><cirsfid:proprietary><cirsfid:MissingInfo><cirsfid:mDocType>act</cirsfid:mDocType><cirsfid:mActDate>1980-01-01</cirsfid:mActDate><cirsfid:mActNumber>1</cirsfid:mActNumber></cirsfid:MissingInfo></cirsfid:proprietary></proprietary></meta><preface><p>CHAPTER 376 - <ActTitle id="ActTitle">Wildlife (Conservation and
+				Management)&#160;Act</ActTitle></p></preface><preamble id="preamble"><p>An Act of Parliament to consolidate and amend the law&#160;relating to the protection,
+				conservation and management&#160;of wildlife in Kenya; and for purposes connected there
+				with and incidental thereto<eol/>WHEREAS&#160;is desirable that the present
+				powers&#160;relating to the management and conservation of wildlife in Kenya should be
+				amalgamated and placed in a consolidated&#160; Service of the Government;<eol/>AND
+				WHEREAS the prime objective of the Service should be to ensure that wildlife is
+				managed and conserved so as to yield to the Nation in general and to individual
+				areas in particular, optimum returns in terms of cultural, aesthetic and scientific
+				gains as well as such economic gains as are incidental to proper wildlife management
+				and conservation and which may be secured without prejudice to such proper
+				management and conservation;<eol/>AND WHEREAS it is necessary, for the achievement
+				of that objective, that full account should be taken of the varied forms of land use
+				and the inter-relationship between wildlife conservation and management and other
+				forms of land use:<eol/><eol/>Now THEREFORE BE IT ENACTED by the Parliament of Kenya, as follows: -</p></preamble><clauses><part id="prtI"><title>PART I-PRELIMINARY</title><article id="art1"><title>Short title</title><clause id="art1-cla1"><p>1. This Act may be cited as the Wildlife (Conservation and Management)
+								Act<noteref href="n1" num="1"/>.</p></clause></article><article id="art2"><title>Interpretation.</title><clause id="art2-cla1"><sidenote>11 of 1983, Sch., 16 of 1989, s.2, 2 of 2002, Sch. Cap. 385</sidenote><p>2. In this Act, unless the context otherwise requires- <eol/>"aircraft"
+							means any type of aeroplane, airship, balloon or kite, whether captive,
+							navigable or free, and whether controlled or directed by human agency or
+							not: <eol/>"animal" means any animal or the young or egg thereof, but
+							does not include a human being or any animal which is commonly
+							considered to be a domestic animal or the young or egg
+							thereof;<eol/>"Board of Trustees" means the Board of Trustees of the
+							service constituted under <ref id="ref1" href="#art3.b">section
+							3B</ref>; "authorized officer" means an officer of the Service, a forest
+							officer, a police officer or an administrative officer; <eol/>"competent
+							authority" means- <eol/>(a) in relation to Government land, the Minister
+							for the time being responsible for matters relating to land; <eol/>(b)
+							in relation to Trust land, the county council in which the land is
+							vested; <eol/>(c) in relation to any other land, the owner thereof or
+							the person for the time being entitled to the rents and profits thereof;
+							<eol/>"dangerous animal" means an elephant, a rhinoceros, a
+							hippopotamus, a buffalo, a lion or a leopard; <eol/>"dealer" means any
+							person who, in the ordinary course of any business or trade carried on
+							by him, whether on his own behalf or on behalf of any other person-
+							<eol/>(a) sells, purchases, barters or otherwise in any manner deals
+							with any trophy; or <eol/>(b) cuts, carves, polishes, preserves, cleans,
+							mounts or otherwise prepares any trophy;<eol/>"Director" means the
+							Director of the Service appointed under <ref id="ref2" href="#art3.c">section 3C</ref>; <eol/>"export" includes re-export; <eol/>"forest
+							officer" has the meaning assigned to it by the Forests Act;
+							<eol/>"forfeiture offence" means an offence which is so designated by
+							any of the provisions of this Act creating offences; <eol/>"former
+							Trustees" means the Trustees of the National Parks of Kenya established
+							by the National Parks of Kenya Act (now repealed); <eol/>"game animal"
+							means an animal specified in the First Schedule; <eol/>"game bird" means
+							a bird specified in the Second Schedule; <eol/>"game licence" means a
+							licence issued under <ref id="ref3" href="#art23">section 23</ref>;
+							<eol/>"Government trophy" means a trophy declared to be a Government
+							trophy by section 39; "hunt" includes the doing of any act immediately
+							directed at the killing, wounding, injuring or capture of any animal,
+							and the taking or wilful molestation of any nest or eggs; <eol/>"land"
+							includes land covered by sea or other water; <eol/>"licensing officer",
+							in respect of any of the provisions of this Act, means a person
+							appointed by the Minister, by notice in the Gazette, to be a licensing
+							officer for the purposes of that provision; <eol/>"local sanctuary"
+							means an area of land declared to be a local sanctuary by or under <ref id="ref4" href="#art19">section 19</ref>; <eol/>"meat" means the
+							fat, blood, flesh or tissue of any game animal, game bird or protected
+							species, whether fresh or dried, pickled or otherwise preserved or
+							processed; <eol/>"Minister" means the Minister for the time being
+							responsible for matters relating to wildlife;<eol/>"motor vehicle"
+							includes a vehicle of the type commonly known as a "hovercraft";
+							<eol/>"National Park" means any area of land declared to be a National
+							Park by or under <ref id="ref5" href="#art6">section 6</ref>;
+							<eol/>"National Reserve" means any area of land declared to be a
+							National Reserve by or under <ref id="ref6" href="#art18">section
+							18</ref>; <eol/>"owner", in relation to private land, includes a lesee
+							or a mortgagee in possession, and any person authorized by an owner,
+							lessee or mortgagee in possession to act on his behalf in his absence,
+							and group representatives incorporated under the Land (Group
+							Representatives) Act; <eol/>"private land" means any land- <eol/>(a)
+							which is held under a conveyance, lease or licence (other than a
+							temporary occupation licence under the Government Lands Act) from the
+							Government or a county council; or <eol/>(b) which has been recorded as
+							being in the ownership of any person or group of persons under any
+							written law relating to the adjudication or recording of such ownership;
+							<eol/>"professional hunter" means the holder of a valid licence issued
+							under <ref id="ref7" href="#art27">section 27</ref>; <eol/>"protected
+							animal" means an animal, or an animal of a species,<eol/>sub-species or
+							group, specified in the Third Schedule; <eol/>"protection area" means an
+							area declared to be a protection area under <ref id="ref8" href="#art15">section 15</ref>; <eol/>"ranger" means a member of the Service, not
+							being a warden, designated as such by the Director; <eol/>"rules" means
+							any rules, regulations or by-laws made under this Act; <eol/>"senior
+							officer" means a warden, a forest officer of or above the rank of
+							assistant conservator of forests, or a police officer of or above the
+							rank of Assistant Inspector;<eol/>"Service" means the Kenya Wildlife
+							Service established under section 3.<eol/>"subordinate officer" means
+							any authorized officer who is not a senior officer; <eol/>"trophy" means
+							any protected animal, game animal, or game bird alive or dead, and any
+							bone, claw, egg, feather, hair, hoof, skin, tooth, tusk or other durable
+							portion whatsoever of that animal or bird or fish or other aquatic life
+							whether processed, added to or changed by the work of man or not, which
+							is recognizable as such a durable portion; <eol/>"warden" means a member
+							of the Service above the rank of ranger;</p></clause></article></part><part id="prtII"><title>PART II - ADMINISTRATION</title><article id="art3"><title>Establishment of the Service.</title><clause id="art3-cla1"><sidenote>16 of 1989, s.3. Cap 287</sidenote><p>3. (1) There is hereby established a uniformed and disciplined service to
+							be known as the Kenya Wildlife Service.</p></clause><clause id="art3-cla2"><num>(2)</num><p>The Kenya Wildlife Service shall be a body corporate with perpetual
+							succession and a common seal and shall have power to sue and be sued in
+							its corporate name and to acquire, hold and dispose of immovable
+							property for the purposes of the service and this Act.</p></clause><clause id="art3-cla3"><num>(3)</num><p>The headquarters of the service shall be situated in Nairobi.</p></clause><clause id="art3-cla4"><num>(4)</num><p> The service shall be the successor to the Wildlife Fund Trustees
+							established under section 489 now repaealed and, subject too this Act
+							all rights, duties and obligations, assets and liabilities shall be
+							automatically an duly transferred to the Service and any reference to
+							the Wildlife Fund Trustees in any written law or in any contract or
+							document shall for all purposes be deemed to be a reference of the
+							Service established under <ref id="ref9" href="#art3-cla1">subsection
+								(1)</ref>.</p></clause></article><article id="art3.a"><title>Functions of the Service.</title><clause id="art3.a-cla1"><sidenote>16 of 1989, s.3</sidenote><p>3A. The functions of the Service shall be to-<eol/></p><ul id="ul1"><li id="art3.a-cla1-itma"><p>(a) formulate policies regarding the conservation, management and
+									utilization of all types of fauna not being domestic animals)
+									and flora;</p></li><li id="art3.a-cla1-itmb"><p>(b) advise the Government on establishment on National Parks,
+									National Reserves and other protected wildlife sanctuaries.</p></li><li id="art3.a-cla1-itmc"><p>(c) mange National Parks and National Reserves;</p></li><li id="art3.a-cla1-itmd"><p>(d) prepare and implement management plans for National Parks and
+									National Reserves and the display of fauna and flora in their
+									natural state for the protection of tourism and for the benefit
+									and education of the inhabitants of Kenya;</p></li><li id="art3.a-cla1-itme"><p>(e) provide wildlife conservation education and extension
+									services to create public awareness and support for wildlife
+									policies;</p></li><li id="art3.a-cla1-itmf"><p>(f) sustain wildlife to meet conservation and management
+								goals.</p></li><li id="art3.a-cla1-itmg"><p>(g) conduct and co-ordinate research activities in the field of
+									wildlife conservation conservation and management;</p></li><li id="art3.a-cla1-itmh"><p>(h) identify manpower requirements and recruit manpower at all
+									levels for the service for wildlife conservation and
+								management;</p></li><li id="art3.a-cla1-itmi"><p>(i) provide advise to the Government and local authorities and
+									landowners on the best methods of wildlife conservation and
+									management and be the principle instrument of the Government in
+									pursuit of such ecological appraisals or controls outside urban
+									areas as are necessary for human survival.;</p></li><li id="art3.a-cla1-itmj"><p>(j) administer and co-ordinate international protocols,
+									conventions and treaties regarding wildlife in all its aspects
+									in consultation with the minister;</p></li><li id="art3.a-cla1-itmk"><p>(k) solicit by public appeal or otherwise, and accept and receive
+									subscriptions, donations, devises and bequests (whether movable
+									or immovable property and whether absolute or unconditional)
+									fort he general or special purposes of the Service or subject to
+									any trust;</p></li><li id="art3.a-cla1-itml"><p>(l) render services to the farming and ranching communities in
+									Kenya necessary for the protection of agriculture and animal
+									husbandry against destruction by wildlife;</p></li></ul></clause></article><article id="art3.b"><title>The Board of Trustees</title><clause id="art3.b-cla1"><sidenote>2 of 2002, Sch.,16 of 1989, s.3. Cap 446</sidenote><p>3B. (1) The service shall be managed by a Board of Trustees of the
+							service which shall, subject to section 3C, consist of-<eol/></p><ul id="ul2"><li id="art3.b-cla1-itma"><p>(a) a chairman appointed by the President;</p></li><li id="art3.b-cla1-itmb"><p>(b) the Permanent Secretary in the ministry for the time being
+									responsible formatters relating to wildlife;</p></li><li id="art3.b-cla1-itmc"><p>(c) the Permanent Secretary in the Ministry for the time being
+									responsible for finance;</p></li><li id="art3.b-cla1-itmd"><p>(d) the Permanent Secretary in the Ministry for the time being
+									responsible for local government;</p></li><li id="art3.b-cla1-itme"><p>(e) the Commissioner of Police;</p></li><li id="art3.b-cla1-itmf"><p>(f) the Director of Forests;</p></li><li id="art3.b-cla1-itmg"><p>(g) a representative of the permanent secretary in the Office of
+									the president responsibly for internal security;</p></li><li id="art3.b-cla1-itmh"><p>(h) the Director of veterinary services;</p></li><li id="art3.b-cla1-itmi"><p>(i) not more than six other trustees to be appointed by the
+									Minister from amongst persons who are conversant with nature
+									conservation in all its aspects.</p></li></ul></clause><clause id="art3.b-cla2"><num>(2)</num><p>The chairman and the trustees to be appoints under subsection (i) (1)(a)
+							and (i) shall hold office for three years and shall be eligible for
+							reappointment.</p></clause><clause id="art3.b-cla3"><num>(3)</num><p>The Board shall elect a vice chairman from among its members.</p></clause><clause id="art3.b-cla4"><num>(4)</num><p>The Board shall meet at least four times in every year.</p></clause><clause id="art3.b-cla5"><num>(5)</num><p>The chairman shall convene an extraordinary meeting of the Board within
+							fourteen days after receipt by him of a written requisition for that
+							effect signed by at least three trustees.</p></clause><clause id="art3.b-cla6"><num>(6)</num><p>Not less than seven day's previous notice of a meeting of the Board
+							shall be given in writing.</p></clause><clause id="art3.b-cla7"><num>(7)</num><p>The quorum necessary for the transaction of the business of the Board
+							shall be seven trustees inclusive of the person presiding; and all acts,
+							matters or things authorized or required to be done by a resolution
+							passed by a majority of the members present and voting at a meeting at
+							which there is a quorum.</p></clause><clause id="art3.b-cla8"><num>(8)</num><p>The chairman, or in his absence, the vice-chairman shall preside at
+							meetings of the Board; but in case of the absence of both the chairman
+							and the vice-chairman at any meeting of the Board the trustees present
+							at the meeting shall elect one of their number to preside at that
+							particular meeting.</p></clause><clause id="art3.b-cla9"><num>(9)</num><p>At every meeting of the Board the chairman, or in his absence the
+							vice-chairman or the trustee presiding, shall have a casting as well as
+							a deliberative vote.</p></clause><clause id="art3.b-cla10"><num>(10)</num><p>Subject to this section and to Part III of the State Corporations Act,
+							the Board of Trustees shall determine its procedure.</p></clause></article><article id="art3.c"><title>Appointment of Director</title><clause id="art3.c-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3C. (1) There shall be a director of the service who shall be a member of
+							the Board of Trustees, the chief executive and head of the Service.</p></clause><clause id="art3.c-cla2"><num>(2)</num><p>The Director shall be appointed by the President.</p></clause><clause id="art3.c-cla3"><num>(3)</num><p>The Director or his nominee shall be the secretary to the Board of
+							Trustees.</p></clause><clause id="art3.c-cla4"><num>(4)</num><p>The director shall, on behalf of the Board of Trustees and subject to
+							this Act, have the general superintendence of al matters within the
+							scope of this Act.</p></clause></article><article id="art3.d"><title>Terms and Conditions of appointment, enlistment and Secondment to the
+						service</title><clause id="art3.d-cla1"><sidenote>16 of 1989, s.3. Cap 189</sidenote><p>3D (1) The Board of Trustees in consultation with the State Corporations
+							Advisory Committee, shall establish the terms and conditions for the
+							appointment and enlistment of the members of the Service and the
+							secondment of any other persons to serve with the service.</p></clause><clause id="art3.d-cla2"><num>(2)</num><p> The Board of Trustees may appoint and may employ such members, agents or
+							servants of the Service as may be necessary for the discharge of the
+							functions of the Service under this Act upon the terms and conditions of
+							service established under <ref id="ref10" href="#art3.d-cla1">subsection
+								(1)</ref>.</p></clause><clause id="art3.d-cla3"><num>(3)</num><p>The Board of Trustees shall within a reasonable time provide for a staff
+							superannuation scheme of a type that will enable the President to
+							determine service with the Kenya Wildlife Service to be public service
+							for the purposes of the Pensions Act.</p></clause></article><article id="art3.e"><title>Ranks of and direction of, the members of service.</title><clause id="art3.e-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3E (1) Members of the Service shall be of the ranks specified in the
+							Fourth Schedule and the Minister may, by notice in the Gazette, amend
+							that Schedule.</p></clause><clause id="art3.e-cla2"><num>(2)</num><p>All members of the Service shall, in exercise of the powers and in
+							performance of the duties conferred or imposed upon them under this Act,
+							conform with any lawful instructions, directions or orders, whether
+							general or specific, which may be given to them by the Director.</p></clause><clause id="art3.e-cla3"><num>(3)</num><p>The Director may, with the approval of the Board of Trustees, from time
+							to time make administrative orders, to be called "Service Standing
+							Orders", for the general control, direction and information of the
+							members of the Service.</p></clause><clause id="art3.e-cla4"><num>(4)</num><p>The Board of Trustees may give such general or special directions to the
+							Director as may be necessary for the more efficient carrying into effect
+							of the provisions of this Act.</p></clause></article><article id="art3.f"><title>Disciplinary code and regulations.</title><clause id="art3.f-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3F. (1) The Board of Trustees may issue a disciplinary code for the
+							Service and the disciplinary code may provide for the following
+							matters-<eol/></p><ul id="ul3"><li id="art3.f-cla1-itma"><p>(a) the investigation of disciplinary offences and the hearing
+									and determination of disciplinary proceedings; and</p></li><li id="art3.f-cla1-itmb"><p>(b) disciplinary penalties and awards.</p></li></ul></clause><clause id="art3.f-cla2"><num>(2)</num><p> The following disciplinary penalties and awards, or any combination
+							thereof, may be included in the disciplinary code for infringements of
+							such code-<eol/></p><ul id="ul4"><li id="art3.f-cla2-itma"><p>(a) dismissal from the Service;</p></li><li id="art3.f-cla2-itmb"><p>(b) reduction in rank;</p></li><li id="art3.f-cla2-itmc"><p>(c) confinement in a guard room or restriction to the confines of
+									any camp or other area where a part of the Service is stationed,
+									for not more than fourteen days;</p></li><li id="art3.f-cla2-itmd"><p>(d) fines;</p></li><li id="art3.f-cla2-itme"><p>(e) where the offence has occasioned any expense, loss or damage,
+									stoppages of pay or allowances;</p></li><li id="art3.f-cla2-itmf"><p>(f) extra drills, parades or fatigues;</p></li><li id="art3.f-cla2-itmg"><p>(g) severe reprimand;</p></li><li id="art3.f-cla2-itmh"><p>(h) reprimand;</p></li><li id="art3.f-cla2-itmi"><p>(i) admonition.</p></li></ul></clause><clause id="art3.f-cla3"><num>(3)</num><p>A disciplinary code issued under this section may provide that a member
+							of the Service committing a disciplinary offence may be arrested without
+							warrant by or on the order of a member senior to himself or placed in
+							command over him, who may, if the circumstances so warrant, confine that
+							member or cause that member to be confined in a building suitable for
+							the purpose, pending the determination of disciplinary proceedings.</p></clause></article><article id="art3.g"><title>Prohibition against members of the service joining trade unions.</title><clause id="art3.g-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3G. (1) No member of the Service shall be or become a member of-<eol/></p><ul id="ul5"><li id="art3.g-cla1-itma"><p>(a) a trade union or any body or association affiliated to a
+									union;</p></li><li id="art3.g-cla1-itmb"><p>(b) a body or association the objects, or one of the objects, of
+									which is to control or influence conditions of employment in a
+									trade or profession;</p></li><li id="art3.g-cla1-itmc"><p>(c) a body or association the objects, or one of the objects, of
+									which is to control or influence pay, pension or conditions of
+									service of the Service other than a staff association
+									established and regulated by rules or regulations made under
+									this Act.</p></li></ul></clause><clause id="art3.g-cla2"><num>(2)</num><p> A member of the Service who contravenes, <ref id="ref11" href="#art3.g-cla1">subsection (1)</ref> shall be liable to be
+							dismissed from the Service and forfeit all rights to pension or
+							gratuity.</p></clause><clause id="art3.g-cla3"><num>(3)</num><p>If a question arises as to whether a body is a trade union or an
+							association to which this section applies, the question shall be
+							referred to the Minister whose decision thereon shall be final.</p></clause></article><article id="art3.h"><title>Insubordinate behaviour.</title><clause id="art3.h-cla1"><sidenote>16 of 1989, s.3</sidenote><p>3H. (1) A member of the Service who-<eol/></p><ul id="ul6"><li id="art3.h-cla1-itma"><p>(a) strikes or otherwise uses violence to, or offers violence to
+									or incites any other person to use violence to a member senior
+									to or placed in command over him or to that other person; or</p></li><li id="art3.h-cla1-itmb"><p>(b) uses threatening or insubordinate language to a member senior
+									to or placed in command over him, shall be guilty of an offence
+									and liable to imprisonment for a term not exceeding one
+								year.</p></li></ul></clause><clause id="art3.h-cla2"><num>(2)</num><p> The Director or an officer of or above the rank of senior warden to whom
+							the power so to do has been delegated by the Director may direct that an
+							offence committed under <ref id="ref12" href="#art3.h-cla1">subsection
+								(1)</ref> be tried summarily and not prosecuted in court.</p></clause></article><article id="art3.i"><title>Desertion.</title><clause id="art3.i-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3I. (1) A member of the Service who absents himself from duty without
+							leave or just cause for a period of twenty-one days or more shall,
+							unless he proves the contrary, be deemed to have deserted from the
+							Service.</p></clause><clause id="art3.i-cla2"><num>(2)</num><p>A member who deserts the Service shall forfeit any pay or allowances due
+							to him, and all rights in respect of any pension, provident or other
+							scheme operated by the Service.</p></clause><clause id="art3.i-cla3"><num>(3)</num><p>No pay or allowance shall be paid to a member in respect of any day
+							during which he is absent from duty without leave, unless the Director
+							otherwise directs.</p></clause></article><article id="art3.j"><title>Liability under other law</title><clause id="art3.j-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3J. Nothing in this Act or any subsidiary legislation made thereunder
+							shall exempt a member of the Service from being proceeded against for an
+							offence under any other law.</p></clause></article><article id="art3.k"><title>Members of service not to engage in trade, etc</title><clause id="art3.k-cla1"><sidenote>16 of 1989, s.3.</sidenote><p>3K. No member of the Service shall, without, in the case of a gazetted
+							officer, the prior written approval of the Board of Trustees and, in the
+							case of any other member, the prior written approval of the Director,
+							engage himself in any trade, business or employment or take part in any
+							commercial undertaking outside the scope of his duties as a member of
+							the Service.</p></clause></article><article id="art4"><title>Honorary wardens</title><clause id="art4-cla1"><sidenote>A16/89.</sidenote><p>4.(1) The Director may, with the prior approval of the Minister, appoint
+							fit and proper persons to be honorary wardens for the purpose of
+							assisting in the carrying into effect of the provisions of this Act.</p></clause><clause id="art4-cla2"><num>(2)</num><p> The appointment of an honorary game warden- <eol/></p><ul id="ul7"><li id="art4-cla2-itma"><p>(a) shall be notified in the Gazette;</p></li><li id="art4-cla2-itmb"><p>(b) shall be effective unless sooner revoked by the Director, for
+									a period of three years; and</p></li><li id="art4-cla2-itmc"><p>(c) may be made subject to any conditions which the Director may
+									think fit to impose.</p></li></ul></clause></article><article id="art5"><title>Delegation, etc., of functions</title><clause id="art5-cla1"><p>5.(1) The Director may delegate or assign any of his functions under this
+							Act- <eol/></p><ul id="ul8"><li id="art5-cla1-itma"><p>(a) to any member of the Service; or</p></li><li id="art5-cla1-itmb"><p>(b) to any officer of the Forest Department; or</p></li><li id="art5-cla1-itmc"><p>(c) to any officer of the Fisheries Department; or</p></li><li id="art5-cla1-itmd"><p>(d) to any public officer, approved by the Minister.</p></li></ul></clause><clause id="art5-cla2"><num>(2)</num><p>Any delegation or assignment under this section shall be by notice in
+							the Gazette and may have effect throughout Kenya or in such area only as
+							may be specified in the notice.</p></clause></article><article id="art5.a"><title>The Kenya Wildlife Service Fund</title><clause id="art5.a-cla1"><sidenote>16 of 1989, s.4</sidenote><p>5A.(1) There is established a fund to be known as the Wild Service Fund
+							which shall be vested in, and operated and managed by the Board of
+							Trustees for the purpose of the Service and this Act.</p></clause><clause id="art5.a-cla2"><num>(2)</num><p>There shall be paid into the Fund-<eol/></p><ul id="ul9"><li id="art5.a-cla2-itma"><p>(a) all sums vested in the former Wildlife Fund Trustees under
+										<ref id="ref13" href="#art59">section 59</ref> (now repealed
+									);</p></li><li id="art5.a-cla2-itmb"><p>(b) donations, loans or other moneys received from any source for
+									the purpose of wildlife conservation and management:</p></li><li id="art5.a-cla2-itmc"><p>(c) any sums from time to time provided by Parliament for the
+									purpose of there Fund;</p></li></ul></clause><clause id="art5.a-cla3"><num>(3)</num><p> There shall be paid out of the fund- <eol/></p><ul id="ul10"><li id="art5.a-cla3-itma"><p>(a) sums required to launch, operate or expand projects of
+									wildlife conservation and management;</p></li><li id="art5.a-cla3-itmb"><p>(b) any other payments either generally or specifically approved
+									by the Board of Trustees.</p></li></ul></clause></article><article id="art5.b"><title>Wildlife Advisory Board.</title><clause id="art5.b-cla1"><sidenote>16 of 1989, s.5.</sidenote><p>5B. (1) For the better carrying out of the powers, and functions of the
+							Service the Board of Trustees may by notice in the Gazette establish
+							such wildlife advisory councils, in respect of any area in which any
+							National Park or National Reserve is situated as may be necessary from
+							time to time.</p></clause><clause id="art5.b-cla2"><num>(2)</num><p> An advisory council established under <ref id="ref14" href="#art5.b-cla1">subsection (1)</ref> shall consist of such
+							person not exceeding serve including the representatives of the local
+							authority concerned, as the Board of Trustees shall determine.</p></clause><clause id="art5.b-cla3"><num>(3)</num><p>An advisory council shall not take part in the day-to-day business of
+							wildlife conservation and management and shall bring to the notice of
+							the Board of Trustees for appropriate action all problems and other
+							matters relative to wildlife conservation and management affecting the
+							area to which the advisory council is established.</p></clause><clause id="art5.b-cla4"><num>(4)</num><p>The Board of Trustees shall determine the tenure and vacation of office
+							of members of an advisory council, its meetings and procedure and its
+							staff.</p></clause></article></part><part id="prtIII"><title>PART III - NATIONAL PARKS, NATIONAL RESERVES AND LOCAL SANCTUARIES</title><article id="art6"><title>Declaration of National Parks</title><clause id="art6-cla1"><p>6. (1) The Minister, after consultation with the competent authority, may
+							by order declare any area of land to be a National Park: <eol/>Provided
+							that, where the competent authority does not consent to the declaration,
+							no order shall be made unless- <eol/></p><ul id="ul11"><li id="art6-cla1-itma"><p>(a) the National Assembly has, by resolution, approved a draft of
+									the order, whether with or without modification; and</p></li><li id="art6-cla1-itmb"><p>(b) in the case of Trust land, the area concerned has first been
+									set apart in accordance with section 118 of the Constitution;
+								or</p></li><li id="art6-cla1-itmc"><p>(c) in the case of private land, the area concerned has first
+									been acquired under the Land Acquisition Act.</p></li></ul></clause><clause id="art6-cla2"><num>(2)</num><p>All National Parks declared to be such under the National Parks of Kenya
+							Act and existing immediately before the appointed day are declared to be
+							National Parks for all the purposes of this Act, and the names and
+							boundaries of such National Parks, unless and until they are amended
+							under this Act, shall be those existing on the appointed day.</p></clause><clause id="art6-cla3"><num>(3)</num><p>All National Parks staff existing immediately before the appointed day,
+							unless and until replaced under this Act, shall be the staff of the
+							Government on the appointed day.</p></clause></article><article id="art7"><title>Cessation of area as a National Park, National Reserve or local sanctuary</title><clause id="art7-cla1"><p>7. (1) Subject to <ref id="ref15" href="#art7-cla2">subsection (2)</ref>,
+							the Minister, after consultation with the competent authority, may by
+							order declare that any National Park, National Reserve, local sanctuary
+							or a specified part thereof, shall cease to be a National Park, National
+							Reserve or local sanctuary.</p></clause><clause id="art7-cla2"><num>(2)</num><p> No order shall be made under subsection (1) unless- <eol/></p><ul id="ul12"><li id="art7-cla2-itma"><p>(a) a notice of the intention to make the order, with details
+									thereof, and inviting objections thereto within a period of not
+									more than 60 days, has been published in the Gazette and in at
+									least one newspaper circulating throughout Kenya; and</p></li><li id="art7-cla2-itmb"><p>(b) not earlier than sixty days after the last date of such
+									publication a draft of the order has been laid before the
+									National Assembly and the National Assembly has by resolution
+									approved the order.</p></li></ul></clause></article><article id="art8"><title>Amendment of boundaries</title><clause id="art8-cla1"><p>8. Subject to sections 6 and 7, the Minister may, by order- <eol/></p><ul id="ul13"><li id="art8-cla1-itma"><p>(a) assign a name to a National Park or amend any such name;</p></li><li id="art8-cla1-itmb"><p>(b) define the boundaries of a National Park, or alter the same
+									whether by adding to or subtracting from the area thereof or
+									otherwise;</p></li><li id="art8-cla1-itmc"><p>(c) amalgamate two or more National Parks into one National
+								Park;</p></li><li id="art8-cla1-itmd"><p>(d) divide any National Park into two or more National Parks;</p></li><li id="art8-cla1-itme"><p>(e) transfer any part of a National Park to another National
+									Park.</p></li></ul></clause></article><article id="art9"><title>Management of National Parks</title><clause id="art9-cla1"><p>9.(1) The Director shall, through the member of the Service, control,
+							manage and maintain all National Parks.</p></clause><clause id="art9-cla2"><num>(2)</num><p> Within a National Park the Director may- <eol/></p><ul id="ul14"><li id="art9-cla2-itmi"><p>(i) reserve or set aside any portion of the Park as a breeding
+									place for animals or as nurseries for vegetation;</p></li><li id="art9-cla2-itmii"><p>(ii) authorize the construction of such roads, bridges, air
+									fields, buildings and fences, the provision of such water
+									supplies, and the carrying out of such other works, as may be
+									necessary for the purposes of the Park;</p></li><li id="art9-cla2-itmiii"><p>(iii) with the approval of the Minister, let sites for the
+									erection of hotels, or other accommodation for visitors to the
+									Park:</p></li></ul><p>Provided that nothing in any document connected with the letting shall be
+							construed as in any manner abridging the overall control of the Park by
+							the Service, or as preventing the Director from giving directions as to
+							the manner in which the premises concerned shall be managed in the
+							interests of the matters set forth in <ref id="ref16" href="#art9-cla2-itmii">paragraph (i)</ref>.<eol/></p></clause></article><article id="art10"><title>Restriction on prospecting and mining</title><clause id="art10-cla1"><p>10. (1) Subject to any rights lawfully acquired before the relevant date,
+							and notwithstanding anything contained in any other written law, no
+							person shall search for, attempt to win or win any minerals in, or
+							remove any minerals from, a National Park except with the written
+							consent of the Minister given after consultation with the Minister for
+							the time being responsible for mines, and in accordance with any
+							conditions which the Minister may impose in relation to that
+						consent.</p></clause><clause id="art10-cla2"><num>(2)</num><p>Any person who is aggrieved by the giving or withholding of consent by
+							the Minister and any conditions imposed in connexion therewith may,
+							within fourteen days of the Minister's decision, appeal to the High
+							Court.</p></clause><clause id="art10-cla3"><num>(3)</num><p>The Minister may, in consultation with the Minister for the time being
+							responsible for mines, by notice in the Gazette, prescribe fees
+							chargeable in respect of any consent given under this section.</p></clause><clause id="art10-cla4"><num>(4)</num><p>The giving of a consent under this section shall not be construed as in
+							any manner exempting any person from complying with the provisions of
+							any other written law relating to the searching for, or the mining or
+							winning of, minerals.</p></clause><clause id="art10-cla5"><num>(5)</num><p> For the purposes of <ref id="ref17" href="#art10-cla1">subsection
+							(1)</ref>, "relevant date" means- <eol/></p><ul id="ul15"><li id="art10-cla5-itma"><p>(a) in respect of a National Park declared by <ref id="ref18" href="#art6-cla2">subsection (2) of section 6</ref> to be a
+									National Park, the appointed day; or</p></li><li id="art10-cla5-itmb"><p>(b) in respect of any area declared under <ref id="ref19" href="#art6-cla1">subsection (1) of section 6</ref> to be a
+									National Park, the date upon which the relevant order under that
+									subsection comes into operation.</p></li></ul></clause><clause id="art10-cla6"><num>(6)</num><p> Any person who contravenes <ref id="ref20" href="#art10-cla1">subsection
+								(1)</ref>, or who fails to comply with any conditions imposed by the
+							Minister under that subsection, shall be guilty of a forfeiture offence
+							and shall be liable to a fine of not less than twenty thousand shillings
+							or to imprisonment for a period of not less than three years, or to both
+							in addition to any penalty for forfeiture offences.</p></clause></article><article id="art11"><title>Restriction on commercial film making</title><clause id="art11-cla1"><sidenote>Cap. 222.</sidenote><p>11.(1) Notwithstanding anything contained in the Films and Stage Plays
+							Act, no person shall in a National Park make any cinematograph film for
+							sale or other commercial use unless the filming licence issued under
+							that Act has been produced to the Director and the Director has, upon
+							payment of the prescribed fee, given his written authorization, subject
+							to such conditions as he may think necessary, to the making of the
+						film.</p></clause><clause id="art11-cla2"><num>(2)</num><p> Any person who contravenes <ref id="ref21" href="#art11-cla1">subsection
+								(1)</ref>, or who fails to comply with any conditions imposed in
+							connexion with any authorization under this section, shall be guilty of
+							a forfeiture offence.</p></clause></article><article id="art12"><title>Flying restrictions in respect of National Parks</title><clause id="art12-cla1"><sidenote>6 of 1976, Sch.&#160;</sidenote><p>12. (1) Except as may be necessitated by sudden emergency endangering the
+							safety of any aircraft, the proof of which shall lie on the pilot
+							thereof, no aircraft- <eol/></p><ul id="ul16"><li id="art12-cla1-itma"><p>(a) shall be landed in a National Park otherwise than at a
+									recognized airfield and in accordance with the rules;</p></li><li id="art12-cla1-itmb"><p>(b)except for the purpose of landing at or taking off from a
+									recognized airfield, shall be flown at a height of less than one
+									thousand five hundred feet over a National Park unless the
+									written authorization of the Minister, which may be given
+									subject to such conditions as the Minister may think fit to
+									impose, has previously been obtained.</p></li></ul></clause><clause id="art12-cla2"><num>(2)</num><p> The pilot of an aircraft who contravenes the provisions of this section,
+							or fails to comply with any conditions attached to an authorization by
+							the Minister, shall be guilty of an offence and liable to a fine not
+							exceeding ten thousand shillings or to imprisonment for a term not
+							exceeding twelve months or to both: <eol/>Provided that nothing in this
+							subsection shall apply to the operation of any aircraft which is, at the
+							time of the contravention, being used for any purpose of the
+						Service.</p></clause></article><article id="art13"><title>General offences in National Parks</title><clause id="art13-cla1"><p>13. (1) Any person who, not being a member of the Service acting in the
+							course of his duties as such, hunts any animal in a National Park shall
+							be guilty of a forfeiture offence and liable to a fine of not less than
+							five thousand shillings and not more than twenty thousand shillings or
+							to imprisonment for a term which shall not be less than six months and
+							not more than three years, with or without corporal punishment or to
+							both.</p></clause><clause id="art13-cla2"><num>(2)</num><p>Any person who, without authorization conveys into a National Park, or
+							being within the area thereof, is in possession of, any weapon,
+							ammunition, explosive, trap or poison, shall be guilty of a forfeiture
+							offence.</p></clause><clause id="art13-cla3"><num>(3)</num><p> Any person who, without authorization- <eol/></p><ul id="ul17"><li id="art13-cla3-itma"><p>(a) enters or resides in a National Park otherwise than in the
+									course of his duty as a public officer or as a person lawfully
+									employed in the Park;</p></li><li id="art13-cla3-itmb"><p>(b) cuts, injures or sets fire to any vegetation in a National
+									Park, or allows any fire lighted by himself or his servants to
+									enter a National Park;</p></li><li id="art13-cla3-itmc"><p>(c) collects or attempts to collect any honey or beeswax or hangs
+									on any tree or elsewhere any honey barrel or other receptacle
+									for the purpose of collecting honey or beeswax, in a National
+									Park;</p></li><li id="art13-cla3-itmd"><p>(d) willfully damages any object of geological, prehistoric,
+									archaeological, historic, marine or other scientific interest
+									within a National Park, or knowingly removes or attempts to
+									remove any such object or any portion thereof from a National
+									Park;</p></li><li id="art13-cla3-itme"><p>(e) is, without lawful excuse in possession of any animal or
+									trophy within or without a National Park;</p></li><li id="art13-cla3-itmf"><p>(f) knowingly introduces any animal or domestic animal or
+									vegetation into a National Park;</p></li><li id="art13-cla3-itmg"><p>(g) deliberately disturbs or stampedes any animal in a National
+									Park;</p></li><li id="art13-cla3-itmh"><p>(h) wilfully damages any structure lawfully placed in a National
+									Park;</p></li><li id="art13-cla3-itmi"><p>(i) clears, cultivates or breaks up for cultivation any land in a
+									National Park; or</p></li><li id="art13-cla3-itmj"><p>(j) catches or attempts to catch any fish in a National Park,</p></li></ul><p>shall be guilty of an offence and liable to a fine not exceeding ten
+							thousand shillings or to imprisonment for a term not exceeding one year
+							or to both. <eol/></p></clause><clause id="art13-cla4"><num>(4)</num><p> For the purposes of this section, an act shall be deemed to be done with
+							authorization if, but only if, it- <eol/></p><ul id="ul18"><li id="art13-cla4-itma"><p>(a) is authorized by the rules; or</p></li><li id="art13-cla4-itmb"><p>(b) is done with the written permission of an officer of the
+									Service; and</p></li><li id="art13-cla4-itmc"><p>(c) the provisions of the rules, or any conditions imposed upon
+									such permission by the officer concerned, are fully complied
+									with.</p></li></ul></clause></article><article id="art14"><title>Animal not to be followed into national park</title><clause id="art14-cla1"><p>14.(1) Notwithstanding any other provision of this Act, no person shall
+							follow any wounded animal into a National Park, and where, under that
+							provision, a person has in other circumstances a duty to follow or kill,
+							or to make a report relating to a wounded animal he shall, at the
+							earliest practicable moment, make a report to an officer of the Service
+							as to all the circumstances of the case.</p></clause><clause id="art14-cla2"><num>(2)</num><p>Any person who contravenes this section shall be guilty of an offence
+							and liable to a fine not exceeding five thousand shillings or to
+							imprisonment for a term not exceeding six months or to both.</p></clause></article><article id="art15"><title>Protection areas</title><clause id="art15-cla1"><p>15.(1) Where the Minister, after consultation with the competent
+							authority, is satisfied that it is necessary, for ensuring the security
+							of the animal or vegetable life in a National Park or in a National
+							Reserve or in a local sanctuary or for preserving the habitat and
+							ecology thereof, to prohibit, restrict or regulate any particular acts
+							in any area adjacent to the Park, National Reserve or local sanctuary he
+							may, by notice in the Gazette, declare the area to be a protection area
+							and may, by the same or a subsequent notice, specify the acts which are
+							prohibited or restricted or regulated and the extent or manner of the
+							restriction or regulation.</p></clause><clause id="art15-cla2"><num>(2)</num><p> Any person who, in a protection area, does any act in contravention of a
+							notice under <ref id="ref22" href="#art15-cla1">subsection (1)</ref>
+							relating to that area shall be guilty of an offence and liable to a fine
+							not exceeding five thousand shillings or to imprisonment for a term not
+							exceeding six months or to both.</p></clause></article><article id="art16"><title>National Park Regulations</title><clause id="art16-cla1"><p>16. (1) The Minister may make regulations for any or all of the following
+							matters- <eol/></p><ul id="ul19"><li id="art16-cla1-itma"><p>(a) the form in, and the conditions subject to which permission
+									to enter a National Park may be granted or withdrawn, and the
+									periods or times during which a National Park or any portion
+									thereof shall be open to the public;</p></li><li id="art16-cla1-itmb"><p>(b) the fees to be paid for permission to enter or reside in a
+									National Park, for the admission of vehicles, or for the use of
+									any amenities provided by the Service in a National Park;</p></li><li id="art16-cla1-itmc"><p>(c) the conditions under, and the extent to, which any of the
+									acts mentioned in <ref id="ref23" href="#art16-cla2">subsection
+										(2)</ref> or <ref id="ref24" href="#art16-cla3">subsection
+										(3)</ref> of section 13 may be lawfully performed and the
+									fees to be paid in respect of such performance;</p></li><li id="art16-cla1-itmd"><p>(d) the conditions under which the services or attendance of
+									members of the Service, or of any other person licensed in that
+									behalf by the Director, may be obtained in a National Park, and
+									the fees to be paid in respect thereof;</p></li><li id="art16-cla1-itme"><p>(e) the regulation of landing of aircraft in, and of traffic in
+									or over, a National Park, the carriage of goods and passengers
+									in a National Park, the points by which a person may enter, and
+									the routes to be followed in or through, a National Park;</p></li><li id="art16-cla1-itmf"><p>(f) generally for the efficient control and management of a
+									National Park and the efficient performance of the duties of the
+									Service therein.</p></li></ul></clause><clause id="art16-cla2"><num>(2)</num><p>Regulations under this section may be made applicable to all or any
+							specified National Parks, and different regulations may be made in
+							respect of different National Parks.</p></clause><clause id="art16-cla3"><num>(3)</num><p>Regulations under this section may provide, in respect of any
+							contravention thereof, penalties not exceeding a fine of six thousand
+							shillings or imprisonment for a term not exceeding six months.</p></clause></article><article id="art17"><title>Impounding of domestic animals</title><clause id="art17-cla1"><p>17. Any domestic animal found in a National Park may be impounded by an
+							Officer of the Service and the owner thereof shall prove ownership
+							before delivery.</p></clause></article><article id="art18"><title>National Reserves</title><clause id="art18-cla1"><p>18. (1) With the agreement of the competent authority, the Minister may,
+							by notice in the Gazette, declare any area of land to be a National
+							Reserve.</p></clause><clause id="art18-cla2"><num>(2)</num><p> An agreement between the Minister and a competent authority under <ref id="ref25" href="#art18-cla1">subsection (1)</ref> may include
+							agreement as to restrictions or conditions relating to the provisions of
+							this Part which shall apply to the area concerned, and any such
+							restrictions or conditions shall be specified by the Minister in the
+							notice declaring the area to be a National Reserve.</p></clause><clause id="art18-cla3"><num>(3)</num><p> The provisions of this Part shall apply to a National Reserve as they
+							apply to a National Park except in so far as- <eol/></p><ul id="ul20"><li id="art18-cla3-itma"><p>(a) they are modified or excluded by any such conditions or
+									restrictions as are mentioned in <ref id="ref26" href="#art18-cla2">subsection (2)</ref>; or</p></li><li id="art18-cla3-itmb"><p>(b) they are further modified or excluded as the Minister may, by
+									the notice declaring the area to be a National Reserve or by a
+									subsequent notice in the Gazette, otherwise direct.</p></li></ul></clause><clause id="art18-cla4"><num>(4)</num><p>Any areas which, immediately before the appointed day, were administered
+							by the former Trustees as national reserves shall on that day become
+							National Reserves for the purposes of this Act, and the powers, duties
+							and functions which immediately before the appointed day were
+							exercisable by the former Trustees in any such area shall thereafter be
+							exercisable by the Director in so far as they conform to the provisions
+							of this Part.</p></clause><clause id="art18-cla5"><num>(5)</num><p> Notwithstanding any law to the contrary, no person shall purport to
+							establish any game reserve or National Reserve except with the approval
+							of the Minister, and any such approval- <eol/></p><ul id="ul21"><li id="art18-cla5-itma"><p>(a) may be made subject to such conditions and restrictions,
+									including conditions relating to the application of this Part to
+									such reserve, as the Minister may, after consultations with the
+									competent authority impose;</p></li><li id="art18-cla5-itmb"><p>(b) shall be published in the Gazette.</p></li></ul></clause><clause id="art18-cla6"><num>(6)</num><p>Any area which, immediately before the appointed day, was administered
+							by a local authority as a game reserve shall become a National Reserve
+							and shall continue to be so administered until the Minister, after
+							consultations with the competent authority, by notice in the Gazette,
+							otherwise directs either generally or in relation to any specified
+						area.</p></clause></article><article id="art19"><title>Local sanctuaries.</title><clause id="art19-cla1"><sidenote>Cap.376 (1962)</sidenote><p>19.(1) The Minister may, after consultation with the competent authority,
+							by notice in the Gazette, declare that any specified area shall be a
+							local sanctuary wherein any animal specified in the same or a later
+							notice shall not be hunted.</p></clause><clause id="art19-cla2"><num>(2)</num><p>The area of a local sanctuary shall not exceed two thousand six hundred
+							hectares.</p></clause><clause id="art19-cla3"><num>(3)</num><p>All local sanctuaries declared to be such under the Wild Animals
+							Protection Act (now repealed) and existing immediately before the
+							appointed day are declared to be local sanctuaries for all the purposes
+							of this Act.</p></clause><clause id="art19-cla4"><num>(4)</num><p> Any person who in a local sanctuary hunts any animal which is specified
+							in respect of that sanctuary under <ref id="ref27" href="#art19-cla1">subsection (1)</ref> shall be guilty of a forfeiture offence.</p></clause></article><article id="art20"><title>Agreements by Director</title><clause id="art20-cla1"><p>20.(1) The Director may enter into any agreement with a competent
+							authority which the Director may consider necessary for the purpose of
+							ensuring that animal migration patterns essential to the continued
+							viability of a National Park or National Reserve are maintained.</p></clause><clause id="art20-cla2"><num>(2)</num><p>An agreement under this section may, with the approval of the Minister,
+							provide for compensation to be payable to the competent authority
+							concerned in respect of rights forgone or of damage caused by
+						animals.</p></clause></article></part><part id="prtIV"><title>PART IV - CONTROL OF HUNTING</title><article id="art21"><title>Powers of honorary wardens</title><clause id="art21-cla1"><p>21. An honorary warden appointed under <ref id="ref28" href="#art19-cla4">section 4</ref> shall, for all the purposes of this Part, be deemed
+							to be a warden.</p></clause></article><article id="art22"><title>Prohibition of unlicensed hunting, etc. &#160;</title><clause id="art22-cla1"><p>22. (1) Except as otherwise expressly provided by this Act or the rules
+							any person who- <eol/></p><ul id="ul22"><li id="art22-cla1-itma"><p>(a) hunts any protected animal; or</p></li><li id="art22-cla1-itmb"><p>(b) hunts any animal otherwise than as the holder of, and in
+									accordance with any conditions attaching to, a game licence
+									authorizing him to hunt that animal, shall be guilty of a
+									forfeiture offence.</p></li></ul></clause><clause id="art22-cla2"><num>(2)</num><p>Except as otherwise provided by this Act or the rules, any person who
+							hunts any game bird otherwise than as the holder of, and in accordance
+							with any conditions attaching to, a game licence authorizing him to hunt
+							such bird shall be guilty of an offence.</p></clause></article><article id="art23"><title>General provisions as to game licences</title><clause id="art23-cla1"><p>23.(1) Subject to subsection (4) of section 3, a licensing officer may
+							issue in accordance with the rules a game licence in a prescribed
+						form.</p></clause><clause id="art23-cla2"><num>(2)</num><p> Game licences shall, subject to <ref id="ref29" href="#prtIII">Part
+							III</ref>, authorize the hunting of such game animals or game birds, in
+							such areas, for such periods and subject to such conditions as may be
+							prescribed, and the prescribed fees shall be payable in respect of the
+							issue thereof.</p></clause><clause id="art23-cla3"><num>(3)</num><p> Notwithstanding any other provision of this Act, no game licence shall
+							authorize the holder thereof to hunt any game animal unless-<eol/></p><ul id="ul23"><li id="art23-cla3-itma"><p>(a) he is a professional hunter; or</p></li><li id="art23-cla3-itmb"><p>(b) he is accompanied at the time of hunting by a professional
+									hunter; or</p></li><li id="art23-cla3-itmc"><p>(c) his licence is endorsed by the Director, after such inquiry
+									or test as to competence as the Director may think fit, to the
+									effect that the holder may, subject to any conditions which the
+									Director may consider necessary, hunt unaccompanied by a
+									professional hunter either generally or in respect of the animal
+									actually hunted.</p></li></ul></clause></article><article id="art24"><title>General provisions as to game licences</title><clause id="art24-cla1"><p>24.(1) For the purpose of computing the number of game animals or game
+							birds which may be hunted under a game licence, all animals or birds
+							which are killed, wounded or captured shall be taken into account.</p></clause><clause id="art24-cla3"><num>(3)</num><p>Every holder of a game licence shall carry the licence with him at all
+							times when engaged upon any of the activities authorized by the licence,
+							and any person who fails to comply with this subsection shall be guilty
+							of an offence.</p></clause><clause id="art24-cla4"><num>(4)</num><p> Subject to the provisions of this Act relating to the cancellation of
+							licences, a game licence shall be valid for the period specified in the
+							licence:<eol/>Provided that a game licence shall cease to be valid as
+							soon as all the animals the hunting of which is authorized by the
+							licence have been killed, wounded or captured.</p></clause></article><article id="art25"><title>Game registers&#160;</title><clause id="art25-cla1"><p>25. (1) Every holder of a game licence shall keep a register in the
+							prescribed form of the prescribed particulars of every game animal
+							killed, wounded or captured by him, or deemed by any provision of this
+							Act to have been killed, wounded or captured by him.</p></clause><clause id="art25-cla2"><num>(2)</num><p>Every professional hunter shall keep a register in such form, and
+							containing such particulars, as the Director may require at the time
+							that the professional hunter's licence is issued.</p></clause><clause id="art25-cla3"><num>(3)</num><p>So far as is practicable, every register kept under this section shall
+							have the registrable particulars entered therein at the conclusion of
+							each day's hunting.</p></clause><clause id="art25-cla4"><num>(4)</num><p> A person required to keep a register under this section shall- <eol/></p><ul id="ul24"><li id="art25-cla4-itma"><p>(a) produce the register at any reasonable time upon being
+									requested to do so by an authorized officer;</p></li><li id="art25-cla4-itmb"><p>(b) produce the register to a warden within seven days after the
+									date upon which any game licence held by him ceases to be valid
+									under <ref id="ref30" href="#art24-cla4">subsection (4) of
+										section 24</ref>;</p></li><li id="art25-cla4-itmc"><p>(c) furnish to the Director within twenty-one days after such
+									date a copy of the register.</p></li></ul></clause><clause id="art25-cla5"><num>(5)</num><p> Any person who, being required by this section to keep a register-
+							<eol/></p><ul id="ul25"><li id="art25-cla5-itma"><p>(a) fails so to do;</p></li><li id="art25-cla5-itmb"><p>(b) makes, or is privy to the making of, any false entry in such
+									register;</p></li><li id="art25-cla5-itmc"><p>(c) fails to record in the register any particulars which are
+									required to be so recorded; or</p></li><li id="art25-cla5-itmd"><p>(d) fails to produce the register, or to furnish a copy thereof,
+									when required by <ref id="ref31" href="#art25-cla4">subsection
+										(4)</ref> so to do, shall be guilty of an offence, and
+									liable to a fine not exceeding five thousand shillings or to
+									imprisonment for a term not exceeding six months or to both.</p></li></ul></clause></article><article id="art26"><title>Special authorization to hunt</title><clause id="art26-cla1"><p>26. (1) Where the Director is satisfied that it is desirable so to do for
+							scientific purposes, or by reason of any circumstances of an unusual or
+							emergency nature, he may, with the prior approval of the Minister in
+							each case, issue a special authorization to hunt any animal in any
+							specified area other than a National Park.</p></clause><clause id="art26-cla2"><num>(2)</num><p> An authorization issued under this section- <eol/></p><ul id="ul26"><li id="art26-cla2-itma"><p>(a) shall be subject to such conditions as the Director may deem
+									it necessary or desirable to impose thereon;</p></li><li id="art26-cla2-itmb"><p>(b) shall, except as may be expressly provided by any such
+									condition, be deemed to be a game licence for all the purposes
+									of this Act; and</p></li><li id="art26-cla2-itmc"><p>(c) shall be subject to the payment of such fee as the Minister
+									may, on granting his approval thereof, direct.</p></li></ul></clause></article><article id="art27"><title>Professional hunters</title><clause id="art27-cla1"><p>27.(1) Any person who, not being the holder of a professional hunter's
+							licence issued under this section- <eol/></p><ul id="ul27"><li id="art27-cla1-itma"><p>(a) carries on the business of a professional hunter, or
+									advertises himself or solicits custom in connexion with such
+									business; or</p></li><li id="art27-cla1-itmb"><p>(b) for hire or reward with the intention of making profit,
+									assists any person to hunt any game animal or game bird, shall
+									be guilty of an offence and liable to a fine not exceeding ten
+									thousand shillings or to imprisonment for a period not exceeding
+									three years or to both:</p></li></ul><p>Provided that paragraph(b)shall not apply to any person employed solely
+							as a tracker, gun-bearer or beater. <eol/></p></clause><clause id="art27-cla2"><num>(2)</num><p> The Director may issue a professional hunter's licence to any person who
+							is able to satisfy the Director that by reason of his competence with
+							firearms, knowledge of game animals and of the written law pertaining
+							thereto, and of any other matters which the Director may consider
+							relevant, he is a fit and proper person to carry on the business of a
+							professional hunter: <eol/>Provided that where a person seeks a
+							professional hunter's licence in continuation of one previously held by
+							him he shall, in the absence of any evidence to the contrary, be deemed
+							to be such a fit and proper person.</p></clause><clause id="art27-cla3"><num>(3)</num><p>There shall be paid in respect of the issue of a professional hunter's
+							licence such fee as may be prescribed and, subject to the provisions of
+							this section, every such licence shall be valid for the period of twelve
+							months following the date of issue thereof.</p></clause><clause id="art27-cla4"><num>(4)</num><p> If the holder of a professional hunter's licence is convicted of any
+							offence under this Act or the rules- <eol/></p><ul id="ul28"><li id="art27-cla4-itma"><p>(a) he shall, within fourteen days after the date of his
+									conviction, surrender his licence to the Director for
+									cancellation; and</p></li><li id="art27-cla4-itmb"><p>(b) he shall not be eligible to be issued with another licence
+									for such period as the Director may determine having regard to
+									the circumstances of the case,</p></li></ul><p>and any person who fails to surrender his licence accordingly shall be
+							guilty of an offence. <eol/></p></clause><clause id="art27-cla5"><num>(5)</num><p> A professional hunter's licence shall not authorize the hunting of any
+							animal by the holder thereof except in so far as may be necessary in his
+							own defence or in the defence of any other person or to prevent the
+							escape of a wounded animal: <eol/>Provided that where an animal so
+							killed was wounded by the holder of a game licence employing the
+							professional hunter it shall, for all the purposes of this Act, be
+							deemed to have been killed by such holder.</p></clause><clause id="art27-cla6"><num>(6)</num><p>Where any person who commits an offence against this Act or the rules is
+							accompanied by a professional hunter, employed by him, at the time that
+							the offence is committed, the professional hunter shall, unless he
+							establishes to the satisfaction of the court that he used all due
+							diligence to prevent the commission of the offence and was unable to
+							prevent the commission thereof, be guilty of the like offence.</p></clause></article><article id="art28"><title>Cancellation, etc., of licences</title><clause id="art28-cla1"><p>28.(1) The Director may, without assigning any reason therefor, suspend
+							or cancel any licence or authorization issued under this Part, and in
+							any such case a proportionate part of the fee paid for the licence may
+							be refunded to the person to whom it was issued.</p></clause><clause id="art28-cla2"><num>(2)</num><p>Any officer authorized under this Part to issue any licence or
+							authorization may, if he thinks fit and without assigning any reason
+							therefor, refuse to issue the licence or authorization.</p></clause></article><article id="art29"><title>Hunting on private land</title><clause id="art29-cla1"><p>29.(1) No game licence shall authorize hunting on any private land unless
+							it is expressed so to do by endorsement specifying the land concerned,
+							made by a licensing officer, and no such endorsement shall be made
+							unless- <eol/></p><ul id="ul29"><li id="art29-cla1-itma"><p>(a) the holder of the licence is the owner of the land concerned;
+									or</p></li><li id="art29-cla1-itmb"><p>(b) the person applying for the endorsement produces to the
+									licensing officer the written consent of the owner of the land
+									thereto; or</p></li><li id="art29-cla1-itmc"><p>(c) the land concerned is registered under <ref id="ref32" href="#art29-cla2">subsection (2)</ref>.</p></li></ul></clause><clause id="art29-cla2"><num>(2)</num><p> Where the owner of private land desires to afford facilities for the
+							hunting of game animals or game birds on the land, he may register the
+							land, in such manner and on furnishing such particulars as may be
+							prescribed, with the Director or with such officer of the Service as the
+							Director may, by notice in the Gazette, appoint for that purpose, and in
+							any such case- <eol/></p><ul id="ul30"><li id="art29-cla2-itma"><p>(a) the registration may be effected in respect of the whole of
+									the land of such owner or of such portion thereof as the owner
+									may specify;</p></li><li id="art29-cla2-itmb"><p>(b) the registration may be made subject to such conditions as to
+									the giving of notice to the owner or his representative of
+									intention to hunt, or as to the types of animals which may be
+									hunted, as the owner may specify, and any endorsement under this
+									section in respect of the land shall include a reference to such
+									conditions;</p></li><li id="art29-cla2-itmc"><p>(c) there shall be paid to the registered owner such fees,
+									whether calculated as a proportion of the fees paid in respect
+									of licences endorsed as valid in respect of the land of the
+									owner or otherwise, as may be prescribed.</p></li></ul></clause></article><article id="art30"><title>Protection of human life</title><clause id="art30-cla1"><p>30.(1) Nothing in this Act shall make it an offence for any person to
+							kill or injure by any means any animal in immediate defence of human
+							life; but the exemption provided by this subsection shall not apply
+							where such killing or injuring is done by any person who, at the time
+							thereof, was committing an offence under this Act or is done under
+							circumstances amounting to deliberate provocation or enticement of the
+							animal by or with the knowledge of that person.</p></clause><clause id="art30-cla2"><num>(2)</num><p>Where a protected animal or game animal is killed in immediate defence
+							of human life the person killing the animal shall make a report of the
+							fact at the earliest practicable moment to an officer of the
+						Service.</p></clause></article><article id="art31"><title>Protection of property</title><clause id="art31-cla1"><p>31. Notwithstanding anything to the contrary in this Act any occupier of
+							land or his servant or any owner of crops or stock or his servant, may,
+							if necessary for the protection of his land, crops or stock, kill any
+							game animal which is causing material damage or loss to his land or to
+							any crop or stock thereon.</p></clause></article><article id="art32"><title>Wounded animals</title><clause id="art32-cla1"><p>32. (1) Where any person, in any circumstances whatsoever, wounds a
+							protected animal or game animal he and any professional hunter
+							accompanying him shall make every endeavour to kill or recover the
+							animal at the earliest opportunity.</p></clause><clause id="art32-cla2"><num>(2)</num><p> Where an animal mentioned in <ref id="ref33" href="#art32-cla1">subsection (1)</ref> is not killed or recovered within twenty-four
+							hours after the wounding thereof the person by whom the animal is
+							wounded shall forthwith make a report of the facts to an officer of the
+							Service, who shall take such action upon such report as he may consider
+							necessary.</p></clause><clause id="art32-cla3"><num>(3)</num><p> Any person who fails to comply with the provisions of this section shall
+							be guilty of an offence and liable- <eol/></p><ul id="ul31"><li id="art32-cla3-itma"><p>(a) if the animal wounded is a dangerous animal, to a fine not
+									exceeding ten thousand shillings or to imprisonment for a term
+									not exceeding two years or to both;</p></li><li id="art32-cla3-itmb"><p>(b) in any other case, to a fine not exceeding two thousand
+									shillings or to imprisonment for a term not exceeding twelve
+									months or to both.</p></li></ul></clause></article><article id="art33"><title>Causing suffering</title><clause id="art33-cla1"><p>33.Any person who- <eol/></p><ul id="ul32"><li id="art33-cla1-itma"><p>(a) in any circumstances whatsoever, causes unnecessary or undue
+									suffering to a protected animal or game animal; or</p></li><li id="art33-cla1-itmb"><p>(b) without the permission of a warden, is in possession of or
+									has in his control or keeping, any such animal which has been
+									maimed or mutilated,</p></li></ul><p>shall be guilty of an offence and liable to a fine not exceeding five
+							thousand shillings or to imprisonment for a term not exceeding eighteen
+							months or to both.<eol/></p></clause></article><article id="art34"><title>Unlawful methods of hunting</title><clause id="art34-cla1"><p>34.(1) No person shall- <eol/></p><ul id="ul33"><li id="art34-cla1-itma"><p>(a) sell, buy, use or have in his possession any gin or similar
+									trap having a jaw length of four inches or more, or any snare or
+									similar contrivance made of wire;</p></li><li id="art34-cla1-itmb"><p>(b) for the purpose of or in connexion with hunting or assisting
+									in hunting any animal, cause any fire or surround any animal
+									with fire, or make, use or have in his possession any of the
+									following things- <eol/></p><ul id="ul34"><li id="art34-cla1-itmb-itmi"><p>(i) any firearm capable of firing more than one missile
+											as a result of one pressure of the trigger or of
+											reloading itself without further action by the
+										operator;</p></li><li id="art34-cla1-itmb-itmii"><p>(ii) any explosive, other than the propellant charge in
+											firearms cartridges, or any missile containing
+											explosive;</p></li><li id="art34-cla1-itmb-itmiii"><p>(iii) any fixed stake or similar sharp instrument;</p></li><li id="art34-cla1-itmb-itmiv"><p>(iv) any set-gun, pitfall, game-pit, trench or similar
+											excavation;</p></li><li id="art34-cla1-itmb-itmv"><p>(v) any net, fence or enclosure;</p></li><li id="art34-cla1-itmb-itmvi"><p>(vi) any gin, trap, snare or similar device other than
+											such as are mentioned in <ref id="ref34" href="#art34-cla1-itma">paragraph (a)</ref>;</p></li><li id="art34-cla1-itmb-itmvii"><p>(vii) any poison or like injurious substance, or any
+											poisoned weapon;</p></li><li id="art34-cla1-itmb-itmviii"><p>(viii) any other means or method of hunting which may be
+											prescribed as unlawful;</p></li></ul></li><li id="art34-cla1-itmc"><p>(c) hunt any game animal during the period between seven òclock
+									in the evening and half-past five òclock in the morning;</p></li><li id="art34-cla1-itmd"><p>(d) partake in any game drive other than a drive of birds;</p></li><li id="art34-cla1-itme"><p>(e) drive any game animal into water for the purpose of
+									incapacitating, killing or capturing it.</p></li></ul></clause><clause id="art34-cla2"><num>(2)</num><p> Any person who contravenes any of the provisions of <ref id="ref35" href="#art34-cla1">subsection (1)</ref> shall be guilty of a
+							forfeiture offence.</p></clause><clause id="art34-cla3"><num>(3)</num><p>Any person who is found away from his place of abode in possession of
+							any of the things mentioned in paragraph (b) of subsection (1) in
+							circumstances which, having regard in particular to the place in which
+							he is so found and the place to or from which he is or appears to be
+							travelling, raise a reasonable assumption that he has used, or intends
+							or is about to use, such thing for hunting shall, unless he proves
+							otherwise to the satisfaction of the court, be presumed to have such
+							thing in his possession for the purpose of hunting an animal.</p></clause></article><article id="art35"><title>Aircraft, motor vehicles, etc</title><clause id="art35-cla1"><p>35.(1) No person shall approach in a motor vehicle Aircraft or aircraft
+							to within five hundred metres of a game animal for the purpose of
+							hunting that animal.</p></clause><clause id="art35-cla2"><num>(2)</num><p>No person shall use an aircraft or radio telephone for locating a game
+							animal for the purpose of that animal being hunted or killed within
+							forty-eight hours of such use.</p></clause><clause id="art35-cla3"><num>(3)</num><p> No person shall use any aircraft, motor vehicle or mechanically
+							propelled vessel in such a manner as to drive, stampede or unduly
+							disturb any protected animal or game animal for any purpose whatsoever:
+							<eol/>Provided that this subsection shall not prohibit the use of an
+							aircraft or radio telephone or vehicle- <eol/></p><ul id="ul35"><li id="art35-cla3-itma"><p>(a) for the purpose of driving any animal away from a recognized
+									aerodrome or airfield or from any other area if necessary to
+									enable an aircraft to land safely; or</p></li><li id="art35-cla3-itmb"><p>(b) for the purpose of driving any animal away from land for the
+									time being under cultivation or in use for the grazing or
+									herding of stock; or</p></li><li id="art35-cla3-itmc"><p>(c) for any other purpose which may be prescribed.</p></li></ul></clause><clause id="art35-cla4"><num>(4)</num><p>No person shall discharge any firearm at or in the direction of any game
+							animal from a motor vehicle or aircraft or from within four hundred
+							metres of a motor vehicle.</p></clause><clause id="art35-cla5"><num>(5)</num><p>No person shall shoot any game animal from a mechanically propelled
+							vessel whilst the vessel is in mechanically induced motion.</p></clause><clause id="art35-cla6"><num>(6)</num><p>Any person who contravenes any of the provisions of this section shall
+							be guilty of a forfeiture offence.</p></clause></article><article id="art36"><title>Use of dogs</title><clause id="art36-cla1"><p>36.(1) No person shall, without the written permission of a warden, which
+							may be refused without any reason being assigned therefor, use dogs for
+							the purpose of hunting any game animal.</p></clause><clause id="art36-cla2"><num>(2)</num><p>Any person who uses a dog in contravention of this section shall be
+							guilty of an offence and liable to a fine not exceeding five thousand
+							shillings or to imprisonment for a term not exceeding twelve months or
+							to both and the court by which the person is convicted may also order
+							the destruction of such dog.</p></clause></article><article id="art37"><title>Power to prohibit use of certain weapons, etc</title><clause id="art37-cla1"><p>37.(1) The Minister may, by notice in the Gazette, prohibit the hunting
+							of any game animal, or may by such notice impose such conditions or
+							restrictions in respect of the use of any specified means of hunting,
+							weapon or missile as he may think fit.</p></clause><clause id="art37-cla2"><num>(2)</num><p> Any person who hunts any animal- <eol/></p><ul id="ul36"><li id="art37-cla2-itma"><p>(a) by any means, weapon or missile the use of which is
+									prohibited under this section; or</p></li><li id="art37-cla2-itmb"><p>(b) in breach of any condition or restriction imposed in respect
+									of the use of the means, weapon or missile used by him in such
+									hunting, shall be guilty of a forfeiture offence.</p></li></ul></clause></article><article id="art38"><title>Close seasons</title><clause id="art38-cla1"><p>38.(1) The Minister may, by notice in the Gazette, declare that, during
+							such period and within such area as may be specified in the notice, the
+							hunting of such game animals or game birds as may be so specified shall
+							be unlawful.</p></clause><clause id="art38-cla2"><num>(2)</num><p>Any person who hunts any animal in contravention of a notice under this
+							section shall be guilty of a forfeiture offence.</p></clause></article></part><part id="prtV"><title>PART V - TROPHIES AND LIVE ANIMALS</title><article id="art39"><title>Government trophies</title><clause id="art39-cla1"><p>39.(1) Except as otherwise provided in this Act, the following shall be
+							Government trophies and the property of the Government- <eol/></p><ul id="ul37"><li id="art39-cla1-itma"><p>(a) any trophy found without an owner;</p></li><li id="art39-cla1-itmb"><p>(b) any protected animal, game animal or game bird found dead or
+									killed by accident or mistake;</p></li><li id="art39-cla1-itmc"><p>(c) any protected animal or game animal killed in defence of
+									life, or in other circumstances authorized by or under this Act,
+									by a person who is not the holder of a game licence authorizing
+									him to hunt such animal;</p></li><li id="art39-cla1-itmd"><p>(d) any animal or trophy in respect of which a breach of any of
+									the provisions of this Act or the rules has been committed;</p></li><li id="art39-cla1-itme"><p>(e) any animal killed by an officer of the Service in the course
+									of his duties as such;</p></li><li id="art39-cla1-itmf"><p>(f) the meat of any animal mentioned in this subsection.</p></li></ul></clause><clause id="art39-cla2"><num>(2)</num><p>Any person who by any means obtains possession of a Government trophy
+							shall forthwith make a report thereof to an authorized officer and shall
+							hand the trophy over to the authorized officer.</p></clause><clause id="art39-cla3"><num>(3)</num><p> Any person who- <eol/></p><ul id="ul38"><li id="art39-cla3-itma"><p>(a) fails to make a report required by <ref id="ref36" href="#art39-cla2">subsection (2)</ref>; or</p></li><li id="art39-cla3-itmb"><p>(b) is unlawfully in possession of, or unlawfully deals in, any
+									Government trophy, shall be guilty of an offence and liable to a
+									fine not exceeding ten thousand shillings or to imprisonment for
+									a term not exceeding twelve months or to both.</p></li></ul></clause><clause id="art39-cla4"><num>(4)</num><p>In any proceedings against any person for an offence against this
+							section, the onus of proving that any possession or dealing was lawful
+							shall be upon that person.</p></clause></article><article id="art40"><title>Importation of trophies</title><clause id="art40-cla1"><p>40. (1) After the appointed day no person shall import any trophy, or any
+							unmanufactured ivory or rhinoceros horn of any description, unless it is
+							imported through a customs port of entry and produced at the time of
+							importation to a proper officer of customs: <eol/>Provided that no
+							person shall, without the written permission of the Minister, import any
+							trophy of a class which the Minister, by notice in the Gazette, has
+							declared to be a prohibited import.</p></clause><clause id="art40-cla2"><num>(2)</num><p> An officer of customs to whom any trophy, ivory or horn is produced
+							under <ref id="ref37" href="#art40-cla1">subsection (1)</ref> shall
+							issue to the person by whom it is produced an acknowledgement of
+							production in the prescribed form, and shall forthwith send a copy of
+							the acknowledgement to the Director.</p></clause><clause id="art40-cla3"><num>(3)</num><p> Within fourteen days after any importation under this section, the
+							importer shall produce the trophy, ivory or horn concerned, together
+							with the acknowledgement of production issued under <ref id="ref38" href="#art40-cla2">subsection (2)</ref>, to the Director who shall
+							weigh, mark and register the trophy, ivory or horn in such manner, if
+							any, as may be prescribed and shall, unless the importer is in
+							possession of a certificate of ownership or equivalent document issued
+							by a competent authority of the country of origin of the trophy, ivory
+							or horn, and subject to <ref id="ref39" href="#art40-cla4">subsection
+								(4)</ref>, issue a certificate of ownership in respect thereof.</p></clause><clause id="art40-cla4"><num>(4)</num><p> A certificate of ownership shall not be issued under <ref id="ref40" href="#art40-cla3">subsection (3)</ref> in respect of any trophy,
+							ivory or rhinoceros horn imported directly from any country to which
+							this subsection has been applied by the Minister by notice in the
+							Gazette unless the Director is satisfied that such trophy, ivory or horn
+							has been lawfully exported from that country.</p></clause><clause id="art40-cla5"><num>(5)</num><p> Any person who- <eol/></p><ul id="ul39"><li id="art40-cla5-itma"><p>(a) imports or attempts to import any trophy, ivory or rhinoceros
+									horn in contravention of <ref id="ref42" href="#art40-cla1">subsection (1)</ref>; or</p></li><li id="art40-cla5-itmb"><p>(b) fails to produce any trophy, ivory or rhinoceros horn as
+									required by <ref id="ref41" href="#art40-cla3">subsection
+									(3)</ref>, shall be guilty of a forfeiture offence and liable to
+									a fine not exceeding ten thousand shillings or to imprisonment
+									for a term not exceeding three years or to both. .</p></li></ul></clause></article><article id="art41"><title>Certificates of ownership relating to hunted animals</title><clause id="art41-cla1"><p>41.(1) Where any person kills or captures any animal under the
+							authorization of a game licence, he shall, within thirty days after the
+							killing or capture, produce the animal or, as the case may be, any
+							trophy of the animal which he wishes to retain, to a warden who shall
+							issue a certificate of ownership in respect thereof: <eol/>Provided
+							that, if the person wishes to have any process applied in Kenya to the
+							trophy, a warden may, upon application made to him in that behalf,
+							extend the period of thirty days for such further period as he may
+							consider necessary to enable the processing to be carried out before the
+							issue of a certificate of ownership in respect of the completed
+						trophy.</p></clause><clause id="art41-cla2"><num>(2)</num><p> Any person who fails to produce any animal or trophy as required by this
+							section shall be guilty of an offence and liable to a fine not exceeding
+							ten thousand shillings or to imprisonment for a term not exceeding three
+							years or to both: <eol/>Provided that it shall be a defence to any
+							proceedings under this subsection for the accused to prove to the
+							satisfaction of the court that his failure to comply with the provisions
+							of <ref id="ref43" href="#art41-cla1">subsection (1)</ref> arose from
+							circumstances beyond his control and that he produced the animal or
+							trophy concerned to a warden at the earliest practicable time.</p></clause></article><article id="art42"><title>Certificates of ownership for possession of trophies</title><clause id="art42-cla1"><sidenote>16 of 1977, Sch. &#160;</sidenote><p>42.(1) Except as otherwise provided by this Act, any person who is in
+							possession of any trophy, or of any ivory or rhinoceros horn of any
+							description, without also being in possession of a certificate of
+							ownership in respect thereof shall be guilty of a forfeiture offence
+							and- <eol/></p><ul id="ul40"><li id="art42-cla1-itma"><p>(a) if that person is the holder of a dealer's licence under <ref id="ref44" href="#art43">section 43</ref>, be liable to a
+									fine not exceeding thirty thousand shillings or to imprisonment
+									for a term not exceeding five years or to both; or</p></li><li id="art42-cla1-itmb"><p>(b) in any other case, be liable to a fine not exceeding ten
+									thousand shillings or to imprisonment for a term not exceeding
+									three years or to both.</p></li></ul></clause><clause id="art42-cla2"><num>(2)</num><p>This section shall not apply to the possession of a trophy by any person
+							who has the possession solely by reason of being a receiver or trustee
+							in bankruptcy or the personal representative of a deceased person.</p></clause><clause id="art42-cla3"><num>(3)</num><p> In this section and in <ref id="ref45" href="#art44">sections 44 and
+							45</ref> "certificate of ownership" means- <eol/></p><ul id="ul41"><li id="art42-cla3-itma"><p>(a) a certificate of ownership issued under any of the provisions
+									of this Act;</p></li><li id="art42-cla3-itmb"><p>(b) a certificate of ownership issued under any former law
+									relating to wildlife; and</p></li><li id="art42-cla3-itmc"><p>(c) a certificate of ownership or equivalent documents issued by
+									a competent officer or other authority of the country of origin
+									of the trophy concerned.</p></li></ul></clause></article><article id="art43"><title>Dealers</title><clause id="art43-cla1"><p>43.(1) No person shall carry on the business of a dealer unless he is the
+							holder of a valid dealer's licence issued by a licensing officer.</p></clause><clause id="art43-cla2"><num>(2)</num><p>An application for a dealer's licence shall be made to a licensing
+							officer in the prescribed form, and the licensing officer may grant or,
+							without assigning any reason therefor, refuse to grant the licence.</p></clause><clause id="art43-cla3"><num>(3)</num><p> A dealer's licence- <eol/></p><ul id="ul42"><li id="art43-cla3-itma"><p>(a) shall be in the prescribed form;</p></li><li id="art43-cla3-itmb"><p>(b) shall be subject to such conditions as may be prescribed or
+									authorized by the rules regulating the manner, place or hours
+									in, at or during which the licensed business may be carried on
+									and the trophies or class of trophies which may be dealt in;</p></li><li id="art43-cla3-itmc"><p>(c) shall be subject to the payment of the prescribed fee, and
+									different fees may be prescribed for different classes of
+									dealers;</p></li><li id="art43-cla3-itmd"><p>(d) shall, subject to any other provision of this Act, be valid
+									for a period of twelve months from the date of issue
+								thereof.</p></li></ul></clause><clause id="art43-cla4"><num>(4)</num><p> Any person who- <eol/></p><ul id="ul43"><li id="art43-cla4-itma"><p>(a) not being the holder of a dealer's licence, carries on the
+									business of a dealer; or</p></li><li id="art43-cla4-itmb"><p>(b) being the holder of a dealer's licence, fails to comply with
+									any condition to which the licence is subject,</p></li></ul><p>shall be guilty of an offence and liable to a fine not exceeding twenty
+							thousand shillings or to imprisonment for a term not exceeding five
+							years or to both.<eol/></p></clause></article><article id="art44"><title>Transfer of trophies</title><clause id="art44-cla1"><p>44.(1) Subject to <ref id="ref46" href="#art44-cla3">subsection
+							(3)</ref>, no person shall transfer the ownership of any trophy to any
+							other person by way of gift, sale or otherwise unless he is in
+							possession of a certificate of ownership in respect of the trophy and
+							unless, at the time of the transfer, he endorses the certificate with
+							the date of transfer and the name of the person to whom the trophy is
+							transferred and hands over the certificate to that other person.</p></clause><clause id="art44-cla2"><num>(2)</num><p>Any person who transfers any trophy to another otherwise than in
+							compliance with subsection (1) shall be guilty of an offence and liable
+							to a fine not exceeding ten thousand shillings or to imprisonment for a
+							term not exceeding twelve months or to both.</p></clause><clause id="art44-cla3"><num>(3)</num><p>Nothing in this section shall apply to any transfer of ownership of a
+							trophy by operation of law or in consequence of the death of the owner
+							of the trophy.</p></clause></article><article id="art45"><title>Export of trophies etc</title><clause id="art45-cla1"><sidenote>11 of 1983, Sch.</sidenote><p>45.(1) No person shall export any live protected animal, of game animal
+							or game bird except-<eol/></p><ul id="ul44"><li id="art45-cla1-itma"><p>(a) through a customs port of entry; and</p></li><li id="art45-cla1-itmb"><p>(b) under and in accordance with an export permit issued by the
+									Director on payment of the prescribed fee, which shall be
+									non-refundable whether or not the permit is granted, and which
+									permit may be refused by the Director without assigning any
+									reason therefor.</p></li></ul></clause><clause id="art45-cla2"><num>(2)</num><p>No person shall export any trophy other than a live animal except
+							through a customs port of entry and upon production to a proper officer
+							of customs of a certificate of ownership relating to that trophy.</p></clause><clause id="art45-cla3"><num>(3)</num><p> Notwithstanding <ref id="ref47" href="#art45-cla1">subsections (1) and
+								(2)</ref> no person shall, without the written permission of the
+							Minister, export any animal or trophy of a class which the Minister, by
+							notice in the Gazette, has declared to be a prohibited export.</p></clause><clause id="art45-cla4"><num>(4)</num><p> Nothing in this section shall apply to any animal or trophy which
+							is-<eol/></p><ul id="ul45"><li id="art45-cla4-itma"><p>(a) in transit through Kenya if the animal or trophy is
+									accompanied by the necessary transit documents issued in the
+									country of origin or export and is entered through a customs
+									port of entry; or</p></li><li id="art45-cla4-itmb"><p>(b) accompanied by a person who is in possession of, and produces
+									to a proper officer of customs, a certificate issued in Tanzania
+									or Uganda certifying that such person is lawfully authorized to
+									export, the animal or trophy, and the person satisfies the
+									officer of customs that- <eol/></p><ul id="ul46"><li id="art45-cla4-itmb-itmi"><p>(i) the certificate was issued to him; and</p></li><li id="art45-cla4-itmb-itmii"><p>(ii) that he is himself exporting the animal or trophy
+											from Kenya.</p></li></ul></li></ul></clause><clause id="art45-cla5"><num>(5)</num><p>Any person who exports or attempts to export any animal or trophy in
+							contravention of any of the provisions of this section shall be guilty
+							of a forfeiture offence.</p></clause></article><article id="art46"><title>Exemptions</title><clause id="art46-cla1"><p>46.The Minister may, by notice in the Gazette, exempt any class of trophy
+							from all or any of the provisions of this part.</p></clause></article><article id="art47"><title>Game meat</title><clause id="art47-cla47"><p>47.(1) The Minister may, by regulation, prohibit, control or regulate the
+							possession or movement of, or any dealings of any nature whatsoever in,
+							any meat.Export of trophies, etc.</p></clause><clause id="art47-cla2"><num>(2)</num><p> Without prejudice to the generality of subsection (1), regulations
+							thereunder may- <eol/></p><ul id="ul47"><li id="art47-cla2-itma"><p>(a) provide for the licensing of persons and premises;</p></li><li id="art47-cla2-itmb"><p>(b) provide for the inspection of premises other than
+									dwelling-houses;</p></li><li id="art47-cla2-itmc"><p>(c) specify the conditions upon which game-ranching and game
+									cropping may be undertaken, and provide for the exemption of
+									game-ranching and game cropping from the provisions of this Act
+									relating to game or other licences;</p></li><li id="art47-cla2-itmd"><p>(d) prescribe the fees to be payable in respect of any licence,
+									permit or authorization issued or given thereunder;</p></li><li id="art47-cla2-itme"><p>(e) impose penalties, in respect of any breach of the
+									regulations, not exceeding a fine of twenty thousand shillings
+									or imprisonment for a term not exceeding three years or
+								both;</p></li><li id="art47-cla2-itmf"><p>(f) provide for the forfeiture of any meat in respect of which
+									any breach of the regulations occurs.</p></li></ul></clause></article><article id="art48"><title>Permit to keep live animals</title><clause id="art48-cla1"><p>48.(1) No person shall keep in captivity any live protected animal, game
+							animal or game bird except in accordance with a permit issued by a
+							licensing officer in that behalf.</p></clause><clause id="art48-cla2"><num>(2)</num><p> A permit under this section- <eol/></p><ul id="ul48"><li id="art48-cla2-itma"><p>(a) shall be in addition to any certificate of ownership required
+									under this Act;</p></li><li id="art48-cla2-itmb"><p>(b) shall be issued, upon application, by the licensing officer
+									unless he has reason to believe that the applicant is not a
+									proper person to keep the animal when the licensing officer may
+									refer the matter to the Director who may direct the licensing
+									officer to issue or refuse the permit, and the decision of the
+									Director thereon shall be final.</p></li></ul></clause><clause id="art48-cla3"><num>(3)</num><p>Any animal or birds kept under the authority of a permit under this
+							section shall be made available for inspection, together with the cage
+							or other enclosure in which it is normally kept, by any warden at all
+							reasonable times.</p></clause><clause id="art48-cla4"><num>(4)</num><p>If, upon an inspection made under this section, a warden is satisfied
+							that the animal or bird concerned is not being adequately cared for, or
+							that the conditions under which it is kept are not reasonably healthy or
+							humane, the warden shall report the facts to the Director who may
+							thereupon cancel the permit concerned and confiscate the animal or bird
+							concerned which shall become the property of the Government.</p></clause><clause id="art48-cla5"><num>(5)</num><p> Any person who keeps any animal or bird in contravention of <ref id="ref48" href="#art48-cla1">subsection (1)</ref>, or fails to make
+							an animal, bird, cage or enclosure available for inspection as required
+							by <ref id="ref49" href="#art48-cla3">subsection (3)</ref>, shall be
+							guilty of an offence and liable to a fine not exceeding five thousand
+							shillings or to imprisonment for a term not exceeding six months or to
+							both.</p></clause></article><article id="art49"><title>Powers of office.</title><clause id="art49-cla1"><sidenote>16 of 1989, s.6</sidenote><p>49.(1) An authorized officer may stop and detain any person whom he finds
+							doing any act for which a licence or permit is required under this Act
+							or the rules for the purpose of requiring that person to produce his
+							licence or permit, and if that person fails to produce the appropriate
+							licence or permit he may be arrested by the officer without a
+						warrant.</p></clause><clause id="art49-cla2"><num>(2)</num><p> If an authorized officer has reasonable grounds for believing that any
+							person has committed an offence under this Act or the rules he may-
+							<eol/></p><ul id="ul49"><li id="art49-cla2-itma"><p>(a) require the person to produce for inspection- <eol/></p><ul id="ul50"><li id="art49-cla2-itma-itmi"><p>(i) any animal, or any meat or other part of an animal,
+											in his possession;</p></li><li id="art49-cla2-itma-itmii"><p>(ii) any firearm or other weapon, trap, net or poison, or
+											any instrument, material or thing, in relation to or in
+											connexion with which any offence appears to the officer
+											to have been committed;</p></li><li id="art49-cla2-itma-itmiii"><p>(iii) any licence, permit or other document required to
+											be had or be kept by such person under the provisions of
+											this Act or the rules;</p></li></ul></li><li id="art49-cla2-itmb"><p>(b) enter and search, with or without assistance, any land,
+									building, tent, vehicle or boat in the occupation or possession
+									of such person, and open and search any baggage or other thing
+									in the possession of such person: Provided that no
+									dwelling-house shall be entered without a warrant except under
+									exceptional circumstances;</p></li><li id="art49-cla2-itmc"><p>(c) seize and detain anything which appears to the officer to be
+									a Government trophy, or any vehicle, boat, firearm or other
+									weapon, trap, net or poison, or any instrument, material or
+									thing whatsoever in relation to or in connexion with which any
+									offence against his Act or the rules appears to have been
+									committed or which appears to the officer to have been used in,
+									or for the purposes of, the commission of any such offence,
+									whether or not it is in the immediate possession of any
+								person;</p></li><li id="art49-cla2-itmd"><p>(d) arrest and detain such person if he has reason to believe
+									that such person will not appear and answer any charge which may
+									be preferred against him.</p></li></ul></clause><clause id="art49-cla3"><num>(3)</num><p>For the purpose of the more effective enforcement of the provisions of
+							this Act, a senior officer, or a subordinate officer authorized by him
+							in that behalf, may erect a temporary barrier across any road or place
+							and any person approaching the barrier shall, on being required by the
+							officer so to do, stop and allow the officer to carry out such search of
+							his own person and of any vehicle as may appear to the officer to be
+							necessary or expedient.</p></clause><clause id="art49-cla4"><num>(4)</num><p> Any person who- <eol/></p><ul id="ul51"><li id="art49-cla4-itma"><p>(a) without reasonable excuse, fails to produce anything which,
+									under the powers conferred by this section, he is required to
+									produce; or</p></li><li id="art49-cla4-itmb"><p>(b) fails to stop or to allow a search when so required under
+									subsection(3); or</p></li><li id="art49-cla4-itmc"><p>(c) assaults, resists or wilfully obstructs any officer in the
+									exercise of the powers conferred upon such officer by this
+									section,</p></li></ul><p>shall be guilty of an offence and liable to a fine not exceeding ten
+							thousand shillings or to imprisonment for a period not exceeding twelve
+							months or to both. <eol/></p></clause><clause id="art49-cla5"><num>(5)</num><p>Neither the Government nor any officer shall be responsible for any loss
+							or damage which may occur to any property during an act of seizure, or
+							whilst such property is detained, under this section, unless the same
+							has been caused maliciously or fraudulently or by gross neglect.</p></clause></article><article id="art50"><title>Disposal of persons arrested and things seized.</title><clause id="art50-cla1"><sidenote>16 of 1989, s.7.</sidenote><p>50. (1) Any person arrested under section 49 shall forth with be taken
+							before a court to be dealt with according to law.</p></clause><clause id="art50-cla2"><num>(2)</num><p> Where anything other than a trophy is seized and detained under section
+							49 of this Act it shall be forfeited to the Government after a period of
+							three months unless within that period some person is charged with a
+							forfeiture offence under the Act and it is alleged that- <eol/></p><ul id="ul52"><li id="art50-cla2-itma"><p>(a) the offence was committed in relation to or in connection
+									with that thing; or</p></li><li id="art50-cla2-itmb"><p>(b) the thing was used in, or for the purpose of, the commission
+									of such an offence.</p></li></ul></clause><clause id="art50-cla3"><num>(3)</num><p> Notwithstanding subsection (2)- <eol/></p><ul id="ul53"><li id="art50-cla3-itma"><p>(a) where anything seized and detained under section 49 is
+									subject to speedy and natural decay, and it is not reasonably
+									practicable to take effective steps to preserve the same, the
+									officer by whom the same is seized or an officer to whose orders
+									he is subject may, without obtaining any order from a court,
+									destroy or otherwise dispose of that thing if he considers it
+									desirable so to do;</p></li><li id="art50-cla3-itmb"><p>(b) where any apparently unlawful means of hunting cannot
+									practicably be removed from its location it may forthwith be
+									rendered inoperative;</p></li><li id="art50-cla3-itmc"><p>(c) Deleted by 16 of 1989, s.7.</p></li></ul></clause></article><article id="art51"><title>Effect of conviction and powers of court</title><clause id="art51-cla1"><p>51.(1) Where the holder of a licence, permit, permission or authorization
+							granted or issued under this Act or the rules is convicted of an offence
+							under this Act the conviction shall, unless the court otherwise directs
+							for reasons to be recorded in writing, have the effect of cancelling the
+							licence, permit, permission or authorization with effect from the date
+							of conviction.</p></clause><clause id="art51-cla2"><num>(2)</num><p> The holder of a licence, permit, permission or authorization which is
+							cancelled under <ref id="ref63" href="#art51-cla1">subsection (1)</ref>
+							shall, within fourteen days from the date of conviction, surrender to
+							the court the licence or permit, or any document evidencing the
+							permission or authorization, and any person who fails to comply with the
+							provisions of this subsection shall be guilty of an offence.</p></clause><clause id="art51-cla3"><num>(3)</num><p>Where any person is convicted of an offence under this Act or the rules
+							in respect of any game-pit, pitfall, trench or similar excavation, or
+							any fence or enclosure, or any other device whatsoever fixed to the
+							ground, which such person has unlawfully made, used or had in his
+							possession for the purpose of hunting, the court may, in addition to any
+							other punishment, order that such game-pit, pitfall, trench, excavation,
+							fence, enclosure or device shall be destroyed or obliterated by the
+							Service in such manner as the court may specify, and any expenditure
+							incurred on account of such order shall be a civil debt recoverable
+							summarily from such person by the Government.</p></clause><clause id="art51-cla4"><num>(4)</num><p>A court before which a person is convicted of an offence against this
+							Act or the rules shall forthwith make a report in the prescribed form to
+							the Director containing the details of the offence and the sentence and
+							particulars of any other order made by the court in relation to the
+							conviction.</p></clause></article><article id="art52"><title>Forfeiture.</title><clause id="art52-cla1"><sidenote>16 of 1989, s.8.</sidenote><p>52. (1) Where a person is convicted of a forfeiture offence the court
+							shall, unless it considers, for reasons to be recorded by the court,
+							that in all the circumstances of the case it would be unjust so to do,
+							order that any animal, trophy, weapon, net, vehicle, instrument,
+							material or thing whatsoever, whether similar to those enumerated or
+							not, in relation to, in connexion with, or by means of which the offence
+							has been committed shall be forfeited to the Government.</p></clause><clause id="art52-cla2"><p>(2) Where anything other than a Government trophy has been seized and
+							detained under <ref id="ref56" href="#art49">section 49</ref> of this
+							Act and a person charged with forfeiture offence in relation thereto
+							within three months of the seizure has not appeared to answer the charge
+							the thing shall be forfeited to the Government.</p></clause><clause id="art52-cla3"><num>(3)</num><p>Deleted by 16 of 1989, s.8.</p></clause></article><article id="art53"><title>Ineligibility to hold licences, etc</title><clause id="art53-cla1"><p>53. Except as otherwise expressly provided in this Act, any person who is
+							convicted of an offence under this Act or the rules, or under any law
+							relating to the preservation of wild game for the time being in force in
+							Tanzania or Uganda, shall be disqualified from holding a licence or
+							permit under this Act or the rules for a period of three years from the
+							date of the conviction:<eol/>Provided that the Minister may, in any
+							particular case, direct that this section shall not apply or that the
+							period of disqualification shall be reduced.</p></clause></article><article id="art54"><title>Conduct of prosecutions.</title><clause id="art54-cla1"><sidenote>Cap. 75.</sidenote><p>54. Any warden may, subject to the directions of the Attorney-General,
+							conduct any prosecution for an offence under this Act or the rules, and
+							shall for that purpose have all the powers conferred upon a public
+							prosecutor by the Criminal Procedure Code.</p></clause></article><article id="art55"><title>Exemption of officers of the Service</title><clause id="art55-cla1"><p>55. Nothing in this Act shall be constructed as rendering an officer of
+							the Service guilty of an offence under this Act or the rules in respect
+							of anything done by him in the course of his duty as such officer, but
+							where the officer is charged with such an offence the onus of proving
+							that anything done by him was done in the course of his duty shall lie
+							upon him.</p></clause></article><article id="art56"><title>General penalties</title><clause id="art56-cla1"><p>56. (1) Any person who is guilty of an offence under this Act for which
+							no other penalty is expressly provided shall be liable- <eol/></p><ul id="ul54"><li id="art56-cla1-itma"><p>(a) if the offence is committed in respect of a protected animal
+									or an animal mentioned in Part I of the First Schedule, or in
+									respect of any trophy of that animal, to a fine not exceeding
+									forty thousand shillings or to imprisonment for a term not
+									exceeding ten years or to both;</p></li><li id="art56-cla1-itmb"><p>(b) if the offence is committed in respect of an animal mentioned
+									in Part II of the First Schedule, or in respect of any trophy of
+									that animal, to a fine not exceeding twenty thousand shillings
+									or to imprisonment of a term not exceeding five years or to
+									both;</p></li><li id="art56-cla1-itmc"><p>(c) if the offence is a forfeiture offence not included in <ref id="ref57" href="#art56-cla1-itma">paragraph (a)</ref> or
+										<ref id="ref58" href="#art56-cla1-itmb">(b)</ref>, to a fine
+									not exceeding fifteen thousand shillings or to imprisonment for
+									a term not exceeding three years or to both;</p></li><li id="art56-cla1-itmd"><p>(d) in any other case, to a fine not exceeding two thousand
+									shillings or to imprisonment for a term not exceeding six months
+									or to both.</p></li></ul></clause><clause id="art56-cla2"><num>(2)</num><p>Upon the conviction of any person for an offence under this Act which
+							relates to more than one animal or trophy the court may inflict an
+							additional punishment in respect of each animal or trophy after the
+							first of a fine not exceeding six thousand shillings, or one-half of the
+							fine prescribed by this Act for the offence, whichever is the less.</p></clause></article><article id="art57"><title>Corporations and firms</title><clause id="art57-cla1"><p>57. (1) Where a corporation is guilty of an offence under this Act or the
+							rules, every director, secretary or officer of the corporation shall,
+							unless he proves that the offence was committed without his knowledge or
+							consent, also be liable to be prosecuted, tried, convicted and punished
+							for that offence.</p></clause><clause id="art57-cla2"><num>(2)</num><p>Where any firm or individual has, in the course of business, committed
+							any offence under this Act or the rules then, without prejudice to the
+							liability of the firm or individual for the offence, every manager or
+							other person concerned in the management of such business shall, unless
+							he proves that the offence was committed without his knowledge or
+							consent, also be liable to be prosecuted, tried, convicted and punished
+							for that offence.</p></clause></article><article id="art57.a"><title>Use of firearms</title><clause id="art57.a-cla1"><sidenote>16 of 1989, s.9</sidenote><p>57A. (1) The President may, through the Commissioner of Police, make
+							available to the Service such firearms as may be necessary for the
+							Service to effectively carry out its functions under this Act.</p></clause><clause id="art57.a-cla2"><num>(2)</num><p> A member of the Service may use firearms to the extent necessary for the
+							efficient management and conservation of wildlife including but without
+							prejudice to the generality of the foregoing-<eol/></p><ul id="ul55"><li id="art57.a-cla2-itma"><p>(a) in the course of law enforcement, against-<eol/></p><ul id="ul56"><li id="art57.a-cla2-itma-itmi"><p>(i) any person in lawful custody charged with an offence
+											punishable under <ref id="ref59" href="#art56-cla1-itma">section 56 (1) (a), (b) or (c)</ref> when that
+											person is escaping or attempting to escape;</p></li><li id="art57.a-cla2-itma-itmii"><p>(ii)any person who by force rescues or attempts to rescue
+											any other person from lawful custody;</p></li><li id="art57.a-cla2-itma-itmiii"><p>(iii)any person who by force rescues or attempts to
+											prevent the lawful arrest of himself or any other
+											person; and</p></li><li id="art57.a-cla2-itma-itmiv"><p>(iv) any person unlawfully hunting game animal or
+											protected animal in any place or hunting any animal,
+											bird or reptile within a National Park, Nairobi national
+											Reserve or local sanctuary;</p></li></ul></li><li id="art57.a-cla2-itmb"><p>(b) in the course of animal population control and management and
+									also for the protection of persons and property against any
+									animal, bird or reptile causing destruction to human life or
+									property or crops:<eol/>Provided that resort to the use of
+									firearms shall not be had-<eol/></p><ul id="ul57"><li id="art57.a-cla2-itmb-itmi"><p>(i) under <ref id="ref50" href="#art57.a-cla2-itma-itm1">paragraph (a) (i)</ref> of this subsection unless
+											the member of the Service concerned has reasonable
+											grounds to believe that he cannot otherwise prevent the
+											escape and unless he has given warning to the person
+											that he is about to use firearms against him and the
+											warning is unheeded;</p></li><li id="art57.a-cla2-itmb-itmii"><p>(ii) under <ref id="ref51" href="#art57.a-cla2-itma-itmii">paragraph (a)
+											(ii)</ref> or <ref id="ref52" href="#art57.a-cla2-itma-itmiii">paragraph (a)
+											(iii)</ref> of this subsection unless the member of the
+											Service concerned believes on reasonable grounds that he
+											or any other person is in danger of grievous bodily harm
+											or that he cannot otherwise prevent the rescue, or, as
+											the case may be, the arrest.</p></li></ul></li></ul></clause></article><article id="art61"><title>Unlawful possession of Service property, etc</title><clause id="art61-cla1"><p>61. (1) Any person who, not being a member of the Service, is in
+							possession of an article which has been supplied to any such officer for
+							use in the execution of his duties as such, and who fails to account
+							satisfactorily for such possession shall be guilty of an
+							offence.<eol/>(2) Any person who, without lawful authority <eol/>(a)
+							purchases or receives any article which has been supplied to a member of
+							the Service for use in the execution of his duties as such; <eol/>(b)
+							aids or abets a member of the Service in selling or disposing of any
+							such article; <eol/>(c) assumes the uniform or any distinctive part
+							thereof, of, or otherwise pretends to act as or to personate, any
+							officer of the Service shall be guilty of an offence.</p></clause></article><article id="art62"><title>Compensation for personal injury or death.</title><clause id="art62-cla1"><sidenote>16 of 1989, s.11.</sidenote><p>62. Where any person suffers any bodily injury from or is killed by any
+							animal, the person injured or in the case of a deceased person, any
+							other person who was dependant upon him at the date of his death, may
+							make application to a district committee established by this section,
+							for the award of compensation for the injury or death: <eol/>Provided
+							that no compensation shall be claimable where the injury or death
+							occurred- <eol/></p><ul id="ul58"><li id="art62-cla1-itma"><p>(a) in the course of any conduct on the part of the person
+									concerned which would constitute an offence under this Act;
+								or</p></li><li id="art62-cla1-itmb"><p>(b) in the course of normal wildlife utilization activities.</p></li></ul></clause><clause id="art62-cla2"><num>(2)</num><p> For the purposes of receiving and considering applications under <ref id="ref53" href="#art62-cla1">subsection (1)</ref>, and of awarding
+							compensation thereunder, there is hereby established in each district a
+							committee which shall consist of- <eol/></p><ul id="ul59"><li id="art62-cla2-itma"><p>(a) the District Commissioner, who shall be the chairman of the
+									committee;</p></li><li id="art62-cla2-itmb"><p>(b) the Divisional Officer of the Service;</p></li><li id="art62-cla2-itmc"><p>(c) the Officer in Charge of the Police Division;</p></li><li id="art62-cla2-itmd"><p>(d) the District Medical Officer;</p></li><li id="art62-cla2-itme"><p>(e) one Elected Member of the National Assembly representing a
+									constituency in the district, who shall be appointed by the
+									Minister;</p></li><li id="art62-cla2-itmf"><p>(f) the chairman of County Council in the district; and</p></li><li id="art62-cla2-itmg"><p>(g) three other members appointed by the Minister to represent
+									the general public of the district.</p></li></ul></clause><clause id="art62-cla3"><num>(3)</num><p>A District Committee may co-opt any person whom it considers may assist
+							it either generally or for the consideration of any particular case.</p></clause><clause id="art62-cla4"><num>(4)</num><p>Compensation awarded under this section shall be payable out of moneys
+							provided by Parliament for that purpose.</p></clause></article><article id="art63"><title>Land use</title><clause id="art63-cla1"><p>63. Where any written law, or any document of title to any land, makes a
+							reference to improvements to such land, or to principles of good
+							husbandry, or any like reference which relates to livestock, such
+							reference shall be deemed to include any game-ranching, game cropping or
+							other wildlife utilization lawfully undertaken under the rules.</p></clause></article><article id="art64"><title>Application of Act to non-game animals</title><clause id="art64-cla1"><p>64. The Minister may, by notice in the Gazette, declare that any
+							provision of this Act shall apply to any animal not mentioned in a
+							schedule, or to any trophy or meat of any such animal, and upon
+							publication of such notice the animal concerned shall be deemed to be a
+							game animal or game bird for the purposes of such provision.</p></clause></article><article id="art65"><title>Appeal to Tribunal</title><clause id="art65-cla1"><p>65. (1) There is hereby established an Appeal Tribunal which shall be
+							known as the Wildlife Conservation and Management Service Appeal
+							Tribunal.</p></clause><clause id="art65-cla2"><num>(2)</num><p>The Tribunal shall consider and determine appeals from any decision in
+							any matter, wherein any person is aggrieved by a refusal of the grant or
+							issue of, or by any condition other than a prescribed condition attached
+							to, or the cancellation or suspension of, any licence, permit or
+							authorization under this Act.</p></clause><clause id="art65-cla3"><num>(3)</num><p> Any person who is dissatisfied with the manner in which compensation is
+							made or not made under <ref id="ref60" href="#art62">section 62</ref>
+							may appeal to the Tribunal within the time prescribed by regulations
+							made under <ref id="ref54" href="#art67-cla1-itmg">section
+						67(g)</ref>.</p></clause><clause id="art65-cla4"><num>(4)</num><p>Appeals to the Tribunal under this Act shall be made within thirty days
+							of the date of the decision appealed against.</p></clause><clause id="art65-cla5"><num>(5)</num><p> The Tribunal shall consist of- <eol/></p><ul id="ul60"><li id="art65-cla5-itma"><p>(a) the chairman appointed by the Minister; and</p></li><li id="art65-cla5-itmb"><p>(b) not less than two and not more than five other members
+									appointed by the Minister of whom one shall be appointed for his
+									knowledge of wildlife management and conservation.</p></li></ul></clause><clause id="art65-cla6"><num>(6)</num><p>There shall be an assessor to the Tribunal who shall be an advocate of
+							not less than five years standing appointed by the Tribunal with the
+							approval of the Minister and the assessor, when the Tribunal so
+							requires, shall attend the proceedings of the Tribunal and advise it on
+							questions of law.</p></clause><clause id="art65-cla7"><num>(7)</num><p>The Minister shall appoint a public officer to be secretary to the
+							Tribunal.</p></clause><clause id="art65-cla8"><num>(8)</num><p> For the purposes of hearing and determining the appeals, by the
+							Tribunal- <eol/></p><ul id="ul61"><li id="art65-cla8-itma"><p>(a) the chairman or other person presiding may administer
+								oaths;</p></li><li id="art65-cla8-itmb"><p>(b) the chairman may, by notice under his hand, summon any person
+									to attend and give evidence and to produce any relevant
+									document.</p></li></ul></clause><clause id="art65-cla9"><num>(9)</num><p>The cost of the appeal shall be in the discretion of the Tribunal, which
+							may make such order as to costs as appear to it just; and any such costs
+							shall be recoverable as a civil debt.</p></clause><clause id="art65-cla10"><num>(10)</num><p>Any person who, after payment or tender to him of his reasonable
+							expenses, without reasonable excuse fails, when summoned by the
+							Tribunal, to attend and give evidence or produce any document which he
+							is required to produce shall be guilty of an offence and liable to a
+							fine not exceeding five thousand shillings or to imprisonment for a term
+							not exceeding six months or to both.</p></clause></article><article id="art66"><title>Duplicate licences</title><clause id="art66-cla1"><p>66. Where any licence, permit or authorization granted or issued under
+							this Act or the rules has been lost or destroyed the person to whom it
+							was granted or issued may apply to the officer by whom it was issued for
+							a duplicate thereof which may be issued at the discretion of that
+							officer upon payment of the prescribed fee.</p></clause></article><article id="art67"><title>Power to make regulations</title><clause id="art67-cla1"><sidenote>2 of 2002, Sch.</sidenote><p>67. The Minister may make regulations for the better carrying into effect
+							of the provisions of this Act, and, without prejudice to the generality
+							of such powers, the regulations may- <eol/></p><ul id="ul62"><li id="art67-cla1-itma"><p>(a) specify the conditions subject to which any licence, permit
+									or authorization may be granted or issued under this Act;</p></li><li id="art67-cla1-itmb"><p>(b) prescribe the procedure to be followed in respect of an
+									application for the licence, permit or authorization;</p></li><li id="art67-cla1-itmc"><p>(c) classify game licences and specify the animals which may be
+									included in any game licence, and the numbers thereof which may
+									be hunted under that licence;</p></li><li id="art67-cla1-itmd"><p>(d) limit the number of game licences which may be issued to any
+									person or in respect of any specified period or area;</p></li><li id="art67-cla1-itme"><p>(e) prohibit the use of any specified type or calibre of weapon
+									in the hunting of any specified type of game animal or game
+									bird;</p></li><li id="art67-cla1-itmf"><p>(f) restrict, regulate or otherwise control the supply of
+									trophies to dealers;</p></li><li id="art67-cla1-itmg"><p>(g) make provision for the manner and time in which applications
+									for the award of compensation under <ref id="ref62" href="#art62">section 62</ref> may be made, for prescribing
+									the level of such compensation and for the regulation of the
+									proceedings of District Committees established under that
+									section and the Appeal Tribunal established under <ref id="ref61" href="#art65">section 65</ref> and the manner and
+									time within which appeals under <ref id="ref55" href="#art65-cla3">section 65(3)</ref> may be made;</p></li><li id="art67-cla1-itmh"><p>(h) make provision for the training of personnel for the
+								service.</p></li></ul></clause></article></part></clauses></act></akomantoso>

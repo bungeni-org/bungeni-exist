@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../../../../../../XSD/styles/nigeria.xsl"?><!--Akoma_Ntoso document--><akomantoso xmlns="http://www.akomantoso.org/1.0" xmlns:cirsfid="http://www.cirsfid.unibo.it/proprietary" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><act contains="OriginalVersion"><meta><identification source="#au1"><Work><uri href="/nga/act/1990-12-12/68"/><date date="2007-03-21" name="Generation"/><author id="au1" href="parliament"/></Work><Expression><uri href="/nga/act/1990-12-12/68/eng"/><date date="2007-03-21" name="Generation"/><author id="au2" href="http://www.cirsfid.unibo.it"/><components><component id="ce1" href="nga/act/1990-12-12/68/eng/main" showAs="main"/></components></Expression><Manifestation><uri href="/nga/act/1990-12-12/68/eng.xml"/><date date="2007-03-21" name="Generation"/><author href="#au2"/><components><component id="cm1" href="nga/act/1990-12-12/68/eng/main.xml" showAs="main"/></components></Manifestation></identification><publication name="" date="1990-10-15" showAs=""/><lifecycle source="#au1"><event id="e1" date="1990-10-15" source="#ro1" type="Generation"/></lifecycle><analysis source="#au1"><ActiveModifications><Textual type="Repeal" id="am1"><source href="#ref5"/><source href="#art40-cla1"/><destination href="nga/act/1970-10-10/200/eng/main"/></Textual><Textual type="Repeal" id="am2"><source href="#ref6"/><source href="#art40-cla2"/><destination href="nga/act/1960-10-10/100/eng/main/schedule.1#art491"/><destination href="nga/act/1960-10-10/100/eng/main/schedule.1#art492"/><destination href="nga/act/1960-10-10/100/eng/main/schedule.1#art493"/></Textual></ActiveModifications></analysis><references source="#au1"><Original id="ro1" href="nga/act/1990-12-12/68/eng/main" showAs="Original"/><ActiveRef id="ra1" href="nga/act/1970-10-10/200/eng/main" showAs=""/><ActiveRef id="ra2" href="nga/act/1960-10-10/100/eng/main/schedule.1" showAs=""/><Attachment id="ran1" href="main/schedule.1" type="integralAttachment" showAs=""/><Attachment id="ran2" href="main/schedule.2" type="integralAttachment" showAs=""/><Attachment id="ran3" href="main/schedule.3" type="integralAttachment" showAs=""/><Attachment id="ran4" href="main/schedule.4" type="integralAttachment" showAs=""/><Attachment id="ran5" href="main/schedule.5" type="integralAttachment" showAs=""/></references><proprietary source="#au1"><cirsfid:proprietary><cirsfid:MissingInfo><cirsfid:mDocType>act</cirsfid:mDocType><cirsfid:mActDate>1990-12-12</cirsfid:mActDate></cirsfid:MissingInfo></cirsfid:proprietary></proprietary></meta><preface><p><ActTitle id="ActTitle">Copyright Act</ActTitle><eol/>Chapter
+        <ActNumber>68</ActNumber><eol/>Laws of the Federation of Nigeria 1990</p></preface><preamble id="preamble"><toc><tocitem href="#" level="0">Arrangement of Sections</tocitem><tocitem href="#" level="0"/><tocitem href="#prtI" level="2">Part I</tocitem><tocitem href="#" level="0">Copyright</tocitem><tocitem href="#" level="0"/><tocitem href="#" level="0">1 Works eligible for copyright.</tocitem><tocitem href="#" level="0">2 Copyright by virtue of nationality or domicile.</tocitem><tocitem href="#" level="0">3 Copyright by reference to country of origin.</tocitem><tocitem href="#" level="0">4 Copyright in works of government, State Authorities and
+          international bodies.</tocitem><tocitem href="#" level="0">5 General nature of copyright.</tocitem><tocitem href="#art6" level="6">6. Nature of copyright in sound recording.</tocitem><tocitem href="#art7" level="6">7. Nature of copyright in broadcast.</tocitem><tocitem href="#art8" level="6">8. Broadcasting of works incorporated in cinematograph
+          films.</tocitem><tocitem href="#art9" level="6">9. First ownership of copyright.</tocitem><tocitem href="#art10" level="6">10. Assignment and licence.</tocitem><tocitem href="#art11" level="6">11. Right to claim ownership.</tocitem><tocitem href="#art12" level="6">12. Right to share in proceeds of sale.</tocitem><tocitem href="#art13" level="6">13. Duty of printer, etc. to keep register.</tocitem><tocitem href="#art14" level="6">14. Infringement of copyright.</tocitem><tocitem href="#art15" level="6">15. Action of infringement.</tocitem><tocitem href="#art16" level="6">16. Conversion rights.</tocitem><tocitem href="#art17" level="6">17. Infringement actionable as breach of statutory duty.</tocitem><tocitem href="#art18" level="6">18. Criminal liability.</tocitem><tocitem href="#art19" level="6">19. Offence by bodies corporate.</tocitem><tocitem href="#" level="0">20 Penalties for making false entries.</tocitem><tocitem href="#art21" level="6">21. Civil and criminal actions may be simultaneous.</tocitem><tocitem href="#art22" level="6">22. Order for inspection and seizure.</tocitem><tocitem href="#" level="0"/><tocitem href="#" level="0"/><tocitem href="#prtII" level="2">Part II</tocitem><tocitem href="#" level="0">Neighbouring Rights</tocitem><tocitem href="#" level="0"/><tocitem href="#art23" level="6">23. Performer’s right.</tocitem><tocitem href="#art24" level="6">24. Duration of performer’s right.</tocitem><tocitem href="#art25" level="6">25. Infringement of performer’s right.</tocitem><tocitem href="#art26" level="6">26. Infringement of performer’s right actionable</tocitem><tocitem href="#art27" level="6">27. Criminal liability in respect of infringement of
+          performer’s right.</tocitem><tocitem href="#art28" level="6">28. Protection of expressions of folklore.</tocitem><tocitem href="#art29" level="6">29. Infringement of folklore.</tocitem><tocitem href="#" level="0"/><tocitem href="#prtIII" level="2">Part III</tocitem><tocitem href="#" level="0">Administration of Copyright</tocitem><tocitem href="#" level="0"/><tocitem href="#art30" level="6">30. Establishment of the Nigerian Copyright Council.</tocitem><tocitem href="#art31" level="6">31. Establishment, membership and functions of the
+          Governing Board.</tocitem><tocitem href="#art32" level="6">32. Appointment of the Director and other staff of the
+          Council.</tocitem><tocitem href="#" level="0"/><tocitem href="#prtIV" level="2">Part IV</tocitem><tocitem href="#" level="0">Miscellaneous</tocitem><tocitem href="#" level="0"/><tocitem href="#art33" level="6">33. Reciprocal extension of protection.</tocitem><tocitem href="#art34" level="6">34. Admission of affidavit evidence. </tocitem><tocitem href="#art35" level="6">35. Presumptions.</tocitem><tocitem href="#art36" level="6">36. Restriction of importation of printed copies. </tocitem><tocitem href="#art37" level="6">37. Regulations. </tocitem><tocitem href="#art38" level="6">38. Jurisdiction.</tocitem><tocitem href="#art39" level="6">39. Interpretation. </tocitem><tocitem href="#art40" level="6">40. Repeals and transitional, etc. provisions. </tocitem><tocitem href="#art41" level="6">41. Short title.</tocitem><tocitem href="#" level="0"/><tocitem href="#" level="0">First Schedule</tocitem><tocitem href="#" level="0">Terms of Copyright</tocitem><tocitem href="#" level="0"/><tocitem href="#" level="0">Second Schedule</tocitem><tocitem href="#" level="0">Exceptions from Copyright Control</tocitem><tocitem href="#" level="0"/><tocitem href="#" level="0">Third Schedule</tocitem><tocitem href="#" level="0">Special Exceptions in respect of Records of Sound Recording</tocitem><tocitem href="#" level="0"/><tocitem href="#" level="0">Fourth Schedule</tocitem><tocitem href="#" level="0">Compulsory Licences for Translation and Reproduction of Certain
+          Works</tocitem></toc><p><eol/>An Act to make provisions for the definition, protection, transfer, infringement of
+        and remedy and penalty thereof of the copyright in literary works, musical works, artistic
+        works, cinematograph films, sound recordings, broadcast, and other ancillary matters.</p></preamble><clauses><part id="prt1"><num>Part 1</num><title>Part 1 Copyright</title><article id="art1"><num>1.</num><title>Copyright</title><clause id="art1-cla1"><num>(1)</num><p>subject to this section, the following shall be eligible for copyright-</p><list id="art1-cla1-lst1"><item id="art1-cla1-itma"><num>(a)</num><p>literary works;</p></item><item id="art1-cla1-itmb"><num>(b)</num><p>musical works;</p></item><item id="art1-cla1-itmc"><num>(c)</num><p>artistic works;</p></item><item id="art1-cla1-itmd"><num>(d)</num><p>cinematograph works;</p></item><item id="art1-cla1-itme"><num>(e)</num><p>sound recording; and</p></item><item id="art1-cla1-itmf"><num>(f)</num><p>broadcasts.</p></item></list></clause><clause id="art1-cla2"><num>(2)</num><p>A literary, musical, or artistic work shall not be eligible for copyright unless-</p><list id="art1-cla2-lst1"><item id="art1-cla2-itma"><num>(a)</num><p>sufficient effort has been expended on making the work to give it an original
+                  character;</p></item><item id="art1-cla2-itmb"><num>(b)</num><p>the work has been fixed in any definite medium of expression now known or later
+                  to be developed, from which it can be perceived, reproduced or otherwise
+                  communicated either directly or with the aid of any machine or device.</p></item></list></clause><clause id="art1-cla3"><num>(3)</num><p>An artistic work shall not be eligible for copyright, if at the time when the work is
+              made, it is intended by the author to be used as a model or pattern to be multiplied
+              by any industrial process.</p></clause><clause id="art1-cla4"><num>(4)</num><p>A work shall not be ineligible for copyright by reason only that the making of the
+              work or the doing of any act in relation to the work involved an infringement of
+              copyright in some other work.</p></clause></article><article id="art2"><num>2.</num><clause id="art2-cla1"><num>(1)</num><p>Copyright shall be conferred by this section on every work eligible for copyright of
+              which the author or, in the case of a work of joint authorship, any of the authors is
+              at the time when the work is made, a qualified person, that is to say-</p><list id="art2-cla1-lst1"><item id="art2-cla1-itma"><num>(a)</num><p>an individual who is a citizen of, or is domiciled in Nigeria; or</p></item><item id="art2-cla1-itmb"><num>(b)</num><p>a body corporate incorporated by or under the laws of Nigeria.</p></item></list></clause><clause id="art2-cla2"><num>(2)</num><p>The term of copyright conferred by this section shall be calculated according to the
+              table set out in the <ref id="ref2" href="nga/act/1990-12-12/68/eng/main/schedule.1">First Schedule</ref> to this Act.</p></clause><clause id="art2-cla3"><num>(3)</num><p>In the case of anonymous or pseudonymous literary, musical or artistic works the
+              copyright therein shall subsist until the end of the expiration of seventy years from
+              the end of the year in which the work was first published: <eol/>Provided that, when
+              the author becomes known, the term of copyright shall be calculated in accordance with
+              paragraph 1 of the <ref id="ref8" href="nga/act/1990-12-12/68/eng/main/schedule.1">First Schedule</ref> to this Act.</p></clause><clause id="art2-cla4"><num>(4)</num><p>In the case of a work of joint authorship, a reference in the <ref id="ref9" href="nga/act/1990-12-12/68/eng/main/schedule.1">First Schedule</ref> to this Act to
+              the death of the author shall be taken to refer to the author who dies last, whether
+              or not he is a qualified person within subsection (1) of this section.</p></clause></article><article id="art3"><num>3.</num><clause id="art3-cla1"><num>(1)</num><p>Copyright shall be conferred by this section on every work, which is eligible for
+              copyright and which-</p><list id="art3-cla1-lst1"><item id="art3-cla1-itma"><num>(a)</num><p>being a literary, musical or artistic work or a cinematograph film, is first
+                  published in Nigeria; or</p></item><item id="art3-cla1-itmb"><num>(b)</num><p>being a sound recording, is made in Nigeria, and which has not been the subject
+                  of copyright conferred by <ref id="ref1" href="#art3-cla2">section 2</ref> of this
+                  Act.</p></item></list></clause><clause id="art3-cla2"><num>(2)</num><p>Copyright conferred on a work by this section shall have some duration as is provided
+              by section 2 of this Act in relation to the same type of work.</p></clause></article><article id="art4"><num>4.</num><clause id="art4-cla1"><num>(1)</num><p>Copyright shall be conferred by this section on every work, which is eligible for
+              copyright and is made by or under the direction or control of the Government, a State
+              authority or prescribed international body.</p></clause><clause id="art4-cla2"><num>(2)</num><p>The term of copyright conferred by this section shall be calculated in accordance
+              with the table set out in the <ref id="ref10" href="nga/act/1990-12-12/68/eng/main/schedule.1">First Schedule</ref> to this
+            Act.</p></clause></article><article id="art5"><num>5.</num><clause id="art5-cla1"><num>(1)</num><p>Subject to the exceptions specified in the <ref id="ref11" href="nga/act/1990-12-12/68/eng/main/schedule.2">Second Schedule</ref> to this Act,
+              copyright in a work shall be exclusive right to control the doing in Nigeria of any of
+              the following acts, that is-</p><list id="art5-cla1-lst1"><item id="art5-cla1-itma"><num>(a)</num><p>in the case of a literary or musical work, to do and authorise the doing of any
+                  of the following acts-</p><list id="art5-cla1-itma-lst1"><item id="art5-cla1-itma-itmi"><num>(i)</num><p>reproduce the work any material form;</p></item><item id="art5-cla1-itma-itmii"><num>(ii)</num><p>publish the work;</p></item><item id="art5-cla1-itma-itmiii"><num>(iii)</num><p>perform the work in public;</p></item><item id="art5-cla1-itma-itmiv"><num>(iv)</num><p>produce, reproduce, perform or publish any translation of the work;</p></item><item id="art5-cla1-itma-itmv"><num>(v)</num><p>make any cinematograph film or a record in respect of the work;</p></item><item id="art5-cla1-itma-itmvi"><num>(vi)</num><p>distribute to the public, for commercial purposes, copies of the work, by way
+                      of rental, lease, hire, loan or similar arrangement;</p></item><item id="art5-cla1-itma-itmvii"><num>(vii)</num><p>broadcast or communicate the work to the public by a loud speaker or any
+                      other similar device;</p></item><item id="art5-cla1-itma-itmviii"><num>(viii)</num><p>make an adaptation of the work;</p></item><item id="art5-cla1-itma-itmix"><num>(ix)</num><p>do in relation to a translation or an adaptation of the work, any of the acts
+                      specified in relation to the work in sub-paragraphs (I) to (vii) of this
+                      paragraph;</p></item></list></item><item id="art5-cla1-itmb"><num>(b)</num><p>in the case of an artistic work, to do or authorise the doing of any of the
+                  following acts, that is-</p><list id="art5-cla1-itmb-lst1"><item id="art5-cla1-itmb-itmi"><num>(i)</num><p>reproduce the work in any material form,</p></item><item id="art5-cla1-itmb-itmii"><num>(ii)</num><p>publish the work.</p></item><item id="art5-cla1-itmb-itmiii"><num>(iii)</num><p>include the work in any cinematograph film,</p></item><item id="art5-cla1-itmb-itmiv"><num>(iv)</num><p>make an adaptation of the work,</p></item><item id="art5-cla1-itmb-itmv"><num>(v)</num><p>do in relation to an adaptation of the work in subparagraphs (I) to (iii) of
+                      this paragraph;</p></item></list></item><item id="art5-cla1-itmc"><num>(c)</num><p>in he case of cinematograph film, to do or authorise the doing of any of the
+                  following acts, that is-</p><list id="art5-cla1-itmc-lst1"><item id="art5-cla1-itmc-itmi"><num>(i)</num><p>make a copy of the film,</p></item><item id="art5-cla1-itmc-itmii"><num>(ii)</num><p>cause the film, in so far as it consists of visual images to be seen in
+                      public and, in so far as it consists of sounds, to be heard in public,</p></item><item id="art5-cla1-itmc-itmiii"><num>(iii)</num><p>make any record embodying the recording in any part of the sound track
+                      associated with the film by utilising such sound track,</p></item><item id="art5-cla1-itmc-itmiv"><num>(iv)</num><p>distribute to the public, for commercial purposes copies of the work, by way
+                      of rental, lease, hire, loan or similar arrangement.</p></item></list></item></list></clause><clause id="art5-cla2"><num>(2)</num><p>The doing of any of the acts referred in subsection (1) of this section shall be in
+              respect of the whole or a substantial part of the work either in its original form or
+              in any form recognisably derived from the original.</p></clause><clause id="art5-cla3"><num>(3)</num><p>Copyright in a work of architecture shall also include the exclusive right to control
+              the erection of any building which reproduces the whole or a substantial part of the
+              work either in its original form or in any form recognisably derived from the
+              original, but not the right to control the reconstruction in the same style as the
+              original of a building to which the copyright relates.</p></clause></article><article id="art6"><num>6.</num><clause id="art6-cla1"><num>(1)</num><p>Copyright in a sound recording shall be exclusive right to control in Nigeria-</p><list id="art6-cla1-lst1"><item id="art6-cla1-itma"><num>(a)</num><p>the direct or indirect reproduction, broadcasting or communication to the public
+                  of the whole or a substantial part of the recording either in its original form or
+                  in any form recognisably derived from the original;</p></item><item id="art6-cla1-itmb"><num>(b)</num><p>the distribution to the public for commercial purposes of copies of the work by
+                  way of rental, lease, hire, loan or similar arrangement.</p></item></list></clause><clause id="art6-cla2"><num>(2)</num><p>The exception specified in paragraphs (a), (h), (k), (l), and (p) of the <ref id="ref3" href="nga/act/1990-12-12/68/eng/main/schedule.2">Second Schedule</ref> to
+              this Act shall apply to the copyright in sound recording in like manner as they apply
+              to copyright in literary, musical or artistic work or a cinematograph film.</p></clause><clause id="art6-cla3"><num>(3)</num><p>The provision of the <ref id="ref12" href="nga/act/1990-12-12/68/eng/main/schedule.3">Third Schedule</ref> to this Act shall apply in respect of sound recording.</p></clause></article><article id="art7"><num>7.</num><clause id="art7-cla1"><num>(1)</num><p>Subject to this section, copyright in a broadcast shall be the exclusive right to
+              control the doing Nigeria of any of the following acts, that is-</p><list id="art7-cla1-lst1"><item id="art7-cla1-itma"><num>(a)</num><p>the recording and the re-broadcast of the whole or a substantial part of the
+                  broadcast;</p></item><item id="art7-cla1-itmb"><num>(b)</num><p>the communication to the public of the whole or a substantial part of a
+                  television broadcast, either in its original form or in any form recognisably
+                  derived from the original; and</p></item><item id="art7-cla1-itmc"><num>(c)</num><p>the distribution to the public for the commercial purposes, of copies of the
+                  work, by way of rental, lease, hire, loan or similar arrangement.</p></item></list></clause><clause id="art7-cla2"><num>(2)</num><p>The copyright in a television broadcast shall include the right to control the taking
+              of still photographs from the broadcast.</p></clause><clause id="art7-cla3"><num>(3)</num><p>The exceptions specified in paragraphs (a), (h), (k) and (o) of the <ref id="ref13" href="nga/act/1990-12-12/68/eng/main/schedule.2">Second Schedule</ref> to this Act
+              shall apply to the copyright in a broadcast, in like manner as they apply to copyright
+              in literary, musical or artistic work or a cinematograph film.</p></clause></article><article id="art8"><num>8.</num><clause id="art8-cla1"><num>(1)</num><p>Where the owner of the copyright in any literary, musical or artistic work authorises
+              a person to incorporate the work in a cinematograph film and a broadcasting authority
+              broadcasts the film, the owner of the copyright shall, in the absence of any express
+              agreement to the contrary between the owner and that person, be deemed to have
+              authorised the broadcast.</p></clause><clause id="art8-cla2"><num>(2)</num><p>Notwithstanding subsection (10 of this section, where a broadcasting authority
+              broadcasts a cinematograph film in which a musical work is incorporated, the owner of
+              the right to broadcast the musical work shall, subject to this Act, be entitled to
+              receive fair compensation from the broadcasting authority.</p></clause></article><article id="art9"><num>9.</num><clause id="art9-cla1"><num>(1)</num><p>Copyright conferred by sections 2 and 3 of this Act, shall vest initially in the
+              author.</p></clause><clause id="art9-cla2"><num>(2)</num><p>Notwithstanding subsection (6) of section 10 of this Act where a work-</p><list id="art9-cla2-lst1"><item id="art9-cla2-itma"><num>(a)</num><p>is commissioned by a person who is not the author’s employer under a contract of
+                  service of apprenticeship; or</p></item><item id="art9-cla2-itmb"><num>(b)</num><p>not having been so commissioned, is made in the course of the author’s
+                  employment, the copyright shall belong in the first instance to the author, unless
+                  otherwise stipulated in writing under contract.</p></item></list></clause><clause id="art9-cla3"><num>(3)</num><p>Where a literary, artistic or musical work is made by the author in the course of his
+              employment by the proprietor of a newspaper, magazine or similar periodical under a
+              contract of service or apprenticeship as is so made for the purpose of publication in
+              a newspaper, magazine or similar periodical, the said proprietor shall, in the absence
+              of any agreement to the contrary, be the first owner of copyright in the work in so
+              far as the copyright relates to the publication of the work in any newspaper, magazine
+              or similar periodical,; or to the reproduction of the work for the purpose of its been
+              so published; but in all other respects, the author shall be the first owner of the
+              copyright in the work.</p></clause><clause id="art9-cla4"><num>(4)</num><p>In the case of a cinematograph film or sound recording, the author shall be obliged
+              to conclude, prior to the making of the work, contracts in writing with all those
+              whose works are to be used in the making of the work.</p></clause><clause id="art9-cla5"><num>(5)</num><p>Copyright conferred by section 4 of this Act, shall vest initially in the Government
+              on behalf of the Federal Republic of Nigeria, in the State authority on behalf of the
+              State in question, or in the international body in question, as the case may be, and
+              not in the author.</p></clause></article><article id="art10"><num>10.</num><clause id="art10-cla1"><num>(1)</num><p>Subject to the provisions of this section, copyright shall be transmitted by
+              assignment, by testamentary disposition or by operation of law, as movable
+            property.</p></clause><clause id="art10-cla2"><num>(2)</num><p>An assignment or testamentary disposition of copyright may be limited so as to apply
+              to only some of the acts which the owner of the copyright has the exclusive right to
+              control, or to a party only of the period of the copyright, or to a specified country
+              or other geographical area.</p></clause><clause id="art10-cla3"><num>(3)</num><p>No assignment of copyright and no exclusive licence to do an act the doing of which
+              is controlled by copyright shall have effect unless it is in writing.</p></clause><clause id="art10-cla4"><num>(4)</num><p>A non-exclusive licence to do an act the doing of which is controlled by copyright
+              may be written or oral, or may be inferred from conduct.</p></clause><clause id="art10-cla5"><num>(5)</num><p>An assignment or licence granted by one copyright owner shall have effect as if
+              granted by his co-owner also, and, subject to any contract between them, fees received
+              by the grantors shall be divided equitably between all the co-owners.</p></clause><clause id="art10-cla6"><num>(6)</num><p>For the purpose of this section, persons shall be deemed to be co-owners-</p><list id="art10-cla6-lst1"><item id="art10-cla6-itma"><num>(a)</num><p>if they share a joint interest in the whole or any part of a copyright; or</p></item><item id="art10-cla6-itmb"><num>(b)</num><p>if they have interests in the various copyrights in a composite production, that
+                  is to say, a production consisting of two or more works.</p></item></list></clause><clause id="art10-cla7"><num>(7)</num><p>An assignment, licence or testamentary disposition be effectively granted or made in
+              respect of a future work or an existing work in which copyright does not yet subsist;
+              and the prospective copyright in any such work shall be transmissible by operation of
+              law as movable property.</p></clause><clause id="art10-cla8"><num>(8)</num><p>A testamentary disposition of material on which a work is first written or otherwise
+              recorded shall, in the absence of any contrary indication, be presumed to include any
+              copyright or prospective copyright in the work which is vested in the deceased.</p></clause></article><article id="art11"><num>11.</num><clause id="art11-cla1"><num>(1)</num><p>The owner of a copyright has the right-</p><list id="art11-cla1-lst1"><item id="art11-cla1-itma"><num>(a)</num><p>to claim authorship of his work, in particular that his authorship be indicated
+                  in connection with any of the acts referred to in section 5 of this Act except
+                  when the work is included incidentally or accidentally when reporting current
+                  events by means of broadcasting.</p></item><item id="art11-cla1-itmb"><num>(b)</num><p>To object and to seek relief in connection with any distortion, mutilation or
+                  other modification of, and any other derogatory action in relation to his work,
+                  where such action would be or is prejudicial to his honour or reputation.</p></item></list></clause><clause id="art11-cla2"><num>(2)</num><p>The rights referred to in subsection (1) of this section, are perpetual, inalienable
+              and imprescriptible.</p></clause><clause id="art11-cla3"><num>(3)</num><p>For the purpose of this section, author includes his heirs and
+            successors-in-title.</p></clause></article><article id="art12"><num>12.</num><clause id="art12-cla1"><num>(1)</num><p>Notwithstanding any assignment or sale of original work, the authors or graphic
+              works, three-dimensional works and manuscript shall have an inalienable right to share
+              in the proceeds of any sale of that work or manuscript by public auction or through a
+              dealer whatever the method used by the latter to carry out the operation.</p></clause><clause id="art12-cla2"><num>(2)</num><p>The right conferred by this section shall apply to originals of such work.</p></clause><clause id="art12-cla3"><num>(3)</num><p>The conditions for the exercise of the right conferred by this section shall be
+              determined by regulations to be made by the Nigerian Copyright Council established
+              under section 30 of this Act.</p></clause><clause id="art12-cla4"><num>(4)</num><p>The foregoing provisions of this section, shall not apply to architectural works or
+              applied art.</p></clause><clause id="art12-cla5"><num>(5)</num><p>In this section, author includes heirs and successors-in-title.</p></clause></article><article id="art13"><num>13.</num><clause id="art13-cla13"><p>Publishers, printers, producers or manufacturers of works in which copyright subsists
+              shall keep a register of all works produced by them showing the following, that is-</p><list id="art13-cla13-lst1"><item id="art13-cla13-itma"><num>(a)</num><p>the name of the author;</p></item><item id="art13-cla13-itmb"><num>(b)</num><p>the title;</p></item><item id="art13-cla13-itmc"><num>(c)</num><p>year of production; and</p></item><item id="art13-cla13-itmd"><num>(d)</num><p>the quantity of work produced.</p></item></list></clause></article><article id="art14"><num>14.</num><clause id="art14-cla1"><num>(1)</num><p>Copyright is infringed by any person who without the licence or authorisation of the
+              owner of the copyright-</p><list id="art14-cla1-lst1"><item id="art14-cla1-itma"><num>(a)</num><p>does, or cause any other person to do an act, the doing of which is controlled by
+                  copyright;</p></item><item id="art14-cla1-itmb"><num>(b)</num><p>imports into Nigeria, otherwise than for his private or domestic use, any article
+                  in respect of which copyright is infringed under paragraph (a) of this
+                subsection;</p></item><item id="art14-cla1-itmc"><num>(c)</num><p>exhibits in public any article in respect of which copyright is infringed under
+                  paragraph (a) of this subsection;</p></item><item id="art14-cla1-itmd"><num>(d)</num><p>distributes by way of trade, offer for sale, hire or otherwise or for any purpose
+                  prejudicial to the owner of the copyright, any article in respect of which
+                  copyright is infringed under paragraph (a)of this subsection;</p></item><item id="art14-cla1-itme"><num>(e)</num><p>makes or has in his possession, plates, master tapes, machines, equipment or
+                  contrivances used for the purpose of making infringed copies of the work;</p></item><item id="art14-cla1-itmf"><num>(f)</num><p>permits a place of public entertainment or of business to be used for a
+                  performance in the public of the work, where the performance constitutes an
+                  infringed of the copyright in the work, unless the person permitting the place to
+                  be used is not aware, and had no reasonable ground for suspecting that the
+                  performance would be an infringement of the copyright;</p></item><item id="art14-cla1-itmg"><num>(g)</num><p>performs or cause to be performed for the purposes of trade or business or as
+                  supporting facility to a trade or business or as supporting facility to a trade or
+                  business, any work in which copyright subsists.</p></item></list></clause><clause id="art14-cla2"><num>(2)</num><p>Notwithstanding subsection (1) of this section, or any other provision of this Act,
+              where any work in which copyright subsists or a production of any such work is
+              comprised in-</p><list id="art14-cla2-lst1"><item id="art14-cla2-itma"><num>(a)</num><p>the archives stored in the National Archives established under the Public
+                  Archives Act; or</p></item><item id="art14-cla2-itmb"><num>(b)</num><p>the public records of a State, being records for storage or custody of which
+                  provision is made by law, the copyright in the work is not infringed by the making
+                  or the supplying to any person, of any reproduction of the work in pursuance of
+                  that Act or law.</p></item></list></clause></article><article id="art15"><num>15.</num><clause id="art15-cla1"><num>(1)</num><p>Subject to this Act, infringement of copyright shall be actionable at the suite of
+              the owner, assignee or an exclusive licensee of the copyright, as the case may be, in
+              the Federal High Court exercising jurisdiction in the place where the infringement
+              occurred; and in any action for such infringement, all such relief by way of damages,
+              injunction, accounts or otherwise shall be available in any corresponding proceedings
+              in respect of infringement of other proprietary rights.</p></clause><clause id="art15-cla2"><num>(2)</num><p>Where an action of infringement of copyright brought by the copyright owner or an
+              exclusive licensee relates to an infringement in respect of which they have concurrent
+              rights of action, the copyright owner or the exclusive licensee may not, without the
+              leave of court, proceed with the action unless the other is either joined as a
+              plaintiff or added as a defendant.</p></clause><clause id="art15-cla3"><num>(3)</num><p>Where in an action for infringement of copyright, it is proved or admitted that an
+              infringement was committed but that at the time of the infringement, the defendant was
+              not aware and had no reasonable grounds for suspecting that copyright subsisted in the
+              work to which the action relates, the plaintiff shall not be entitled under this
+              section to any damages against the defendant in respect of the infringement, but shall
+              be entitled to an account of profits in respect of the infringement, whether or not
+              any other relief is granted under this section.</p></clause><clause id="art15-cla4"><num>(4)</num><p>Where an action under this section, an infringement of copyright is proved or
+              admitted, and the court in which the action is brought, having regard (apart from all
+              other material considerations) to-</p><list id="art15-cla4-lst1"><item id="art15-cla4-itma"><num>(a)</num><p>the flagrancy of the infringement; and</p></item><item id="art15-cla4-itmb"><num>(b)</num><p>any benefit shown to have accrued to the defendant by reason of the infringement,
+                  is satisfied that effective relief would not otherwise be available to the
+                  plaintiff, the court, in assessing damages for the infringement, shall have power
+                  to award such additional damages by virtue of this subsection as the court may
+                  consider appropriate in the circumstances.</p></item></list></clause><clause id="art15-cla5"><num>(5)</num><p>No injunction shall be issued in proceedings for infringement of copyright which
+              requires completed or partly completed building to be demolished or prevents the
+              completion of a partly completed building.</p></clause><clause id="art15-cla6"><num>(6)</num><p>In this section, action includes a counter-claim, and references to the plaintiff and
+              to the defendant in an action shall be construed accordingly.</p></clause></article><article id="art16"><num>16.</num><clause id="art16-cla1"><p>All infringement copies of any work in which copyright subsists, or of any
+              substantial part thereof, and all plates, master tapes, machines, equipment or
+              contrivances used, or intended to be used for the production of such infringing copies
+              shall be deemed to be the property of the owner, assignee or exclusive licensee, as
+              the case may be, of the copyright, who accordingly may take proceedings for the
+              recovery of the possession thereof or in respect of the conversion thereof.</p></clause></article><article id="art17"><num>17.</num><clause id="art17-cla1"><num>(1)</num><p>An infringement of the rights conferred by section 9 of this Act is actionable as a
+              breach of statutory duty owed to the person entitled to the right.</p></clause><clause id="art17-cla2"><num>(2)</num><p>In proceedings for infringement of the rights conferred by the said section 9 of this
+              Act, the person whose rights have been infringed shall be entitled to an award of
+              damages, injunction and any other remedies as the court may deem fit to award in the
+              circumstances.</p></clause></article><article id="art18"><num>18.</num><clause id="art18-cla1"><num>(1)</num><p>Any person who-</p><list id="art18-cla1-lst1"><item id="art18-cla1-itma"><num>(a)</num><p>makes or causes to be made for sale, hire, or for the purpose of trade or
+                  business any infringing copy of a work in which copyright subsists; or</p></item><item id="art18-cla1-itmb"><num>(b)</num><p>imports or causes to be imported into Nigeria more than two infringing copies of
+                  such work; or</p></item><item id="art18-cla1-itmc"><num>(c)</num><p>makes, causes to be made, or has in his possession, any plate, master tape,
+                  machine, equipment or contrivance for purpose of making any infringing copy of any
+                  such work; shall, unless he proves to the satisfaction of the court that he did
+                  not know and had no reason to believe that any such copy was not an infringing
+                  copy of any such work, or that such plate, master tape, machine, equipment or
+                  contrivance for purpose of making any infringing copy of any such work, be guilty
+                  of an offence under this Act and shall be liable on conviction to a fine of an
+                  amount not exceeding N1,000 for every copy dealt with in contravention of this
+                  section or to a term of imprisonment not exceeding five years, or to both such
+                  fine and imprisonment.</p></item></list></clause><clause id="art18-cla2"><num>(2)</num><p>Any person who-</p><list id="art18-cla2-lst1"><item id="art18-cla2-itma"><num>(a)</num><p>sells or lets hire or for purpose of trade or business, exposes or offers for
+                  sale, or hires any infringing copy of any work in which copyright subsists; or</p></item><item id="art18-cla2-itmb"><num>(b)</num><p>distributes for the purposes of trade or business any infringing copy of any such
+                  work; or</p></item><item id="art18-cla2-itmc"><num>(c)</num><p>has in his possession other than for his private or domestic use, any infringing
+                  copy of any such work, shall, unless he proves to the satisfaction of the court
+                  that he did not know and had no reason to believe that any such copy was not an
+                  infringing copy of any such work, be guilty of an offence under this Act and shall
+                  be liable on conviction to a fine of an amount not exceeding N 1,000 for every
+                  copy dealt with in contravention of this section or to a term of imprisonment not
+                  exceeding two years or in the case of an individual to both such fine and
+                  imprisonment.</p></item></list></clause><clause id="art18-cla3"><num>(3)</num><p>Any person who, without the consent of the owner, distributes, in public for
+              commercial purposes, copies of a work in which copyright subsists by virtue of
+              sections 5(1)(a)(vi), 5(1)(c)(iv), 6(1)(b) or 7(1)(c) of this Act by way of rental,
+              lease, hire, loan or similar arrangement, shall be guilty of an offence under this
+              Act, and shall be liable upon conviction to a fine of N 100 for every copy dealt with
+              or imprisonment for six months on or to both such fine and imprisonment.</p></clause><clause id="art18-cla4"><num>(4)</num><p>The court before which any proceedings are taken for any offence under subsections
+              (1), (2) and (3) of this section, whether the alleged offender is convicted or not,
+              may order all copies of the works, plates, master tape, machine, equipment or
+              contrivance in the possession of the alleged offender, which appear, to be infringing
+              copies, of the works, to be destroyed or delivered up to the owner of the copyright or
+              otherwise dealt with as the court may think fit.</p></clause><clause id="art18-cla5"><num>(5)</num><p>Where an article has been seized by a police officer or an authorised officer in
+              connection with a suspected offence under this Act, a court may on the application of
+              the Attorney-General of the Federation of owner of the copyright in connection with
+              which such offence is suspected to have been committed, order that the article be
+              destroyed or delivered up to the owner of the copyright or otherwise dealt with as the
+              court may think fit, notwithstanding that no person has been charged with the
+              suspected offence.</p></clause></article><article id="art19"><num>19.</num><clause id="art19-cla1"><num>(1)</num><p>Where an offence under this Act has been committed by a body corporate, the body
+              corporate and every person who at the time the offence was committed was in charge of,
+              or was responsible to the body corporate shall be deemed to be guilty of such offence
+              and shall be liable to be proceeded against and punished accordingly:<eol/>Provided
+              that nothing contained in this subsection shall render any person liable to any
+              punishment, if he proves that the offence was committed without his knowledge or that
+              he exercised all due diligence to prevent the commission of such offence.</p></clause><clause id="art19-cla2"><num>(2)</num><p>Notwithstanding anything contained in subsection (1) of this section, where an
+              offence under this Act has been committed by a body corporate and it is proved that
+              the offence was committed with the consent or connivance of, any director, manager,
+              secretary or other officer of the body corporate such director, manager, secretary or
+              other officer shall also be deemed to be guilty of that offence and shall be liable to
+              be proceeding against and punished accordingly.</p></clause><clause id="art19-cla3"><num>(3)</num><p>For the purposes of this section-<eol/>body corporate includes a firm or other
+              association of persons; and<eol/>director in relation to a firm includes a partner in
+              the firm.</p></clause></article><article id="art20"><num>20.</num><clause id="art20-cla1"><p>Any person who-</p><list id="art20-cla1-lst1"><item id="art20-cla1-itma"><num>(a)</num><p>fails to keep a register required under section 13 of this Act; or</p></item><item id="art20-cla1-itmb"><num>(b)</num><p>makes or causes to be made a false entry in such register; or</p></item><item id="art20-cla1-itmc"><num>(c)</num><p>produces or tenders, or causes to be produced or tendered under this section and
+                  be liable on conviction to a fine not exceeding N10,000.</p></item></list></clause></article><article id="art21"><num>21.</num><clause id="art21-cla1"><p>Notwithstanding the provisions of any law to the contrary, it shall be permissible
+              for both criminal and civil actions to be taken simultaneously in respect of the same
+              infringement under this Act.</p></clause></article><article id="art22"><num>22.</num><clause id="art22-cla1"><num>(1)</num><p>In any action for infringement of any right under this Act, where an ex parte
+              application is made to the court, supported by affidavit, that there is reasonable
+              cause for suspecting that there is in any house or premises any infringing copy or any
+              plate, film or contrivance used or intended to be used for making infringing copies ir
+              capable of being used for the purpose of making copies or any other article, book or
+              document by means of or in relation to which any infringement under this Act has been
+              commited, the court may issue an order upon such terms as it deems just, authorising
+              the applicant to enter the house or premises at any reasonable time by day or night
+              accompanied by a police officer not below the rank of an Assistant Superintendent of
+              Police, and</p><list id="art22-cla1-lst1"><item id="art22-cla1-itma"><num>(a)</num><p>seize, detain and preserve any such infringing copy or contrivance;</p></item><item id="art22-cla1-itmb"><num>(b)</num><p>inspect all or any documents in the custody or under the control of the defendant
+                  relating to the action.</p></item></list></clause><clause id="art22-cla2"><num>(2)</num><p>Any person who knowingly gives false information under this section shall be guilty
+              of an offence and liable on conviction to fine of N1,000.</p></clause></article></part><part id="prtII"><num>Part II</num><title>Part II Neighbouring Rights</title><article id="art23"><num>(a)</num><title>Neighbouring Rights</title><clause id="art23-cla1"><p>23. A performer shall have exclusive right to control, in relation to his
+              performance, the following acts, that is-</p><list id="art23-cla1-lst1"><item id="art23-cla1-itma"><p>performing;</p></item><item id="art23-cla1-itmb"><num>(b)</num><p>recording;</p></item><item id="art23-cla1-itmc"><num>(c)</num><p>broadcasting live;</p></item><item id="art23-cla1-itmd"><num>(d)</num><p>reproducing in any material form; and</p></item><item id="art23-cla1-itme"><num>(e)</num><p>adaptation of the performance.</p></item></list></clause><clause id="art23-cla2"><num>(2)</num><p>In this section, performance includes-</p><list id="art23-cla2-lst1"><item id="art23-cla2-itma"><num>(a)</num><p>a dramatic performance (which includes dance and mime);</p></item><item id="art23-cla2-itmb"><num>(b)</num><p>a musical performance; and</p></item><item id="art23-cla2-itmc"><num>(c)</num><p>a reading or recitation of literary act or any similar presentation which is or
+                  so far as it is, a live performance given by one or more individuals.</p></item></list></clause></article><article id="art24"><num>24.</num><clause id="art24-cla1"><p>The right conferred by <ref id="ref4" href="#art23">section 23</ref> of this Act
+              shall subsist in relation to the performance until the end of the period of fifty
+              years from the end of the year in which the performance first took place.</p></clause></article><article id="art25"><num>(a)</num><clause id="art25-cla1"><p>25. A performer’s right is infringed by a person who, without the performer’s consent
+              or authorisation in writing, does any of the following, that is-</p><list id="art25-cla1-lst1"><item id="art25-cla1-itma"><p>makes a recording of the whole or substantial part of a live
+                  performance:<eol/>Provided that where the consent sought is to make a recording of
+                  the work for research, private or domestic use, such consent shall not be
+                  reasonably refused;</p></item><item id="art25-cla1-itmb"><num>(b)</num><p>broadcasts live, or includes live in a cable programme, the whole or a
+                  substantial part of the live performance;</p></item><item id="art25-cla1-itmc"><num>(c)</num><p>performs in public the whole or a substantial part of the live performance;</p></item><item id="art25-cla1-itmd"><num>(d)</num><p>shows or plays in public the whole or a substantial part of the live performance
+                  for commercial purposes;</p></item><item id="art25-cla1-itme"><num>(e)</num><p>broadcast, or includes in a cable programme, a substantial part of the
+                  performance by means of recording which is, and which that person knows or has
+                  reason to believe was made without the performer’s consent;</p></item><item id="art25-cla1-itmf"><num>(f)</num><p>imports into the country otherwise than for his private or domestic use, a
+                  recording of a performer’s work which is an infringing recording; or</p></item><item id="art25-cla1-itmg"><num>(g)</num><p>in the course of trade or business, sells or lets for hire, offers, distributes
+                  or displays for sale or hire a recording of a performer’s work which is an
+                  infringing recording.</p></item></list></clause></article><article id="art26"><num>26.</num><clause id="art26-cla1"><num>(1)</num><p>An infringement of a right protected by section 23 of this Act shall be actionable by
+              the person entitled to the right as a breach of statutory duty and the performer be
+              entitled to damages, injunction, account for profit or conversion.</p></clause><clause id="art26-cla2"><num>(2)</num><p>Where a person has in his possession, custody or control, in the course of trade or
+              business or otherwise than for a private or domestic use, an unauthorised recording of
+              a performance, a person having the performer’s right or recording rights in relation
+              to the performance under this section shall be entitled to an order of the court that
+              the recording be forfeited and delivered up to him.</p></clause></article><article id="art27"><num>27.</num><clause id="art27-cla1"><num>(1)</num><p>Notwithstanding the provisions of section 25 of this Act, a person who does any of
+              the acts set out in the said section 25 shall, unless he proves to the satisfaction of
+              the court that he did not know that this conduct was an infringement of the
+              performer’s right, be liable on conviction-</p><list id="art27-cla1-lst1"><item id="art27-cla1-itma"><num>(a)</num><p>in the case of an individual, to a fine not exceeding N10,000;</p></item><item id="art27-cla1-itmb"><num>(b)</num><p>in the case of a body corporate, to a fine of N50,000;</p></item><item id="art27-cla1-itmc"><num>(c)</num><p>in all other cases, to a fine of N100 for each copy dealt with in contravention
+                  or to imprisonment for twelve months or to both such fine and imprisonment.</p></item></list></clause><clause id="art27-cla2"><num>(2)</num><p>A court before which an offence under this section is tried shall order that the
+              recording or any other part thereof be delivered to the performer.</p></clause></article><article id="art28"><num>28.</num><clause id="art28-cla1"><num>(1)</num><p>Expressions of folklore are protected against-</p><list id="art28-cla1-lst1"><item id="art28-cla1-itma"><num>(a)</num><p>reproduction;</p></item><item id="art28-cla1-itmb"><num>(b)</num><p>communication to the public by performance, broadcasting, distribution by cable
+                  or other means;</p></item><item id="art28-cla1-itmc"><num>(c)</num><p>adaptation, translation and other transformations,when such expressions are made
+                  either for commercial purposes or outside their traditional or customary
+                context.</p></item></list></clause><clause id="art28-cla2"><num>(2)</num><p>The right conferred in subsection (1) of this section shall not include the right to
+              control-</p><list id="art28-cla2-lst1"><item id="art28-cla2-itma"><num>(a)</num><p>the doing of any of the acts by way of fair dealing for private and domestic use,
+                  subject to the condition that, if the use is public, it shall be accompanied by an
+                  acknowledgement of the title of the work and its sources;</p></item><item id="art28-cla2-itmb"><num>(b)</num><p>the utilisation for purposes of education;</p></item><item id="art28-cla2-itmc"><num>(c)</num><p>utilisation by way of illustration in an original work of the author: provided
+                  that the extent of such utilisation is compatible with fair practice;</p></item><item id="art28-cla2-itmd"><num>(d)</num><p>the borrowing of expressions of folklore for creating an original work of the
+                  author:</p></item><item id="art28-cla2-itme"><num>(e)</num><p>the incidental utilisation expressions of folklore.</p></item></list></clause><clause id="art28-cla3"><num>(3)</num><p>In all printed publications, and in connection with any communications to the public,
+              of any identifiable expression of folklore, its source shall be indicated in an
+              appropriate manner, and in conformity with fair practice, by mentioning the community
+              or place from where the expression utilised has been derived.</p></clause><clause id="art28-cla4"><num>(4)</num><p>The rights to authorise acts referred to in subsection (1) of this section shall vest
+              in the Nigeria Copyright Council.</p></clause><clause id="art28-cla5"><num>(5)</num><p>For the purposes of this section, folklore means a group-oriented and tradition-based
+              creation of groups or individuals reflecting the expectation of the community as an
+              inadequate expression of its cultural and social identity, its standards and values as
+              transmitted orally, by imitation or by other means including-</p><list id="art28-cla5-lst1"><item id="art28-cla5-itma"><num>(a)</num><p>folklore, folk poetry, and folk riddles;</p></item><item id="art28-cla5-itmb"><num>(b)</num><p>folk songs and instrumental folk music;</p></item><item id="art28-cla5-itmc"><num>(c)</num><p>folk dances and folk plays;</p></item><item id="art28-cla5-itmd"><num>(d)</num><p>productions of folk art in particular, drawings, paintings, carvings, sculptures,
+                  pottery, terracotta, mosaic, woodwork, metalwork, handicrafts, costumes,
+                  indigenous textiles.</p></item></list></clause></article><article id="art29"><clause id="art29-cla1"><p>29. A person who, without the consent of the Nigeria Copyright Council, uses an
+              expression of folklore in a manner not permitted by section 28 of this Act shall be in
+              breach of statutory duty and be liable to the council in damages, injunctions and any
+              other remedies as the court may deem fit to award in the circumstances.</p></clause></article></part><part id="prtIII"><num>Part III</num><title>Part III Administration of Copyright</title><article id="art30"><num>30.</num><title>Administration of Copyright</title><clause id="art30-cla1"><num>(1)</num><p>There is hereby established a body to be known as the Nigeria Copyright Council
+              (hereinafter referred to as the council)</p></clause><clause id="art30-cla2"><num>(2)</num><p>The council shall be a body corporate with perpetual succession and a common seal and
+              may sue and be sued in its corporate name.</p></clause><clause id="art30-cla3"><num>(3)</num><p>The council shall-</p><list id="art30-cla3-lst1"><item id="art30-cla3-itma"><num>(a)</num><p>be responsible for all matters affecting copyright in Nigeria as provided for in
+                  this Act;</p></item><item id="art30-cla3-itmb"><num>(b)</num><p>monitor and supervise Nigeria’s position in relation to international convention
+                  and advise Government thereon;</p></item><item id="art30-cla3-itmc"><num>(c)</num><p>advise and regulate condition s for the conclusion of bilateral and multilateral
+                  agreements between Nigeria and any other country;</p></item><item id="art30-cla3-itmd"><num>(d)</num><p>enlighten and inform the public on matters relating to copyright;</p></item><item id="art30-cla3-itme"><num>(e)</num><p>maintain an effective data bank on authors and their works;</p></item><item id="art30-cla3-itmf"><num>(f)</num><p>be responsible for such other matters as relate to copyright in Nigeria as the
+                  Minister may, from time to time, direct.</p></item></list></clause></article><article id="art31"><num>31.</num><clause id="art31-cla1"><num>(1)</num><p>The council shall have a Governing Body (hereinafter referred to as the board) which
+              shall be composed as follows-</p><list id="art31-cla1-lst1"><item id="art31-cla1-itma"><num>(a)</num><p>a chairman to be appointed by the president, Commander-in-Chief of the Armed
+                  Forces;</p></item><item id="art31-cla1-itmb"><num>(b)</num><p>the Director of the Council;</p></item><item id="art31-cla1-itmc"><num>(c)</num><p>a representative of the Federal Ministry in charge of culture;</p></item><item id="art31-cla1-itmd"><num>(d)</num><p>a representative of the Federal Ministry of Education;</p></item><item id="art31-cla1-itme"><num>(e)</num><p>a representative of the Federal Ministry of Trade and Tourism;</p></item><item id="art31-cla1-itmf"><num>(f)</num><p>a representative of the Federal Ministry of Internal Affairs</p></item><item id="art31-cla1-itmg"><num>(g)</num><p>a representative of the Federal Ministry of the Nigeria Police Force, not below
+                  the rank of a Commissioner of Police;</p></item><item id="art31-cla1-itmh"><num>(h)</num><p>a representative of the Federal Ministry of the National Library</p></item><item id="art31-cla1-itmi"><num>(i)</num><p>two persons knowledgeable in copyright matters to be chosen by the minister in
+                  charge of culture;</p></item><item id="art31-cla1-itmj"><num>(j)</num><p>fifteen representative of author’s associations who shall represent as far as
+                  possible the following interests to be appointed by the Minister, that is-</p><list id="art31-cla1-itmj-lst1"><item id="art31-cla1-itmj-itmi"><num>(i)</num><p>writers,</p></item><item id="art31-cla1-itmj-itmii"><num>(ii)</num><p>publishers,</p></item><item id="art31-cla1-itmj-itmiii"><num>(iii)</num><p>musicians and music-publishers,</p></item><item id="art31-cla1-itmj-itmiv"><num>(iv)</num><p>phonographic and videographic producers</p></item><item id="art31-cla1-itmj-itmv"><num>(v)</num><p>cinematograph producers,</p></item><item id="art31-cla1-itmj-itmvi"><num>(vi)</num><p>theatre practitioners,</p></item><item id="art31-cla1-itmj-itmvii"><num>(vii)</num><p>broadcasting organisations,</p></item><item id="art31-cla1-itmj-itmviii"><num>(viii)</num><p>visual artists.</p></item></list></item></list></clause><clause id="art31-cla2"><num>(2)</num><p>The representative of the Ministries shall be officers not below the rank of
+              Director.</p></clause><clause id="art31-cla3"><num>(3)</num><p>The Board shall adopt rules governing its procedure and method of operation.</p></clause></article><article id="art32"><num>32.</num><clause id="art32-cla1"><num>(1)</num><p>There shall be for the council of a Director who shall be the Chief Executive and
+              shall be appointed by the president, Commander-in-Chief of the Armed Forces on the
+              recommendation of the Minister.</p></clause><clause id="art32-cla2"><num>(2)</num><p>The Director shall be responsible for the day-to-day administration of the
+            Council.</p></clause><clause id="art32-cla3"><num>(3)</num><p>Without prejudice to the generality of subsection (1) of this section, the Council
+              shall have power-</p><list id="art32-cla3-lst1"><item id="art32-cla3-itma"><num>(a)</num><p>to appoint such other staff as it may determine;</p></item><item id="art32-cla3-itmb"><num>(b)</num><p>to pay its staff such remuneration and allowances as it may, from time to time,
+                  determine;`</p></item><item id="art32-cla3-itmc"><num>(c)</num><p>as regards any staff in whose case it decides so to do, to pay to or in respect
+                  of such staff such pensions and gratuities as are payable to persons of equivalent
+                  grade in the public service of the Federation.</p></item></list></clause></article></part><part id="prtIV"><num>Part IV</num><title>Part IV Miscellaneous</title><article id="art33"><num>33.</num><title>Miscellaneous</title><clause id="art33-cla1"><p>Where any country is a party to a treaty or other international agreement to which
+              Nigeria is also a party and the Minister is satisfied that the country in question
+              provides for protection of copyright in works which are protected under this Act, the
+              Minister may by Order in the Federal Gazette extend the application of this Act in
+              respect of any or all the works referred to in section 1 (1) of this Act-</p><list id="art33-cla1-lst1"><item id="art33-cla1-itma"><num>(a)</num><p>to individuals who are citizens of or domiciled in that country;</p></item><item id="art33-cla1-itmb"><num>(b)</num><p>to bodies corporate established by or under the law of that country;</p></item><item id="art33-cla1-itmc"><num>(c)</num><p>to works, other than sound recordings and broadcasts, first published in the
+                  country; and</p></item><item id="art33-cla1-itmd"><num>(d)</num><p>to broadcast and sound recordings made in that country.</p></item></list></clause></article><article id="art34"><num>34.</num><clause id="art34-cla1"><num>(1)</num><p>An affidavit made before a Commissioner for Oaths, notary public or other person
+              competent to administer an oath in terms of the law of the country where the oath is
+              made which-</p><list id="art34-cla1-lst1"><item id="art34-cla1-itma"><num>(a)</num><p>purports to have been made by or on behalf of the copyright in a work; and</p></item><item id="art34-cla1-itmb"><num>(b)</num><p>states that-</p><list id="art34-cla1-itmb-lst1"><item id="art34-cla1-itmb-itmi"><num>(i)</num><p>at the time specified therein, copyright subsists in the work,</p></item><item id="art34-cla1-itmb-itmii"><num>(ii)</num><p>the person named therein is the owner of the copyright in the work,</p></item><item id="art34-cla1-itmb-itmiii"><num>(iii)</num><p>a copy of the work exhibited to the affidavit is a true copy of the work,</p></item><item id="art34-cla1-itmb-itmiv"><num>(iv)</num><p>the author of the work is a citizens of or domiciled in a country named in
+                      the affidavit,</p></item><item id="art34-cla1-itmb-itmv"><num>(v)</num><p>the author of the work is a body corporate established or incorporated by or
+                      under the laws of the country named in the affidavit,</p></item><item id="art34-cla1-itmb-itmvi"><num>(vi)</num><p>the certificate attached to the affidavit is a true copy of the certificate
+                      of registration of that incorporation, shall be admitted as evidence of the
+                      facts stated therein without further proof in any proceedings under this
+                    Act.</p></item></list></item></list></clause><clause id="art34-cla2"><num>(2)</num><p>The court before which an affidavit is produced under subsection (1) of this section
+              shall presume, until the contrary is proved, that the statements made therein are
+              true.</p></clause></article><article id="art35"><num>35.</num><clause id="art35-cla1"><p>In any action for an infringement of copyright in a work, the following shall be
+              presumed, in the absence of any evidence to the contrary-</p><list id="art35-cla1-lst1"><item id="art35-cla1-itma"><num>(a)</num><p>the copyright subsists in a work which is the subject matter of an alleged
+                  infringement;</p></item><item id="art35-cla1-itmb"><num>(b)</num><p>that the plaintiff is the owner of copyright in the work;</p></item><item id="art35-cla1-itmc"><num>(c)</num><p>that the name appearing on a work purported to be the name of the author, is the
+                  name of such author;</p></item><item id="art35-cla1-itmd"><num>(d)</num><p>that the name appearing on a work purported to be that of a publisher or producer
+                  of a work is the name of such publisher or producer;</p></item><item id="art35-cla1-itme"><num>(e)</num><p>where the author is dead, that the work is an original work;</p></item><item id="art35-cla1-itmf"><num>(f)</num><p>that it was published or produced at the place and on the date appearing on the
+                  work.</p></item></list></clause></article><article id="art36"><num>36.</num><clause id="art36-cla1"><num>(1)</num><p>The owner of a copyright in any published literary, artistic or musical work or sound
+              recording, may give notice in writing to the Department of Customs and Excise (in this
+              section referred to as the Department)<eol/>(a) that he is the owner of the copyright
+              in the work; and<eol/>(b) that he requests the Department during the period specified
+              in the notice, to treat as prohibited goods, copies of the work to which this section
+              applies:<eol/>Provided that the period specified in a notice under this subsection
+              shall not exceed five years and shall not exceed beyond the end of the period for
+              which the copyright is to subsist.</p></clause><clause id="art36-cla2"><num>(2)</num><p>This section applies, in the case of a work, to any printed copy outside Nigeria
+              which if it had been made in Nigeria, would be an infringement copy of the work.</p></clause><clause id="art36-cla3"><num>(3)</num><p>Where a notice has been given under this section in respect of a work and has not
+              been withdrawn, the importation into Nigeria, at a time before the end of the period
+              specified in the notice, of any copy of the work to which this section applies shall,
+              subject to the following provisions of this section, be prohibited:<eol/>Provided that
+              this subsection shall not apply to the importation of any article by a person for his
+              private and domestic use.</p></clause><clause id="art36-cla4"><num>(4)</num><p>Where a notice is given under subsection (1) of this section in respect of any work,
+              neither the Department nor any member, officer, servant or agent of the Department
+              shall be liable to the owner of the work or to any other person for any act or
+              omission by the department or its servants or agents in relation to the
+              notice:<eol/>Provided that, where the owner has suffered loss as a result of any such
+              act or omission and a fee has been paid or is payable to the Department in respect of
+              the notice, an amount equal to the loss or to the amount of the fee for one year,
+              whichever is less, shall be repaid by the Department to the owner or, if the fee has
+              been paid, shall be waived.</p></clause><clause id="art36-cla5"><num>(5)</num><p>The Minister of Internal Affairs may make regulations prescribing the form in which
+              notices are to be given under this section, and requiring a person giving such notice,
+              either at the time of giving the notice are at the time when the goods in question are
+              imported, or at both of those times, to furnish the Department with such evidence, and
+              to comply with such other conditions (if any), as may be specified in the regulations;
+              and any such regulations may include such incidental and supplementary provisions as
+              the Minister of Internal Affairs considers expedient for the purposes of this
+            section.</p></clause><clause id="art36-cla6"><num>(6)</num><p>Without prejudice to the generality of subsection (5) of this section, regulations
+              made under that subsection may include provisions for requiring a person who has given
+              a notice purporting to be a notice under this section to pay such fee in respect of
+              the notice as may be prescribed by the regulations.</p></clause><clause id="art36-cla7"><num>(7)</num><p>For the purposes of the Customs and Excise Management Act any fee paid in pursuance
+              of any regulations made under this section shall be treated as money collected on
+              account of the Department.</p></clause><clause id="art36-cla8"><num>(8)</num><p>Notwithstanding anything in the Customs and Excise Management Act, a person shall not
+              be liable to any penalty under that Act (other than forfeiture of the goods) by reason
+              that any goods are treated as prohibited goods by virtue of this section.</p></clause><clause id="art36-cla9"><num>(9)</num><p>This section shall have effect as if it formed part of the Customs and Excise
+              Management Act.</p></clause></article><article id="art37"><num>37.</num><clause id="art37-cla1"><num>(1)</num><p>Where no other provisions is made in that behalf, the Minister may make Regulations
+              prescribing anything required to be prescribed for the purposes of this Act.</p></clause><clause id="art37-cla2"><num>(2)</num><p>Regulations may be made-</p><list id="art37-cla2-lst1"><item id="art37-cla2-itma"><num>(a)</num><p>in the case of works, the copyright in which is vested in the Government, by the
+                  Minister with the prior consent of the National Council of Ministers; and</p></item><item id="art37-cla2-itmb"><num>(b)</num><p>in the case of works, the copyright in which is vested in a State authority, by
+                  the State Authority or a person designated by the State Authority, prescribing the
+                  public officer or other authority by whom licences may be granted for the
+                  production of the works in question and a scale of fees to be charged in respect
+                  of any such licence.</p></item></list></clause><clause id="art37-cla3"><num>(3)</num><p>Regulations made under subsection (2) of this section, shall be additional to and not
+              in derogation of any enactment or other law regulating the custody of the National
+              Archives of Nigeria or the public records of a State, and shall be without prejudice
+              to the operation of section 11 (2) of this Act.</p></clause></article><article id="art38"><num>38.</num><clause id="art38-cla1"><p>The Federal High Court shall have exclusive jurisdiction for the trial of offences or
+              disputes under this Act.</p></clause></article><article id="art39"><num>39.</num><clause id="art39-cla1"><num>(1)</num><p>In this Act, unless the context otherwise requires-<eol/>adaptation means the
+              modification of a pre-existing work from one genre of work to another and consists in
+              altering work within the same genre to make it suitable for different conditions of
+              exploitation, and may also involve altering the composition of the work;<eol/>artistic
+              work includes, irrespective of artistic quality, any of the following works or works
+              similar thereto</p><list id="art39-cla1-lst1"><item id="art39-cla1-itma"><num>(a)</num><p>paintings, drawings, etchings, lithographs, woodcuts, engravings and prints;</p></item><item id="art39-cla1-itmb"><num>(b)</num><p>maps, plans and diagrams;</p></item><item id="art39-cla1-itmc"><num>(c)</num><p>works of sculpture;</p></item><item id="art39-cla1-itmd"><num>(d)</num><p>photographs not comprised in a cinematographic film;</p></item><item id="art39-cla1-itme"><num>(e)</num><p>works of architecture in the form of buildings models; and</p></item><item id="art39-cla1-itmf"><num>(f)</num><p>works of artistic craftsmanship and also (subject to section 1 (3) of this Act)
+                  pictorial woven tissues and articles of applied handicraft and industrial art;</p></item></list><p>author in the case of cinematograph film or sound recording means the person by whom
+              the arrangements for making of the film or sound recording were made, unless the
+              parties to the making of the film or sound recording, provide otherwise by contract
+              within themselves;<eol/>author in the case of literary, artistic or musical works,
+              means the creator of the work;<eol/>author in the case of photographic work, means the
+              person who took the photograph;<eol/>author in the case of broadcast transmitted from
+              within any country, means the person by whom the arrangements for the making or the
+              transmission from within that country were undertaken;<eol/>broadcast means sound or
+              television broadcast by wireless telegraphy or wire or both, or by satellite or cable
+              programmes and includes re-broadcast;<eol/>broadcasting authority means any authority
+              established under any law in Nigeria or elsewhere providing broadcasting services for
+              public reception;<eol/>building includes any structure;<eol/>cable programmes means
+              visual images, sounds or other information sent by means of a telecommunication system
+              otherwise than by wireless telegraphy for reception-<eol/>(a) at two or more places
+              (whereas for simultaneous reception or at different times) in response to request by
+              different users; or<eol/>(b) for presentation to members of the
+              public;<eol/>choreographic work means a composition of movements for dancing or any
+              other patterned succession of gestures mostly created to accompany
+              music;<eol/>cinematograph film includes the first fixation of a sequence of visual
+              images capable of being the subject of reproduction, and includes the recording of a
+              sound track associated with the cinematograph film;<eol/>communication to the public
+              includes, in addition to any live performance or delivery, any mode of visual or
+              acoustic presentation, but does not include a broadcast or re-broadcast;<eol/>computer
+              programme means a set of statements, or instructions to be used directly or indirectly
+              in a computer in order to bring about a certain result;<eol/>copy means a reproduction
+              in written form, in the form of a recording or cinematograph film, or in any other
+              material form, so however that an object shall not be taken to be a copy of an
+              architectural work unless the object is a building or model;<eol/>copyright means
+              copyright under this Act;<eol/>court means the Federal High Court;<eol/>exclusive
+              licence means a licence signed by or on behalf of a copyright owner, authorising the
+              licensee to the exclusion of all other persons (including the person granting the
+              licence), to exercise any right which would otherwise be exercisable exclusively by
+              the copyright owner;<eol/>licence means a lawfully granted licence permitting the
+              doing of an act controlled by this Act;<eol/>literary work includes, irrespective of
+              literary quality, any of the following works or works similar thereto-<eol/>(a)
+              novels, stories and poetic works;<eol/>(b) plays, stage directions, film scenarios and
+              broadcasting scripts;<eol/>(c) choreographic works;<eol/>(d) computer
+              programmes;<eol/>(e) text-books, treaties, histories, biographies, essays and
+              articles;<eol/>(f) encyclopaedias, dictionaries, directories and anthologies;<eol/>(g)
+              letters, reports, and memoranda;<eol/>(h) lectures, addresses and sermons;<eol/>(i)
+              law reports, excluding decision of courts;<eol/>(j) written tables or
+              complaints;<eol/>Minister means the Minister charged with responsibility for
+              culture;<eol/>musical work means any musical work, irrespective of musical quality and
+              includes works composed for musical accompaniment<eol/>re-broadcast means a
+              simultaneous or subsequent broadcast by one broadcasting authority of the broadcast of
+              another broadcasting authority;<eol/>reproduction means the making of one or more
+              copies of a literary, musical or artistic work, cinematograph film or sound
+              recording;<eol/>sound recording means the fixation of a sequence of sound capable of
+              being perceived aurally and of being reproduced but does not include a sound track
+              associated with a cinematograph film;<eol/>State authority in relation to a State,
+              means the Military Governor or Governor, as the case may be, or other governmental
+              authority of a State;<eol/>work includes translations, adaptation, new versions or
+              arrangements of pre-existing works, and anthologies or collection of works which, by
+              reason of the selection and arrangement of their content, present an original
+              character;<eol/>work of joint authorship means a work produced by the collaboration of
+              two or more authors in which the contribution of each author is inseparable from the
+              contribution of the other author or authors;<eol/>year means-<eol/>(a) in section 36
+              of this Act, a period of twelve months; and<eol/>(b) elsewhere in this Act, a calendar
+              year, that is to say, a period of twelve months beginning on 1st January and ending of
+              31st December.</p></clause><clause id="art39-cla2"><num>(2)</num><p>The following provisions shall apply with respect to publication, that is to say-</p><list id="art39-cla2-lst1"><item id="art39-cla2-itma"><num>(a)</num><p>a work shall be deemed to have been published if copies of it have been made
+                  available in a manner sufficient to render the work accessible to the public;</p></item><item id="art39-cla2-itmb"><num>(b)</num><p>where in the first instance, a part only of a work is published, that part shall
+                  be treated for the purposes of this Act as a separate work;</p></item><item id="art39-cla2-itmc"><num>(c)</num><p>a publication in any country shall not be treated as being other than the first
+                  publication by reason only of an earlier publication elsewhere if the two
+                  publications took place within a period of not more than thirty days.</p></item></list></clause></article><article id="art40"><num>40.</num><clause id="art40-cla1"><num>(1)</num><p>The <mod id="mod1"><ref id="ref5" href="nga/act/1970-10-10/200/eng/main">Copyright Act 1970</ref></mod> is hereby repealed.</p></clause><clause id="art40-cla2"><num>(2)</num><p><mod id="mod2"><ref id="ref6" href="nga/act/1960-10-10/100/eng/main/schedule.1#art491">Sections
+                  491, 492 and 493 of the First Schedule to the Criminal Code Act</ref></mod> are hereby repealed.</p></clause><clause id="art40-cla3"><num>(3)</num><p>The transitional and saving provisions in the <ref id="ref7" href="nga/act/1990-12-12/68/eng/main/schedule.5">Fifth Schedule</ref> to this Act
+              shall have effect notwithstanding subsection (1) of this section or any other
+              provisions of this Act</p></clause></article><article id="art41"><num>41.</num><clause id="art41-cla1"><p>This Act may be cited as the Copyright Act.</p></clause></article></part></clauses><attachments><attachment id="ann1-nga_act_1990_10_68_en" href="main/schedule.1" showAs="First Schedule Terms of Copyright"/><attachment id="ann2-nga_act_1990_10_68_en" href="main/schedule.2" showAs="Second Schedule Exceptions from Copyright Control"/><attachment id="ann3-nga_act_1990_10_68_en" href="main/schedule.3" showAs="Third Schedule Special Exceptions in respect of Records of Sound Recording"/><attachment id="ann4-nga_act_1990_10_68_en" href="main/schedule.4" showAs="Fourth Schedule Compulsory Licences for Translation and Reproduction of Certain Works"/><attachment id="ann5-nga_act_1990_10_68_en" href="main/schedule.5" showAs="Fifth Schedule Transitional and Savings Provisions"/></attachments></act></akomantoso>

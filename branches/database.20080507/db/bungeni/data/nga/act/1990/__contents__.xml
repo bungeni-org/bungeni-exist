@@ -1,0 +1,4 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/bungeni/data/nga/act/1990" owner="admin" group="dba" mode="755" created="2007-07-11T19:11:27+01:00" version="1">
+    <resource type="BinaryResource" name="12-12_68_eng.doc" owner="admin" group="dba" mode="755" created="2007-07-11T19:13:44+01:00" modified="2007-07-11T19:13:44+01:00" filename="12-12_68_eng.doc" mimetype="application/msword"/>
+    <resource type="XMLResource" name="12-12_68_eng.xml" owner="admin" group="dba" mode="755" created="2007-07-11T19:13:37+01:00" modified="2007-07-13T11:55:29+01:00" filename="12-12_68_eng.xml" mimetype="text/xml"/>
+</collection>

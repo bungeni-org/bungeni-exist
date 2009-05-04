@@ -1,0 +1,6 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/bungeni/data/ken/act/1980" owner="admin" group="dba" mode="755" created="2007-07-11T18:45:43+01:00" version="1">
+    <resource type="BinaryResource" name="01-01_1_eng%401989-12-15.doc" owner="admin" group="dba" mode="755" created="2007-07-11T18:53:20+01:00" modified="2007-07-11T18:53:20+01:00" filename="01-01_1_eng@1989-12-15.doc" mimetype="application/msword"/>
+    <resource type="XMLResource" name="01-01_1_eng%401989-12-15.xml" owner="admin" group="dba" mode="755" created="2007-07-11T18:52:13+01:00" modified="2007-07-13T11:42:38+01:00" filename="01-01_1_eng@1989-12-15.xml" mimetype="text/xml"/>
+    <resource type="BinaryResource" name="01-01_1_eng.doc" owner="admin" group="dba" mode="755" created="2007-07-11T18:50:38+01:00" modified="2007-07-11T18:50:38+01:00" filename="01-01_1_eng.doc" mimetype="application/msword"/>
+    <resource type="XMLResource" name="01-01_1_eng.xml" owner="admin" group="dba" mode="755" created="2007-07-11T18:50:14+01:00" modified="2007-07-13T11:42:21+01:00" filename="01-01_1_eng.xml" mimetype="text/xml"/>
+</collection>

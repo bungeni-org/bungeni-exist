@@ -27,12 +27,8 @@ public class ANFolderWriter implements ANWriter
     @Override
     public void writeCollection(Collection collection) throws IOException
     {
-        if(mapper.shouldMap(collection))
-        {
-            //create the folder
-            String anPath = mapper.mapPath(collection);
-            new File(dst, anPath).mkdirs();
-        }
+        //we dont need to do anything here in this instance,
+        //all nessecary folders are created by writeResource
     }
 
     @Override

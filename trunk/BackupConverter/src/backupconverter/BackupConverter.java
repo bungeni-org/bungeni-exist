@@ -1,17 +1,22 @@
 package backupconverter;
 
 
+import java.io.File;
+import java.io.PrintStream;
+import java.io.IOException;
+
 import backupconverter.backup.Collection;
 import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
 import backupconverter.backup.reader.FolderBackupReader;
 import backupconverter.backup.reader.ZipBackupReader;
 import backupconverter.backup.reader.BackupReader;
-import java.io.File;
-import java.io.PrintStream;
-import java.io.IOException;
+
 
 /**
+ * Tool for converting an eXist backup to an
+ * Akoma Ntoso Layout mirroring the database
+ *
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
@@ -20,7 +25,7 @@ public class BackupConverter
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws IOException
     {
         if(args.length != 2)
         {
@@ -47,12 +52,6 @@ public class BackupConverter
         out.println("");
         out.println("destination: \t This filesystem destination for the Akoma Ntoso layout to be written to.");
         out.println("");
-    }
-
-
-    public BackupConverter()
-    {
-
     }
 
     public void convert(File backupSrc, File dst) throws IOException

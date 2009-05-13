@@ -8,6 +8,7 @@ import backupconverter.backup.reader.FolderBackupReader;
 import backupconverter.backup.reader.ZipBackupReader;
 import backupconverter.backup.reader.BackupReader;
 import java.io.File;
+import java.io.PrintStream;
 import java.io.IOException;
 
 /**
@@ -21,6 +22,13 @@ public class BackupConverter
      */
     public static void main(String[] args) throws Exception
     {
+        if(args.length != 2)
+        {
+            printUseage(System.out);
+            return;
+        }
+
+
         String backupSrc = args[0];
         String dst = args[1];
 
@@ -29,6 +37,17 @@ public class BackupConverter
     }
 
     private String ZIPPED_BACKUP_SUFFIX = ".zip";
+
+    private static void printUseage(PrintStream out)
+    {
+        out.println("");
+        out.println("BackupConverter <eXist backup> <destination>");
+        out.println("");
+        out.println("eXist backup:\t The filesystem location of an eXist database backup. This may be either a full folder backup or a zip file backup.");
+        out.println("");
+        out.println("destination: \t This filesystem destination for the Akoma Ntoso layout to be written to.");
+        out.println("");
+    }
 
 
     public BackupConverter()

@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.PrintStream;
 import java.io.IOException;
 
+import org.exist.backup.BackupDirectory;
+import org.exist.backup.BackupDescriptor;
+
 import backupconverter.backup.Collection;
 import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
@@ -67,7 +70,18 @@ public class BackupConverter
             backupReader = new FolderBackupReader(backupSrc);
         }
 
+        if(backupSrc.getName().startsWith(BackupDirectory.PREFIX_INC_BACKUP_FILE))
+        {
+            //incremental backup
+        }
+        else
+        {
+           //full backup
+        }
+
+
         Mapper mapper = new BackupToANMapper();
+
         ANWriter writer = new ANFolderWriter(mapper, dst);
 
         //read the backup

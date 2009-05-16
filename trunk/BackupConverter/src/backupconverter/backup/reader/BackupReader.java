@@ -16,7 +16,6 @@ import java.util.NoSuchElementException;
 public abstract class BackupReader implements Iterator<Item>
 {
     public final static String PATH_SEPARATOR = "/";
-    public final static String CONTENTS_FILE = "__contents__.xml";
     
     protected List<Item> backupItems = null;
     protected File backupSrc = null;

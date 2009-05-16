@@ -70,16 +70,35 @@ public class BackupConverter
             backupReader = new FolderBackupReader(backupSrc);
         }
 
-        if(backupSrc.getName().startsWith(BackupDirectory.PREFIX_INC_BACKUP_FILE))
+        BackupDirectory backupDir = new BackupDirectory(backupSrc.getParentFile());
+        BackupDescriptor bdLast = backupDir.lastBackupFile();
+        
+        if(bdLast == null)
         {
-            //incremental backup
+            //this is a full backup that was not created by the ConsistencyCheckTask
         }
         else
         {
-           //full backup
+            String lastFilename = bdLast.getName();
+
+
+            String incremental = bdLast.getProperties().getProperty(BackupDescriptor.INCREMENTAL_PROP_NAME);
+            String previous = bdLast.getProperties().getProperty(BackupDescriptor.PREVIOUS_PROP_NAME);
+
+            //TOD check this assertion
+            if(incremental.equalsIgnoreCase("yes") && previous != null)
+            {
+                //incremental
+            }
+            else
+            {
+                //full backup
+            }
         }
 
 
+
+        
         Mapper mapper = new BackupToANMapper();
 
         ANWriter writer = new ANFolderWriter(mapper, dst);

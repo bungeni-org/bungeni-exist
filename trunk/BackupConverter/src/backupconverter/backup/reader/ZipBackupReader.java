@@ -2,6 +2,7 @@ package backupconverter.backup.reader;
 
 
 import backupconverter.backup.Collection;
+import backupconverter.backup.Contents;
 import backupconverter.backup.Item;
 import backupconverter.backup.ItemPathComparator;
 import backupconverter.backup.Resource;
@@ -58,9 +59,10 @@ public class ZipBackupReader extends BackupReader
                 ZipEntry ze = entries.nextElement();
                 String path = ze.getName();
 
-                if(path.endsWith(CONTENTS_FILE))
+                if(path.endsWith(Contents.CONTENTS_FILE))
                 {
                     this.backupItems.add(new Collection(path.substring(0, path.lastIndexOf('/'))));
+                    this.backupItems.add(new Contents(path, zipFile.getInputStream(ze)));
                 }
                 else
                 {

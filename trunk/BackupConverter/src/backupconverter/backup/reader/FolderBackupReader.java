@@ -2,6 +2,7 @@ package backupconverter.backup.reader;
 
 
 import backupconverter.backup.Collection;
+import backupconverter.backup.Contents;
 import backupconverter.backup.Item;
 import backupconverter.backup.ItemPathComparator;
 import backupconverter.backup.Resource;
@@ -43,8 +44,14 @@ public class FolderBackupReader extends BackupReader
         }
         else
         {
-            if(!f.getName().equals(CONTENTS_FILE))
+            if(path.endsWith(Contents.CONTENTS_FILE))
+            {
+                items.add(new Contents(path, new FileInputStream(f)));
+            }
+            else
+            {
                 items.add(new Resource(path, new FileInputStream(f)));
+            }
         }
 
         return items;

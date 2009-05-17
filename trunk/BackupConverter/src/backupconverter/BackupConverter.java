@@ -118,7 +118,17 @@ public class BackupConverter
             throw new IOException("Unknown backup type");
         }
 
-        
+        //if its not an incremental backup
+        //and the mirror destination exists
+        //then overwite it
+        if(brPreviousSrc == null)
+        {
+            if(dst.exists())
+            {
+                dst.delete();
+                dst.mkdir();
+            }
+        }
 
         
         Mapper mapper = new BackupToANMapper();

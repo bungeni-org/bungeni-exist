@@ -6,6 +6,9 @@ import backupconverter.backup.Contents;
 import backupconverter.backup.Item;
 import backupconverter.backup.ItemPathComparator;
 import backupconverter.backup.Resource;
+
+import org.exist.backup.BackupDescriptor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,12 +22,12 @@ import java.util.zip.ZipFile;
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
-public class ZipBackupReader extends BackupReader
+public class ZipArchiveBackupReader extends BackupReader
 {
     private ZipFile zipFile = null;
     private Enumeration<? extends ZipEntry> zipFileEntries = null;
 
-    public ZipBackupReader(File backupSrc)
+    public ZipArchiveBackupReader(File backupSrc)
     {
         super(backupSrc);
         
@@ -59,7 +62,7 @@ public class ZipBackupReader extends BackupReader
                 ZipEntry ze = entries.nextElement();
                 String path = ze.getName();
 
-                if(path.endsWith(Contents.CONTENTS_FILE))
+                if(path.endsWith(BackupDescriptor.COLLECTION_DESCRIPTOR))
                 {
                     this.backupItems.add(new Collection(path.substring(0, path.lastIndexOf('/'))));
                     this.backupItems.add(new Contents(path, zipFile.getInputStream(ze)));

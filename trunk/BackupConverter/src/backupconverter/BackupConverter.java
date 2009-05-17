@@ -4,15 +4,24 @@ package backupconverter;
 import java.io.File;
 import java.io.PrintStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
-import org.exist.backup.BackupDirectory;
 import org.exist.backup.BackupDescriptor;
+import org.exist.backup.FileSystemBackupDescriptor;
+import org.exist.backup.ZipArchiveBackupDescriptor;
 
 import backupconverter.backup.Collection;
+import backupconverter.backup.Contents;
+import backupconverter.backup.Contents.ContentsEntry;
+import backupconverter.backup.Contents.ContentsResourceEntry;
+import backupconverter.backup.Contents.ContentsSubCollectionEntry;
 import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
 import backupconverter.backup.reader.FolderBackupReader;
-import backupconverter.backup.reader.ZipBackupReader;
+import backupconverter.backup.reader.ZipArchiveBackupReader;
 import backupconverter.backup.reader.BackupReader;
 
 
@@ -36,7 +45,6 @@ public class BackupConverter
             return;
         }
 
-
         String backupSrc = args[0];
         String dst = args[1];
 
@@ -57,56 +65,85 @@ public class BackupConverter
         out.println("");
     }
 
+    private String getPreviousBackupSrc(BackupDescriptor bdBackupSrc) throws IOException
+    {
+        Properties backupProperties = bdBackupSrc.getProperties();
+        
+        if(backupProperties != null)
+        {
+            String pIncremental = bdBackupSrc.getProperties().getProperty(BackupDescriptor.INCREMENTAL_PROP_NAME);
+            String pPrevious = bdBackupSrc.getProperties().getProperty(BackupDescriptor.PREVIOUS_PROP_NAME);
+
+            if(pIncremental.equalsIgnoreCase("yes") && pPrevious != null)
+            {
+                return pPrevious;
+            }
+        }
+
+        return null;
+    }
+
     public void convert(File backupSrc, File dst) throws IOException
     {
-        BackupReader backupReader = null;
+        BackupReader brBackupSrc = null;
+        BackupReader brPreviousSrc = null;
 
-        if(backupSrc.getName().endsWith(ZIPPED_BACKUP_SUFFIX))
+        BackupDescriptor bdBackupSrc = null;
+        if(backupSrc.isDirectory())
         {
-            backupReader = new ZipBackupReader(backupSrc);
+            brBackupSrc = new FolderBackupReader(backupSrc);
+            bdBackupSrc = new FileSystemBackupDescriptor(new File(backupSrc, "db/" + BackupDescriptor.COLLECTION_DESCRIPTOR));
+
+            String prevBackup = getPreviousBackupSrc(bdBackupSrc);
+            if(prevBackup != null && prevBackup.length() > 0)
+            {
+                File prevBackupSrc = new File(backupSrc, prevBackup);
+                brPreviousSrc = new FolderBackupReader(prevBackupSrc);
+            }
+        }
+        else if(backupSrc.getName().endsWith(ZIPPED_BACKUP_SUFFIX))
+        {
+            brBackupSrc = new ZipArchiveBackupReader(backupSrc);
+            bdBackupSrc = new ZipArchiveBackupDescriptor(backupSrc);
+
+            String prevBackup = getPreviousBackupSrc(bdBackupSrc);
+            if(prevBackup != null && prevBackup.length() > 0)
+            {
+                File prevBackupSrc = new File(backupSrc.getParentFile(), prevBackup);
+                brPreviousSrc = new ZipArchiveBackupReader(prevBackupSrc);
+            }
         }
         else
         {
-            backupReader = new FolderBackupReader(backupSrc);
+            throw new IOException("Unknown backup type");
         }
 
-        BackupDirectory backupDir = new BackupDirectory(backupSrc.getParentFile());
-        BackupDescriptor bdLast = backupDir.lastBackupFile();
         
-        if(bdLast == null)
-        {
-            //this is a full backup that was not created by the ConsistencyCheckTask
-        }
-        else
-        {
-            String lastFilename = bdLast.getName();
-
-
-            String incremental = bdLast.getProperties().getProperty(BackupDescriptor.INCREMENTAL_PROP_NAME);
-            String previous = bdLast.getProperties().getProperty(BackupDescriptor.PREVIOUS_PROP_NAME);
-
-            //TOD check this assertion
-            if(incremental.equalsIgnoreCase("yes") && previous != null)
-            {
-                //incremental
-            }
-            else
-            {
-                //full backup
-            }
-        }
-
-
 
         
         Mapper mapper = new BackupToANMapper();
 
         ANWriter writer = new ANFolderWriter(mapper, dst);
 
-        //read the backup
-        while(backupReader.hasNext())
+        //load the contents of the previous backup
+        Map<String, Contents> previousContents = new HashMap<String, Contents>();
+        if(brPreviousSrc != null)
         {
-            Item item = backupReader.next();
+            while(brPreviousSrc.hasNext())
+            {
+                 Item item = brPreviousSrc.next();
+                 if(item instanceof Contents)
+                 {
+                     previousContents.put(item.getPath(), (Contents)item);
+                 }
+            }
+        }
+
+
+        //read the backup
+        while(brBackupSrc.hasNext())
+        {
+            Item item = brBackupSrc.next();
 
             if(item instanceof Collection)
             {
@@ -116,8 +153,35 @@ public class BackupConverter
             {
                 writer.writeResource((Resource)item);
             }
+            else if(item instanceof Contents)
+            {
+                if(brPreviousSrc != null)
+                {
+                    Contents contents = ((Contents)item);
+                    Contents prevContents = previousContents.get(contents.getPath());
+
+                    List<ContentsEntry> contentsEntries = contents.getEntries();
+
+                    //look for entries in prevContents that dont exist in contents - these entries have been deleted.
+                    for(ContentsEntry prevContentsEntry : prevContents.getEntries())
+                    {
+                        if(!contentsEntries.contains(prevContentsEntry))
+                        {
+                            //entry has been deleted
+                            if(prevContentsEntry instanceof ContentsSubCollectionEntry)
+                            {
+                                writer.removeCollection(prevContentsEntry);
+                            }
+                            else if(prevContentsEntry instanceof ContentsResourceEntry)
+                            {
+                                writer.removeResource(prevContentsEntry);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        backupReader.close();
+        brBackupSrc.close();
     }
 }

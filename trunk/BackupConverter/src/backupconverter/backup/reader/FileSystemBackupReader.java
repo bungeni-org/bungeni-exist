@@ -20,11 +20,11 @@ import java.util.List;
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
-public class FolderBackupReader extends BackupReader
+public class FileSystemBackupReader extends BackupReader
 {
     private final String backupSrcPath;
 
-    public FolderBackupReader(File backupSrc)
+    public FileSystemBackupReader(File backupSrc)
     {
         super(backupSrc);
         backupSrcPath = backupSrc.getAbsolutePath();

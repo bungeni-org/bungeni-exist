@@ -125,6 +125,7 @@ public class BackupConverter
         {
             if(dst.exists())
             {
+                //TODO must replace with RECURSIVE DELETE?
                 dst.delete();
                 dst.mkdir();
             }

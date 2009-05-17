@@ -4,11 +4,15 @@ package backupconverter;
 import backupconverter.backup.Collection;
 import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
+import backupconverter.backup.reader.BackupReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Adam Retter <adam.retter@googlemail.com>
@@ -18,6 +22,10 @@ public class ANFolderWriter implements ANWriter
 {
     private final Mapper mapper;
     private final File dst;
+
+    private final static Pattern yearPattern = Pattern.compile("([19|20])[0-9]{2}");
+    private final static Matcher yearMatcher = yearPattern.matcher("");
+
 
     public ANFolderWriter(Mapper mapper, File dst)
     {
@@ -60,8 +68,50 @@ public class ANFolderWriter implements ANWriter
     }
 
     @Override
-    public void removeCollection(Item resource) throws IOException
+    public void removeCollection(Item collection) throws IOException
     {
+        if(mapper.shouldMap(collection))
+        {
+            String anPath = mapper.mapPath(new Collection(collection.getPath()));
+
+            String lastSeg = anPath.substring(anPath.lastIndexOf(BackupReader.PATH_SEPARATOR)+1);
+            if(lastSeg != null)
+            {
+                //TODO fix the yearMatcher regexp
+                yearMatcher.reset(lastSeg);
+                if(yearMatcher.matches())
+                {
+                    File container = new File(dst, anPath).getParentFile();
+                    File yearFolders[] = container.listFiles(new FilenameFilter(){
+
+                        @Override
+                        public boolean accept(File dir, String name)
+                        {
+                            //is it a directory, does it start with the year?
+                            return false;
+                        }
+
+                    });
+
+
+                    for(File yearFolder : yearFolders)
+                    {
+                        //TODO must replace with RECURSIVE DELETE?
+                        yearFolder.delete();
+                    }
+
+                    return;
+                }
+            }
+
+            File f = new File(dst, anPath);
+            if(!f.isDirectory() || !f.exists())
+                throw new IOException("Cannot remove directory. Directory does not exist '" + f.getPath() + "'");
+
+            //TODO must replace with RECURSIVE DELETE?
+            f.delete();
+        }
+
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

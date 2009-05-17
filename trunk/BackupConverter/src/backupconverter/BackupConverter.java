@@ -20,7 +20,7 @@ import backupconverter.backup.Contents.ContentsResourceEntry;
 import backupconverter.backup.Contents.ContentsSubCollectionEntry;
 import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
-import backupconverter.backup.reader.FolderBackupReader;
+import backupconverter.backup.reader.FileSystemBackupReader;
 import backupconverter.backup.reader.ZipArchiveBackupReader;
 import backupconverter.backup.reader.BackupReader;
 
@@ -91,14 +91,14 @@ public class BackupConverter
         BackupDescriptor bdBackupSrc = null;
         if(backupSrc.isDirectory())
         {
-            brBackupSrc = new FolderBackupReader(backupSrc);
+            brBackupSrc = new FileSystemBackupReader(backupSrc);
             bdBackupSrc = new FileSystemBackupDescriptor(new File(backupSrc, "db/" + BackupDescriptor.COLLECTION_DESCRIPTOR));
 
             String prevBackup = getPreviousBackupSrc(bdBackupSrc);
             if(prevBackup != null && prevBackup.length() > 0)
             {
                 File prevBackupSrc = new File(backupSrc, prevBackup);
-                brPreviousSrc = new FolderBackupReader(prevBackupSrc);
+                brPreviousSrc = new FileSystemBackupReader(prevBackupSrc);
             }
         }
         else if(backupSrc.getName().endsWith(ZIPPED_BACKUP_SUFFIX))

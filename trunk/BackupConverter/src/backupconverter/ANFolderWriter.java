@@ -2,6 +2,7 @@ package backupconverter;
 
 
 import backupconverter.backup.Collection;
+import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,6 +56,27 @@ public class ANFolderWriter implements ANWriter
 
             os.close();
             is.close();
+        }
+    }
+
+    @Override
+    public void removeCollection(Item resource) throws IOException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void removeResource(Item resource) throws IOException
+    {
+        if(mapper.shouldMap(resource))
+        {
+            String anPath = mapper.mapPath(new Resource(resource.getPath(), null));
+            File f = new File(dst, anPath);
+
+            if(!f.exists())
+                throw new IOException("Cannot remove file. File does not exist '" + f.getPath() + "'");
+
+            f.delete();
         }
     }
 }

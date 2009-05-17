@@ -6,6 +6,9 @@ import backupconverter.backup.Contents;
 import backupconverter.backup.Item;
 import backupconverter.backup.ItemPathComparator;
 import backupconverter.backup.Resource;
+
+import org.exist.backup.BackupDescriptor;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,7 +47,7 @@ public class FolderBackupReader extends BackupReader
         }
         else
         {
-            if(path.endsWith(Contents.CONTENTS_FILE))
+            if(path.endsWith(BackupDescriptor.COLLECTION_DESCRIPTOR))
             {
                 items.add(new Contents(path, new FileInputStream(f)));
             }

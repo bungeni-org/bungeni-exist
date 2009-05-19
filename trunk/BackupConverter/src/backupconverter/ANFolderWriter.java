@@ -23,8 +23,13 @@ public class ANFolderWriter implements ANWriter
     private final Mapper mapper;
     private final File dst;
 
-    private final static Pattern yearPattern = Pattern.compile("([19|20])[0-9]{2}");
+    private final static Pattern countryPattern = Pattern.compile("[a-z]{3}");
+    private final static Matcher countryMatcher = countryPattern.matcher("");
+    private final static Pattern yearPattern = Pattern.compile("(19|20)[0-9]{2}");
     private final static Matcher yearMatcher = yearPattern.matcher("");
+    private final static Pattern datePattern = Pattern.compile("(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])");
+    private final static Matcher dateMatcher = datePattern.matcher("");
+
 
 
     public ANFolderWriter(Mapper mapper, File dst)
@@ -36,6 +41,17 @@ public class ANFolderWriter implements ANWriter
     @Override
     public void writeCollection(Collection collection) throws IOException
     {
+        if(mapper.shouldMap(collection))
+        {
+            String collectionPath = mapper.mapPath(collection);
+
+            String lastSeg = collectionPath.substring(collectionPath.lastIndexOf(BackupReader.PATH_SEPARATOR)+1);
+            yearMatcher.reset(lastSeg);
+            if(!yearMatcher.matches())
+            {
+                new File(dst, collectionPath).mkdirs();
+            }
+        }
         //we dont need to do anything here in this instance,
         //all nessecary folders are created by writeResource
     }
@@ -77,42 +93,45 @@ public class ANFolderWriter implements ANWriter
             String lastSeg = anPath.substring(anPath.lastIndexOf(BackupReader.PATH_SEPARATOR)+1);
             if(lastSeg != null)
             {
-                //TODO fix the yearMatcher regexp
                 yearMatcher.reset(lastSeg);
                 if(yearMatcher.matches())
                 {
-                    File container = new File(dst, anPath).getParentFile();
-                    File yearFolders[] = container.listFiles(new FilenameFilter(){
-
-                        @Override
-                        public boolean accept(File dir, String name)
-                        {
-                            //is it a directory, does it start with the year?
-                            return false;
-                        }
-
-                    });
-
-
-                    for(File yearFolder : yearFolders)
-                    {
-                        //TODO must replace with RECURSIVE DELETE?
-                        yearFolder.delete();
-                    }
-
+                    deleteYearFolders(new File(dst, anPath).getParentFile(), lastSeg);
                     return;
                 }
             }
 
             File f = new File(dst, anPath);
-            if(!f.isDirectory() || !f.exists())
-                throw new IOException("Cannot remove directory. Directory does not exist '" + f.getPath() + "'");
-
-            //TODO must replace with RECURSIVE DELETE?
-            f.delete();
+            FileUtil.recursiveDelete(f);
         }
+    }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+    private void deleteYearFolders(File containerDir, final String year)
+    {
+        if(!containerDir.exists())
+            return;
+
+        File yearFolders[] = containerDir.listFiles(new FilenameFilter(){
+            @Override
+            public boolean accept(File dir, String name)
+            {
+                //is it a directory, does it start with the year, is it a valid date?
+                File f = new File(dir, name);
+                if(f.isDirectory() && name.startsWith(year))
+                {
+                    dateMatcher.reset(name);
+                    return dateMatcher.matches();
+
+                }
+                return false;
+            }
+
+        });
+
+        for(File yearFolder : yearFolders)
+        {
+            FileUtil.recursiveDelete(yearFolder);
+        }
     }
 
     @Override
@@ -122,9 +141,6 @@ public class ANFolderWriter implements ANWriter
         {
             String anPath = mapper.mapPath(new Resource(resource.getPath(), null));
             File f = new File(dst, anPath);
-
-            if(!f.exists())
-                throw new IOException("Cannot remove file. File does not exist '" + f.getPath() + "'");
 
             f.delete();
         }

@@ -125,8 +125,7 @@ public class BackupConverter
         {
             if(dst.exists())
             {
-                //TODO must replace with RECURSIVE DELETE?
-                dst.delete();
+                FileUtil.recursiveDelete(dst);
                 dst.mkdir();
             }
         }
@@ -171,21 +170,24 @@ public class BackupConverter
                     Contents contents = ((Contents)item);
                     Contents prevContents = previousContents.get(contents.getPath());
 
-                    List<ContentsEntry> contentsEntries = contents.getEntries();
-
-                    //look for entries in prevContents that dont exist in contents - these entries have been deleted.
-                    for(ContentsEntry prevContentsEntry : prevContents.getEntries())
+                    if(prevContents != null)    //may be a new contents entirely e.g. new collection, therefore there wont be any old contents
                     {
-                        if(!contentsEntries.contains(prevContentsEntry))
+                        List<ContentsEntry> contentsEntries = contents.getEntries();
+
+                        //look for entries in prevContents that dont exist in contents - these entries have been deleted.
+                        for(ContentsEntry prevContentsEntry : prevContents.getEntries())
                         {
-                            //entry has been deleted
-                            if(prevContentsEntry instanceof ContentsSubCollectionEntry)
+                            if(!contentsEntries.contains(prevContentsEntry))
                             {
-                                writer.removeCollection(prevContentsEntry);
-                            }
-                            else if(prevContentsEntry instanceof ContentsResourceEntry)
-                            {
-                                writer.removeResource(prevContentsEntry);
+                                //entry has been deleted
+                                if(prevContentsEntry instanceof ContentsSubCollectionEntry)
+                                {
+                                    writer.removeCollection(prevContentsEntry);
+                                }
+                                else if(prevContentsEntry instanceof ContentsResourceEntry)
+                                {
+                                    writer.removeResource(prevContentsEntry);
+                                }
                             }
                         }
                     }

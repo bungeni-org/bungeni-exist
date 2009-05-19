@@ -6,13 +6,19 @@ import backupconverter.backup.Item;
 import backupconverter.backup.Resource;
 import backupconverter.backup.reader.BackupReader;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 /**
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
 public class BackupToANMapper implements Mapper
 {
-    private final static String DATA_PATH = "db/bungeni/data/";
+    private final static Pattern backupANFilenamePattern = Pattern.compile("(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])(_[0-9]+)?(_[a-z]{3})((@first)|(@(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])))?\\.[a-z0-9]+");
+    private final static Matcher backupANFilenameMatcher = backupANFilenamePattern.matcher("");
+
+    public final static String DATA_PATH = "db/bungeni/data/";
 
     @Override
     public boolean shouldMap(Item item)
@@ -29,15 +35,19 @@ public class BackupToANMapper implements Mapper
     }
 
     @Override
-    public String mapPath(Resource res)
+    public String mapPath(Resource resource)
     {
-        String path = res.getPath();
+        String path = resource.getPath();
 
         //set to the AN root
         path = path.substring(path.indexOf(DATA_PATH) + DATA_PATH.length());
 
         //get the filename part
         String filename = path.substring(path.lastIndexOf(BackupReader.PATH_SEPARATOR) + 1);
+
+        backupANFilenameMatcher.reset(filename);
+        if(!backupANFilenameMatcher.matches())
+            return path;
 
         //remove the filename part from the path
         path = path.substring(0, path.lastIndexOf(BackupReader.PATH_SEPARATOR));

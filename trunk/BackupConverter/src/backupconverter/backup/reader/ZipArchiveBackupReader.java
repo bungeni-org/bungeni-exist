@@ -64,8 +64,24 @@ public class ZipArchiveBackupReader extends BackupReader
 
                 if(path.endsWith(BackupDescriptor.COLLECTION_DESCRIPTOR))
                 {
-                    this.backupItems.add(new Collection(path.substring(0, path.lastIndexOf('/'))));
+                    String collectionPath = path.substring(0, path.lastIndexOf(BackupReader.PATH_SEPARATOR));
+                    if(!isKnownCollection(collectionPath))
+                    {
+                        this.backupItems.add(new Collection(collectionPath));
+                    }
+
                     this.backupItems.add(new Contents(path, zipFile.getInputStream(ze)));
+                }
+                else if(ze.isDirectory())
+                {
+                    String collectionPath = path;
+                    if(collectionPath.endsWith(BackupReader.PATH_SEPARATOR))
+                        collectionPath = collectionPath.substring(0, collectionPath.length()-1);
+
+                    if(!isKnownCollection(collectionPath))
+                    {
+                        this.backupItems.add(new Collection(collectionPath));
+                    }
                 }
                 else
                 {
@@ -83,5 +99,16 @@ public class ZipArchiveBackupReader extends BackupReader
     public void close() throws IOException
     {
         zipFile.close();
+    }
+
+    private boolean isKnownCollection(String collectionPath)
+    {
+        for(Item item : backupItems)
+        {
+            if(item instanceof Collection && item.getPath().equals(collectionPath))
+                return true;
+        }
+
+        return false;
     }
 }

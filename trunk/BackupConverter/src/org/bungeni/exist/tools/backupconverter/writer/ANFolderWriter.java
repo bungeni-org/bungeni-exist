@@ -17,13 +17,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Akoma Ntoso Writer that writes to a Folder on the filesystem
+ *
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
 public class ANFolderWriter implements ANWriter
 {
     private final Mapper mapper;
-    private final File dst;
+    private final File dstFolder;
 
     private final static Pattern countryPattern = Pattern.compile("[a-z]{3}");
     private final static Matcher countryMatcher = countryPattern.matcher("");
@@ -33,11 +35,14 @@ public class ANFolderWriter implements ANWriter
     private final static Matcher dateMatcher = datePattern.matcher("");
 
 
-
-    public ANFolderWriter(Mapper mapper, File dst)
+    /**
+     * @param mapper The Mapper for mapping paths to the destination
+     * @param dstFolder The destination folder to write to
+     */
+    public ANFolderWriter(Mapper mapper, File dstFolder)
     {
         this.mapper = mapper;
-        this.dst = dst;
+        this.dstFolder = dstFolder;
     }
 
     @Override
@@ -51,7 +56,7 @@ public class ANFolderWriter implements ANWriter
             yearMatcher.reset(lastSeg);
             if(!yearMatcher.matches())
             {
-                new File(dst, collectionPath).mkdirs();
+                new File(dstFolder, collectionPath).mkdirs();
             }
         }
         //we dont need to do anything here in this instance,
@@ -65,7 +70,7 @@ public class ANFolderWriter implements ANWriter
         {
             String anPath = mapper.mapPath(resource);
 
-            File f = new File(dst, anPath);
+            File f = new File(dstFolder, anPath);
             f.getParentFile().mkdirs();
             
             OutputStream os = new FileOutputStream(f);
@@ -98,16 +103,22 @@ public class ANFolderWriter implements ANWriter
                 yearMatcher.reset(lastSeg);
                 if(yearMatcher.matches())
                 {
-                    deleteYearFolders(new File(dst, anPath).getParentFile(), lastSeg);
+                    deleteYearFolders(new File(dstFolder, anPath).getParentFile(), lastSeg);
                     return;
                 }
             }
 
-            File f = new File(dst, anPath);
+            File f = new File(dstFolder, anPath);
             FileUtil.recursiveDelete(f);
         }
     }
 
+    /**
+     * Deletes all folders that start with a certain year
+     *
+     * @param containerDir The directory to search for dolders matching the year
+     * @param year The year of the folders to delete
+     */
     private void deleteYearFolders(File containerDir, final String year)
     {
         if(!containerDir.exists())
@@ -142,7 +153,7 @@ public class ANFolderWriter implements ANWriter
         if(mapper.shouldMap(resource))
         {
             String anPath = mapper.mapPath(new Resource(resource.getPath(), null));
-            File f = new File(dst, anPath);
+            File f = new File(dstFolder, anPath);
 
             f.delete();
         }

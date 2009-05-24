@@ -10,27 +10,32 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
+ * Mapper for mapping paths from eXist Backup to Akoma Ntoso FileSystem layout
+ *
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
 public class BackupToANMapper implements Mapper
 {
+    //regular expression for the filename of an Akoma Ntoso Resource in the eXist backup
     private final static Pattern backupANFilenamePattern = Pattern.compile("(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])(_[0-9]+)?(_[a-z]{3})((@first)|(@(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])))?\\.[a-z0-9]+");
     private final static Matcher backupANFilenameMatcher = backupANFilenamePattern.matcher("");
 
+    //Akoma Ntoso documents collection path in the eXist backup
     public final static String DATA_PATH = "db/bungeni/data/";
 
     @Override
     public boolean shouldMap(Item item)
     {
+        //map all paths under the Akoma Ntoso documents collection in the backup
         return item.getPath().startsWith(DATA_PATH);
     }
 
     @Override
     public String mapPath(Collection col)
     {
+        //map all collection paths under the Akoma Ntoso documents collection to relative paths
         String path = col.getPath();
-        
         return path.substring(path.indexOf(DATA_PATH) + DATA_PATH.length());
     }
 

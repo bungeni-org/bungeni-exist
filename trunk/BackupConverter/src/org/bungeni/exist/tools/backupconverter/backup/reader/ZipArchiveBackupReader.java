@@ -19,6 +19,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
+ * BackupReader for reading an eXist Backup from a Zip file
+ *
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
@@ -27,26 +29,13 @@ public class ZipArchiveBackupReader extends BackupReader
     private ZipFile zipFile = null;
     private Enumeration<? extends ZipEntry> zipFileEntries = null;
 
-    public ZipArchiveBackupReader(File backupSrc)
+   /**
+     * @param backupZip The backup zip file that we are reading
+     */
+    public ZipArchiveBackupReader(File backupZip)
     {
-        super(backupSrc);
+        super(backupZip);
         
-    }
-
-    private ZipFile getZipFile() throws IOException
-    {
-        if(this.zipFile == null)
-            this.zipFile = new ZipFile(backupSrc);
-
-        return this.zipFile;
-    }
-
-    private Enumeration<? extends ZipEntry> getZipFileEntries() throws IOException
-    {
-        if(this.zipFileEntries == null)
-            this.zipFileEntries = getZipFile().entries();
-
-        return this.zipFileEntries;
     }
 
     @Override
@@ -67,9 +56,11 @@ public class ZipArchiveBackupReader extends BackupReader
                     String collectionPath = path.substring(0, path.lastIndexOf(BackupReader.PATH_SEPARATOR));
                     if(!isKnownCollection(collectionPath))
                     {
+                        //collection from contents (some zip files dont have the collections in them, so we infer them from the contents)
                         this.backupItems.add(new Collection(collectionPath));
                     }
 
+                    //contents
                     this.backupItems.add(new Contents(path, zipFile.getInputStream(ze)));
                 }
                 else if(ze.isDirectory())
@@ -80,27 +71,57 @@ public class ZipArchiveBackupReader extends BackupReader
 
                     if(!isKnownCollection(collectionPath))
                     {
+                        //collection
                         this.backupItems.add(new Collection(collectionPath));
                     }
                 }
                 else
                 {
+                    //resource
                     this.backupItems.add(new Resource(path, zipFile.getInputStream(ze)));
                 }
             }
 
+            //sort the items into A-Z path order
             Collections.sort(backupItems, new ItemPathComparator());
         }
 
         return this.backupItems;
     }
 
-    @Override
-    public void close() throws IOException
+    /**
+     * Get the Zip file of the Backup
+     *
+     * @return The Zip file
+     */
+    private ZipFile getZipFile() throws IOException
     {
-        zipFile.close();
+        if(this.zipFile == null)
+            this.zipFile = new ZipFile(backupSrc);
+
+        return this.zipFile;
     }
 
+    /**
+     * Get the Entries from the Zip file Backup
+     *
+     * @return Enumeration of ZipFile entries
+     */
+    private Enumeration<? extends ZipEntry> getZipFileEntries() throws IOException
+    {
+        if(this.zipFileEntries == null)
+            this.zipFileEntries = getZipFile().entries();
+
+        return this.zipFileEntries;
+    }
+
+    /**
+     * Determines if a Collection is already known
+     *
+     * @param collectionPath Path of the Collection
+     *
+     * @return true if the collectionPath is known, false otherwise
+     */
     private boolean isKnownCollection(String collectionPath)
     {
         for(Item item : backupItems)
@@ -111,4 +132,15 @@ public class ZipArchiveBackupReader extends BackupReader
 
         return false;
     }
+
+    /**
+     * Closes the Zip file
+     */
+    @Override
+    public void close() throws IOException
+    {
+        zipFile.close();
+    }
+
+   
 }

@@ -32,10 +32,10 @@ public class BackupToANMapper implements Mapper
     }
 
     @Override
-    public String mapPath(Collection col)
+    public String mapPath(Collection collection)
     {
         //map all collection paths under the Akoma Ntoso documents collection to relative paths
-        String path = col.getPath();
+        String path = collection.getPath();
         return path.substring(path.indexOf(DATA_PATH) + DATA_PATH.length());
     }
 

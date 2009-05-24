@@ -29,7 +29,7 @@ public interface Mapper
      *
      * @return The mapped path of the Collection
      */
-    public String mapPath(Collection col);
+    public String mapPath(Collection collection);
 
     /**
      * Maps the path of a Resource
@@ -38,5 +38,5 @@ public interface Mapper
      *
      * @return The mapped path of the Resource
      */
-    public String mapPath(Resource res);
+    public String mapPath(Resource resource);
 }

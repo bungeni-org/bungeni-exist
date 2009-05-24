@@ -78,7 +78,7 @@ public class Contents extends Item
          * @param contents The Contents from which this entry was extracted
          * @param filename The filename of the file represented by this Contents Entry
          */
-        public ContentsEntry(Contents contents, String filename)
+        protected ContentsEntry(Contents contents, String filename)
         {
             super(new File(new File(contents.getPath()).getParentFile(), filename).getPath());
         }

@@ -1,7 +1,6 @@
 package org.bungeni.exist.query;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -13,13 +12,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -43,24 +38,8 @@ import org.xml.sax.SAXException;
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.1
  */
-public class EditTest /*extends XMLTestCase*/
+public class EditTest
 {
-    private final static String NS_AKOMANTOSO_URI = "http://www.akomantoso.org/1.0";
-
-    //private final static String EDIT_URL = "http://localhost:8088/db/bungeni/query/edit.xql";
-    private final static String EDIT_URL = "http://localhost:8080/exist/rest/db/bungeni/query/edit.xql";
-
-    private final static String ADMIN_USERNAME = "admin";
-    private final static String ADMIN_PASSWORD = "admin";
-
-    private final static String XML_MIMETYPE = "text/xml";
-
-    private enum ActContentTypes
-    {
-        ORIGINAL_VERSION,
-        SINGLE_VERSION,
-    };
-
     static {
         XMLUnit.setIgnoreWhitespace(true);
     }
@@ -76,7 +55,7 @@ public class EditTest /*extends XMLTestCase*/
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
-        storeTestDocument(generateTestAct(ActContentTypes.ORIGINAL_VERSION, testDocWorkURI, testDocExpressionURI, testDocManifestationURI, null), testDocManifestationURI);
+        storeTestDocument(generateTestAct(AkomaNtoso.ActContentTypes.ORIGINAL_VERSION, testDocWorkURI, testDocExpressionURI, testDocManifestationURI, null), testDocManifestationURI);
     }
 
     /**
@@ -95,11 +74,11 @@ public class EditTest /*extends XMLTestCase*/
         //store a test document, we can then try updating it
         storeTestDocument(generateTestBill(testDocWorkURI, testDocExpressionURI, testDocManifestationURI), testDocManifestationURI);
 
-        HttpClient http = newHttpClient();
+        HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int status = HttpStatus.SC_NOT_FOUND;
 
         //GET the binary document
-        GetMethod get = new GetMethod(EDIT_URL);
+        GetMethod get = new GetMethod(REST.EDIT_URL);
         get.setDoAuthentication(true);
 
         //set the querystring
@@ -112,7 +91,7 @@ public class EditTest /*extends XMLTestCase*/
         try
         {
                 status = http.executeMethod(get);
-                getDocument = getResponseBody(get);
+                getDocument = REST.getResponseBody(get);
 
                 assertEquals("GET Request did not return OK", HttpStatus.SC_OK, status);
         }
@@ -128,8 +107,7 @@ public class EditTest /*extends XMLTestCase*/
         }
 
         //POST the updated XML document
-        byte[] postDocument = null;
-        PostMethod post = new PostMethod(EDIT_URL);
+        PostMethod post = new PostMethod(REST.EDIT_URL);
         post.setDoAuthentication(true);
         NameValuePair qsPostParams[] = {
                         new NameValuePair("action", "save"),
@@ -179,16 +157,16 @@ public class EditTest /*extends XMLTestCase*/
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
         //store a test document, we can then create a version of it
-        storeTestDocument(generateTestAct(ActContentTypes.SINGLE_VERSION, testDocWorkURI, testDocExpressionURI, testDocManifestationURI, null), testDocManifestationURI);
+        storeTestDocument(generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, testDocWorkURI, testDocExpressionURI, testDocManifestationURI, null), testDocManifestationURI);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String newVersion = sdf.format(Calendar.getInstance().getTime());
 
-        HttpClient http = newHttpClient();
+        HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int status = HttpStatus.SC_NOT_FOUND;
 
         //GET the XML document
-        GetMethod get = new GetMethod(EDIT_URL);
+        GetMethod get = new GetMethod(REST.EDIT_URL);
         get.setDoAuthentication(true);
 
         //set the querystring
@@ -202,7 +180,7 @@ public class EditTest /*extends XMLTestCase*/
         try
         {
                 status = http.executeMethod(get);
-                getResponse = getResponseBody(get);
+                getResponse = REST.getResponseBody(get);
 
                 assertEquals("GET Request did not return OK", HttpStatus.SC_OK, status);
 
@@ -216,7 +194,7 @@ public class EditTest /*extends XMLTestCase*/
                 XpathEngine xpathEngine = XMLUnit.newXpathEngine();
 
                 HashMap<String, String> namespaces = new HashMap<String, String>();
-                namespaces.put("an", NS_AKOMANTOSO_URI);
+                namespaces.put("an", AkomaNtoso.NAMESPACE_URI);
                 xpathEngine.setNamespaceContext(new SimpleNamespaceContext(namespaces));
                 String versionedExpressionURI = xpathEngine.evaluate("/an:akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href", docVersioned);
                 String versionedManifestationURI = xpathEngine.evaluate("/an:akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href", docVersioned);
@@ -257,7 +235,7 @@ public class EditTest /*extends XMLTestCase*/
 
             //POST the new version XML document
             byte[] postDocument = null;
-            PostMethod post = new PostMethod(EDIT_URL);
+            PostMethod post = new PostMethod(REST.EDIT_URL);
             post.setDoAuthentication(true);
             NameValuePair qsPostParams[] = {
                             new NameValuePair("action", "save"),
@@ -265,7 +243,7 @@ public class EditTest /*extends XMLTestCase*/
                             new NameValuePair("version", newVersion)
                     };
             post.setQueryString(qsPostParams);
-            post.setRequestEntity(new ByteArrayRequestEntity(newDocVersion.getBytes(), XML_MIMETYPE));
+            post.setRequestEntity(new ByteArrayRequestEntity(newDocVersion.getBytes(), Database.XML_MIMETYPE));
 
             try
             {
@@ -304,11 +282,11 @@ public class EditTest /*extends XMLTestCase*/
     {
         String testDocManifestationURI = "/ken/act/1997-08-22/3/eng.doc";
 
-        HttpClient http = newHttpClient();
+        HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int status = HttpStatus.SC_NOT_FOUND;
 
         //GET the binary document
-        GetMethod get = new GetMethod(EDIT_URL);
+        GetMethod get = new GetMethod(REST.EDIT_URL);
         get.setDoAuthentication(true);
 
         //set the querystring
@@ -321,7 +299,7 @@ public class EditTest /*extends XMLTestCase*/
         try
         {
             status = http.executeMethod(get);
-            getDocument = getResponseBody(get);
+            getDocument = REST.getResponseBody(get);
 
             assertEquals("GET Request did not return OK", HttpStatus.SC_OK, status);
 
@@ -340,7 +318,7 @@ public class EditTest /*extends XMLTestCase*/
 
         //POST the updated binary document
         byte[] postDocument = null;
-        PostMethod post = new PostMethod(EDIT_URL);
+        PostMethod post = new PostMethod(REST.EDIT_URL);
         post.setDoAuthentication(true);
         NameValuePair qsPostParams[] = {
             new NameValuePair("action", "save"),
@@ -352,7 +330,7 @@ public class EditTest /*extends XMLTestCase*/
         try
         {
             status = http.executeMethod(post);
-            postDocument = getResponseBody(post);
+            postDocument = REST.getResponseBody(post);
 
             assertEquals("POST Request did not return OK", HttpStatus.SC_OK, status);
 
@@ -393,11 +371,11 @@ public class EditTest /*extends XMLTestCase*/
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String newVersion = sdf.format(Calendar.getInstance().getTime());
 
-            HttpClient http = newHttpClient();
+            HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
             int status = HttpStatus.SC_NOT_FOUND;
 
             //GET the binary document
-            GetMethod get = new GetMethod(EDIT_URL);
+            GetMethod get = new GetMethod(REST.EDIT_URL);
             get.setDoAuthentication(true);
 
             //set the querystring
@@ -411,7 +389,7 @@ public class EditTest /*extends XMLTestCase*/
             try
             {
                     status = http.executeMethod(get);
-                    getDocument = getResponseBody(get);
+                    getDocument = REST.getResponseBody(get);
 
                     assertEquals("GET Request did not return OK", HttpStatus.SC_OK, status);
 
@@ -430,7 +408,7 @@ public class EditTest /*extends XMLTestCase*/
 
             //POST the updated binary document
             byte[] postDocument = null;
-            PostMethod post = new PostMethod(EDIT_URL);
+            PostMethod post = new PostMethod(REST.EDIT_URL);
             post.setDoAuthentication(true);
             NameValuePair qsPostParams[] = {
                             new NameValuePair("action", "save"),
@@ -443,7 +421,7 @@ public class EditTest /*extends XMLTestCase*/
             try
             {
                     status = http.executeMethod(post);
-                    postDocument = getResponseBody(post);
+                    postDocument = REST.getResponseBody(post);
 
                     assertEquals("POST Request did not return OK", HttpStatus.SC_OK, status);
 
@@ -471,21 +449,6 @@ public class EditTest /*extends XMLTestCase*/
     }
 
     /**
-     * Creates a HTTP Client with appropriate authentication credentials
-     */
-    private final static HttpClient newHttpClient()
-    {
-        HttpClient http = new HttpClient();
-
-        //username and password
-        Credentials adminCreds = new UsernamePasswordCredentials(ADMIN_USERNAME, ADMIN_PASSWORD);
-        http.getState().setCredentials(AuthScope.ANY, adminCreds);
-        http.getParams().setAuthenticationPreemptive(true);
-
-        return http;
-    }
-
-    /**
      * Stores a XML Test document for testing against
      *
      * @param testDocument the XML test document
@@ -493,11 +456,11 @@ public class EditTest /*extends XMLTestCase*/
      */
     private final static void storeTestDocument(String testDocument, String manifestationURI)
     {
-        HttpClient http = newHttpClient();
+        HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int status = HttpStatus.SC_NOT_FOUND;
 
         //setup POST Request for storing new document
-        PostMethod post = new PostMethod(EDIT_URL);
+        PostMethod post = new PostMethod(REST.EDIT_URL);
         post.setDoAuthentication(true);
 
         //String testDocument = generateAct(actContentType, workURI, expressionURI, manifestationURI, originalURI);
@@ -507,7 +470,7 @@ public class EditTest /*extends XMLTestCase*/
             new NameValuePair("uri", manifestationURI)
         };
         post.setQueryString(qsPostParams);
-        post.setRequestEntity(new ByteArrayRequestEntity(testDocument.getBytes(), XML_MIMETYPE));
+        post.setRequestEntity(new ByteArrayRequestEntity(testDocument.getBytes(), Database.XML_MIMETYPE));
 
         try
         {
@@ -544,11 +507,11 @@ public class EditTest /*extends XMLTestCase*/
      * @param manifestationURI the URI of this Manifestation
      * @param originalURI the URI of the Original version or null if this is non-versioned or the Original
      */
-    private final static String generateTestAct(ActContentTypes actContentType, String workURI, String expressionURI, String manifestationURI, String originalURI)
+    private final static String generateTestAct(AkomaNtoso.ActContentTypes actContentType, String workURI, String expressionURI, String manifestationURI, String originalURI)
     {
         String act =
-                "<an:akomantoso xmlns:an=\"" + NS_AKOMANTOSO_URI + "\">"
-                +    "<an:act contains=\"" + (actContentType == ActContentTypes.ORIGINAL_VERSION ? "OriginalVersion" : "SingleVersion") + "\">"
+                "<an:akomantoso xmlns:an=\"" + AkomaNtoso.NAMESPACE_URI + "\">"
+                +    "<an:act contains=\"" + (actContentType == AkomaNtoso.ActContentTypes.ORIGINAL_VERSION ? "OriginalVersion" : "SingleVersion") + "\">"
                 +        "<an:meta>"
                 +            "<an:identification source=\"#ar1\">"
                 +  	 			 "<an:Work>"
@@ -588,7 +551,7 @@ public class EditTest /*extends XMLTestCase*/
     private final static String generateTestBill(String workURI, String expressionURI, String manifestationURI)
     {
             return
-                    "<an:akomantoso xmlns:an=\"" + NS_AKOMANTOSO_URI + "\">"
+                    "<an:akomantoso xmlns:an=\"" + AkomaNtoso.NAMESPACE_URI + "\">"
                     +    "<an:bill>"
                     +        "<an:meta>"
                     +            "<an:identification source=\"FV\">"
@@ -605,21 +568,5 @@ public class EditTest /*extends XMLTestCase*/
                     +		"</an:meta>"
                     +    "</an:bill>"
                     + "</an:akomantoso>";
-    }
-
-    private final static byte[] getResponseBody(HttpMethod method) throws IOException
-    {
-        InputStream is = method.getResponseBodyAsStream();
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-        byte buf[] = new byte[1024];
-        int read = -1;
-        while((read = is.read(buf)) > -1)
-        {
-            os.write(buf, 0, read);
-        }
-        is.close();
-
-        return os.toByteArray();
     }
 }

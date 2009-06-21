@@ -19,8 +19,10 @@ import org.apache.commons.httpclient.auth.AuthScope;
  */
 public class REST
 {
-    private final static String EXIST_REST_URI = "http://localhost:8080/exist/rest";
-    //private final static String EXIST_REST_URI = "http://localhost:8088/rest";
+    public final static String SERVER_URI = "http://localhost:8080";
+    //private final static String SERVER_URI = "http://localhost:8088";
+
+    public final static String EXIST_REST_URI = SERVER_URI + "/exist/rest";
 
     public final static String EDIT_URL = EXIST_REST_URI + "/db/bungeni/query/edit.xql";
 

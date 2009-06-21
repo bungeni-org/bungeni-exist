@@ -7,8 +7,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.jxpath.JXPathContext;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import static org.junit.Assert.fail;
@@ -27,15 +33,96 @@ public class EditErrorTest
 {
     private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
+    private final static String TEST_ACT_MANIFESTATION_URI = "/ken/act/2009-06-21/1/eng.xml";
+    private final static String TEST_ACT_EXPRESSION_URI = TEST_ACT_MANIFESTATION_URI.substring(0, TEST_ACT_MANIFESTATION_URI.indexOf('.'));
+    private final static String TEST_ACT_WORK_URI = TEST_ACT_EXPRESSION_URI.substring(0, TEST_ACT_EXPRESSION_URI.lastIndexOf('/'));
+
+    private final static String TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/2009/06-21_1_eng.xml";
+
+    @BeforeClass
+    public static void storeTestDocuments() throws IOException
+    {
+        String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, TEST_ACT_WORK_URI, TEST_ACT_EXPRESSION_URI, TEST_ACT_MANIFESTATION_URI, null);
+
+        NameValuePair qsPostParams[] = {
+            new NameValuePair("action", "new"),
+            new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+        };
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        post.setQueryString(qsPostParams);
+        post.setRequestEntity(new ByteArrayRequestEntity(testAct.getBytes(), Database.XML_MIMETYPE));
+
+        //store the document
+        HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
+        int result = client.executeMethod(post);
+        assertEquals(HttpStatus.SC_OK, result);
+    }
+
+    @AfterClass
+    public static void removeTestDocuments() throws IOException
+    {
+        HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
+
+        DeleteMethod delete = new DeleteMethod(REST.EXIST_REST_URI + TEST_ACT_MANIFESTATION_DB_URI);
+
+        int result = client.executeMethod(delete);
+        assertEquals(HttpStatus.SC_OK, result);
+    }
+
     @Test
-    public void calledWithNoParams_ReturnsError() throws IOException, SAXException, ParserConfigurationException
+    public void calledWithNoParams() throws IOException, SAXException, ParserConfigurationException
     {
         final String expectedErrorCode = "MIDUED0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        HttpMethod method = new GetMethod(REST.EDIT_URL);
+        GetMethod get = new GetMethod(REST.EDIT_URL);
 
-        testErrorResponse(method, expectedErrorCode, expectedErrorMessage);
+        testErrorResponse(get, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void new_manifestationUriMismatchesDocumentExpressionUri() throws IOException, ParserConfigurationException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "EXUMAU0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+
+        final String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, TEST_ACT_WORK_URI, TEST_ACT_EXPRESSION_URI, TEST_ACT_MANIFESTATION_URI, null);
+
+        NameValuePair qsPostParams[] = {
+            new NameValuePair("action", "new"),
+            new NameValuePair("uri", "/some/wrong/manifestation/uri.xml")
+        };
+        post.setQueryString(qsPostParams);
+        post.setRequestEntity(new ByteArrayRequestEntity(testAct.getBytes(), Database.XML_MIMETYPE));
+
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void new_documentAlreadyExists() throws IOException, ParserConfigurationException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "EXDODB0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        final String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, TEST_ACT_WORK_URI, TEST_ACT_EXPRESSION_URI, TEST_ACT_MANIFESTATION_URI, null);
+
+        NameValuePair qsPostParams[] = {
+            new NameValuePair("action", "new"),
+            new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+        };
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        post.setQueryString(qsPostParams);
+        post.setRequestEntity(new ByteArrayRequestEntity(testAct.getBytes(), Database.XML_MIMETYPE));
+
+
+        //try and store the test doument again
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
     }
 
     private final static String getErrorMessageForErrorCode(String errorCode) throws IOException, ParserConfigurationException, SAXException
@@ -50,9 +137,11 @@ public class EditErrorTest
                 fail("Received Http Status: " + result);
 
             DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
+
             Document docErrorMessages = builder.parse(getErrorMessages.getResponseBodyAsStream());
 
             JXPathContext jxp = JXPathContext.newContext(docErrorMessages);
+            jxp.registerNamespace(REST.ERRORS_NAMESPACE_PREFIX, REST.ERRORS_NAMESPACE_URI);
 
             String errorMessage = (String)jxp.getValue("/" + REST.ERRORS_NAMESPACE_PREFIX + ":errors/" + REST.ERRORS_NAMESPACE_PREFIX + ":error[@code = '" + errorCode + "']", String.class);
 
@@ -92,12 +181,13 @@ public class EditErrorTest
             String actualErrorMessage = (String)jxp.getValue("/" + REST.ERROR_NAMESPACE_PREFIX + ":error/" + REST.ERROR_NAMESPACE_PREFIX + ":message", String.class);
             assertEquals(expectedErrorMessage, actualErrorMessage);
 
-            String expectedErrorMethod = method instanceof GetMethod ? "GET" : "POST";
+            final String expectedErrorMethod = method instanceof GetMethod ? "GET" : "POST";
             String actualErrorMethod = (String)jxp.getValue("/" + REST.ERROR_NAMESPACE_PREFIX + ":error/" + REST.ERROR_NAMESPACE_PREFIX + ":http-context/"+ REST.ERROR_NAMESPACE_PREFIX + ":method", String.class);
             assertEquals(expectedErrorMethod, actualErrorMethod);
 
+            final String expectedErrorURI = method.getURI().getPath();
             String actualErrorUri = (String)jxp.getValue("/" + REST.ERROR_NAMESPACE_PREFIX + ":error/" + REST.ERROR_NAMESPACE_PREFIX + ":http-context/"+ REST.ERROR_NAMESPACE_PREFIX + ":uri", String.class);
-            assertEquals(method.getURI().toString(), actualErrorUri);
+            assertEquals(expectedErrorURI, actualErrorUri);
 
             //TODO compare params
         }

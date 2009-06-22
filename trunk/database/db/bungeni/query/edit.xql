@@ -7,7 +7,7 @@
 :    for client editing with Open Office
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1
+:    @version 1.1.1
 :)
 xquery version "1.0";
 
@@ -34,9 +34,8 @@ import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util
 :    @param akomantoso The akomantoso node from the xml document, for a binary document use the corresponding xml document
 :    @return xs:boolean true() if the documentType is versioned
 :)
-declare function local:isVersionedDocumentType($akomantoso as node()+) as xs:boolean
+declare function local:isVersionedDocumentType($akomantoso as element(an:akomantoso)+) as xs:boolean
 {
-    
     node-name($akomantoso/child::node()) = $config:versionedDocumentTypes
 };
 
@@ -241,86 +240,97 @@ declare function local:isValidVersion($akomantoso as node(), $originalURI, $vers
 :    @param data The HTTP POST data, i.e. the document to Save
 :    @return The stored XML document or otherwise if a Binary document it is streamed directly to the HTTP Response, otherwise an error element
 :)
-declare function local:save($originalURI as xs:string, $versionDate as xs:string?, $data) as node()?
+declare function local:save($originalURI as xs:string, $versionDate as xs:string?, $data as item()?) as node()?
 {
-    (: are we saving an xml or binary document? :)
-    if(ends-with($originalURI, ".xml"))then
+    (: check we have a document to save! :)
+    if(empty($data))then
     (
-        (: XML Document :)
-        
-        (: if(local:isVersionedDocumentType($data//an:akomantoso))then :) (: buggy with in-memory nodes  - SF Bug ID - 1758589 :)
-        if(node-name($data/child::node()[position() eq 2]) = $config:versionedDocumentTypes)then (: temporary work around :)
+        error:response("MIDOED0001")
+    )
+    else if($data instance of xs:string and xs:string($data) eq "")then
+    (
+        error:response("MIDOED0001")
+    )
+    else
+    (
+        (: are we saving an xml or binary document? :)
+        if(ends-with($originalURI, ".xml"))then
         (
-            if($versionDate)then
+            (: XML Document :)
+            if(local:isVersionedDocumentType($data//an:akomantoso))then (: buggy with in-memory nodes  - SF Bug ID - 1758589 :)
+            (: if(node-name($data/child::node()[position() eq 2]) = $config:versionedDocumentTypes)then :) (: temporary work around :)
             (
-                (: versioned XML document :)
-                let $valid := local:isValidVersion($data, $originalURI, $versionDate) return
-                    if(empty($valid))then
-                    (
-                           (: save the versioned XML document :)
-                           let $dbNewXMLDocURI := local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate)),
-                                $storedURI := xmldb:store(
-                                    uri:collectionURIFromResourceURI($dbNewXMLDocURI),
-                                    uri:resourceNameFromResourceURI($dbNewXMLDocURI),
-                                    $data
-                                ) return
-                                
-                                    (: return the stored document :)
-                                    doc($storedURI)
-                    )
-                    else
-                    (
-                        error:response($valid)
-                    )
+                if($versionDate)then
+                (
+                    (: versioned XML document :)
+                    let $valid := local:isValidVersion($data, $originalURI, $versionDate) return
+                        if(empty($valid))then
+                        (
+                               (: save the versioned XML document :)
+                               let $dbNewXMLDocURI := local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate)),
+                                    $storedURI := xmldb:store(
+                                        uri:collectionURIFromResourceURI($dbNewXMLDocURI),
+                                        uri:resourceNameFromResourceURI($dbNewXMLDocURI),
+                                        $data
+                                    ) return
+                                    
+                                        (: return the stored document :)
+                                        doc($storedURI)
+                        )
+                        else
+                        (
+                            error:response($valid)
+                        )
+                )
+                else
+                (
+                    (: versioned document, but no version provided :)
+                    error:response("MIVEED0001")
+                )
             )
             else
             (
-                (: versioned document, but no version provided :)
-                error:response("MIVEED0001")
+                (: save the un-versioned XML document :)
+                let $dbNewXMLDocURI := local:ANManifestationURIToDBURI($originalURI),
+                    $storedURI := xmldb:store(
+                        uri:collectionURIFromResourceURI($dbNewXMLDocURI),
+                        uri:resourceNameFromResourceURI($dbNewXMLDocURI),
+                        $data
+                    ) return
+                    
+                        (: return the stored document :)
+                        doc($storedURI)
             )
         )
         else
         (
-            (: save the un-versioned XML document :)
-            let $dbNewXMLDocURI := local:ANManifestationURIToDBURI($originalURI),
-                $storedURI := xmldb:store(
-                    uri:collectionURIFromResourceURI($dbNewXMLDocURI),
-                    uri:resourceNameFromResourceURI($dbNewXMLDocURI),
-                    $data
+            (: Binary Document :)
+            let $dbOriginalBinaryDocURI := local:ANManifestationURIToDBURI($originalURI) return
+            
+            (: determine the db uri for storing the binary document :)
+            let $dbNewBinaryDocURI := if($versionDate)then
+                (
+                    (: new binary versioned document :)
+                    local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate))
+                )
+                else
+                (
+                    (: un-versioned binary document :)
+                    $dbOriginalBinaryDocURI
+                )
+            return
+                
+                (: store the document :)
+                let $storedURI := xmldb:store(
+                        uri:collectionURIFromResourceURI($dbNewBinaryDocURI),
+                        uri:resourceNameFromResourceURI($dbNewBinaryDocURI),
+                        $data,
+                        xmldb:get-mime-type(xs:anyURI($dbOriginalBinaryDocURI))
                 ) return
                 
                     (: return the stored document :)
-                    doc($storedURI)
+                    response:stream-binary(util:binary-doc($storedURI), xmldb:get-mime-type(xs:anyURI($storedURI)),())
         )
-    )
-    else
-    (
-        (: Binary Document :)
-        let $dbOriginalBinaryDocURI := local:ANManifestationURIToDBURI($originalURI) return
-        
-        (: determine the db uri for storing the binary document :)
-        let $dbNewBinaryDocURI := if($versionDate)then
-            (
-                (: new binary versioned document :)
-                local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate))
-            )
-            else
-            (
-                (: un-versioned binary document :)
-                $dbOriginalBinaryDocURI
-            )
-        return
-            
-            (: store the document :)
-            let $storedURI := xmldb:store(
-                    uri:collectionURIFromResourceURI($dbNewBinaryDocURI),
-                    uri:resourceNameFromResourceURI($dbNewBinaryDocURI),
-                    $data,
-                    xmldb:get-mime-type(xs:anyURI($dbOriginalBinaryDocURI))
-            ) return
-            
-                (: return the stored document :)
-                response:stream-binary(util:binary-doc($storedURI), xmldb:get-mime-type(xs:anyURI($storedURI)),())
     )
 };
 

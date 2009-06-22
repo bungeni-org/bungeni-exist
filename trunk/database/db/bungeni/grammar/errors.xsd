@@ -1,8 +1,167 @@
-<xs:schema xmlns="http://exist.bungeni.org/errors" xmlns:iso639-3="http://exist.bungeni.org/grammar/types/iso639-3" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exist.bungeni.org/errors" elementFormDefault="qualified" xml:lang="eng"><xs:annotation><xs:documentation>
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://exist.bungeni.org/errors" xmlns:iso639-3="http://exist.bungeni.org/grammar/types/iso639-3" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exist.bungeni.org/errors" elementFormDefault="qualified" xml:lang="eng">
+    <xs:annotation>
+        <xs:documentation>
             Schema for describing language based error description documents
-        </xs:documentation></xs:annotation><xs:import namespace="http://exist.bungeni.org/grammar/types/iso639-3" schemaLocation="http://localhost:8080/exist/rest/db/bungeni/grammar/types/iso639-3.xsd"/><xs:complexType name="errorDescription"><xs:simpleContent><xs:extension base="errorMessage"><xs:annotation><xs:documentation>The message describing the error itself in the native language</xs:documentation></xs:annotation><xs:attribute name="code" type="errorCode" use="required"><xs:annotation><xs:documentation>The code for the error</xs:documentation></xs:annotation></xs:attribute></xs:extension></xs:simpleContent></xs:complexType><xs:simpleType name="errorMessage"><xs:restriction base="xs:string"/></xs:simpleType><xs:simpleType name="errorCode"><xs:annotation><xs:documentation>
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://exist.bungeni.org/grammar/types/iso639-3" schemaLocation="http://localhost:8080/exist/rest/db/bungeni/grammar/types/iso639-3.xsd"/>
+    <xs:complexType name="errorDescription">
+        <xs:simpleContent>
+            <xs:extension base="errorMessage">
+                <xs:annotation>
+                    <xs:documentation>The message describing the error itself in the native language</xs:documentation>
+                </xs:annotation>
+                <xs:attribute name="code" type="errorCode" use="required">
+                    <xs:annotation>
+                        <xs:documentation>The code for the error</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="errorMessage">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="errorCode">
+        <xs:annotation>
+            <xs:documentation>
                 Prefix conventions - 
-                    UNKN = Unknown
-                    IV = Invalid
-                    MI = Missing
-            </xs:documentation></xs:annotation><xs:restriction base="xs:string"><xs:pattern value="[A-Z]{6}[0-9]{4}"/><xs:enumeration value="UNKNER0001"><xs:annotation><xs:documentation>Unknown error</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="IVDUTY0001"><xs:annotation><xs:documentation>Invalid document uri type</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MICOWO0001"><xs:annotation><xs:documentation>Missing Country of Work</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MICOEX0001"><xs:annotation><xs:documentation>Missing Country of Expression</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MICOMA0001"><xs:annotation><xs:documentation>Missing Country of Manifestation</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MITYWO0001"><xs:annotation><xs:documentation>Missing Type of Work</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MITYEX0001"><xs:annotation><xs:documentation>Missing Type of Expression</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MITYMA0001"><xs:annotation><xs:documentation>Missing Type of Manifestation</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MIDTWO0001"><xs:annotation><xs:documentation>Missing Date of Work</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MIDTEX0001"><xs:annotation><xs:documentation>Missing Date of Expression</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MIDTMA0001"><xs:annotation><xs:documentation>Missing Date of Manifestation</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MILAEX0001"><xs:annotation><xs:documentation>Missing Language of Expression</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MILAMA0001"><xs:annotation><xs:documentation>Missing Language of Manifestaion</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MIDFMA0001"><xs:annotation><xs:documentation>Missing Data Format of Manifestaion</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MIDUED0001"><xs:annotation><xs:documentation>Missing document URI whilst attempting to edit document</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="EXUMAU0001"><xs:annotation><xs:documentation>Expression URI in the New document does not correspond to the provided Manifestation URI</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="EXDODB0001"><xs:annotation><xs:documentation>Document already exists in the database</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="MIVEED0001"><xs:annotation><xs:documentation>Missing Version for editing versioned document</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="IVDORE0001"><xs:annotation><xs:documentation>Documents reference to the original document is invalid</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="IVVWOU0001"><xs:annotation><xs:documentation>Documents version of Work URI is invalid</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="IVVEXU0001"><xs:annotation><xs:documentation>Documents version of Expression URI is invalid</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="IVVMAU0001"><xs:annotation><xs:documentation>Documents version of Manifestation URI is invalid</xs:documentation></xs:annotation></xs:enumeration><xs:enumeration value="IVVESV0001"><xs:annotation><xs:documentation>Document version is invalid, expected Single Version</xs:documentation></xs:annotation></xs:enumeration></xs:restriction></xs:simpleType><xs:element name="errors"><xs:complexType><xs:sequence><xs:element name="error" type="errorDescription" minOccurs="1" maxOccurs="unbounded"/></xs:sequence><xs:attribute name="language" type="iso639-3:iso639-3" use="required"/></xs:complexType></xs:element></xs:schema>
+                UNKN = Unknown
+                IV = Invalid
+                MI = Missing
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{6}[0-9]{4}"/>
+            <xs:enumeration value="UNKNER0001">
+                <xs:annotation>
+                    <xs:documentation>Unknown error</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVDUTY0001">
+                <xs:annotation>
+                    <xs:documentation>Invalid document uri type</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MICOWO0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Country of Work</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MICOEX0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Country of Expression</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MICOMA0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Country of Manifestation</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MITYWO0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Type of Work</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MITYEX0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Type of Expression</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MITYMA0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Type of Manifestation</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIDTWO0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Date of Work</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIDTEX0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Date of Expression</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIDTMA0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Date of Manifestation</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MILAEX0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Language of Expression</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MILAMA0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Language of Manifestaion</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIDFMA0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Data Format of Manifestaion</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIDUED0001">
+                <xs:annotation>
+                    <xs:documentation>Missing document URI whilst attempting to edit document</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="EXUMAU0001">
+                <xs:annotation>
+                    <xs:documentation>Expression URI in the New document does not correspond to the provided Manifestation URI</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="EXDODB0001">
+                <xs:annotation>
+                    <xs:documentation>Document already exists in the database</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIVEED0001">
+                <xs:annotation>
+                    <xs:documentation>Missing Version for editing versioned document</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIDOED0001">
+                <xs:annotation>
+                    <xs:documentation>You are trying to edit a versioned document, but no new version of the document was provided</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVDORE0001">
+                <xs:annotation>
+                    <xs:documentation>Documents reference to the original document is invalid</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVVWOU0001">
+                <xs:annotation>
+                    <xs:documentation>Documents version of Work URI is invalid</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVVEXU0001">
+                <xs:annotation>
+                    <xs:documentation>Documents version of Expression URI is invalid</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVVMAU0001">
+                <xs:annotation>
+                    <xs:documentation>Documents version of Manifestation URI is invalid</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVVESV0001">
+                <xs:annotation>
+                    <xs:documentation>Document version is invalid, expected Single Version</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="errors">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="error" type="errorDescription" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="language" type="iso639-3:iso639-3" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

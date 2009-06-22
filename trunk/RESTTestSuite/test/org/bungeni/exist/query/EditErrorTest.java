@@ -125,6 +125,58 @@ public class EditErrorTest
         testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
     }
 
+    @Test
+    public void edit_versionedXMLDocumentButNoVersionSupplied() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "MIVEED0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+        
+        GetMethod get = new GetMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+        };
+        get.setQueryString(qsGetParams);
+        
+        testErrorResponse(get, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButNoDocumentSupplied() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "MIDOED0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("version", "2009-06-22")
+        };
+        post.setQueryString(qsGetParams);
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButNoVersionSupplied() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "MIVEED0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+        };
+        post.setQueryString(qsGetParams);
+
+        final String testNewDocumentVersion = "<an:akomantoso xmlns:an=\"" + AkomaNtoso.NAMESPACE_URI + "\"><an:act contains=\"SingleVersion\"/></an:akomantoso>";
+
+        post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
     private final static String getErrorMessageForErrorCode(String errorCode) throws IOException, ParserConfigurationException, SAXException
     {
         HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
@@ -166,10 +218,9 @@ public class EditErrorTest
             int result = client.executeMethod(method);
 
             if(result != HttpStatus.SC_OK)
-                fail("Received Http Status: " + result);
+                fail("Received Http Status: " + result + "\r\n" + method.getResponseBodyAsString());
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+            DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
             Document docResult = builder.parse(method.getResponseBodyAsStream());
 
             JXPathContext jxp = JXPathContext.newContext(docResult);

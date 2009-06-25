@@ -33,17 +33,17 @@ public class EditErrorTest
 {
     private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
-    private final static String ORIGINAL_TEST_ACT_MANIFESTATION_URI = "/ken/act/2009-06-21/1/eng.xml";
+    private final static String ORIGINAL_TEST_ACT_MANIFESTATION_URI = "/ken/act/9999-06-21/1/eng.xml";
     private final static String ORIGINAL_TEST_ACT_EXPRESSION_URI = ORIGINAL_TEST_ACT_MANIFESTATION_URI.substring(0, ORIGINAL_TEST_ACT_MANIFESTATION_URI.indexOf('.'));
     private final static String ORIGINAL_TEST_ACT_WORK_URI = ORIGINAL_TEST_ACT_EXPRESSION_URI.substring(0, ORIGINAL_TEST_ACT_EXPRESSION_URI.lastIndexOf('/'));
 
-    private final static String ORIGINAL_TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/2009/06-21_1_eng.xml";
+    private final static String ORIGINAL_TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/9999/06-21_1_eng.xml";
 
-    private final static String NEW_TEST_ACT_MANIFESTATION_URI = "/ken/act/2009-06-21/1/eng@2009-06-25.xml";
+    private final static String NEW_TEST_ACT_MANIFESTATION_URI = "/ken/act/9999-06-21/1/eng@9999-06-25.xml";
     private final static String NEW_TEST_ACT_EXPRESSION_URI = NEW_TEST_ACT_MANIFESTATION_URI.substring(0, NEW_TEST_ACT_MANIFESTATION_URI.indexOf('.'));
     private final static String NEW_TEST_ACT_WORK_URI = NEW_TEST_ACT_EXPRESSION_URI.substring(0, NEW_TEST_ACT_EXPRESSION_URI.lastIndexOf('/'));
 
-    private final static String NEW_TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/2009/06-21_1_eng@2009-06-25.xml";
+    private final static String NEW_TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/9999/06-21_1_eng@9999-06-25.xml";
 
 
 
@@ -158,7 +158,7 @@ public class EditErrorTest
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
                 new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
-                new NameValuePair("version", "2009-06-22")
+                new NameValuePair("version", "9999-06-22")
         };
         post.setQueryString(qsGetParams);
 
@@ -195,7 +195,7 @@ public class EditErrorTest
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
                 new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
-                new NameValuePair("version", "2009-06-25")
+                new NameValuePair("version", "9999-06-25")
         };
         post.setQueryString(qsGetParams);
 
@@ -216,7 +216,7 @@ public class EditErrorTest
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
                 new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
-                new NameValuePair("version", "2009-06-25")
+                new NameValuePair("version", "9999-06-25")
         };
         post.setQueryString(qsGetParams);
 
@@ -237,7 +237,7 @@ public class EditErrorTest
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
                 new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
-                new NameValuePair("version", "2009-06-25")
+                new NameValuePair("version", "9999-06-25")
         };
         post.setQueryString(qsGetParams);
 
@@ -258,7 +258,7 @@ public class EditErrorTest
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
                 new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
-                new NameValuePair("version", "2009-06-25")
+                new NameValuePair("version", "9999-06-25")
         };
         post.setQueryString(qsGetParams);
 
@@ -279,7 +279,7 @@ public class EditErrorTest
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
                 new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
-                new NameValuePair("version", "2009-06-25")
+                new NameValuePair("version", "9999-06-25")
         };
         post.setQueryString(qsGetParams);
 

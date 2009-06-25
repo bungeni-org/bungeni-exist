@@ -176,38 +176,65 @@ declare function local:isValidVersion($akomantoso as node(), $originalURI, $vers
         if($akomantoso/an:act/@contains eq "SingleVersion")then
         (
             (:
-                3) the work/expression/manifestation element's HREF references in the <identification> block HREF references must be changed
+                3.1) the Work URI must be the same in the original and new versions 
             :)
             if($akomantoso/an:act/an:meta/an:identification/an:Work/an:uri/@href eq $originalVersion/an:akomantoso/an:act/an:meta/an:identification/an:Work/an:uri/@href)then
             ( 
-                let $newURI := local:manifestationURIWithVersion($originalURI, $versionDate) return
-                
-                    if($akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href eq local:expressionURIFromManifestationURI($newURI))then
+                (:
+                    3.2) the Expression URI must be different in the original and new versions
+                :)
+                if($akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href ne $originalVersion/an:akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href)then
+                (
+                    (:
+                    3.3) the Manifestation uri must be different in the original and new versions
+                    :)
+                    if($akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href ne $originalVersion/an:akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href)then
                     (
-                        if($akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href eq $newURI)then
-                        (
-                            (:
-                                 4) A reference to the original document must be added in the <references> section of the document...
-                                 <references source="#au1">
-                                    <Original id="ro1" href="ken/act/1997-08-22/3/en/main" showAs="Original"/>
-                                </references>
-                            :)
-                            if($akomantoso/an:act/an:meta/an:references/an:Original/@href eq $originalURI)then
+                        (: 
+                            3.4 the expression uri must match the new expression uri
+                        :)
+                        let $newURI := local:manifestationURIWithVersion($originalURI, $versionDate) return
+                            if($akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href eq local:expressionURIFromManifestationURI($newURI))then
                             (
-                                () (: sucess :)
+                                (:
+                                    3.5 ) the Manifestation uri must match the new uri 
+                                :)
+                                if($akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href eq $newURI)then
+                                (
+                                    (:
+                                         4) A reference to the original document must be added in the <references> section of the document...
+                                         <references source="#au1">
+                                            <Original id="ro1" href="ken/act/1997-08-22/3/en/main" showAs="Original"/>
+                                        </references>
+                                    :)
+                                    if($akomantoso/an:act/an:meta/an:references/an:Original/@href eq $originalURI)then
+                                    (
+                                        () (: sucess :)
+                                    )
+                                    else
+                                    (
+                                        (: Act documents reference to the original document is invalid :)
+                                        <error>IVDORE0001</error>
+                                    )
+                                )
+                                else
+                                (
+                                    (: Act documents Manifestation uri is invalid :)
+                                    <error>IVVMAU0001</error>
+                                )
                             )
-                            else
-                            (
-                                (: Act documents reference to the original document is invalid :)
-                                <error>INVDORE0001</error>
-                            )
-                        )
                         else
                         (
-                            (: Act documents Manifestation uri is invalid :)
-                            <error>IVVMAU0001</error>
+                            (: Act documents Expression uri is invalid :)
+                            <error>IVVEXU0001</error>
                         )
                     )
+                    else
+                    (
+                        (: Act documents Manifestation uri is invalid :)
+                        <error>IVVMAU0001</error>
+                    )
+                )
                 else
                 (
                     (: Act documents Expression uri is invalid :)

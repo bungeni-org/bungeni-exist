@@ -33,20 +33,28 @@ public class EditErrorTest
 {
     private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
-    private final static String TEST_ACT_MANIFESTATION_URI = "/ken/act/2009-06-21/1/eng.xml";
-    private final static String TEST_ACT_EXPRESSION_URI = TEST_ACT_MANIFESTATION_URI.substring(0, TEST_ACT_MANIFESTATION_URI.indexOf('.'));
-    private final static String TEST_ACT_WORK_URI = TEST_ACT_EXPRESSION_URI.substring(0, TEST_ACT_EXPRESSION_URI.lastIndexOf('/'));
+    private final static String ORIGINAL_TEST_ACT_MANIFESTATION_URI = "/ken/act/2009-06-21/1/eng.xml";
+    private final static String ORIGINAL_TEST_ACT_EXPRESSION_URI = ORIGINAL_TEST_ACT_MANIFESTATION_URI.substring(0, ORIGINAL_TEST_ACT_MANIFESTATION_URI.indexOf('.'));
+    private final static String ORIGINAL_TEST_ACT_WORK_URI = ORIGINAL_TEST_ACT_EXPRESSION_URI.substring(0, ORIGINAL_TEST_ACT_EXPRESSION_URI.lastIndexOf('/'));
 
-    private final static String TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/2009/06-21_1_eng.xml";
+    private final static String ORIGINAL_TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/2009/06-21_1_eng.xml";
+
+    private final static String NEW_TEST_ACT_MANIFESTATION_URI = "/ken/act/2009-06-21/1/eng@2009-06-25.xml";
+    private final static String NEW_TEST_ACT_EXPRESSION_URI = NEW_TEST_ACT_MANIFESTATION_URI.substring(0, NEW_TEST_ACT_MANIFESTATION_URI.indexOf('.'));
+    private final static String NEW_TEST_ACT_WORK_URI = NEW_TEST_ACT_EXPRESSION_URI.substring(0, NEW_TEST_ACT_EXPRESSION_URI.lastIndexOf('/'));
+
+    private final static String NEW_TEST_ACT_MANIFESTATION_DB_URI = "/db/bungeni/data/ken/act/2009/06-21_1_eng@2009-06-25.xml";
+
+
 
     @BeforeClass
     public static void storeTestDocuments() throws IOException
     {
-        String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, TEST_ACT_WORK_URI, TEST_ACT_EXPRESSION_URI, TEST_ACT_MANIFESTATION_URI, null);
+        String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, ORIGINAL_TEST_ACT_WORK_URI, ORIGINAL_TEST_ACT_EXPRESSION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI, null);
 
         NameValuePair qsPostParams[] = {
             new NameValuePair("action", "new"),
-            new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+            new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI)
         };
 
         PostMethod post = new PostMethod(REST.EDIT_URL);
@@ -64,7 +72,7 @@ public class EditErrorTest
     {
         HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
 
-        DeleteMethod delete = new DeleteMethod(REST.EXIST_REST_URI + TEST_ACT_MANIFESTATION_DB_URI);
+        DeleteMethod delete = new DeleteMethod(REST.EXIST_REST_URI + ORIGINAL_TEST_ACT_MANIFESTATION_DB_URI);
 
         int result = client.executeMethod(delete);
         assertEquals(HttpStatus.SC_OK, result);
@@ -89,7 +97,7 @@ public class EditErrorTest
 
         PostMethod post = new PostMethod(REST.EDIT_URL);
 
-        final String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, TEST_ACT_WORK_URI, TEST_ACT_EXPRESSION_URI, TEST_ACT_MANIFESTATION_URI, null);
+        final String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, ORIGINAL_TEST_ACT_WORK_URI, ORIGINAL_TEST_ACT_EXPRESSION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI, null);
 
         NameValuePair qsPostParams[] = {
             new NameValuePair("action", "new"),
@@ -108,11 +116,11 @@ public class EditErrorTest
         final String expectedErrorCode = "EXDODB0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, TEST_ACT_WORK_URI, TEST_ACT_EXPRESSION_URI, TEST_ACT_MANIFESTATION_URI, null);
+        final String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, ORIGINAL_TEST_ACT_WORK_URI, ORIGINAL_TEST_ACT_EXPRESSION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI, null);
 
         NameValuePair qsPostParams[] = {
             new NameValuePair("action", "new"),
-            new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+            new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI)
         };
 
         PostMethod post = new PostMethod(REST.EDIT_URL);
@@ -133,7 +141,7 @@ public class EditErrorTest
         
         GetMethod get = new GetMethod(REST.EDIT_URL);
         NameValuePair qsGetParams[] = {
-                new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI)
         };
         get.setQueryString(qsGetParams);
         
@@ -149,7 +157,7 @@ public class EditErrorTest
         PostMethod post = new PostMethod(REST.EDIT_URL);
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
-                new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
                 new NameValuePair("version", "2009-06-22")
         };
         post.setQueryString(qsGetParams);
@@ -166,11 +174,116 @@ public class EditErrorTest
         PostMethod post = new PostMethod(REST.EDIT_URL);
         NameValuePair qsGetParams[] = {
                 new NameValuePair("action", "save"),
-                new NameValuePair("uri", TEST_ACT_MANIFESTATION_URI)
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI)
         };
         post.setQueryString(qsGetParams);
 
-        final String testNewDocumentVersion = "<an:akomantoso xmlns:an=\"" + AkomaNtoso.NAMESPACE_URI + "\"><an:act contains=\"SingleVersion\"/></an:akomantoso>";
+        final String testNewDocumentVersion = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, NEW_TEST_ACT_WORK_URI, NEW_TEST_ACT_EXPRESSION_URI, NEW_TEST_ACT_MANIFESTATION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI);
+
+        post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButNotSingleVersionDocument() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "IVVESV0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("version", "2009-06-25")
+        };
+        post.setQueryString(qsGetParams);
+
+        final String testNewDocumentVersion = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.ORIGINAL_VERSION, NEW_TEST_ACT_WORK_URI, NEW_TEST_ACT_EXPRESSION_URI, NEW_TEST_ACT_MANIFESTATION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI);
+
+        post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButWorkUriChanged() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "IVVWOU0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("version", "2009-06-25")
+        };
+        post.setQueryString(qsGetParams);
+
+        final String testNewDocumentVersion = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, "/some/invalid/work/uri", NEW_TEST_ACT_EXPRESSION_URI, NEW_TEST_ACT_MANIFESTATION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI);
+
+        post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButExpressionUriUnchanged() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "IVVEXU0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("version", "2009-06-25")
+        };
+        post.setQueryString(qsGetParams);
+
+        final String testNewDocumentVersion = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, NEW_TEST_ACT_WORK_URI, ORIGINAL_TEST_ACT_EXPRESSION_URI, NEW_TEST_ACT_MANIFESTATION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI);
+
+        post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButManifestationUriUnchanged() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "IVVMAU0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("version", "2009-06-25")
+        };
+        post.setQueryString(qsGetParams);
+
+        final String testNewDocumentVersion = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, NEW_TEST_ACT_WORK_URI, NEW_TEST_ACT_EXPRESSION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI);
+
+        post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
+
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void save_versionedXMLDocumentButNoReferenceToOriginal() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "IVDORE0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("action", "save"),
+                new NameValuePair("uri", ORIGINAL_TEST_ACT_MANIFESTATION_URI),
+                new NameValuePair("version", "2009-06-25")
+        };
+        post.setQueryString(qsGetParams);
+
+        final String testNewDocumentVersion = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, NEW_TEST_ACT_WORK_URI, NEW_TEST_ACT_EXPRESSION_URI, NEW_TEST_ACT_MANIFESTATION_URI, null);
 
         post.setRequestEntity(new ByteArrayRequestEntity(testNewDocumentVersion.getBytes(), Database.XML_MIMETYPE));
 

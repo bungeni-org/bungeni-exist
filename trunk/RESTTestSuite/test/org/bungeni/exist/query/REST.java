@@ -11,8 +11,10 @@ import java.io.InputStream;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 /**
  * @author Adam Retter <adam.retter@googlemail.com>
@@ -69,5 +71,43 @@ public class REST
         is.close();
 
         return os.toByteArray();
+    }
+
+    public final static void createCollectionFromPath(String newCollectionPath) throws IOException
+    {
+        HttpClient client = getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
+
+        GetMethod getCollection = null;
+        GetMethod createCollection = null;
+        String path = new String();
+
+        for(String pathSeg : newCollectionPath.split("/"))
+        {
+            if(pathSeg.length() != 0)
+            {
+                path += "/" + pathSeg;
+                createCollection = null;
+                try
+                {
+                    getCollection = new GetMethod(EXIST_REST_URI + path);
+                    int result = client.executeMethod(getCollection);
+                    if(result == HttpStatus.SC_NOT_FOUND)
+                    {
+                        String parentColPath = path.substring(0, path.lastIndexOf("/"));
+                        createCollection = new GetMethod(EXIST_REST_URI + parentColPath + "?_query=xmldb:create-collection('" + parentColPath + "','" + pathSeg + "')");
+                        result = client.executeMethod(createCollection);
+                        if(result != HttpStatus.SC_OK)
+                            throw new IOException(createCollection.getResponseBodyAsString());
+                    }
+                }
+                finally
+                {
+                    if(getCollection != null)
+                        getCollection.releaseConnection();
+                    if(createCollection != null)
+                        createCollection.releaseConnection();
+                }
+            }
+        }
     }
 }

@@ -50,6 +50,11 @@ public class EditErrorTest
     @BeforeClass
     public static void storeTestDocuments() throws IOException
     {
+        //create the test collection (if required)
+        REST.createCollectionFromPath(ORIGINAL_TEST_ACT_MANIFESTATION_DB_URI.substring(0, ORIGINAL_TEST_ACT_MANIFESTATION_DB_URI.lastIndexOf("/")));
+
+
+        //generate the test original document
         String testAct = AkomaNtoso.generateTestAct(AkomaNtoso.ActContentTypes.SINGLE_VERSION, ORIGINAL_TEST_ACT_WORK_URI, ORIGINAL_TEST_ACT_EXPRESSION_URI, ORIGINAL_TEST_ACT_MANIFESTATION_URI, null);
 
         NameValuePair qsPostParams[] = {
@@ -61,7 +66,7 @@ public class EditErrorTest
         post.setQueryString(qsPostParams);
         post.setRequestEntity(new ByteArrayRequestEntity(testAct.getBytes(), Database.XML_MIMETYPE));
 
-        //store the document
+        //store the original document
         HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int result = client.executeMethod(post);
         assertEquals(HttpStatus.SC_OK, result);

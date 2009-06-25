@@ -5,7 +5,8 @@ package org.bungeni.exist.query;
  */
 public class AkomaNtoso
 {
-    public final static String NAMESPACE_URI = "http://www.akomantoso.org/1.0";
+    public final static String AN_NAMESPACE_URI = "http://www.akomantoso.org/1.0";
+    public final static String AN_NAMESPACE_PREFIX = "an";
 
     public enum ActContentTypes
     {
@@ -25,7 +26,7 @@ public class AkomaNtoso
     public final static String generateTestAct(AkomaNtoso.ActContentTypes actContentType, String workURI, String expressionURI, String manifestationURI, String originalURI)
     {
         String act =
-                "<an:akomantoso xmlns:an=\"" + AkomaNtoso.NAMESPACE_URI + "\">"
+                "<an:akomantoso xmlns:an=\"" + AkomaNtoso.AN_NAMESPACE_URI + "\">"
                 +    "<an:act contains=\"" + (actContentType == AkomaNtoso.ActContentTypes.ORIGINAL_VERSION ? "OriginalVersion" : "SingleVersion") + "\">"
                 +        "<an:meta>"
                 +            "<an:identification source=\"#ar1\">"
@@ -66,7 +67,7 @@ public class AkomaNtoso
     public final static String generateTestBill(String workURI, String expressionURI, String manifestationURI)
     {
             return
-                    "<an:akomantoso xmlns:an=\"" + AkomaNtoso.NAMESPACE_URI + "\">"
+                    "<an:akomantoso xmlns:an=\"" + AkomaNtoso.AN_NAMESPACE_URI + "\">"
                     +    "<an:bill>"
                     +        "<an:meta>"
                     +            "<an:identification source=\"FV\">"

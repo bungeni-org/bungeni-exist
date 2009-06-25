@@ -18,11 +18,10 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.custommonkey.xmlunit.SimpleNamespaceContext;
+import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.jxpath.JXPathNotFoundException;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.custommonkey.xmlunit.XpathEngine;
-import org.custommonkey.xmlunit.exceptions.XpathException;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,6 +39,8 @@ import org.xml.sax.SAXException;
  */
 public class EditTest
 {
+    private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
     static {
         XMLUnit.setIgnoreWhitespace(true);
     }
@@ -187,25 +188,23 @@ public class EditTest
                 assertTrue("No Response document", getResponse != null && getResponse.length > 0);
 
                 //check the document URI's have been updated for the new version
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                factory.setFeature("http://xml.org/sax/features/namespaces", true);
-                DocumentBuilder builder = factory.newDocumentBuilder();
+                DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
                 Document docVersioned = builder.parse(new ByteArrayInputStream(getResponse));
-                XpathEngine xpathEngine = XMLUnit.newXpathEngine();
+                JXPathContext jxp = JXPathContext.newContext(docVersioned);
+                jxp.registerNamespace(AkomaNtoso.AN_NAMESPACE_PREFIX, AkomaNtoso.AN_NAMESPACE_URI);
 
                 HashMap<String, String> namespaces = new HashMap<String, String>();
-                namespaces.put("an", AkomaNtoso.NAMESPACE_URI);
-                xpathEngine.setNamespaceContext(new SimpleNamespaceContext(namespaces));
-                String versionedExpressionURI = xpathEngine.evaluate("/an:akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href", docVersioned);
-                String versionedManifestationURI = xpathEngine.evaluate("/an:akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href", docVersioned);
+                namespaces.put("an", AkomaNtoso.AN_NAMESPACE_URI);
+                String versionedExpressionURI = (String)jxp.getValue("/an:akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href", String.class);
+                String versionedManifestationURI = (String)jxp.getValue("/an:akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href", String.class);
 
                 assertEquals(versionedExpressionURI, testDocExpressionURI + "@" + newVersion);
                 assertEquals(versionedManifestationURI, testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.')) + "@" + newVersion + testDocManifestationURI.substring(testDocManifestationURI.indexOf('.')));
             }
-            catch (XpathException xpe)
+            catch(JXPathNotFoundException jnfe)
             {
-                xpe.printStackTrace();
-                fail(xpe.getMessage());
+                jnfe.printStackTrace();
+                fail(jnfe.getMessage());
             }
             catch(ParserConfigurationException pce)
             {

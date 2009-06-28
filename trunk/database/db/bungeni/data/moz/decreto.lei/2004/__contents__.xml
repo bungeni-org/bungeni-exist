@@ -1,4 +1,0 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/bungeni/data/moz/decreto.lei/2004" owner="admin" group="dba" mode="755" created="2007-07-13T11:38:40+01:00" version="1">
-    <resource type="BinaryResource" name="05-24_120_por.doc" owner="admin" group="dba" mode="755" created="2007-07-11T19:03:42+01:00" modified="2007-07-11T19:03:42+01:00" filename="05-24_120_por.doc" mimetype="application/msword"/>
-    <resource type="XMLResource" name="05-24_120_por.xml" owner="admin" group="dba" mode="755" created="2007-07-11T19:03:34+01:00" modified="2007-07-13T11:55:29+01:00" filename="05-24_120_por.xml" mimetype="text/xml"/>
-</collection>

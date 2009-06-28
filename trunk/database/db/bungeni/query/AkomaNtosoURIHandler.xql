@@ -8,7 +8,7 @@
 :    available from http://akn.web.cs.unibo.it/
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.2.1
+:    @version 1.3
 :)
 xquery version "1.0";
 
@@ -136,13 +136,13 @@ declare function handler:work($country as xs:string, $type as xs:string, $date a
     
         (: return the expressions of the work :)
         element handler:results {
-            for $work in collection($collectionURI)/an:akomantoso/child::element()[local-name(.) eq $type][an:meta/an:identification/an:Work/an:uri/@href eq $workURI] return
-                element an:akomantoso {    
+            for $work in collection($collectionURI)/an:akomaNtoso/child::element()[local-name(.) eq $type][an:meta/an:identification/an:FRBRWork/an:FRBRuri/@value eq $workURI] return
+                element an:akomaNtoso {    
                     element { concat("an:", $type) } {
                         element an:meta
                         {
                             element an:identification {
-                                $work/an:meta/an:identification/an:Expression        
+                                $work/an:meta/an:identification/an:FRBRExpression        
                             }
                         },
                         element an:preface {
@@ -176,13 +176,13 @@ declare function handler:expression($country as xs:string, $type as xs:string, $
     
         (: return details of the expressions and links to the manifestation :)
         element handler:results{
-            for $expression in collection($collectionURI)/an:akomantoso/child::element()[local-name(.) eq $type][an:meta/an:identification/an:Expression/an:uri/@href eq $expressionURI] return
-                element an:akomantoso {    
+            for $expression in collection($collectionURI)/an:akomaNtoso/child::element()[local-name(.) eq $type][an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq $expressionURI] return
+                element an:akomaNtoso {    
                     element { concat("an:", $type) } {
                         element an:meta
                         {
                             element an:identification {
-                                $expression/an:meta/an:identification/an:Manifestation        
+                                $expression/an:meta/an:identification/an:FRBRManifestation        
                             }
                         },
                         element an:preface {
@@ -215,7 +215,7 @@ declare function handler:manifestation($country as xs:string, $type as xs:string
     $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, $number, $lang, $version),
     
     (: get the xml manifestation :)
-    $xmlManifestation := collection($collectionURI)/an:akomantoso[local-name(child::element()[an:meta/an:identification/an:Manifestation/an:uri/@href eq $manifestationURI]) eq $type] return
+    $xmlManifestation := collection($collectionURI)/an:akomaNtoso[local-name(child::element()[an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value eq $manifestationURI]) eq $type] return
     
         (: what sort of Manifestation do we want? :)
         if($dataformat eq "xml")then

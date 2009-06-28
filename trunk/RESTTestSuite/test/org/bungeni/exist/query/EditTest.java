@@ -16,12 +16,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.JXPathNotFoundException;
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -41,10 +45,28 @@ public class EditTest
 {
     private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
+    private final static String TEST_COLLECTION = "/db/bungeni/data/ken/act/9999";
+
     static {
         XMLUnit.setIgnoreWhitespace(true);
     }
 
+    @BeforeClass
+    public static void setupTestCollection() throws IOException
+    {
+        //create the test collection (if required)
+        REST.createCollectionFromPath(TEST_COLLECTION);
+    }
+
+    @AfterClass
+    public static void removeTestCollection() throws IOException
+    {   
+        DeleteMethod delete = new DeleteMethod(REST.EXIST_REST_URI + TEST_COLLECTION);
+
+        HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
+        int result = client.executeMethod(delete);
+        assertEquals(HttpStatus.SC_OK, result);
+    }
     /**
      * Attempts to store a NEW XML document
      * checks the returned document is the same as the posted document
@@ -52,7 +74,7 @@ public class EditTest
     @Test
     public void storeNewXMLDocument()
     {
-        String testDocManifestationURI = "/ken/act/2008-07-04/1/eng.xml";
+        String testDocManifestationURI = "/ken/act/9999-07-04/1/eng.xml";
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
@@ -68,7 +90,7 @@ public class EditTest
     @Test
     public void updateUnVersionedXMLDocument()
     {
-        String testDocManifestationURI = "/ken/bill/2008-07-04/1/eng.xml";
+        String testDocManifestationURI = "/ken/act/9999-07-05/1/eng.xml";
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
@@ -119,12 +141,12 @@ public class EditTest
 
         try
         {
-                status = http.executeMethod(post);
+            status = http.executeMethod(post);
 
-                assertEquals("POST Request did not return OK", HttpStatus.SC_OK, status);
+            assertEquals("POST Request did not return OK", HttpStatus.SC_OK, status);
 
-                InputStream responseDocument = post.getResponseBodyAsStream();
-                assertXMLEqual("Document should not have changed", new InputSource(new ByteArrayInputStream(getDocument)), new InputSource(responseDocument));
+            InputStream responseDocument = post.getResponseBodyAsStream();
+            assertXMLEqual("Document should not have changed", new InputSource(new ByteArrayInputStream(getDocument)), new InputSource(responseDocument));
         }
         catch(IOException ioe)
         {
@@ -153,7 +175,7 @@ public class EditTest
     @Test
     public void createNewXMLDocumentVersion()
     {
-        String testDocManifestationURI = "/ken/act/2008-07-05/1/eng.xml";
+        String testDocManifestationURI = "/ken/act/9999-07-01/1/eng.xml";
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
@@ -277,12 +299,18 @@ public class EditTest
      * is the same between the GET response and POST response
      */
     @Test
-    public void updateUnVersionedBinaryDocument()
+    public void updateUnVersionedBinaryDocument() throws IOException
     {
-        String testDocManifestationURI = "/ken/act/1997-08-22/3/eng.doc";
+        String testDocManifestationURI = "/ken/act/9999-01-22/3/eng.doc";
 
         HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int status = HttpStatus.SC_NOT_FOUND;
+
+        //PUT a test binary document
+        PutMethod put = new PutMethod(REST.EXIST_REST_URI + "/db/bungeni/data/ken/act/9999/01-22_3_eng.doc");
+        put.setRequestEntity(new ByteArrayRequestEntity("some_data".getBytes(), "application/msword"));
+        status = http.executeMethod(put);
+        assertEquals("Could not store test document", HttpStatus.SC_CREATED, status);
 
         //GET the binary document
         GetMethod get = new GetMethod(REST.EDIT_URL);
@@ -364,87 +392,93 @@ public class EditTest
      * has the same content as the original version
      */
     @Test
-    public void createNewBinaryDocumentVersion()
+    public void createNewBinaryDocumentVersion() throws IOException
     {
-            final String testDocManifestationURI = "/ken/act/1997-08-22/3/eng.doc";
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String newVersion = sdf.format(Calendar.getInstance().getTime());
+        final String testDocManifestationURI = "/ken/act/9999-04-22/3/eng.doc";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String newVersion = sdf.format(Calendar.getInstance().getTime());
 
-            HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
-            int status = HttpStatus.SC_NOT_FOUND;
+        HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
+        int status = HttpStatus.SC_NOT_FOUND;
 
-            //GET the binary document
-            GetMethod get = new GetMethod(REST.EDIT_URL);
-            get.setDoAuthentication(true);
+        //PUT a test binary document
+        PutMethod put = new PutMethod(REST.EXIST_REST_URI + "/db/bungeni/data/ken/act/9999/04-22_3_eng.doc");
+        put.setRequestEntity(new ByteArrayRequestEntity("some_data".getBytes(), "application/msword"));
+        status = http.executeMethod(put);
+        assertEquals("Could not store test document", HttpStatus.SC_CREATED, status);
 
-            //set the querystring
-            NameValuePair qsGetParams[] = {
-                    new NameValuePair("uri", testDocManifestationURI),
-                    new NameValuePair("version", newVersion)
-            };
-            get.setQueryString(qsGetParams);
+        //GET the binary document
+        GetMethod get = new GetMethod(REST.EDIT_URL);
+        get.setDoAuthentication(true);
 
-            byte getDocument[] = null;
-            try
+        //set the querystring
+        NameValuePair qsGetParams[] = {
+                new NameValuePair("uri", testDocManifestationURI),
+                new NameValuePair("version", newVersion)
+        };
+        get.setQueryString(qsGetParams);
+
+        byte getDocument[] = null;
+        try
+        {
+            status = http.executeMethod(get);
+            getDocument = REST.getResponseBody(get);
+
+            assertEquals("GET Request did not return OK", HttpStatus.SC_OK, status);
+
+            assertTrue("No Response document", getDocument != null && getDocument.length > 0);
+        }
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+            fail(ioe.getMessage());
+        }
+        finally
+        {
+            //release the connection
+            get.releaseConnection();
+        }
+
+        //POST the updated binary document
+        byte[] postDocument = null;
+        PostMethod post = new PostMethod(REST.EDIT_URL);
+        post.setDoAuthentication(true);
+        NameValuePair qsPostParams[] = {
+            new NameValuePair("action", "save"),
+            new NameValuePair("uri", testDocManifestationURI),
+            new NameValuePair("version", newVersion)
+        };
+        post.setQueryString(qsPostParams);
+        post.setRequestEntity(new ByteArrayRequestEntity(getDocument, get.getResponseHeader("Content-Type").getValue()));
+
+        try
+        {
+            status = http.executeMethod(post);
+            postDocument = REST.getResponseBody(post);
+
+            assertEquals("POST Request did not return OK", HttpStatus.SC_OK, status);
+
+            if(postDocument != null && getDocument != null && postDocument.length == getDocument.length)
             {
-                    status = http.executeMethod(get);
-                    getDocument = REST.getResponseBody(get);
-
-                    assertEquals("GET Request did not return OK", HttpStatus.SC_OK, status);
-
-                    assertTrue("No Response document", getDocument != null && getDocument.length > 0);
+                for(int i = 0; i < postDocument.length; i++)
+                {
+                    assertEquals("Received document is not the same as the saved document", postDocument[i], getDocument[i]);
+                }
             }
-            catch(IOException ioe)
+            else
             {
-                    ioe.printStackTrace();
-                    fail(ioe.getMessage());
+                fail("Received document is not the same as the saved document");
             }
-            finally
-            {
-                    //release the connection
-                    get.releaseConnection();
-            }
-
-            //POST the updated binary document
-            byte[] postDocument = null;
-            PostMethod post = new PostMethod(REST.EDIT_URL);
-            post.setDoAuthentication(true);
-            NameValuePair qsPostParams[] = {
-                            new NameValuePair("action", "save"),
-                            new NameValuePair("uri", testDocManifestationURI),
-                            new NameValuePair("version", newVersion)
-                    };
-            post.setQueryString(qsPostParams);
-            post.setRequestEntity(new ByteArrayRequestEntity(getDocument, get.getResponseHeader("Content-Type").getValue()));
-
-            try
-            {
-                    status = http.executeMethod(post);
-                    postDocument = REST.getResponseBody(post);
-
-                    assertEquals("POST Request did not return OK", HttpStatus.SC_OK, status);
-
-                    if(postDocument != null && getDocument != null && postDocument.length == getDocument.length)
-                    {
-                            for(int i = 0; i < postDocument.length; i++)
-                            {
-                                    assertEquals("Received document is not the same as the saved document", postDocument[i], getDocument[i]);
-                            }
-                    }
-                    else
-                    {
-                            fail("Received document is not the same as the saved document");
-                    }
-            }
-            catch(IOException ioe)
-            {
-                    ioe.printStackTrace();
-                    fail(ioe.getMessage());
-            }
-            finally
-            {
-                    post.releaseConnection();
-            }
+        }
+        catch(IOException ioe)
+        {
+            ioe.printStackTrace();
+            fail(ioe.getMessage());
+        }
+        finally
+        {
+            post.releaseConnection();
+        }
     }
 
     /**
@@ -461,8 +495,6 @@ public class EditTest
         //setup POST Request for storing new document
         PostMethod post = new PostMethod(REST.EDIT_URL);
         post.setDoAuthentication(true);
-
-        //String testDocument = generateAct(actContentType, workURI, expressionURI, manifestationURI, originalURI);
 
         NameValuePair qsPostParams[] = {
             new NameValuePair("action", "new"),

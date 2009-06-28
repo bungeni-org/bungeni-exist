@@ -45,7 +45,7 @@ public class EditTest
 {
     private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
-    private final static String TEST_COLLECTION = "/db/bungeni/data/ken/act/9999";
+    private final static String TEST_COLLECTION = "/db/bungeni/data/ke/act/9999";
 
     static {
         XMLUnit.setIgnoreWhitespace(true);
@@ -74,7 +74,7 @@ public class EditTest
     @Test
     public void storeNewXMLDocument()
     {
-        String testDocManifestationURI = "/ken/act/9999-07-04/1/eng.xml";
+        String testDocManifestationURI = "/ke/act/9999-07-04/1/eng.xml";
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
@@ -90,7 +90,7 @@ public class EditTest
     @Test
     public void updateUnVersionedXMLDocument()
     {
-        String testDocManifestationURI = "/ken/act/9999-07-05/1/eng.xml";
+        String testDocManifestationURI = "/ke/act/9999-07-05/1/eng.xml";
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
@@ -175,7 +175,7 @@ public class EditTest
     @Test
     public void createNewXMLDocumentVersion()
     {
-        String testDocManifestationURI = "/ken/act/9999-07-01/1/eng.xml";
+        String testDocManifestationURI = "/ke/act/9999-07-01/1/eng.xml";
         String testDocExpressionURI = testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.'));
         String testDocWorkURI = testDocExpressionURI.substring(0, testDocExpressionURI.lastIndexOf('/'));
 
@@ -217,8 +217,8 @@ public class EditTest
 
                 HashMap<String, String> namespaces = new HashMap<String, String>();
                 namespaces.put("an", AkomaNtoso.AN_NAMESPACE_URI);
-                String versionedExpressionURI = (String)jxp.getValue("/an:akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href", String.class);
-                String versionedManifestationURI = (String)jxp.getValue("/an:akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href", String.class);
+                String versionedExpressionURI = (String)jxp.getValue("/an:akomaNtoso/an:act/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value", String.class);
+                String versionedManifestationURI = (String)jxp.getValue("/an:akomaNtoso/an:act/an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value", String.class);
 
                 assertEquals(versionedExpressionURI, testDocExpressionURI + "@" + newVersion);
                 assertEquals(versionedManifestationURI, testDocManifestationURI.substring(0, testDocManifestationURI.indexOf('.')) + "@" + newVersion + testDocManifestationURI.substring(testDocManifestationURI.indexOf('.')));
@@ -250,7 +250,7 @@ public class EditTest
             }
 
             //add a reference to the Original version into the new version of the document
-            String originalReference = "<an:references source=\"#ar1\"><an:Original id=\"ro1\" href=\"" + testDocManifestationURI + "\" showAs=\"Original\"/></an:references>";
+            String originalReference = "<an:references source=\"#ar1\"><an:original id=\"ro1\" href=\"" + testDocManifestationURI + "\" showAs=\"original\"/></an:references>";
             String newDocVersion = new String(getResponse);
             newDocVersion = newDocVersion.substring(0, newDocVersion.indexOf("</an:meta>")) + originalReference + newDocVersion.substring(newDocVersion.indexOf("</an:meta>"));
 
@@ -301,13 +301,13 @@ public class EditTest
     @Test
     public void updateUnVersionedBinaryDocument() throws IOException
     {
-        String testDocManifestationURI = "/ken/act/9999-01-22/3/eng.doc";
+        String testDocManifestationURI = "/ke/act/9999-01-22/3/eng.doc";
 
         HttpClient http = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int status = HttpStatus.SC_NOT_FOUND;
 
         //PUT a test binary document
-        PutMethod put = new PutMethod(REST.EXIST_REST_URI + "/db/bungeni/data/ken/act/9999/01-22_3_eng.doc");
+        PutMethod put = new PutMethod(REST.EXIST_REST_URI + "/db/bungeni/data/ke/act/9999/01-22_3_eng.doc");
         put.setRequestEntity(new ByteArrayRequestEntity("some_data".getBytes(), "application/msword"));
         status = http.executeMethod(put);
         assertEquals("Could not store test document", HttpStatus.SC_CREATED, status);
@@ -394,7 +394,7 @@ public class EditTest
     @Test
     public void createNewBinaryDocumentVersion() throws IOException
     {
-        final String testDocManifestationURI = "/ken/act/9999-04-22/3/eng.doc";
+        final String testDocManifestationURI = "/ke/act/9999-04-22/3/eng.doc";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String newVersion = sdf.format(Calendar.getInstance().getTime());
 
@@ -402,7 +402,7 @@ public class EditTest
         int status = HttpStatus.SC_NOT_FOUND;
 
         //PUT a test binary document
-        PutMethod put = new PutMethod(REST.EXIST_REST_URI + "/db/bungeni/data/ken/act/9999/04-22_3_eng.doc");
+        PutMethod put = new PutMethod(REST.EXIST_REST_URI + "/db/bungeni/data/ke/act/9999/04-22_3_eng.doc");
         put.setRequestEntity(new ByteArrayRequestEntity("some_data".getBytes(), "application/msword"));
         status = http.executeMethod(put);
         assertEquals("Could not store test document", HttpStatus.SC_CREATED, status);

@@ -26,33 +26,33 @@ public class AkomaNtoso
     public final static String generateTestAct(AkomaNtoso.ActContentTypes actContentType, String workURI, String expressionURI, String manifestationURI, String originalURI)
     {
         String act =
-                "<an:akomantoso xmlns:an=\"" + AkomaNtoso.AN_NAMESPACE_URI + "\">"
-                +    "<an:act contains=\"" + (actContentType == AkomaNtoso.ActContentTypes.ORIGINAL_VERSION ? "OriginalVersion" : "SingleVersion") + "\">"
+                "<an:akomaNtoso xmlns:an=\"" + AkomaNtoso.AN_NAMESPACE_URI + "\">"
+                +    "<an:act contains=\"" + (actContentType == AkomaNtoso.ActContentTypes.ORIGINAL_VERSION ? "originalVersion" : "singleVersion") + "\">"
                 +        "<an:meta>"
                 +            "<an:identification source=\"#ar1\">"
-                +  	 			 "<an:Work>"
-                +				 	"<an:uri href=\"" + workURI + "\"/>"
-                +				 "</an:Work>"
-                +                "<an:Expression>"
-                +                    "<an:uri href=\"" + expressionURI + "\"/>"
-                +                "</an:Expression>"
-                +				 "<an:Manifestation>"
-                +				 	 "<an:uri href=\"" + manifestationURI + "\"/>"
-                +				 "</an:Manifestation>"
+                +  	 			 "<an:FRBRWork>"
+                +				 	"<an:FRBRuri value=\"" + workURI + "\"/>"
+                +				 "</an:FRBRWork>"
+                +                "<an:FRBRExpression>"
+                +                    "<an:FRBRuri value=\"" + expressionURI + "\"/>"
+                +                "</an:FRBRExpression>"
+                +				 "<an:FRBRManifestation>"
+                +				 	 "<an:FRBRuri value=\"" + manifestationURI + "\"/>"
+                +				 "</an:FRBRManifestation>"
                 +            "</an:identification>";
 
         if(originalURI != null)
         {
                 act +=
                                          "<an:references source=\"#ar1\">"
-                +				 "<an:Original id=\"ro1\" href=\"" + originalURI + "\" showAs=\"Original\"/>"
+                +				 "<an:original id=\"ro1\" href=\"" + originalURI + "\" showAs=\"original\"/>"
                 +			 "</an:references>";
         }
 
         act +=
                                 "</an:meta>"
                 +    "</an:act>"
-                + "</an:akomantoso>";
+                + "</an:akomaNtoso>";
 
         return act;
     }
@@ -60,29 +60,29 @@ public class AkomaNtoso
     /**
      * Generates a very Simple Bill document
      *
-     * @param workURI the URI of this Work
+     * @param workURI the URI of this Workan:akomantoso
      * @param expressionURI the URI of this Expression
      * @param manifestationURI the URI of this Manifestation
      */
     public final static String generateTestBill(String workURI, String expressionURI, String manifestationURI)
     {
             return
-                    "<an:akomantoso xmlns:an=\"" + AkomaNtoso.AN_NAMESPACE_URI + "\">"
+                    "<an:akomaNtoso xmlns:an=\"" + AkomaNtoso.AN_NAMESPACE_URI + "\">"
                     +    "<an:bill>"
                     +        "<an:meta>"
                     +            "<an:identification source=\"FV\">"
-                    +  	 			 "<an:Work>"
-                    +				 	"<an:uri href=\"" + workURI + "\"/>"
-                    +				 "</an:Work>"
-                    +                "<an:Expression>"
-                    +                    "<an:uri href=\"" + expressionURI + "\"/>"
-                    +                "</an:Expression>"
-                    +				 "<an:Manifestation>"
-                    +				 	 "<an:uri href=\"" + manifestationURI + "\"/>"
-                    +				 "</an:Manifestation>"
+                    +  	 			 "<an:FRBRWork>"
+                    +				 	"<an:FRBRuri value=\"" + workURI + "\"/>"
+                    +				 "</an:FRBRWork>"
+                    +                "<an:FRBRExpression>"
+                    +                    "<an:FRBRuri value=\"" + expressionURI + "\"/>"
+                    +                "</an:FRBRExpression>"
+                    +				 "<an:FRBRManifestation>"
+                    +				 	 "<an:FRBRuri value=\"" + manifestationURI + "\"/>"
+                    +				 "</an:FRBRManifestation>"
                     +            "</an:identification>"
                     +		"</an:meta>"
                     +    "</an:bill>"
-                    + "</an:akomantoso>";
+                    + "</an:akomaNtoso>";
     }
 }

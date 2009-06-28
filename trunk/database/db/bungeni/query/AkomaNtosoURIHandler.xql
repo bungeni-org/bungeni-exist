@@ -1,5 +1,5 @@
 (:~
-:    Copyright  Adam Retter 2008 <adam.retter@googlemail.com>
+:    Copyright  Adam Retter 2009 <adam.retter@googlemail.com>
 :    
 :    Akoma Ntoso URI Handler
 :    
@@ -8,7 +8,7 @@
 :    available from http://akn.web.cs.unibo.it/
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.2
+:    @version 1.2.1
 :)
 xquery version "1.0";
 

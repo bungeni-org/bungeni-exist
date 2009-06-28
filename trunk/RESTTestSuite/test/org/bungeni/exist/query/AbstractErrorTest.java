@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.jxpath.JXPathContext;
+import org.junit.Ignore;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -19,6 +20,7 @@ import static org.junit.Assert.fail;
  * @author Adam Retter <adam.retter@googlemail.com>
  * @version 1.0
  */
+@Ignore
 public abstract class AbstractErrorTest
 {
     private final static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

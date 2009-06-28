@@ -22,6 +22,7 @@ public class REST
     public final static String EXIST_REST_URI = SERVER_URI + "/exist/rest";
 
     public final static String EDIT_URL = EXIST_REST_URI + "/db/bungeni/query/edit.xql";
+    public final static String AN_URIHANDLER_URL = EXIST_REST_URI + "/db/bungeni/query/AkomaNtosoURIHandler.xql";
 
     public final static String DEFAULT_ERROR_MESSAGES_URI = EXIST_REST_URI + "/db/bungeni/errors/eng.xml";
 

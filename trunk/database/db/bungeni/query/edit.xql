@@ -36,7 +36,8 @@ import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util
 :)
 declare function local:isVersionedDocumentType($akomantoso as element(an:akomantoso)+) as xs:boolean
 {
-    node-name($akomantoso/child::node()) = $config:versionedDocumentTypes
+    (: node-name($akomantoso/child::node()) = $config:versionedDocumentTypes :)
+    $akomantoso/child::node()/node-name(.) = $config:versionedDocumentTypes
 };
 
 (:~

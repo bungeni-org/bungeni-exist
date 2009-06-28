@@ -7,7 +7,7 @@
 :    for client editing with Open Office
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1.1
+:    @version 1.2
 :)
 xquery version "1.0";
 
@@ -34,7 +34,7 @@ import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util
 :    @param akomantoso The akomantoso node from the xml document, for a binary document use the corresponding xml document
 :    @return xs:boolean true() if the documentType is versioned
 :)
-declare function local:isVersionedDocumentType($akomantoso as element(an:akomantoso)+) as xs:boolean
+declare function local:isVersionedDocumentType($akomantoso as element(an:akomaNtoso)+) as xs:boolean
 {
     (: node-name($akomantoso/child::node()) = $config:versionedDocumentTypes :)
     $akomantoso/child::node()/node-name(.) = $config:versionedDocumentTypes
@@ -119,7 +119,7 @@ declare function local:edit($originalURI as xs:string, $versionDate as xs:string
         (: XML Document :)
         
         (: get the document to edit :)
-        let $xmlDoc := collection($config:data_collection)/an:akomantoso[child::node()/an:meta/an:identification/an:Manifestation/an:uri/@href eq $originalURI] return
+        let $xmlDoc := collection($config:data_collection)/an:akomaNtoso[child::node()/an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value eq $originalURI] return
         
         (: is the document a versioned type? :)
         if(local:isVersionedDocumentType($xmlDoc))then
@@ -174,41 +174,41 @@ declare function local:isValidVersion($akomantoso as node(), $originalURI, $vers
             2) the <act> container of the new version has a "contains" attribute, this must be set to "SingleVersion"
             <act contains="SingleVersion">
         :)
-        if($akomantoso/an:act/@contains eq "SingleVersion")then
+        if($akomantoso/an:act/@contains eq "singleVersion")then
         (
             (:
                 3.1) the Work URI must be the same in the original and new versions 
             :)
-            if($akomantoso/an:act/an:meta/an:identification/an:Work/an:uri/@href eq $originalVersion/an:akomantoso/an:act/an:meta/an:identification/an:Work/an:uri/@href)then
+            if($akomantoso/an:act/an:meta/an:identification/an:FRBRWork/an:FRBRuri/@value eq $originalVersion/an:akomaNtoso/an:act/an:meta/an:identification/an:FRBRWork/an:FRBRuri/@value)then
             ( 
                 (:
                     3.2) the Expression URI must be different in the original and new versions
                 :)
-                if($akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href ne $originalVersion/an:akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href)then
+                if($akomantoso/an:act/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value ne $originalVersion/an:akomaNtoso/an:act/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value)then
                 (
                     (:
                     3.3) the Manifestation uri must be different in the original and new versions
                     :)
-                    if($akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href ne $originalVersion/an:akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href)then
+                    if($akomantoso/an:act/an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value ne $originalVersion/an:akomaNtoso/an:act/an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value)then
                     (
                         (: 
                             3.4 the expression uri must match the new expression uri
                         :)
                         let $newURI := local:manifestationURIWithVersion($originalURI, $versionDate) return
-                            if($akomantoso/an:act/an:meta/an:identification/an:Expression/an:uri/@href eq local:expressionURIFromManifestationURI($newURI))then
+                            if($akomantoso/an:act/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq local:expressionURIFromManifestationURI($newURI))then
                             (
                                 (:
                                     3.5 ) the Manifestation uri must match the new uri 
                                 :)
-                                if($akomantoso/an:act/an:meta/an:identification/an:Manifestation/an:uri/@href eq $newURI)then
+                                if($akomantoso/an:act/an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value eq $newURI)then
                                 (
                                     (:
                                          4) A reference to the original document must be added in the <references> section of the document...
                                          <references source="#au1">
-                                            <Original id="ro1" href="ken/act/1997-08-22/3/en/main" showAs="Original"/>
+                                            <Original id="ro1" href="ken/act/1997-08-22/3/en/main" showAs="original"/>
                                         </references>
                                     :)
-                                    if($akomantoso/an:act/an:meta/an:references/an:Original/@href eq $originalURI)then
+                                    if($akomantoso/an:act/an:meta/an:references/an:original/@href eq $originalURI)then
                                     (
                                         () (: sucess :)
                                     )
@@ -285,7 +285,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
         if(ends-with($originalURI, ".xml"))then
         (
             (: XML Document :)
-            if(local:isVersionedDocumentType($data//an:akomantoso))then (: buggy with in-memory nodes  - SF Bug ID - 1758589 :)
+            if(local:isVersionedDocumentType($data//an:akomaNtoso))then (: buggy with in-memory nodes  - SF Bug ID - 1758589 :)
             (: if(node-name($data/child::node()[position() eq 2]) = $config:versionedDocumentTypes)then :) (: temporary work around :)
             (
                 if($versionDate)then
@@ -376,7 +376,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
 declare function local:new($newURI as xs:string, $data) as node()
 {
     (: check the expression uri matches the suggested uri :)
-    if($data/child::node()/an:meta/an:identification/an:Expression/an:uri/@href eq local:expressionURIFromManifestationURI($newURI))then
+    if($data/child::node()/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq local:expressionURIFromManifestationURI($newURI))then
     (
         let $dbNewXMLDocURI := local:ANManifestationURIToDBURI($newURI) return
         

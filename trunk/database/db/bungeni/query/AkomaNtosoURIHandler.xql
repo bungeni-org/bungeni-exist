@@ -8,7 +8,7 @@
 :    available from http://akn.web.cs.unibo.it/
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.3
+:    @version 1.3.2
 :)
 xquery version "1.0";
 
@@ -74,7 +74,7 @@ declare function handler:buildWorkURI($country as xs:string, $type as xs:string,
 :    @param $version the version of the document (if any)
 :    @return xs:string of the Akoma Ntoso Expression URI
 :)
-declare function handler:buildExpressionURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $language as xs:string, $version as xs:string?) as xs:string
+declare function handler:buildExpressionURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $language as xs:string, $version as xs:string?, $component as xs:string*) as xs:string
 {
     concat(
         handler:buildWorkURI($country, $type, $date, $number),
@@ -93,6 +93,11 @@ declare function handler:buildExpressionURI($country as xs:string, $type as xs:s
         else
         (
             (: in-force version :)
+        ),
+        string-join(
+            for $c in $component return
+                concat("/", $c),
+            ""
         )
     )
 };
@@ -109,9 +114,9 @@ declare function handler:buildExpressionURI($country as xs:string, $type as xs:s
 :    @param $version the version of the document (if any)
 :    @return xs:string of the Akoma Ntoso Manifestation URI
 :)
-declare function handler:buildManifestationURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $language as xs:string, $version as xs:string?) as xs:string
+declare function handler:buildManifestationURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $language as xs:string, $version as xs:string?, $component as xs:string*) as xs:string
 {
-    concat(handler:buildExpressionURI($country, $type, $date, $number, $language, $version), ".xml")
+    concat(handler:buildExpressionURI($country, $type, $date, $number, $language, $version, $component), ".xml")
 };
 
 
@@ -166,13 +171,13 @@ declare function handler:work($country as xs:string, $type as xs:string, $date a
 :    @param $date the date of the document
 :    @return one or more Manifestation elements
 :)
-declare function handler:expression($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $lang as xs:string, $version as xs:string?) as element(handler:results)?
+declare function handler:expression($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $lang as xs:string, $version as xs:string?, $component as xs:string*) as element(handler:results)?
 {
     (: determine the collection URI :)
     let $collectionURI := handler:buildCollectionURI($country, $type, $date),
     
     (: determine the expression uri :)
-    $expressionURI :=  handler:buildExpressionURI($country, $type, $date, $number, $lang, $version) return
+    $expressionURI :=  handler:buildExpressionURI($country, $type, $date, $number, $lang, $version, $component) return
     
         (: return details of the expressions and links to the manifestation :)
         element handler:results{
@@ -206,13 +211,13 @@ declare function handler:expression($country as xs:string, $type as xs:string, $
 :    @param $date the date of the document
 :    @return one or more XML Manifestations or if a Binary Manifestation it is streamed directly to the HTTP Response
 :)
-declare function handler:manifestation($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $lang as xs:string, $version as xs:string?, $dataformat as xs:string) as element()?
+declare function handler:manifestation($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $lang as xs:string, $version as xs:string?, $component as xs:string*, $dataformat as xs:string) as element()?
 {       
     (: determine the collection URI :)
     let $collectionURI := handler:buildCollectionURI($country, $type, $date),
     
     (: determine the manifestation uri :)
-    $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, $number, $lang, $version),
+    $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, $number, $lang, $version, $component),
     
     (: get the xml manifestation :)
     $xmlManifestation := collection($collectionURI)/an:akomaNtoso[local-name(child::element()[an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value eq $manifestationURI]) eq $type] return
@@ -296,10 +301,12 @@ declare function handler:process() as element()
                 )
                 else
                 (
-                    let $version := request:get-parameter("version",()), (: optional :)
+                    (: optional http params :)
+                    let $version := request:get-parameter("version",()),
+                    $lang := request:get-parameter("lang",()),
+                    $component := request:get-parameter("component", ()) return
                     
-                    (: check lang parameter - common to expression and manifestation :)
-                    $lang := request:get-parameter("lang",()) return
+                        (: check lang parameter - common to expression and manifestation :)
                         if(empty($lang))then
                         (
                             error:response(concat("MILA", upper-case(substring($uriType, 1, 2)), "0001"))
@@ -308,7 +315,7 @@ declare function handler:process() as element()
                         (
                             if($uriType eq "expression") then
                             (
-                                handler:expression($country, $type, $date, $number, $lang, $version)
+                                handler:expression($country, $type, $date, $number, $lang, $version, $component)
                             )
                             else if($uriType eq "manifestation") then
                             (
@@ -319,7 +326,7 @@ declare function handler:process() as element()
                                     )
                                     else
                                     (
-                                        handler:manifestation($country, $type, $date, $number, $lang, $version, $dataformat)
+                                        handler:manifestation($country, $type, $date, $number, $lang, $version, $component, $dataformat)
                                     )
                             )
                             else

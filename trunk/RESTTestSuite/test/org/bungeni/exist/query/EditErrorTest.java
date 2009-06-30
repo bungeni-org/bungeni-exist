@@ -61,7 +61,7 @@ public class EditErrorTest extends AbstractErrorTest
         //store the original document
         HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int result = client.executeMethod(post);
-        assertEquals(HttpStatus.SC_OK, result);
+        assertEquals(post.getResponseBodyAsString(), HttpStatus.SC_OK, result);
     }
 
     @AfterClass

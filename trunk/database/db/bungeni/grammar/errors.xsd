@@ -39,6 +39,11 @@
                     <xs:documentation>Unknown error</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="UNKNAC0001">
+                <xs:annotation>
+                    <xs:documentation>Unknown action</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="IVDUTY0001">
                 <xs:annotation>
                     <xs:documentation>Invalid document uri type</xs:documentation>
@@ -152,6 +157,16 @@
             <xs:enumeration value="IVVESV0001">
                 <xs:annotation>
                     <xs:documentation>Document version is invalid, expected Single Version</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="MIPKST0001">
+                <xs:annotation>
+                    <xs:documentation>Missing the package when trying to store a package</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IVPKST0001">
+                <xs:annotation>
+                    <xs:documentation>Invalid package data encountered when trying to store a package</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
         </xs:restriction>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <errors xmlns="http://exist.bungeni.org/errors" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://exist.bungeni.org/errors http://localhost:8080/exist/rest/db/bungeni/grammar/errors.xsd" language="eng">
     <error code="UNKNER0001">Unknown error for error code</error>
+    <error code="UNKNAC0001">Unknown action</error>
     <error code="IVDUTY0001">Invalid Akoma Ntoso Document Type, expected one of ('work', 'expression', 'manifestation')</error>
     <error code="MICOWO0001">Missing Country of Work</error>
     <error code="MICOEX0001">Missing Country of Expression</error>
@@ -24,4 +25,6 @@
     <error code="IVVEXU0001">Documents version of Expression URI is invalid</error>
     <error code="IVVMAU0001">Documents version of Manifestation URI is invalid</error>
     <error code="IVVESV0001">Document version is invalid, expected Single Version</error>
+    <error code="MIPKST0001">Missing the package when trying to store a package</error>
+    <error code="IVPKST0001">Invalid package data encountered when trying to store a package</error>
 </errors>

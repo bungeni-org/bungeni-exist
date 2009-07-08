@@ -169,6 +169,11 @@
                     <xs:documentation>Invalid package data encountered when trying to store a package</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="FAPKST0001">
+                <xs:annotation>
+                    <xs:documentation>Failed to store package entries</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
     <xs:element name="errors">

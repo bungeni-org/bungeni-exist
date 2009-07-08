@@ -60,10 +60,7 @@ declare function local:ANManifestationURIToDBURI($akomantosoURI as xs:string) as
             substring-before($uriComponents[4], "-"),
             "/",
             substring-after($uriComponents[4], "-"),
-            (:"_",
-            $uriComponents[5],
-            "_",
-            $uriComponents[6],:)
+           
             if(count($uriComponents) gt 4)then
             (
                 string-join(

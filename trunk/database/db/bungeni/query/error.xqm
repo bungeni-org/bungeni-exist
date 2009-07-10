@@ -4,7 +4,7 @@
 :    Bungeni Configuration settings
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1
+:    @version 1.2
 :)
 
 module namespace error = "http://exist.bungeni.org/query/error";
@@ -64,7 +64,7 @@ declare function error:__create-response($code as xs:string, $language as xs:str
                 )
                 else
                 (
-                    <error:code>UNKN0001</error:code>,
+                    <error:code>UNKNER0001</error:code>,
                     <error:message language="eng">Unknown error for error code: {$code}</error:message>
                 )
             }

@@ -10,7 +10,11 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 /**
+ * Test harness for Bungeni Package XQuery REST API Error Codes
+ * http://localhost:8088/db/bungeni/query/package.xql
+ *
  * @author Adam Retter <adam.retter@googlemail.com>
+ * @version 1.0
  */
 public class PackageErrorTest extends AbstractErrorTest
 {

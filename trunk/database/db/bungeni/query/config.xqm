@@ -4,7 +4,7 @@
 :    Bungeni Configuration settings
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.2.1
+:    @version 1.2.2
 :)
 
 module namespace config = "http://exist.bungeni.org/query/config";
@@ -20,7 +20,7 @@ declare variable $config:default_language as xs:string := "eng";
 declare variable $config:log-to-exist_log as xs:boolean := true();
 
 (: standard regexps :)
-declare variable $config:date-regexp as xs:string := "(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])";
+declare variable $config:date-regexp as xs:string := "(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])";
 
 (: collections in the database :)
 declare variable $config:bungeni_collection as xs:string := "/db/bungeni";

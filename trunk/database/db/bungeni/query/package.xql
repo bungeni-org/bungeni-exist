@@ -4,7 +4,7 @@
 :    Expands and stores a .akn package in the database
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1
+:    @version 1.1.1
 :)
 xquery version "1.0";
 
@@ -22,7 +22,7 @@ import module namespace error = "http://exist.bungeni.org/query/error" at "error
 import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util/uri.xqm";
 
 
-declare function local:parse-akn-entry-uri-to-db-uri($akn-entry-uri as xs:string) as xs:string
+declare function local:parse-akn-entry-uri-to-db-uri($akn-entry-uri as xs:anyURI) as xs:string
 {
     let $uri-components := tokenize($akn-entry-uri, "_") return
         concat(
@@ -44,38 +44,51 @@ declare function local:parse-akn-entry-uri-to-db-uri($akn-entry-uri as xs:string
     )
 };
 
-declare function local:akn-entry-data($entry-name as xs:string, $entry-type as xs:string, $entry-data as xs:base64Binary?) as xs:string
+declare function local:akn-entry-data($entry-name as xs:anyURI, $entry-type as xs:string, $entry-data as item()?) as xs:string?
 {
-    if($entry-type eq "file")then
+    if($entry-type eq "resource")then
     (
         let $db-uri := local:parse-akn-entry-uri-to-db-uri($entry-name) return
             let $new-collection-paths := db:createCollectionsFromPath(uri:collectionURIFromResourceURI($db-uri)) return
-            
-                xmldb:store(uri:collectionURIFromResourceURI($db-uri), uri:resourceNameFromResourceURI($db-uri), $entry-data, xmldb:get-mime-type(xs:anyURI($db-uri)))
+   
+                let $collection-uri := uri:collectionURIFromResourceURI($db-uri),
+                $resource-uri := uri:resourceNameFromResourceURI($db-uri),
+                $resource-mime-type := xmldb:get-mime-type(xs:anyURI(concat("zip://", $entry-name))) return
+   
+                    ( util:log("debug", concat("db-uri=", $db-uri)),
+                        xmldb:store($collection-uri, $resource-uri, $entry-data, $resource-mime-type)
+                    )
     )else()
 };
 
-declare function local:is-valid-akn-entry-uri($akn-entry-uri) as xs:boolean
+declare function local:is-valid-akn-entry-uri($akn-entry-uri as xs:anyURI) as xs:boolean
 {
     (: e.g. ke_act_1980-01-01_1_eng@1989-12-15_main.xml :)
     
     let $akn-entry-regexp := concat(
-        "[a-z]{2}_",
-        "[", string-join($config:document-types, "|"), "]",
-        "_", $config:date-regexp,
+        "^[a-z]{2}_",
+        "(", string-join($config:document-types, "|"), ")",
+        "_(", $config:date-regexp, ")",
         "(_[0-9999])?",
         "_[a-z]{3}",
         "(@", $config:date-regexp, ")?",
         "(_[a-z0-9]*)?",
-        ".", "[a-z0-9]{3,4,5}"
+        "\.", "[a-z0-9]{3,5}$"
     ) return
         
+        (:( util:log("debug", concat("REGEXP=",$akn-entry-regexp)),
         matches($akn-entry-uri, $akn-entry-regexp)
+        ):)
+        let $result := matches($akn-entry-uri, $akn-entry-regexp),
+            $null := util:log("debug", concat("MATCHES=", $result)) return
+                $result
 };
 
-declare function local:akn-entry-filter($entry-name as xs:string, $entry-type as xs:string) as xs:boolean
+declare function local:akn-entry-filter($entry-name as xs:anyURI, $entry-type as xs:string) as xs:boolean
 {
-    if($entry-type eq "file")then
+    let $null := util:log("debug", concat("entry-name=", $entry-name)) return
+
+    if($entry-type eq "resource")then
     (
         local:is-valid-akn-entry-uri($entry-name)
     )

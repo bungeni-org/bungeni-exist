@@ -4,12 +4,12 @@
 :    Expands and stores a .akn package in the database
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.0
+:    @version 1.1
 :)
 xquery version "1.0";
 
 (: eXist function namespaces :)
-declare namespace db = "http://exist-db.org/xquery/db";
+declare namespace dbstore = "http://exist-db.org/xquery/db";
 declare namespace compression = "http://exist-db.org/xquery/compression";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace util = "http://exist-db.org/xquery/util";
@@ -26,7 +26,7 @@ declare function local:parse-akn-entry-uri-to-db-uri($akn-entry-uri as xs:string
 {
     let $uri-components := tokenize($akn-entry-uri, "_") return
         concat(
-            $config:data-collection,
+            $config:data_collection,
             "/",
             $uri-components[1],
             "/",
@@ -70,7 +70,7 @@ declare function local:is-valid-akn-entry-uri($akn-entry-uri) as xs:boolean
         ".", "[a-z0-9]{3,4,5}"
     ) return
         
-        mathces($akn-entry-uri, $akn-entry-regexp)
+        matches($akn-entry-uri, $akn-entry-regexp)
 };
 
 declare function local:akn-entry-filter($entry-name as xs:string, $entry-type as xs:string) as xs:boolean
@@ -94,17 +94,17 @@ declare function local:store-package($data as item()?) as element()
     )
     else if($data instance of xs:string and xs:string($data) eq "")then
     (
-        error:response("INPKST0001")
+        error:response("IVPKST0001")
     )
     else if(not($data instance of xs:base64Binary))then
     (
-        error:response("INPKST0001")
+        error:response("IVPKST0002")
     )
     else
     (
         
         (:
-        (# db:transaction #) {
+        (# dbstore:transaction #) {
         :)
         
             let $stored-entries := compression:unzip($data, util:function(xs:QName("local:akn-entry-filter"), 2), util:function(xs:QName("local:akn-entry-data"), 3)) return
@@ -140,10 +140,8 @@ declare function local:store-package($data as item()?) as element()
     )
 };
 
-(: and request:get-method() eq "POST" :)
-
 (: main entry point - choose a function based on the uri :)
-if(request:get-parameter("action", ()) eq "store")then
+if(request:get-parameter("action", ()) eq "store" and request:get-method() eq "POST")then
 (
     local:store-package(request:get-data())
 )

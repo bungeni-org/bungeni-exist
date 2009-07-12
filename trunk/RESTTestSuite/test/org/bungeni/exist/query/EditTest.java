@@ -65,7 +65,6 @@ public class EditTest
 
         HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
         int result = client.executeMethod(delete);
-        assertEquals(HttpStatus.SC_OK, result);
     }
     /**
      * Attempts to store a NEW XML document

@@ -286,8 +286,4 @@ public class EditErrorTest extends AbstractErrorTest
 
         testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
     }
-
-    
-
-    
 }

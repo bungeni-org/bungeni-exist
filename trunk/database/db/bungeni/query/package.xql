@@ -4,7 +4,7 @@
 :    Expands and stores a .akn package in the database
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1.1
+:    @version 1.1.2
 :)
 xquery version "1.0";
 
@@ -55,9 +55,7 @@ declare function local:akn-entry-data($entry-name as xs:anyURI, $entry-type as x
                 $resource-uri := uri:resourceNameFromResourceURI($db-uri),
                 $resource-mime-type := xmldb:get-mime-type(xs:anyURI(concat("zip://", $entry-name))) return
    
-                    ( util:log("debug", concat("db-uri=", $db-uri)),
                         xmldb:store($collection-uri, $resource-uri, $entry-data, $resource-mime-type)
-                    )
     )else()
 };
 
@@ -76,18 +74,12 @@ declare function local:is-valid-akn-entry-uri($akn-entry-uri as xs:anyURI) as xs
         "\.", "[a-z0-9]{3,5}$"
     ) return
         
-        (:( util:log("debug", concat("REGEXP=",$akn-entry-regexp)),
-        matches($akn-entry-uri, $akn-entry-regexp)
-        ):)
-        let $result := matches($akn-entry-uri, $akn-entry-regexp),
-            $null := util:log("debug", concat("MATCHES=", $result)) return
-                $result
+        let $result := matches($akn-entry-uri, $akn-entry-regexp) return
+            $result
 };
 
 declare function local:akn-entry-filter($entry-name as xs:anyURI, $entry-type as xs:string) as xs:boolean
 {
-    let $null := util:log("debug", concat("entry-name=", $entry-name)) return
-
     if($entry-type eq "resource")then
     (
         local:is-valid-akn-entry-uri($entry-name)
@@ -127,12 +119,27 @@ declare function local:store-package($data as item()?) as element()
         
             (: check the stored paths eXist (due to hlt), then return desired result :)
             let $missing-entries := for $stored-entry in $stored-entries return
-                if(doc-available($stored-entry))then
-                ()
+            
+                if(util:is-binary-doc($stored-entry))then
+                (
+                   if(util:binary-doc-available($stored-entry))then
+                   ()
+                   else
+                   (
+                       $stored-entry
+                   )
+                )
                 else
                 (
-                    $stored-entry
+                    if(doc-available($stored-entry))then
+                    ()
+                    else
+                    (
+                       $stored-entry
+                    )
                 )
+                
+                
             return
                 
                 if(empty($missing-entries))then

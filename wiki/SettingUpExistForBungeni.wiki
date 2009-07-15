@@ -1,0 +1,43 @@
+#summary building and configuring exist from source
+#labels bungeni,Featured
+
+= Pre-requisites =
+
+ * Working JDK installation (1.5 or 1.6)
+ * Ant
+
+= Building eXist =
+
+Checkout source of eXist
+
+{{{
+svn co https://exist.svn.sourceforge.net/svnroot/exist/trunk/eXist
+}}}
+
+Now build eXist using ant 
+
+{{{
+JAVA_HOME=/path/to/java/home ./build.sh jar
+JAVA_HOME=/path/to/java/home ./build.sh extension-modules
+}}}
+
+
+= Configuring the Installation =
+
+ * Activate the compression and datetime modules in conf.xml :
+{{{
+         <!-- Optional Modules -->
+            <module class="org.exist.backup.xquery.BackupModule"
+                    uri="http://exist-db.org/xquery/backups"/>
+
+            <module class="org.exist.xquery.modules.compression.CompressionModule"
+                    uri="http://exist-db.org/xquery/compression" />
+            <module class="org.exist.xquery.modules.datetime.DateTimeModule"
+                    uri="http://exist-db.org/xquery/datetime" />
+}}}
+ * Change the default transformer to Saxon :
+{{{
+   <transformer class="net.sf.saxon.TransformerFactoryImpl"/>
+}}}
+ * Add the following saxon jar files to lib/endorsed :
+    * saxon9.jar, saxon9-dom.jar, saxon9-xpath.jar , jakarta-regexp14.jar

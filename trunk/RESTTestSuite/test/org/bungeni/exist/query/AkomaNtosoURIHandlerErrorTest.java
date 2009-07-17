@@ -47,7 +47,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MITYWO0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=work&country=ken";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=work&country=ke";
 
         GetMethod get = new GetMethod(uri);
 
@@ -60,7 +60,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MIDTWO0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=work&country=ken&type=act";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=work&country=ke&type=act";
 
         GetMethod get = new GetMethod(uri);
 
@@ -86,7 +86,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MITYEX0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=expression&country=ken";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=expression&country=ke";
 
         GetMethod get = new GetMethod(uri);
 
@@ -99,7 +99,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MIDTEX0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=expression&country=ken&type=act";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=expression&country=ke&type=act";
 
         GetMethod get = new GetMethod(uri);
 
@@ -112,7 +112,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MILAEX0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=expression&country=ken&type=act&date=2009-06-28";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=expression&country=ke&type=act&date=2009-06-28";
 
         GetMethod get = new GetMethod(uri);
 
@@ -138,7 +138,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MITYMA0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ken";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ke";
 
         GetMethod get = new GetMethod(uri);
 
@@ -151,7 +151,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MIDTMA0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ken&type=act";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ke&type=act";
 
         GetMethod get = new GetMethod(uri);
 
@@ -164,7 +164,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MILAMA0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ken&type=act&date=2009-06-28";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ke&type=act&date=2009-06-28";
 
         GetMethod get = new GetMethod(uri);
 
@@ -177,7 +177,7 @@ public class AkomaNtosoURIHandlerErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MIDFMA0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ken&type=act&date=2009-06-28&lang=eng";
+        final String uri = REST.AN_URIHANDLER_URL + "?uriType=manifestation&country=ke&type=act&date=2009-06-28&lang=eng";
 
         GetMethod get = new GetMethod(uri);
 

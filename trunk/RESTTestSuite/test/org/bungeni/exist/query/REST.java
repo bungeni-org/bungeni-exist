@@ -16,7 +16,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
  */
 public class REST
 {
-    public final static String SERVER_URI = "http://10.0.0.127:8080";
+    public final static String SERVER_URI = "http://localhost:8080";
     //private final static String SERVER_URI = "http://localhost:8088";
 
     public final static String EXIST_REST_URI = SERVER_URI + "/exist/rest";

@@ -4,7 +4,7 @@
 :    Bungeni Configuration settings
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.2.2
+:    @version 1.2.3
 :)
 
 module namespace config = "http://exist.bungeni.org/query/config";
@@ -34,7 +34,7 @@ declare variable $config:handler_results_xslt as xs:string := concat($config:tra
 (: file extension for the manifestation package file :)
 declare variable $config:manifestation_package_extension as xs:string := "akn";
 (: mime type for the manifestation package file :)
-declare variable $config:manifestation_package_mimeType as xs:string := "applicatiopn/zip";
+declare variable $config:manifestation_package_mimeType as xs:string := "application/zip";
 
 (: all document types :)
 declare variable $config:document-types as xs:string+ := ("act","debate","report","judgement");

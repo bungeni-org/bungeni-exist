@@ -7,7 +7,7 @@
 :    for client editing with Open Office
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.2.2
+:    @version 1.2.3
 :)
 xquery version "1.0";
 
@@ -28,6 +28,7 @@ import module namespace error = "http://exist.bungeni.org/query/error" at "error
 import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util/uri.xqm";
 
 
+
 (:~
 :    Determines whether the document type is versioned
 :
@@ -38,38 +39,6 @@ declare function local:isVersionedDocumentType($akomantoso as element(an:akomaNt
 {
     (: node-name($akomantoso/child::node()) = $config:versionedDocumentTypes :)
     $akomantoso/child::node()/node-name(.) = $config:versionedDocumentTypes
-};
-
-(:~
-:    Simple Manifestation URI Resolver
-:    Given an Akoma Ntoso Manifestation URI the corresponding DB URI is returned
-:
-:    @param akomantosoURI The Akoma Ntoso Manifestation URI
-:    @return the db URI of the Manifestation
-:)
-declare function local:ANManifestationURIToDBURI($akomantosoURI as xs:string) as xs:string?
-{
-    let $uriComponents := tokenize($akomantosoURI, "/") return
-        concat(
-            $config:data_collection,
-            "/",
-            $uriComponents[2],
-            "/",
-            $uriComponents[3],
-            "/",
-            substring-before($uriComponents[4], "-"),
-            "/",
-            substring-after($uriComponents[4], "-"),
-           
-            if(count($uriComponents) gt 4)then
-            (
-                string-join(
-                    for $i in (5 to count($uriComponents)) return
-                        concat("_", $uriComponents[$i]),
-                    ""
-                )
-            )else()
-        )
 };
 
 (:~
@@ -158,7 +127,7 @@ declare function local:edit($originalURI as xs:string, $versionDate as xs:string
         (: Binary Document :)
         
         (: stream the binary document to the response :)
-        let $dbBinaryDocURI := local:ANManifestationURIToDBURI($originalURI) return
+        let $dbBinaryDocURI := uri:ANManifestationURIToDBURI($originalURI) return
             response:stream-binary(util:binary-doc($dbBinaryDocURI), xmldb:get-mime-type(xs:anyURI($dbBinaryDocURI)), ())
     )
 };
@@ -173,7 +142,7 @@ declare function local:edit($originalURI as xs:string, $versionDate as xs:string
 :)
 declare function local:isValidVersion($akomantoso as node(), $originalURI, $versionDate as xs:string) as element(error)?
 {
-    let $originalVersion := doc(local:ANManifestationURIToDBURI($originalURI)) return
+    let $originalVersion := doc(uri:ANManifestationURIToDBURI($originalURI)) return
 
         (:
             2) the <act> container of the new version has a "contains" attribute, this must be set to "SingleVersion"
@@ -300,7 +269,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
                         if(empty($valid))then
                         (
                                (: save the versioned XML document :)
-                               let $dbNewXMLDocURI := local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate)),
+                               let $dbNewXMLDocURI := uri:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate)),
                                     $storedURI := xmldb:store(
                                         uri:collectionURIFromResourceURI($dbNewXMLDocURI),
                                         uri:resourceNameFromResourceURI($dbNewXMLDocURI),
@@ -324,7 +293,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
             else
             (
                 (: save the un-versioned XML document :)
-                let $dbNewXMLDocURI := local:ANManifestationURIToDBURI($originalURI),
+                let $dbNewXMLDocURI := uri:ANManifestationURIToDBURI($originalURI),
                     $storedURI := xmldb:store(
                         uri:collectionURIFromResourceURI($dbNewXMLDocURI),
                         uri:resourceNameFromResourceURI($dbNewXMLDocURI),
@@ -338,13 +307,13 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
         else
         (
             (: Binary Document :)
-            let $dbOriginalBinaryDocURI := local:ANManifestationURIToDBURI($originalURI) return
+            let $dbOriginalBinaryDocURI := uri:ANManifestationURIToDBURI($originalURI) return
             
             (: determine the db uri for storing the binary document :)
             let $dbNewBinaryDocURI := if($versionDate)then
                 (
                     (: new binary versioned document :)
-                    local:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate))
+                    uri:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate))
                 )
                 else
                 (
@@ -383,7 +352,7 @@ declare function local:new($newURI as xs:string, $data) as node()
     (: check the expression uri matches the suggested uri :)
     if($data/child::node()/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq local:expressionURIFromManifestationURI($newURI))then
     (
-        let $dbNewXMLDocURI := local:ANManifestationURIToDBURI($newURI) return
+        let $dbNewXMLDocURI := uri:ANManifestationURIToDBURI($newURI) return
         
             (: check the document does not already exist in the db :)
             if(doc-available($dbNewXMLDocURI))then

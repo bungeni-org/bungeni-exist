@@ -4,7 +4,7 @@
 :    Expands and stores a .akn package in the database
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1.2
+:    @version 1.1.3
 :)
 xquery version "1.0";
 
@@ -22,33 +22,12 @@ import module namespace error = "http://exist.bungeni.org/query/error" at "error
 import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util/uri.xqm";
 
 
-declare function local:parse-akn-entry-uri-to-db-uri($akn-entry-uri as xs:anyURI) as xs:string
-{
-    let $uri-components := tokenize($akn-entry-uri, "_") return
-        concat(
-            $config:data_collection,
-            "/",
-            $uri-components[1],
-            "/",
-            $uri-components[2],
-            "/",
-            substring-before($uri-components[3], "-"),
-            "/",
-            substring-after($uri-components[3], "-"),
-            
-            string-join(
-                for $i in (4 to count($uri-components)) return
-                    concat("_", $uri-components[$i]),
-                ""
-            )
-    )
-};
 
 declare function local:akn-entry-data($entry-name as xs:anyURI, $entry-type as xs:string, $entry-data as item()?) as xs:string?
 {
     if($entry-type eq "resource")then
     (
-        let $db-uri := local:parse-akn-entry-uri-to-db-uri($entry-name) return
+        let $db-uri := uri:parse-akn-entry-uri-to-db-uri($entry-name) return
             let $new-collection-paths := db:createCollectionsFromPath(uri:collectionURIFromResourceURI($db-uri)) return
    
                 let $collection-uri := uri:collectionURIFromResourceURI($db-uri),

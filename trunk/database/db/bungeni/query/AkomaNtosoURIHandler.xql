@@ -8,7 +8,7 @@
 :    available from http://akn.web.cs.unibo.it/
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.3.2
+:    @version 1.3.3
 :)
 xquery version "1.0";
 
@@ -27,6 +27,8 @@ declare namespace an = "http://www.akomantoso.org/1.0";
 (: user defined function modules :)
 import module namespace config = "http://exist.bungeni.org/query/config" at "config.xqm";
 import module namespace error = "http://exist.bungeni.org/query/error" at "error.xqm";
+import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util/uri.xqm";
+
 
 
 (:~
@@ -112,11 +114,13 @@ declare function handler:buildExpressionURI($country as xs:string, $type as xs:s
 :    @param $number the number of the document (if any)
 :    @param $language the language of the document
 :    @param $version the version of the document (if any)
+:    @param $component the component of the document (if any)
+:    @param $dataformat the dataformat of the document
 :    @return xs:string of the Akoma Ntoso Manifestation URI
 :)
-declare function handler:buildManifestationURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $language as xs:string, $version as xs:string?, $component as xs:string*) as xs:string
+declare function handler:buildManifestationURI($country as xs:string, $type as xs:string, $date as xs:string, $number as xs:string?, $language as xs:string, $version as xs:string?, $component as xs:string*, $dataformat as xs:string) as xs:string
 {
-    concat(handler:buildExpressionURI($country, $type, $date, $number, $language, $version, $component), ".xml")
+    concat(handler:buildExpressionURI($country, $type, $date, $number, $language, $version, $component), ".", $dataformat)
 };
 
 
@@ -217,59 +221,53 @@ declare function handler:manifestation($country as xs:string, $type as xs:string
     let $collectionURI := handler:buildCollectionURI($country, $type, $date),
     
     (: determine the manifestation uri :)
-    $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, $number, $lang, $version, $component),
-    
-    (: get the xml manifestation :)
-    $xmlManifestation := collection($collectionURI)/an:akomaNtoso[local-name(child::element()[an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value eq $manifestationURI]) eq $type] return
+    $manifestationURI :=  handler:buildManifestationURI($country, $type, $date, $number, $lang, $version, $component, $dataformat) return
     
         (: what sort of Manifestation do we want? :)
         if($dataformat eq "xml")then
         (
-            (: we want the XML Manifestation :)
-            $xmlManifestation
+            (: we want the XML Manifestation, get the xml manifestation :)
+            let $xmlManifestation := collection($collectionURI)/an:akomaNtoso[local-name(child::element()[an:meta/an:identification/an:FRBRManifestation/an:FRBRuri/@value eq $manifestationURI]) eq $type] return
+                $xmlManifestation
         )
         else
         (
             (: we want a Binary Manifestation :)
-            
-            (: determine the filename of the binary manifestation :)
-            let $baseName := substring-before(util:document-name($xmlManifestation), "."),
-            $binaryManifestationFilename := concat($baseName, ".", $dataformat) return
+            let $dbManifestationURI := uri:ANManifestationURIToDBURI($manifestationURI) return
         
-                (: check for a Manifestation package URI :)
-                if($dataformat eq $config:manifestation_package_extension)then
-                (
-                    (: we want a Manifestation package, so find all suitable manifestations and package them up :)
-                    
-                    (: stream a zip of all relevant resources to the http response :)
-                    response:stream-binary(
-                        compression:zip(
-                            (: get a list of all resources in the collection :)
-                            (
-                                for $anResource in xmldb:get-child-resources($collectionURI)[starts-with(., $baseName)] return
-                                    xs:anyURI(concat($collectionURI, "/", $anResource))
-                            ),
-                            false()
-                        ),
-                        $config:manifestation_package_mimeType,
-                        $binaryManifestationFilename
-                    )
-                )
-                else
-                (
-                    (: we want a specific binary Manifestation file :)
-                    
-                    (: determine its URI in the db :)
-                    let $binaryManifestationURI := concat($collectionURI, "/", $binaryManifestationFilename) return
-                    
-                        (: stream the binary resource to the http response :)
-                        response:stream-binary(util:binary-doc($binaryManifestationURI), xmldb:get-mime-type(xs:anyURI($binaryManifestationURI)), $binaryManifestationFilename)
-                )
+               (: check for a Manifestation package URI :)
+               if($dataformat eq $config:manifestation_package_extension)then
+               (
+                   (: we want a Manifestation package, so find all suitable manifestations and package them up :)
+                
+                   let $baseName := substring-before(uri:resourceNameFromResourceURI($dbManifestationURI), ".") return
+                
+                       (: stream a zip of all relevant resources to the http response :)
+                       response:stream-binary(
+                           compression:zip(
+                               (: get a list of all resources in the collection :)
+                               (
+                                   for $anResource in xmldb:get-child-resources($collectionURI)[starts-with(., $baseName)] return
+                                       xs:anyURI(concat($collectionURI, "/", $anResource))
+                               ),
+                               false()
+                           ),
+                           $config:manifestation_package_mimeType,
+                           uri:parse-db-uri-to-akn-entry-uri($dbManifestationURI)
+                       )
+               )
+               else
+               (
+                   (: we want a specific binary Manifestation file :)
+                   
+                   (: stream the binary resource to the http response :)
+                   response:stream-binary(util:binary-doc($dbManifestationURI), xmldb:get-mime-type(xs:anyURI($dbManifestationURI)), uri:resourceNameFromResourceURI($manifestationURI))
+               )
         )
 };
 
 
-declare function handler:process() as element()
+declare function handler:process() as element()?
 {
     let $uriType := request:get-parameter("uriType",()),
     $country := request:get-parameter("country", ()),

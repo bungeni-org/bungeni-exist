@@ -39,7 +39,7 @@ public class PackageTest
 
    
     @AfterClass
-    public static void removeTestCollection() throws IOException
+    public static void removeStoredEntries() throws IOException
     {
         for(String storedEntryPath : storedEntryPaths)
         {
@@ -135,6 +135,11 @@ public class PackageTest
             HeadMethod head = new HeadMethod(REST.EXIST_REST_URI + extractedEntryPath);
             assertEquals(HttpStatus.SC_OK, http.executeMethod(head));
         }
+    }
+
+    public static List<String> getStoredEntryPaths()
+    {
+        return storedEntryPaths;
     }
 
     private List<String> getExtractedEntryPaths(InputStream responseBody) throws ParserConfigurationException, SAXException, IOException

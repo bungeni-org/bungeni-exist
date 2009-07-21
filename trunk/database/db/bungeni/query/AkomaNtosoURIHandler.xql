@@ -8,7 +8,7 @@
 :    available from http://akn.web.cs.unibo.it/
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.3.3
+:    @version 1.3.4
 :)
 xquery version "1.0";
 
@@ -247,8 +247,9 @@ declare function handler:manifestation($country as xs:string, $type as xs:string
                            compression:zip(
                                (: get a list of all resources in the collection :)
                                (
-                                   for $anResource in xmldb:get-child-resources($collectionURI)[starts-with(., $baseName)] return
-                                       xs:anyURI(concat($collectionURI, "/", $anResource))
+                                   for $an-resource in xmldb:get-child-resources($collectionURI)[starts-with(., $baseName)]
+                                   let $an-resource-uri := concat($collectionURI, "/", $an-resource) return
+                                        <entry name="{uri:parse-db-uri-to-akn-entry-uri($an-resource-uri)}" type="uri">{xs:anyURI($an-resource-uri)}</entry>
                                ),
                                false()
                            ),

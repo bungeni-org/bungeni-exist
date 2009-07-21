@@ -19,7 +19,11 @@ import static org.junit.Assert.assertTrue;
 import org.xml.sax.SAXException;
 
 /**
+ * Test harness for Bungeni Akoma Ntoso URI Handler XQuery REST API
+ * http://localhost:8088/db/bungeni/query/AkomaNtosoURIHandler.xql
+ *
  * @author Adam Retter <adam.retter@googlemail.com>
+ * @version 1.0
  */
 public class AkomaNtosoURIHandlerTest
 {
@@ -65,7 +69,7 @@ public class AkomaNtosoURIHandlerTest
 
         assertEquals(HttpStatus.SC_OK, result);
 
-        assertEquals("application/zip", get.getResponseHeader("Content-Type").getValue());
+        assertEquals(Database.ZIP_MIMETYPE, get.getResponseHeader("Content-Type").getValue());
         assertEquals("inline; filename=ke_act_1993-12-16_9_eng.akn", get.getResponseHeader("Content-Disposition").getValue());
 
         ZipInputStream zis = new ZipInputStream(get.getResponseBodyAsStream());

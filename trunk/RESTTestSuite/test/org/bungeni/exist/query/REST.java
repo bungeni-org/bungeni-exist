@@ -24,6 +24,7 @@ public class REST
     public final static String EDIT_URL = EXIST_REST_URI + "/db/bungeni/query/edit.xql";
     public final static String AN_URIHANDLER_URL = EXIST_REST_URI + "/db/bungeni/query/AkomaNtosoURIHandler.xql";
     public final static String PACKAGE_URL = EXIST_REST_URI + "/db/bungeni/query/package.xql";
+    public final static String QUERY_URL = EXIST_REST_URI + "/db/bungeni/query/query.xql";
 
     public final static String DEFAULT_ERROR_MESSAGES_URI = EXIST_REST_URI + "/db/bungeni/errors/eng.xml";
 
@@ -32,6 +33,7 @@ public class REST
 
     public final static String ERROR_NAMESPACE_URI = "http://exist.bungeni.org/query/error";
     public final static String ERROR_NAMESPACE_PREFIX = "error";
+    
 
     
     /**

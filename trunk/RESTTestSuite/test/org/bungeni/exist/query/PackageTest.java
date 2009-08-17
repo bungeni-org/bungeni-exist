@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import org.xml.sax.SAXException;
 
 /**
- * Test harness for Bungeni XQuery REST API
+ * Test harness for Bungeni Package XQuery REST API
  * http://localhost:8088/db/bungeni/query/package.xql
  *
  * @author Adam Retter <adam.retter@googlemail.com>

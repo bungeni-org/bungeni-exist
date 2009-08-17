@@ -12,7 +12,7 @@ module namespace db = "http://exist.bungeni.org/query/util/db";
 declare namespace xmldb = "http://exist-db.org/xquery/xmldb";
 declare namespace util = "http://exist-db.org/xquery/util";
 
-import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "util/uri.xqm";
+import module namespace uri = "http://exist.bungeni.org/query/util/uri" at "uri.xqm";
 
 (:~
 :    Recursively creates collections to create a collection matching the provided path

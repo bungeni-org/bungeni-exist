@@ -7,7 +7,7 @@
 :    for client editing with Open Office
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.2.3
+:    @version 1.2.4
 :)
 xquery version "1.0";
 
@@ -39,38 +39,6 @@ declare function local:isVersionedDocumentType($akomantoso as element(an:akomaNt
 {
     (: node-name($akomantoso/child::node()) = $config:versionedDocumentTypes :)
     $akomantoso/child::node()/node-name(.) = $config:versionedDocumentTypes
-};
-
-(:~
-:    Adds a version to a Manifestation URI
-:    if a version already exists then it is replaced with the value
-:    of the version parameter
-:    
-:    @param manifestationURI The Akoma Ntoso Manifestation URI to add the version to
-:    @param version The version to add
-:    @return The manifestationURI with the specified version
-:)
-declare function local:manifestationURIWithVersion($manifestationURI as xs:string, $version as xs:string) as xs:string
-{
-    if(contains($manifestationURI, "@"))then
-    (
-        replace($manifestationURI, "(.*)@.*(\..*)", concat("$1@", $version, "$2"))
-    )
-    else
-    (
-        replace($manifestationURI, "(.*)(\..*)", concat("$1@", $version, "$2"))
-    )
-};
-
-(:~
-:    Returns an Expression URI given a Manifestation URI
-:
-:    @param Manifestation URI
-:    @return Expression URI
-:)
-declare function local:expressionURIFromManifestationURI($manifestationURI as xs:string) as xs:string
-{
-    replace($manifestationURI, "(.*)(\.)(.*)", "$1")
 };
 
 (:~
@@ -168,8 +136,8 @@ declare function local:isValidVersion($akomantoso as node(), $originalURI, $vers
                         (: 
                             3.4 the expression uri must match the new expression uri
                         :)
-                        let $newURI := local:manifestationURIWithVersion($originalURI, $versionDate) return
-                            if($akomantoso/an:act/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq local:expressionURIFromManifestationURI($newURI))then
+                        let $newURI := uri:manifestationURI-with-version($originalURI, $versionDate) return
+                            if($akomantoso/an:act/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq uri:expressionURI-from-manifestationURI($newURI))then
                             (
                                 (:
                                     3.5 ) the Manifestation uri must match the new uri 
@@ -269,7 +237,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
                         if(empty($valid))then
                         (
                                (: save the versioned XML document :)
-                               let $dbNewXMLDocURI := uri:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate)),
+                               let $dbNewXMLDocURI := uri:ANManifestationURIToDBURI(uri:manifestationURI-with-version($originalURI, $versionDate)),
                                     $storedURI := xmldb:store(
                                         uri:collectionURIFromResourceURI($dbNewXMLDocURI),
                                         uri:resourceNameFromResourceURI($dbNewXMLDocURI),
@@ -313,7 +281,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
             let $dbNewBinaryDocURI := if($versionDate)then
                 (
                     (: new binary versioned document :)
-                    uri:ANManifestationURIToDBURI(local:manifestationURIWithVersion($originalURI, $versionDate))
+                    uri:ANManifestationURIToDBURI(uri:manifestationURI-with-version($originalURI, $versionDate))
                 )
                 else
                 (
@@ -350,7 +318,7 @@ declare function local:save($originalURI as xs:string, $versionDate as xs:string
 declare function local:new($newURI as xs:string, $data) as node()
 {
     (: check the expression uri matches the suggested uri :)
-    if($data/child::node()/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq local:expressionURIFromManifestationURI($newURI))then
+    if($data/child::node()/an:meta/an:identification/an:FRBRExpression/an:FRBRuri/@value eq uri:expressionURI-from-manifestationURI($newURI))then
     (
         let $dbNewXMLDocURI := uri:ANManifestationURIToDBURI($newURI) return
         

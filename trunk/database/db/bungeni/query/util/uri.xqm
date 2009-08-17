@@ -4,7 +4,7 @@
 :    Bungeni URI Utilities
 :    
 :    @author Adam Retter <adam.retter@googlemail.com>
-:    @version 1.1
+:    @version 1.2
 :)
 
 module namespace uri = "http://exist.bungeni.org/query/util/uri";
@@ -98,4 +98,36 @@ declare function uri:parse-db-uri-to-akn-entry-uri($db-uri as xs:string) as xs:s
            "_",
            $uri-components[7], "-", $uri-components[8]
         )
+};
+
+(:~
+:    Adds a version to a Manifestation URI
+:    if a version already exists then it is replaced with the value
+:    of the version parameter
+:    
+:    @param manifestationURI The Akoma Ntoso Manifestation URI to add the version to
+:    @param version The version to add
+:    @return The manifestationURI with the specified version
+:)
+declare function uri:manifestationURI-with-version($manifestationURI as xs:string, $version as xs:string) as xs:string
+{
+    if(contains($manifestationURI, "@"))then
+    (
+        replace($manifestationURI, "(.*)@.*(\..*)", concat("$1@", $version, "$2"))
+    )
+    else
+    (
+        replace($manifestationURI, "(.*)(\..*)", concat("$1@", $version, "$2"))
+    )
+};
+
+(:~
+:    Returns an Expression URI given a Manifestation URI
+:
+:    @param Manifestation URI
+:    @return Expression URI
+:)
+declare function uri:expressionURI-from-manifestationURI($manifestationURI as xs:string) as xs:string
+{
+    replace($manifestationURI, "(.*)(\.)(.*)", "$1")
 };

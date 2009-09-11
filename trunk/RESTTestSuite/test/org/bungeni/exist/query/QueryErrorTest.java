@@ -3,6 +3,7 @@ package org.bungeni.exist.query;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -22,9 +23,9 @@ public class QueryErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "UNKNAC0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        PostMethod post = new PostMethod(REST.PACKAGE_URL);
+        GetMethod get = new GetMethod(REST.PACKAGE_URL);
 
-        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+        testErrorResponse(get, expectedErrorCode, expectedErrorMessage);
     }
 
     @Test
@@ -33,12 +34,12 @@ public class QueryErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MIDULC0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        PostMethod post = new PostMethod(REST.PACKAGE_URL);
-        post.setQueryString(new NameValuePair[]{
+        GetMethod get = new GetMethod(REST.PACKAGE_URL);
+        get.setQueryString(new NameValuePair[]{
             new NameValuePair("action", "list-components")
         });
         
-        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+        testErrorResponse(get, expectedErrorCode, expectedErrorMessage);
     }
 
     @Test
@@ -47,11 +48,11 @@ public class QueryErrorTest extends AbstractErrorTest
         final String expectedErrorCode = "MIDULA0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
-        PostMethod post = new PostMethod(REST.PACKAGE_URL);
-        post.setQueryString(new NameValuePair[]{
+        GetMethod get = new GetMethod(REST.PACKAGE_URL);
+        get.setQueryString(new NameValuePair[]{
             new NameValuePair("action", "list-attachments")
         });
 
-        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+        testErrorResponse(get, expectedErrorCode, expectedErrorMessage);
     }
 }

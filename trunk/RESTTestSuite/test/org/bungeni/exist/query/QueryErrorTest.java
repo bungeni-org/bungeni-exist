@@ -2,6 +2,7 @@ package org.bungeni.exist.query;
 
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -23,6 +24,20 @@ public class QueryErrorTest extends AbstractErrorTest
 
         PostMethod post = new PostMethod(REST.PACKAGE_URL);
 
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void list_components_but_no_uri() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "UNKNAC0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.PACKAGE_URL);
+        post.setQueryString(new NameValuePair[]{
+            new NameValuePair("action", "list-components")
+        });
+        
         testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
     }
 }

@@ -29,4 +29,6 @@
     <error code="IVPKST0001">Invalid package data encountered when trying to store a package (empty string)</error>
     <error code="IVPKST0002">Invalid package data encountered when trying to store a package (not binary)</error>
     <error code="FAPKST0001">Failed to store package entries</error>
+    <error code="MIDULC0001">Missing Document URI for listing Components</error>
+    <error code="MIDULA0001">Missing Document URI for listing Attachments</error>
 </errors>

@@ -1,3 +1,46 @@
-<xs:schema xmlns="http://exist.bungeni.org/query/error" xmlns:errors="http://exist.bungeni.org/errors" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exist.bungeni.org/query/error" elementFormDefault="qualified"><xs:annotation><xs:documentation>
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://exist.bungeni.org/query/error" xmlns:errors="http://exist.bungeni.org/errors" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://exist.bungeni.org/query/error" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>
             Schema for describing response of runtime errors from the XQuery REST interface
-        </xs:documentation></xs:annotation><xs:import namespace="http://exist.bungeni.org/errors" schemaLocation="http://localhost:8080/exist/rest/db/bungeni/grammar/errors.xsd"/><xs:simpleType name="httpMethod"><xs:restriction base="xs:string"><xs:enumeration value="GET"/><xs:enumeration value="POST"/></xs:restriction></xs:simpleType><xs:element name="error"><xs:complexType><xs:sequence><xs:element name="code" type="errors:errorCode"/><xs:element name="message" type="errors:errorMessage"/><xs:element name="http-context"><xs:complexType><xs:sequence><xs:element name="method" type="httpMethod"/><xs:element name="uri" type="xs:anyURI"/><xs:element name="parameters"><xs:complexType><xs:sequence><xs:element name="parameter" minOccurs="0" maxOccurs="unbounded"><xs:complexType><xs:sequence><xs:element name="value" minOccurs="0" maxOccurs="unbounded" type="xs:string"/></xs:sequence><xs:attribute name="name" type="xs:string" use="required"/></xs:complexType></xs:element></xs:sequence></xs:complexType></xs:element></xs:sequence></xs:complexType></xs:element></xs:sequence><xs:attribute name="timestamp" type="xs:dateTime" use="required"/></xs:complexType></xs:element></xs:schema>
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://exist.bungeni.org/errors" schemaLocation="http://localhost:8080/exist/rest/db/bungeni/grammar/errors.xsd"/>
+    <xs:simpleType name="httpMethod">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="GET"/>
+            <xs:enumeration value="POST"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="error">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="code" type="errors:errorCode"/>
+                <xs:element name="message" type="errors:errorMessage"/>
+                <xs:element name="http-context">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="method" type="httpMethod"/>
+                            <xs:element name="uri" type="xs:anyURI"/>
+                            <xs:element name="parameters">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="value" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="name" type="xs:string" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="timestamp" type="xs:dateTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -30,7 +30,7 @@ public class QueryErrorTest extends AbstractErrorTest
     @Test
     public void list_components_but_no_uri() throws IOException, ParserConfigurationException, SAXException
     {
-        final String expectedErrorCode = "UNKNAC0001";
+        final String expectedErrorCode = "MIDULC0001";
         final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
 
         PostMethod post = new PostMethod(REST.PACKAGE_URL);
@@ -38,6 +38,20 @@ public class QueryErrorTest extends AbstractErrorTest
             new NameValuePair("action", "list-components")
         });
         
+        testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
+    }
+
+    @Test
+    public void list_attachments_but_no_uri() throws IOException, ParserConfigurationException, SAXException
+    {
+        final String expectedErrorCode = "MIDULA0001";
+        final String expectedErrorMessage = getErrorMessageForErrorCode(expectedErrorCode);
+
+        PostMethod post = new PostMethod(REST.PACKAGE_URL);
+        post.setQueryString(new NameValuePair[]{
+            new NameValuePair("action", "list-attachments")
+        });
+
         testErrorResponse(post, expectedErrorCode, expectedErrorMessage);
     }
 }

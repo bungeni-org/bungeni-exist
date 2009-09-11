@@ -45,7 +45,7 @@ public class QueryTest
         packageTest.store_package_ke_act_1993_12_16_9();
         storedEntryPaths = packageTest.getStoredEntryPaths();
     }
-/*
+
     @AfterClass
     public static void removeTestPackage() throws IOException
     {
@@ -56,7 +56,7 @@ public class QueryTest
             int result = client.executeMethod(delete);
         }
     }
-*/
+
     @Test
     public void listWorkComponents() throws IOException, SAXException, ParserConfigurationException
     {
@@ -223,6 +223,77 @@ public class QueryTest
             assertEquals(NoSuchElementException.class, e.getClass());
         }
 
+    }
+
+    @Test
+    public void listWorkAttachments() throws IOException, SAXException, ParserConfigurationException
+    {
+        final String queryAction = "list-attachments";
+        final String queryUri = "/ke/act/1993-12-31/9";
+
+
+        GetMethod get = new GetMethod(REST.QUERY_URL);
+        NameValuePair qsParams[] = {
+            new NameValuePair("action", queryAction),
+            new NameValuePair("uri", queryUri)
+        };
+        get.setQueryString(qsParams);
+
+        HttpClient client = REST.getAuthenticatingHttpClient(Database.DEFAULT_ADMIN_USERNAME, Database.DEFAULT_ADMIN_PASSWORD);
+
+        int result = client.executeMethod(get);
+
+        assertEquals(HttpStatus.SC_OK, result);
+
+        DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
+        Document docResult = builder.parse(get.getResponseBodyAsStream());
+
+        JXPathContext jxp = JXPathContext.newContext(docResult);
+        jxp.setLenient(true);
+        jxp.registerNamespace(QUERY_NAMESPACE_PREFIX, QUERY_NAMESPACE_URI);
+        jxp.registerNamespace(AkomaNtoso.AN_NAMESPACE_PREFIX, AkomaNtoso.AN_NAMESPACE_URI);
+
+        //assertions
+        String responseRequestAction = (String)jxp.getValue("/query:query/query:request/query:action");
+        assertEquals(queryAction, responseRequestAction);
+
+        String responseRequestUri = (String)jxp.getValue("/query:query/query:request/query:params/an:uri");
+        assertEquals(queryUri, responseRequestUri);
+
+        Iterator<DOMNodePointer> itPtrMatch = (Iterator<DOMNodePointer>)jxp.iteratePointers("/query:query/query:results/query:match");
+
+        DOMNodePointer ptrMatch = itPtrMatch.next();
+        assertEquals("/ke/act/1993-12-31/9/eng@/main.xml", getAttributeValue("an-manifestation-uri", ptrMatch));
+        assertEquals("/db/bungeni/data/ke/act/1993/12-16_9_eng_main.xml", getAttributeValue("db-uri", ptrMatch));
+
+        try
+        {
+            itPtrMatch.next();
+        }
+        catch(Exception e)
+        {
+            assertEquals(NoSuchElementException.class, e.getClass());
+        }
+
+        Iterator itAttachmentHrefs = (Iterator)jxp.iterate("/query:query/query:results/query:match/an:hasAttachment/@href");
+
+        String attachmentHref = (String)itAttachmentHrefs.next();
+        assertEquals("main/schedule01", attachmentHref);
+
+        attachmentHref = (String)itAttachmentHrefs.next();
+        assertEquals("main/schedule02", attachmentHref);
+
+        attachmentHref = (String)itAttachmentHrefs.next();
+        assertEquals("main/schedule03", attachmentHref);
+
+        try
+        {
+            itAttachmentHrefs.next();
+        }
+        catch(Exception e)
+        {
+            assertEquals(NoSuchElementException.class, e.getClass());
+        }
     }
 
     private final String getAttributeValue(String attrName, DOMNodePointer ptrNode)

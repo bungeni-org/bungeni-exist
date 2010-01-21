@@ -1,0 +1,4 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/bungeni/grammar" owner="admin" group="dba" mode="744" created="2007-07-05T12:05:49+01:00" version="1">
+    <resource type="XMLResource" name="akomantoso10.xsd" owner="admin" group="dba" mode="744" created="2007-07-08T20:01:02+01:00" modified="2007-07-08T20:01:02+01:00" filename="akomantoso10.xsd" mimetype="text/xml"/>
+    <resource type="XMLResource" name="catalog.xml" owner="admin" group="dba" mode="744" created="2007-07-08T20:00:13+01:00" modified="2007-07-19T16:33:03+01:00" filename="catalog.xml" mimetype="text/xml"/>
+</collection>

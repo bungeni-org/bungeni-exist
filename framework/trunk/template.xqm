@@ -1,10 +1,12 @@
 xquery version "1.0";
 
-module namespace template = "http://whatithink.com/xquery/template";
+(: Adapted code from http://seewhatithink.sourceforge.net/ by Adam Retter :)
+
+module namespace template = "http://bungeni.org/xquery/template";
 
 declare namespace xh = "http://www.w3.org/1999/xhtml";
 
-import module namespace config = "http://whatithink.com/xquery/config" at "config.xqm";
+import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 
 (: rewrite src, href and action attribute uri's :)
 declare function template:adjust-relative-paths($request-rel-path as xs:string, $attr as attribute()) {

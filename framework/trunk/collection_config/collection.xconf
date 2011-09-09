@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:kl="http://kenyalaw.org/metadata">
+        <!-- Old full text index configuration. Deprecated. -->
+        <fulltext default="none" attributes="no"/>
+        <!-- New full text index based on Lucene -->
+        <lucene>
+            <analyzer id="sa" class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+            <analyzer id="ws" class="org.apache.lucene.analysis.WhitespaceAnalyzer"/>
+            <text match="//docTitle"/>
+            <text match="//docNumber"/>
+            <text match="//docDate"/>
+            <text match="//part"/>
+            <text match="//section"/>
+            <text match="//akomaNtoso"/>
+        </lucene>
+        <create path="//docTitle/@id" type="xs:string"/>
+        <create path="//docNumber/@id" type="xs:string"/>
+        <create path="//docDate/@date" type="xs:date"/>
+        <create path="//docDate/@refersTo" type="xs:string"/>
+        <create path="//kl:meta/@num" type="xs:integer"/>
+        <create path="//kl:meta/@name" type="xs:string"/>
+    </index>
+</collection>

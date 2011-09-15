@@ -58,14 +58,50 @@ declare function template:merge($request-rel-path as xs:string, $template1 as do
         }
 };
 
+
+declare function template:set-title($content as element(), $title as xs:string) as  element() {
+	if ($content/self::xh:title)
+	then <title>{$title}</title>
+	else element { node-name($content)}
+		  		 {$content/@*, 
+					for $child in $content/node()
+						return if ($child instance of element())
+							   then template:set-title($child, $title)
+							   else $child
+				 }
+};
+
+declare function template:filter-page-namespace(
+      $element as element()) as element() {
+   element {node-name($element) }
+             { $element/@*,
+               for $child in $element/node()[not(namespace-uri(.)='http://bungeni.org/page')]
+                  return if ($child instance of element())
+                    then template:filter-page-namespace($child)
+                    else $child
+           }
+};
+
+
+declare function template:process-page-meta($doc as element()) as element() {
+	(: Get the page info element :)
+	let $page-info := $doc//pg:info
+	(: Now remove the page namespace from the final document :)
+	let $final := template:filter-page-namespace($doc)
+    (: For now only the title is specified in page namespace - but this will be expanded
+       to support other things :)
+	(: Set the title and return the page :)
+	return 
+		template:set-title($final, $page-info/pg:title/text())
+};
+
+
 declare function template:process-template($rel-path as xs:string, $request-rel-path as xs:string, $template-name as xs:string, $content as document-node()+) {  (:document-node(element(xh:div))* :)
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
     $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] 
     (: extracts top level content and content from within an id less container :)
-    let $final := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
-    let $page_title := $template/pg:info/pg:title/text()
-    return $final
-        (: template:copy-and-replace($request-rel-path, $template/xh:html, $content/xh:div) :)
+    let $processed-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
+    return template:process-page-meta($processed-doc)
 };
 
 

@@ -1,4 +1,5 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en" xsi:schemalocation="http://www.w3.org/1999/xhtml http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd" version="-//W3C//DTD XHTML 1.1//EN"><head><title>title</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en" xsi:schemalocation="http://www.w3.org/1999/xhtml http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd" version="-//W3C//DTD XHTML 1.1//EN">
+    <!-- TEMPLATE --><head><title>title</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <!--YUI CSS--><link rel="stylesheet" type="text/css" href="yui/skins/sam/skin.css"/><link type="text/css" rel="stylesheet" href="yui/autocomplete/assets/skins/sam/autocomplete.css"/><link type="text/css" rel="stylesheet" href="yui/tabview/assets/skins/sam/tabview.css"/><link type="text/css" rel="stylesheet" href="yui/container/assets/skins/sam/container.css"/><link type="text/css" rel="stylesheet" href="yui/treeview/assets/skins/sam/treeview.css"/><link type="text/css" rel="stylesheet" href="yui/calendar/assets/skins/sam/calendar.css"/>
         <!-- YUI JS --><script src="yui/yahoo-dom-event/yahoo-dom-event.js"/><script src="yui/element/element-min.js"/><script src="yui/datasource/datasource-min.js"/>
         <!-- OPTIONAL: Get (required only if using ScriptNodeDataSource) --><script src="yui/get/get-min.js"/>
@@ -6,27 +7,33 @@
         <!-- OPTIONAL: Animation (required only if enabling animation) --><script src="yui/animation/animation-min.js"/><script src="yui/calendar/calendar-min.js"/>
         <!-- OPTIONAL: JSON (enables JSON validation) --><script src="yui/json/json-min.js"/><script src="yui/treeview/treeview-min.js"/>    
         <!-- YUI WIDGET JS --><script src="yui/autocomplete/autocomplete-min.js"/><script src="yui/tabview/tabview-min.js"/><script src="yui/container/container-min.js"/>                 
-        <!-- root js --><script type="text/javascript">
-   /** BeginRenderedBy(lexcustom:get-root-js()) **/
-    /** define an object namespace **/
-    YAHOO.namespace("kenyalex.bungeni");
-    var Dom = YAHOO.util.Dom,
+        <!-- root js --><script type="text/javascript"> 
+         /** define an object namespace **/
+        YAHOO.namespace("kenyalex.bungeni");
+        var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event,
             log = YAHOO.log;
-    YAHOO.kenyalex.bungeni.COLLECTION = "/db/kenyalex";        
-     /** EndRenderedBy(lexcustom:get-root-js()) **/          
-    </script><link rel="stylesheet" type="text/css" href="css/custom.css"/>
+        /*** EDIT THE BELOW APPROPRIATELY ****/
+        YAHOO.kenyalex.bungeni.COLLECTION = "/db/kenyalex";
+        YAHOO.kenyalex.bungeni.FRAMEWORK_ROOT = "http://localhost:8080/exist/apps/framework/"; 
+		YAHOO.kenyalex.bungeni.APP_PREFIX = "lexapp/";
+        YAHOO.kenyalex.bungeni.APP_ROOT = YAHOO.kenyalex.bungeni.FRAMEWORK_ROOT + YAHOO.kenyalex.bungeni.APP_ROOT;
+
+		function appScript(script_file) {
+			return YAHOO.kenyalex.bungeni.APP_ROOT + script_file;
+		 }
+
+         </script><link rel="stylesheet" type="text/css" href="css/custom.css"/>
         <!-- custom js --><script type="text/javascript">
-    /** BeginRenderedBy(lexcustom:get-custom-js()) **/
-    /** render tab **/
-    YAHOO.kenyalex.bungeni.Tabs = new YAHOO.widget.TabView("tabcontent");
-    function escapeQuery(query) {
-    	return encodeURIComponent(query);
-    }
-    /** put all the onload init stuff here **/
-    function init() {
-    }
-    /** Event listeners **/
-    YAHOO.util.Event.addListener(window, "load", init);
-    /** EndRenderedBy(lexcustom:get-custom-js()) **/
-   </script><script src="scripts/lex.js" type="text/javascript"/><meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/><meta http-equiv="Content-Style-Type" content="text/css"/><meta http-equiv="Content-Language" content="en"/><meta name="DCTERMS.language" scheme="ISO 639-2/T" content="eng"/><meta name="DCTERMS.format" content="text/html"/></head><body class="yui-skin-sam" id="tab1"><div id="wrapper"><div id="tabnavigation"><ul id="tabnav"><li class="tab1"><a href="search/by/title">By Title</a></li><li class="tab2"><a href="search/by/capno">By Cap No</a></li><li class="tab3"><a href="search/by/keyword">By Keyword</a></li></ul></div><div id="headerLinks"/><div id="lnavi"><div id="leftManagerMenu"/><div id="leftMenu"/><div class="text_links" id="content"/><div id="contentFooter"/><div class="text_links" id="footer"><div><p>Footer links</p></div></div></div></div></body></html>
+        /** render tab **/
+        //obsolete
+        //YAHOO.kenyalex.bungeni.Tabs = new YAHOO.widget.TabView("tabcontent");
+        function escapeQuery(query) {
+            return encodeURIComponent(query);
+        } 
+        /** put all the onload init stuff here **/
+        function init() {} 
+        /** Event listeners **/
+        YAHOO.util.Event.addListener(window, "load", init);
+       </script><script src="scripts/lex.js" type="text/javascript"/><meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/><meta http-equiv="Content-Style-Type" content="text/css"/><meta http-equiv="Content-Language" content="en"/><meta name="DCTERMS.language" scheme="ISO 639-2/T" content="eng"/><meta name="DCTERMS.format" content="text/html"/></head><body class="yui-skin-sam" id="tab1"><div id="wrapper"><div id="tabnavigation"><ul id="tabnav"><li class="tab1"><a href="search/by/title">By Title</a></li><li class="tab2"><a href="search/by/capno">By Cap No</a></li><li class="tab3"><a href="search/by/keyword">By Keyword</a></li></ul></div><div id="headerLinks"/><div id="lnavi"><div id="leftManagerMenu"/><div id="leftMenu"/>
+                <!-- THIS IS THE MAIN CONTENT DIV --><div id="content" class="text_links"/><div id="contentFooter"/><div class="text_links" id="footer"><div><p>Footer links</p></div></div></div></div></body></html>

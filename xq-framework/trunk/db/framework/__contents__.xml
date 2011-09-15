@@ -1,18 +1,18 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework" owner="admin" group="dba" mode="755" created="2011-09-12T16:08:36+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="actsjsonbyid.xql" owner="admin" group="dba" mode="644" created="2011-09-14T16:00:05+03:00" modified="2011-09-14T16:03:58+03:00" filename="actsjsonbyid.xql" mimetype="application/xquery">
-        <acl entries="0" version="1"/>
-    </resource>
     <resource type="BinaryResource" name="common.xqm" owner="admin" group="dba" mode="644" created="2011-09-14T16:03:07+03:00" modified="2011-09-14T16:03:07+03:00" filename="common.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:14:46+03:00" modified="2011-09-12T16:14:46+03:00" filename="config.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:14:46+03:00" modified="2011-09-15T17:26:04+03:00" filename="config.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-09-14T16:08:04+03:00" filename="controller.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-09-15T17:41:42+03:00" filename="controller.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="index.xml" owner="admin" group="dba" mode="644" created="2011-09-14T16:07:40+03:00" modified="2011-09-14T16:07:40+03:00" filename="index.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="file.xql" owner="admin" group="dba" mode="644" created="2011-09-15T00:05:03+03:00" modified="2011-09-15T00:05:30+03:00" filename="file.xql" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="index.xml" owner="admin" group="dba" mode="755" created="2011-09-15T17:39:07+03:00" modified="2011-09-15T17:39:07+03:00" filename="index.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="menu.xml" owner="admin" group="dba" mode="644" created="2011-09-14T16:28:22+03:00" modified="2011-09-14T16:28:22+03:00" filename="menu.xml" mimetype="application/xml">
@@ -27,14 +27,18 @@
     <resource type="BinaryResource" name="security.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-09-12T16:10:51+03:00" filename="security.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="template.xhtml" owner="admin" group="dba" mode="745" created="2011-09-14T17:24:44+03:00" modified="2011-09-14T17:24:44+03:00" filename="template.xhtml" mimetype="application/xhtml+xml" namedoctype="html" publicid="-//W3C//DTD XHTML 1.1//EN" systemid="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    <resource type="XMLResource" name="template.xhtml" owner="admin" group="dba" mode="644" created="2011-09-15T17:38:01+03:00" modified="2011-09-15T17:38:01+03:00" filename="template.xhtml" mimetype="application/xhtml+xml" namedoctype="html" publicid="-//W3C//DTD XHTML 1.1//EN" systemid="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="template.xqm" owner="admin" group="dba" mode="755" created="2011-09-12T16:10:51+03:00" modified="2011-09-14T17:51:56+03:00" filename="template.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="template.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-09-15T11:46:37+03:00" filename="template.xqm" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="test.xql" owner="admin" group="dba" mode="755" created="2011-09-15T00:06:59+03:00" modified="2011-09-15T00:17:38+03:00" filename="test.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <subcollection name="scripts" filename="scripts"/>
     <subcollection name="yui" filename="yui"/>
+    <subcollection name="lexapp" filename="lexapp"/>
     <subcollection name="images" filename="images"/>
     <subcollection name="css" filename="css"/>
 </collection>

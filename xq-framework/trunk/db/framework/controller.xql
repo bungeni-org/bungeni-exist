@@ -98,12 +98,24 @@ This script allows separation of view from control logic.
 let $menus := fn:doc(fn:concat($rel-path, "/menu.xml"))
 
 (: Root path: redirect to index.xql :)
-return
+return (: First process all framework requests :)
     if ($exist:path eq "") then
     	local:redirect(fn:concat(request:get-uri(), "/"))
     else if($exist:path eq "/" or $exist:path eq "/index.xml") then
     		template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/index.xml"))))
-    else
+	(: Now we process application requests :)
+    else if ($exist:resource eq 'searchbytitle') 
+		 then let $actid := xs:string(request:get-parameter("actid", ""))
+	     return
+ 	       <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+			     <forward url="titlesearch.xql">
+              	   <add-parameter name="actid" value="{$actid}" />
+         	     </forward>
+            	 <view>
+                	<forward url="translate-titlesearch.xql" />
+				 </view>
+           </dispatch>
+	else
         local:ignore()
 (: the below is older code :)
 

@@ -1,0 +1,13 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/tabview" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="tabview-debug.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="tabview-debug.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="tabview-min.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="tabview-min.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="tabview.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="tabview.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <subcollection name="assets" filename="assets"/>
+</collection>

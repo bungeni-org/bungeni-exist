@@ -1,0 +1,19 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:11+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="custom.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="custom.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <subcollection name="container" filename="container"/>
+    <subcollection name="autocomplete" filename="autocomplete"/>
+    <subcollection name="yahoo-dom-event" filename="yahoo-dom-event"/>
+    <subcollection name="tabview" filename="tabview"/>
+    <subcollection name="datasource" filename="datasource"/>
+    <subcollection name="get" filename="get"/>
+    <subcollection name="skins" filename="skins"/>
+    <subcollection name="json" filename="json"/>
+    <subcollection name="calendar" filename="calendar"/>
+    <subcollection name="treeview" filename="treeview"/>
+    <subcollection name="animation" filename="animation"/>
+    <subcollection name="connection" filename="connection"/>
+    <subcollection name="element" filename="element"/>
+</collection>

@@ -1,0 +1,22 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/container" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="container-debug.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="container-debug.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="container-min.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="container-min.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="container.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="container.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="container_core-debug.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="container_core-debug.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="container_core-min.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="container_core-min.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="container_core.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:12+03:00" modified="2011-09-12T16:53:12+03:00" filename="container_core.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <subcollection name="assets" filename="assets"/>
+</collection>

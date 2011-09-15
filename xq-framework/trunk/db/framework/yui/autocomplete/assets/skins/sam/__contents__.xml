@@ -1,0 +1,9 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/autocomplete/assets/skins/sam" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="autocomplete-skin.css" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="autocomplete-skin.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="autocomplete.css" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="autocomplete.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

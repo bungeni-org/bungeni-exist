@@ -35,7 +35,7 @@ declare variable $exist:controller external;
 (: The default template :)
 declare variable $DEFAULT-TEMPLATE := "template.xhtml";
 declare variable $rel-path := fn:concat($exist:root, '/', $exist:controller);
-
+declare variable $app-pref := $config:app-prefix;
 
 (: Helper Functions :)
 
@@ -107,13 +107,12 @@ return (: First process all framework requests :)
     else if ($exist:resource eq 'searchbytitle') 
 		 then let $actid := xs:string(request:get-parameter("actid", ""))
 	     return
- 	       <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-			     <forward url="titlesearch.xql">
-              	   <add-parameter name="actid" value="{$actid}" />
-         	     </forward>
-            	 <view>
-                	<forward url="translate-titlesearch.xql" />
-				 </view>
+           <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+	  	      <forward url="{$app-pref}titlesearch.xql" />
+			  (: We dont forward the actid parameter, as it is sent by default :)
+              <view>
+                <forward url="{$app-pref}translate-titlesearch.xql" />
+			  </view>
            </dispatch>
 	else
         local:ignore()

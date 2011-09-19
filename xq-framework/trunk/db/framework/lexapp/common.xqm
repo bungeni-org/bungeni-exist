@@ -2,6 +2,7 @@ module namespace lexcommon = "http://exist.bungeni.org/lexcommon";
 
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace request="http://exist-db.org/xquery/request";
+import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 
 (:
 
@@ -14,7 +15,7 @@ Library for common functions
 Get the path to the lex collection
 :)
 declare function lexcommon:get-lex-db() as xs:string {
-     xs:string("/db/kenyalex")
+    $config:xml-collection
  };
  
  (:
@@ -28,11 +29,14 @@ declare function lexcommon:get-lex-db() as xs:string {
  (:
  Used as a data-source for the Cap-no search auto-complete
  :)
- declare function lexcommon:get-actsbycapno-jsonds() as xs:string {
+declare function lexcommon:get-actsbycapno-jsonds() as xs:string {
      xs:string(concat(lexcommon:get-server(), "/exist/kenyalex/actsjsonbycapno.xql"))
  };
  
  
+declare function lexcommon:get-xslt($value as xs:string) as document-node() {
+    doc(fn:concat($config:fw-app-root, $value))
+};
  
 
  declare function lexcommon:get-parameters($value as xs:string, $delimiter as xs:string) as node() {

@@ -53,7 +53,7 @@
            }        
 	  </script><div id="title-search-results"><div class="bd"><!-- body for search results --></div></div><div id="ts-actbuttonpanel" class="yui-pe-content"><div class="bd"><button id="ts-showhtml">Expand</button><button id="ts-hidehtml">Collapse</button><button id="ts-openwin">Open in a new Window</button></div></div><div id="ts-actviewer" class="yui-pe-content"><div class="hd"> --- Act --- </div><div class="bd">This is a Module that was marked up in the document.</div><div class="ft"> --- End Act --- </div></div>
       <!-- end ts-viewer-panel --></div><script type="text/javascript">       /** BeginRenderedBy(titlesearch:get-title-search-scripts()) ****/
-       var title_ds = appScript('actsjsonbyid.xql');
+       var title_ds = appScript('actsbyidasjson.xql');
        YAHOO.kenyalex.bungeni.TitlesDS = new YAHOO.util.XHRDataSource(title_ds);
        YAHOO.kenyalex.bungeni.TitlesDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
        YAHOO.kenyalex.bungeni.TitlesDS.responseSchema = {

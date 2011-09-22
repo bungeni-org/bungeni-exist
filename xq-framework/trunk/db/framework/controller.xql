@@ -106,8 +106,7 @@ return (: First process all framework requests :)
 	(: Now we process application requests :)
 
     else if ($exist:resource eq 'searchbytitle') 
-		 then let $actid := xs:string(request:get-parameter("actid", ""))
-	     return
+		 then 
            <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
 	  	      <forward url="{$APP-PREF}titlesearch.xql" />
 			  (: We dont forward the actid parameter, as it is sent by default since eXist 1.4.1 :)
@@ -116,23 +115,18 @@ return (: First process all framework requests :)
 			  </view>
            </dispatch>
 	else if ($exist:resource eq 'viewacttoc')
-         then let $actid := xs:string(request:get-parameter("actid", ""))
-          let $pref := xs:string(xmldb:decode(request:get-parameter("pref","")))
-          return
-            <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-	             <forward url="{$APP-PREF}viewacttoc.xql" />
-                 <view>
-                    <forward url="{$APP-PREF}translate-toc.xql" />
-                 </view>            
-            </dispatch>
+         then 
+          <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+            <forward url="{$APP-PREF}viewacttoc.xql" />
+            <view>
+              <forward url="{$APP-PREF}translate-toc.xql" />
+            </view>            
+          </dispatch>
     else if ($exist:resource eq 'actview') 
-		 then return
-			<dispatch xmlnss="http://exist.sourceforge.net/NS/exist">
-              <view>
-	            <forward url="{$APP-PREF}actview.xql" />
-              </view>            
-            </dispatch>
+		 then 
+		  <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+            <forward url="{$APP-PREF}actview.xql" />
+          </dispatch>
 	else
         local:ignore()
 (: the below is older code :)
-

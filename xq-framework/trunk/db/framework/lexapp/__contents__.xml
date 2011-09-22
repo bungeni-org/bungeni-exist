@@ -1,6 +1,6 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/lexapp" owner="admin" group="dba" mode="644" created="2011-09-15T17:24:01+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="actsbyidasjson.xql" owner="admin" group="dba" mode="645" created="2011-09-19T12:17:32+03:00" modified="2011-09-19T14:38:57+03:00" filename="actsbyidasjson.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="actsbyidasjson.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-19T12:17:32+03:00" modified="2011-09-19T14:38:57+03:00" filename="actsbyidasjson.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="actsjsonbyid.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-14T16:00:05+03:00" modified="2011-09-14T16:03:58+03:00" filename="actsjsonbyid.xql" mimetype="application/xquery">
@@ -9,10 +9,10 @@
     <resource type="XMLResource" name="actsnapshot.xsl" owner="SYSTEM" group="dba" mode="645" created="2011-09-16T15:25:00+03:00" modified="2011-09-16T15:25:00+03:00" filename="actsnapshot.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="acttoc.xsl" owner="admin" group="dba" mode="645" created="2011-09-19T14:57:15+03:00" modified="2011-09-19T14:57:15+03:00" filename="acttoc.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="acttoc.xsl" owner="SYSTEM" group="dba" mode="645" created="2011-09-22T10:36:57+03:00" modified="2011-09-22T10:36:57+03:00" filename="acttoc.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="actview.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-19T15:39:17+03:00" modified="2011-09-19T15:51:18+03:00" filename="actview.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="actview.xql" owner="admin" group="dba" mode="645" created="2011-09-19T15:39:17+03:00" modified="2011-09-19T15:51:18+03:00" filename="actview.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="actview.xqm" owner="SYSTEM" group="dba" mode="645" created="2011-09-19T15:51:30+03:00" modified="2011-09-19T15:52:22+03:00" filename="actview.xqm" mimetype="application/xquery">
@@ -21,22 +21,22 @@
     <resource type="BinaryResource" name="common.xqm" owner="SYSTEM" group="dba" mode="645" created="2011-09-14T16:03:07+03:00" modified="2011-09-19T14:54:52+03:00" filename="common.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="lex.xqm" owner="admin" group="dba" mode="644" created="2011-09-19T14:40:43+03:00" modified="2011-09-19T14:41:44+03:00" filename="lex.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="lex.xqm" owner="admin" group="dba" mode="645" created="2011-09-19T14:40:43+03:00" modified="2011-09-19T14:41:44+03:00" filename="lex.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="test.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-19T13:00:03+03:00" modified="2011-09-19T13:00:03+03:00" filename="test.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="titlesearch.xql" owner="admin" group="dba" mode="644" created="2011-09-16T15:15:17+03:00" modified="2011-09-16T16:28:33+03:00" filename="titlesearch.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="titlesearch.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-16T15:15:17+03:00" modified="2011-09-16T16:28:33+03:00" filename="titlesearch.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="translate-titlesearch.xql" owner="admin" group="dba" mode="644" created="2011-09-16T15:15:17+03:00" modified="2011-09-19T14:55:30+03:00" filename="translate-titlesearch.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="translate-titlesearch.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-16T15:15:17+03:00" modified="2011-09-19T14:55:30+03:00" filename="translate-titlesearch.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="translate-toc.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-19T14:39:43+03:00" modified="2011-09-19T14:56:48+03:00" filename="translate-toc.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="viewacttoc.xql" owner="admin" group="dba" mode="644" created="2011-09-19T14:39:43+03:00" modified="2011-09-19T14:42:32+03:00" filename="viewacttoc.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="viewacttoc.xql" owner="SYSTEM" group="dba" mode="645" created="2011-09-19T14:39:43+03:00" modified="2011-09-19T14:42:32+03:00" filename="viewacttoc.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

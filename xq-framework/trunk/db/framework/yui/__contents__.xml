@@ -4,8 +4,8 @@
         <acl entries="0" version="1"/>
     </resource>
     <subcollection name="container" filename="container"/>
-    <subcollection name="autocomplete" filename="autocomplete"/>
     <subcollection name="yahoo-dom-event" filename="yahoo-dom-event"/>
+    <subcollection name="autocomplete" filename="autocomplete"/>
     <subcollection name="tabview" filename="tabview"/>
     <subcollection name="datasource" filename="datasource"/>
     <subcollection name="get" filename="get"/>

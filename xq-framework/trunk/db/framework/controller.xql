@@ -15,6 +15,8 @@ import module namespace util = "http://exist-db.org/xquery/util";
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "template.xqm";
 
+(:app modules:)
+import module namespace lex = "http://exist.bungeni.org/lex" at "lexapp/lex.xqm";
 
 (: xhtml 1.1 :)
 (:
@@ -38,6 +40,10 @@ declare variable $rel-path := fn:concat($exist:root, '/', $exist:controller);
 declare variable $APP-PREF := $config:app-prefix;
 
 (: Helper Functions :)
+
+declare function local:get($param as xs:string) as xs:string {
+    request:get-parameter($param, "")
+};
 
 (: do nothing ! :)
 declare function local:ignore() as element(exist:ignore) {
@@ -101,10 +107,15 @@ let $menus := fn:doc(fn:concat($rel-path, "/menu.xml"))
 return (: First process all framework requests :)
     if ($exist:path eq "" ) then
     	local:redirect(fn:concat(request:get-uri(), "/"))
-    else if($exist:path eq "/" or $exist:path eq "/index.xml") then
+    else if($exist:path eq "/" or $exist:path eq "/home" or $exist:path eq "/index.xml") then
     		template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/index.xml"))))
 	(: Now we process application requests :)
-
+	else if ($exist:path eq "/by-title")
+		 then 
+           template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/by-title.xml"))))
+	else if ($exist:path eq "/by-keyword")
+		 then 
+           template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/by-keyword.xml"))))
     else if ($exist:resource eq 'searchbytitle') 
 		 then 
            <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
@@ -124,9 +135,11 @@ return (: First process all framework requests :)
           </dispatch>
     else if ($exist:resource eq 'actview') 
 		 then 
-		  <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$APP-PREF}actview.xql" />
-          </dispatch>
+		  let $actcontent := lex:get-act(local:get("actid"),local:get("pref"),"actfull.xsl") return document {
+                template:copy-and-replace($exist:path,
+                fn:doc(fn:concat($rel-path, "/actview.xml"))/xh:div, 
+                $actcontent)
+             }
 	else
         local:ignore()
 (: the below is older code :)

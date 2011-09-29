@@ -1,0 +1,6 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/system/config/db/kenyalex/0-100" owner="SYSTEM" group="dba" mode="755" created="2010-11-03T16:28:44+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="XMLResource" name="collection.xconf" owner="admin" group="dba" mode="755" created="1970-01-01T03:00:00+03:00" modified="2010-11-03T16:02:37+03:00" filename="collection.xconf" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

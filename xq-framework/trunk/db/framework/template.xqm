@@ -187,6 +187,19 @@ declare function template:set-title($content as element(), $title as xs:string) 
 				 }
 };
 
+
+declare function template:set-navigation-active($content as element() , $active as xs:string) as element() {
+	if ($content/self::xh:a[@href=$active] and $content/ancestor::xh:div[@class="menu"])
+	then <a class="current" href="$active">{$active}</a>
+	else element { node-name($content)}
+		  		 {$content/@*, 
+					for $child in $content/node()
+						return if ($child instance of element())
+							   then template:set-navigation-active($child, $active)
+							   else $child
+				 }
+};
+
 (:~
 : Remove the page: namespace
 : 
@@ -214,6 +227,11 @@ declare function template:process-page-meta($doc as element()) as element() {
     (: For now only the title is specified in page namespace - but this will be expanded
        to support other things :)
 	(: Set the title and return the page :)
-	return 
-		template:set-title($final, $page-info/pg:title/text())
+	let $output := template:set-title($final, $page-info/pg:title/text())
+	(: For navigation menu to highlight current page :)
+	return if ($page-info/pg:navigation) then
+	           template:set-navigation-active($output, $page-info/pg:navigation/text())
+	       else
+	           $output
 };
+

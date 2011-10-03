@@ -1,6 +1,6 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/yahoo-dom-event" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" version="1">
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/resources/yui/yahoo-dom-event" owner="admin" group="dba" mode="644" created="2011-10-03T10:49:47+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="yahoo-dom-event.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="yahoo-dom-event.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="yahoo-dom-event.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="yahoo-dom-event.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

@@ -1,27 +1,27 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/treeview/assets/skins/sam" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" version="1">
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/resources/yui/treeview/assets/skins/sam" owner="admin" group="dba" mode="644" created="2011-10-03T10:49:47+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="check0.gif" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="check0.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="check0.gif" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="check0.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="check1.gif" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="check1.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="check1.gif" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="check1.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="check2.gif" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="check2.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="check2.gif" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="check2.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="loading.gif" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="loading.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="loading.gif" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="loading.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="treeview-loading.gif" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="treeview-loading.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="treeview-loading.gif" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="treeview-loading.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="treeview-skin.css" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="treeview-skin.css" mimetype="text/css">
+    <resource type="BinaryResource" name="treeview-skin.css" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="treeview-skin.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="treeview-sprite.gif" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="treeview-sprite.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="treeview-sprite.gif" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="treeview-sprite.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="treeview.css" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="treeview.css" mimetype="text/css">
+    <resource type="BinaryResource" name="treeview.css" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:07+03:00" modified="2011-10-03T10:41:07+03:00" filename="treeview.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

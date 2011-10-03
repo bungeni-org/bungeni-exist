@@ -28,16 +28,16 @@ declare function lex:get-toc($actid as xs:string) as element() {
 };
 
 
-declare function lex:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) as element() {
+declare function lex:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) {
     (: First get the act document :)
-    let $doc := lex:get-doc($actid)
+    let $doc := lex:get-doc($actid),
     (: Next get the doc of the XSLT :)   
-    let $doc-xslt := lexcommon:get-xslt($xslt)
+     $doc-xslt := lexcommon:get-xslt($xslt),
     (: Now transform the doc with the XSLT :)
-    let $doc-transformed := transform:transform($doc, 
+     $doc-transformed := transform:transform($doc, 
 		$doc-xslt,
         <parameters>
             <param name="pref" value="{$pref}" />
         </parameters>)
-    return $doc-transformed
+     return $doc-transformed
 };

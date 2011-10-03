@@ -1,4 +1,4 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/calendar/assets/skins" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:11+03:00" version="1">
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/resources/yui/calendar/assets/skins" owner="admin" group="dba" mode="644" created="2011-10-03T10:49:47+03:00" version="1">
     <acl entries="0" version="1"/>
     <subcollection name="sam" filename="sam"/>
 </collection>

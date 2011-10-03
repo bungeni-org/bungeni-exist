@@ -1,24 +1,24 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/yui/connection" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" version="1">
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/resources/yui/connection" owner="admin" group="dba" mode="644" created="2011-10-03T10:49:47+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="connection-debug.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection-debug.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="connection-debug.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection-debug.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="connection-min.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection-min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="connection-min.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection-min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="connection.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="connection.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="connection.swf" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection.swf" mimetype="application/octet-stream">
+    <resource type="BinaryResource" name="connection.swf" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection.swf" mimetype="application/octet-stream">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="connection_core-debug.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection_core-debug.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="connection_core-debug.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection_core-debug.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="connection_core-min.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection_core-min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="connection_core-min.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection_core-min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="connection_core.js" owner="admin" group="dba" mode="644" created="2011-09-12T16:53:14+03:00" modified="2011-09-12T16:53:14+03:00" filename="connection_core.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="connection_core.js" owner="admin" group="dba" mode="644" created="2011-10-03T10:41:06+03:00" modified="2011-10-03T10:41:06+03:00" filename="connection_core.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

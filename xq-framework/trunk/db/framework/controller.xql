@@ -34,10 +34,11 @@ declare variable $exist:path external;
 declare variable $exist:root external;
 declare variable $exist:controller external;
 
-(: The default template :)
-declare variable $DEFAULT-TEMPLATE := "template.xhtml";
+
 declare variable $REL-PATH := fn:concat($exist:root, '/', $exist:controller);
 declare variable $APP-PREF := $config:app-prefix;
+(: The default template :)
+declare variable $DEFAULT-TEMPLATE := "template.xhtml";
 
 (: Helper Functions :)
 
@@ -143,12 +144,15 @@ return (: First process all framework requests :)
  	else if ($exist:resource eq 'viewacttoc')
          then 
           local:app-chain-forward("viewacttoc.xql", "translate-toc.xql")
-    else if ($exist:resource eq 'actview') 
-		 then 
-		  let $actcontent := lex:get-act(local:get("actid"),local:get("pref"),"actfull.xsl") return document {
+    else if ($exist:resource eq 'actview') then 
+		  let $actcontent := lex:get-act(local:get("actid"),local:get("pref"),"actfull.xsl"),
+              $actdoc := document {
                 template:copy-and-replace($exist:path,
                 local:app-tmpl("actview.xml")/xh:div, 
                 $actcontent)
-             }
+               } return 
+                  template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ($menus, $actdoc)) 
+                            
+             
 	else
         local:ignore()

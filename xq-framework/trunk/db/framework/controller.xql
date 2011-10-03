@@ -36,13 +36,21 @@ declare variable $exist:controller external;
 
 (: The default template :)
 declare variable $DEFAULT-TEMPLATE := "template.xhtml";
-declare variable $rel-path := fn:concat($exist:root, '/', $exist:controller);
+declare variable $REL-PATH := fn:concat($exist:root, '/', $exist:controller);
 declare variable $APP-PREF := $config:app-prefix;
 
 (: Helper Functions :)
 
+(:~
+Abbreviated API to get a request parameter
+:)
 declare function local:get($param as xs:string) as xs:string {
     request:get-parameter($param, "")
+};
+
+
+declare function local:app-tmpl($uri as xs:string) as document-node() {
+   fn:doc(fn:concat($APP-PREF, $uri))
 };
 
 (: do nothing ! :)
@@ -59,6 +67,19 @@ again be filtered by XQueryURLRewrite.
 declare function local:redirect($uri as xs:string) as element(exist:dispatch) {
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         <redirect url="{$uri}"/>
+    </dispatch>
+};
+
+(:~
+Chain and forward -- this is the typical query pattern for Ajax requests 
+This specifically assumes all the scripts are in the application folder
+:)
+declare function local:app-chain-forward($uri1 as xs:string, $uri2 as xs:string) as element(exist:dispatch) {
+    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+      <forward url="{$APP-PREF}{$uri1}" />
+      <view>
+        <forward url="{$APP-PREF}{$uri2}" />
+	  </view>
     </dispatch>
 };
 
@@ -101,45 +122,33 @@ This script allows separation of view from control logic.
      
 :)
 
-let $menus := fn:doc(fn:concat($rel-path, "/menu.xml"))
+let $menus := local:app-tmpl("menu.xml")
 
 (: Root path: redirect to index.xql :)
 return (: First process all framework requests :)
     if ($exist:path eq "" ) then
     	local:redirect(fn:concat(request:get-uri(), "/"))
     else if($exist:path eq "/" or $exist:path eq "/home" or $exist:path eq "/index.xml") then
-    		template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/index.xml"))))
+    		template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("index.xml")))
 	(: Now we process application requests :)
 	else if ($exist:path eq "/by-title")
 		 then 
-           template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/by-title.xml"))))
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("by-title.xml")))
 	else if ($exist:path eq "/by-keyword")
 		 then 
-           template:process-template($rel-path, $exist:path, $DEFAULT-TEMPLATE, ( $menus, fn:doc(fn:concat($rel-path, "/by-keyword.xml"))))
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("by-keyword.xml")))
     else if ($exist:resource eq 'searchbytitle') 
-		 then 
-           <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-	  	      <forward url="{$APP-PREF}titlesearch.xql" />
-			  (: We dont forward the actid parameter, as it is sent by default since eXist 1.4.1 :)
-              <view>
-                <forward url="{$APP-PREF}translate-titlesearch.xql" />
-			  </view>
-           </dispatch>
-	else if ($exist:resource eq 'viewacttoc')
+		 then
+		   local:app-chain-forward("titlesearch.xql", "translate-titlesearch.xql")
+ 	else if ($exist:resource eq 'viewacttoc')
          then 
-          <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$APP-PREF}viewacttoc.xql" />
-            <view>
-              <forward url="{$APP-PREF}translate-toc.xql" />
-            </view>            
-          </dispatch>
+          local:app-chain-forward("viewacttoc.xql", "translate-toc.xql")
     else if ($exist:resource eq 'actview') 
 		 then 
 		  let $actcontent := lex:get-act(local:get("actid"),local:get("pref"),"actfull.xsl") return document {
                 template:copy-and-replace($exist:path,
-                fn:doc(fn:concat($rel-path, "/actview.xml"))/xh:div, 
+                local:app-tmpl("actview.xml")/xh:div, 
                 $actcontent)
              }
 	else
         local:ignore()
-(: the below is older code :)

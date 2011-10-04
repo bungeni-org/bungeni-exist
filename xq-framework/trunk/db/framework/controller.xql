@@ -145,7 +145,11 @@ return (: First process all framework requests :)
 									template:copy-and-replace($exist:path, local:app-tmpl("acts-list.xml")/xh:div, $act-entries-tmpl)
 								 } 
 								 return 
-									template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ($menus, $act-entries-repl)) 
+									template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, (
+										$menus, 
+										template:merge($exist:path, local:app-tmpl("act-list-page.xml"), $act-entries-repl)
+										)
+									)					 
     else if ($exist:resource eq 'searchbytitle') 
 		 then
 		   local:app-chain-forward("titlesearch.xql", "translate-titlesearch.xql")

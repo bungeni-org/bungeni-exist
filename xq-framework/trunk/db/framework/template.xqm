@@ -190,10 +190,10 @@ declare function local:set-meta($content as element(), $page-info as element()) 
     :)
     (: This condition is for the example template - adjust appropriately :)
 	
-    else if ($content/ancestor::xh:div[@id="tabnavigation"] and $content/self::xh:a) then (
+    else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:a) then (
 			if ($page-info/pg:navigation) then (
 				if ($content/self::xh:a[@href=$page-info/pg:navigation/text()]) then (
-					<a class="top-nav-current" href="$page-info/pg:navigation/text()">{$page-info/pg:navigation/text()}</a>
+					<a class="current" href="{$page-info/pg:navigation/text()}">{$page-info/pg:navigation/text()}</a>
 				) 
 				else  
 				 $content
@@ -204,10 +204,10 @@ declare function local:set-meta($content as element(), $page-info as element()) 
 	(:~
 	Set the subnavigation tab 
     :)
-    else if ($content/ancestor::xh:div[@id="tabnavigation"] and $content/self::xh:a) then (
+    else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:a) then (
 			if ($page-info/pg:subnavigation) then (
 				if ($content/self::xh:a[@href=$page-info/pg:subnavigation/text()]) then (
-					<a class="sub-nav-current" href="$page-info/pg:subnavigation/text()">{$page-info/pg:subnavigation/text()}</a>
+					<a class="current" href="{$page-info/pg:subnavigation/text()}">{$page-info/pg:subnavigation/text()}</a>
 				) 
 				else  
 				 $content

@@ -16,7 +16,7 @@ import module namespace config = "http://bungeni.org/xquery/config" at "config.x
 import module namespace template = "http://bungeni.org/xquery/template" at "template.xqm";
 
 (:app modules:)
-import module namespace lex = "http://exist.bungeni.org/lex" at "lexapp/lex.xqm";
+import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni/bungeni.xqm";
 
 (: xhtml 1.1 :)
 (:
@@ -34,11 +34,10 @@ declare variable $exist:path external;
 declare variable $exist:root external;
 declare variable $exist:controller external;
 
-
+(: The default template :)
+declare variable $DEFAULT-TEMPLATE := "portal.html";
 declare variable $REL-PATH := fn:concat($exist:root, '/', $exist:controller);
 declare variable $APP-PREF := $config:app-prefix;
-(: The default template :)
-declare variable $DEFAULT-TEMPLATE := "template.xhtml";
 
 (: Helper Functions :)
 
@@ -129,42 +128,48 @@ let $menus := local:app-tmpl("menu.xml")
 return (: First process all framework requests :)
     if ($exist:path eq "" ) then
     	local:redirect(fn:concat(request:get-uri(), "/"))
-    else if($exist:path eq "/" or $exist:path eq "/home" or $exist:path eq "/index.xml") then
+    else if($exist:path eq "/" or $exist:path eq "/home" or $exist:path eq "/index.xml") 
+         then
     		template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("index.xml")))
 	(: Now we process application requests :)
+	else if ($exist:path eq "/business")
+		 then 
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("business.xml")))
+	else if ($exist:path eq "/committees")
+		 then 
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("committees.xml")))	             
+	else if ($exist:path eq "/bills")
+		 then 
+           let $act-entries-tmpl := bun:get-acts(),
+		       $act-entries-repl:= document {
+									template:copy-and-replace($exist:path, local:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
+								 } 
+								 return 
+									template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ($menus, $act-entries-repl)) 
+	else if ($exist:path eq "/members")
+		 then 
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("members.xml")))
+	else if ($exist:path eq "/politicalgroups")
+		 then 
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("politicalgroups.xml")))	           
 	else if ($exist:path eq "/by-title")
 		 then 
            template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("by-title.xml")))
 	else if ($exist:path eq "/by-keyword")
 		 then 
            template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("by-keyword.xml")))
-	else if ($exist:path eq "/by-capno")
-		 then 
-           let $act-entries-tmpl := lex:get-acts(),
-		       $act-entries-repl:= document {
-									template:copy-and-replace($exist:path, local:app-tmpl("acts-list.xml")/xh:div, $act-entries-tmpl)
-								 } 
-								 return 
-									template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, (
-										$menus, 
-										template:merge($exist:path, local:app-tmpl("act-list-page.xml"), $act-entries-repl)
-										)
-									)					 
     else if ($exist:resource eq 'searchbytitle') 
 		 then
 		   local:app-chain-forward("titlesearch.xql", "translate-titlesearch.xql")
  	else if ($exist:resource eq 'viewacttoc')
          then 
           local:app-chain-forward("viewacttoc.xql", "translate-toc.xql")
-    else if ($exist:resource eq 'actview') then 
-		  let $actcontent := lex:get-act(local:get("actid"),local:get("pref"),"actfull.xsl"),
-              $actdoc := document {
+    else if ($exist:resource eq 'actview') 
+		 then 
+		  let $actcontent := bun:get-act(local:get("actid"),local:get("pref"),"actfull.xsl") return document {
                 template:copy-and-replace($exist:path,
                 local:app-tmpl("actview.xml")/xh:div, 
                 $actcontent)
-               } return 
-                  template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ($menus, $actdoc)) 
-                            
-             
+             }
 	else
         local:ignore()

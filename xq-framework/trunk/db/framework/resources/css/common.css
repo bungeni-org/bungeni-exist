@@ -1,0 +1,188 @@
+body {background-color:#eeeeee}
+
+div#header {
+    width:100%;
+    margin:0;
+    height:98px;
+    background-color:#434343;
+    padding-top:10px;
+}
+div#sub-header {
+    clear:none;
+    width:100%;
+    margin:0;
+    margin-top:-4px;
+    height:27px;
+    background-color:#7e7e7e;
+    padding-top:0px;
+}
+
+div#header-banner {
+    width:960px;
+    height:78px;
+    margin:0 auto 15px auto;
+    background:transparent url(../imgs/portal_banner.png) no-repeat;
+}
+div.header-nav {
+    display:block;
+    width:960px;
+    height:auto;
+    margin:3px auto 0 auto;
+}
+.theme-lev-1 {
+    font-family:Arial,"Times New Roman";
+    font-size:0.8em;
+}
+.theme-lev-1-only {
+    font-family:Arial,"Times New Roman";
+}
+.lev-1-search {
+    margin:auto 0px 10px auto;
+    width:600px;
+    height:20px;
+    text-align:right;
+}
+
+div#main-wrapper {
+    width:960px;
+    height:auto;
+    margin:0 auto 0 auto;
+    margin-top:20px;
+    background-color:tranparent;
+}
+.portal .main-content {
+
+}
+h1#doc-title {
+    text-align:right;
+    text-shadow: 0px 1px 0px #c1c1c0;
+    color:#f79f0e;
+    padding:0;
+    margin:0;
+    margin-top:20px !important;
+    font-weight:normal;
+}
+h1#doc-title-plain {
+    text-align:right;
+    color:#f79f0e;
+    padding:0;
+    margin:0;
+    font-weight:normal;
+}
+h1#doc-title-blue {
+    text-align:right;
+    text-shadow: 0px 1px 0px #c1c1c0;
+    color:#2b92be;
+    padding:0;
+    margin:0;
+    font-weight:normal;
+    font-size:1.5em;
+}
+div#title-holder {
+    clear:none;    
+}
+
+#doc-pre {
+    position:relative;
+    width:100%;
+}
+
+.ls-tabs {
+    position:relative;
+    width:100%;
+}
+
+div#main-doc {
+    width:960px;
+    height:auto;
+    min-height:400px;
+    margin:0px auto 20px auto;
+    padding-bottom:10px;
+    background-color:#fff;
+    border:1px solid #c1c1c0;
+}
+
+.toggler {
+    cursor:pointer;
+}
+
+div#doc-downloads {
+    height:20px;
+    padding:10px 10px 0 0;
+    text-align:right;
+}
+
+.rounded-eigh {
+    -moz-border-radius: 8px; 
+    -webkit-border-radius:8px; 
+    border-radius:8px;
+}      
+.rounded-five {
+    -moz-border-radius: 5px; 
+    -webkit-border-radius:5px; 
+    border-radius:5px;
+}  
+
+.doc-headers {
+    color:#000;
+    text-shadow: 0px .5px 0px #c1c1c0;
+    font-weight:normal;
+    font-size:1.1em;
+} 
+
+.doc-headers-darkgrey {
+    color:#4f4f4f;
+    text-shadow: 0px .5px 0px #c1c1c0;
+} 
+
+#doc-heading {
+    text-align:center;
+    text-transform:uppercase;
+}
+#doc-img {
+    display:block;
+    margin:0 auto 0 auto;
+}
+#doc-item-no {
+    text-align:center;
+}
+#doc-item-desc {
+    text-align:center;
+    text-transform:uppercase;
+}
+#doc-item-desc2 {
+    text-align:center;
+}
+
+#doc-content-area {
+    margin:10px auto 10px auto;
+    width:695px;
+    text-align:justify;
+}
+
+.doc-toggle {
+    margin:0 auto 0 10px;
+}    
+ 
+ .toggler-list {
+    margin-left:10px;
+    width: 180px;
+    color: #AAAAA9;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, .1);
+    font-weight: normal;
+    text-decoration: none;
+    cursor:pointer;
+ }
+ 
+/*reusables*/
+.ele-center {
+    margin:0 auto 0 auto;
+    width:960px;
+}
+.ele-center-ws {
+    margin:0 auto 0 auto;
+    width:96%;
+}   
+.bspacer10 {
+    margin-bottom:10px;
+}  

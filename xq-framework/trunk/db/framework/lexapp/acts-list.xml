@@ -1,0 +1,1 @@
+<div xmlns="http://www.w3.org/1999/xhtml" id="content"><page:info xmlns:page="http://bungeni.org/page"><page:title>Browse Acts</page:title><page:navigation>by-title</page:navigation></page:info><h2>Browse Acts</h2><ul id="actList"><li><a href="{$uri}"/>{$title}</li></ul></div>

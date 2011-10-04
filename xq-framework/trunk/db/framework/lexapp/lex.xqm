@@ -3,6 +3,7 @@ import module namespace lexcommon = "http://exist.bungeni.org/lexcommon" at "com
 
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace transform="http://exist-db.org/xquery/transform";
+declare namespace xh = "http://www.w3.org/1999/xhtml";
 
 (:
 Library for common lex functions
@@ -16,6 +17,26 @@ declare function lex:get-doc($actid as xs:string) as element() {
       let $c := string($match)
       where $c = $actid
     return $match/ancestor::akomaNtoso
+};
+
+
+declare function lex:get-acts() as element(xh:ul) {
+    <xh:ul id="actList">
+    {
+	for $match in subsequence(collection(lexcommon:get-lex-db())//akomaNtoso,1,15)
+       let $actid := $match//docNumber[@id='ActIdentifier']/text()
+       return element xh:li{
+ 				element xh:a {
+                    attribute href { fn:concat("actview?actid=", $actid, "&amp;pref=ts") },
+                    $match//docTitle[@id='ActTitle']/text()
+                },
+                element xh:span {
+					attribute class {"act-date"},
+					$match//docDate[@refersTo='#CommencementDate']/text()
+				}
+		}
+    }
+    </xh:ul>
 };
 
 

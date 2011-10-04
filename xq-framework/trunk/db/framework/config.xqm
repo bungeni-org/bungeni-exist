@@ -13,7 +13,7 @@ declare variable $config:xml-collection := fn:concat($config:db-root-collection,
 (: Framework files :)
 declare variable $config:fw-root := fn:concat($config:db-root-collection, "/framework");
 (: Application files :)
-declare variable $config:app-prefix := "lexapp/";
+declare variable $config:app-prefix := "bungeni/";
 (: Application root :)
 declare variable $config:fw-app-root := fn:concat($config:fw-root, "/", $config:app-prefix);
 (: Ontology files :)

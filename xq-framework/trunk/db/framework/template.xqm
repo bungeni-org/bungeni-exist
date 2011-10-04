@@ -167,38 +167,68 @@ Extended API added by Ashok
 :)
 
 (:~
-: Set the title on the page
+: Apply the metadata attributes on the page
 : 
 : @param content
 :   XHTML content template
 :
-: @param title
-:   The title of the page
+: @param page-info
+:   The page-info element 
 :)
-declare function template:set-title($content as element(), $title as xs:string) as  element() {
-	if ($content/self::xh:title)
-	then <title>{$title}</title>
-	else element { node-name($content)}
+declare function local:set-meta($content as element(), $page-info as element()) as  element() {
+    (:~
+    Check set the title from the page-info attribute 
+    :)
+
+	if ($content/self::xh:title and  $page-info/pg:title) then (
+		<title>{$page-info/pg:title/text()}</title>
+    )
+
+    (:~ 
+    Set the navigation tab to the active one for the page - the condition to determine the active
+    tab is slight more involved hence the nested if 
+    :)
+    (: This condition is for the example template - adjust appropriately :)
+	
+    else if ($content/ancestor::xh:div[@id="tabnavigation"] and $content/self::xh:a) then (
+			if ($page-info/pg:navigation) then (
+				if ($content/self::xh:a[@href=$page-info/pg:navigation/text()]) then (
+					<a class="top-nav-current" href="$page-info/pg:navigation/text()">{$page-info/pg:navigation/text()}</a>
+				) 
+				else  
+				 $content
+			)
+			else
+			  $content
+	)
+	(:~
+	Set the subnavigation tab 
+    :)
+    else if ($content/ancestor::xh:div[@id="tabnavigation"] and $content/self::xh:a) then (
+			if ($page-info/pg:subnavigation) then (
+				if ($content/self::xh:a[@href=$page-info/pg:subnavigation/text()]) then (
+					<a class="sub-nav-current" href="$page-info/pg:subnavigation/text()">{$page-info/pg:subnavigation/text()}</a>
+				) 
+				else  
+				 $content
+			)
+			else
+			  $content
+	)
+
+	else 
+    (:~
+     return the default 
+     :)
+  		element { node-name($content)}
 		  		 {$content/@*, 
 					for $child in $content/node()
 						return if ($child instance of element())
-							   then template:set-title($child, $title)
+							   then local:set-meta($child, $page-info)
 							   else $child
 				 }
 };
 
-
-declare function template:set-navigation-active($content as element() , $active as xs:string) as element() {
-	if ($content/self::xh:a[@href=$active] and $content/ancestor::xh:div[@class="menu"])
-	then <a class="current" href="$active">{$active}</a>
-	else element { node-name($content)}
-		  		 {$content/@*, 
-					for $child in $content/node()
-						return if ($child instance of element())
-							   then template:set-navigation-active($child, $active)
-							   else $child
-				 }
-};
 
 (:~
 : Remove the page: namespace
@@ -219,6 +249,9 @@ declare function template:filter-page-namespace(
 };
 
 
+
+
+
 declare function template:process-page-meta($doc as element()) as element() {
 	(: Get the page info element :)
 	let $page-info := $doc//pg:info
@@ -227,11 +260,9 @@ declare function template:process-page-meta($doc as element()) as element() {
     (: For now only the title is specified in page namespace - but this will be expanded
        to support other things :)
 	(: Set the title and return the page :)
-	let $output := template:set-title($final, $page-info/pg:title/text())
+	(:let $output := template:set-title($final, $page-info/pg:title/text()) :)
 	(: For navigation menu to highlight current page :)
-	return if ($page-info/pg:navigation) then
-	           template:set-navigation-active($output, $page-info/pg:navigation/text())
-	       else
-	           $output
+	return
+		local:set-meta($final, $page-info)
 };
 

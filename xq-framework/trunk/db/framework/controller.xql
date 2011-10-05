@@ -137,10 +137,10 @@ return (: First process all framework requests :)
            template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("business.xml")))
 	else if ($exist:path eq "/committees")
 		 then 
-           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("committees.xml")))	             
+           template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("committees.xml")))      
 	else if ($exist:path eq "/bills")
 		 then 
-           let $act-entries-tmpl := bun:get-acts(),
+           let $act-entries-tmpl :=  bun:get-bills(),
 		       $act-entries-repl:= document {
 									template:copy-and-replace($exist:path, local:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
 								 } 
@@ -158,18 +158,32 @@ return (: First process all framework requests :)
 	else if ($exist:path eq "/by-keyword")
 		 then 
            template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ( $menus, local:app-tmpl("by-keyword.xml")))
+	else if ($exist:path eq "/by-capno")
+		 then 
+           let $act-entries-tmpl := bun:get-bills(),
+		       $act-entries-repl:= document {
+									template:copy-and-replace($exist:path, local:app-tmpl("acts-list.xml")/xh:div, $act-entries-tmpl)
+								 } 
+								 return 
+									template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, (
+										$menus, 
+										template:merge($exist:path, local:app-tmpl("act-list-page.xml"), $act-entries-repl)
+										)
+									)             
     else if ($exist:resource eq 'searchbytitle') 
 		 then
 		   local:app-chain-forward("titlesearch.xql", "translate-titlesearch.xql")
  	else if ($exist:resource eq 'viewacttoc')
          then 
           local:app-chain-forward("viewacttoc.xql", "translate-toc.xql")
-    else if ($exist:resource eq 'actview') 
-		 then 
-		  let $actcontent := bun:get-act(local:get("actid"),local:get("pref"),"actfull.xsl") return document {
+    else if ($exist:resource eq 'actview') then 
+		  let $actcontent := bun:get-act(local:get("actid"),local:get("pref"),"actfull.xsl"),
+              $actdoc := document {
                 template:copy-and-replace($exist:path,
                 local:app-tmpl("actview.xml")/xh:div, 
                 $actcontent)
-             }
+               } return 
+                  template:process-template($REL-PATH, $exist:path, $DEFAULT-TEMPLATE, ($menus, $actdoc))
 	else
         local:ignore()
+

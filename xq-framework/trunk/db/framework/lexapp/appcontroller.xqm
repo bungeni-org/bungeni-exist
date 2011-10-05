@@ -1,4 +1,9 @@
 xquery version "1.0";
+(:~
+
+Application controller implementation of the lexapp sample application
+
+:)
 
 module namespace appcontroller = "http://bungeni.org/xquery/appcontroller";
 
@@ -22,12 +27,30 @@ import module namespace template = "http://bungeni.org/xquery/template" at "../t
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 
 
-
+(:~
+Application specific module imports
+:)
 import module namespace lex = "http://exist.bungeni.org/lex" at "lex.xqm";
 
 (:~
-All applications using the XQ framework must implement the appcontroller namespace module with the function 
-called appcontroller:controller() in the same pattern as below
+: All applications using the XQ-framework must implement application controllers on the below pattern.
+: The controller must always be in the http://bungeni.org/exist/appcontroller namespace, and implement
+: a controller function with the parameters specified.
+:
+: @param EXIST-PATH
+:   The last part of the request URI after the section leading to the controller. If the resource example.xml 
+:   resides within the same directory as the controller query, $EXIST-PATH will be /example.xml.
+: @param EXIST-ROOT
+:   The root of the current controller hierarchy. This may either point to the file system or to a collection 
+:   in the database. Use this variable to locate resources relative to the root of the application.
+: @param EXIST-CONTROLLER
+:   The part of the URI leading to the current controller script. For example, if the request path is 
+:   /xquery/test.xql and the controller is in the xquery directory, $exist:controller would contain /xquery.
+: @param EXIST-RESOURCE
+:   The section of the URI after the last /, usually pointing to a resource, e.g. example.xml.
+: @param REL-PATH
+:   This EXIST-ROOT & EXIST-CONTROLLER concatenated by a /
+:
 :)
 declare function appcontroller:controller($EXIST-PATH as xs:string, 
                                 $EXIST-ROOT as xs:string, 

@@ -3,18 +3,25 @@
     <resource type="XMLResource" name="README.txt" owner="admin" group="dba" mode="644" created="2011-10-03T10:56:44+03:00" modified="2011-10-03T10:56:44+03:00" filename="README.txt" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="645" created="2011-09-12T16:14:46+03:00" modified="2011-09-16T16:57:31+03:00" filename="config.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:14:46+03:00" modified="2011-09-16T16:57:31+03:00" filename="config.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="755" created="2011-09-12T16:10:51+03:00" modified="2011-10-03T13:04:04+03:00" filename="controller.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-10-03T13:04:04+03:00" filename="controller.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="template.xhtml" owner="SYSTEM" group="dba" mode="645" created="2011-10-03T10:51:38+03:00" modified="2011-10-03T10:51:38+03:00" filename="template.xhtml" mimetype="application/xhtml+xml" namedoctype="html" publicid="-//W3C//DTD XHTML 1.1//EN" systemid="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    <resource type="XMLResource" name="portal.html" owner="admin" group="dba" mode="645" created="2011-10-05T11:04:28+03:00" modified="2011-10-05T11:04:28+03:00" filename="portal.html" mimetype="text/html">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="template.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-09-23T16:54:04+03:00" filename="template.xqm" mimetype="application/xquery">
+    <resource type="XMLResource" name="template.xhtml" owner="admin" group="dba" mode="755" created="2011-10-05T11:14:39+03:00" modified="2011-10-05T11:14:39+03:00" filename="template.xhtml" mimetype="application/xhtml+xml" namedoctype="html" publicid="-//W3C//DTD XHTML 1.1//EN" systemid="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="template.xqm" owner="SYSTEM" group="dba" mode="645" created="2011-09-12T16:10:51+03:00" modified="2011-09-23T16:54:04+03:00" filename="template.xqm" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="workspace.html" owner="admin" group="dba" mode="644" created="2011-10-05T11:18:37+03:00" modified="2011-10-05T11:18:37+03:00" filename="workspace.html" mimetype="text/html">
         <acl entries="0" version="1"/>
     </resource>
     <subcollection name="lexapp" filename="lexapp"/>
-    <subcollection name="resources" filename="resources"/>
+    <subcollection name="bungeni" filename="bungeni"/>
+    <subcollection name="assets" filename="assets"/>
 </collection>

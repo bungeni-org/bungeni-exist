@@ -1,0 +1,6 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/yahoo-dom-event" owner="admin" group="dba" mode="644" created="2011-10-05T11:06:53+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="yahoo-dom-event.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="yahoo-dom-event.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

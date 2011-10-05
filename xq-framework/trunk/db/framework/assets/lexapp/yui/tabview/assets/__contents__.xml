@@ -1,0 +1,19 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/tabview/assets" owner="admin" group="dba" mode="644" created="2011-10-05T11:06:53+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="border_tabs.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="border_tabs.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="loading.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="loading.gif" mimetype="image/gif">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="skin-sam.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="skin-sam.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="tabview-core.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="tabview-core.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="tabview.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="tabview.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <subcollection name="skins" filename="skins"/>
+</collection>

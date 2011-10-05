@@ -1,0 +1,6 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/scripts" owner="admin" group="dba" mode="644" created="2011-10-05T11:06:53+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="lex.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="lex.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

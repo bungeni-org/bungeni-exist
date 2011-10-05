@@ -1,0 +1,4 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/autocomplete/assets/skins" owner="admin" group="dba" mode="644" created="2011-10-05T11:06:53+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <subcollection name="sam" filename="sam"/>
+</collection>

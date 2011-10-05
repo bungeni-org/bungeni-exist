@@ -1,0 +1,22 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/calendar/assets" owner="admin" group="dba" mode="644" created="2011-10-05T11:06:53+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="BinaryResource" name="calendar-core.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="calendar-core.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="calendar.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="calendar.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="calgrad.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="calgrad.png" mimetype="image/png">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="callt.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="callt.gif" mimetype="image/gif">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="calrt.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="calrt.gif" mimetype="image/gif">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="calx.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="calx.gif" mimetype="image/gif">
+        <acl entries="0" version="1"/>
+    </resource>
+    <subcollection name="skins" filename="skins"/>
+</collection>

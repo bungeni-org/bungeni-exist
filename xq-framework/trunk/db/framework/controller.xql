@@ -1,5 +1,14 @@
 xquery version "1.0";
 
+(:~
+
+The XQ-framework allows switching controllers between applications using the framework.
+
+The only editable part of this file is the URI to the appcontroller module 
+
+:)
+
+
 declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 
 (:~
@@ -8,6 +17,13 @@ config module - this may need to be customized per module
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 (:~
 app controller module - switch between applications by switching  appcontroller modules 
+:)
+
+
+(:~
+
+Change the path to the appcontroller to the appcontroller of your application  
+
 :)
 import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "lexapp/appcontroller.xqm";
 
@@ -36,7 +52,7 @@ let $ret := appcontroller:controller(
                 $exist:path, 
                 $exist:root, 
                 $exist:controller, 
-                $exist:resource, 
+                $exist:resource,
                 $REL-PATH
             ) return $ret
     

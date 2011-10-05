@@ -1,4 +1,4 @@
-module namespace lexcommon = "http://exist.bungeni.org/lexcommon";
+module namespace bungenicommon = "http://bungeni.org/pis/common";
 
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace request="http://exist-db.org/xquery/request";
@@ -14,32 +14,18 @@ Library for common functions
 (:
 Get the path to the lex collection
 :)
-declare function lexcommon:get-lex-db() as xs:string {
+declare function bungenicommon:get-lex-db() as xs:string {
     $config:xml-collection
  };
  
- (:
- Used as a data source for the Title search auto-complete
- :)
- declare function lexcommon:get-acts-jsonds() as xs:string {
-     xs:string(concat(lexcommon:get-server(), "/exist/kenyalex/actsbyidasjson.xql"))
- };
  
  
- (:
- Used as a data-source for the Cap-no search auto-complete
- :)
-declare function lexcommon:get-actsbycapno-jsonds() as xs:string {
-     xs:string(concat(lexcommon:get-server(), "/exist/kenyalex/actsjsonbycapno.xql"))
- };
- 
- 
-declare function lexcommon:get-xslt($value as xs:string) as document-node() {
+declare function bungenicommon:get-xslt($value as xs:string) as document-node() {
     doc(fn:concat($config:fw-app-root, $value))
 };
  
 
- declare function lexcommon:get-parameters($value as xs:string, $delimiter as xs:string) as node() {
+ declare function bungenicommon:get-parameters($value as xs:string, $delimiter as xs:string) as node() {
          let $parsed-tokens := tokenize($value ,$delimiter)
          return 
          <tokens>
@@ -53,7 +39,7 @@ declare function lexcommon:get-xslt($value as xs:string) as document-node() {
 (:
 Returns the server running the current scripts
 :)
-declare function lexcommon:get-server() as xs:string {
+declare function bungenicommon:get-server() as xs:string {
     let $url := concat("http://" , request:get-server-name(),":" ,request:get-server-port())
     return $url
 

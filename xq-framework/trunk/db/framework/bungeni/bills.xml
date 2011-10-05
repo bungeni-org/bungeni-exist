@@ -1,9 +1,1 @@
-<div xmlns="http://www.w3.org/1999/xhtml" id="doc-container"><page:info xmlns:page="http://bungeni.org/page"><page:title>BUSINESS | BILLS</page:title><page:navigation>business</page:navigation><page:subnavigation>bills</page:subnavigation></page:info><div id="doc-listing"><div id="tmpsanity"><div style="width:550px;clear:both"><div style="float:left" class="toggler-list" id="expand-all">+ expand all</div><div id="paginator" class="paginate" align="right" style="float:right;height:30px;"><a href="#" class="curr-no">1</a> &#160; 
-                    <a href="#">2</a> &#160; 
-                    <a href="#">3</a> &#160; 
-                    <a href="#">4</a> &#160; 
-                    <a href="#">5</a> &#160; 
-                    <a href="#">6</a> &#160; 
-                    <a href="#">7</a> &#160; 
-                    <a href="#">8</a> &#160;
-                    <a href="#">Next &gt;</a></div></div><ul id="list-toggle"><li><a href="#1">Bill title</a><span>+</span><div class="doc-toggle"><table class="doc-tbl-details"><tr><td/></tr></table></div></li></ul></div></div></div>
+<div xmlns="http://www.w3.org/1999/xhtml" id="content"><page:info xmlns:page="http://bungeni.org/page"><page:title>BUSINESS | BILLS</page:title><page:navigation>business</page:navigation><page:subnavigation>bills</page:subnavigation></page:info><div id="doc-listing"/></div>

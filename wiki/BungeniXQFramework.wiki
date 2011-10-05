@@ -1,0 +1,93 @@
+#summary the Bungeni XQ Framework
+#labels bungeni,Featured
+
+= Introduction = 
+
+The Bungeni XQ framework is a XQuery web framework. It makes use of eXist's controller XML support (see http://exist-db.org/urlrewrite.html ).  The Bungeni XQ framework is an adaption of the seewhatithink.com application (see [http://sourceforge.net/projects/seewhatithink/] ).
+
+= Setup = 
+
+Checkout the framework from svn :
+
+{{{
+svn co http://bungeni-exist.googlecode.com/svn/xq-framework/trunk/db/framework/ fw 
+}}}
+
+This will checkout the framework as a eXist db backup.
+
+Import the framework into your eXist installation. It will get imported as the `/db/framework` folder into eXist.
+
+= Usage = 
+
+The framework allows creation of applications - the application must reside in a sub-folder within the framework.
+
+The application is configured via a configuration file in the framework root. Within the `/db/framework/config.xqm`, the following configuration needs to be done :
+
+ * Set the xml collection that you want to query : 
+  {{{
+  declare variable $config:xml-collection := fn:concat($config:db-root-collection, "/kenyalex");
+  }}}
+ * Set the folder of the application, e.g. if you are application is in a folder called `lexapp` within the `/db/framework` , set the `app-prefix` config to `lexapp/` (note the trailing slash) :
+  {{{
+  declare variable $config:app-prefix := "lexapp/";
+  }}}
+ * Set the default template to be used by the application, this template file must reside in the framework collection : 
+  {{{  
+  declare variable $config:DEFAULT-TEMPLATE := "template.xhtml";
+  }}}
+
+= Application structure = 
+
+The application must define a "Application Controller" module - this must use the following pattern :
+
+{{{
+
+xquery version "1.0";
+
+
+module namespace appcontroller = "http://bungeni.org/xquery/appcontroller";
+(:~
+: All applications using the XQ-framework must implement application controllers on the below pattern.
+: The controller must always be in the http://bungeni.org/exist/appcontroller namespace, and implement
+: a controller function with the parameters specified.
+:
+: @param EXIST-PATH
+:   The last part of the request URI after the section leading to the controller. If the resource example.xml 
+:   resides within the same directory as the controller query, $EXIST-PATH will be /example.xml.
+: @param EXIST-ROOT
+:   The root of the current controller hierarchy. This may either point to the file system or to a collection 
+:   in the database. Use this variable to locate resources relative to the root of the application.
+: @param EXIST-CONTROLLER
+:   The part of the URI leading to the current controller script. For example, if the request path is 
+:   /xquery/test.xql and the controller is in the xquery directory, $exist:controller would contain /xquery.
+: @param EXIST-RESOURCE
+:   The section of the URI after the last /, usually pointing to a resource, e.g. example.xml.
+: @param REL-PATH
+:   This EXIST-ROOT & EXIST-CONTROLLER concatenated by a /
+:
+:)
+  declare function appcontroller:controller($EXIST-PATH as xs:string, 
+                                $EXIST-ROOT as xs:string, 
+                                $EXIST-CONTROLLER as xs:string, 
+                                $EXIST-RESOURCE as xs:string, 
+                                $REL-PATH as xs:string) {
+     (: Your code :)
+  }
+
+}}}
+
+This application controller is then specified via an import in the framework's `controller.xql`
+
+{{{
+import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "lexapp/appcontroller.xqm";
+
+....
+}}}
+
+For an example of how the appcontroller module see the appcontroller.xqm of the `lexapp` application :
+   [http://bungeni-exist.googlecode.com/svn/xq-framework/trunk/db/framework/lexapp/appcontroller.xqm appcontroller.xqm]
+
+= Templating =
+
+TO DO  
+

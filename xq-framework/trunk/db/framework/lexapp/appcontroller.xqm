@@ -78,6 +78,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, 
                     ( fw:app-tmpl("menu.xml"), fw:app-tmpl("by-keyword.xml"))
                )
+        else if ($EXIST-PATH eq "/by-capno")
+		     then 
+               let $act-entries-tmpl := lex:get-acts(),
+		           $act-entries-repl:= document {
+						 template:copy-and-replace(
+						   $EXIST-PATH, 
+						   fw:app-tmpl("acts-list.xml")/xh:div, 
+						   $act-entries-tmpl
+						  )
+					   } return template:process-template(
+					       $REL-PATH, 
+					       $EXIST-PATH, 
+					       $config:DEFAULT-TEMPLATE,(
+					           fw:app-tmpl("menu.xml"),	
+					           template:merge(
+					               $EXIST-PATH, 
+					               fw:app-tmpl("act-list-page.xml"), 
+					               $act-entries-repl
+					           )
+					       )
+					     )			               
         else if ($EXIST-RESOURCE eq 'searchbytitle') 
     		 then
     		   fw:app-chain-forward("titlesearch.xql", "translate-titlesearch.xql")
@@ -86,11 +107,18 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
               fw:app-chain-forward("viewacttoc.xql", "translate-toc.xql")
         else if ($EXIST-RESOURCE eq 'actview') 
     		 then 
-    		  let $actcontent := lex:get-act(fw:get("actid"),fw:get("pref"),"actfull.xsl") return document {
-                    template:copy-and-replace($EXIST-PATH,
-                    fw:app-tmpl("actview.xml")/xh:div, 
-                    $actcontent)
-                 }
-    	else
+		        let $actcontent := lex:get-act(fw:get("actid"),fw:get("pref"),"actfull.xsl"),
+                    $actdoc := document {
+                        template:copy-and-replace($EXIST-PATH,
+                        fw:app-tmpl("actview.xml")/xh:div, 
+                        $actcontent)
+                       } return 
+                          template:process-template(
+                            $REL-PATH, 
+                            $EXIST-PATH, 
+                            $config:DEFAULT-TEMPLATE, 
+                            (fw:app-tmpl("menu.xml"), $actdoc)
+                          ) 
+        else
             fw:ignore()
 };

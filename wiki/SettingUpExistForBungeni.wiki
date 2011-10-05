@@ -1,24 +1,33 @@
 #summary building and configuring exist from source
 #labels bungeni,Featured
 
+= Reference = 
+
+[http://exist.sourceforge.net/building.html http://exist.sourceforge.net/building.html]
+
 = Pre-requisites =
 
- * Working JDK installation (1.5 or 1.6)
+ * Working JDK installation (1.6)
  * Ant
 
 = Building eXist =
 
-Checkout source of eXist
+Checkout source of eXist into a separate folder 
 
 {{{
-svn co https://exist.svn.sourceforge.net/svnroot/exist/trunk/eXist
+svn co https://exist.svn.sourceforge.net/svnroot/exist/trunk/eXist ~/eXist
+}}}
+
+Configure extensions, by enabling XSLFO module, edit ~/eXist/extensions/build.properties and enable the xslfo module :
+{{{
+# XSL FO transformations (Uses Apache FOP)
+include.module.xslfo = true
 }}}
 
 Now build eXist using ant 
 
 {{{
-JAVA_HOME=/path/to/java/home ./build.sh jar
-JAVA_HOME=/path/to/java/home ./build.sh extension-modules
+JAVA_HOME=/path/to/java/home ./build.sh all
 }}}
 
 
@@ -39,8 +48,6 @@ JAVA_HOME=/path/to/java/home ./build.sh extension-modules
 {{{
    <transformer class="net.sf.saxon.TransformerFactoryImpl"/>
 }}}
- * Add the following saxon jar files to lib/endorsed :
-    * saxon9.jar, saxon9-dom.jar, saxon9-xpath.jar , jakarta-regexp14.jar
  * Import the data into eXist from svn : [http://bungeni-exist.googlecode.com/svn/trunk/database /svn/trunk/database]
  * Add a reference to the schema in webapp/WEB-INF/catalog.xml :
      {{{

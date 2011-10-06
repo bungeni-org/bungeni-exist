@@ -33,19 +33,25 @@
     <resource type="XMLResource" name="app.xqm" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:13+03:00" modified="2011-10-03T15:42:13+03:00" filename="app.xqm" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="appcontroller.xqm" owner="SYSTEM" group="dba" mode="645" created="2011-10-05T16:02:10+03:00" modified="2011-10-05T18:23:27+03:00" filename="appcontroller.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="appcontroller.xqm" owner="admin" group="dba" mode="644" created="2011-10-05T16:02:10+03:00" modified="2011-10-06T18:58:54+03:00" filename="appcontroller.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="bill-listing.xql" owner="admin" group="dba" mode="644" created="2011-10-05T10:42:35+03:00" modified="2011-10-05T14:13:23+03:00" filename="bill-listing.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="bill-listing.xsl" owner="SYSTEM" group="dba" mode="645" created="2011-10-05T18:41:14+03:00" modified="2011-10-05T18:41:14+03:00" filename="bill-listing.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="bill-listing.xsl" owner="SYSTEM" group="dba" mode="645" created="2011-10-06T18:16:42+03:00" modified="2011-10-06T18:16:42+03:00" filename="bill-listing.xsl" mimetype="application/xslt+xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="bill.xml" owner="admin" group="dba" mode="644" created="2011-10-06T17:39:52+03:00" modified="2011-10-06T17:39:52+03:00" filename="bill.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="bill.xsl" owner="admin" group="dba" mode="644" created="2011-10-06T19:06:59+03:00" modified="2011-10-06T19:06:59+03:00" filename="bill.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="bills.xml" owner="SYSTEM" group="dba" mode="645" created="2011-10-05T18:02:18+03:00" modified="2011-10-05T18:02:18+03:00" filename="bills.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni.xqm" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:13+03:00" modified="2011-10-05T18:44:27+03:00" filename="bungeni.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="bungeni.xqm" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:13+03:00" modified="2011-10-06T18:59:28+03:00" filename="bungeni.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="business.xml" owner="admin" group="dba" mode="644" created="2011-10-04T12:07:33+03:00" modified="2011-10-04T12:07:33+03:00" filename="business.xml" mimetype="application/xml">
@@ -90,7 +96,7 @@
     <resource type="BinaryResource" name="translate-toc.xql" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:14+03:00" modified="2011-10-03T15:42:14+03:00" filename="translate-toc.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="viewacttoc.xql" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:14+03:00" modified="2011-10-03T15:42:14+03:00" filename="viewacttoc.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="viewacttoc.xql" owner="SYSTEM" group="dba" mode="645" created="2011-10-03T15:42:14+03:00" modified="2011-10-03T15:42:14+03:00" filename="viewacttoc.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

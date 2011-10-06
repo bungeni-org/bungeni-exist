@@ -13,8 +13,9 @@ uses bungenicommon
 (:~
 Local Constants
 :)
-declare variable $bun:PER-PAGE := 5;
-declare variable $bun:DEFAULT-PAGE := 1;
+declare variable $bun:OFF-SET := 1;
+declare variable $bun:LIMIT := 5;
+declare variable $bun:DOCNO := 1;
 
 (: Search for the doc matching the actid in the parameter and return the document :)
 declare function bun:get-doc($actid as xs:string) as element() {
@@ -36,13 +37,21 @@ declare function lex:paginator($totalcount as xs:integer, $offset as xs:integer,
 };
 :)
 declare function bun:paginator($offset as xs:integer) as element()+ {
-    for $match in subsequence(collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'],$offset,$bun:PER-PAGE)
-    return element xh:li{
- 			element xh:a {
+    (: get total documents for pagination :)
+    let $count := count(collection(bungenicommon:get-lex-db())//akomaNtoso)
+    
+    let $pageoutput := <span>{fn:concat("total: ", $count)}</span>
+     
+    (:for $match in collection(bungenicommon:get-lex-db())//akomaNtoso:)
+    (:for $i in (1 to $count)[. mod 10 = 0]
+    let $page := <a > </a> 
+    
+        element xh:a {
                 attribute href { fn:concat("?offset=", $bun:DEFAULT-PAGE, "&amp;limit=",$bun:PER-PAGE) },
-                "&#160;"
-            }
-    }
+                $bun:DEFAULT-PAGE
+            } return $page
+      :)
+    return $pageoutput
 };
 
 declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as element() {
@@ -52,15 +61,21 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
     
     (: input ANxml document in request :)
     let $doc := <docs> 
-    <paginator>{bun:paginator($offset)}</paginator>
-    {
-        for $match in subsequence(collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'],$offset,$bun:PER-PAGE)
-        return $match/ancestor::akomaNtoso     
-    } 
+        <paginator>
+        <count>{count(collection(bungenicommon:get-lex-db())//akomaNtoso)}</count>
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        </paginator>
+        <alisting>
+        {
+            for $match in subsequence(collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'],$offset,$limit)
+            return $match/ancestor::akomaNtoso     
+        } 
+        </alisting>
     </docs>
     
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, ()) 
        
 };  
 
@@ -73,6 +88,13 @@ declare function bun:get-toc($actid as xs:string) as element() {
     return $match/ancestor::akomaNtoso//preamble/toc
 };
 
+declare function bun:get-bill($billid as xs:string) as element() {
+
+    (: return AN Bill document as singleton :)
+    let $doc := collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'][text() eq $billid]/ancestor::akomaNtoso
+    
+    return $doc
+};
 
 declare function bun:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) {
     (: First get the act document :)

@@ -55,14 +55,24 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/bills")
     		 then 
                 let 
-                    $offset := xs:integer(request:get-parameter("offset",$bun:DEFAULT-PAGE)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:PER-PAGE)),                
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),                
                     $act-entries-tmpl :=  bun:get-bills($offset,$limit),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    	else if ($EXIST-PATH eq "/bill" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-bill($docnumber),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bill.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
                template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("politicalgroups.xml")))	           

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework" owner="admin" group="dba" mode="755" created="2011-09-12T16:08:36+03:00" version="1">
     <acl entries="0" version="1"/>
     <resource type="XMLResource" name="config.xml" owner="admin" group="dba" mode="644" created="2011-10-10T14:23:48+03:00" modified="2011-10-10T14:23:48+03:00" filename="config.xml" mimetype="application/xml">

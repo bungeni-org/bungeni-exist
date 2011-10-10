@@ -1,42 +1,43 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/scripts" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" version="1">
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/scripts" owner="admin" group="dba" mode="644" created="2011-10-05T11:08:29+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="3e4a0570feac8632f7823bd6ef29b66760b9defd.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="3e4a0570feac8632f7823bd6ef29b66760b9defd.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="3e4a0570feac8632f7823bd6ef29b66760b9defd.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="3e4a0570feac8632f7823bd6ef29b66760b9defd.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="application.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="application.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="application.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="application.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="expand.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="expand.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="expand.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="expand.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery-1.5.2.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery-1.5.2.min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery-1.5.2.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery-1.5.2.min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery-1.6.2.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery-1.6.2.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery-1.6.2.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery-1.6.2.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery-1.6.2.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery-1.6.2.min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery-1.6.2.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery-1.6.2.min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery-ui.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery-ui.min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery-ui.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery-ui.min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery.cookie.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery.cookie.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery.cookie.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery.cookie.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="jquery.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery.min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="jquery.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="jquery.min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="lex.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="lex.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="lex.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="lex.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="modernizr-2.0.6.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="modernizr-2.0.6.min.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="modernizr-2.0.6.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="modernizr-2.0.6.min.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="splitter.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="splitter.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="splitter.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="splitter.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

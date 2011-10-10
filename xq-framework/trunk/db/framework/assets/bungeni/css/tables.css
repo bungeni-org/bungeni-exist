@@ -51,7 +51,7 @@ table.tbl-tgl tr td {
 }
 
 table.timeline  {
-   width:600px;  
+   width:100%;  
    float:none;
    text-align:center;
    text-align:center;
@@ -90,6 +90,8 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
 /*PAGINATOR*/
 .paginate {
  	text-align:right;
+ 	float:right;
+ 	height:30px;
 }
 .paginate a 
 {
@@ -114,4 +116,5 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
 	border:1px solid #e3d3ff;
 	background:#fff !important;
 	cursor:text;
+	text-decoration:none;
 }

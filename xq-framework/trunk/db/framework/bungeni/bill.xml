@@ -1,1 +1,9 @@
-<div xmlns="http://www.w3.org/1999/xhtml" id="content"><page:info xmlns:page="http://bungeni.org/page"><page:title>BUSINESS | BILL ITEM</page:title><page:navigation>business</page:navigation><page:subnavigation>bills</page:subnavigation></page:info><div id="main-wrapper"/></div>
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" id="content">
+    <page:info xmlns:page="http://bungeni.org/page">
+        <page:title>BUSINESS | BILL ITEM</page:title>
+        <page:navigation>business</page:navigation>
+        <page:subnavigation>bills</page:subnavigation>
+    </page:info>
+    <div id="main-wrapper"/>
+</div>

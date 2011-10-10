@@ -21,7 +21,7 @@ div#header-banner {
     width:960px;
     height:78px;
     margin:0 auto 15px auto;
-    background:transparent url(../imgs/portal_banner.png) no-repeat;
+    background:transparent url(../images/portal_banner.png) no-repeat;
 }
 div.header-nav {
     display:block;
@@ -97,9 +97,15 @@ div#main-doc {
     height:auto;
     min-height:400px;
     margin:0px auto 20px auto;
+    padding-top:10px;
     padding-bottom:10px;
     background-color:#fff;
     border:1px solid #c1c1c0;
+}
+
+div.list-header {
+    width:550px;
+    clear:both;
 }
 
 .toggler {
@@ -172,6 +178,7 @@ div#doc-downloads {
     font-weight: normal;
     text-decoration: none;
     cursor:pointer;
+    float:left;
  }
  
 /*reusables*/

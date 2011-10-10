@@ -1,57 +1,57 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/images" owner="admin" group="dba" mode="644" created="2011-10-05T11:08:24+03:00" version="1">
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/images" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="New-Bungeni-Demo-LOGOS.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="New-Bungeni-Demo-LOGOS.png" mimetype="image/png">
+    <resource type="BinaryResource" name="New-Bungeni-Demo-LOGOS.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="New-Bungeni-Demo-LOGOS.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni-logo.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="bungeni-logo.png" mimetype="image/png">
+    <resource type="BinaryResource" name="bungeni-logo.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="bungeni-logo.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="download.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="download.png" mimetype="image/png">
+    <resource type="BinaryResource" name="download.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="download.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="dropdown_linkbg.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="dropdown_linkbg.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="dropdown_linkbg.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="dropdown_linkbg.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="empowered.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="empowered.png" mimetype="image/png">
+    <resource type="BinaryResource" name="empowered.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="empowered.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="expand.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="expand.png" mimetype="image/png">
+    <resource type="BinaryResource" name="expand.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="expand.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="footer.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="footer.png" mimetype="image/png">
+    <resource type="BinaryResource" name="footer.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="footer.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="minimize.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="minimize.png" mimetype="image/png">
+    <resource type="BinaryResource" name="minimize.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="minimize.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="mp.jpg" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="mp.jpg" mimetype="image/jpeg">
+    <resource type="BinaryResource" name="mp.jpg" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="mp.jpg" mimetype="image/jpeg">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="portal_banner.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="portal_banner.png" mimetype="image/png">
+    <resource type="BinaryResource" name="portal_banner.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="portal_banner.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="search_icon.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="search_icon.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="search_icon.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="search_icon.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="shadowAlpha.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="shadowAlpha.png" mimetype="image/png">
+    <resource type="BinaryResource" name="shadowAlpha.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="shadowAlpha.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="sort_none.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="sort_none.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="sort_none.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="sort_none.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="subnav_btn.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="subnav_btn.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="subnav_btn.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="subnav_btn.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="vdockbar-trans.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="vdockbar-trans.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="vdockbar-trans.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="vdockbar-trans.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="vgrabber.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="vgrabber.gif" mimetype="image/gif">
+    <resource type="BinaryResource" name="vgrabber.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="vgrabber.gif" mimetype="image/gif">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="workspace_logo.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:19+03:00" modified="2011-10-05T11:05:19+03:00" filename="workspace_logo.png" mimetype="image/png">
+    <resource type="BinaryResource" name="workspace_logo.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="workspace_logo.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="workspace_parliament.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:20+03:00" modified="2011-10-05T11:05:20+03:00" filename="workspace_parliament.png" mimetype="image/png">
+    <resource type="BinaryResource" name="workspace_parliament.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="workspace_parliament.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

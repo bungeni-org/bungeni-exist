@@ -88,12 +88,16 @@ declare function bun:get-toc($actid as xs:string) as element() {
     return $match/ancestor::akomaNtoso//preamble/toc
 };
 
-declare function bun:get-bill($billid as xs:string) as element() {
+declare function bun:get-bill($billid as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := bungenicommon:get-xslt("bill.xsl") 
 
     (: return AN Bill document as singleton :)
     let $doc := collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'][text() eq $billid]/ancestor::akomaNtoso
     
-    return $doc
+    return 
+        transform:transform($doc, $stylesheet, ()) 
 };
 
 declare function bun:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) {

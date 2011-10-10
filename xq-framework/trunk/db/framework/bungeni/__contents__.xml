@@ -1,9 +1,9 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/bungeni" owner="admin" group="dba" mode="644" created="2011-10-03T15:41:30+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="XMLResource" name="act-list-page.xml" owner="admin" group="dba" mode="645" created="2011-10-04T17:11:07+03:00" modified="2011-10-04T17:11:07+03:00" filename="act-list-page.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="act-list-page.xml" owner="admin" group="dba" mode="644" created="2011-10-04T17:11:07+03:00" modified="2011-10-04T17:11:07+03:00" filename="act-list-page.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="actfull.xsl" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:13+03:00" modified="2011-10-03T15:42:13+03:00" filename="actfull.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="actfull.xsl" owner="admin" group="dba" mode="645" created="2011-10-03T15:42:13+03:00" modified="2011-10-03T15:42:13+03:00" filename="actfull.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="acts-list.xml" owner="admin" group="dba" mode="644" created="2011-10-04T17:11:07+03:00" modified="2011-10-04T17:11:07+03:00" filename="acts-list.xml" mimetype="application/xml">
@@ -39,19 +39,19 @@
     <resource type="BinaryResource" name="bill-listing.xql" owner="admin" group="dba" mode="644" created="2011-10-05T10:42:35+03:00" modified="2011-10-05T14:13:23+03:00" filename="bill-listing.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="bill-listing.xsl" owner="SYSTEM" group="dba" mode="645" created="2011-10-06T18:16:42+03:00" modified="2011-10-06T18:16:42+03:00" filename="bill-listing.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="bill-listing.xsl" owner="SYSTEM" group="dba" mode="645" created="2011-10-10T06:45:41+03:00" modified="2011-10-10T06:45:41+03:00" filename="bill-listing.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="bill.xml" owner="admin" group="dba" mode="644" created="2011-10-06T17:39:52+03:00" modified="2011-10-06T17:39:52+03:00" filename="bill.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="bill.xml" owner="admin" group="dba" mode="644" created="2011-10-10T06:42:34+03:00" modified="2011-10-10T06:42:34+03:00" filename="bill.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="bill.xsl" owner="admin" group="dba" mode="644" created="2011-10-06T19:06:59+03:00" modified="2011-10-06T19:06:59+03:00" filename="bill.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="bill.xsl" owner="admin" group="dba" mode="644" created="2011-10-10T06:57:58+03:00" modified="2011-10-10T06:57:58+03:00" filename="bill.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="bills.xml" owner="SYSTEM" group="dba" mode="645" created="2011-10-05T18:02:18+03:00" modified="2011-10-05T18:02:18+03:00" filename="bills.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="bills.xml" owner="SYSTEM" group="dba" mode="645" created="2011-10-10T06:40:57+03:00" modified="2011-10-10T06:40:57+03:00" filename="bills.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni.xqm" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:13+03:00" modified="2011-10-06T18:59:28+03:00" filename="bungeni.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="bungeni.xqm" owner="admin" group="dba" mode="644" created="2011-10-03T15:42:13+03:00" modified="2011-10-10T05:41:50+03:00" filename="bungeni.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="business.xml" owner="admin" group="dba" mode="644" created="2011-10-04T12:07:33+03:00" modified="2011-10-04T12:07:33+03:00" filename="business.xml" mimetype="application/xml">

@@ -1,29 +1,27 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework" owner="admin" group="dba" mode="755" created="2011-09-12T16:08:36+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="XMLResource" name="README.txt" owner="admin" group="dba" mode="644" created="2011-10-03T10:56:44+03:00" modified="2011-10-03T10:56:44+03:00" filename="README.txt" mimetype="application/xml">
+    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="644" created="2011-09-12T16:14:46+03:00" modified="2011-10-05T16:01:11+03:00" filename="config.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="755" created="2011-09-12T16:14:46+03:00" modified="2011-10-05T15:37:50+03:00" filename="config.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-10-05T16:10:07+03:00" filename="controller.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="644" created="2011-09-12T16:10:51+03:00" modified="2011-10-05T15:36:08+03:00" filename="controller.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="fw.xqm" owner="admin" group="dba" mode="755" created="2011-10-05T15:59:19+03:00" modified="2011-10-05T15:59:19+03:00" filename="fw.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="fw.xqm" owner="admin" group="dba" mode="645" created="2011-10-05T12:11:47+03:00" modified="2011-10-05T12:25:38+03:00" filename="fw.xqm" mimetype="application/xquery">
+    <resource type="XMLResource" name="portal.html" owner="admin" group="dba" mode="644" created="2011-10-10T06:40:50+03:00" modified="2011-10-10T06:40:50+03:00" filename="portal.html" mimetype="text/html">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="portal.html" owner="admin" group="dba" mode="644" created="2011-10-05T11:04:28+03:00" modified="2011-10-05T11:04:28+03:00" filename="portal.html" mimetype="text/html">
+    <resource type="XMLResource" name="template.xhtml" owner="admin" group="dba" mode="644" created="2011-10-05T11:58:42+03:00" modified="2011-10-05T11:58:42+03:00" filename="template.xhtml" mimetype="application/xhtml+xml" namedoctype="html" publicid="-//W3C//DTD XHTML 1.1//EN" systemid="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="template.xhtml" owner="admin" group="dba" mode="644" created="2011-10-05T11:14:39+03:00" modified="2011-10-05T11:14:39+03:00" filename="template.xhtml" mimetype="application/xhtml+xml" namedoctype="html" publicid="-//W3C//DTD XHTML 1.1//EN" systemid="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+    <resource type="BinaryResource" name="template.xqm" owner="admin" group="dba" mode="645" created="2011-09-12T16:10:51+03:00" modified="2011-10-04T13:16:39+03:00" filename="template.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="template.xqm" owner="SYSTEM" group="dba" mode="645" created="2011-09-12T16:10:51+03:00" modified="2011-09-23T16:54:04+03:00" filename="template.xqm" mimetype="application/xquery">
+    <resource type="XMLResource" name="workspace.html" owner="admin" group="dba" mode="644" created="2011-10-05T11:57:06+03:00" modified="2011-10-05T11:57:06+03:00" filename="workspace.html" mimetype="text/html">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="workspace.html" owner="admin" group="dba" mode="644" created="2011-10-05T11:18:37+03:00" modified="2011-10-05T11:18:37+03:00" filename="workspace.html" mimetype="text/html">
-        <acl entries="0" version="1"/>
-    </resource>
+    <subcollection name="yui" filename="yui"/>
     <subcollection name="lexapp" filename="lexapp"/>
     <subcollection name="bungeni" filename="bungeni"/>
     <subcollection name="assets" filename="assets"/>

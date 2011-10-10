@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Switch default application of framework by switching the default-app attribute -->
+<fw-config default-app="lexapp">
+    <apps>
+        <app name="lexapp">
+            <default-tmpl>template.xhtml</default-tmpl>
+        </app>
+        <app name="bungeni">
+            <default-tmpl>portal.html</default-tmpl>
+        </app>
+    </apps>
+</fw-config>

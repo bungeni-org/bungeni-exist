@@ -13,8 +13,8 @@ uses bungenicommon
 (:~
 Local Constants
 :)
-declare variable $bun:OFF-SET := 1;
-declare variable $bun:LIMIT := 5;
+declare variable $bun:OFF-SET := 0;
+declare variable $bun:LIMIT := 10;
 declare variable $bun:DOCNO := 1;
 
 (: Search for the doc matching the actid in the parameter and return the document :)

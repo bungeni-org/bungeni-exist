@@ -19,6 +19,7 @@ ul.ls-row {
     display:block;
     list-style-type:none;
     padding:0 0 0 15px;
+    width:96% !important;
 }
 ul.ls-row li {
     display:block;

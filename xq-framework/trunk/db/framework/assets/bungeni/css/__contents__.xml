@@ -1,33 +1,34 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" version="1">
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/css" owner="admin" group="dba" mode="644" created="2011-10-05T11:08:07+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="%20forms.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename=" forms.css" mimetype="text/css">
+    <resource type="BinaryResource" name="%20forms.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename=" forms.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="boilerplate.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="boilerplate.css" mimetype="text/css">
+    <resource type="BinaryResource" name="boilerplate.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="boilerplate.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni-ws.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="bungeni-ws.css" mimetype="text/css">
+    <resource type="BinaryResource" name="bungeni-ws.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="bungeni-ws.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="bungeni.css" mimetype="text/css">
+    <resource type="BinaryResource" name="bungeni.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="bungeni.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="common.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-10T10:04:41+03:00" filename="common.css" mimetype="text/css">
+    <resource type="BinaryResource" name="common.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="common.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="lists.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="lists.css" mimetype="text/css">
+    <resource type="BinaryResource" name="lists.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="lists.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="main.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="main.css" mimetype="text/css">
+    <resource type="BinaryResource" name="main.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="main.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="member.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="member.css" mimetype="text/css">
+    <resource type="BinaryResource" name="member.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="member.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="tables.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="tables.css" mimetype="text/css">
+    <resource type="BinaryResource" name="tables.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="tables.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="workspace.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="workspace.css" mimetype="text/css">
+    <resource type="BinaryResource" name="workspace.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="workspace.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
 </collection>

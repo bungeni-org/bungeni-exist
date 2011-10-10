@@ -5,9 +5,9 @@
         <page:navigation>business</page:navigation>
     </page:info>
     <div>
-        <div class="toggler-list" id="expand-all" style="margin-top:20px"/>
+        <div class="toggler-list" id="expand-all" style="margin-top:20px" />
         <ul class="ls-row" id="list-toggle">
-            <li/>
+            <li />
         </ul>
     </div>
 </div>

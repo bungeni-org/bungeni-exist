@@ -7,11 +7,11 @@
     </page:info>
     <div>
         <div class="list-header">
-            <div class="toggler-list" id="expand-all" style="margin-top:20px"/>
-            <div id="paginator" class="paginate" align="right"/>
+            <div class="toggler-list" id="expand-all" style="margin-top:20px" />
+            <div id="paginator" class="paginate" align="right" />
         </div>
         <ul class="ls-row" id="list-toggle">
-            <li/>
+            <li />
         </ul>
     </div>
 </div>

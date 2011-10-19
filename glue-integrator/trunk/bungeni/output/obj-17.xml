@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><akomaNtoso xmlns="http://www.akomantoso.org/1.0">
+   <doc name="office">
+      <meta>
+         <identification source="#bungeni">
+            <FRBRWork>
+               <FRBRauthor href="#Author"/>
+               <FRBRdate date="2011-02-24" name="#startdate"/>
+               <FRBRuri value="/ke/office/2011-02-24/main"/>
+               <FRBRthis value="/ke/office/"/>
+            </FRBRWork>
+            <FRBRExpression>
+               <FRBRauthor href="#Author"/>
+               <FRBRdate date="2011-02-24" name="#startdate"/>
+               <FRBRuri value="/ke/office/2011-02-24/main"/>
+               <FRBRthis value="/ke/office/"/>
+               <FRBRlanguage language="en"/>
+            </FRBRExpression>
+            <FRBRManifestation>
+               <FRBRauthor href="#Author"/>
+               <FRBRdate date="2011-02-24" name="#startdate"/>
+               <FRBRuri value="/ke/office/2011-02-24/main"/>
+               <FRBRthis value="/ke/office/"/>
+            </FRBRManifestation>
+         </identification>
+         <workflow source="#parliament">
+            <step href="#election-date" id="ed" date=""/>
+            <step href="#status-date" id="rd" date="2011-10-13 00:07:59.830709"/>
+         </workflow>
+         <references source="#parliament">
+            <TLCConcept id="object-type" href="/ontology/object/group" showAs="House Business Office"/>
+            <TLCConcept id="type" href="/ontology/office" showAs="office"/>
+            <TLCConcept href="status.active" id="status" showAs="active"/>
+            <TLCConcept href="/ontology/concept/shortname" id="short-name" showAs="HBO"/>
+            <TLCConcept href="/ontology/concept/fullname" id="full-name" showAs="House Business Office"/>
+            <TLCObject id="group-principal-id" href="/ontology/parliament/ke/" showAs="group.office.17"/>
+            <TLCOrganization href="/ontology/parliament/ke" id="parliament" showAs="Parliament of Kenya"/>
+            <TLCConcept href="/ontology/event/StartDate" id="start-date" showAs="StartDate"/>
+            <TLCConcept href="/ontology/event/EndDate" id="end-date" showAs="EndDate"/>
+            <TLCConcept href="/ontology/event/StatusDate" id="status-date" showAs="StatusDate"/>
+         </references>
+      </meta>
+      <preface>
+         <block name="preface">
+            <docDate refersTo="#election-date" date="2011-10-13 00:07:59.830709"/>
+            <docDate refersTo="#status-date" date="2011-10-13 00:07:59.830709"/>
+            <docTitle refersTo="#short-name">HBO</docTitle>
+            <docTitle refersTo="#full-name">House Business Office</docTitle>
+         </block>
+      </preface>
+      <mainContent>
+         <block name="description"/>
+      </mainContent>
+   </doc>
+</akomaNtoso>

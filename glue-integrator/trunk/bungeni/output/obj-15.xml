@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><akomaNtoso xmlns="http://www.akomantoso.org/1.0">
+   <doc name="political-group">
+      <meta>
+         <identification source="#bungeni">
+            <FRBRWork>
+               <FRBRauthor href="#Author"/>
+               <FRBRdate date="2011-02-23" name="#startdate"/>
+               <FRBRuri value="/ke/political-group/2011-02-23/main"/>
+               <FRBRthis value="/ke/political-group/"/>
+            </FRBRWork>
+            <FRBRExpression>
+               <FRBRauthor href="#Author"/>
+               <FRBRdate date="2011-02-23" name="#startdate"/>
+               <FRBRuri value="/ke/political-group/2011-02-23/main"/>
+               <FRBRthis value="/ke/political-group/"/>
+               <FRBRlanguage language="en"/>
+            </FRBRExpression>
+            <FRBRManifestation>
+               <FRBRauthor href="#Author"/>
+               <FRBRdate date="2011-02-23" name="#startdate"/>
+               <FRBRuri value="/ke/political-group/2011-02-23/main"/>
+               <FRBRthis value="/ke/political-group/"/>
+            </FRBRManifestation>
+         </identification>
+         <workflow source="#parliament">
+            <step href="#election-date" id="ed" date=""/>
+            <step href="#status-date" id="rd" date="2011-10-13 00:05:45.119880"/>
+         </workflow>
+         <references source="#parliament">
+            <TLCConcept id="object-type" href="/ontology/object/group" showAs="Political Group P1_993"/>
+            <TLCConcept id="type" href="/ontology/political-group" showAs="political-group"/>
+            <TLCConcept href="status.active" id="status" showAs="active"/>
+            <TLCConcept href="/ontology/concept/shortname" id="short-name" showAs="PG_993"/>
+            <TLCConcept href="/ontology/concept/fullname" id="full-name" showAs="Political Group P1_993"/>
+            <TLCObject id="group-principal-id" href="/ontology/parliament/ke/" showAs="group.political-group.15"/>
+            <TLCOrganization href="/ontology/parliament/ke" id="parliament" showAs="Parliament of Kenya"/>
+            <TLCConcept href="/ontology/event/StartDate" id="start-date" showAs="StartDate"/>
+            <TLCConcept href="/ontology/event/EndDate" id="end-date" showAs="EndDate"/>
+            <TLCConcept href="/ontology/event/StatusDate" id="status-date" showAs="StatusDate"/>
+         </references>
+      </meta>
+      <preface>
+         <block name="preface">
+            <docDate refersTo="#election-date" date="2011-10-13 00:05:45.119880"/>
+            <docDate refersTo="#status-date" date="2011-10-13 00:05:45.119880"/>
+            <docTitle refersTo="#short-name">PG_993</docTitle>
+            <docTitle refersTo="#full-name">Political Group P1_993</docTitle>
+         </block>
+      </preface>
+      <mainContent>
+         <block name="description">description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group &lt;em&gt;description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group&lt;/em&gt;: &lt;ul&gt;&lt;li&gt;&lt;strong&gt;description&lt;/strong&gt; of the political group description of the political group description of the political group &lt;/li&gt;&lt;li&gt;description of the political group description of the political group &lt;strong&gt;description&lt;/strong&gt; of the political group description of the political group description of the political group &lt;/li&gt;&lt;li&gt;description of the political group &lt;strong&gt;description&lt;/strong&gt; of the political group &lt;/li&gt;&lt;/ul&gt;description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group description of the political group &lt;span style="color: #ff0000;"&gt;description of the political group&lt;/span&gt;.</block>
+      </mainContent>
+   </doc>
+</akomaNtoso>

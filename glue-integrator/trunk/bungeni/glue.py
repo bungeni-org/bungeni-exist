@@ -26,14 +26,14 @@ from org.bungeni.translators.utility.files import FileUtility
 
 #Get the configuration file
 config = ConfigParser.RawConfigParser()
-config.read('sorting.ini')
+config.read("config.ini")
 
 #getting runtime params
-path = config.get('general','bungeni_docs_folder')                  #path to Bungeni Documents
-resources_f = config.get('general','transformer_resources_folder')  #Resources folder with transfromation configs
-output_folder = config.get('general','akomantoso_output_folder')    #AN output dumping folder
-metalex_dump = config.get('general','allow_metalex_output')         #Dumps metalex files !+FIX_THIS (ao, 19th Oct 2011) only per group not individually
-metalex = config.get('general','default_metalex')                   #Default dumping file
+path = config.get("general","bungeni_docs_folder")                  #path to Bungeni Documents
+resources_f = config.get("general","transformer_resources_folder")  #Resources folder with transfromation configs
+output_folder = config.get("general","akomantoso_output_folder")    #AN output dumping folder
+metalex_dump = config.get("general","allow_metalex_output")         #Dumps metalex files !+FIX_THIS (ao, 19th Oct 2011) only per group not individually
+metalex = config.get("general","default_metalex")                   #Default dumping file
 
 class Transformer:
     
@@ -65,12 +65,12 @@ class ParseBungeniXML:
         self.xmlfile = xml_path
         self.xmldoc = None
         
-    def xpath_form_by_attr(self,get_name):
-        return  self.__global_path__ + "field[@name='"+get_name+"']"
+    def xpath_form_by_attr(self,name):
+        return  self.__global_path__ + "field[@name=" + name + "']"
         
-    def parse_me(self, file):
+    def parse_me(self, file_path):
         sreader = SAXReader()
-        an_xml = File(file)        
+        an_xml = File(file_path)        
         self.xmldoc = sreader.read(an_xml)
         getType= self.xmldoc.selectSingleNode(self.xpath_form_by_attr("type"))
         named = getType.getStringValue()      
@@ -78,10 +78,10 @@ class ParseBungeniXML:
       
     def sorting_hat(self, typename):
         if typename == "question":
-            __conf_path__ =  config.get('parliament','question')
+            __conf_path__ =  config.get("parliament","question")
             
-        elif typname == "group":
-            __conf_path__ =  config.get('parliament','group')
+        elif typename == "group":
+            __conf_path__ =  config.get("parliament","group")
                         
 def main():
     # parse command line options

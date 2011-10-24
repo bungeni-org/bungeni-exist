@@ -19,8 +19,6 @@ from java.io import File
 from java.io import FileInputStream
 
 from org.bungeni.translators.translator import OATranslator
-from org.bungeni.translators.configurations import OAConfiguration
-from org.bungeni.translators.translator import GenericXMLSource
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
 from org.bungeni.translators.utility.files import FileUtility
 
@@ -35,6 +33,10 @@ output_folder = config.get("general","akomantoso_output_folder")    #AN output d
 metalex_dump = config.get("general","allow_metalex_output")         #Dumps metalex files !+FIX_THIS (ao, 19th Oct 2011) only per group not individually
 metalex = config.get("general","default_metalex")                   #Default dumping file
 
+#Get Pipelines
+pipe_question = config.get("pipelines","question")
+pipe_group = config.get("pipelines","group")
+
 class Transformer:
     
     def __init__(self):
@@ -42,7 +44,6 @@ class Transformer:
         self.transformer = OATranslator.getInstance()
     
     def run(self,input_file,output,config_file):
-        config_file="configfiles/configs/config_bungeni_group.xml"
         translatedFiles = {}
         translatedFiles = self.transformer.translate(input_file, config_file)
         
@@ -66,25 +67,30 @@ class ParseBungeniXML:
         self.xmldoc = None
         
     def xpath_form_by_attr(self,name):
-        return  self.__global_path__ + "field[@name=" + name + "']"
+        return  self.__global_path__ + "field[@name='" + name + "']"
+        
+    def xpath_get_attr_val(self,name):
+        return  self.__global_path__ + "field[@name]"        
         
     def parse_me(self, file_path):
         sreader = SAXReader()
         an_xml = File(file_path)        
         self.xmldoc = sreader.read(an_xml)
-        getType= self.xmldoc.selectSingleNode(self.xpath_form_by_attr("type"))
-        named = getType.getStringValue()      
-        return named  
+        getRoot = self.xmldoc.getRootElement()
+        named = getRoot.selectSingleNode("//contenttype/@name").value
+        return named
       
     def sorting_hat(self, typename):
         if typename == "question":
-            __conf_path__ =  config.get("parliament","question")
+            __conf_path__ =  pipe_question
+            return pipe_question
             
         elif typename == "group":
-            __conf_path__ =  config.get("parliament","group")
+            __conf_path__ =  pipe_group
+            return pipe_group
                         
 def main():
-    # parse command line options
+    # parse command line options if any
     try:
         trans = Transformer()
         count = 1
@@ -92,8 +98,9 @@ def main():
         for infile in listing:
             print "[" + str(count) + "]current file is: " + infile
             bunparse = ParseBungeniXML(path+infile)
-            print bunparse.parse_me(path+infile)
-            trans.run(path+infile,output_folder+infile,"configfiles/configs/config_bungeni_group.xml")
+            pipe_type = bunparse.parse_me(path+infile)
+            pipe_path = bunparse.sorting_hat(pipe_type)
+            trans.run(path+infile,output_folder+infile,pipe_path)
             count = count + 1
             
     except getopt.error, msg:

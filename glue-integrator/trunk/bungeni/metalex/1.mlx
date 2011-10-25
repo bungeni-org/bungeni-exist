@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><bu:ontology xmlns:bu="http://portal.bungeni.org/1.0/" type="group">
+   <bu:group type="office" id="16">
+      <bu:groupId>16</bu:groupId>
+      <bu:startDate type="xs:dateTime">2011-02-24T</bu:startDate>
+      <bu:group_addresses/>
+   </bu:group>
+   <bu:bungeni>
+      <bu:status>active</bu:status>
+      <bu:language>en</bu:language>
+      <bu:permissions>
+         <bu:permission>
+            <bu:field name="role">bungeni.Owner</bu:field>
+            <bu:field name="user">admin</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+         </bu:permission>
+      </bu:permissions>
+      <bu:principalGroup href="#group.office.16"/>
+      <bu:contained_groups/>
+   </bu:bungeni>
+   <bu:office isA="TLCOrganization" id="parl" type="16">
+      <bu:shortName>CO</bu:shortName>
+      <bu:fullName>Clerk's Office</bu:fullName>
+   </bu:office>
+   <bu:legislature>
+      <bu:agenda_items/>
+      <bu:shortName>CO</bu:shortName>
+      <bu:field name="group_principal_id">group.office.16</bu:field>
+      <bu:statusDate type="xs:dateTime">2011-10-14T22:10:17.318251</bu:statusDate>
+      <bu:field name="language">en</bu:field>
+      <bu:type>office</bu:type>
+   </bu:legislature>
+   <bu:membership>
+      <bu:members/>
+   </bu:membership>
+</bu:ontology>

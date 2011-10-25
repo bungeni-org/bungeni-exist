@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><bu:ontology xmlns:bu="http://portal.bungeni.org/1.0/" type="group">
+   <bu:group type="government" id="3">
+      <bu:startDate type="xs:dateTime">2011-02-18T</bu:startDate>
+      <bu:parentGroupId>2</bu:parentGroupId>
+      <bu:groupId>3</bu:groupId>
+      <bu:group_addresses/>
+   </bu:group>
+   <bu:bungeni>
+      <bu:status>active</bu:status>
+      <bu:language>en</bu:language>
+      <bu:permissions>
+         <bu:permission>
+            <bu:field name="role">bungeni.Government</bu:field>
+            <bu:field name="user">group.government.3</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+         </bu:permission>
+         <bu:permission>
+            <bu:field name="role">bungeni.Owner</bu:field>
+            <bu:field name="user">admin</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+         </bu:permission>
+      </bu:permissions>
+      <bu:principalGroup href="#group.government.3"/>
+      <bu:contained_groups/>
+   </bu:bungeni>
+   <bu:government isA="TLCOrganization" id="parl" type="3">
+      <bu:shortName>Goverment</bu:shortName>
+      <bu:description>description &lt;span style="color: rgb(191, 0, 95);"&gt;description &lt;/span&gt;description description description description description description description
+
+description description description political &lt;strong&gt;group description description&lt;/strong&gt; description description description description description 
+
+description description description description description description &lt;span style="background-color: rgb(255, 128, 128);"&gt;description description&lt;/span&gt; description description description description description description description 
+
+description description description description</bu:description>
+      <bu:fullName>G1</bu:fullName>
+   </bu:government>
+   <bu:legislature>
+      <bu:agenda_items/>
+      <bu:shortName>Goverment</bu:shortName>
+      <bu:field name="group_principal_id">group.government.3</bu:field>
+      <bu:field name="language">en</bu:field>
+      <bu:type>government</bu:type>
+      <bu:statusDate type="xs:dateTime">2011-10-14T21:43:59.475602</bu:statusDate>
+   </bu:legislature>
+   <bu:membership>
+      <bu:members/>
+   </bu:membership>
+</bu:ontology>

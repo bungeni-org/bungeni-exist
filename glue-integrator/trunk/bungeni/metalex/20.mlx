@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><bu:ontology xmlns:bu="http://portal.bungeni.org/1.0/" type="group">
+   <bu:group type="political-group" id="73">
+      <bu:startDate type="xs:dateTime">2011-02-23T</bu:startDate>
+      <bu:parentGroupId>2</bu:parentGroupId>
+      <bu:groupId>73</bu:groupId>
+      <bu:group_addresses/>
+   </bu:group>
+   <bu:bungeni>
+      <bu:status>active</bu:status>
+      <bu:language>en</bu:language>
+      <bu:permissions>
+        <bu:permission>
+            <bu:field name="role">bungeni.PartyMember</bu:field>
+            <bu:field name="user">group.political-group.73</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+        </bu:permission>
+        <bu:permission>
+            <bu:field name="role">bungeni.Owner</bu:field>
+            <bu:field name="user">admin</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+        </bu:permission>
+      </bu:permissions>
+      <bu:principalGroup href="#group.political-group.73"/>
+      <bu:contained_groups/>
+   </bu:bungeni>
+   <bu:political-group isA="TLCOrganization" id="parl" type="73">
+      <bu:shortName>PG</bu:shortName>
+      <bu:description>description of the political group description of the political group
+        description of the political group description of the political group description of the
+        political group description of the political group description of the political group
+        description of the political group &lt;em&gt;description of the political group description
+        of the political group description of the political group description of the political group
+        description of the political group description of the political group description of the
+        political group description of the political group&lt;/em&gt;:
+        &lt;ul&gt;&lt;li&gt;&lt;strong&gt;description&lt;/strong&gt; of the political group
+        description of the political group description of the political group
+        &lt;/li&gt;&lt;li&gt;description of the political group description of the political group
+        &lt;strong&gt;description&lt;/strong&gt; of the political group description of the political
+        group description of the political group &lt;/li&gt;&lt;li&gt;description of the political
+        group &lt;strong&gt;description&lt;/strong&gt; of the political group
+        &lt;/li&gt;&lt;/ul&gt;description of the political group description of the political group
+        description of the political group description of the political group description of the
+        political group description of the political group description of the political group
+        description of the political group &lt;span style="color: #ff0000;"&gt;description of the
+        political group&lt;/span&gt;.</bu:description>
+      <bu:fullName>Political Group P1_07</bu:fullName>
+   </bu:political-group>
+   <bu:legislature>
+      <bu:agenda_items/>
+      <bu:shortName>PG</bu:shortName>
+      <bu:field name="group_principal_id">group.political-group.73</bu:field>
+      <bu:field name="language">en</bu:field>
+      <bu:type>political-group</bu:type>
+      <bu:statusDate type="xs:dateTime">2011-10-15T21:48:36.415609</bu:statusDate>
+   </bu:legislature>
+   <bu:membership>
+      <bu:members/>
+   </bu:membership>
+</bu:ontology>

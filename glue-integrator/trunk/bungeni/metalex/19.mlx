@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><bu:ontology xmlns:bu="http://portal.bungeni.org/1.0/" type="group">
+   <bu:group type="ministry" id="89">
+      <bu:startDate type="xs:dateTime">2011-02-18T</bu:startDate>
+      <bu:parentGroupId>3</bu:parentGroupId>
+      <bu:groupId>89</bu:groupId>
+      <bu:group_addresses/>
+   </bu:group>
+   <bu:bungeni>
+      <bu:status>active</bu:status>
+      <bu:language>en</bu:language>
+      <bu:permissions>
+         <bu:permission>
+            <bu:field name="role">bungeni.Minister</bu:field>
+            <bu:field name="user">group.ministry.89</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+         </bu:permission>
+         <bu:permission>
+            <bu:field name="role">bungeni.Owner</bu:field>
+            <bu:field name="user">admin</bu:field>
+            <bu:field name="permission">Allow</bu:field>
+         </bu:permission>
+      </bu:permissions>
+      <bu:principalGroup href="#group.ministry.89"/>
+      <bu:contained_groups/>
+   </bu:bungeni>
+   <bu:ministry isA="TLCOrganization" id="parl" type="89">
+      <bu:shortName>Min</bu:shortName>
+      <bu:description>ministry description &lt;strong&gt;ministry description&lt;/strong&gt; ministry description &lt;em&gt;ministry description&lt;/em&gt; ministry description &lt;strong&gt;ministry description&lt;/strong&gt;
+ ministry description ministry description ministry description 
+ministry description ministry description ministry description 
+ministry description ministry description ministry description 
+ministry description ministry description ministry description &lt;span style="color: rgb(255, 0, 0);"&gt;ministry description&lt;/span&gt; ministry description ministry description</bu:description>
+      <bu:fullName>Ministry P1_09</bu:fullName>
+   </bu:ministry>
+   <bu:legislature>
+      <bu:agenda_items/>
+      <bu:shortName>Min</bu:shortName>
+      <bu:field name="group_principal_id">group.ministry.89</bu:field>
+      <bu:field name="language">en</bu:field>
+      <bu:type>ministry</bu:type>
+      <bu:statusDate type="xs:dateTime">2011-10-15T23:45:44.458043</bu:statusDate>
+   </bu:legislature>
+   <bu:membership>
+      <bu:members/>
+   </bu:membership>
+</bu:ontology>

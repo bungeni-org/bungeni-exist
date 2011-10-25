@@ -31,7 +31,8 @@ path = config.get("general","bungeni_docs_folder")                  #path to Bun
 resources_f = config.get("general","transformer_resources_folder")  #Resources folder with transfromation configs
 output_folder = config.get("general","akomantoso_output_folder")    #AN output dumping folder
 metalex_dump = config.get("general","allow_metalex_output")         #Dumps metalex files !+FIX_THIS (ao, 19th Oct 2011) only per group not individually
-metalex = config.get("general","default_metalex")                   #Default dumping file
+metalex_folder = config.get("general","default_metalex")                   #Default dumping folder
+metalex_allow = config.get("general","allow_metalex_output")              
 
 #Get Pipelines
 pipe_question = config.get("pipelines","question")
@@ -43,9 +44,9 @@ class Transformer:
         GlobalConfigurations.setApplicationPathPrefix(resources_f)
         self.transformer = OATranslator.getInstance()
     
-    def run(self,input_file,output,config_file):
+    def run(self,input_file,output,metalex,config_file):
         translatedFiles = {}
-        translatedFiles = self.transformer.translate(input_file, config_file)
+        translatedFiles = self.transformer.translate(input_file, config_file) 
         
         #input stream
         fis  = FileInputStream(translatedFiles["anxml"])
@@ -100,7 +101,7 @@ def main():
             bunparse = ParseBungeniXML(path+infile)
             pipe_type = bunparse.parse_me(path+infile)
             pipe_path = bunparse.sorting_hat(pipe_type)
-            trans.run(path+infile,output_folder+infile,pipe_path)
+            trans.run(path+infile,output_folder+infile,metalex_folder+str(count)+".mlx",pipe_path)
             count = count + 1
             
     except getopt.error, msg:

@@ -22,6 +22,7 @@ from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
 from org.bungeni.translators.utility.files import FileUtility
 
+'''
 #Get the configuration file
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
@@ -31,21 +32,60 @@ path = config.get("general","bungeni_docs_folder")                  #path to Bun
 resources_f = config.get("general","transformer_resources_folder")  #Resources folder with transfromation configs
 output_folder = config.get("general","akomantoso_output_folder")    #AN output dumping folder
 metalex_dump = config.get("general","allow_metalex_output")         #Dumps metalex files !+FIX_THIS (ao, 19th Oct 2011) only per group not individually
-metalex_folder = config.get("general","default_metalex")                   #Default dumping folder
+metalex_folder = config.get("general","metalex_output_folder")                   #Default dumping folder
 metalex_allow = config.get("general","allow_metalex_output")              
 
 #Get Pipelines
 pipe_question = config.get("pipelines","question")
 pipe_group = config.get("pipelines","group")
+'''
+
+class Config:
+    
+    def __init__(self, config_file):
+        self.cfg = ConfigParser.RawConfigParser()
+        self.cfg.read(config_file)
+    
+    def get(self, section, key):
+        return self.cfg.get(section, key)
+
+class TransformerConfig(Config):
+
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_pipes = {}
+    
+    def get_input_folder(self):
+        return self.get("general", "bungeni_docs_folder")
+
+    def get_transformer_resources_folder(self):
+        return self.get("general", "transformer_resources_folder")
+    
+    def get_akomantoso_output_folder(self):
+        return self.get("general", "akomantoso_output_folder")
+
+    def get_ontoxml_output_folder(self):
+        return self.get("general", "metalex_output_folder")
+
+    def get_pipelines(self):
+        # list of key,values pairs as tuples 
+        if len(self.dict_pipes) == 0:
+            l_pipes = self.cfg.items("pipelines")
+            for l_pipe in l_pipes:
+                self.dict_pipes[l_pipe[0]] = l_pipe[1]
+        return self.dict_pipes
+    
+
 
 class Transformer:
     
-    def __init__(self):
-        GlobalConfigurations.setApplicationPathPrefix(resources_f)
+    def __init__(self, cfg):
+        GlobalConfigurations.setApplicationPathPrefix(cfg.get_transformer_resources_folder())
         self.transformer = OATranslator.getInstance()
     
-    def run(self,input_file,output,metalex,config_file):
-        translatedFiles = {}
+    def run(self, input_file, output, metalex, config_file):
+	print "xxx ", input_file, output, metalex, config_file, "yyy  "      
+	translatedFiles = {}
         translatedFiles = self.transformer.translate(input_file, config_file) 
         
         #input stream
@@ -73,7 +113,7 @@ class ParseBungeniXML:
     def xpath_get_attr_val(self,name):
         return  self.__global_path__ + "field[@name]"        
         
-    def parse_me(self, file_path):
+    def get_contenttype_name(self, file_path):
         sreader = SAXReader()
         an_xml = File(file_path)        
         self.xmldoc = sreader.read(an_xml)
@@ -81,27 +121,23 @@ class ParseBungeniXML:
         named = getRoot.selectSingleNode("//contenttype/@name").value
         return named
       
-    def sorting_hat(self, typename):
-        if typename == "question":
-            __conf_path__ =  pipe_question
-            return pipe_question
-            
-        elif typename == "group":
-            __conf_path__ =  pipe_group
-            return pipe_group
                         
-def main():
+def main(config_file):
     # parse command line options if any
     try:
-        trans = Transformer()
+        cfg = TransformerConfig(config_file)
+        trans = Transformer(cfg)
         count = 1
-        listing = os.listdir(path)
+        listing = os.listdir(cfg.get_input_folder())
         for infile in listing:
             print "[" + str(count) + "]current file is: " + infile
-            bunparse = ParseBungeniXML(path+infile)
-            pipe_type = bunparse.parse_me(path+infile)
-            pipe_path = bunparse.sorting_hat(pipe_type)
-            trans.run(path+infile,output_folder+infile,metalex_folder+str(count)+".mlx",pipe_path)
+            input_file_path = cfg.get_input_folder() + infile            
+            bunparse = ParseBungeniXML(input_file_path)
+            pipe_type = bunparse.get_contenttype_name(input_file_path)
+            pipe_path = cfg.get_pipelines()[pipe_type]
+            trans.run(input_file_path,
+                 cfg.get_akomantoso_output_folder() + infile,
+                 cfg.get_ontoxml_output_folder() + str(count) + ".mlx",pipe_path)
             count = count + 1
             
     except getopt.error, msg:
@@ -110,4 +146,9 @@ def main():
         sys.exit(2)
 
 if __name__ == "__main__":
-    main()
+    if (len(sys.argv) > 1):
+        main(sys.argv[1])
+    else:
+        print "config.ini file must be an input parameter"
+
+

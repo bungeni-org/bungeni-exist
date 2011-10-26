@@ -104,22 +104,31 @@ class ParseBungeniXML:
     __global_path__ = "//"
     
     def __init__(self, xml_path):
+        """
+        Load the xml document from the path
+        """
+
         self.xmlfile = xml_path
-        self.xmldoc = None
-        
+        sreader = SAXReader()
+        an_xml = File(xml_path)        
+        self.xmldoc = sreader.read(an_xml)
+ 
     def xpath_form_by_attr(self,name):
+
         return  self.__global_path__ + "field[@name='" + name + "']"
         
     def xpath_get_attr_val(self,name):
+
         return  self.__global_path__ + "field[@name]"        
         
-    def get_contenttype_name(self, file_path):
-        sreader = SAXReader()
-        an_xml = File(file_path)        
-        self.xmldoc = sreader.read(an_xml)
-        getRoot = self.xmldoc.getRootElement()
-        named = getRoot.selectSingleNode("//contenttype/@name").value
-        return named
+    def get_contenttype_name(self):
+
+        root_element = self.xmldoc.getRootElement()
+        if root_element.getName() == "contenttype":
+            return root_element.attributeValue("name")   
+        else:
+            return None
+
       
                         
 def main(config_file):
@@ -133,12 +142,17 @@ def main(config_file):
             print "[" + str(count) + "]current file is: " + infile
             input_file_path = cfg.get_input_folder() + infile            
             bunparse = ParseBungeniXML(input_file_path)
-            pipe_type = bunparse.get_contenttype_name(input_file_path)
-            pipe_path = cfg.get_pipelines()[pipe_type]
-            trans.run(input_file_path,
-                 cfg.get_akomantoso_output_folder() + infile,
-                 cfg.get_ontoxml_output_folder() + str(count) + ".mlx",pipe_path)
-            count = count + 1
+            pipe_type = bunparse.get_contenttype_name()
+            if pipe_type is not None:
+               pipe_path = cfg.get_pipelines()[pipe_type]
+               trans.run(input_file_path,
+                    cfg.get_akomantoso_output_folder() + infile,
+                    cfg.get_ontoxml_output_folder() + str(count) + ".mlx",
+                    pipe_path)
+               count = count + 1
+            else:
+               print "Ignoring %s" % input_file_path
+               
             
     except getopt.error, msg:
         print msg

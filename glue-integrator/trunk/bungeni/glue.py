@@ -22,23 +22,6 @@ from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
 from org.bungeni.translators.utility.files import FileUtility
 
-'''
-#Get the configuration file
-config = ConfigParser.RawConfigParser()
-config.read("config.ini")
-
-#getting runtime params
-path = config.get("general","bungeni_docs_folder")                  #path to Bungeni Documents
-resources_f = config.get("general","transformer_resources_folder")  #Resources folder with transfromation configs
-output_folder = config.get("general","akomantoso_output_folder")    #AN output dumping folder
-metalex_dump = config.get("general","allow_metalex_output")         #Dumps metalex files !+FIX_THIS (ao, 19th Oct 2011) only per group not individually
-metalex_folder = config.get("general","metalex_output_folder")                   #Default dumping folder
-metalex_allow = config.get("general","allow_metalex_output")              
-
-#Get Pipelines
-pipe_question = config.get("pipelines","question")
-pipe_group = config.get("pipelines","group")
-'''
 
 class Config:
     
@@ -74,7 +57,6 @@ class TransformerConfig(Config):
             for l_pipe in l_pipes:
                 self.dict_pipes[l_pipe[0]] = l_pipe[1]
         return self.dict_pipes
-    
 
 
 class Transformer:
@@ -84,8 +66,8 @@ class Transformer:
         self.transformer = OATranslator.getInstance()
     
     def run(self, input_file, output, metalex, config_file):
-	print "xxx ", input_file, output, metalex, config_file, "yyy  "      
-	translatedFiles = {}
+        print "xxx ", input_file, output, metalex, config_file, "yyy  "      
+        translatedFiles = {}
         translatedFiles = self.transformer.translate(input_file, config_file) 
         
         #input stream
@@ -129,30 +111,54 @@ class ParseBungeniXML:
         else:
             return None
 
-      
+class DirWalker(object):
+
+    def __init__(self, config_object, transformer):
+       self.cfg = config_object
+       self.transformer = transformer
+       self.counter = 0
+
+    def walk(self, dir, callback_function):
+       """ 
+       walk a folder and recursively walk through sub-folders
+       for every file in the folder call the processing function
+       """
+       dir = os.path.abspath(dir)
+       for file in [
+         file for file in os.listdir(dir) if not file in [".",".."]
+         ]:
+         nfile = os.path.join(dir,file)
+         if os.path.isdir(nfile):
+            self.walk(nfile, callback_function)
+         else:
+            self.counter = self.counter + 1
+            callback_function(self.cfg, self.transformer, nfile, self.counter)
+
+
+def process_file(cfg, trans, input_file_path, count):
+    bunparse = ParseBungeniXML(input_file_path)
+    pipe_type = bunparse.get_contenttype_name()
+    if pipe_type is not None:
+       pipe_path = cfg.get_pipelines()[pipe_type]
+       output_file_name_wo_prefix  = pipe_type + str(count)
+       an_xml_file = output_file_name_wo_prefix + ".xml"
+       on_xml_file = output_file_name_wo_prefix + ".mlx"
+       trans.run(input_file_path,
+            cfg.get_akomantoso_output_folder() + an_xml_file ,
+            cfg.get_ontoxml_output_folder() + on_xml_file,
+            pipe_path)
+    else:
+       print "Ignoring %s" % input_file_path
+
                         
 def main(config_file):
     # parse command line options if any
     try:
         cfg = TransformerConfig(config_file)
-        trans = Transformer(cfg)
+        transformer = Transformer(cfg)
         count = 1
-        listing = os.listdir(cfg.get_input_folder())
-        for infile in listing:
-            print "[" + str(count) + "]current file is: " + infile
-            input_file_path = cfg.get_input_folder() + infile            
-            bunparse = ParseBungeniXML(input_file_path)
-            pipe_type = bunparse.get_contenttype_name()
-            if pipe_type is not None:
-               pipe_path = cfg.get_pipelines()[pipe_type]
-               trans.run(input_file_path,
-                    cfg.get_akomantoso_output_folder() + infile,
-                    cfg.get_ontoxml_output_folder() + str(count) + ".mlx",
-                    pipe_path)
-               count = count + 1
-            else:
-               print "Ignoring %s" % input_file_path
-               
+        d = DirWalker(cfg, transformer)
+        d.walk(cfg.get_input_folder(), process_file)
             
     except getopt.error, msg:
         print msg

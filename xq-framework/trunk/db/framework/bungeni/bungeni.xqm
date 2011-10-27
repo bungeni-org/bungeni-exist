@@ -1,9 +1,11 @@
 module namespace bun = "http://exist.bungeni.org/bun";
 import module namespace bungenicommon = "http://bungeni.org/pis/common" at "common.xqm";
 
+
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace transform="http://exist-db.org/xquery/transform";
 declare namespace xh = "http://www.w3.org/1999/xhtml";
+declare namespace bu="http://portal.bungeni.org/1.0/";
 
 (:
 Library for common lex functions
@@ -62,14 +64,14 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
     (: input ANxml document in request :)
     let $doc := <docs> 
         <paginator>
-        <count>{count(collection(bungenicommon:get-lex-db())//akomaNtoso)}</count>
+        <count>{count(collection(bungenicommon:get-lex-db())//bu:ontology)}</count>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
         <alisting>
         {
-            for $match in subsequence(collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'],$offset,$limit)
-            return $match/ancestor::akomaNtoso     
+            for $match in subsequence(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'],$offset,$limit)
+            return $match/ancestor::bu:ontology     
         } 
         </alisting>
     </docs>

@@ -15,7 +15,7 @@ Library for common functions
 Get the path to the lex collection
 :)
 declare function bungenicommon:get-lex-db() as xs:string {
-    $config:xml-collection
+    $config:XML-COLLECTION
  };
  
  

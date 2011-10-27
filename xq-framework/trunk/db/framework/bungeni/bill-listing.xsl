@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -10,6 +9,12 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
+    
+    <xsl:character-map name="html-unescape">
+        <xsl:output-character character="&lt;" string="&lt;"/>
+        <xsl:output-character character="&gt;" string="&gt;"/>
+    </xsl:character-map>    
+    
     <xsl:template match="docs">
         <div id="main-wrapper" role="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
@@ -57,7 +62,7 @@
         <!--begin_: Line_by_Line_Output -->
         <xsl:if test="$i &lt;= round($count div $limit)">
             <xsl:choose>
-                <xsl:when test="(abs($i)-0)*$limit = $offset or ($offset = $i)">
+                <xsl:when test="((abs($i)-0)*$limit = $offset) or ($offset = $i)">
                     <a class="curr-no">
                         <xsl:attribute name="href">
                             <xsl:text>#</xsl:text>
@@ -91,11 +96,11 @@
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="akomaNtoso" mode="akomaNtoso">
-        <xsl:variable name="actIdentifier" select=".//docNumber[@id='ActIdentifier']"/>
+    <xsl:template match="bu:ontology" mode="akomaNtoso">
+        <xsl:variable name="billIdentifier" select=".//bu:field[@name='bill_id']"/>
         <li>
-            <a href="bill?doc={$actIdentifier}" id="{$actIdentifier}">
-                <xsl:value-of select=".//docTitle[@id='ActTitle']"/>
+            <a href="bill?doc={$billIdentifier}" id="{$billIdentifier}">
+                <xsl:value-of select=".//bu:bill/bu:shortName"/>
             </a>
             <span>+</span>
             <div class="doc-toggle">
@@ -103,21 +108,25 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select=".//docNumber[@id='ActIdentifier']"/>
+                            <xsl:value-of select="$billIdentifier"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">moved by:</td>
-                        <td>member P1_01</td>
+                        <td>
+                            <xsl:value-of select="concat(.//bu:bill/bu:owner/bu:field[@name='first_name'],' ', .//bu:bill/bu:owner/bu:field[@name='last_name'])" />
+                        </td>
                     </tr>
                     <tr>
                         <td class="labels">status:</td>
-                        <td>response completed</td>
+                        <td>
+                            <xsl:value-of select=".//bu:bill/bu:status" />
+                        </td>
                     </tr>
                     <tr>
                         <td class="labels">status date:</td>
                         <td>
-                            <xsl:value-of select=".//docDate[@refersTo='#CommencementDate']"/>
+                            <xsl:value-of select=".//bu:legislativeItem/bu:statusDate"/>
                         </td>
                     </tr>
                     <tr>

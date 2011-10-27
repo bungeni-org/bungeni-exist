@@ -123,6 +123,7 @@ class DirWalker(object):
        walk a folder and recursively walk through sub-folders
        for every file in the folder call the processing function
        """
+       import fnmatch
        dir = os.path.abspath(dir)
        for file in [
          file for file in os.listdir(dir) if not file in [".",".."]
@@ -131,22 +132,26 @@ class DirWalker(object):
          if os.path.isdir(nfile):
             self.walk(nfile, callback_function)
          else:
-            self.counter = self.counter + 1
-            callback_function(self.cfg, self.transformer, nfile, self.counter)
+            if fnmatch.fnmatch(nfile, "*.xml"):
+                self.counter = self.counter + 1
+                callback_function(self.cfg, self.transformer, nfile, self.counter)
 
 
 def process_file(cfg, trans, input_file_path, count):
     bunparse = ParseBungeniXML(input_file_path)
     pipe_type = bunparse.get_contenttype_name()
     if pipe_type is not None:
-       pipe_path = cfg.get_pipelines()[pipe_type]
-       output_file_name_wo_prefix  = pipe_type + str(count)
-       an_xml_file = "an_" + output_file_name_wo_prefix + ".xml"
-       on_xml_file = "on_" + output_file_name_wo_prefix + ".xml"
-       trans.run(input_file_path,
-            cfg.get_akomantoso_output_folder() + an_xml_file ,
-            cfg.get_ontoxml_output_folder() + on_xml_file,
-            pipe_path)
+       if pipe_type in cfg.get_pipelines():
+           pipe_path = cfg.get_pipelines()[pipe_type]
+           output_file_name_wo_prefix  = pipe_type + "_" + str(count)
+           an_xml_file = "an_" + output_file_name_wo_prefix + ".xml"
+           on_xml_file = "on_" + output_file_name_wo_prefix + ".xml"
+           trans.run(input_file_path,
+                cfg.get_akomantoso_output_folder() + an_xml_file ,
+                cfg.get_ontoxml_output_folder() + on_xml_file,
+                pipe_path)
+       else:
+           print "No pipeline defined for content type %s " % pipe_type
     else:
        print "Ignoring %s" % input_file_path
 
@@ -156,13 +161,12 @@ def main(config_file):
     try:
         cfg = TransformerConfig(config_file)
         transformer = Transformer(cfg)
-        count = 1
         d = DirWalker(cfg, transformer)
         d.walk(cfg.get_input_folder(), process_file)
             
     except getopt.error, msg:
         print msg
-        print "BOMBED!"
+        print "There was an exception during startup !"
         sys.exit(2)
 
 if __name__ == "__main__":

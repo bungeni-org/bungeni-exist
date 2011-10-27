@@ -141,8 +141,8 @@ def process_file(cfg, trans, input_file_path, count):
     if pipe_type is not None:
        pipe_path = cfg.get_pipelines()[pipe_type]
        output_file_name_wo_prefix  = pipe_type + str(count)
-       an_xml_file = output_file_name_wo_prefix + ".xml"
-       on_xml_file = output_file_name_wo_prefix + ".mlx"
+       an_xml_file = "an_" + output_file_name_wo_prefix + ".xml"
+       on_xml_file = "on_" + output_file_name_wo_prefix + ".xml"
        trans.run(input_file_path,
             cfg.get_akomantoso_output_folder() + an_xml_file ,
             cfg.get_ontoxml_output_folder() + on_xml_file,

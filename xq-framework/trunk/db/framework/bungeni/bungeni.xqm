@@ -61,17 +61,39 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
     (: stylesheet to transform :)
     let $stylesheet := bungenicommon:get-xslt("bill-listing.xsl")    
     
-    (: input ANxml document in request :)
+    (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        <count>{count(collection(bungenicommon:get-lex-db())//bu:ontology)}</count>
+        (: Count the total number of bills only :)
+        <count>{count(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'])}</count>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
         <alisting>
         {
+            (:
             for $match in subsequence(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'],$offset,$limit)
-            return $match/ancestor::bu:ontology     
+            return $match/ancestor::bu:ontology  
+            :)
+            
+            for $match in subsequence(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'],$offset,$limit)
+            return 
+            <document>
+                <output> 
+                {
+                    $match/ancestor::bu:ontology
+                }
+                </output>
+                <referenceInfo>
+                    <ref>
+                    {
+                        let $bill-ref := data($match/ancestor::bu:ontology//bu:bill/bu:ministry/@href)
+                        return 
+                            collection(bungenicommon:get-lex-db())//bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
+                    }
+                    </ref>
+                </referenceInfo>
+            </document>            
         } 
         </alisting>
     </docs>
@@ -96,10 +118,10 @@ declare function bun:get-bill($billid as xs:string) as element()* {
     let $stylesheet := bungenicommon:get-xslt("bill.xsl") 
 
     (: return AN Bill document as singleton :)
-    let $doc := collection(bungenicommon:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier'][text() eq $billid]/ancestor::akomaNtoso
+    let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:bill[@uri=$billid]/ancestor::bu:ontology
     
-    return 
-        transform:transform($doc, $stylesheet, ()) 
+    return
+        transform:transform($doc, $stylesheet, ())
 };
 
 declare function bun:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) {

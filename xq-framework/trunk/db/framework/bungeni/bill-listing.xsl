@@ -8,28 +8,23 @@
             <xd:p>Lists bills from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
-    <xsl:output method="xml"/>
-    
+    <xsl:output method="xml" use-character-maps="html-unescape"/>
     <xsl:character-map name="html-unescape">
+        
         <xsl:output-character character="&lt;" string="&lt;"/>
         <xsl:output-character character="&gt;" string="&gt;"/>
-    </xsl:character-map>    
+    </xsl:character-map>
     
     <xsl:template match="docs">
-        <div id="main-wrapper" role="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">All Bills</h1>
-            </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
-                <div id="doc-listing" class="acts">
-                    <div class="list-header">
-                        <div class="toggler-list" id="expand-all">+ expand all</div>
-                        <xsl:apply-templates select="paginator"/>
-                    </div>
-                    <ul id="list-toggle" class="ls-row" style="clear:both">
-                        <xsl:apply-templates select="alisting" mode="akomaNtoso"/>
-                    </ul>
+        <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="doc-listing" class="acts">
+                <div class="list-header">
+                    <div class="toggler-list" id="expand-all">+ expand all</div>
+                    <xsl:apply-templates select="paginator"/>
                 </div>
+                <ul id="list-toggle" class="ls-row" style="clear:both">
+                    <xsl:apply-templates select="alisting" mode="akomaNtoso"/>
+                </ul>
             </div>
         </div>
     </xsl:template>
@@ -96,8 +91,8 @@
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="bu:ontology" mode="akomaNtoso">
-        <xsl:variable name="billIdentifier" select=".//bu:field[@name='bill_id']"/>
+    <xsl:template match="document" mode="akomaNtoso">
+        <xsl:variable name="billIdentifier" select=".//bu:bill/@uri"/>
         <li>
             <a href="bill?doc={$billIdentifier}" id="{$billIdentifier}">
                 <xsl:value-of select=".//bu:bill/bu:shortName"/>
@@ -114,13 +109,13 @@
                     <tr>
                         <td class="labels">moved by:</td>
                         <td>
-                            <xsl:value-of select="concat(.//bu:bill/bu:owner/bu:field[@name='first_name'],' ', .//bu:bill/bu:owner/bu:field[@name='last_name'])" />
+                            <xsl:value-of select="concat(.//bu:bill/bu:owner/bu:field[@name='first_name'],' ', .//bu:bill/bu:owner/bu:field[@name='last_name'])"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">status:</td>
                         <td>
-                            <xsl:value-of select=".//bu:bill/bu:status" />
+                            <xsl:value-of select=".//bu:bill/bu:status"/>
                         </td>
                     </tr>
                     <tr>
@@ -137,11 +132,15 @@
                     </tr>
                     <tr>
                         <td class="labels">submission date:</td>
-                        <td>May 18, 2011</td>
+                        <td>
+                            <xsl:value-of select=".//bu:bungeni/bu:parliament/@date"/>
+                        </td>
                     </tr>
                     <tr>
                         <td class="labels">ministry:</td>
-                        <td>Finance</td>
+                        <td>
+                            <xsl:value-of select=".//bu:ministry/bu:shortName"/>
+                        </td>
                     </tr>
                 </table>
             </div>

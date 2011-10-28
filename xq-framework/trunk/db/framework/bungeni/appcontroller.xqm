@@ -72,16 +72,11 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bill.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("politicalgroups.xml")))	           
-    	else if ($EXIST-PATH eq "/by-title")
-    		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("by-title.xml")))
-    	else if ($EXIST-PATH eq "/by-keyword")
-    		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("by-keyword.xml")))   
+               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("politicalgroups.xml")))
     	else if ($EXIST-PATH eq "/by-capno")
     		 then 
                let $act-entries-tmpl := bun:get-bills(0,0),

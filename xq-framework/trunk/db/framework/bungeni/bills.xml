@@ -1,9 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" id="content">
     <page:info xmlns:page="http://bungeni.org/page">
         <page:title>BUSINESS | BILLS</page:title>
         <page:navigation>business</page:navigation>
         <page:subnavigation>bills</page:subnavigation>
     </page:info>
-    <div id="main-wrapper"/>
+    <div id="main-wrapper">
+        <div id="title-holder" class="theme-lev-1-only">
+            <h1 id="doc-title-blue">All Bills</h1>
+        </div>    
+        <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            
+        </div>
+    </div>
 </div>

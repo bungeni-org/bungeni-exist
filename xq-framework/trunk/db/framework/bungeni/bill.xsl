@@ -23,6 +23,32 @@
                 <xsl:with-param name="uri" select="$doc_uri"/>
                 <xsl:with-param name="tab">text</xsl:with-param>
             </xsl:call-template>
+            <div style="float:right;width:400px;height:18px;">
+                <div id="doc-downloads">
+                    <ul class="ls-downloads">
+                        <li>
+                            <a href="#" title="get as RSS feed" class="rss">
+                                <em>RSS</em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="print this document" class="print">
+                                <em>PRINT</em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="get as ODT document" class="odt">
+                                <em>ODT</em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="get as RTF document" class="rtf">
+                                <em>RTF</em>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">

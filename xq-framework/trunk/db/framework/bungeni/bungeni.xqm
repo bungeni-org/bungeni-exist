@@ -124,6 +124,30 @@ declare function bun:get-bill($billid as xs:string) as element()* {
         transform:transform($doc, $stylesheet, ())
 };
 
+declare function bun:get-attachments($billid as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := bungenicommon:get-xslt("attachments.xsl") 
+
+    (: return AN Bill document as singleton :)
+    let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:bill[@uri=$billid]/ancestor::bu:ontology
+    
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
+declare function bun:get-changes($billid as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := bungenicommon:get-xslt("changes.xsl") 
+
+    (: return AN Bill document as singleton :)
+    let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:bill[@uri=$billid]/ancestor::bu:ontology
+    
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
 declare function bun:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) {
     (: First get the act document :)
     let $doc := bun:get-doc($actid),

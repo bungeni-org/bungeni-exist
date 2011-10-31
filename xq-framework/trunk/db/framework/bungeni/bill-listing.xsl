@@ -56,7 +56,7 @@
         <!--begin_: Line_by_Line_Output -->
         <xsl:if test="$i &lt;= round($count div $limit)">
             <xsl:choose>
-                <xsl:when test="((abs($i)-0)*$limit = $offset)">
+                <xsl:when test="((abs($i)-0)*$limit = $offset) or (($offset+1) = $i)">
                     <a class="curr-no">
                         <xsl:attribute name="href">
                             <xsl:text>#</xsl:text>

@@ -85,7 +85,7 @@ $(document).ready(function () {
             });
         });      
     
-    
+    /*
 	$(".tab_content").hide(); //Hide all content
 	$("ul.ls-doc-tabs li:first").addClass("active").show(); //Activate first tab
 	$(".tab_content:first").show(); //Show first tab content
@@ -101,5 +101,5 @@ $(document).ready(function () {
 		$(activeTab).fadeIn(); //Fade in the active ID content
 		return false;
 	});               
- 
+    */
 });   

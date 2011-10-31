@@ -23,31 +23,34 @@
                 <xsl:with-param name="uri" select="$doc_uri"/>
                 <xsl:with-param name="tab">text</xsl:with-param>
             </xsl:call-template>
-            <div style="float:right;width:400px;height:18px;">
-                <div id="doc-downloads">
-                    <ul class="ls-downloads">
-                        <li>
-                            <a href="#" title="get as RSS feed" class="rss">
-                                <em>RSS</em>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" title="print this document" class="print">
-                                <em>PRINT</em>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" title="get as ODT document" class="odt">
-                                <em>ODT</em>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" title="get as RTF document" class="rtf">
-                                <em>RTF</em>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div id="doc-downloads">
+                <ul class="ls-downloads">
+                    <li>
+                        <a href="#" title="get as RSS feed" class="rss">
+                            <em>RSS</em>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="print this document" class="print">
+                            <em>PRINT</em>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="get as ODT document" class="odt">
+                            <em>ODT</em>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="get as RTF document" class="rtf">
+                            <em>RTF</em>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="get as PDF document" class="pdf">
+                            <em>PDF</em>
+                        </a>
+                    </li>
+                </ul>
             </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
@@ -58,7 +61,7 @@
                         <xsl:value-of select=".//docTitle[@id='ActTitle']"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
-                            <a href="{$doc_uri}">
+                            <a href="user?uri={$doc_uri}">
                                 <xsl:value-of select="concat(.//bu:bill/bu:owner/bu:field[@name='first_name'],' ', .//bu:bill/bu:owner/bu:field[@name='last_name'])"/>
                             </a>
                         </i>

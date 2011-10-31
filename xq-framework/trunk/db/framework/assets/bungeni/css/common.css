@@ -74,7 +74,7 @@ h1#doc-title-blue {
     text-shadow: 0px 1px 0px #c1c1c0;
     color:#2b92be;
     padding:0;
-    margin:0;
+    margin:0 10px;
     font-weight:normal;
     font-size:1.5em;
 }
@@ -114,7 +114,7 @@ div.list-header {
 
 div#doc-downloads {
     height:20px;
-    padding:10px 10px 0 0;
+    padding:0 10px 0 0;
     text-align:right;
 }
 
@@ -193,4 +193,3 @@ div#doc-downloads {
 .bspacer10 {
     margin-bottom:10px;
 }  
-

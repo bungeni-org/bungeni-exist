@@ -1,18 +1,17 @@
 /* Document download options list styling */
-ul.ls-downloads {
-    display:inline;
-    list-style-type:none;
-    padding:0;
-}
-ul.ls-downloads li {
-    padding:0 3px 0 0;
-    display:inline;
-    color:#494949;
-    border-right:1px solid #aaa;
-}
 ul.ls-downloads li.selected {
     background-color:#f5f5f5;   
 }
+
+ul.ls-downloads em { display: none; margin: 0; padding: 0; line-height: 0px;}
+ul.ls-downloads { list-style-type:none;padding: 0px; margin: 0px;margin-bottom:5px; }
+ul.ls-downloads li { float: right; padding: 0px;padding-right:8px; margin: 0px; list-style-type: none; color:#494949; display: inline; }
+ul.ls-downloads li a { display: block; height: 15px;margin-right:0px; }
+ul.ls-downloads li a.rss { margin-right:0px;background: url(../images/ico-rss.png) no-repeat left top; width: 15px; }
+ul.ls-downloads li a.print { margin-right:0px;background: url(../images/ico-print.png) no-repeat left top; width: 15px; }
+ul.ls-downloads li a.odt { margin-right:0px;background: url(../images/ico-doc.png) no-repeat left top; width: 15px; }
+ul.ls-downloads li a.rtf { margin-right:0px;background: url(../images/ico-rtf.png) no-repeat left top; width: 15px; }
+ul.ls-downloads li a:hover { background-position: left -15px; }
 
 /* Listing of items */
 ul.ls-row {
@@ -372,4 +371,3 @@ li.fbr		{ border-bottom-width: 1pt; border-bottom-style: solid; border-right-wid
 li.ftl		{ border-top-width: 1pt; border-top-style: solid; border-left-width: 1pt; border-left-style: solid; }
 li.ftr		{ border-top-width: 1pt; border-top-style: solid; border-right-width: 1pt; border-right-style: solid; }
 li.flr		{ border-left-width: 1pt; border-left-style: solid; border-right-width: 1pt; border-right-style: solid; }
-

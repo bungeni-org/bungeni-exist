@@ -63,7 +63,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 } 
     								 return 
     									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
-    	else if ($EXIST-PATH eq "/bill" )
+    	else if ($EXIST-PATH eq "/text" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
@@ -73,7 +73,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 } 
     								 return 
     									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
-    									
+    	else if ($EXIST-PATH eq "/attachments" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-attachments($docnumber),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    	else if ($EXIST-PATH eq "/timeline" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-changes($docnumber),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    			    					    									
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
                template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("politicalgroups.xml")))

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -10,11 +11,9 @@
     </xd:doc>
     <xsl:output method="xml" use-character-maps="html-unescape"/>
     <xsl:character-map name="html-unescape">
-        
         <xsl:output-character character="&lt;" string="&lt;"/>
         <xsl:output-character character="&gt;" string="&gt;"/>
     </xsl:character-map>
-    
     <xsl:template match="docs">
         <div id="main-doc" class="rounded-eigh tab_container" role="main">
             <div id="doc-listing" class="acts">
@@ -57,7 +56,7 @@
         <!--begin_: Line_by_Line_Output -->
         <xsl:if test="$i &lt;= round($count div $limit)">
             <xsl:choose>
-                <xsl:when test="((abs($i)-0)*$limit = $offset) or ($offset = $i)">
+                <xsl:when test="((abs($i)-0)*$limit = $offset)">
                     <a class="curr-no">
                         <xsl:attribute name="href">
                             <xsl:text>#</xsl:text>
@@ -94,7 +93,7 @@
     <xsl:template match="document" mode="akomaNtoso">
         <xsl:variable name="billIdentifier" select=".//bu:bill/@uri"/>
         <li>
-            <a href="bill?doc={$billIdentifier}" id="{$billIdentifier}">
+            <a href="text?doc={$billIdentifier}" id="{$billIdentifier}">
                 <xsl:value-of select=".//bu:bill/bu:shortName"/>
             </a>
             <span>+</span>

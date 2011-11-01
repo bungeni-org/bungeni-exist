@@ -8,10 +8,8 @@
 """
 
 import java
-import os 
-import sys 
+import os, sys, errno, getopt
 import ConfigParser
-import getopt
 
 from org.dom4j.io import SAXReader
 from org.dom4j.tree import DefaultAttribute
@@ -154,11 +152,28 @@ def process_file(cfg, trans, input_file_path, count):
     else:
         print "Ignoring %s" % input_file_path
 
+
+def __setup_output_dirs__(cfg):
+ 
+    def mkdir_p(path):
+        try:
+            os.makedirs(path)
+        except os.error : # Python >2.5
+            if os.error.errno == errno.EEXIST:
+                pass
+            else: raise
+
+    if not os.path.isdir(cfg.get_akomantoso_output_folder()):
+        os.mkdir(cfg.get_akomantoso_output_folder())
+    if not os.path.isdir(cfg.get_ontoxml_output_folder()):
+        os.mkdir(cfg.get_ontoxml_output_folder())
+
                         
 def main(config_file):
     # parse command line options if any
     try:
         cfg = TransformerConfig(config_file)
+        __setup_output_dirs__(cfg)
         transformer = Transformer(cfg)
         d = DirWalker(cfg, transformer)
         d.walk(cfg.get_input_folder(), process_file)

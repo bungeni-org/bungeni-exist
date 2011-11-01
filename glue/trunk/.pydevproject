@@ -9,10 +9,12 @@
 <path>/glue-integrator/lib/bungeni/editorplugininterface.jar</path>
 <path>/glue-integrator/lib/jsoup/jsoup-1.6.1.jar</path>
 <path>/glue-integrator/lib/log4j/log4j.jar</path>
-<path>/glue-integrator/lib/saxon/saxon9.jar</path>
 <path>/glue-integrator/lib/odfdom/odfdom.jar</path>
 <path>/glue-integrator/lib/commons-lang/commons-lang-2.3.jar</path>
 <path>/glue-integrator/lib/jaxen/jaxen.jar</path>
 <path>/glue-integrator/lib/dom4j/dom4j-1.6.1.jar</path>
+<path>/glue-integrator/lib/transformer/odttransformer-generic.jar</path>
+<path>/glue-integrator/lib/xerces/xercesImpl.jar</path>
+<path>/glue-integrator/lib/saxon/saxon9he.jar</path>
 </pydev_pathproperty>
 </pydev_project>

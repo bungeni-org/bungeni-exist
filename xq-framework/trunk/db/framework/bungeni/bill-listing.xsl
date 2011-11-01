@@ -120,7 +120,7 @@
                     <tr>
                         <td class="labels">status date:</td>
                         <td>
-                            <xsl:value-of select=".//bu:legislativeItem/bu:statusDate"/>
+                            <xsl:value-of select="format-dateTime(.//bu:legislativeItem/bu:statusDate,                                 '[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]',                                 'en',                                  (),())"/>
                         </td>
                     </tr>
                     <tr>
@@ -132,7 +132,7 @@
                     <tr>
                         <td class="labels">submission date:</td>
                         <td>
-                            <xsl:value-of select=".//bu:bungeni/bu:parliament/@date"/>
+                            <xsl:value-of select="format-date(.//bu:bungeni/bu:parliament/@date,                                 '[D1o] [MNn,*-3], [Y]',                                 'en',                                  (),())"/>
                         </td>
                     </tr>
                     <tr>

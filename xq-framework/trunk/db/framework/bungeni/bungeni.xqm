@@ -112,10 +112,10 @@ declare function bun:get-toc($actid as xs:string) as element() {
     return $match/ancestor::akomaNtoso//preamble/toc
 };
 
-declare function bun:get-bill($billid as xs:string) as element()* {
+declare function bun:get-parl-doc($billid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := bungenicommon:get-xslt("bill.xsl") 
+    let $stylesheet := bungenicommon:get-xslt($_tmpl) 
 
     (: return AN Bill document as singleton :)
     let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:bill[@uri=$billid]/ancestor::bu:ontology
@@ -124,25 +124,13 @@ declare function bun:get-bill($billid as xs:string) as element()* {
         transform:transform($doc, $stylesheet, ())
 };
 
-declare function bun:get-attachments($billid as xs:string) as element()* {
+declare function bun:get-member($memberid as xs:string) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := bungenicommon:get-xslt("attachments.xsl") 
+    let $stylesheet := bungenicommon:get-xslt("member.xsl") 
 
-    (: return AN Bill document as singleton :)
-    let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:bill[@uri=$billid]/ancestor::bu:ontology
-    
-    return
-        transform:transform($doc, $stylesheet, ())
-};
-
-declare function bun:get-changes($billid as xs:string) as element()* {
-
-    (: stylesheet to transform :)
-    let $stylesheet := bungenicommon:get-xslt("changes.xsl") 
-
-    (: return AN Bill document as singleton :)
-    let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:bill[@uri=$billid]/ancestor::bu:ontology
+    (: return AN Member document as singleton :)
+    let $doc := collection(bungenicommon:get-lex-db())//bu:ontology//bu:user[@uri=$memberid]/ancestor::bu:ontology
     
     return
         transform:transform($doc, $stylesheet, ())

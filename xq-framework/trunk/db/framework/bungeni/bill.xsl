@@ -77,7 +77,7 @@
                             <b>Status Date:</b>
                         </span>
                         <span>
-                            <xsl:value-of select=".//bu:bungeni/bu:parliament/@date"/>
+                            <xsl:value-of select="format-date(.//bu:bungeni/bu:parliament/@date,                                 '[D1o] [MNn,*-3], [Y]',                                 'en',                                  (),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">

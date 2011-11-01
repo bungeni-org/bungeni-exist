@@ -23,6 +23,22 @@
                 <xsl:with-param name="uri" select="$doc_uri"/>
                 <xsl:with-param name="tab">attachments</xsl:with-param>
             </xsl:call-template>
+            <div style="float:right;width:400px;height:18px;">
+                <div id="doc-downloads">
+                    <ul class="ls-downloads">
+                        <li>
+                            <a href="#" title="get as RSS feed" class="rss">
+                                <em>RSS</em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" title="print this document" class="print">
+                                <em>PRINT</em>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div style="width:700px;margin: 0 auto;">
@@ -46,7 +62,7 @@
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="./bu:statusDate"/>
+                                            <xsl:value-of select="format-dateTime(./bu:statusDate,                                                 '[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]',                                                 'en',                                                  (),())"/>
                                         </span>
                                     </td>
                                 </tr>

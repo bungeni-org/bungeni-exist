@@ -81,10 +81,7 @@
                                     </td>
                                     <td>
                                         <span>
-                                            <!-- #!FIX_THIS NOT RECOGNIZING DATE FORMAT -->
-                                            <!--xsl:variable name="arrStatusDate" select="tokenize(./bu:field[@name='date_active'],'\s+')" as="xs:dateTime" />
-                                            <xsl:variable name="formedDate" select="concat($arrStatusDate[1],'T',$arrStatusDate[2])" as="xs:dateTime" /-->
-                                            <xsl:value-of select="format-date(                                                 current-date(),                                                 '[FNn], [D1o] [MNn,*-3], [Y]',                                                 'en',                                                 (),                                                 ()                                                 )"/>
+                                            <xsl:value-of select="format-dateTime(./bu:field[@name='date_active'],                                                                         '[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]',                                                                         'en',                                                                          (),())"/>
                                         </span>
                                     </td>
                                 </tr>

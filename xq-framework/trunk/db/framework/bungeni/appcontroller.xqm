@@ -67,7 +67,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-bill($docnumber),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"bill.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bill.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -77,7 +77,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-attachments($docnumber),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"attachments.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -87,13 +87,33 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-changes($docnumber),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"changes.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
-    			    					    									
+    	else if ($EXIST-PATH eq "/related" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"related.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    	else if ($EXIST-PATH eq "/member" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-member($docnumber),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("member.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    			    			    
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
                template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("politicalgroups.xml")))

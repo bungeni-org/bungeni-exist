@@ -61,11 +61,17 @@
                         <xsl:value-of select=".//docTitle[@id='ActTitle']"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
-                            <a href="user?uri={$doc_uri}">
+                            <a href="member?uri={$doc_uri}">
                                 <xsl:value-of select="concat(.//bu:bill/bu:owner/bu:field[@name='first_name'],' ', .//bu:bill/bu:owner/bu:field[@name='last_name'])"/>
                             </a>
                         </i>
                     </h4>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( <xsl:for-each select=".//bu:itemsignatories/bu:itemsignatorie">
+                            <i>
+                                <a href="member?uri={concat('/ke/parliament/user/', bu:field[@name='user_id'])}">
+                                    <xsl:value-of select="concat(bu:field[@name='first_name'],' ', bu:field[@name='last_name'])"/>
+                                </a>
+                            </i>, </xsl:for-each> )</h4>
                     <div class="doc-status">
                         <span>
                             <b>Status:</b>

@@ -6,5 +6,13 @@
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">jython 2.5</pydev_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/glue-integrator/src</path>
+<path>/glue-integrator/lib/bungeni/editorplugininterface.jar</path>
+<path>/glue-integrator/lib/jsoup/jsoup-1.6.1.jar</path>
+<path>/glue-integrator/lib/log4j/log4j.jar</path>
+<path>/glue-integrator/lib/saxon/saxon9.jar</path>
+<path>/glue-integrator/lib/odfdom/odfdom.jar</path>
+<path>/glue-integrator/lib/commons-lang/commons-lang-2.3.jar</path>
+<path>/glue-integrator/lib/jaxen/jaxen.jar</path>
+<path>/glue-integrator/lib/dom4j/dom4j-1.6.1.jar</path>
 </pydev_pathproperty>
 </pydev_project>

@@ -164,9 +164,9 @@ def __setup_output_dirs__(cfg):
             else: raise
 
     if not os.path.isdir(cfg.get_akomantoso_output_folder()):
-        os.mkdir(cfg.get_akomantoso_output_folder())
+        mkdir_p(cfg.get_akomantoso_output_folder())
     if not os.path.isdir(cfg.get_ontoxml_output_folder()):
-        os.mkdir(cfg.get_ontoxml_output_folder())
+        mkdir_p(cfg.get_ontoxml_output_folder())
 
                         
 def main(config_file):

@@ -27,17 +27,8 @@ declare function bun:get-doc($actid as xs:string) as element() {
     return $match/ancestor::akomaNtoso
 };
 
-    
-(:
-declare function lex:paginator($totalcount as xs:integer, $offset as xs:integer, $limit as xs:integer) as element(xh:div) {
-<xh:div id="paginator>
-{
-     return $totalcount
 
-}
-<xh:div>
-};
-:)
+
 declare function bun:paginator($offset as xs:integer) as element()+ {
     (: get total documents for pagination :)
     let $count := count(collection(bungenicommon:get-lex-db())//akomaNtoso)
@@ -65,18 +56,18 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
     let $doc := <docs> 
         <paginator>
         (: Count the total number of bills only :)
-        <count>{count(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'])}</count>
+        <count>{count(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'])}</count>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
         <alisting>
         {
             (:
-            for $match in subsequence(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'],$offset,$limit)
+            for $match in subsequence(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
             return $match/ancestor::bu:ontology  
             :)
             
-            for $match in subsequence(collection(bungenicommon:get-lex-db())//bu:ontology//bu:field[@name='bill_id'],$offset,$limit)
+            for $match in subsequence(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
             return 
             <document>
                 <output> 
@@ -87,9 +78,9 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
                 <referenceInfo>
                     <ref>
                     {
-                        let $bill-ref := data($match/ancestor::bu:ontology//bu:bill/bu:ministry/@href)
+                        let $bill-ref := data($match/ancestor::bu:ontology/bu:bill/bu:ministry/@href)
                         return 
-                            collection(bungenicommon:get-lex-db())//bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
+                            collection(bungenicommon:get-lex-db())/bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
                     }
                     </ref>
                 </referenceInfo>

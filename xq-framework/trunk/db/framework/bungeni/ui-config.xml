@@ -8,6 +8,61 @@
     <!-- specify date and datetime formats here -->
     <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
     <format type="date">[D1o] [MNn,*-3], [Y]</format>
+    <menugroups>
+        <main path="home">
+            <title>home</title>
+        </main>
+        <main path="business">
+            <ul xmlns="http://www.w3.org/1999/xhtml" class="theme-lev-1">
+                <li>
+                    <a href="whatson">what's on</a>
+                </li>
+                <li>
+                    <a href="committees">committees</a>
+                </li>
+                <li>
+                    <a href="bills">bills</a>
+                </li>
+                <li>
+                    <a href="questions">questions</a>
+                </li>
+                <li>
+                    <a href="motions">motions</a>
+                </li>
+                <li>
+                    <a href="tableddocuments">tabled documents</a>
+                </li>
+                <li>
+                    <a href="agenda">agenda items</a>
+                </li>
+                <li>
+                    <a href="sittings">sittings</a>
+                </li>
+                <li>
+                    <a href="publications">publications</a>
+                </li>
+                <li>
+                    <a href="politicalgroups">politicalgroups</a>
+                </li>
+            </ul>
+        </main>
+        <main path="members">
+            <ul xmlns="http://www.w3.org/1999/xhtml" class=" theme-lev-1">
+                <li>
+                    <a href="whatson">what's on</a>
+                </li>
+                <li>
+                    <a href="sittings">sittings</a>
+                </li>
+                <li>
+                    <a href="publications">publications</a>
+                </li>
+                <li>
+                    <a href="politicalgroups">politicalgroups</a>
+                </li>
+            </ul>
+        </main>
+    </menugroups>
     <tabgroups>
         <tabs name="legislativeitems">
             <tab path="bill">

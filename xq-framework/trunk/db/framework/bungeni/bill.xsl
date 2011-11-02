@@ -12,7 +12,7 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc_uri" select=".//bu:bill/@uri"/>
+        <xsl:variable name="doc_uri" select="concat('/ke/parliament/2011-03-02/user/',./bu:bill/bu:owner/bu:field[@name='user_id'])"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
@@ -20,7 +20,7 @@
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="./bu:bill/@uri"/>
                 <xsl:with-param name="tab">text</xsl:with-param>
             </xsl:call-template>
             <div id="doc-downloads">
@@ -68,7 +68,7 @@
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( <xsl:for-each select=".//bu:itemsignatories/bu:itemsignatorie">
                             <i>
-                                <a href="member?uri={concat('/ke/parliament/user/', bu:field[@name='user_id'])}">
+                                <a href="member?uri={concat('/ke/parliament/2011-03-02/user/', bu:field[@name='user_id'])}">
                                     <xsl:value-of select="concat(bu:field[@name='first_name'],' ', bu:field[@name='last_name'])"/>
                                 </a>
                             </i>, </xsl:for-each> )</h4>

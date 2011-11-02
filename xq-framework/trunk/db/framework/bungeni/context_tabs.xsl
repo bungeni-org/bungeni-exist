@@ -13,71 +13,92 @@
     
     <!-- Start Tab Configurations -->
     <nav:doc>
-        <nav:tab>text</nav:tab>
-        <nav:tab>timeline</nav:tab>
-        <nav:tab>related</nav:tab>
-        <nav:tab>attachments</nav:tab>
+        <nav:tab>
+            <nav:title>text</nav:title>
+            <nav:path>text</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>timeline</nav:title>
+            <nav:path>timeline</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>related</nav:title>
+            <nav:path>related</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>attached files</nav:title>
+            <nav:path>attachments</nav:path>
+        </nav:tab>
     </nav:doc>
     <nav:member>
-        <nav:tab>member</nav:tab>
-        <nav:tab>info</nav:tab>
-        <nav:tab>office-held</nav:tab>
-        <nav:tab>parl-activities</nav:tab>
-        <nav:tab>contacts</nav:tab>
+        <nav:tab>
+            <nav:title>member</nav:title>
+            <nav:path>member</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>information</nav:title>
+            <nav:path>info</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>offices held</nav:title>
+            <nav:path>offices-held</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>parliament activities</nav:title>
+            <nav:path>parl-activities</nav:path>
+        </nav:tab>
+        <nav:tab>
+            <nav:title>contacts</nav:title>
+            <nav:path>contacts</nav:path>
+        </nav:tab>
     </nav:member>
     <!-- End Tab Configurations -->
     <xsl:template name="doc-tabs" match="nav:tabs">
         <xsl:param name="tab"/>
         <xsl:param name="uri"/>
-        <xsl:param name="title"/>
         <div id="tab-menu" class="ls-tabs">
             <ul class="ls-doc-tabs">
-                <xsl:call-template name="tab-generator">
-                    <xsl:with-param name="tab" select="$tab"/>
-                    <xsl:with-param name="uri" select="$uri"/>
-                    <xsl:with-param name="title">text default</xsl:with-param>
-                    <xsl:with-param name="for">document('')/*/nav:doc/nav:tab</xsl:with-param>
-                </xsl:call-template>
+                <xsl:for-each select="document('')/*/nav:doc/nav:tab">
+                    <xsl:call-template name="tab-generator">
+                        <xsl:with-param name="tab" select="$tab"/>
+                        <xsl:with-param name="uri" select="$uri"/>
+                    </xsl:call-template>
+                </xsl:for-each>
             </ul>
         </div>
     </xsl:template>
     <xsl:template name="mem-tabs" match="nav:tabs">
         <xsl:param name="tab"/>
         <xsl:param name="uri"/>
-        <xsl:param name="title"/>
         <div id="tab-menu" class="ls-tabs">
             <ul class="ls-doc-tabs">
-                <xsl:call-template name="tab-generator">
-                    <xsl:with-param name="tab" select="$tab"/>
-                    <xsl:with-param name="uri" select="$uri"/>
-                    <xsl:with-param name="title">members of parliament</xsl:with-param>
-                    <xsl:with-param name="for" select="document('')/*/nav:member/nav:tab"/>
-                </xsl:call-template>
+                <xsl:for-each select="document('')/*/nav:member/nav:tab">
+                    <xsl:call-template name="tab-generator">
+                        <xsl:with-param name="tab" select="$tab"/>
+                        <xsl:with-param name="uri" select="$uri"/>
+                    </xsl:call-template>
+                </xsl:for-each>
             </ul>
         </div>
     </xsl:template>
     <xsl:template name="tab-generator">
         <xsl:param name="tab"/>
         <xsl:param name="uri"/>
-        <xsl:param name="title"/>
-        <xsl:param name="for"/>
-        <xsl:for-each select="document('')/*/nav:doc/nav:tab">
-            <xsl:choose>
-                <xsl:when test=". = $tab">
-                    <li class="active">
-                        <a href="{$tab}?doc={$uri}#">
-                            <xsl:value-of select="."/>
-                        </a>
-                    </li>
-                </xsl:when>
-                <xsl:otherwise>
-                    <li>
-                        <a href="{.}?doc={$uri}">
-                            <xsl:value-of select="."/>
-                        </a>
-                    </li>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
+        <xsl:choose>
+            <xsl:when test="./nav:path = $tab">
+                <li class="active">
+                    <a href="{$tab}?doc={$uri}#">
+                        <xsl:value-of select="./nav:title"/>
+                    </a>
+                </li>
+            </xsl:when>
+            <xsl:otherwise>
+                <li>
+                    <a href="{./nav:path}?doc={$uri}">
+                        <xsl:value-of select="./nav:title"/>
+                    </a>
+                </li>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>

@@ -63,7 +63,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 } 
     								 return 
     									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
-    	else if ($EXIST-PATH eq "/text" )
+    	else if ($EXIST-PATH eq "/bill" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("doc",$bun:DOCNO)),                

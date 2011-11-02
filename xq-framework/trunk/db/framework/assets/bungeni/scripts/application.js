@@ -71,19 +71,19 @@ $(document).ready(function () {
             $("#expand-all").toggle(function (){
                 var text = $('.ls-row').find('li div.doc-toggle');
                 text.slideDown('200');
-                $(this).parent().find('span').html('-');     
+                $(this).parent().parent().find('span').html('-');     
    
                 $("#expand-all").text("- compress all")
                 .stop();
             }, function(){
                 var text = $('.ls-row').find('li div.doc-toggle');
                 text.slideUp('200');
-                $(this).parent().find('span').html('+');
+                $(this).parent().parent().find('span').html('+');
                             
                 $("#expand-all").text("+ expand all")
                 .stop();
             });
-        });      
+        });    
     
     /*
 	$(".tab_content").hide(); //Hide all content

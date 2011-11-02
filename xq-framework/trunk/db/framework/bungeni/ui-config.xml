@@ -1,0 +1,6 @@
+<!-- 
+    
+    This file is the UI configuration file used by the System 
+    
+    --><ui>
+    <!-- specify date and datetime formats here --><format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format><format type="date">[D1o] [MNn,*-3], [Y]</format></ui>

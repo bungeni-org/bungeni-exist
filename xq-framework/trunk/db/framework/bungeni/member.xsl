@@ -12,7 +12,7 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc_uri" select=".//bu:bill/@uri"/>
+        <xsl:variable name="doc_uri" select=".//bu:user/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
@@ -21,7 +21,6 @@
             </div>
             <xsl:call-template name="mem-tabs">
                 <xsl:with-param name="uri" select="$doc_uri"/>
-                <xsl:with-param name="title">member of parliament</xsl:with-param>
                 <xsl:with-param name="tab">member</xsl:with-param>
             </xsl:call-template>
             <div id="doc-downloads">

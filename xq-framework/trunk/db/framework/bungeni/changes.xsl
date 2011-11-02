@@ -32,8 +32,9 @@
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="uri" select="$doc_uri"/>
-                <xsl:with-param name="tab">timeline</xsl:with-param>
+                <xsl:with-param name="tab-group">legislativeitems</xsl:with-param>
+                <xsl:with-param name="tab-path">timeline</xsl:with-param>
+                <xsl:with-param name="uri" select="./bu:bill/@uri"/>
             </xsl:call-template>
             <div style="float:right;width:400px;height:18px;">
                 <div id="doc-downloads">

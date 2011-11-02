@@ -20,8 +20,9 @@
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
+                <xsl:with-param name="tab-group">members</xsl:with-param>
+                <xsl:with-param name="tab-path">member</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
-                <xsl:with-param name="tab">member</xsl:with-param>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">

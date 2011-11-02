@@ -20,8 +20,9 @@
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
+                <xsl:with-param name="tab-group">legislativeitems</xsl:with-param>
+                <xsl:with-param name="tab-path">bill</xsl:with-param>
                 <xsl:with-param name="uri" select="./bu:bill/@uri"/>
-                <xsl:with-param name="tab">text</xsl:with-param>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">

@@ -1,6 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
     
     This file is the UI configuration file used by the System 
     
-    --><ui>
-    <!-- specify date and datetime formats here --><format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format><format type="date">[D1o] [MNn,*-3], [Y]</format></ui>
+    -->
+<ui>
+    <!-- specify date and datetime formats here -->
+    <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
+    <format type="date">[D1o] [MNn,*-3], [Y]</format>
+    <tabgroups>
+        <tabs name="legislativeitems">
+            <tab path="bill">
+                <title>text</title>
+            </tab>
+            <tab path="timeline">
+                <title>timeline</title>
+            </tab>
+            <tab path="related">
+                <title>related</title>
+            </tab>
+            <tab path="attachments">
+                <title>attached files</title>
+            </tab>
+        </tabs>
+        <tabs name="members">
+            <tab path="member">
+                <title>member</title>
+            </tab>
+            <tab path="info">
+                <title>information</title>
+            </tab>
+            <tab path="office-held">
+                <title>offices held</title>
+            </tab>
+            <tab path="parl-activities">
+                <title>parliament activities</title>
+            </tab>
+            <tab path="contacts">
+                <title>contacts</title>
+            </tab>
+        </tabs>
+    </tabgroups>
+</ui>

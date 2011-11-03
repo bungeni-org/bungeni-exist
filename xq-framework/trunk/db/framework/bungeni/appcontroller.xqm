@@ -56,13 +56,15 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),                
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $act-entries-tmpl :=  bun:get-bills($offset,$limit),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    								    (:template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( bun:get-menu($EXIST-PATH, fw:app-tmpl("menu.xml")/xh:div, $act-entries-tmpl), $act-entries-repl)):)
+    								    
     	else if ($EXIST-PATH eq "/bill" )
     		 then 
                 let 

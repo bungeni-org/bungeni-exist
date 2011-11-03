@@ -9,59 +9,78 @@
     <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
     <format type="date">[D1o] [MNn,*-3], [Y]</format>
     <menugroups>
-        <main path="home">
-            <title>home</title>
-        </main>
-        <main path="business">
-            <ul xmlns="http://www.w3.org/1999/xhtml" class="theme-lev-1">
-                <li>
-                    <a href="whatson">what's on</a>
-                </li>
-                <li>
-                    <a href="committees">committees</a>
-                </li>
-                <li>
-                    <a href="bills">bills</a>
-                </li>
-                <li>
-                    <a href="questions">questions</a>
-                </li>
-                <li>
-                    <a href="motions">motions</a>
-                </li>
-                <li>
-                    <a href="tableddocuments">tabled documents</a>
-                </li>
-                <li>
-                    <a href="agenda">agenda items</a>
-                </li>
-                <li>
-                    <a href="sittings">sittings</a>
-                </li>
-                <li>
-                    <a href="publications">publications</a>
-                </li>
-                <li>
-                    <a href="politicalgroups">politicalgroups</a>
-                </li>
-            </ul>
-        </main>
-        <main path="members">
-            <ul xmlns="http://www.w3.org/1999/xhtml" class=" theme-lev-1">
-                <li>
-                    <a href="whatson">what's on</a>
-                </li>
-                <li>
-                    <a href="sittings">sittings</a>
-                </li>
-                <li>
-                    <a href="publications">publications</a>
-                </li>
-                <li>
-                    <a href="politicalgroups">politicalgroups</a>
-                </li>
-            </ul>
-        </main>
+        <menu name="mainnav">
+            <div id="mainnav" class="menu">
+                <ul class="theme-lev-1" id="menu-level-mainnav">
+                    <li>
+                        <a href="home">home</a>
+                    </li>
+                    <li>
+                        <a href="business">business</a>
+                    </li>
+                    <li>
+                        <a href="members">members</a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+        <menu name="subnav">
+            <submenu for="home">
+                <ul id="portal-home">
+                    <li/>
+                </ul>
+            </submenu>
+            <submenu for="business">
+                <ul class="theme-lev-1">
+                    <li>
+                        <a href="whatson">what's on</a>
+                    </li>
+                    <li>
+                        <a href="committees">committees</a>
+                    </li>
+                    <li>
+                        <a href="bills">bills</a>
+                    </li>
+                    <li>
+                        <a href="questions">questions</a>
+                    </li>
+                    <li>
+                        <a href="motions">motions</a>
+                    </li>
+                    <li>
+                        <a href="tableddocuments">tabled documents</a>
+                    </li>
+                    <li>
+                        <a href="agenda">agenda items</a>
+                    </li>
+                    <li>
+                        <a href="sittings">sittings</a>
+                    </li>
+                    <li>
+                        <a href="publications">publications</a>
+                    </li>
+                    <li>
+                        <a href="politicalgroups">politicalgroups</a>
+                    </li>
+                </ul>
+            </submenu>
+            <submenu for="members">
+                <ul class="theme-lev-1">
+                    <li>
+                        <a href="whatson">what's on</a>
+                    </li>
+                    <li>
+                        <a href="sittings">sittings</a>
+                    </li>
+                    <li>
+                        <a href="publications">publications</a>
+                    </li>
+                    <li>
+                        <a href="politicalgroups">politicalgroups</a>
+                    </li>
+                </ul>
+            </submenu>
+        </menu>
     </menugroups>
     <tabgroups>
         <tabs name="legislativeitems">

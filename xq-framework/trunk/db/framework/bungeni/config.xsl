@@ -12,6 +12,18 @@
     <xsl:variable name="ui-config" select="string('ui-config.xml')"/>
     <xsl:variable name="date-format" select="document($ui-config)/ui/format[@type='date']/text()"/>
     <xsl:variable name="datetime-format" select="document($ui-config)/ui/format[@type='datetime']/text()"/>
+    <!-- sub-menu nav -->
+    <xsl:function name="xqcfg:get_sub_nav">
+        <xsl:param name="main-nav"/>
+        <xsl:call-template name="get_menu_tree">
+            <xsl:with-param name="top-level" select="$main-nav"/>
+        </xsl:call-template>
+    </xsl:function>
+    <xsl:template name="get_menu_tree">
+        <xsl:param name="top-level"/>
+        <xsl:copy-of select="document($ui-config)/ui/menugroups/menu/submenu[@for=$top-level]"/>
+    </xsl:template>    
+    <!-- tab-menu nav -->
     <xsl:function name="xqcfg:get_tab">
         <xsl:param name="tab-group"/>
         <xsl:call-template name="get_tab">

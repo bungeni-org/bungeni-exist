@@ -37,7 +37,7 @@
     <xsl:template match="document" mode="renderui">
         <xsl:variable name="billIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
         <li>
-            <a href="bill?doc={$billIdentifier}" id="{$billIdentifier}">
+            <a href="question?doc={$billIdentifier}" id="{$billIdentifier}">
                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>+</span>

@@ -3,16 +3,16 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Oct 6, 2011</xd:p>
+                <xd:b>Created on:</xd:b> Nov 03, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill item from Bungeni</xd:p>
+            <xd:p> Question item from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc_uri" select="concat('/ke/parliament/2011-03-02/user/',./bu:bill/bu:owner/bu:field[@name='user_id'])"/>
+        <xsl:variable name="doc_uri" select="concat('/ke/parliament/2011-03-02/user/',./bu:legislativeItem/bu:owner/bu:field[@name='user_id'])"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
@@ -22,7 +22,7 @@
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">legislativeitems</xsl:with-param>
                 <xsl:with-param name="tab-path">bill</xsl:with-param>
-                <xsl:with-param name="uri" select="./bu:bill/@uri"/>
+                <xsl:with-param name="uri" select="./bu:question/@uri"/>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
@@ -56,10 +56,10 @@
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">
-                        <xsl:value-of select=".//bu:legislativeItem/bu:shortName"/>
+                        KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select=".//docTitle[@id='ActTitle']"/>
+                        <xsl:value-of select=".//bu:legislativeItem/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
                             <a href="member?uri={$doc_uri}">
@@ -67,12 +67,22 @@
                             </a>
                         </i>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( <xsl:for-each select=".//bu:itemsignatories/bu:itemsignatorie">
-                            <i>
-                                <a href="member?uri={concat('/ke/parliament/2011-03-02/user/', bu:field[@name='user_id'])}">
-                                    <xsl:value-of select="concat(bu:field[@name='first_name'],' ', bu:field[@name='last_name'])"/>
-                                </a>
-                            </i>, </xsl:for-each> )</h4>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( 
+                        <xsl:choose>
+                            <xsl:when test=".//bu:itemsignatories/bu:itemsignatorie ne null">
+                                <xsl:for-each select=".//bu:itemsignatories/bu:itemsignatorie">
+                                    <i>
+                                        <a href="member?uri={concat('/ke/parliament/2011-03-02/user/', bu:field[@name='user_id'])}">
+                                            <xsl:value-of select="concat(bu:field[@name='first_name'],' ', bu:field[@name='last_name'])"/>
+                                        </a>
+                                    </i>, 
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                None
+                            </xsl:otherwise>
+                        </xsl:choose> )
+                    </h4>
                     <div class="doc-status">
                         <span>
                             <b>Status:</b>

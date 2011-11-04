@@ -66,9 +66,6 @@
     <resource type="XMLResource" name="menu.xml" owner="admin" group="dba" mode="644" created="2011-11-03T16:31:46+03:00" modified="2011-11-03T16:31:46+03:00" filename="menu.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="menu.xsl" owner="admin" group="dba" mode="644" created="2011-11-03T14:52:56+03:00" modified="2011-11-03T14:52:56+03:00" filename="menu.xsl" mimetype="application/xslt+xml">
-        <acl entries="0" version="1"/>
-    </resource>
     <resource type="XMLResource" name="paginator.xsl" owner="admin" group="dba" mode="644" created="2011-11-02T18:18:56+03:00" modified="2011-11-02T18:18:56+03:00" filename="paginator.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>

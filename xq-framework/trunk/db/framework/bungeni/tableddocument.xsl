@@ -6,7 +6,7 @@
                 <xd:b>Created on:</xd:b> Oct 6, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill item from Bungeni</xd:p>
+            <xd:p> Tabled document item from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -71,24 +71,6 @@
                                 <xsl:value-of select="concat(bu:legislativeItem/bu:owner/bu:field[@name='first_name'],' ', bu:legislativeItem/bu:owner/bu:field[@name='last_name'])"/>
                             </a>
                         </i>
-                    </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( 
-                        <xsl:choose>
-                            <!-- check whether we have signatories or not -->
-                            <xsl:when test="boolean(bu:itemsignatories[not(*)]) eq false()">
-                                <xsl:for-each select="bu:itemsignatories/bu:itemsignatorie">
-                                    <i>
-                                        <a href="member?uri={concat('/ke/parliament/2011-03-02/user/', ./bu:field[@name='user_id'])}">
-                                            <xsl:value-of select="concat(bu:field[@name='first_name'],' ', ./bu:field[@name='last_name'])"/>
-                                        </a>
-                                    </i>, 
-                                </xsl:for-each>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                None
-                            </xsl:otherwise>
-                        </xsl:choose> 
-                        )
                     </h4>
                     <div class="doc-status">
                         <span>

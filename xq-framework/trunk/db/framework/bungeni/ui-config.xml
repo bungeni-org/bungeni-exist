@@ -83,17 +83,65 @@
         </menu>
     </menugroups>
     <tabgroups>
-        <tabs name="legislativeitems">
-            <tab path="bill">
+        <tabs name="bill">
+            <tab path="bill/text" id="text">
                 <title>text</title>
             </tab>
-            <tab path="timeline">
+            <tab path="bill/timeline" id="timeline">
                 <title>timeline</title>
             </tab>
-            <tab path="related">
+            <tab path="bill/related" id="related">
                 <title>related</title>
             </tab>
-            <tab path="attachments">
+            <tab path="bill/attachments" id="attachments">
+                <title>attached files</title>
+            </tab>
+        </tabs>
+        <tabs name="question">
+            <tab path="question/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="question/timeline" id="timeline">
+                <title>timeline</title>
+            </tab>
+            <tab path="question/related" id="related">
+                <title>related</title>
+            </tab>
+            <tab path="question/attachments" id="attachments">
+                <title>attached files</title>
+            </tab>
+        </tabs>
+        <tabs name="motion">
+            <tab path="motion/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="motion/timeline" id="timeline">
+                <title>timeline</title>
+            </tab>
+            <tab path="motion/related" id="related">
+                <title>related</title>
+            </tab>
+            <tab path="motion/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
+            <tab path="motion/attachments" id="attachments">
+                <title>attached files</title>
+            </tab>
+        </tabs>
+        <tabs name="tableddocument">
+            <tab path="motion/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="tableddocument/timeline" id="timeline">
+                <title>timeline</title>
+            </tab>
+            <tab path="tableddocument/related" id="related">
+                <title>related</title>
+            </tab>
+            <tab path="tableddocument/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
+            <tab path="tableddocument/attachments" id="attachments">
                 <title>attached files</title>
             </tab>
         </tabs>

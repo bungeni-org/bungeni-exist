@@ -6,7 +6,7 @@
                 <xd:b>Created on:</xd:b> Oct 31, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill changes from Bungeni</xd:p>
+            <xd:p> Parliamentary Item Assigned Groups from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -24,7 +24,7 @@
                 <xsl:with-param name="tab-group">
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">timeline</xsl:with-param>
+                <xsl:with-param name="tab-path">assigned</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div style="float:right;width:400px;height:18px;">

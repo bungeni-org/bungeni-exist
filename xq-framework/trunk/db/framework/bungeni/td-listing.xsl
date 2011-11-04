@@ -6,7 +6,7 @@
                 <xd:b>Created on:</xd:b> Oct 5, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p>Lists bills from Bungeni</xd:p>
+            <xd:p>Lists tableddocuments from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     
@@ -37,7 +37,7 @@
     <xsl:template match="document" mode="renderui">
         <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
         <li>
-            <a href="question/text?doc={$docIdentifier}" id="{$docIdentifier}">
+            <a href="tableddocument/text?doc={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>+</span>
@@ -65,12 +65,6 @@
                         <td class="labels">status date:</td>
                         <td>
                             <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">question type:</td>
-                        <td>
-                            <xsl:value-of select="output/bu:ontology/bu:question/bu:question_type/bu:field[@name='question_type_name']"/>
                         </td>
                     </tr>
                     <tr>

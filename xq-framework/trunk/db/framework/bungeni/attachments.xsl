@@ -12,17 +12,20 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc_uri" select=".//bu:bill/@uri"/>
+        <xsl:variable name="doc-type" select="bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select=".//bu:bill/bu:shortName"/>
+                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group">legislativeitems</xsl:with-param>
+                <xsl:with-param name="tab-group">
+                    <xsl:value-of select="$doc-type"/>
+                </xsl:with-param>
                 <xsl:with-param name="tab-path">attachments</xsl:with-param>
-                <xsl:with-param name="uri" select="./bu:bill/@uri"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div style="float:right;width:400px;height:18px;">
                 <div id="doc-downloads">

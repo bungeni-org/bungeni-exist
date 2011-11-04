@@ -157,6 +157,89 @@ declare function bun:get-questions($offset as xs:integer, $limit as xs:integer) 
        
 };  
 
+declare function bun:get-motions($offset as xs:integer, $limit as xs:integer) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := bungenicommon:get-xslt("motion-listing.xsl")    
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of questions only :)
+        <count>{count(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'])}</count>
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        </paginator>
+        <alisting>
+        {            
+            for $match in subsequence(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'],$offset,$limit)
+            return 
+            <document>
+                <output> 
+                {
+                    $match/ancestor::bu:ontology
+                }
+                </output>
+                <referenceInfo>
+                    <ref>
+                    {
+                        let $bill-ref := data($match/ancestor::bu:ontology/bu:bill/bu:ministry/@href)
+                        return 
+                            collection(bungenicommon:get-lex-db())/bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
+                    }
+                    </ref>
+                </referenceInfo>
+            </document>            
+        } 
+        </alisting>
+    </docs>
+    
+    return
+        transform:transform($doc, $stylesheet, ()) 
+       
+};
+
+declare function bun:get-tableddocs($offset as xs:integer, $limit as xs:integer) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := bungenicommon:get-xslt("td-listing.xsl")    
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of questions only :)
+        <count>{count(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'])}</count>
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        </paginator>
+        <alisting>
+        {            
+            for $match in subsequence(collection(bungenicommon:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'],$offset,$limit)
+            return 
+            <document>
+                <output> 
+                {
+                    $match/ancestor::bu:ontology
+                }
+                </output>
+                <referenceInfo>
+                    <ref>
+                    {
+                        let $bill-ref := data($match/ancestor::bu:ontology/bu:bill/bu:ministry/@href)
+                        return 
+                            collection(bungenicommon:get-lex-db())/bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
+                    }
+                    </ref>
+                </referenceInfo>
+            </document>            
+        } 
+        </alisting>
+    </docs>
+    
+    return
+        transform:transform($doc, $stylesheet, ()) 
+       
+};
 
 (: Search for the doc matching the actid in the parameter and return the tabel of contents :)
 declare function bun:get-toc($actid as xs:string) as element() {

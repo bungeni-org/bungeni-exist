@@ -35,9 +35,9 @@
         </ul>
     </xsl:template>
     <xsl:template match="document" mode="renderui">
-        <xsl:variable name="billIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
         <li>
-            <a href="bill?doc={$billIdentifier}" id="{$billIdentifier}">
+            <a href="bill/text?doc={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>+</span>
@@ -46,7 +46,7 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="$billIdentifier"/>
+                            <xsl:value-of select="$docIdentifier"/>
                         </td>
                     </tr>
                     <tr>

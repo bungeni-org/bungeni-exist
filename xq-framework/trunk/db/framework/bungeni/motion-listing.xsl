@@ -35,9 +35,9 @@
         </ul>
     </xsl:template>
     <xsl:template match="document" mode="renderui">
-        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:*/@uri"/>
         <li>
-            <a href="question/text?doc={$docIdentifier}" id="{$docIdentifier}">
+            <a href="motion/text?doc={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>+</span>
@@ -65,12 +65,6 @@
                         <td class="labels">status date:</td>
                         <td>
                             <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">question type:</td>
-                        <td>
-                            <xsl:value-of select="output/bu:ontology/bu:question/bu:question_type/bu:field[@name='question_type_name']"/>
                         </td>
                     </tr>
                     <tr>

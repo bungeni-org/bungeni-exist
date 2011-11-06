@@ -21,9 +21,13 @@ import module namespace config = "http://bungeni.org/xquery/config" at "../confi
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 
-
-
+(:~
+Application imports
+:)
 import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm"; 
+
+
 
 (:~
 All applications using the XQ framework must implement the appcontroller namespace module with the function 
@@ -45,13 +49,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	(: Now we process application requests :)
     	else if ($EXIST-PATH eq "/business")
     		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("business.xml")))
+               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-tmpl($EXIST-PATH, "business.xml"))
     	else if ($EXIST-PATH eq "/members")
     		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("members.xml")))               
+               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-tmpl($EXIST-PATH, "members.xml"))               
     	else if ($EXIST-PATH eq "/committees")
     		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("committees.xml")))                   
+               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-tmpl($EXIST-PATH, "committees.xml"))                   
     	else if ($EXIST-PATH eq "/bills")
     		 then 
                 let 
@@ -62,7 +66,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, 
+    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								        )
     								    (:template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( bun:get-menu($EXIST-PATH, fw:app-tmpl("menu.xml")/xh:div, $act-entries-tmpl), $act-entries-repl)):)
     	else if ($EXIST-PATH eq "/questions")
     		 then 
@@ -74,7 +80,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, 
+    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								        )
     	else if ($EXIST-PATH eq "/motions")
     		 then 
                 let 
@@ -85,7 +93,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("motions.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/tableddocuments")
     		 then 
                 let 
@@ -96,7 +104,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("tableddocuments.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    								    
+    								    template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))    								    
     	else if ($EXIST-PATH eq "/question/text" )
     		 then 
                 let 
@@ -106,7 +114,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("question.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/question/timeline" )
     		 then 
                 let 
@@ -116,7 +124,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/question/related" )
     		 then 
                 let 
@@ -126,7 +134,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/question/attachments" )
     		 then 
                 let 
@@ -136,7 +144,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))   									
     	else if ($EXIST-PATH eq "/bill/text" )
     		 then 
                 let 
@@ -146,7 +154,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bill.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/bill/timeline" )
     		 then 
                 let 
@@ -156,7 +164,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))   									
     	else if ($EXIST-PATH eq "/bill/related" )
     		 then 
                 let 
@@ -166,7 +174,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))   									
     	else if ($EXIST-PATH eq "/bill/attachments" )
     		 then 
                 let 
@@ -176,7 +184,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/motion/text" )
     		 then 
                 let 
@@ -186,7 +194,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("motion.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/motion/timeline" )
     		 then 
                 let 
@@ -196,7 +204,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))  									
     	else if ($EXIST-PATH eq "/motion/related" )
     		 then 
                 let 
@@ -206,7 +214,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/motion/assigned-groups" )
     		 then 
                 let 
@@ -216,7 +224,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))      									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))      									
     	else if ($EXIST-PATH eq "/motion/attachments" )
     		 then 
                 let 
@@ -226,7 +234,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/tableddocument/text" )
     		 then 
                 let 
@@ -236,7 +244,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("tableddocument.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/tableddocument/timeline" )
     		 then 
                 let 
@@ -246,7 +254,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))    									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))   									
     	else if ($EXIST-PATH eq "/tableddocument/related" )
     		 then 
                 let 
@@ -256,7 +264,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     	else if ($EXIST-PATH eq "/tableddocument/assigned-groups" )
     		 then 
                 let 
@@ -266,7 +274,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))      									
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))      									
     	else if ($EXIST-PATH eq "/tableddocument/attachments" )
     		 then 
                 let 
@@ -276,7 +284,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
 
     	else if ($EXIST-PATH eq "/member" )
     		 then 
@@ -287,12 +295,12 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("member.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), $act-entries-repl))
+    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-node($EXIST-PATH, $act-entries-repl))
     			    			    
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
-               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, ( fw:app-tmpl("menu.xml"), fw:app-tmpl("politicalgroups.xml")))
-    	else if ($EXIST-PATH eq "/by-capno")
+               template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, cmn:build-nav-tmpl($EXIST-PATH, "politicalgroups.xml"))
+    	(:else if ($EXIST-PATH eq "/by-capno")
     		 then 
                let $act-entries-tmpl := bun:get-bills(0,0),
     		       $act-entries-repl:= document {
@@ -303,7 +311,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     										fw:app-tmpl("menu.xml"), 
     										template:merge($EXIST-PATH, fw:app-tmpl("act-list-page.xml"), $act-entries-repl)
     										)
-    									)                 
+    									) :)                
     	else
             fw:ignore()
 };

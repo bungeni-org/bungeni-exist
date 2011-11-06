@@ -49,7 +49,7 @@ import module namespace config = "http://bungeni.org/xquery/config" at "config.x
 : @return
 :   An XHTML page which is the result of merging the template with the content snippets
 :)
-declare function template:process-template($rel-path as xs:string, $request-rel-path as xs:string, $template-name as xs:string, $content as document-node()+) {  (:document-node(element(xh:div))* :)
+declare function template:process-template($rel-path as xs:string, $request-rel-path as xs:string, $template-name as xs:string, $content as node()+) {  (:document-node(element(xh:div))* :)
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
     $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] 
     (: extracts top level content and content from within an id less container :)

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/css" owner="admin" group="dba" mode="644" created="2011-10-05T11:08:07+03:00" version="1">
     <acl entries="0" version="1"/>
     <resource type="BinaryResource" name="%20forms.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename=" forms.css" mimetype="text/css">
@@ -10,7 +9,7 @@
     <resource type="BinaryResource" name="bungeni-ws.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="bungeni-ws.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="bungeni.css" mimetype="text/css">
+    <resource type="BinaryResource" name="bungeni.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-11-06T22:56:43+03:00" filename="bungeni.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="common.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="common.css" mimetype="text/css">

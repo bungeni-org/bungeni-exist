@@ -23,15 +23,19 @@ declare variable $config:fw-root := fn:concat($config:db-root-collection, "/fram
 (: Application files :)
 
 declare variable $config:doc := fn:doc(fn:concat($config:fw-root, "/config.xml"));
-
+(: Application name :)
 declare variable $config:APP-NAME := data($config:doc/fw-config/@default-app);
-
 declare variable $config:app-prefix :=  fn:concat($config:APP-NAME, "/") ; (: "lexapp/"; :)
+(: The Application prefix i.e. the folder prefix :)
 declare variable $config:APP-PREF := $config:app-prefix;
+(: The XML collection queried by this application :)
 declare variable $config:XML-COLLECTION := data($config:doc//app[@name eq $config:APP-NAME]/xml-collection);
+(: The UI configuration file of the application :)
+declare variable $config:UI-CONFIG := data($config:doc//app[@name eq $config:APP-NAME]/ui-config);
+(: The default template used by the application :)
+declare variable $config:DEFAULT-TEMPLATE := data($config:doc//app[@name eq $config:APP-NAME]/default-tmpl); 
 
 (: Application root :)
 declare variable $config:fw-app-root := fn:concat($config:fw-root, "/", $config:app-prefix);
 (: Ontology files :)
 declare variable $config:xml-ontology-collection := fn:concat($config:XML-COLLECTION, "/ontology");
-declare variable $config:DEFAULT-TEMPLATE := data($config:doc//app[@name eq $config:APP-NAME]/default-tmpl); (: "template.xhtml"; :)

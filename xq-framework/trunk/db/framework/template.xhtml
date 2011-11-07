@@ -1,13 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en" xsi:schemalocation="http://www.w3.org/1999/xhtml http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd" version="-//W3C//DTD XHTML 1.1//EN">
-    <!-- TEMPLATE --><head><title>title</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <!--YUI CSS--><link rel="stylesheet" type="text/css" href="assets/lexapp/yui/skins/sam/skin.css"/><link type="text/css" rel="stylesheet" href="assets/lexapp/yui/autocomplete/assets/skins/sam/autocomplete.css"/><link type="text/css" rel="stylesheet" href="assets/lexapp/yui/tabview/assets/skins/sam/tabview.css"/><link type="text/css" rel="stylesheet" href="assets/lexapp/yui/container/assets/skins/sam/container.css"/><link type="text/css" rel="stylesheet" href="assets/lexapp/yui/treeview/assets/skins/sam/treeview.css"/><link type="text/css" rel="stylesheet" href="assets/lexapp/yui/calendar/assets/skins/sam/calendar.css"/>
-        <!-- YUI JS --><script src="assets/lexapp/yui/yahoo-dom-event/yahoo-dom-event.js"/><script src="assets/lexapp/yui/element/element-min.js"/><script src="assets/lexapp/yui/datasource/datasource-min.js"/>
-        <!-- OPTIONAL: Get (required only if using ScriptNodeDataSource) --><script src="assets/lexapp/yui/get/get-min.js"/>
-        <!-- OPTIONAL: Connection (required only if using XHRDataSource) --><script src="assets/lexapp/yui/connection/connection-min.js"/>
-        <!-- OPTIONAL: Animation (required only if enabling animation) --><script src="assets/lexapp/yui/animation/animation-min.js"/><script src="assets/lexapp/yui/calendar/calendar-min.js"/>
-        <!-- OPTIONAL: JSON (enables JSON validation) --><script src="assets/lexapp/yui/json/json-min.js"/><script src="assets/lexapp/yui/treeview/treeview-min.js"/>    
-        <!-- YUI WIDGET JS --><script src="assets/lexapp/yui/autocomplete/autocomplete-min.js"/><script src="assets/lexapp/yui/tabview/tabview-min.js"/><script src="assets/lexapp/yui/container/container-min.js"/>                 
-        <!-- root js --><script type="text/javascript"> 
+    <!-- TEMPLATE -->
+    <head>
+        <title>title</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <!--YUI CSS-->
+        <link rel="stylesheet" type="text/css" href="assets/lexapp/yui/skins/sam/skin.css"/>
+        <link type="text/css" rel="stylesheet" href="assets/lexapp/yui/autocomplete/assets/skins/sam/autocomplete.css"/>
+        <link type="text/css" rel="stylesheet" href="assets/lexapp/yui/tabview/assets/skins/sam/tabview.css"/>
+        <link type="text/css" rel="stylesheet" href="assets/lexapp/yui/container/assets/skins/sam/container.css"/>
+        <link type="text/css" rel="stylesheet" href="assets/lexapp/yui/treeview/assets/skins/sam/treeview.css"/>
+        <link type="text/css" rel="stylesheet" href="assets/lexapp/yui/calendar/assets/skins/sam/calendar.css"/>
+        <!-- YUI JS -->
+        <script src="assets/lexapp/yui/yahoo-dom-event/yahoo-dom-event.js"/>
+        <script src="assets/lexapp/yui/element/element-min.js"/>
+        <script src="assets/lexapp/yui/datasource/datasource-min.js"/>
+        <!-- OPTIONAL: Get (required only if using ScriptNodeDataSource) -->
+        <script src="assets/lexapp/yui/get/get-min.js"/>
+        <!-- OPTIONAL: Connection (required only if using XHRDataSource) -->
+        <script src="assets/lexapp/yui/connection/connection-min.js"/>
+        <!-- OPTIONAL: Animation (required only if enabling animation) -->
+        <script src="assets/lexapp/yui/animation/animation-min.js"/>
+        <script src="assets/lexapp/yui/calendar/calendar-min.js"/>
+        <!-- OPTIONAL: JSON (enables JSON validation) -->
+        <script src="assets/lexapp/yui/json/json-min.js"/>
+        <script src="assets/lexapp/yui/treeview/treeview-min.js"/>    
+        <!-- YUI WIDGET JS -->
+        <script src="assets/lexapp/yui/autocomplete/autocomplete-min.js"/>
+        <script src="assets/lexapp/yui/tabview/tabview-min.js"/>
+        <script src="assets/lexapp/yui/container/container-min.js"/>                 
+        <!-- root js -->
+        <script type="text/javascript"> 
          /** define an object namespace **/
         YAHOO.namespace("kenyalex.bungeni");
         var Dom = YAHOO.util.Dom,
@@ -23,8 +46,10 @@
 			return YAHOO.kenyalex.bungeni.APP_ROOT + script_file;
 		 }
 
-         </script><link rel="stylesheet" type="text/css" href="assets/lexapp/css/custom.css"/>
-        <!-- custom js --><script type="text/javascript">
+         </script>
+        <link rel="stylesheet" type="text/css" href="assets/lexapp/css/custom.css"/>
+        <!-- custom js -->
+        <script type="text/javascript">
         /** render tab **/
         //obsolete
         //YAHOO.kenyalex.bungeni.Tabs = new YAHOO.widget.TabView("tabcontent");
@@ -35,5 +60,45 @@
         function init() {} 
         /** Event listeners **/
         YAHOO.util.Event.addListener(window, "load", init);
-       </script><script src="assets/lexapp/scripts/lex.js" type="text/javascript"/><meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/><meta http-equiv="Content-Style-Type" content="text/css"/><meta http-equiv="Content-Language" content="en"/><meta name="DCTERMS.language" scheme="ISO 639-2/T" content="eng"/><meta name="DCTERMS.format" content="text/html"/></head><body class="yui-skin-sam" id="tab0"><div id="wrapper"><div id="tabnavigation"><ul id="tabnav"><li class="tab0"><a href="home">Home</a></li><li class="tab1"><a href="by-title">By Title</a></li><li class="tab2"><a href="by-capno">By Cap No</a></li><li class="tab3"><a href="by-keyword">By Keyword</a></li></ul></div><div id="headerLinks"/><div id="lnavi"><div id="leftManagerMenu"/><div id="leftMenu"/>
-                <!-- THIS IS THE MAIN CONTENT DIV --><div id="content" class="text_links"/><div id="contentFooter"/><div class="text_links" id="footer"><div><p>Footer links</p></div></div></div></div></body></html>
+       </script>
+        <script src="assets/lexapp/scripts/lex.js" type="text/javascript"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=us-ascii"/>
+        <meta http-equiv="Content-Style-Type" content="text/css"/>
+        <meta http-equiv="Content-Language" content="en"/>
+        <meta name="DCTERMS.language" scheme="ISO 639-2/T" content="eng"/>
+        <meta name="DCTERMS.format" content="text/html"/>
+    </head>
+    <body class="yui-skin-sam" id="tab0">
+        <div id="wrapper">
+            <div id="tabnavigation">
+                <ul id="tabnav">
+                    <li class="tab0">
+                        <a href="home">Home</a>
+                    </li>
+                    <li class="tab1">
+                        <a href="by-title">By Title</a>
+                    </li>
+                    <li class="tab2">
+                        <a href="by-capno">By Cap No</a>
+                    </li>
+                    <li class="tab3">
+                        <a href="by-keyword">By Keyword</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="headerLinks"/>
+            <div id="lnavi">
+                <div id="leftManagerMenu"/>
+                <div id="leftMenu"/>
+                <!-- THIS IS THE MAIN CONTENT DIV -->
+                <div id="content" class="text_links"/>
+                <div id="contentFooter"/>
+                <div class="text_links" id="footer">
+                    <div>
+                        <p>Footer links</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -21,20 +21,34 @@ Import the framework into your eXist installation. It will get imported as the `
 
 The framework allows creation of applications - the application must reside in a sub-folder within the framework.
 
-The application is configured via a configuration file in the framework root. Within the `/db/framework/config.xqm`, the following configuration needs to be done :
+The application is configured via a configuration file in the framework root. Within the `/db/framework/config.xml`, the following configuration needs to be done - e.g. for an application called 'bungeni' residing within a collection called `bungeni` within the `framework` collection :
 
- * Set the xml collection that you want to query : 
-  {{{
-  declare variable $config:xml-collection := fn:concat($config:db-root-collection, "/kenyalex");
-  }}}
- * Set the folder of the application, e.g. if you are application is in a folder called `lexapp` within the `/db/framework` , set the `app-prefix` config to `lexapp/` (note the trailing slash) :
-  {{{
-  declare variable $config:app-prefix := "lexapp/";
-  }}}
- * Set the default template to be used by the application, this template file must reside in the framework collection : 
-  {{{  
-  declare variable $config:DEFAULT-TEMPLATE := "template.xhtml";
-  }}}
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Switch default application of framework by switching the default-app attribute -->
+<fw-config default-app="bungeni">
+    <apps>
+        <app name="lexapp">
+            <default-tmpl>template.xhtml</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/kenyalex</xml-collection>
+        </app>
+        <app name="bungeni">
+            <default-tmpl>portal.html</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/bungeni-xml</xml-collection>
+        </app>
+    </apps>
+</fw-config>
+}}}
+
+ * fwconfig/@default-app - specifies the active application for the framework
+ * apps/app - the configuration for a specific application
+ * apps/app/@name - the name of the application, this is also the name of the collection housing the application
+ * app/default-tmpl - the default main template for the application
+ * app/ui-config - the ui configuration file for the specific application. this is a path relative to the application folder.
+ * app/xml-collection - the path to the xml document collection queries by the framework app.
+
 
 = Application structure = 
 
@@ -90,4 +104,3 @@ For an example of how the appcontroller module see the appcontroller.xqm of the 
 = Templating =
 
 TO DO  
-

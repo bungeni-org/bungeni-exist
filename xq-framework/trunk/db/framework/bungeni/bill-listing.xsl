@@ -20,6 +20,29 @@
                 <div class="list-header">
                     <div class="toggler-list" id="expand-all">+ expand all</div>
                     <xsl:apply-templates select="paginator"/>
+                    <div id="search-n-sort" class="search-bar">
+                        <form method="get" action="" name="search_sort">
+                            <label for="search_for">Search text:</label>
+                            <input id="search_for" name="search_for" class="search_for" type="text" value=""/>
+                            <label for="search_in">in:</label>
+                            <select name="w" id="search_w">
+                                <option value="doc" selected="">entire document</option>
+                                <option value="name">short name</option>
+                                <option value="text">body text</option>
+                                <option value="desc">description</option>
+                                <option value="changes">changes</option>
+                                <option value="versions">versions</option>
+                                <option value="owner">owner</option>
+                            </select>
+                            <label for="search_in">sort by:</label>
+                            <select name="s" id="sort_by">
+                                <option value="status" selected="">status date</option>
+                                <option value="pub_date">publication date</option>
+                                <option value="gazetted">gazetted</option>
+                            </select>
+                            <input value="search" type="submit"/>
+                        </form>
+                    </div>
                 </div>
                 <!-- render the actual listing-->
                 <xsl:apply-templates select="alisting"/>

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" id="content">
-    <page:info xmlns:page="http://bungeni.org/page">
-        <page:title>MEMBERS | MEMBER ITEM</page:title>
-        <page:navigation>members</page:navigation>
-        <page:subnavigation>member</page:subnavigation>
-    </page:info>
     <div id="main-wrapper"/>
 </div>

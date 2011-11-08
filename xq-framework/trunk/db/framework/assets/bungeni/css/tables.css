@@ -90,7 +90,7 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
 /*PAGINATOR*/
 .paginate {
  	text-align:right;
- 	float:right;
+ 	float:left;
  	height:30px;
 }
 .paginate a 

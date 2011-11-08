@@ -15,8 +15,11 @@ uses bungenicommon
 :)
 
 (:~
-Local Constants
+Default Variables
 :)
+declare variable $bun:SORT-BY := 'bu:status';
+declare variable $bun:WHERE := 'body_text';
+
 declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT := 15;
 declare variable $bun:DOCNO := 1;
@@ -68,7 +71,7 @@ declare function bun:paginator($offset as xs:integer) as element()+ {
     return $pageoutput
 };
 
-declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as element() {
+declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("bill-listing.xsl")    
@@ -83,29 +86,25 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
         </paginator>
         <alisting>
         {
-            (:
-            for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
-            return $match/ancestor::bu:ontology  
-            :)
-            
-            for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
-            return 
-            <document>
-                <output> 
-                {
-                    $match/ancestor::bu:ontology
-                }
-                </output>
-                <referenceInfo>
-                    <ref>
-                    {
-                        let $bill-ref := data($match/ancestor::bu:ontology/bu:bill/bu:ministry/@href)
-                        return 
-                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
-                    }
-                    </ref>
-                </referenceInfo>
-            </document>            
+            if ($sortby = 'status') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
+                return 
+                    bun:get-reference($match)       
+                )
+            else if ($sortby = 'pub_date') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:field[@type='publication_date'] descending
+                return 
+                    bun:get-reference($match)         
+                )                
+            else  (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:registryNumber descending
+                return 
+                    bun:get-reference($match)         
+                )
+
         } 
         </alisting>
     </docs>
@@ -113,6 +112,30 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer) as e
     return
         transform:transform($doc, $stylesheet, ()) 
        
+};
+
+(:~
+    This function runs a sub-query to get ministry information
+    It takes in primary results of main query as input to search
+    for group documents with matching URI
+:)
+declare function bun:get-reference($docitem as node()) {
+            <document>
+                <output> 
+                {
+                    $docitem/ancestor::bu:ontology
+                }
+                </output>
+                <referenceInfo>
+                    <ref>
+                    {
+                        let $bill-ref := data($docitem/ancestor::bu:ontology/bu:bill/bu:ministry/@href)
+                        return 
+                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
+                    }
+                    </ref>
+                </referenceInfo>
+            </document>     
 };
 
 declare function bun:get-questions($offset as xs:integer, $limit as xs:integer) as element() {

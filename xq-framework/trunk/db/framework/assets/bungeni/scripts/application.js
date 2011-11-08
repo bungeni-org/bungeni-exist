@@ -1,6 +1,13 @@
 
 
 $(document).ready(function () {
+
+    $(function(){
+      $("#sort_lists").change(function(){
+        window.location='http://localhost:8180/exist/apps/framework/bills?sort=' + this.value
+      });
+    });
+
     /*** TOGGLE FEATURES **/
     /** toggling doc items per item isolated **/  
     $('.ls-row span').click(function () {

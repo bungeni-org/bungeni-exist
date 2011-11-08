@@ -104,7 +104,7 @@ div#main-doc {
 }
 
 div.list-header {
-    width:600px;
+    width:100%;
     clear:both;
 }
 
@@ -172,13 +172,17 @@ div#doc-downloads {
  
  .toggler-list {
     margin-left:10px;
-    width: 180px;
+    width: 100px;
     color: #AAAAA9;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, .1);
     font-weight: normal;
     text-decoration: none;
     cursor:pointer;
     float:left;
+ }
+ .search-bar {
+    float:right;
+    margin-right:10px;   
  }
  
 /*reusables*/

@@ -47,18 +47,108 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
+        <route href="/bill/text">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/timeline">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/related">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/attachments">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
         <route href="/questions">
             <title>Business | Questions </title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question/text">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/question/timeline">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/question/related">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/question/attachments">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
         </route>
         <route href="/motions">
             <title>Business | Motions </title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
+        <route href="/motion/text">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion/timeline">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion/related">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion/assigned-groups">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion/attachments">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
         <route href="/tableddocuments">
             <title>Business | Tabled Documents </title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument/text">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument/timeline">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument/related">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocuments/assigned-groups">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocuments/attachments">
+            <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
@@ -90,13 +180,13 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
                 <ul class="theme-lev-1" id="menu-level-mainnav">
                     <li>
-                        <a href="home">home</a>
+                        <a name="home" href="home">home</a>
                     </li>
                     <li>
-                        <a href="business">business</a>
+                        <a name="business" href="business">business</a>
                     </li>
                     <li>
-                        <a href="members">members</a>
+                        <a name="members" href="members">members</a>
                     </li>
                 </ul>
             </div>
@@ -112,34 +202,34 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a href="whatson">what's on</a>
+                        <a name="whatson" href="whatson">what's on</a>
                     </li>
                     <li>
-                        <a href="committees">committees</a>
+                        <a name="committees" href="committees">committees</a>
                     </li>
                     <li>
-                        <a href="bills">bills</a>
+                        <a name="bills" href="bills">bills</a>
                     </li>
                     <li>
-                        <a href="questions">questions</a>
+                        <a name="questions" href="questions">questions</a>
                     </li>
                     <li>
-                        <a href="motions">motions</a>
+                        <a name="motions" href="motions">motions</a>
                     </li>
                     <li>
-                        <a href="tableddocuments">tabled documents</a>
+                        <a name="tableddocuments" href="tableddocuments">tabled documents</a>
                     </li>
                     <li>
-                        <a href="agendaitems">agenda items</a>
+                        <a name="agendaitems" href="agendaitems">agenda items</a>
                     </li>
                     <li>
-                        <a href="sittings">sittings</a>
+                        <a name="sittings" href="sittings">sittings</a>
                     </li>
                     <li>
-                        <a href="publications">publications</a>
+                        <a name="publications" href="publications">publications</a>
                     </li>
                     <li>
-                        <a href="politicalgroups">politicalgroups</a>
+                        <a name="politicalgroups" href="politicalgroups">politicalgroups</a>
                     </li>
                 </ul>
             </div>
@@ -148,16 +238,16 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a href="whatson">what's on</a>
+                        <a name="whatson" href="whatson">what's on</a>
                     </li>
                     <li>
-                        <a href="sittings">sittings</a>
+                        <a name="sittings" href="sittings">sittings</a>
                     </li>
                     <li>
-                        <a href="publications">publications</a>
+                        <a name="publications" href="publications">publications</a>
                     </li>
                     <li>
-                        <a href="politicalgroups">politicalgroups</a>
+                        <a name="politicalgroups" href="politicalgroups">politicalgroups</a>
                     </li>
                 </ul>
             </div>

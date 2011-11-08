@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" id="main-doc" class="rounded-eigh tab_container" role="main">
-    <page:info xmlns:page="http://bungeni.org/page">
-        <page:title>By Title</page:title>
-        <page:navigation>members</page:navigation>
-        <page:sub-navigation>all</page:sub-navigation>
-    </page:info>    
-    Ola! Members
+<div xmlns="http://www.w3.org/1999/xhtml" id="main-doc" class="rounded-eigh tab_container" role="main"> 
+    Members
 </div>

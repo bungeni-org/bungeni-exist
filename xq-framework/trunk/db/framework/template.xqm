@@ -201,8 +201,8 @@ declare function local:set-meta($route as element(), $content as element()) as  
     
     else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:a) then (
 			if ($route/navigation) then (
-				if ($content/self::xh:a[@href=$route/navigation/text()]) then (
-					<a class="current" href="{$route/navigation/text()}">{$route/navigation/text()}</a>
+				if ($content/self::xh:a[@name=$route/navigation/text()]) then (
+				    <xh:a class="current" href="{$content/@href}">{data($content)}</xh:a>
 				) 
 				else  
 				 $content
@@ -216,8 +216,8 @@ declare function local:set-meta($route as element(), $content as element()) as  
 
     else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:a) then (
 			if ($route/subnavigation) then (
-				if ($content/self::xh:a[@href=$route/subnavigation/text()]) then (
-					<a class="current" href="{$route/subnavigation/text()}">{$route/subnavigation/text()}</a>
+				if ($content/self::xh:a[@name=$route/subnavigation/text()]) then (
+				    <xh:a class="current" href="{$content/@href}">{data($content)}</xh:a>
 				) 
 				else  
 				 $content

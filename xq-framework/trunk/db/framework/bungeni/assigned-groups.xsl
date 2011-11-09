@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="bu:legislativeItem/@uri"/>
+    <xsl:template match="document">
+        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -40,45 +40,38 @@
             </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:700px;margin: 0 auto;">
-                        <table class="listing timeline tbl-tgl">
-                            <tr>
-                                <th>type</th>
-                                <th>description</th>
-                                <th>date</th>
-                            </tr>
-                            <xsl:for-each select="bu:legislativeItem/bu:changes/bu:change">
-                                <xsl:variable name="action" select="./bu:field[@name='action']"/>
-                                <xsl:variable name="content_id" select="./bu:field[@name='change_id']"/>
-                                <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
-                                <tr>
-                                    <td>
-                                        <span>
-                                            <xsl:value-of select="$action"/>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span>
-                                            <xsl:choose>
-                                                <xsl:when test="$action = 'new-version'">
-                                                    <a href="bill?doc={$version_uri}">
-                                                        <xsl:value-of select="./bu:field[@name='description']"/>
-                                                    </a>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:value-of select="./bu:field[@name='description']"/>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span>
-                                            <xsl:value-of select="format-dateTime(./bu:field[@name='date_active'],                                                                         '[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]',                                                                         'en',                                                                          (),())"/>
-                                        </span>
-                                    </td>
-                                </tr>
-                            </xsl:for-each>
-                        </table>
+                    <div style="width:700px;margin: 0 auto;text-align:center">
+                        <xsl:choose>
+                            <xsl:when test="boolean(secondary/bu:committee/bu:fullName)">
+                                <table class="listing timeline tbl-tgl">
+                                    <tr>
+                                        <th>name</th>
+                                        <th>start date</th>
+                                        <th>status date</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span>
+                                                <xsl:value-of select="secondary/bu:committee/bu:fullName"/>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <xsl:value-of select="secondary/bu:legislature/bu:statusDate"/>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <xsl:value-of select="secondary/bu:group/bu:startDate"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                no assigned groups                                 
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </div>
                 </div>
             </div>

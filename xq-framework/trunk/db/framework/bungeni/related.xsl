@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="bu:legislativeItem/@uri"/>
+    <xsl:template match="document">
+        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -76,32 +76,31 @@
                         </li>
                         <li>
                             <div style="margin-top:-15px;padding-left:2px;">
-                                <b>Session Num</b> : <xsl:value-of select="bu:legislativeItem/bu:legislativeItemId"/>
+                                <b>Session Num</b> : <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:legislativeItemId"/>
                             </div>
                         </li>
                         <li>
                             <div style="width:100%;">
                                 <span class="tgl" style="margin-right:10px">+</span>
-                                <a href="#1">Versions</a>
+                                <a href="#1">Events</a>
                             </div>
                             <div class="doc-toggle">
                                 <table class="tbl-tgl" style="width:99%;float:none;margin:10px auto 0 auto;text-align:center">
                                     <tr>
-                                        <td class="fall" style="text-align-left;">Status</td>
-                                        <td class="fall">Type</td>
-                                        <td class="fall">Title</td>
-                                        <td class="fall">From</td>
-                                        <td class="fall">To</td>
+                                        <td class="fall" style="text-align:left;padding:5px;">description</td>
+                                        <td class="fall">date</td>
                                     </tr>
-                                    <xsl:for-each select="bu:legislativeItem/bu:versions/bu:version">
+                                    <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
+                                        <xsl:sort select="@date" order="descending"/>
                                         <tr>
-                                            <td class="fall" style="text-align-left;">
-                                                <xsl:value-of select="bu:status"/>
+                                            <td class="fall" style="text-align:left;padding:5px;">
+                                                <a href="event?uri={@href}">
+                                                    <xsl:value-of select="@showAs"/>
+                                                </a>
                                             </td>
-                                            <td class="fall">parliament</td>
-                                            <td class="fall">Member</td>
-                                            <td class="fall">Jan 18, 2001</td>
-                                            <td class="fall">May 18, 2011</td>
+                                            <td class="fall">
+                                                <xsl:value-of select="format-dateTime(@date,$datetime-format,'en',(),())"/>
+                                            </td>
                                         </tr>
                                     </xsl:for-each>
                                 </table>

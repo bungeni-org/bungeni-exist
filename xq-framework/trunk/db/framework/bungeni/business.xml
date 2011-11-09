@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" id="main-doc" class="rounded-eigh tab_container" role="main">
-    <page:info xmlns:page="http://bungeni.org/page">
-        <page:title>BUSINESS</page:title>
-        <page:navigation>business</page:navigation>
-    </page:info>
-    <div>
-        <div class="toggler-list" id="expand-all" style="margin-top:20px" />
-        <ul class="ls-row" id="list-toggle">
-            <li />
-        </ul>
+<div xmlns="http://www.w3.org/1999/xhtml" id="content">
+    <div id="main-wrapper">
+        <div id="title-holder" class="theme-lev-1-only">
+            <h1 id="doc-title-blue">Business</h1>
+        </div>
+        <div id="main-doc" class="rounded-eigh tab_container" role="main"/>
     </div>
 </div>

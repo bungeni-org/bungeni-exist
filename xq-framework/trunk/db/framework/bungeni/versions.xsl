@@ -6,7 +6,7 @@
                 <xd:b>Created on:</xd:b> Oct 31, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill changes from Bungeni</xd:p>
+            <xd:p> Parliamentary document versions from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -24,7 +24,7 @@
                 <xsl:with-param name="tab-group">
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">timeline</xsl:with-param>
+                <xsl:with-param name="tab-path">versions</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div style="float:right;width:400px;height:18px;">
@@ -43,12 +43,13 @@
                     <div style="width:700px;margin: 0 auto;">
                         <table class="listing timeline tbl-tgl">
                             <tr>
-                                <th>type</th>
+                                <th>status</th>
                                 <th>description</th>
                                 <th>date</th>
                             </tr>
-                            <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
-                                <xsl:variable name="action" select="./bu:field[@name='action']"/>
+                            <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version">
+                                <xsl:sort select="bu:statusDate" order="descending"/>
+                                <xsl:variable name="action" select="./bu:status"/>
                                 <xsl:variable name="content_id" select="./bu:field[@name='change_id']"/>
                                 <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
                                 <tr>
@@ -59,21 +60,12 @@
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:choose>
-                                                <xsl:when test="$action = 'new-version'">
-                                                    <a href="bill?doc={$version_uri}">
-                                                        <xsl:value-of select="./bu:field[@name='description']"/>
-                                                    </a>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:value-of select="./bu:field[@name='description']"/>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
+                                            <xsl:value-of select="bu:shortName"/>
                                         </span>
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="format-dateTime(./bu:field[@name='date_active'],                                                                         '[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]',                                                                         'en',                                                                          (),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
                                         </span>
                                     </td>
                                 </tr>

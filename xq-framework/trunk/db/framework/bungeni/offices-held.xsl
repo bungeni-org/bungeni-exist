@@ -3,10 +3,10 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Oct 6, 2011</xd:p>
+                <xd:b>Created on:</xd:b> Nov 9, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Member item from Bungeni</xd:p>
+            <xd:p> MP Personal Information from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -24,7 +24,7 @@
                 <xsl:with-param name="tab-group">
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">member</xsl:with-param>
+                <xsl:with-param name="tab-path">offices</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div id="doc-downloads">
@@ -69,7 +69,7 @@
                                 <tr>
                                     <td class="labels fbt">name:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],' ',.//bu:user/bu:field[@name='first_name'],' ', .//bu:user/bu:field[@name='last_name'])"/>
+                                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', .//bu:user/bu:field[@name='last_name'])"/>
                                     </td>
                                 </tr>
                                 <tr>

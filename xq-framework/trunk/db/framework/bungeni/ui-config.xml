@@ -39,8 +39,34 @@
             <title>Business</title>
         </route>
         <route href="/members">
-            <navigation>members</navigation>
             <title>Members</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member/personal-info">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member/offices-held">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member/parl-activities">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member/contacts">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
         </route>
         <route href="/bills">
             <title>Business | Bills</title>
@@ -53,6 +79,16 @@
             <subnavigation>bills</subnavigation>
         </route>
         <route href="/bill/timeline">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/versions">
+            <title>Business | Bill versions</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/assigned-groups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -73,24 +109,29 @@
             <subnavigation>questions</subnavigation>
         </route>
         <route href="/question/text">
-            <title>Business | Bill</title>
+            <title>Business | Question Text</title>
             <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
+            <subnavigation>questions</subnavigation>
         </route>
         <route href="/question/timeline">
-            <title>Business | Bill</title>
+            <title>Business | Question Timeline</title>
             <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question/versions">
+            <title>Business | Question versions</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
         </route>
         <route href="/question/related">
-            <title>Business | Bill</title>
+            <title>Business | Related Infomation</title>
             <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
+            <subnavigation>questions</subnavigation>
         </route>
         <route href="/question/attachments">
-            <title>Business | Bill</title>
+            <title>Business | Attachments</title>
             <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
+            <subnavigation>questions</subnavigation>
         </route>
         <route href="/motions">
             <title>Business | Motions </title>
@@ -104,6 +145,11 @@
         </route>
         <route href="/motion/timeline">
             <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion/versions">
+            <title>Business | Motion Versions</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
@@ -137,6 +183,11 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <route href="/tableddocument/versions">
+            <title>Business | Tabled document versions</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
         <route href="/tableddocument/related">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
@@ -157,10 +208,25 @@
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/whatson">
-            <title>Business | Whats On </title>
+        <route href="/agendaitems">
+            <title>Business | Agenda Items </title>
             <navigation>business</navigation>
-            <subnavigation>whatson</subnavigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/sittings">
+            <title>Business | Sittings </title>
+            <navigation>business</navigation>
+            <subnavigation>sittings</subnavigation>
+        </route>
+        <route href="/publications">
+            <title>Business | Publications </title>
+            <navigation>business</navigation>
+            <subnavigation>publications</subnavigation>
+        </route>
+        <route href="/politicalgroups">
+            <title>Business | Committees </title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
         </route>
     </routes>
     
@@ -202,9 +268,6 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a name="whatson" href="whatson">what's on</a>
-                    </li>
-                    <li>
                         <a name="committees" href="committees">committees</a>
                     </li>
                     <li>
@@ -238,7 +301,7 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a name="whatson" href="whatson">what's on</a>
+                        <a name="current" href="members">current</a>
                     </li>
                     <li>
                         <a name="sittings" href="sittings">sittings</a>
@@ -269,6 +332,12 @@
             <tab path="bill/timeline" id="timeline">
                 <title>timeline</title>
             </tab>
+            <tab path="bill/versions" id="versions">
+                <title>versions</title>
+            </tab>
+            <tab path="bill/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
             <tab path="bill/related" id="related">
                 <title>related</title>
             </tab>
@@ -283,6 +352,9 @@
             <tab path="question/timeline" id="timeline">
                 <title>timeline</title>
             </tab>
+            <tab path="question/versions" id="versions">
+                <title>versions</title>
+            </tab>
             <tab path="question/related" id="related">
                 <title>related</title>
             </tab>
@@ -296,6 +368,9 @@
             </tab>
             <tab path="motion/timeline" id="timeline">
                 <title>timeline</title>
+            </tab>
+            <tab path="motion/versions" id="versions">
+                <title>versions</title>
             </tab>
             <tab path="motion/related" id="related">
                 <title>related</title>
@@ -314,6 +389,9 @@
             <tab path="tableddocument/timeline" id="timeline">
                 <title>timeline</title>
             </tab>
+            <tab path="tableddocument/versions" id="versions">
+                <title>versions</title>
+            </tab>
             <tab path="tableddocument/related" id="related">
                 <title>related</title>
             </tab>
@@ -324,20 +402,20 @@
                 <title>attached files</title>
             </tab>
         </tabs>
-        <tabs name="members">
-            <tab path="member">
+        <tabs name="user">
+            <tab path="member" id="member">
                 <title>member</title>
             </tab>
-            <tab path="info">
+            <tab path="member/personal-info" id="info">
                 <title>information</title>
             </tab>
-            <tab path="office-held">
+            <tab path="member/offices-held" id="offices">
                 <title>offices held</title>
             </tab>
-            <tab path="parl-activities">
+            <tab path="member/parl-activities" id="activities">
                 <title>parliament activities</title>
             </tab>
-            <tab path="contacts">
+            <tab path="member/contacts" id="contacts">
                 <title>contacts</title>
             </tab>
         </tabs>

@@ -37,7 +37,7 @@
     <xsl:template match="document" mode="renderui">
         <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:*/@uri"/>
         <li>
-            <a href="motion/text?doc={$docIdentifier}" id="{$docIdentifier}">
+            <a href="motion/text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>+</span>
@@ -52,7 +52,9 @@
                     <tr>
                         <td class="labels">moved by:</td>
                         <td>
-                            <xsl:value-of select="concat(output/bu:ontology/bu:legislativeItem/bu:owner/bu:field[@name='first_name'],' ', output/bu:ontology/bu:legislativeItem/bu:owner/bu:field[@name='last_name'])"/>
+                            <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                            </a>
                         </td>
                     </tr>
                     <tr>
@@ -76,7 +78,7 @@
                     <tr>
                         <td class="labels">ministry:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:ministry/bu:shortName"/>
+                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
                         </td>
                     </tr>
                 </table>

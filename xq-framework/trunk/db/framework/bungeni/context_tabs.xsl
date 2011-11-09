@@ -41,14 +41,14 @@
                     <xsl:choose>
                         <xsl:when test="@id = $tab">
                             <li class="active">
-                                <a href="{@path}?doc={$uri}#">
+                                <a href="{@path}?uri={$uri}#">
                                     <xsl:value-of select="./title"/>
                                 </a>
                             </li>
                         </xsl:when>
                         <xsl:otherwise>
                             <li>
-                                <a href="{@path}?doc={$uri}">
+                                <a href="{@path}?uri={$uri}">
                                     <xsl:value-of select="./title"/>
                                 </a>
                             </li>

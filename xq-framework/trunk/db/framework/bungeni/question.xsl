@@ -11,16 +11,19 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc_uri" select="bu:legislativeItem/@uri"/>
+    <xsl:template match="document">
+        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group">question</xsl:with-param>
+                <xsl:with-param name="tab-group">
+                    <xsl:value-of select="$doc-type"/>
+                </xsl:with-param>
                 <xsl:with-param name="tab-path">text</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
@@ -59,21 +62,22 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
-                            <a href="member?uri={$doc_uri}">
-                                <xsl:value-of select="concat(bu:legislativeItem/bu:owner/bu:field[@name='first_name'],' ', bu:legislativeItem/bu:owner/bu:field[@name='last_name'])"/>
+                            <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
                         </i>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( 
                         <xsl:choose>
-                            <xsl:when test="bu:itemsignatories/bu:itemsignatorie ne null">
-                                <xsl:for-each select=".//bu:itemsignatories/bu:itemsignatorie">
+                            <!-- check whether we have signatories or not -->
+                            <xsl:when test="boolean(primary/bu:ontology/bu:signatories[not(*)]) eq false()">
+                                <xsl:for-each select="primary/bu:ontology/bu:signatories/bu:signatory">
                                     <i>
-                                        <a href="member?uri={concat('/ke/parliament/2011-03-02/user/', bu:field[@name='user_id'])}">
-                                            <xsl:value-of select="concat(bu:field[@name='first_name'],' ', bu:field[@name='last_name'])"/>
+                                        <a href="member?uri={@href}">
+                                            <xsl:value-of select="@showAs"/>
                                         </a>
                                     </i>, 
                                 </xsl:for-each>
@@ -81,14 +85,15 @@
                             <xsl:otherwise>
                                 None
                             </xsl:otherwise>
-                        </xsl:choose> )
+                        </xsl:choose>
+                        )
                     </h4>
                     <div class="doc-status">
                         <span>
                             <b>Status:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:status"/>
                         </span>
                         <span>
                             <b>Status Date:</b>
@@ -99,7 +104,7 @@
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="bu:legislativeItem/bu:body"/>
+                            <xsl:copy-of select="primary/bu:ontology/bu:legislativeItem/bu:body"/>
                         </div>
                     </div>
                 </div>

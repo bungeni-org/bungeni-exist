@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" id="main-doc" class="rounded-eigh tab_container" role="main"> 
-    Members
+<div xmlns="http://www.w3.org/1999/xhtml" id="content">
+    <div id="main-wrapper">
+        <div id="title-holder" class="theme-lev-1-only">
+            <h1 id="doc-title-blue">Members of Parliament</h1>
+        </div>
+        <div id="main-doc" class="rounded-eigh tab_container" role="main"/>
+    </div>
 </div>

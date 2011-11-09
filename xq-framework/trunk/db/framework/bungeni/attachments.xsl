@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="bu:legislativeItem/@uri"/>
+    <xsl:template match="document">
+        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -52,7 +52,7 @@
                                 <th>type</th>
                                 <th>date</th>
                             </tr>
-                            <xsl:for-each select=".//bu:attached_files/bu:attached_file">
+                            <xsl:for-each select="primary/bu:ontology/bu:attached_files/bu:attached_file">
                                 <tr>
                                     <td>
                                         <span>

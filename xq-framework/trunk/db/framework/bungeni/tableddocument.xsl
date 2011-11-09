@@ -11,14 +11,14 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="bu:legislativeItem/@uri"/>
-        <xsl:variable name="mover_uri" select="concat('/ke/parliament/2011-03-02/user/',bu:legislativeItem/bu:owner/bu:field[@name='user_id'])"/>
+    <xsl:template match="document">
+        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="mover_uri" select="primary/bu:ontology/bu:legislativeItem/bu:owner/@href"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -64,7 +64,7 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
                             <a href="member?uri={$mover_uri}">

@@ -17,7 +17,7 @@ uses bungenicommon
 (:~
 Default Variables
 :)
-declare variable $bun:SORT-BY := 'bu:status';
+declare variable $bun:SORT-BY := 'bu:statusDate';
 declare variable $bun:WHERE := 'body_text';
 
 declare variable $bun:OFF-SET := 0;
@@ -87,8 +87,11 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $que
         <alisting>
         {
             if ($sortby = 'status') then (
+            
+                (:if (fn:ni$qrystr):)
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
+                let $by := "bu:statusDate"                
+                order by $match/ancestor::bu:ontology/bu:legislativeItem/util:eval(fn:concat("/",$by)) descending
                 return 
                     bun:get-reference($match)       
                 )
@@ -129,9 +132,9 @@ declare function bun:get-reference($docitem as node()) {
                 <referenceInfo>
                     <ref>
                     {
-                        let $bill-ref := data($docitem/ancestor::bu:ontology/bu:bill/bu:ministry/@href)
+                        let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:group/@href)
                         return 
-                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $bill-ref]/../bu:ministry
+                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../bu:ministry
                     }
                     </ref>
                 </referenceInfo>
@@ -276,19 +279,85 @@ declare function bun:get-parl-doc($docid as xs:string, $_tmpl as xs:string) as e
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
-
-    (: return AN document as singleton :)
-    (: !#FIX_THIS (ao, 3rd Nov 2011, dynamically get any document e.g question, bill e.t.c instead of 'bu:*' :)
-    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:*[@uri=$docid]/ancestor::bu:ontology
-    
+ 
+    let $doc := <parl-doc> 
+        {
+            (: return AN document as singleton :)
+            (: !#FIX_THIS (ao, 3rd Nov 2011, dynamically get any document e.g question, bill e.t.c instead of 'bu:*' :)
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:*[@uri=$docid]
+            return
+                bun:get-ref-assigned-grps($match)   
+        } 
+    </parl-doc>    
     return
         transform:transform($doc, $stylesheet, ())
 };
 
-declare function bun:get-member($memberid as xs:string) as element()* {
+declare function bun:get-ref-assigned-grps($docitem as node()) {
+            <document>
+                <primary> 
+                {
+                    $docitem/ancestor::bu:ontology
+                }
+                </primary>
+                <secondary>
+                    {
+                        let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:ministry/@href)
+                        return 
+                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../../bu:ontology
+                    }
+                </secondary>
+            </document>     
+};
+
+declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt("members.xsl")    
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of bills only :)
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'])}</count>
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        </paginator>
+        <alisting>
+        {
+            if ($sortby = 'ln') then (
+            
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)                
+                order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='last_name'] descending
+                return 
+                    bun:get-reference($match)       
+                )
+            else if ($sortby = 'fn') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='first_name'] descending
+                return 
+                    bun:get-reference($match)         
+                )                
+            else  (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='last_name'] descending
+                return 
+                    bun:get-reference($match)         
+                )
+
+        } 
+        </alisting>
+    </docs>
+    
+    return
+        transform:transform($doc, $stylesheet, ()) 
+       
+};
+
+declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("member.xsl") 
+    let $stylesheet := cmn:get-xslt($_tmpl) 
 
     (: return AN Member document as singleton :)
     let $doc := collection(cmn:get-lex-db())//bu:ontology//bu:user[@uri=$memberid]/ancestor::bu:ontology

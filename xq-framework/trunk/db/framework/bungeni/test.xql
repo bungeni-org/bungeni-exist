@@ -3,10 +3,10 @@ declare namespace util="http://exist-db.org/xquery/util";
 declare namespace request="http://exist-db.org/xquery/request";
 
 import module namespace xmldb = "http://exist-db.org/xquery/xmldb";
-import module namespace bungenicommon = "http://exist.bungeni.org/cmn" at "common.xqm";
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
 
 
 
 
-let $actinfo := bungenicommon:get-route('/business')
+let $actinfo := cmn:get-menu-from-route('/bill/text')
 return $actinfo

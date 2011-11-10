@@ -40,7 +40,7 @@
             </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:700px;margin: 0 auto;">
+                    <div style="width:80%;">
                         <table class="listing timeline tbl-tgl">
                             <tr>
                                 <th>type</th>
@@ -48,6 +48,7 @@
                                 <th>date</th>
                             </tr>
                             <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
+                                <xsl:sort select="./bu:field[@name='date_active']" order="descending"/>
                                 <xsl:variable name="action" select="./bu:field[@name='action']"/>
                                 <xsl:variable name="content_id" select="./bu:field[@name='change_id']"/>
                                 <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
@@ -61,19 +62,20 @@
                                         <span>
                                             <xsl:choose>
                                                 <xsl:when test="$action = 'new-version'">
-                                                    <a href="bill?doc={$version_uri}">
-                                                        <xsl:value-of select="./bu:field[@name='description']"/>
+                                                    <xsl:variable name="new_ver_id" select="bu:field[@name='change_id']"/>
+                                                    <a href="{//primary/bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}&amp;v={//primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:field[@name='change_id']/text()}">
+                                                        <xsl:value-of select="bu:field[@name='description']"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="./bu:field[@name='description']"/>
+                                                    <xsl:value-of select="bu:field[@name='description']"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </span>
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="format-dateTime(./bu:field[@name='date_active'],                                                                         '[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]',                                                                         'en',                                                                          (),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:field[@name='date_active'],'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </span>
                                     </td>
                                 </tr>

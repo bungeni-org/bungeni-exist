@@ -38,7 +38,14 @@ ul.ls-row div.list-toggle {
 ul.ls-row div.doc-toggle {
     margin:5px auto 5px 10px;
     display:none;
-}  
+} 
+.list-block div.doc-toggle {
+    margin:5px auto 5px 10px;
+    display:none;
+}
+.list-block div > span {
+    cursor:pointer;
+}
 
 /* Listing of main-nav tabs */
 #tabs {

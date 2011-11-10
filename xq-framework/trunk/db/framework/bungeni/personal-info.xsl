@@ -58,59 +58,12 @@
             </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
+                    <h2 id="doc-item-desc2" class="doc-headers-darkgrey">
+                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', bu:user/bu:field[@name='last_name'])"/>
+                    </h2>
                     <div class="mem-profile">
-                        <div class="mem-photo mem-top-left">
-                            <p class="imgonlywrap">
-                                <img width="150" height="200" src="assets/bungeni/images/mp.jpg" alt="The Speaker"/>
-                            </p>
-                        </div>
-                        <div class="mem-top-right">
-                            <table class="mem-tbl-details">
-                                <tr>
-                                    <td class="labels fbt">name:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', .//bu:user/bu:field[@name='last_name'])"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">elected/nominated:</td>
-                                    <td class="fbt">nominated</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">election/nomination date:</td>
-                                    <td class="fbt">15 Feb 2011</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">start date:</td>
-                                    <td class="fbt">22 Feb 2011</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">language:</td>
-                                    <td class="fbt">English</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">constituency:</td>
-                                    <td class="fbt">Constituency P1_01</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">province:</td>
-                                    <td class="fbt">Province P1_01</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">region:</td>
-                                    <td class="fbt">Region P1_01</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">political party:</td>
-                                    <td class="fbt">Party P1_01</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">notes:</td>
-                                    <td class="fbt">
-                                        <xsl:copy-of select="bu:user/bu:description"/>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div class="mem-top-right" style="padding:10px 40px;">
+                            <xsl:copy-of select="bu:user/bu:description"/>
                         </div>
                     </div>
                 </div>

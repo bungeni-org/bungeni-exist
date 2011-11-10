@@ -73,13 +73,14 @@
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( 
                         <xsl:choose>
                             <!-- check whether we have signatories or not -->
-                            <xsl:when test="boolean(primary/bu:ontology/bu:signatories[not(*)]) eq false()">
+                            <xsl:when test="primary/bu:ontology/bu:signatories/bu:signatory">
                                 <xsl:for-each select="primary/bu:ontology/bu:signatories/bu:signatory">
                                     <i>
                                         <a href="member?uri={@href}">
                                             <xsl:value-of select="@showAs"/>
                                         </a>
-                                    </i>, 
+                                    </i>
+                                    <xsl:if test="position() &lt; last()">,</xsl:if>
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
@@ -99,7 +100,7 @@
                             <b>Status Date:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-date(bu:bungeni/bu:parliament/@date,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-date(primary/bu:ontology/bu:bungeni/bu:parliament/@date,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">

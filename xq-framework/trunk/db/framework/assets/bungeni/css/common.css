@@ -103,8 +103,13 @@ div#main-doc {
     border:1px solid #c1c1c0;
 }
 
+div#main-doc div {
+    margin: 0 auto;
+}
+
 div.list-header {
-    width:100%;
+    margin:0 auto;
+    width:97%;
     clear:both;
 }
 
@@ -181,8 +186,7 @@ div#doc-downloads {
     float:left;
  }
  .search-bar {
-    float:right;
-    margin-right:10px;   
+    float:right;  
  }
  
 /*reusables*/
@@ -197,3 +201,18 @@ div#doc-downloads {
 .bspacer10 {
     margin-bottom:10px;
 }  
+
+/* div blocks */
+.list-block {
+    width:95%;
+    margin:0 auto;
+    padding-bottom:10px;
+}
+.list-block .block-label {
+    width:120px;
+    float:left;
+    font-weight:bold;
+}
+.list-block div.doc-toggle {
+    width:90%;
+}

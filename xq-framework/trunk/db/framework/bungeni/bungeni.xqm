@@ -181,7 +181,7 @@ declare function bun:get-questions($offset as xs:integer, $limit as xs:integer) 
     return
         transform:transform($doc, $stylesheet, ()) 
        
-};  
+}; 
 
 declare function bun:get-motions($offset as xs:integer, $limit as xs:integer) as element() {
     
@@ -279,6 +279,7 @@ declare function bun:get-parl-doc($docid as xs:string, $_tmpl as xs:string) as e
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
+    
  
     let $doc := <parl-doc> 
         {
@@ -366,16 +367,29 @@ declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as 
         transform:transform($doc, $stylesheet, ())
 };
 
-declare function bun:get-act($actid as xs:string, $pref as xs:string, $xslt as xs:string) {
-    (: First get the act document :)
-    let $doc := bun:get-doc($actid),
-    (: Next get the doc of the XSLT :)   
-     $doc-xslt := cmn:get-xslt($xslt),
-    (: Now transform the doc with the XSLT :)
-     $doc-transformed := transform:transform($doc, 
-		$doc-xslt,
-        <parameters>
-            <param name="pref" value="{$pref}" />
-        </parameters>)
-     return $doc-transformed
+declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:string) as element()* {
+
+     (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($_tmpl) 
+
+    (: return AN Member document with his/her activities :)
+    let $doc := <activities>
+    <member>
+    {
+        collection(cmn:get-lex-db())/bu:ontology//bu:user[@uri=$memberid]/ancestor::bu:ontology
+    }
+    </member>
+    {
+    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:owner[@href=$memberid]
+    return
+        <docs>
+            {
+                $match/ancestor::bu:ontology
+             }
+        </docs>
+    }
+    </activities> 
+    
+    return
+        transform:transform($doc, $stylesheet, ())    
 };

@@ -14,7 +14,6 @@
     <xsl:template match="document">
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
         <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
-        <xsl:variable name="mover_uri" select="primary/bu:ontology/bu:legislativeItem/bu:owner/@href"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
@@ -67,8 +66,8 @@
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
-                            <a href="member?uri={$mover_uri}">
-                                <xsl:value-of select="concat(bu:legislativeItem/bu:owner/bu:field[@name='first_name'],' ', bu:legislativeItem/bu:owner/bu:field[@name='last_name'])"/>
+                            <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
                         </i>
                     </h4>
@@ -77,18 +76,18 @@
                             <b>Status:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:status"/>
                         </span>
                         <span>
                             <b>Status Date:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-date(bu:bungeni/bu:parliament/@date, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-date(primary/bu:ontology/bu:bungeni/bu:parliament/@date, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select=".//bu:legislativeItem/bu:body"/>
+                            <xsl:copy-of select="primary/bu:ontology/bu:legislativeItem/bu:body"/>
                         </div>
                         <!-- TO_BE_REVIEWED -->
                     </div>

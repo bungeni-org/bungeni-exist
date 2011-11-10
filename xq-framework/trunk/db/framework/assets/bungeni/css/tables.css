@@ -47,7 +47,7 @@ table.tbl-tgl {
     padding:2px 5px 2px 5px;
 }
 table.tbl-tgl tr td {
-    padding:2px 5px 2px 0px;
+    padding:2px 5px 2px 2px;
 }
 
 table.timeline  {

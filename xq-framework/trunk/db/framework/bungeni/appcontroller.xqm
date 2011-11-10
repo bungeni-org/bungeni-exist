@@ -211,7 +211,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/bill/text" )
     		 then 
                 let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $versionid := xs:string(request:get-parameter("v",$bun:DOCNO)),
                     $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"bill.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bill.xml")/xh:div, $act-entries-tmpl)
@@ -276,13 +277,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    									 
     									 
-    	else if ($EXIST-PATH eq "/bill/related" )
+    	else if ($EXIST-PATH eq "/bill/details" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"related.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -293,13 +294,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
     									
-    	else if ($EXIST-PATH eq "/bill/attachments" )
+    	else if ($EXIST-PATH eq "/bill/documents" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"attachments.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -344,13 +345,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
     									
-    	else if ($EXIST-PATH eq "/question/related" )
+    	else if ($EXIST-PATH eq "/question/details" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"related.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -378,13 +379,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									
     									
-    	else if ($EXIST-PATH eq "/question/attachments" )
+    	else if ($EXIST-PATH eq "/question/documents" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"attachments.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -447,13 +448,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									
     									
-    	else if ($EXIST-PATH eq "/motion/related" )
+    	else if ($EXIST-PATH eq "/motion/details" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"related.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -481,13 +482,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
     									
-    	else if ($EXIST-PATH eq "/motion/attachments" )
+    	else if ($EXIST-PATH eq "/motion/documents" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"attachments.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -549,13 +550,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									
     									
-    	else if ($EXIST-PATH eq "/tableddocument/related" )
+    	else if ($EXIST-PATH eq "/tableddocument/details" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"related.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("related.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -583,13 +584,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
     									
-    	else if ($EXIST-PATH eq "/tableddocument/attachments" )
+    	else if ($EXIST-PATH eq "/tableddocument/documents" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"attachments.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("attachments.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -653,7 +654,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-member($docnumber,"parl-activities.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-activities($docnumber,"parl-activities.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("member.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -664,7 +665,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)   
+    									)
     									
     	else if ($EXIST-PATH eq "/member/contacts" )
     		 then 

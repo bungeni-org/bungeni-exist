@@ -74,35 +74,35 @@
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">elected/nominated:</td>
-                                    <td class="fbt">nominated</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">election/nomination date:</td>
-                                    <td class="fbt">15 Feb 2011</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">start date:</td>
-                                    <td class="fbt">22 Feb 2011</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">language:</td>
-                                    <td class="fbt">English</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">constituency:</td>
-                                    <td class="fbt">Constituency P1_01</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">province:</td>
-                                    <td class="fbt">Province P1_01</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">region:</td>
-                                    <td class="fbt">Region P1_01</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">political party:</td>
-                                    <td class="fbt">Party P1_01</td>
+                                    <td class="fbt">unknown</td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">notes:</td>

@@ -93,12 +93,12 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/related">
+        <route href="/bill/details">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/attachments">
+        <route href="/bill/documents">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -123,12 +123,12 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/related">
+        <route href="/question/details">
             <title>Business | Related Infomation</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/attachments">
+        <route href="/question/documents">
             <title>Business | Attachments</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
@@ -153,7 +153,7 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/related">
+        <route href="/motion/details">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
@@ -163,7 +163,7 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/attachments">
+        <route href="/motion/documents">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
@@ -188,7 +188,7 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/related">
+        <route href="/tableddocument/details">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
@@ -198,7 +198,7 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocuments/attachments">
+        <route href="/tableddocuments/documents">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
@@ -330,19 +330,16 @@
                 <title>text</title>
             </tab>
             <tab path="bill/timeline" id="timeline">
-                <title>timeline</title>
+                <title>history</title>
             </tab>
-            <tab path="bill/versions" id="versions">
-                <title>versions</title>
+            <tab path="bill/details" id="related">
+                <title>details</title>
             </tab>
             <tab path="bill/assigned-groups" id="assigned">
                 <title>assigned groups</title>
             </tab>
-            <tab path="bill/related" id="related">
-                <title>related</title>
-            </tab>
-            <tab path="bill/attachments" id="attachments">
-                <title>attached files</title>
+            <tab path="bill/documents" id="attachments">
+                <title>documents</title>
             </tab>
         </tabs>
         <tabs name="question">
@@ -350,16 +347,13 @@
                 <title>text</title>
             </tab>
             <tab path="question/timeline" id="timeline">
-                <title>timeline</title>
+                <title>history</title>
             </tab>
-            <tab path="question/versions" id="versions">
-                <title>versions</title>
+            <tab path="question/details" id="related">
+                <title>details</title>
             </tab>
-            <tab path="question/related" id="related">
-                <title>related</title>
-            </tab>
-            <tab path="question/attachments" id="attachments">
-                <title>attached files</title>
+            <tab path="question/documents" id="attachments">
+                <title>documents</title>
             </tab>
         </tabs>
         <tabs name="motion">
@@ -367,19 +361,16 @@
                 <title>text</title>
             </tab>
             <tab path="motion/timeline" id="timeline">
-                <title>timeline</title>
+                <title>history</title>
             </tab>
-            <tab path="motion/versions" id="versions">
-                <title>versions</title>
-            </tab>
-            <tab path="motion/related" id="related">
-                <title>related</title>
+            <tab path="motion/details" id="related">
+                <title>details</title>
             </tab>
             <tab path="motion/assigned-groups" id="assigned">
                 <title>assigned groups</title>
             </tab>
-            <tab path="motion/attachments" id="attachments">
-                <title>attached files</title>
+            <tab path="motion/documents" id="attachments">
+                <title>documents</title>
             </tab>
         </tabs>
         <tabs name="tableddocument">
@@ -387,19 +378,16 @@
                 <title>text</title>
             </tab>
             <tab path="tableddocument/timeline" id="timeline">
-                <title>timeline</title>
+                <title>history</title>
             </tab>
-            <tab path="tableddocument/versions" id="versions">
-                <title>versions</title>
-            </tab>
-            <tab path="tableddocument/related" id="related">
-                <title>related</title>
+            <tab path="tableddocument/details" id="related">
+                <title>details</title>
             </tab>
             <tab path="tableddocument/assigned-groups" id="assigned">
                 <title>assigned groups</title>
             </tab>
-            <tab path="tableddocument/attachments" id="attachments">
-                <title>attached files</title>
+            <tab path="tableddocument/documents" id="attachments">
+                <title>documents</title>
             </tab>
         </tabs>
         <tabs name="user">

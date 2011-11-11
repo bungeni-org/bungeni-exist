@@ -15,9 +15,9 @@
 
 p.imgonlywrap {
 	  float:left;
-	  background: url(../imgs/shadowAlpha.png) no-repeat bottom right !important;
-	  background: url(../imgs/shadow.gif) no-repeat bottom right;
-	  margin: 10px 10px 0 10px !important;
+	  background: url(../images/shadowAlpha.png) no-repeat bottom right !important;
+	  background: url(../images/shadow.gif) no-repeat bottom right;
+	  margin: 10px 10px 0 30px !important;
 	  margin: 10px 10px 0 5px;
   }
   
@@ -31,8 +31,8 @@ p.imgonlywrap img {
   }  
   
 table.mem-tbl-details {
-    width:690px;
-    margin:0 15px 0 auto;
+    width:700px;
+    margin:10px 25px 0 auto;
     float:right;
 }
 table.mem-tbl-details tr td.labels {

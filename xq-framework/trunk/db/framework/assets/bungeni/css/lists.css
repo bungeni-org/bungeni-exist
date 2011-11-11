@@ -14,6 +14,30 @@ ul.ls-downloads li a.rtf { margin-right:0px;background: url(../images/ico-rtf.pn
 ul.ls-downloads li a.pdf { margin-right:0px;background: url(../images/ico-pdf.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a:hover { background-position: left -15px; }
 
+/* Listing of versions */
+ul.doc-versions {
+    display:block;
+    list-style-type:none;
+    padding:0 0 0 10px;
+    width:96% !important;
+}
+ul.doc-versions li {
+    color:#494949;
+    margin-bottom:3px;
+}
+ul.doc-versions li a {
+    color:#2b92be;
+}
+ul.doc-versions > li a {
+    text-transform:capitalize;
+}
+ul.doc-versions li span {
+    color:#b22b14;
+}
+ul.doc-versions li a:hover {
+    color:#b22b14;
+}
+
 /* Listing of items */
 ul.ls-row {
     display:block;

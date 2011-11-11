@@ -36,10 +36,10 @@
                             </select>
                             <label for="search_in">sort by:</label>
                             <select name="s" id="sort_by">
-                                <option value="status" selected="">status date new</option>
-                                <option value="status" selected="">status date old</option>
-                                <option value="pub_date">publication date old</option>
-                                <option value="status" selected="">publication date new</option>
+                                <option value="status" selected="selected">status date [newest]</option>
+                                <option value="status">status date [oldest]</option>
+                                <option value="pub_date">submission date [newest]</option>
+                                <option value="status">submission date [oldest]</option>
                                 <option value="gazetted">gazetted</option>
                             </select>
                             <input value="search" type="submit"/>
@@ -56,9 +56,7 @@
     <xsl:include href="paginator.xsl"/>
     <xsl:template match="alisting">
         <ul id="list-toggle" class="ls-row" style="clear:both">
-            <xsl:apply-templates mode="renderui">
-                <xsl:sort select="output/bu:ontology/bu:legislativeItem/bu:statusDate" order="descending"/>
-            </xsl:apply-templates>
+            <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
     <xsl:template match="document" mode="renderui">
@@ -73,7 +71,7 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="$docIdentifier"/>
+                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                         </td>
                     </tr>
                     <tr>
@@ -85,13 +83,7 @@
                     <tr>
                         <td class="labels">status:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">status date:</td>
-                        <td>
-                            <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>&#160;&#160;<b>on:</b>&#160;&#160;<xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>

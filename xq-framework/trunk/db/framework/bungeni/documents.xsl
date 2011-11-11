@@ -74,7 +74,7 @@
                                             </td>
                                             <td>
                                                 <span>
-                                                    <a href="{//primary/bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}&amp;v={@uri}">
+                                                    <a href="{//primary/bu:ontology/bu:document/@type}/version?uri={@uri}">
                                                         <xsl:value-of select="bu:shortName"/>
                                                     </a>
                                                 </span>

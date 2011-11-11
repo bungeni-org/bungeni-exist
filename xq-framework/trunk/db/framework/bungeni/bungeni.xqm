@@ -311,6 +311,38 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
             </document>     
 };
 
+(:~
+    Get parliamentary document based on a version URI
+    +NOTES
+    Follows the same structure as get-parl-doc() in that it returns 
+    <document>
+        <version>id</version>
+        <primary/>
+        <secondary/>
+    </document>
+:)
+declare function bun:get-doc-ver($versionid as xs:string, $_tmpl as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($_tmpl) 
+    
+    let $doc := <parl-doc>
+        <document>
+            <version>{$versionid}</version>
+            <primary>         
+            {
+                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:versions/bu:version[@uri=$versionid]/ancestor::bu:ontology
+            }
+            </primary>
+            <secondary>
+            </secondary>
+        </document>
+    </parl-doc>   
+    
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
 declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)

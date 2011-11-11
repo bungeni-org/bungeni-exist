@@ -83,7 +83,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/versions">
+        <route href="/bill/version">
             <title>Business | Bill versions</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -95,6 +95,11 @@
         </route>
         <route href="/bill/details">
             <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/version/details">
+            <title>Business | Bill Version</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
@@ -118,7 +123,7 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/versions">
+        <route href="/question/version">
             <title>Business | Question versions</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
@@ -148,7 +153,7 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/versions">
+        <route href="/motion/version">
             <title>Business | Motion Versions</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
@@ -183,7 +188,7 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/versions">
+        <route href="/tableddocument/version">
             <title>Business | Tabled document versions</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
@@ -193,12 +198,12 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocuments/assigned-groups">
+        <route href="/tableddocument/assigned-groups">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocuments/documents">
+        <route href="/tableddocument/documents">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
@@ -325,6 +330,20 @@
             Tabgroups are like navigation but they describe navigation relative to content 
             The name is always that of a content type
         -->
+        <tabs name="bill-ver">
+            <tab path="bill/version/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="bill/version/details" id="related">
+                <title>details</title>
+            </tab>
+            <tab path="bill/version/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
+            <tab path="bill/version/documents" id="attachments">
+                <title>documents</title>
+            </tab>
+        </tabs>
         <tabs name="bill">
             <tab path="bill/text" id="text">
                 <title>text</title>
@@ -339,6 +358,17 @@
                 <title>assigned groups</title>
             </tab>
             <tab path="bill/documents" id="attachments">
+                <title>documents</title>
+            </tab>
+        </tabs>
+        <tabs name="question-ver">
+            <tab path="question/version/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="question/version/details" id="related">
+                <title>details</title>
+            </tab>
+            <tab path="question/version/documents" id="attachments">
                 <title>documents</title>
             </tab>
         </tabs>

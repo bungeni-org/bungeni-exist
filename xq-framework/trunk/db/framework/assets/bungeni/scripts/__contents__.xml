@@ -1,12 +1,15 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/bungeni/scripts" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="application.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-11-02T16:58:07+03:00" filename="application.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="application.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-11-14T00:48:29+03:00" filename="application.js" mimetype="application/x-javascript">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="custom.js" owner="admin" group="dba" mode="644" created="2011-11-14T00:27:24+03:00" modified="2011-11-14T00:28:44+03:00" filename="custom.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="debugger.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="debugger.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="expand.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="expand.js" mimetype="application/x-javascript">
+    <resource type="BinaryResource" name="expand.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-11-13T21:57:19+03:00" filename="expand.js" mimetype="application/x-javascript">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="jquery-ui.min.js" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:37+03:00" modified="2011-10-05T11:55:37+03:00" filename="jquery-ui.min.js" mimetype="application/x-javascript">

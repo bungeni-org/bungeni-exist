@@ -9,6 +9,9 @@
             <xd:p>Lists bills from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
+    <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
+    <xsl:param name="sortby"/>
+    
     
     <!-- load configuration info -->
     <xsl:include href="config.xsl"/>
@@ -36,10 +39,10 @@
                             </select>
                             <label for="search_in">sort by:</label>
                             <select name="s" id="sort_by">
-                                <option value="status" selected="selected">status date [newest]</option>
-                                <option value="status">status date [oldest]</option>
-                                <option value="pub_date">submission date [newest]</option>
-                                <option value="status">submission date [oldest]</option>
+                                <option value="st_date_newest" selected="selected">status date [newest]</option>
+                                <option value="st_date_oldest">status date [oldest]</option>
+                                <option value="sub_date_newest">submission date [newest]</option>
+                                <option value="sub_date_oldest">submission date [oldest]</option>
                                 <option value="gazetted">gazetted</option>
                             </select>
                             <input value="search" type="submit"/>
@@ -51,6 +54,7 @@
             </div>
         </div>
     </xsl:template>
+
     
     <!-- Include the paginator generator -->
     <xsl:include href="paginator.xsl"/>

@@ -15,7 +15,7 @@
     <resource type="BinaryResource" name="common.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="common.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="lists.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-10-05T11:05:16+03:00" filename="lists.css" mimetype="text/css">
+    <resource type="BinaryResource" name="lists.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:16+03:00" modified="2011-11-13T21:56:43+03:00" filename="lists.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="main.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:15+03:00" modified="2011-10-05T11:05:15+03:00" filename="main.css" mimetype="text/css">

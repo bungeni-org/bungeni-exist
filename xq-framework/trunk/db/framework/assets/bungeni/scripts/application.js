@@ -4,6 +4,7 @@ $(document).ready(function () {
 
     $(function(){
       $("#sort_lists").change(function(){
+        /** !+FIX_THIS - hardcoded URL !!! **/
         window.location='http://localhost:8180/exist/apps/framework/bills?sort=' + this.value
       });
     });
@@ -92,6 +93,26 @@ $(document).ready(function () {
             });
         });    
     
+    
+    /**
+        !+SORT_ORDER (ah, nov-2011)
+        Set the sort selector list to the correct option 
+        based on the sort parameter int the request
+    **/
+    
+    if ($('#sort_by').length != 0 ) {
+        sort_by = getParameterByName("s");
+        if (sort_by == "") {
+            sort_by = "st_date_newest";
+        }
+        select_sort_by  = $("#sort_by").val();
+        if (select_sort_by != sort_by) {
+            $("#sort_by").val(sort_by);
+        }
+    }
+
+
+    
     /*
 	$(".tab_content").hide(); //Hide all content
 	$("ul.ls-doc-tabs li:first").addClass("active").show(); //Activate first tab
@@ -110,3 +131,4 @@ $(document).ready(function () {
 	});               
     */
 });   
+

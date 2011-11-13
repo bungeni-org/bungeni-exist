@@ -86,12 +86,17 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $que
         </paginator>
         <alisting>
         {
-            if ($sortby = 'status') then (
-            
-                (:if (fn:ni$qrystr):)
+            if ($sortby = 'st_date_oldest') then (
+               (:if (fn:ni$qrystr):)
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
-                let $by := "bu:statusDate"                
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/util:eval(fn:concat("/",$by)) descending
+                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate ascending
+                return 
+                    bun:get-reference($match)       
+                )
+                
+            else if ($sortby eq 'st_date_newest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)       
                 )
@@ -111,9 +116,15 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $que
         } 
         </alisting>
     </docs>
-    
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
     return
-        transform:transform($doc, $stylesheet, ()) 
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           ) 
        
 };
 

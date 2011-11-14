@@ -1,6 +1,8 @@
 #summary the Bungeni XQ Framework
 #labels bungeni,Featured
 
+<wiki:toc max_depth="3" />
+
 = Introduction = 
 
 The Bungeni XQ framework is a XQuery web framework. It makes use of eXist's controller XML support (see http://exist-db.org/urlrewrite.html ).  The Bungeni XQ framework is an adaption of the seewhatithink.com application (see [http://sourceforge.net/projects/seewhatithink/] ).
@@ -17,7 +19,7 @@ This will checkout the framework as a eXist db backup.
 
 Import the framework into your eXist installation. It will get imported as the `/db/framework` folder into eXist.
 
-= Usage = 
+= Framework Configuration = 
 
 The framework allows creation of applications - the application must reside in a sub-folder within the framework.
 
@@ -49,6 +51,150 @@ The application is configured via a configuration file in the framework root. Wi
  * app/ui-config - the ui configuration file for the specific application. this is a path relative to the application folder.
  * app/xml-collection - the path to the xml document collection queries by the framework app.
 
+= Application Configuration = 
+
+Applications developed in the framework are configured via ui-config file.  The ui-config file is specified in the `app/ui-config` parameter in the framework configuration.
+
+The ui-config file allows configuring different aspects of the application 
+
+== Date and time formats == 
+
+Custom date and time formats can be specified using the format configuration (date and time formats specified in the XSLT 2.0 date time format specification ) :
+
+{{{
+    <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
+    <format type="date">[D1o] [MNn,*-3], [Y]</format>
+}}}
+
+== Routes == 
+
+A route map describes the navigation for a URL. 
+
+In a route you specify :
+   * route/@href - the format of the route url
+   * title - the default title for the route url
+   * navigation - the main navigator the url falls under
+   * subnavigation - the sub navigator the url falls under
+
+The framework supports 2 levels of menu navigators
+
+{{{
+  <routes>
+        <!--
+            href - the incoming url, this is used to load the main menu
+            navigation - specifies the active navigation level 1
+            subnavigation - specifies te active navigation level 2
+            -->
+        <route href="/">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        <route href="/home">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        ...
+        <route href="/member/personal-info">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        ...
+}}}
+
+== Menus == 
+
+The route navigation always resolves to a menu - the menus are defined in `<menugroups>`
+
+A defined menu in the system must provide the following :
+ * menu/@name - a unique name
+ * menu/@for - this the name of a navigator defined in the route map. This is used to associate a menu with a navigator.
+
+The menus are defined in xhtml format
+
+{{{
+<menugroups>
+...
+ <menu ... />
+....
+ <menu name="business" for="business">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
+                <ul class="theme-lev-1">
+                    <li>
+                        <a name="committees" href="committees">committees</a>
+                    </li>
+                    <li>
+                        <a name="bills" href="bills">bills</a>
+                    </li>
+                    <li>
+                        <a name="questions" href="questions">questions</a>
+                    </li>
+                    <li>
+                        <a name="motions" href="motions">motions</a>
+                    </li>
+....
+}}}
+
+== Content Tabs ==
+
+The menus link to listings - and the listings resolve to a view of the document.
+
+The framework allows segregating the view of a document across "tabs" - for .e.g. the text of the document may be shown on one tab and links to different versions of the document may be shown on a different tab. "Tabs" are essentially a subsidiary navigation within either a "navigation" or a "subnavigation"
+
+The "tabs" are mapped to routes.
+
+The "tabs" are defined with the following rules : 
+ * "tabs" are used to group individual "tab" definitions
+ * "tabgroups" is a container for multiple "tabs" configuration.
+ * "tabs" support a @name attribute - this must correspond to the type of the document. For e.g. if you are defining the tabs for the "bill" document type, the @name attribute for the "tabs" element should be *bills*
+ 
+
+The individual "tab" is configured as follows :
+ * path - specified in @path attribute - this specifies a url route for the tab i.e. a route/@href configuration
+ * id - a unique identifier for the tab (within the context of a "tabs" element)
+ * title - specified in the title element - the title of the tab
+
+
+{{{
+   <tabgroups>
+        <!-- 
+            Tabgroups are like navigation but they describe navigation relative to content 
+            The name is always that of a content type
+        -->
+
+        <tabs name="bill">
+            <tab path="bill/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="bill/timeline" id="timeline">
+                <title>history</title>
+            </tab>
+            <tab path="bill/details" id="related">
+                <title>details</title>
+            </tab>
+            <tab path="bill/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
+            <tab path="bill/documents" id="attachments">
+                <title>documents</title>
+            </tab>
+        </tabs>
+
+        <tabs name="bill-ver">
+            <tab path="bill/version/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="bill/version/details" id="related">
+                <title>details</title>
+            </tab>
+            <tab path="bill/version/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
+            <tab path="bill/version/documents" id="attachments">
+                <title>documents</title>
+            </tab>
+        </tabs>
+}}}
 
 = Application structure = 
 

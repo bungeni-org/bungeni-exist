@@ -25,6 +25,13 @@
 :   10-10-2011 - added template metadata processing support
 :   07-11-2011 - renamed process-template to process-tmpl and added support for route processing, template
 :                metadata processing is deprecated now
+:   14-11-2011 - added route-override support to process-tmpl. Some pages like e.g. when vieiwing a specific question
+:                set the page title dynamically from the contents of the question - so we cannot use the route title there.
+:                such pages can specify a <route-override /> element from the controller. E.g. :
+:                   <route-override>
+:                       <xh:title>this is a title override</xh:title>
+:                   </route-override>
+:                will override the title
 :)
 
 xquery version "1.0";
@@ -51,6 +58,9 @@ import module namespace config = "http://bungeni.org/xquery/config" at "config.x
 :   The name of the template to load from the database and merge
 : @param route-map
 :   The node of the route as specified in the appcontroller
+: @param route-override
+:   The override map for the route map, this is set dynamically from the controller.
+:   If its not used pass an empty node : ()
 : @param content
 :   The XHTML content snippets to merge into the template
 :
@@ -58,13 +68,20 @@ import module namespace config = "http://bungeni.org/xquery/config" at "config.x
 :   An XHTML page which is the result of merging the template with the content snippets
 : 
 :)
-declare function template:process-tmpl($rel-path as xs:string, $request-rel-path as xs:string, $template-name as xs:string, $route-map as node(), $content as node()+) { 
+declare function template:process-tmpl(
+        $rel-path as xs:string, 
+        $request-rel-path as xs:string, 
+        $template-name as xs:string, 
+        $route-map as node(),
+        $route-override as node(),
+        $content as node()+
+        ) { 
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
     $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] 
     (: extracts top level content and content from within an id less container :)
     let $processed-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
-    return template:process-page-meta($route-map, $processed-doc)
+    return template:process-page-meta($route-map, $route-override, $processed-doc)
 };
 
 
@@ -181,17 +198,23 @@ Extended API added by Ashok
 : 
 : @param content
 :   XHTML content template
-:
+: @param override
+:   The route override parameter
 : @param page-info
 :   The page-info element 
 :)
-declare function local:set-meta($route as element(), $content as element()) as  element() {
+declare function local:set-meta($route as element(), $override as element(), $content as element()) as  element() {
     (:~
     Check set the title from the page-info attribute 
     :)
 
 	if ($content/self::xh:title and $route/title) then (
-		<title>{$route/title/text()}</title>
+		   <title>{
+		   if ($override/xh:title) then 
+		      $override/xh:title/text()
+		   else
+		      $route/title/text()
+		   }</title>
     ) 
 
     (:~ 
@@ -234,7 +257,7 @@ declare function local:set-meta($route as element(), $content as element()) as  
 		  		 {$content/@*, 
 					for $child in $content/node()
 						return if ($child instance of element())
-							   then local:set-meta($route, $child)
+							   then local:set-meta($route, $override, $child)
 							   else $child
 				 }
 };
@@ -261,13 +284,16 @@ declare function template:filter-page-namespace(
 };
 
 
-declare function template:process-page-meta($route as element(), $doc as element()) as element() {
-	(: Now remove the page namespace from the final document :)
-	(: let $final := template:filter-page-namespace($doc) :)
-    (: For now only the title is specified in page namespace - but this will be expanded
-       to support other things :)
-	(: Set the title and return the page :)
-	(:let $output := template:set-title($final, $page-info/pg:title/text()) :)
-	(: For navigation menu to highlight current page :)
-	local:set-meta($route, $doc)
+(:~
+: Process the metadata for the page by querying the route map
+: 
+: @param route
+:   route map
+: @param override
+:   The route override parameter
+: @param doc
+:   The page content being processed by the template 
+:)
+declare function template:process-page-meta($route as element(), $override as element(), $doc as element()) as element() {
+	local:set-meta($route, $override, $doc)
 };

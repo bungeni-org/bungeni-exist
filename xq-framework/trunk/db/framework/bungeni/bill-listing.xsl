@@ -21,7 +21,7 @@
             <div id="doc-listing" class="acts">
                 <!-- render the paginator -->
                 <div class="list-header">
-                    <div class="toggler-list" id="expand-all">+ expand all</div>
+                    <div class="toggler-list" id="expand-all">- compress all</div>
                     <xsl:apply-templates select="paginator"/>
                     <div id="search-n-sort" class="search-bar">
                         <form method="get" action="" name="search_sort">
@@ -43,7 +43,6 @@
                                 <option value="st_date_oldest">status date [oldest]</option>
                                 <option value="sub_date_newest">submission date [newest]</option>
                                 <option value="sub_date_oldest">submission date [oldest]</option>
-                                <option value="gazetted">gazetted</option>
                             </select>
                             <input value="search" type="submit"/>
                         </form>
@@ -69,7 +68,7 @@
             <a href="bill/text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
-            <span>+</span>
+            <span>-</span>
             <div class="doc-toggle">
                 <table class="doc-tbl-details">
                     <tr>

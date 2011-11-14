@@ -11,21 +11,47 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
+         document as opposed to main document. -->
+    <xsl:param name="version"/>
     <xsl:template match="document">
+        <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
         <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:if test="$version eq 'true'">
+                        <br/>
+                        <span style="color:#b22b14">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        </span>
+                    </xsl:if>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-type"/>
+                    <xsl:choose>
+                        <xsl:when test="$version eq 'true'">
+                            <xsl:value-of select="concat($doc-type,'-ver')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$doc-type"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+                <xsl:with-param name="uri">
+                    <xsl:choose>
+                        <xsl:when test="$version eq 'true'">
+                            <xsl:value-of select="$ver_uri"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$doc_uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">related</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
@@ -77,10 +103,10 @@
                     <ul class="ls-row" id="list-toggle-wide">
                         <li>
                             <div style="width:100%;">
-                                <span class="tgl" style="margin-right:10px">+</span>
+                                <span class="tgl" style="margin-right:10px">-</span>
                                 <a href="#1">profile</a>
                             </div>
-                            <div class="doc-toggle">
+                            <div class="doc-toggle open">
                                 <table class="doc-tbl-details">
                                     <tr>
                                         <td class="labels">submission date:</td>
@@ -127,10 +153,10 @@
                         <xsl:if test="primary/bu:ontology/bu:document[@type='question']">
                             <li>
                                 <div style="width:100%;">
-                                    <span class="tgl" style="margin-right:10px">+</span>
+                                    <span class="tgl" style="margin-right:10px">-</span>
                                     <a href="#1">summary</a>
                                 </div>
-                                <div class="doc-toggle">
+                                <div class="doc-toggle open">
                                     <xsl:copy-of select="primary/bu:ontology/bu:ministry/bu:field[@name='description']"/>
                                 </div>
                             </li>

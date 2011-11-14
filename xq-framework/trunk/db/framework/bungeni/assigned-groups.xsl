@@ -11,21 +11,48 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
+        document as opposed to main document. -->
+    <xsl:param name="version"/>
     <xsl:template match="document">
+        <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
         <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <!-- If its a version and not a main document... add version title below main title -->
+                    <xsl:if test="$version eq 'true'">
+                        <br/>
+                        <span style="color:#b22b14">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        </span>
+                    </xsl:if>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-type"/>
+                    <xsl:choose>
+                        <xsl:when test="$version eq 'true'">
+                            <xsl:value-of select="concat($doc-type,'-ver')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$doc-type"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+                <xsl:with-param name="uri">
+                    <xsl:choose>
+                        <xsl:when test="$version eq 'true'">
+                            <xsl:value-of select="$ver_uri"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$doc_uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">assigned</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div style="float:right;width:400px;height:18px;">
                 <div id="doc-downloads">

@@ -2,7 +2,35 @@
 <div xmlns="http://www.w3.org/1999/xhtml" id="content">
     <div id="main-wrapper">
         <div id="title-holder" class="theme-lev-1-only">
-            <h1 id="doc-title-blue">Committees</h1>
+            <h1 id="doc-title-blue-center">Committees</h1>
+        </div>
+        <div id="tab-menu" class="ls-tabs">
+            <ul class="ls-doc-tabs">
+                <li class="active">
+                    <a href="#">
+                        archive
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        archive
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="doc-downloads">
+            <ul class="ls-downloads">
+                <li>
+                    <a href="#" title="get as RSS feed" class="rss">
+                        <em>RSS</em>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="print this page listing" class="print">
+                        <em>PRINT</em>
+                    </a>
+                </li>
+            </ul>
         </div>
         <div id="main-doc" class="rounded-eigh tab_container" role="main"/>
     </div>

@@ -63,7 +63,7 @@
                                             <xsl:choose>
                                                 <xsl:when test="$action = 'new-version'">
                                                     <xsl:variable name="new_ver_id" select="bu:field[@name='change_id']"/>
-                                                    <a href="{//primary/bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}&amp;v={//primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:field[@name='change_id']/text()}">
+                                                    <a href="{//primary/bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}{//primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:field[@name=$new_ver_id]//@uri}">
                                                         <xsl:value-of select="bu:field[@name='description']"/>
                                                     </a>
                                                 </xsl:when>

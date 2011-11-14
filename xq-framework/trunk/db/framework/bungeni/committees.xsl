@@ -3,12 +3,14 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Oct 5, 2011</xd:p>
+                <xd:b>Created on:</xd:b> Nov 14, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p>Lists tableddocuments from Bungeni</xd:p>
+            <xd:p>List committees from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
+    <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
+    <xsl:param name="sortby"/>   
     
     <!-- load configuration info -->
     <xsl:include href="config.xsl"/>
@@ -40,6 +42,7 @@
                                 <option value="st_date_oldest">status date [oldest]</option>
                                 <option value="sub_date_newest">submission date [newest]</option>
                                 <option value="sub_date_oldest">submission date [oldest]</option>
+                                <option value="ministry">ministry</option>
                             </select>
                             <input value="search" type="submit"/>
                         </form>
@@ -50,6 +53,7 @@
             </div>
         </div>
     </xsl:template>
+
     
     <!-- Include the paginator generator -->
     <xsl:include href="paginator.xsl"/>
@@ -59,44 +63,38 @@
         </ul>
     </xsl:template>
     <xsl:template match="document" mode="renderui">
-        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:*/@uri"/>
         <li>
-            <a href="tableddocument/text?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
+            <a href="committee/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
             </a>
+            <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:type"/>
+            </div>
             <span>-</span>
             <div class="doc-toggle">
                 <table class="doc-tbl-details">
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            <xsl:value-of select="bu:ontology/bu:bungeni/bu:principalGroup/@href"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">moved by:</td>
+                        <td class="labels">parent group:</td>
                         <td>
-                            <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
-                            </a>
+                            <xsl:value-of select="bu:ontology/bu:legislature/bu:parent_group/bu:shortName"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">status:</td>
+                        <td class="labels">start date:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>&#160;&#160;<b>on:</b>&#160;&#160;<xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">submission date:</td>
                         <td>
-                            <xsl:value-of select="format-date(output/bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">ministry:</td>
-                        <td>
-                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislature/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                 </table>

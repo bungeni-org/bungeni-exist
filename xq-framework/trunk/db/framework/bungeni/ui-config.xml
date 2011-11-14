@@ -68,6 +68,7 @@
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
+        <!-- #BILLS -->
         <route href="/bills">
             <title>Business | Bills</title>
             <navigation>business</navigation>
@@ -78,13 +79,18 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
+        <route href="/bill/version/text">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
         <route href="/bill/timeline">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/version">
-            <title>Business | Bill versions</title>
+        <route href="/bill/version/timeline">
+            <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
@@ -108,6 +114,12 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
+        <route href="/bill/version/documents">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>   
+        <!-- #QUESTIONS -->
         <route href="/questions">
             <title>Business | Questions </title>
             <navigation>business</navigation>
@@ -118,17 +130,27 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
+        <route href="/question/version/text">
+            <title>Business | Question Version Text</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
         <route href="/question/timeline">
             <title>Business | Question Timeline</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/version">
-            <title>Business | Question versions</title>
+        <route href="/question/version/timeline">
+            <title>Business | Question Version Timeline</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
         <route href="/question/details">
+            <title>Business | Related Infomation</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question/version/details">
             <title>Business | Related Infomation</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
@@ -138,6 +160,12 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
+        <route href="/question/version/documents">
+            <title>Business | Question Version Attachments</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>  
+        <!-- #MOTIONS -->
         <route href="/motions">
             <title>Business | Motions </title>
             <navigation>business</navigation>
@@ -148,13 +176,18 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
+        <route href="/motion/version/text">
+            <title>Business | Motion Version Text</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
         <route href="/motion/timeline">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/version">
-            <title>Business | Motion Versions</title>
+        <route href="/motion/version/timeline">
+            <title>Business | Motion Version Timeline</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
@@ -163,8 +196,18 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
+        <route href="/motion/version/details">
+            <title>Business | Motion Version Details</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
         <route href="/motion/assigned-groups">
             <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion/version/assigned-groups">
+            <title>Business | Motion Version Assigned-groups</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
@@ -173,6 +216,12 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
+        <route href="/motion/version/documents">
+            <title>Business | Motion Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>  
+        <!-- #TABLED DOCUMENTS -->
         <route href="/tableddocuments">
             <title>Business | Tabled Documents </title>
             <navigation>business</navigation>
@@ -183,13 +232,18 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <route href="/tableddocument/version/text">
+            <title>Business | Tabled document Version Document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
         <route href="/tableddocument/timeline">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/version">
-            <title>Business | Tabled document versions</title>
+        <route href="/tableddocument/version/timeline">
+            <title>Business | Tabled document Version Timeline</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
@@ -198,13 +252,28 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <route href="/tableddocument/version/details">
+            <title>Business | Tabled document Version Details</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
         <route href="/tableddocument/assigned-groups">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <route href="/tableddocument/version/assigned-groups">
+            <title>Business | Tabled document Version Assigned-groups</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
         <route href="/tableddocument/documents">
             <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument/version/documents">
+            <title>Business | Tabled document Version Documents</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
@@ -337,9 +406,6 @@
             <tab path="bill/version/details" id="related">
                 <title>details</title>
             </tab>
-            <tab path="bill/version/assigned-groups" id="assigned">
-                <title>assigned groups</title>
-            </tab>
             <tab path="bill/version/documents" id="attachments">
                 <title>documents</title>
             </tab>
@@ -386,6 +452,17 @@
                 <title>documents</title>
             </tab>
         </tabs>
+        <tabs name="motion-ver">
+            <tab path="motion/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="motion/timeline" id="timeline">
+                <title>history</title>
+            </tab>
+            <tab path="motion/details" id="related">
+                <title>details</title>
+            </tab>
+        </tabs>
         <tabs name="motion">
             <tab path="motion/text" id="text">
                 <title>text</title>
@@ -401,6 +478,17 @@
             </tab>
             <tab path="motion/documents" id="attachments">
                 <title>documents</title>
+            </tab>
+        </tabs>
+        <tabs name="tableddocument-ver">
+            <tab path="motion/text" id="text">
+                <title>text</title>
+            </tab>
+            <tab path="tableddocument/timeline" id="timeline">
+                <title>history</title>
+            </tab>
+            <tab path="tableddocument/details" id="related">
+                <title>details</title>
             </tab>
         </tabs>
         <tabs name="tableddocument">

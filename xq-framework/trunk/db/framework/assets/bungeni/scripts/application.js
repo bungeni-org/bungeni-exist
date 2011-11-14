@@ -1,15 +1,23 @@
 
 
 $(document).ready(function () {
-
-    $(function(){
-      $("#sort_lists").change(function(){
-        /** !+FIX_THIS - hardcoded URL !!! **/
-        window.location='http://localhost:8180/exist/apps/framework/bills?sort=' + this.value
-      });
-    });
-
     /*** TOGGLE FEATURES **/
+    
+    /** toggling doc items per item isolated not in <li>**/  
+    $('.blocks div span.tgl').click(function () {
+ 
+        var text = $(this).parent('div').siblings('div.doc-toggle');
+ 
+        if (text.is(':hidden')) {
+            text.slideDown('200');
+            $(this).closest('span.tgl').html('-');     
+        } else {
+            text.slideUp('200');
+            $(this).closest('span.tgl').html('+');     
+        }
+         
+    });     
+    
     /** toggling doc items per item isolated **/  
     $('.ls-row span').click(function () {
  

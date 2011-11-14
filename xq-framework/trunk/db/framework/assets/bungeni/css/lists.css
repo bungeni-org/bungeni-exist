@@ -61,7 +61,6 @@ ul.ls-row div.list-toggle {
 }  
 ul.ls-row div.doc-toggle {
     margin:5px auto 5px 10px;
-    display:none;
 } 
 .list-block div.doc-toggle {
     margin:5px auto 5px 10px;
@@ -70,6 +69,12 @@ ul.ls-row div.doc-toggle {
 .list-block div > span {
     cursor:pointer;
 }
+div.doc-toggle.closed {
+    display:none;
+} 
+div.doc-toggle.opened {
+    display:inherit;
+} 
 
 /* Listing of main-nav tabs */
 #tabs {

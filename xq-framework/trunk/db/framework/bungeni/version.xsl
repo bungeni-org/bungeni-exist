@@ -85,7 +85,7 @@
                                             </span>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <a href="{primary/bu:ontology/bu:document/@type}/version?uri={@uri}">
+                                            <a href="{$doc-type}/version/text?uri={@uri}">
                                                 version-<xsl:value-of select="$cur_pos"/>
                                             </a>
                                         </xsl:otherwise>

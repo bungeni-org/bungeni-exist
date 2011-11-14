@@ -11,21 +11,48 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
+        document as opposed to main document. -->
+    <xsl:param name="version"/>
     <xsl:template match="document">
+        <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
         <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <!-- If its a version and not a main document... add version title below main title -->
+                    <xsl:if test="$version eq 'true'">
+                        <br/>
+                        <span style="color:#b22b14">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        </span>
+                    </xsl:if>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-type"/>
+                    <xsl:choose>
+                        <xsl:when test="$version eq 'true'">
+                            <xsl:value-of select="concat($doc-type,'-ver')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$doc-type"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:with-param>
+                <xsl:with-param name="uri">
+                    <xsl:choose>
+                        <xsl:when test="$version eq 'true'">
+                            <xsl:value-of select="$ver_uri"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$doc_uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">attachments</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
             <div style="float:right;width:400px;height:18px;">
                 <div id="doc-downloads">
@@ -51,10 +78,10 @@
                         </div>
                         <div id="block1" class="list-block">
                             <div style="width:100%;">
-                                <span class="tgl" style="margin-right:10px">+</span>
+                                <span class="tgl" style="margin-right:10px">-</span>
                                 <a href="#1">versions</a>
                             </div>
-                            <div class="doc-toggle">
+                            <div class="doc-toggle opened">
                                 <table class="listing timeline tbl-tgl">
                                     <tr>
                                         <th>status</th>
@@ -74,7 +101,7 @@
                                             </td>
                                             <td>
                                                 <span>
-                                                    <a href="{//primary/bu:ontology/bu:document/@type}/version?uri={@uri}">
+                                                    <a href="{//primary/bu:ontology/bu:document/@type}/version/text?uri={@uri}">
                                                         <xsl:value-of select="bu:shortName"/>
                                                     </a>
                                                 </span>
@@ -92,10 +119,10 @@
                         <xsl:if test="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
                             <div id="block2" class="list-block">
                                 <div style="width:100%;">
-                                    <span class="tgl" style="margin-right:10px">+</span>
+                                    <span class="tgl" style="margin-right:10px">-</span>
                                     <a href="#1">Events</a>
                                 </div>
-                                <div class="doc-toggle">
+                                <div class="doc-toggle opened">
                                     <ul class="ls-row">
                                         <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
                                             <xsl:sort select="@date" order="descending"/>
@@ -113,10 +140,10 @@
                         </xsl:if>
                         <div id="block3" class="list-block">
                             <div style="width:100%;">
-                                <span class="tgl" style="margin-right:10px">+</span>
+                                <span class="tgl" style="margin-right:10px">-</span>
                                 <a href="#1">attached files</a>
                             </div>
-                            <div class="doc-toggle">
+                            <div class="doc-toggle opened">
                                 <table class="listing timeline">
                                     <tr>
                                         <th>file title</th>

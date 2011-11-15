@@ -526,4 +526,22 @@
             </tab>
         </tabs>
     </tabgroups>
+
+    <!-- Document Types -->
+    
+    <doctypes>
+        
+        <doctype name="bill">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin value="title">Title</searchin>
+                <searchin value="body">Body</searchin>
+            </searchins>
+        </doctype>
+        
+    </doctypes>
+
 </ui>

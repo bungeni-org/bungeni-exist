@@ -3,29 +3,32 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Nov 03, 2011</xd:p>
+                <xd:b>Created on:</xd:b> Nov 16, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Question item from Bungeni</xd:p>
+            <xd:p> Committee item from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="document">
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="ver_id" select="version"/>
+        <xsl:variable name="doc-type" select="primary/bu:ontology/@type"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">text</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri">
+                    <xsl:value-of select="$doc_uri"/>
+                </xsl:with-param>
+                <xsl:with-param name="tab-path">profile</xsl:with-param>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
@@ -64,48 +67,28 @@
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Primary Sponsor: <i>
-                            <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
-                            </a>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Language: 
+                        <i>
+                            <xsl:value-of select="primary/bu:ontology/bu:bungeni/bu:language"/>
                         </i>
-                    </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Sponsors: ( 
-                        <xsl:choose>
-                            <!-- check whether we have signatories or not -->
-                            <xsl:when test="primary/bu:ontology/bu:signatories/bu:signatory">
-                                <xsl:for-each select="primary/bu:ontology/bu:signatories/bu:signatory">
-                                    <i>
-                                        <a href="member?uri={@href}">
-                                            <xsl:value-of select="@showAs"/>
-                                        </a>
-                                    </i>
-                                    <xsl:if test="position() &lt; last()">,</xsl:if>
-                                </xsl:for-each>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                None
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        )
                     </h4>
                     <div class="doc-status">
                         <span>
-                            <b>Last Event:</b>
+                            <b>Acronym:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:shortName"/>
                         </span>
                         <span>
-                            <b>Status Date:</b>
+                            <b>Start Date:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-date(primary/bu:ontology/bu:bungeni/bu:parliament/@date,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-date(primary/bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="primary/bu:ontology/bu:legislativeItem/bu:body"/>
+                            <xsl:copy-of select="primary/bu:ontology/bu:legislature/bu:description"/>
                         </div>
                     </div>
                 </div>

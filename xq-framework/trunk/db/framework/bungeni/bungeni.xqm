@@ -21,7 +21,7 @@ declare variable $bun:SORT-BY := 'bu:statusDate';
 declare variable $bun:WHERE := 'body_text';
 
 declare variable $bun:OFF-SET := 0;
-declare variable $bun:LIMIT :=15;
+declare variable $bun:LIMIT :=5;
 declare variable $bun:DOCNO := 1;
 
 
@@ -539,4 +539,29 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
         transform:transform($doc, $stylesheet, ())    
 };
 
+declare function bun:get-assigned-items($committeeid as xs:string, $_tmpl as xs:string) as element()* {
 
+     (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($_tmpl) 
+
+    (: return AN Committee document with all items assigned to it :)
+    let $doc := <assigned-items>
+    <group>
+    {
+        collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@uri=$committeeid]/ancestor::bu:ontology
+    }
+    </group>
+    {
+    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:*/bu:group[@href=$committeeid]
+    return
+        <items>
+            {
+                $match/ancestor::bu:ontology
+             }
+        </items>
+    }
+    </assigned-items> 
+    
+    return
+        transform:transform($doc, $stylesheet, ())  
+};

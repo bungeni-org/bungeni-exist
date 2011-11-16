@@ -68,6 +68,37 @@
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
+        <!-- #COMMITTEES -->
+        <route href="/committee/profile">
+            <title>Business | Committee's Profile</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee/members">
+            <title>Business | Committee's Members</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee/assigned-items">
+            <title>Business | Committee's Assigned Items</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee/sittings">
+            <title>Business | Committee's Sittings</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee/staff">
+            <title>Business | Committee's Staff</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee/contacts">
+            <title>Business | Committee's Staff</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>        
         <!-- #BILLS -->
         <route href="/bills">
             <title>Business | Bills</title>
@@ -399,6 +430,26 @@
             Tabgroups are like navigation but they describe navigation relative to content 
             The name is always that of a content type
         -->
+        <tabs name="group">
+            <tab path="committee/profile" id="profile">
+                <title>profile</title>
+            </tab>
+            <tab path="committee/members" id="members">
+                <title>members</title>
+            </tab>
+            <tab path="committee/assigned-items" id="assigned">
+                <title>assigned items</title>
+            </tab>
+            <tab path="committee/sittings" id="sittings">
+                <title>sittings</title>
+            </tab>
+            <tab path="committee/staff" id="staff">
+                <title>staff</title>
+            </tab>
+            <tab path="committee/contacts" id="contacts">
+                <title>contacts</title>
+            </tab>
+        </tabs>
         <tabs name="bill-ver">
             <tab path="bill/version/text" id="text">
                 <title>text</title>
@@ -533,6 +584,42 @@
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin value="title">Title</searchin>
+                <searchin value="body">Body</searchin>
+            </searchins>
+        </doctype>
+        <doctype name="question">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin value="title">Title</searchin>
+                <searchin value="body">Body</searchin>
+            </searchins>
+        </doctype>
+        <doctype name="motion">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin value="title">Title</searchin>
+                <searchin value="body">Body</searchin>
+            </searchins>
+        </doctype>
+        <doctype name="tableddocument">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin value="title">Title</searchin>

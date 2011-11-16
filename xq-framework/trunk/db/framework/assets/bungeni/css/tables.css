@@ -33,13 +33,14 @@ table.doc-tbl-details tr td.labels {
     font-weight:bold;
     text-align:left;
     width:100px;
-    vertical-align:top;
+    vertical-align:bottom;
 }
 table.doc-tbl-details tr td {
     border-width:1px;
     border-color: #c1c1c0 !important;
     padding-left:8px;
     text-align:left !important;
+    vertical-align:bottom;
 }
 
 table.tbl-tgl {

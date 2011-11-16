@@ -528,9 +528,7 @@
     </tabgroups>
 
     <!-- Document Types -->
-    
     <doctypes>
-        
         <doctype name="bill">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
@@ -541,7 +539,5 @@
                 <searchin value="body">Body</searchin>
             </searchins>
         </doctype>
-        
     </doctypes>
-
 </ui>

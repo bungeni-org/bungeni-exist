@@ -19,7 +19,6 @@
 : templates and XHTML snippets together
 :
 : @author Adam Retter <adam.retter@googlemail.com>
-: @version 201109122029
 : Modified :
 :   ashok.hariharan
 :   10-10-2011 - added template metadata processing support
@@ -34,7 +33,7 @@
 :                will override the title
 :)
 
-xquery version "1.0";
+(:xquery version "1.0";:)
 
 (: Further additions by Ashok Hariharan :)
 

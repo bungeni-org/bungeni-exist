@@ -12,6 +12,7 @@
     
     <!-- this is the paginator template matcher -->
     <xsl:template match="paginator">
+        <!-- The paginator expects a document with the following -->
         <xsl:variable name="offset">
             <xsl:value-of select="./offset"/>
         </xsl:variable>

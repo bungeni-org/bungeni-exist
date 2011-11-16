@@ -88,6 +88,42 @@ declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) a
 };
 
 
+declare function cmn:get-doctype-config($doctype as xs:string) {
+   let $config := cmn:get-ui-config()
+   let $dc-config := $config/ui/doctypes/doctype[@name eq $doctype]
+   return 
+    if ($dc-config) then (
+        $dc-config
+      )
+    else
+        ()
+};
+
+declare function cmn:get-orderby-config($doctype as xs:string)  {
+    let $dc-config := cmn:get-doctype-config($doctype)
+    return
+    if ($dc-config) then (
+       $dc-config/orderbys/orderby
+       )
+    else
+        ()
+};
+
+declare function cmn:get-searchins-config($doctype as xs:string)  {
+    let $dc-config := cmn:get-doctype-config($doctype)
+    return 
+    if ($dc-config) then (
+       $dc-config/searchins/searchin
+       )
+    else
+        ()
+};
+
+
+
+
+
+
 (:~
 Loads an XSLT file 
 :)

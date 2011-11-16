@@ -24,26 +24,6 @@ declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT :=15;
 declare variable $bun:DOCNO := 1;
 
-(:~
-Load navigation menu on every page 
-:)
-declare function bun:get-menu($request-rel-path as xs:string, $element as element(), $content as node()*) {
-  element {node-name($element)} {
-     for $attr in $element/@* return
-        template:adjust-relative-paths($request-rel-path, $attr)
-     ,
-     for $child in $element/node() return
-        if($child instance of element()) then
-            
-            if($content/node-name(.) = node-name($child) and $child/@id = $content/@id)then
-            (: if(node-name($child) = (xs:QName("xh:div"), xs:QName("xh:ul")) and $child/@id = $content/@id)then :)
-                template:copy-and-replace($request-rel-path, $content[@id eq $child/@id], ())
-            else
-                template:copy-and-replace($request-rel-path, $child, $content)
-        else
-            $child
-    }
-};
 
 (: Search for the doc matching the actid in the parameter and return the document :)
 declare function bun:get-doc($actid as xs:string) as element() {
@@ -53,34 +33,19 @@ declare function bun:get-doc($actid as xs:string) as element() {
     return $match/ancestor::akomaNtoso
 };
 
-declare function bun:paginator($offset as xs:integer) as element()+ {
-    (: get total documents for pagination :)
-    let $count := count(collection(cmn:get-lex-db())//akomaNtoso)
-    
-    let $pageoutput := <span>{fn:concat("total: ", $count)}</span>
-     
-    (:for $match in collection(cmn:get-lex-db())//akomaNtoso:)
-    (:for $i in (1 to $count)[. mod 10 = 0]
-    let $page := <a > </a> 
-    
-        element xh:a {
-                attribute href { fn:concat("?offset=", $bun:DEFAULT-PAGE, "&amp;limit=",$bun:PER-PAGE) },
-                $bun:DEFAULT-PAGE
-            } return $page
-      :)
-    return $pageoutput
-};
 
 declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("bill-listing.xsl")    
+    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of bills only :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'])}</count>
+        <documentType>bill</documentType>
+        <listingUrlPrefix>bill/text</listingUrlPrefix>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
@@ -225,13 +190,15 @@ declare function bun:get-reference($docitem as node()) {
 declare function bun:get-questions($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("question-listing.xsl")    
+    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of questions only :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'])}</count>
+        <documentType>question</documentType>
+        <listingUrlPrefix>question/text</listingUrlPrefix>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
@@ -286,13 +253,15 @@ declare function bun:get-questions($offset as xs:integer, $limit as xs:integer, 
 declare function bun:get-motions($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("motion-listing.xsl")    
+    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of questions only :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'])}</count>
+        <documentType>motion</documentType>
+        <listingUrlPrefix>motion/text</listingUrlPrefix>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
@@ -347,13 +316,15 @@ declare function bun:get-motions($offset as xs:integer, $limit as xs:integer, $q
 declare function bun:get-tableddocs($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("td-listing.xsl")    
+    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of questions only :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'])}</count>
+        <documentType>tableddocument</documentType>
+        <listingUrlPrefix>tableddocument/text</listingUrlPrefix>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
@@ -567,3 +538,5 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
     return
         transform:transform($doc, $stylesheet, ())    
 };
+
+

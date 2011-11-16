@@ -114,7 +114,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">moved by:</td>
+                        <td class="labels">primary sponsor:</td>
                         <td>
                             <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
                                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
@@ -122,7 +122,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">status:</td>
+                        <td class="labels">last event:</td>
                         <td>
                             <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
                             &#160;&#160;<b>on:</b>&#160;&#160;

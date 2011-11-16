@@ -39,9 +39,11 @@ body,button,input,select,textarea {
 }
 a, a:visited {
     color:#2b92be;
+    text-decoration:none;
 }
 a:hover {
-    color:#36b9f1
+    color:#36b9f1;
+    text-decoration:underline;
 }
 a:focus {
     outline:thin dotted
@@ -258,7 +260,7 @@ td {
     -ms-filter:none!important
 }
 a,a:visited {
-    text-decoration:underline
+    text-decoration:none;
 }
 a[href]:after {
     content:" (" attr(href) ")"

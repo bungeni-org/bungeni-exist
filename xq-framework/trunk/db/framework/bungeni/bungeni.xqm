@@ -99,6 +99,43 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $que
        
 };
 
+declare function bun:get-atom-feed($item as xs:string) as element() {
+    util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
+
+    let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:bu="http://portal.bungeni.org/1.0/">
+        <title>Bills Atom</title>
+        <id>http://portal.bungeni.org/1.0/</id>
+        <updated>{current-dateTime()}</updated>
+        <generator uri="http://exist.sourceforge.net/" version="1.4.5">eXist XML Database</generator>      
+        <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
+        <link rel="self" href="/bills/rss" />
+       {
+         let $current := substring-before(base-uri(/bu:ontology/bu:legislativeItem[@uri='/ke/parliament/2011-03-02/bill/467:38-bill/en']),'/.feed.atom'),
+             $current-path := substring-after($current,'/db/bungeni-xml')
+            for $i in (collection($current)/bu:ontology[@type='document']/bu:document[@type='bill'])/ancestor::bu:ontology
+               (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
+                  return ( <entry>
+                            <id>{data($i/bu:legislativeItem/@uri)}</id>
+                            <title>{$i/bu:legislativeItem/bu:shortName/node()}</title>
+                            {
+                               <summary> {
+                                   $i/bu:document/@type,
+                                   $i/bu:legislativeItem/bu:shortName/node()
+                               }</summary>,
+                               <link rel="alternate" type="application/atom+xml" href="/bills/{/bu:legislativeItem/@uri}"/>
+                           }
+                            <content type='html'>{$i/bu:legislativeItem/bu:body/node()}</content>
+                            <published>{$i/bu:legislativeItem/bu:publicationDate/node()}</published>
+                            <updated>{$i/bu:legislativeItem/bu:statusDate/node()}</updated>                           
+                           </entry>
+                         )
+       }
+    </feed>
+    
+    return 
+        $feed
+};
+
 declare function bun:get-committees($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
@@ -164,6 +201,70 @@ declare function bun:get-committees($offset as xs:integer, $limit as xs:integer,
        
 };
 
+declare function bun:get-politicalgroups($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt("politicalgroups.xsl")    
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of groups :)
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'])}</count>
+        <documentType>group</documentType>
+        <listingUrlPrefix>committee/profile</listingUrlPrefix>        
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        </paginator>
+        <alisting>
+        {
+            if ($sortby = 'start_dt_oldest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>  
+                )
+                
+            else if ($sortby eq 'start_dt_newest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>     
+                )
+            else if ($sortby = 'fN_asc') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>      
+                )    
+            else if ($sortby = 'fN_desc') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>        
+                )                 
+            else  (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>
+                   
+                )
+
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           ) 
+       
+};
 (:~
     This function runs a sub-query to get ministry information
     It takes in primary results of main query as input to search

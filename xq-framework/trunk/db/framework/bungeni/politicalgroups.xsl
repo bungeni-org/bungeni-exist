@@ -22,7 +22,7 @@
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">Committees</h1>
+                <h1 id="doc-title-blue-center">Political Groups</h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
@@ -33,7 +33,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            archive
+                            gazetted
                         </a>
                     </li>
                 </ul>
@@ -130,15 +130,21 @@
             <div class="doc-toggle">
                 <table class="doc-tbl-details">
                     <tr>
+                        <td class="labels">id:</td>
+                        <td>
+                            <xsl:value-of select="bu:ontology/bu:bungeni/bu:principalGroup/@href"/>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="labels">start date:</td>
                         <td>
                             <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">election date:</td>
+                        <td class="labels">submission date:</td>
                         <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:parentGroup/bu:electionDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislature/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                 </table>

@@ -111,7 +111,7 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
 	border:1px solid #2b92be;
 }
 
-.paginate a.curr-no {
+.paginate a.disabled {
 	color: #f79f0e !important;
 	font-size:12px;
 	padding:2px 6px 2px 6px;
@@ -119,4 +119,10 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
 	background:#fff !important;
 	cursor:text;
 	text-decoration:none;
+}
+
+.paginate a.curr-no {
+	color: #ffffff !important;
+	background-color: #2b92be;
+	border:1px solid #2b92be;
 }

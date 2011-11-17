@@ -104,7 +104,7 @@
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <a href="{$doc-type}/version/text?uri={@uri}">
-                                                version-<xsl:value-of select="$cur_pos"/>
+                                                Version-<xsl:value-of select="$cur_pos"/>
                                                 </a>
                                             </xsl:otherwise>
                                         </xsl:choose>
@@ -144,23 +144,24 @@
                         </xsl:choose>
                         )
                     </h4>
+                    <xsl:variable name="render-doc" select="if ($version eq 'true') then                                   primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]                                  else                                   primary/bu:ontology/bu:legislativeItem                                "/>
                     <div class="doc-status">
                         <span>
                             <b>Status:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="$render-doc/bu:status"/>
                         </span>
                         <span>
                             <b>Status Date:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-date(primary/bu:ontology/bu:bungeni/bu:parliament/@date,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-dateTime($render-doc/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="primary/bu:ontology/bu:legislativeItem/bu:body"/>
+                            <xsl:copy-of select="$render-doc/bu:body"/>
                         </div>
                     </div>
                 </div>

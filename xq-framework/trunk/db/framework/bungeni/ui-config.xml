@@ -149,7 +149,12 @@
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
-        </route>   
+        </route>
+        <route href="/bills/rss">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>        
         <!-- #QUESTIONS -->
         <route href="/questions">
             <title>Business | Questions </title>
@@ -273,11 +278,6 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/version/timeline">
-            <title>Business | Tabled document Version Timeline</title>
-            <navigation>business</navigation>
-            <subnavigation>tableddocuments</subnavigation>
-        </route>
         <route href="/tableddocument/details">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
@@ -329,9 +329,9 @@
             <subnavigation>publications</subnavigation>
         </route>
         <route href="/politicalgroups">
-            <title>Business | Committees </title>
+            <title>Business | Political Groups </title>
             <navigation>business</navigation>
-            <subnavigation>committees</subnavigation>
+            <subnavigation>politicalgroups</subnavigation>
         </route>
     </routes>
     
@@ -421,6 +421,18 @@
             </div>
         </menu>
     </menugroups>
+    
+    <!-- 
+        Download formats
+    -->
+    <downloadgroups>
+        <listings>
+            
+        </listings>
+        <document>
+            
+        </document>
+    </downloadgroups>
     
     <!--
         Tab Groups
@@ -532,13 +544,10 @@
             </tab>
         </tabs>
         <tabs name="tableddocument-ver">
-            <tab path="motion/text" id="text">
+            <tab path="tableddocument/version/text" id="text">
                 <title>text</title>
             </tab>
-            <tab path="tableddocument/timeline" id="timeline">
-                <title>history</title>
-            </tab>
-            <tab path="tableddocument/details" id="related">
+            <tab path="tableddocument/version/details" id="related">
                 <title>details</title>
             </tab>
         </tabs>

@@ -31,7 +31,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    <xsl:text>List of</xsl:text>
+                    <xsl:text>List of&#160;</xsl:text>
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
             <div id="tab-menu" class="ls-tabs">

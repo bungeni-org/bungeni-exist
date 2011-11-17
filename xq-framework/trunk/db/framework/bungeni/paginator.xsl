@@ -69,7 +69,7 @@
             <xsl:choose>
                 <!-- If the current page is page 1 , we dont render anything -->
                 <xsl:when test="$pwhere eq 1">
-                    <a title="Beginning" class="curr-no">
+                    <a title="Beginning" class="disabled">
                         <xsl:text>«</xsl:text>
                     </a>
                 </xsl:when>
@@ -90,7 +90,7 @@
             <xsl:choose>
                 <!-- If in the first page dont link back -->
                 <xsl:when test="$pwhere eq 1">
-                    <a class="curr-no">
+                    <a class="disabled">
                         <xsl:text>‹</xsl:text>
                     </a>
                 </xsl:when>
@@ -149,7 +149,7 @@
             -->
             <xsl:choose>
                 <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
-                    <a title="Next Page" class="curr-no">
+                    <a title="Next Page" class="disabled">
                         <xsl:text>›</xsl:text>
                     </a>
                 </xsl:when>
@@ -170,7 +170,7 @@
             -->
             <xsl:choose>
                 <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
-                    <a title="Last Page" class="curr-no">
+                    <a title="Last Page" class="disabled">
                         <xsl:text>»</xsl:text>
                     </a>
                 </xsl:when>

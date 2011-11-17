@@ -13,17 +13,39 @@
     <!-- this is the paginator template matcher -->
     <xsl:template match="paginator">
         <!-- The paginator expects a document with the following -->
+        
+        <!-- 
+           the starting point of the pager 
+        -->
         <xsl:variable name="offset">
             <xsl:value-of select="./offset"/>
         </xsl:variable>
+        <!--
+            the total number of records 
+            -->
         <xsl:variable name="count">
             <xsl:value-of select="./count"/>
         </xsl:variable>
+        <!--
+            The number of records per page 
+            -->
         <xsl:variable name="limit">
             <xsl:value-of select="./limit"/>
         </xsl:variable>
+        
+        <!--
+            Render the pager 
+            -->
         <div id="paginator" class="paginate" align="right">
-            <!-- How to know the current page -->
+            
+            <!-- DEBUG
+            <span><xsl:value-of select="$count"></xsl:value-of>,</span>
+            <span><xsl:value-of select="$limit"></xsl:value-of>,</span>
+            <span><xsl:value-of select="$offset"></xsl:value-of>,</span>
+            <span><xsl:value-of select="($limit+$offset) div $limit"></xsl:value-of>,</span>
+            -->
+            
+            <!-- The current page number -->
             <xsl:variable name="pwhere" select="($limit+$offset) div $limit"/>
             <!-- Calculate the number of pages that need links -->
             <xsl:variable name="raw-page-count" select="floor($count div $limit)"/>
@@ -45,32 +67,43 @@
             
             <!-- This serves the purpose of showing 'First' page link -->
             <xsl:choose>
-                <xsl:when test="$pwhere &lt;= 1"/>
+                <!-- If the current page is page 1 , we dont render anything -->
+                <xsl:when test="$pwhere eq 1">
+                    <a title="Beginning" class="curr-no">
+                        <xsl:text>«</xsl:text>
+                    </a>
+                </xsl:when>
                 <xsl:otherwise>
-                    <a title="Fist Page">
+                    <a title="Beginning">
                         <xsl:attribute name="href">
                             <xsl:text>?offset=</xsl:text>
                             <xsl:value-of select="0"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>
-                        «</a>
+                        <xsl:text>«</xsl:text>
+                    </a>
                 </xsl:otherwise>
-            </xsl:choose>            
+            </xsl:choose>
+            
             <!-- if is first page then set previous link a disabled, otherwise linked... -->
             <xsl:choose>
-                <xsl:when test="$pwhere &lt;= 1">
-                    <a class="curr-no">‹</a>
+                <!-- If in the first page dont link back -->
+                <xsl:when test="$pwhere eq 1">
+                    <a class="curr-no">
+                        <xsl:text>‹</xsl:text>
+                    </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a>
+                    <a title="Previous Page">
                         <xsl:attribute name="href">
                             <xsl:text>?offset=</xsl:text>
                             <xsl:value-of select="$offset - $limit"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>
-                        ‹</a>
+                        <xsl:text>‹</xsl:text>
+                    </a>
                 </xsl:otherwise>
             </xsl:choose>
             <!-- 
@@ -83,6 +116,12 @@
             <xsl:variable name="group-left" select="($group+1)*5"/>
             <!-- Calculate boundary to now show the available pages on the right -->
             <xsl:variable name="group-right" select="($group*5)+1"/>
+            <!-- DEBUG
+            <span>;;<xsl:value-of select="$group"></xsl:value-of> ,</span>
+            <span><xsl:value-of select="$group-left"></xsl:value-of> (group-left),</span>
+            <span><xsl:value-of select="$group-right"></xsl:value-of>(group-right) ,</span>
+            <span><xsl:value-of select="$pages"></xsl:value-of>(pages) ,</span>
+            -->
             <xsl:choose>
                 <xsl:when test="$pages &lt;= $group-left">
                     <xsl:call-template name="generate-paginator">
@@ -109,7 +148,11 @@
                 on the last page.
             -->
             <xsl:choose>
-                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count"/>
+                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
+                    <a title="Next Page" class="curr-no">
+                        <xsl:text>›</xsl:text>
+                    </a>
+                </xsl:when>
                 <xsl:otherwise>
                     <a title="Next Page">
                         <xsl:attribute name="href">
@@ -126,7 +169,11 @@
                 Show the 'Last' page link based on similar conditions as 'Next' above.
             -->
             <xsl:choose>
-                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count"/>
+                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
+                    <a title="Last Page" class="curr-no">
+                        <xsl:text>»</xsl:text>
+                    </a>
+                </xsl:when>
                 <xsl:otherwise>
                     <a title="Last Page">
                         <xsl:attribute name="href">
@@ -142,8 +189,11 @@
             <!-- 
                 +KNOWN ISSUES
                 1. Initially, the next button links to itself, ideally simply link to page 2
+                    (FIXED - 17-nov)
                 2. Somehow page 5 has disappears into thin air...
+                    (FIXED - 17-nov)
                 3. Otherwise it works fine, only remaining to add is 'First' and 'Last' page links.
+                    (LOOKS FINE ?)
             -->
         </div>
     </xsl:template>
@@ -155,11 +205,15 @@
         <xsl:param name="count"/>
         <xsl:param name="offset"/>
         <xsl:param name="limit"/>
-        
+        <!-- DEBUG
+        <span>i=<xsl:value-of select="$i" />,</span>
+        <span>limi=<xsl:value-of select="$limit" />,</span>
+        <span>off=<xsl:value-of select="$offset" />,</span>
+        -->
         <!--begin_: Line_by_Line_Output -->
-        <xsl:if test="$i &lt;= ($pages - 1)">
+        <xsl:if test="$i &lt;= ($pages)">
             <xsl:choose>
-                <xsl:when test="(abs($i)*$limit = $offset) or (($offset+1) = $i)">
+                <xsl:when test="((abs($i)-1)*$limit = $offset) or (($offset+1) = $i)">
                     <a class="curr-no">
                         <xsl:attribute name="href">
                             <xsl:text>#</xsl:text>
@@ -171,7 +225,7 @@
                     <a title="Page {$i}">
                         <xsl:attribute name="href">
                             <xsl:text>?offset=</xsl:text>
-                            <xsl:value-of select="abs($limit)*abs($i)"/>
+                            <xsl:value-of select="abs($limit)*(abs($i)-1)"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>

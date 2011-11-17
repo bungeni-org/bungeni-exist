@@ -30,18 +30,20 @@
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">List of <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
+                <h1 id="doc-title-blue-center">
+                    <xsl:text>List of</xsl:text>
+                    <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            admissible (<xsl:value-of select="paginator/count"/>)
+                            current (<xsl:value-of select="paginator/count"/>)
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            gazetted
+                            archive
                         </a>
                     </li>
                 </ul>
@@ -81,15 +83,6 @@
                                                 <xsl:value-of select="./text()"/>
                                             </option>
                                         </xsl:for-each>
-                                        <!--
-                                        <option value="doc" selected="">entire document</option>
-                                        <option value="name">short name</option>
-                                        <option value="text">body text</option>
-                                        <option value="desc">description</option>
-                                        <option value="changes">changes</option>
-                                        <option value="versions">versions</option>
-                                        <option value="owner">owner</option>
-                                        -->
                                     </select>
                                     <label for="search_in">sort by:</label>
                                     <select name="s" id="sort_by">
@@ -98,13 +91,6 @@
                                                 <xsl:value-of select="./text()"/>
                                             </option>
                                         </xsl:for-each>
-                                        <!--
-                                        <option value="st_date_newest" selected="selected">status date
-                                            [newest]</option>
-                                        <option value="st_date_oldest">status date [oldest]</option>
-                                        <option value="sub_date_newest">submission date [newest]</option>
-                                        <option value="sub_date_oldest">submission date [oldest]</option>
-                                        -->
                                     </select>
                                     <input value="search" type="submit"/>
                                 </form>

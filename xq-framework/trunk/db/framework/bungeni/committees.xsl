@@ -28,12 +28,12 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            archive (<xsl:value-of select="paginator/count"/>)
+                            current (<xsl:value-of select="paginator/count"/>)
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            gazetted
+                            archive
                         </a>
                     </li>
                 </ul>

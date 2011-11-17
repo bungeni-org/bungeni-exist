@@ -28,62 +28,95 @@
         MAIN RENDERING TEMPLATE
         -->
     <xsl:template match="docs">
-        <div id="main-doc" class="rounded-eigh tab_container" role="main">
-            <!-- container for holding listings -->
-            <div id="doc-listing" class="acts">
-                <div class="list-header">
-                    <div class="toggler-list" id="expand-all">- compress all</div>
-                    <!-- call the paginator -->
-                    <xsl:apply-templates select="paginator"/>
-                    <div id="search-n-sort" class="search-bar">
-                        <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
-                        <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
-                        <xsl:if test="$searchins and $orderbys">
-                            <form method="get" action="" name="search_sort">
-                                <label for="search_for">Search text:</label>
-                                <input id="search_for" name="q" class="search_for" type="text" value=""/>
-                                <label for="search_in">in:</label>
-                                <select name="w" id="search_w">
-                                    <xsl:for-each select="$searchins/searchin">
-                                        <option value="{@value}">
-                                            <xsl:value-of select="./text()"/>
-                                        </option>
-                                    </xsl:for-each>
-                                    <!--
-                                    <option value="doc" selected="">entire document</option>
-                                    <option value="name">short name</option>
-                                    <option value="text">body text</option>
-                                    <option value="desc">description</option>
-                                    <option value="changes">changes</option>
-                                    <option value="versions">versions</option>
-                                    <option value="owner">owner</option>
-                                    -->
-                                </select>
-                                <label for="search_in">sort by:</label>
-                                <select name="s" id="sort_by">
-                                    <xsl:for-each select="$orderbys/orderby">
-                                        <option value="{@value}">
-                                            <xsl:value-of select="./text()"/>
-                                        </option>
-                                    </xsl:for-each>
-                                    <!--
-                                    <option value="st_date_newest" selected="selected">status date
-                                        [newest]</option>
-                                    <option value="st_date_oldest">status date [oldest]</option>
-                                    <option value="sub_date_newest">submission date [newest]</option>
-                                    <option value="sub_date_oldest">submission date [oldest]</option>
-                                    -->
-                                </select>
-                                <input value="search" type="submit"/>
-                            </form>
-                        </xsl:if>
+        <div id="main-wrapper">
+            <div id="title-holder" class="theme-lev-1-only">
+                <h1 id="doc-title-blue-center">List of <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
+            </div>
+            <div id="tab-menu" class="ls-tabs">
+                <ul class="ls-doc-tabs">
+                    <li class="active">
+                        <a href="#">
+                            admissible (<xsl:value-of select="paginator/count"/>)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            gazetted
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="doc-downloads">
+                <ul class="ls-downloads">
+                    <li>
+                        <a href="#" title="get as RSS feed" class="rss">
+                            <em>RSS</em>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="print this page listing" class="print">
+                            <em>PRINT</em>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+                <!-- container for holding listings -->
+                <div id="doc-listing" class="acts">
+                    <div class="list-header">
+                        <div class="toggler-list" id="expand-all">- compress all</div>
+                        <!-- call the paginator -->
+                        <xsl:apply-templates select="paginator"/>
+                        <div id="search-n-sort" class="search-bar">
+                            <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
+                            <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
+                            <xsl:if test="$searchins and $orderbys">
+                                <form method="get" action="" name="search_sort">
+                                    <label for="search_for">Search text:</label>
+                                    <input id="search_for" name="q" class="search_for" type="text" value=""/>
+                                    <label for="search_in">in:</label>
+                                    <select name="w" id="search_w">
+                                        <xsl:for-each select="$searchins/searchin">
+                                            <option value="{@value}">
+                                                <xsl:value-of select="./text()"/>
+                                            </option>
+                                        </xsl:for-each>
+                                        <!--
+                                        <option value="doc" selected="">entire document</option>
+                                        <option value="name">short name</option>
+                                        <option value="text">body text</option>
+                                        <option value="desc">description</option>
+                                        <option value="changes">changes</option>
+                                        <option value="versions">versions</option>
+                                        <option value="owner">owner</option>
+                                        -->
+                                    </select>
+                                    <label for="search_in">sort by:</label>
+                                    <select name="s" id="sort_by">
+                                        <xsl:for-each select="$orderbys/orderby">
+                                            <option value="{@value}">
+                                                <xsl:value-of select="./text()"/>
+                                            </option>
+                                        </xsl:for-each>
+                                        <!--
+                                        <option value="st_date_newest" selected="selected">status date
+                                            [newest]</option>
+                                        <option value="st_date_oldest">status date [oldest]</option>
+                                        <option value="sub_date_newest">submission date [newest]</option>
+                                        <option value="sub_date_oldest">submission date [oldest]</option>
+                                        -->
+                                    </select>
+                                    <input value="search" type="submit"/>
+                                </form>
+                            </xsl:if>
+                        </div>
                     </div>
+                    <!-- 
+                    !+LISTING_GENERATOR
+                    render the actual listing
+                    -->
+                    <xsl:apply-templates select="alisting"/>
                 </div>
-                <!-- 
-                !+LISTING_GENERATOR
-                render the actual listing
-                -->
-                <xsl:apply-templates select="alisting"/>
             </div>
         </div>
     </xsl:template>

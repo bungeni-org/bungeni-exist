@@ -580,6 +580,18 @@
 
     <!-- Document Types -->
     <doctypes>
+        <doctype name="group">
+            <orderbys>
+                <orderby value="start_dt_oldest" order="asc">start date [oldest]</orderby>
+                <orderby value="start_dt_newest" order="desc">start date [newest]</orderby>
+                <orderby value="fN_asc" order="asc">full name [ascending]</orderby>
+                <orderby value="fN_desc" order="desc">full name [descending]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin value="title">Title</searchin>
+                <searchin value="body">Body</searchin>
+            </searchins>
+        </doctype>
         <doctype name="bill">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>

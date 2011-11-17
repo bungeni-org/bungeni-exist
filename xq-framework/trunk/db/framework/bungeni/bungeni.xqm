@@ -21,7 +21,7 @@ declare variable $bun:SORT-BY := 'bu:statusDate';
 declare variable $bun:WHERE := 'body_text';
 
 declare variable $bun:OFF-SET := 0;
-declare variable $bun:LIMIT :=5;
+declare variable $bun:LIMIT :=10;
 declare variable $bun:DOCNO := 1;
 
 
@@ -108,43 +108,44 @@ declare function bun:get-committees($offset as xs:integer, $limit as xs:integer,
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'])}</count>
+        <documentType>group</documentType>
+        <listingUrlPrefix>committee/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
         <alisting>
         {
-            if ($sortby = 'st_date_oldest') then (
-               (:if (fn:ni$qrystr):)
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:statusDate ascending
-                return 
-                    <document>{$match}</document>  
-                )
-                
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:statusDate descending
-                return 
-                    <document>{$match}</document>     
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group'],$offset,$limit)
+            if ($sortby = 'start_dt_oldest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
                 return 
-                    <document>{$match}</document>      
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group'],$offset,$limit)
+                    <document>{$match/ancestor::bu:ontology}</document>  
+                )
+                
+            else if ($sortby eq 'start_dt_newest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
                 return 
-                    <document>{$match}</document>        
+                    <document>{$match/ancestor::bu:ontology}</document>     
+                )
+            else if ($sortby = 'fN_asc') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>      
+                )    
+            else if ($sortby = 'fN_desc') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
+                return 
+                    <document>{$match/ancestor::bu:ontology}</document>        
                 )                 
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <document>{$match}</document>
+                    <document>{$match/ancestor::bu:ontology}</document>
                    
                 )
 

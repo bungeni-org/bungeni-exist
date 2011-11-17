@@ -23,10 +23,7 @@
             <xsl:value-of select="./limit"/>
         </xsl:variable>
         <div id="paginator" class="paginate" align="right">
-            <!--div id="xxx">
-                <xsl:value-of select="$count"/>
-            </div-->
-            <!-- How tp know the current page -->
+            <!-- How to know the current page -->
             <xsl:variable name="pwhere" select="($limit+$offset) div $limit"/>
             <!-- Calculate the number of pages that need links -->
             <xsl:variable name="raw-page-count" select="floor($count div $limit)"/>
@@ -45,10 +42,25 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
+            
+            <!-- This serves the purpose of showing 'First' page link -->
+            <xsl:choose>
+                <xsl:when test="$pwhere &lt;= 1"/>
+                <xsl:otherwise>
+                    <a title="Fist Page">
+                        <xsl:attribute name="href">
+                            <xsl:text>?offset=</xsl:text>
+                            <xsl:value-of select="0"/>
+                            <xsl:text>&amp;limit=</xsl:text>
+                            <xsl:value-of select="$limit"/>
+                        </xsl:attribute>
+                        «</a>
+                </xsl:otherwise>
+            </xsl:choose>            
             <!-- if is first page then set previous link a disabled, otherwise linked... -->
             <xsl:choose>
                 <xsl:when test="$pwhere &lt;= 1">
-                    <a class="curr-no">Previous</a>
+                    <a class="curr-no">‹</a>
                 </xsl:when>
                 <xsl:otherwise>
                     <a>
@@ -58,7 +70,7 @@
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>
-                        Previous</a>
+                        ‹</a>
                 </xsl:otherwise>
             </xsl:choose>
             <!-- 
@@ -92,24 +104,41 @@
                 </xsl:otherwise>
             </xsl:choose>
             <!-- 
-                Determines whether its sound to show or not to show 'Next' 
+                Determines whether it's sound to show or not to show 'Next' 
                 based on whether we have insufficient pages-count or we are
                 on the last page.
             -->
             <xsl:choose>
                 <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count"/>
                 <xsl:otherwise>
-                    <a>
+                    <a title="Next Page">
                         <xsl:attribute name="href">
                             <xsl:text>?offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*abs($pwhere)"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>
-                        Next
+                        ›
                     </a>
                 </xsl:otherwise>
             </xsl:choose>
+            <!-- 
+                Show the 'Last' page link based on similar conditions as 'Next' above.
+            -->
+            <xsl:choose>
+                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count"/>
+                <xsl:otherwise>
+                    <a title="Last Page">
+                        <xsl:attribute name="href">
+                            <xsl:text>?offset=</xsl:text>
+                            <xsl:value-of select="abs($pages*$limit) - $limit"/>
+                            <xsl:text>&amp;limit=</xsl:text>
+                            <xsl:value-of select="$limit"/>
+                        </xsl:attribute>
+                        »
+                    </a>
+                </xsl:otherwise>
+            </xsl:choose>            
             <!-- 
                 +KNOWN ISSUES
                 1. Initially, the next button links to itself, ideally simply link to page 2
@@ -139,7 +168,7 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a>
+                    <a title="Page {$i}">
                         <xsl:attribute name="href">
                             <xsl:text>?offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*abs($i)"/>

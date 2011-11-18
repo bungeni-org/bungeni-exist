@@ -34,16 +34,20 @@ declare function bun:get-doc($actid as xs:string) as element() {
 };
 
 
-declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
-    
+    let $acl-filter := cmn:get-acl-filter($acl)
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of bills only :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'])}</count>
+        <count>{
+            count(
+                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter]
+              )
+         }</count>
         <documentType>bill</documentType>
         <listingUrlPrefix>bill/text</listingUrlPrefix>
         <offset>{$offset}</offset>
@@ -53,32 +57,32 @@ declare function bun:get-bills($offset as xs:integer, $limit as xs:integer, $que
         {
             if ($sortby = 'st_date_oldest') then (
                (:if (fn:ni$qrystr):)
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate ascending
                 return 
                     bun:get-reference($match)       
                 )
                 
             else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)       
                 )
             else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date ascending
                 return 
                     bun:get-reference($match)         
                 )    
             else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date descending
                 return 
                     bun:get-reference($match)         
                 )                 
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
@@ -486,17 +490,16 @@ declare function bun:get-toc($actid as xs:string) as element() {
     return $match/ancestor::akomaNtoso//preamble/toc
 };
 
-declare function bun:get-parl-doc($docid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
-    
+    let $acl-filter := cmn:get-acl-filter($acl)
  
     let $doc := <parl-doc> 
         {
             (: return AN document as singleton :)
-            (: !#FIX_THIS (ao, 3rd Nov 2011, dynamically get any document e.g question, bill e.t.c instead of 'bu:*' :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:*[@uri=$docid]
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter]
             return
                 bun:get-ref-assigned-grps($match)   
         } 

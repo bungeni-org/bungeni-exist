@@ -4,8 +4,8 @@ declare namespace xh = "http://www.w3.org/1999/xhtml";
 
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace request="http://exist-db.org/xquery/request";
-import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
-import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
+import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
+import module namespace fw = "http://bungeni.org/xquery/fw" at "fw.xqm";
 
 
 (:

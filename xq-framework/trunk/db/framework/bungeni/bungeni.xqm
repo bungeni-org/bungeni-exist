@@ -508,6 +508,24 @@ declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl
         transform:transform($doc, $stylesheet, ())
 };
 
+declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $acl-filter := cmn:get-acl-filter($acl)
+ 
+    let $doc := <parl-doc> 
+        {
+            (: return AN document as singleton :)
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid][$acl-filter]
+            return
+                bun:get-ref-assigned-grps($match)   
+        } 
+    </parl-doc>    
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
 declare function bun:get-ref-assigned-grps($docitem as node()) {
             <document>
                 <primary> 
@@ -549,6 +567,35 @@ declare function bun:get-doc-ver($versionid as xs:string, $_tmpl as xs:string) a
             }
             </primary>
             <secondary>
+            </secondary>
+        </document>
+    </parl-doc>   
+    
+    return
+        transform:transform($doc, 
+                            $stylesheet, 
+                            <parameters>
+                                <param name="version" value="true" />
+                            </parameters>)
+};
+
+declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($_tmpl) 
+    
+    let $doc := <parl-doc>
+        <document>
+            <event>{$eventid}</event>
+            <primary>         
+            {
+                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:wfevents/bu:wfevent[@href = $eventid]/ancestor::bu:ontology
+            }
+            </primary>
+            <secondary>
+            {
+                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='event']/../bu:legislativeItem[@uri eq $eventid]/ancestor::bu:ontology
+            }            
             </secondary>
         </document>
     </parl-doc>   

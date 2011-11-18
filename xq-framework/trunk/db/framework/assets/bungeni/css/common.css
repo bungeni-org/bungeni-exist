@@ -225,3 +225,21 @@ div#doc-downloads {
 .list-block div.doc-toggle {
     width:90%;
 }
+
+/* Versions, Event View feature this on the top-right section of the document */
+.hanging-menu {
+    clear:both;
+    width:110px !important;
+    height:auto;
+    float:right !important;
+    display:inline;
+    position:relative;
+    top:0px;
+    right:10px;
+}
+
+.hang-left-titles {
+    margin-left:110px;
+    clear:none;
+    float:none;
+}

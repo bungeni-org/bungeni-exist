@@ -150,6 +150,11 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
+        <route href="/bill/event">
+            <title>Business | Bill Event</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
         <route href="/bills/rss">
             <title>Business | Bill</title>
             <navigation>business</navigation>
@@ -200,7 +205,12 @@
             <title>Business | Question Version Attachments</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
-        </route>  
+        </route>
+        <route href="/question/event">
+            <title>Business | Question Event</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>          
         <!-- #MOTIONS -->
         <route href="/motions">
             <title>Business | Motions </title>
@@ -256,7 +266,12 @@
             <title>Business | Motion Version Documents</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
-        </route>  
+        </route>
+        <route href="/motion/event">
+            <title>Business | Motion Event</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>          
         <!-- #TABLED DOCUMENTS -->
         <route href="/tableddocuments">
             <title>Business | Tabled Documents </title>
@@ -305,6 +320,11 @@
         </route>
         <route href="/tableddocument/version/documents">
             <title>Business | Tabled document Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument/event">
+            <title>Business | Tabled document Event</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>

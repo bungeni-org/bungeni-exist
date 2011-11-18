@@ -127,11 +127,11 @@
                                         <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
                                             <xsl:sort select="@date" order="descending"/>
                                             <li>
-                                                [ <a href="event?uri={@href}">
+                                                <a href="{//primary/bu:ontology/bu:document/@type}/event?uri={@href}">
                                                     <xsl:value-of select="@showAs"/>
                                                 </a>
                                                 <div style="display:inline-block;"> / <xsl:value-of select="format-dateTime(@date,$datetime-format,'en',(),())"/>
-                                                </div> ]
+                                                </div>
                                             </li>
                                         </xsl:for-each>
                                     </ul>

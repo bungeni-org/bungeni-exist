@@ -586,6 +586,17 @@
             </tab>
         </tabs>
     </tabgroups>
+    
+    <!--
+        ACL GROUPS define permission accessors for documents 
+        
+        the @axis and @condition are combined to create a filter on a legislativeitem document.
+        concat(@axis,[,@condition,])
+        -->
+    <acl-groups>
+        <acl name="public-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow'"/>
+        <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
+    </acl-groups>
 
     <!-- Document Types -->
     <doctypes>

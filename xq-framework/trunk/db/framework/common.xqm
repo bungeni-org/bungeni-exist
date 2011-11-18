@@ -119,8 +119,35 @@ declare function cmn:get-searchins-config($doctype as xs:string)  {
         ()
 };
 
+(:~
 
+Retrieve the permissinos for a filter name 'public-view', 'authenticated-view'
+   <acl-groups>
+        <acl name="public-view" condition="@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow'" />
+        <acl name="authenticated-view" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'" />
+    </acl-groups>
 
+:)
+
+declare function cmn:get-acl-group($filter-name as xs:string) {
+      let $acl-group := cmn:get-ui-config()/ui/acl-groups/acl[@name eq $filter-name]
+      return 
+        if ($acl-group) then (
+            $acl-group
+          )
+        else
+            ()
+};
+
+declare function cmn:get-acl-filter($filter-name as xs:string) {
+    let $acl-group := cmn:get-acl-group($filter-name)
+    return 
+        if ($acl-group) then (
+            concat($acl-group/@axis, '[', $acl-group/@condition, ']')
+            )
+         else
+            ()
+};
 
 
 

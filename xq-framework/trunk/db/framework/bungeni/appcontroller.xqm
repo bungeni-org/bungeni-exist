@@ -118,7 +118,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-bills($offset,$limit,$qry,$whr,$sty),
+                    $acl := "public-view",
+                    $act-entries-tmpl :=  bun:get-bills($acl,$offset,$limit,$qry,$whr,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -262,7 +263,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"committee.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"committee.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committee.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -281,7 +282,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"comm-members.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"comm-members.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committee.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -377,7 +378,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"bill.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"bill.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bill.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -416,7 +417,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"changes.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -455,7 +456,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"assigned-groups.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"assigned-groups.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -474,7 +475,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"assigned-groups.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"assigned-groups.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -494,7 +495,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -534,7 +535,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view", $docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -573,7 +574,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"question.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"question.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("question.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -612,7 +613,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"changes.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -648,7 +649,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -687,7 +688,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -727,7 +728,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"motion.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"motion.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("motion.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -766,7 +767,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"changes.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -825,7 +826,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -845,7 +846,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"assigned-groups.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"assigned-groups.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -865,7 +866,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -885,7 +886,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"tableddocument.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"tableddocument.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("tableddocument.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -924,7 +925,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"changes.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -944,7 +945,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"details.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"details.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -983,7 +984,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"assigned-groups.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view", $docnumber,"assigned-groups.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -1003,7 +1004,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc($docnumber,"documents.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view", $docnumber,"documents.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
     								 } 

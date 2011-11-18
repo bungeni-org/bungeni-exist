@@ -36,6 +36,9 @@
     <resource type="BinaryResource" name="ico-rtf.png" owner="admin" group="dba" mode="644" created="2011-10-31T16:11:45+03:00" modified="2011-10-31T16:11:45+03:00" filename="ico-rtf.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
+    <resource type="BinaryResource" name="ico-xml.png" owner="admin" group="dba" mode="644" created="2011-11-18T16:26:36+03:00" modified="2011-11-18T16:29:35+03:00" filename="ico-xml.png" mimetype="image/png">
+        <acl entries="0" version="1"/>
+    </resource>
     <resource type="BinaryResource" name="minimize.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="minimize.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>

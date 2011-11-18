@@ -32,18 +32,19 @@
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
                     <xsl:text>List of&#160;</xsl:text>
+                    <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            current (<xsl:value-of select="paginator/count"/>)
+                            under consideration (<xsl:value-of select="paginator/count"/>)
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            archive
+                            archived
                         </a>
                     </li>
                 </ul>
@@ -51,7 +52,7 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
-                        <a href="#" title="get as RSS feed" class="rss">
+                        <a href="{$input-document-type}s/rss" title="get as RSS feed" class="rss">
                             <em>RSS</em>
                         </a>
                     </li>

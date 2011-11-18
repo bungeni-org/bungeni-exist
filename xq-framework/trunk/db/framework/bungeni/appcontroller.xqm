@@ -132,11 +132,53 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        (),
     								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     								    )
+        (:Atom FEEDS:)    								 
     	else if ($EXIST-PATH eq "/bills/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed('bills')
+                    $act-entries-tmpl :=  bun:get-atom-feed('bill','user')
                     return $act-entries-tmpl
+    	else if ($EXIST-PATH eq "/questions/rss")
+    		 then 
+                let
+                    $act-entries-tmpl :=  bun:get-atom-feed('question','user')
+                    return $act-entries-tmpl    
+    	else if ($EXIST-PATH eq "/motions/rss")
+    		 then 
+                let
+                    $act-entries-tmpl :=  bun:get-atom-feed('motion','user')
+                    return $act-entries-tmpl                     
+    	else if ($EXIST-PATH eq "/tableddocuments/rss")
+    		 then 
+                let
+                    $act-entries-tmpl :=  bun:get-atom-feed('tableddocument','user')
+                    return $act-entries-tmpl  
+          
+        (:Get AkomaNtoso XML:)
+    	else if ($EXIST-PATH eq "/bill/xml")   
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
+    		        return $act-entries-tmpl        
+    	else if ($EXIST-PATH eq "/question/xml")   
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
+    		        return $act-entries-tmpl 
+    	else if ($EXIST-PATH eq "/motion/xml")   
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
+    		        return $act-entries-tmpl      
+    	else if ($EXIST-PATH eq "/tableddocument/xml")   
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
+    		        return $act-entries-tmpl    		        
     								    
     	else if ($EXIST-PATH eq "/questions")
     		 then 

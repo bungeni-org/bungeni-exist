@@ -22,12 +22,12 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    B’ <xsl:value-of select="//bu:itemId"/>:&#160;                    
+                    B’ <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                    
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
                         <br/>
-                        <span style="color:#b22b14">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        <span class="doc-sub-title-red">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
                 </h1>
@@ -58,28 +58,8 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
+                        <a href="{$doc-type}/xml?uri={$doc_uri}" title="get raw xml output" class="xml">
+                            <em>XML</em>
                         </a>
                     </li>
                 </ul>
@@ -120,6 +100,9 @@
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    </h4>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Bill Number: 
+                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Primary Sponsor: <i>
                             <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">

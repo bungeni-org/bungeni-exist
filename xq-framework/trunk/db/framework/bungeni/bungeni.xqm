@@ -2,6 +2,8 @@ module namespace bun = "http://exist.bungeni.org/bun";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
+import module namespace functx = "http://www.functx.com" at "../functx.xqm";
+declare namespace request = "http://exist-db.org/xquery/request";
 
 
 declare namespace util="http://exist-db.org/xquery/util";
@@ -103,20 +105,27 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
        
 };
 
-declare function bun:get-atom-feed($item as xs:string) as element() {
+(:~
+    Generates Atom FEED for Bungeni Documents
+    Bills, Questions, TabledDocuments and Motions.
+    
+    @category type of document e.g. bill
+    
+    Ordered by `bu:statusDate` and limited to 10 items.
+:)
+declare function bun:get-atom-feed($category as xs:string, $outputtype as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
-
-    let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:bu="http://portal.bungeni.org/1.0/">
-        <title>Bills Atom</title>
+    let $server-path := "http://localhost:8180/exist/apps/framework"
+    let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
+        <title>{concat(upper-case(substring($category, 1, 1)), substring($category, 2))}s Atom</title>
         <id>http://portal.bungeni.org/1.0/</id>
         <updated>{current-dateTime()}</updated>
         <generator uri="http://exist.sourceforge.net/" version="1.4.5">eXist XML Database</generator>      
         <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
         <link rel="self" href="/bills/rss" />
        {
-         let $current := substring-before(base-uri(/bu:ontology/bu:legislativeItem[@uri='/ke/parliament/2011-03-02/bill/467:38-bill/en']),'/.feed.atom'),
-             $current-path := substring-after($current,'/db/bungeni-xml')
-            for $i in (collection($current)/bu:ontology[@type='document']/bu:document[@type='bill'])/ancestor::bu:ontology
+            for $i in subsequence((collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$category]),0,10)/ancestor::bu:ontology
+            order by $i/bu:legislativeItem/bu:statusDate descending
                (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
                   return ( <entry>
                             <id>{data($i/bu:legislativeItem/@uri)}</id>
@@ -126,7 +135,15 @@ declare function bun:get-atom-feed($item as xs:string) as element() {
                                    $i/bu:document/@type,
                                    $i/bu:legislativeItem/bu:shortName/node()
                                }</summary>,
-                               <link rel="alternate" type="application/atom+xml" href="/bills/{/bu:legislativeItem/@uri}"/>
+                               
+                               
+                               if ($outputtype = 'user')  then (
+                                    <link rel="alternate" type="application/xhtml" href="{$server-path}/bill/text?uri={$i/bu:legislativeItem/@uri}"/>
+                                )  (: "service" output :)
+                                else (
+                                    <link rel="alternate" type="application/xml" href="{$server-path}/bill/xml?uri={$i/bu:legislativeItem/@uri}"/>
+                                )
+                                
                            }
                             <content type='html'>{$i/bu:legislativeItem/bu:body/node()}</content>
                             <published>{$i/bu:legislativeItem/bu:publicationDate/node()}</published>
@@ -138,6 +155,22 @@ declare function bun:get-atom-feed($item as xs:string) as element() {
     
     return 
         $feed
+};
+
+(:~
+    Returns the fetched document as XML document
+    @works-with Bills, Questions, TabledDocuments and Motions.
+    @category   type of document e.g. bill
+    
+    Ordered by `bu:statusDate` and limited to 10 items.
+:)
+declare function bun:get-raw-xml($docid as xs:string) as element() {
+    util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
+
+    functx:remove-elements-deep(
+    collection(cmn:get-lex-db())/bu:ontology[@type='document'][child::bu:legislativeItem[@uri eq $docid]],
+    ('bu:versions', 'bu:permissions', 'bu:changes')
+    )
 };
 
 declare function bun:get-committees($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {

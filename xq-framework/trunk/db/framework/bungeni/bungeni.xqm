@@ -1,5 +1,5 @@
 module namespace bun = "http://exist.bungeni.org/bun";
-import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 

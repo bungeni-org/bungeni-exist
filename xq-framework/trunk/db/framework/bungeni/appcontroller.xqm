@@ -25,7 +25,7 @@ import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 Application imports
 :)
 import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
-import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm"; 
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm"; 
 
 
 

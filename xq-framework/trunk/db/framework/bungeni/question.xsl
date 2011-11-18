@@ -22,7 +22,9 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
+                    Q’ <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemId"/>:&#160;
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
                         <br/>
@@ -86,7 +88,7 @@
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <xsl:if test="$version eq 'true'">
-                        <div class="rounded-eigh tab_container" style="clear:both;width:110px;height:auto;float:right;display:inline;position:relative;top:0px;right:10px;">
+                        <div class="rounded-eigh tab_container hanging-menu">
                             <ul class="doc-versions">
                                 <li>
                                     <a href="{primary/bu:ontology/bu:document/@type}/text?uri={primary/bu:ontology/bu:legislativeItem/@uri}">current</a>
@@ -119,13 +121,13 @@
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Introduced by: <i>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Primary Sponsor: <i>
                             <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">
                                 <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
                         </i>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Moved by: ( 
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Sponsors: ( 
                         <xsl:choose>
                             <!-- check whether we have signatories or not -->
                             <xsl:when test="primary/bu:ontology/bu:signatories/bu:signatory">
@@ -147,7 +149,7 @@
                     <xsl:variable name="render-doc" select="if ($version eq 'true') then                                   primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]                                  else                                   primary/bu:ontology/bu:legislativeItem                                "/>
                     <div class="doc-status">
                         <span>
-                            <b>Status:</b>
+                            <b>Last Event:</b>
                         </span>
                         <span>
                             <xsl:value-of select="$render-doc/bu:status"/>

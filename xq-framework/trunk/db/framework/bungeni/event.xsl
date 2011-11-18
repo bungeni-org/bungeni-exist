@@ -92,7 +92,7 @@
                     </h4>
                     <div class="doc-status">
                         <span>
-                            <b>Status:</b>
+                            <b>Last Event:</b>
                         </span>
                         <span>
                             <xsl:value-of select="secondary/bu:ontology/bu:legislativeItem/bu:status"/>

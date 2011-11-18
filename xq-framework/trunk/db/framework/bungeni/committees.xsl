@@ -41,11 +41,6 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
                         <a href="#" title="print this page listing" class="print">
                             <em>PRINT</em>
                         </a>

@@ -52,7 +52,6 @@
                 <div id="doc-listing" class="acts">
                     <!-- render the paginator -->
                     <div class="list-header">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
                         <xsl:apply-templates select="paginator"/>
                         <div id="search-n-sort" class="search-bar">
                             <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
@@ -98,6 +97,9 @@
                             </xsl:if>
                         </div>
                     </div>
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div class="toggler-list" id="expand-all">- compress all</div>
+                    </div>                    
                     <!-- render the actual listing-->
                     <xsl:apply-templates select="alisting"/>
                 </div>
@@ -119,7 +121,7 @@
             <a href="committee/profile?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
             </a>
-            <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parent_group/bu:shortName"/>
+            <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
             </div>
             <span>-</span>
             <div class="doc-toggle">

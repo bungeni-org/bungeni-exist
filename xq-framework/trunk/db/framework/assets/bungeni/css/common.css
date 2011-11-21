@@ -189,6 +189,10 @@ div#doc-downloads {
     margin:0 auto 0 10px;
 }    
  
+ .toggle-wrapper {
+     width:97%;
+     height:10px;
+ }
  .toggler-list {
     margin-left:10px;
     width: 100px;
@@ -202,6 +206,10 @@ div#doc-downloads {
  .search-bar {
     float:right;  
  }
+ 
+.clear {
+    clear:both;
+}
  
 /*reusables*/
 .ele-center {

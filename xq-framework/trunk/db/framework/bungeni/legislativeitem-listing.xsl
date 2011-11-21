@@ -72,7 +72,6 @@
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
                     <div class="list-header">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
                         <!-- call the paginator -->
                         <xsl:apply-templates select="paginator"/>
                         <div id="search-n-sort" class="search-bar">
@@ -103,6 +102,9 @@
                             </xsl:if>
                         </div>
                     </div>
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div class="toggler-list" id="expand-all">- compress all</div>
+                    </div>                    
                     <!-- 
                     !+LISTING_GENERATOR
                     render the actual listing
@@ -119,7 +121,7 @@
     Listing generator template 
     -->
     <xsl:template match="alisting">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
+        <ul id="list-toggle" class="ls-row clear">
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>

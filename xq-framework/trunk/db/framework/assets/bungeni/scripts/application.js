@@ -34,18 +34,18 @@ $(document).ready(function () {
     });
     
     /** toggling all doc item **/  
-    $('#list-toggle-ctrl li a').click(function () {
+    $('.toggler-list').click(function () {
     
-        if($(this).attr('id') == "txt-expand")
-        {
+        if($(this).attr('id') == "expand-all")
+        {      
             var text = $('.ls-row').find('li div.doc-toggle');
-            text.slideDown('200');
-            $(this).siblings('span').html('-');     
+            text.slideUp('200');
+            $(this).siblings('span').html('+');    
         }
         else {
             var text = $('.ls-row').find('li div.doc-toggle');
-            text.slideUp('200');
-            $(this).siblings('span').html('+');     
+            text.slideDown('200');
+            $(this).siblings('span').html('-');              
         }                
          
     });    
@@ -86,17 +86,17 @@ $(document).ready(function () {
     $(function() {
             $("#expand-all").toggle(function (){
                 var text = $('.ls-row').find('li div.doc-toggle');
-                text.slideDown('200');
-                $(this).parent().parent().find('span').html('-');     
-   
-                $("#expand-all").text("- compress all")
-                .stop();
-            }, function(){
-                var text = $('.ls-row').find('li div.doc-toggle');
                 text.slideUp('200');
                 $(this).parent().parent().find('span').html('+');
                             
                 $("#expand-all").text("+ expand all")
+                .stop();            
+            }, function(){
+                var text = $('.ls-row').find('li div.doc-toggle');
+                text.slideDown('200');
+                $(this).parent().parent().find('span').html('-');     
+   
+                $("#expand-all").text("- compress all")
                 .stop();
             });
         });    

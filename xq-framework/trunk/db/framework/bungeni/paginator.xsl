@@ -149,7 +149,7 @@
             -->
             <xsl:choose>
                 <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
-                    <a title="Next Page" class="disabled">
+                    <a title="Next Page" href="#" class="disabled">
                         <xsl:text>›</xsl:text>
                     </a>
                 </xsl:when>
@@ -161,8 +161,7 @@
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>
-                        ›
-                    </a>
+                        ›</a>
                 </xsl:otherwise>
             </xsl:choose>
             <!-- 
@@ -170,7 +169,7 @@
             -->
             <xsl:choose>
                 <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
-                    <a title="Last Page" class="disabled">
+                    <a title="Last Page" href="#" class="disabled">
                         <xsl:text>»</xsl:text>
                     </a>
                 </xsl:when>
@@ -182,8 +181,7 @@
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
                         </xsl:attribute>
-                        »
-                    </a>
+                        »</a>
                 </xsl:otherwise>
             </xsl:choose>            
             <!-- 
@@ -222,7 +220,7 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a title="Page {$i}">
+                    <a title="Page {$i}" accesskey="{$i}">
                         <xsl:attribute name="href">
                             <xsl:text>?offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*(abs($i)-1)"/>

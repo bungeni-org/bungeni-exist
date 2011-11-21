@@ -41,6 +41,14 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
     let $acl-filter := cmn:get-acl-filter($acl)
+    
+    (: 
+        Logical offset is set to Zero but since there is no document Zero
+        in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
+        Need arises to  alter the $offset to 1 for the first page limit only.
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
@@ -84,7 +92,7 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
                     bun:get-reference($match)         
                 )                 
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$query-offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)         

@@ -1,9 +1,12 @@
 module namespace bun = "http://exist.bungeni.org/bun";
+(:import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";:)
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
 declare namespace request = "http://exist-db.org/xquery/request";
+declare namespace fo="http://www.w3.org/1999/XSL/Format";
+declare namespace xslfo="http://exist-db.org/xquery/xslfo";
 
 
 declare namespace util="http://exist-db.org/xquery/util";
@@ -33,6 +36,28 @@ declare function bun:get-doc($actid as xs:string) as element() {
       let $c := string($match)
       where $c = $actid
     return $match/ancestor::akomaNtoso
+};
+
+(:
+    Renders PDF documents using xslfo module
+:)
+declare function bun:gen-pdf-output($docid as xs:string) {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt('parl-doc.fo') 
+    
+    let $doc := <document>        
+            {
+                collection(cmn:get-lex-db())/bu:ontology[@type='document'][child::bu:legislativeItem[@uri eq $docid]]
+            }
+        </document>      
+        
+    let $transformed := transform:transform($doc,$stylesheet,())
+     
+    let $pdf := xslfo:render($transformed, "application/pdf", ())
+     
+    return response:stream-binary($pdf, "application/pdf", "output.pdf")     
+    
 };
 
 

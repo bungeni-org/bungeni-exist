@@ -20,7 +20,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    Td’ <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                     
+                    Tableddocument <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                     
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
@@ -55,6 +55,11 @@
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
+                    <li>
+                        <a href="{$doc-type}/pdf?uri={$doc_uri}" title="get PDF document" class="pdf">
+                            <em>PDF</em>
+                        </a>
+                    </li>
                     <li>
                         <a href="{$doc-type}/xml?uri={$doc_uri}" title="get raw xml output" class="xml">
                             <em>XML</em>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:bu="http://portal.bungeni.org/1.0/" version="2.0">
+    <xsl:output method="xml" version="2.0" indent="yes"/>
+    <xsl:include href="config.xsl"/>
+    <!--xsl:include href="xhtml2fo.xsl" /-->
+    <xsl:template match="document">
+        <fo:root>
+            <fo:layout-master-set>
+                <fo:simple-page-master page-height="297mm" page-width="210mm" margin="5mm 25mm 10mm 25mm" master-name="parl-doc">
+                    <fo:region-body margin="10mm 0mm 20mm 0mm"/>
+                    <fo:region-after margin="10mm 0mm 10mm 0mm"/>
+                </fo:simple-page-master>
+            </fo:layout-master-set>
+            <fo:page-sequence master-reference="parl-doc">  
+                <!-- THIS THE FOOTER SECTION -->
+                <fo:static-content flow-name="xsl-region-after">
+                    <fo:list-block font-family="'Times New Roman', san-serif" font-size="10pt" provisional-distance-between-starts="5in" provisional-label-separation="0in">
+                        <fo:list-item>
+                            <fo:list-item-label>
+                                <fo:block text-align="start">Bungeni Document</fo:block><!-- Footer left -->
+                            </fo:list-item-label>
+                            <fo:list-item-body>
+                                <fo:block text-align="end">Page <fo:page-number/> <!-- Footer Right -->
+                                </fo:block>
+                            </fo:list-item-body>
+                        </fo:list-item>
+                    </fo:list-block>
+                </fo:static-content> 
+                <!-- THIS IS THE MAIN BODY -->
+                <fo:flow flow-name="xsl-region-body">
+                    <fo:block text-align="center" font-size="12pt" font-family="'Times New Roman', san-serif">KENYA PARLIAMENT</fo:block>
+                    <xsl:apply-templates select="bu:ontology"/>
+                </fo:flow>
+            </fo:page-sequence>
+        </fo:root>
+    </xsl:template>
+    <xsl:template match="bu:ontology">
+        <xsl:apply-templates mode="title"/>
+        <xsl:apply-templates mode="itemno"/>
+        <xsl:apply-templates mode="sponsor"/>
+        <xsl:apply-templates mode="sponsors"/>
+        <xsl:apply-templates mode="status"/>
+        <xsl:apply-templates mode="body"/>
+    </xsl:template>
+    <xsl:template mode="title" match="bu:legislativeItem/bu:shortName">
+        <fo:block space-before="10pt" font-size="10pt" text-align="center" text-transform="uppercase" font-family="'Times New Roman', san-serif">
+            <xsl:value-of select="."/>
+        </fo:block>
+    </xsl:template>
+    <xsl:template mode="itemno" match="bu:legislativeItem/bu:itemNumber">
+        <fo:block font-family="'Times New Roman', san-serif" space-before="10pt" font-size="10pt" text-align="center">
+            <fo:inline>
+                <xsl:value-of select="concat(upper-case(substring(//bu:document/@type, 1, 1)), substring(//bu:document/@type, 2))"/>
+            </fo:inline> Number: <xsl:value-of select="."/>
+        </fo:block>
+    </xsl:template>
+    <xsl:template mode="sponsor" match="bu:legislativeItem/bu:owner">
+        <xsl:variable name="sponsor-link" select="concat('http://localhost:8180/exist/apps/framework/member?uri=',@href)"/>
+        <fo:block font-family="'Times New Roman', san-serif" space-before="8pt" font-size="10pt" text-align="center">
+            <fo:inline>Primary Sponsor: </fo:inline>
+            <fo:basic-link external-destination="url({$sponsor-link})" color="blue" text-decoration="underline">
+                <xsl:value-of select="@showAs"/>
+            </fo:basic-link>
+        </fo:block>
+    </xsl:template>
+    <xsl:template mode="sponsors" match="bu:signatories">
+        <fo:block font-family="'Times New Roman', san-serif" space-before="8pt" font-size="10pt" text-align="center">
+            Sponsors: (
+            <xsl:choose>
+                <!-- check whether we have signatories or not -->
+                <xsl:when test="//bu:signatories">
+                    <xsl:for-each select="//bu:signatories/bu:signatory">
+                        <xsl:variable name="sponsors-links" select="concat('http://localhost:8180/exist/apps/framework/member?uri=',@href)"/>
+                        <fo:basic-link external-destination="url({$sponsors-links})" color="blue" text-decoration="underline">
+                            <xsl:value-of select="@showAs"/>
+                        </fo:basic-link>
+                        <fo:inline padding-right="5pt">
+                            <xsl:if test="position() &lt; last()">,</xsl:if>
+                        </fo:inline>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    None
+                </xsl:otherwise>
+            </xsl:choose>
+            )
+        </fo:block>
+    </xsl:template>
+    <xsl:template mode="status" match="bu:legislativeItem/bu:status">
+        <fo:block font-family="'Times New Roman', san-serif" space-before="8pt" font-size="10pt" text-align="center">
+            Last Event: <fo:inline font-weight="bold" padding-right="15pt">
+                <xsl:value-of select="."/>
+            </fo:inline> Date: <fo:inline font-weight="bold">
+                <xsl:value-of select="format-dateTime(//bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+            </fo:inline>
+        </fo:block>
+    </xsl:template>     
+    
+    <!-- 
+        !#FIX_THIS (21 Nov 2011)
+        Currently <apply-templates> strips pre-existing xhtml tags and renders 
+        text only. Ideally should preserve xhtml formatting as the portal displays
+    -->
+    <xsl:template mode="body" match="bu:legislativeItem/bu:body">
+        <fo:block font-family="'Times New Roman', san-serif" linefeed-treatment="preserve" white-space-treatment="preserve" white-space-collapse="false" space-before="8pt" font-size="10pt" text-align="justify">
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+</xsl:stylesheet>

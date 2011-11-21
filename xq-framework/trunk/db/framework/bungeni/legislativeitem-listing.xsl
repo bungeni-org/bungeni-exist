@@ -39,17 +39,12 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            <xsl:text>
-                                current
-                            </xsl:text>
-                            (<xsl:value-of select="paginator/count"/>)
+                            under consideration (<xsl:value-of select="paginator/count"/>)
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                           <xsl:text>
                             archived
-                           </xsl:text>
                         </a>
                     </li>
                 </ul>

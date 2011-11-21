@@ -102,7 +102,10 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
 	background:#fff;
 	border:1px solid #e3d3ff;
 	padding:2px 6px 2px 6px;
-	margin-left:4px;
+}
+.paginate a:first-child 
+{
+	margin-left:0;
 }
 .paginate a:hover
 {

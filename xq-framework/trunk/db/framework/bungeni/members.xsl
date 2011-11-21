@@ -18,7 +18,6 @@
             <div id="doc-listing" class="acts">
                 <!-- render the paginator -->
                 <div class="list-header">
-                    <div class="toggler-list" id="expand-all">+ expand all</div>
                     <xsl:apply-templates select="paginator"/>
                     <div id="search-n-sort" class="search-bar">
                         <form method="get" action="" name="search_sort">
@@ -43,6 +42,9 @@
                         </form>
                     </div>
                 </div>
+                <div id="toggle-wrapper" class="clear toggle-wrapper">
+                    <div class="toggler-list" id="expand-all">- compress all</div>
+                </div>                 
                 <!-- render the actual listing-->
                 <xsl:apply-templates select="alisting"/>
             </div>
@@ -65,7 +67,7 @@
                 <xsl:value-of select="concat(bu:ontology/bu:user/bu:field[@name='titles'],'. ',bu:ontology/bu:user/bu:field[@name='first_name'],' ', bu:ontology/bu:user/bu:field[@name='last_name'])"/>
             </a>
             <div style="display:inline-block;">/ Constitutency / Party</div>
-            <span>+</span>
+            <span>-</span>
             <div class="doc-toggle">
                 <table class="doc-tbl-details">
                     <tr>

@@ -162,7 +162,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </xsl:attribute-set>
     <xsl:attribute-set name="pre">
         <xsl:attribute name="font-size">0.83em</xsl:attribute>
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
         <xsl:attribute name="white-space">pre</xsl:attribute>
         <xsl:attribute name="space-before">1em</xsl:attribute>
         <xsl:attribute name="space-after">1em</xsl:attribute>
@@ -196,10 +196,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <xsl:attribute name="space-after">0pt</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="ul-li">
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>        
     <!-- for (unordered)fo:list-item -->
         <xsl:attribute name="relative-align">baseline</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="ol-li">
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>        
     <!-- for (ordered)fo:list-item -->
         <xsl:attribute name="relative-align">baseline</xsl:attribute>
     </xsl:attribute-set>
@@ -222,7 +226,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </xsl:attribute-set>
     <xsl:param name="ul-label-2">o</xsl:param>
     <xsl:attribute-set name="ul-label-2">
-        <xsl:attribute name="font">0.67em monospace</xsl:attribute>
+        <xsl:attribute name="font">0.67em 'Times New Roman'</xsl:attribute>
         <xsl:attribute name="baseline-shift">0.25em</xsl:attribute>
     </xsl:attribute-set>
     <xsl:param name="ul-label-3">-</xsl:param>
@@ -293,13 +297,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
        Inline-level
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
     <xsl:attribute-set name="b">
-        <xsl:attribute name="font-weight">bolder</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="strong">
-        <xsl:attribute name="font-weight">bolder</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="strong-em">
-        <xsl:attribute name="font-weight">bolder</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="i">
@@ -318,16 +324,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="tt">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="code">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="kbd">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="samp">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="big">
         <xsl:attribute name="font-size">larger</xsl:attribute>
@@ -357,6 +363,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </xsl:attribute-set>
     <xsl:attribute-set name="ins">
         <xsl:attribute name="text-decoration">underline</xsl:attribute>
+    </xsl:attribute-set>
+    <xsl:attribute-set name="span">
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman'</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="abbr">
     <!-- e.g.,
@@ -397,7 +407,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Root
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:html">
+    <xsl:template match="html">
         <fo:root xsl:use-attribute-sets="root">
             <xsl:call-template name="process-common-attributes"/>
             <xsl:call-template name="make-layout-master-set"/>
@@ -431,16 +441,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </fo:simple-page-master>
         </fo:layout-master-set>
     </xsl:template>
-    <xsl:template match="html:head | html:script"/>
-    <xsl:template match="html:body">
+    <xsl:template match="head | script"/>
+    <xsl:template match="body">
         <fo:page-sequence master-reference="all-pages">
             <fo:title>
-                <xsl:value-of select="/html:html/html:head/html:title"/>
+                <xsl:value-of select="/html/head/title"/>
             </fo:title>
             <fo:static-content flow-name="page-header">
                 <fo:block space-before.conditionality="retain" space-before="{$page-header-margin}" xsl:use-attribute-sets="page-header">
                     <xsl:if test="$title-print-in-header = 'true'">
-                        <xsl:value-of select="/html:html/html:head/html:title"/>
+                        <xsl:value-of select="/html/head/title"/>
                     </xsl:if>
                 </fo:block>
             </fo:static-content>
@@ -471,7 +481,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </xsl:template>
     <xsl:template name="process-common-attributes">
         <xsl:attribute name="role">
-            <xsl:value-of select="concat('html:', local-name())"/>
+            <xsl:value-of select="concat('', local-name())"/>
         </xsl:attribute>
         <xsl:choose>
             <xsl:when test="@xml:lang">
@@ -491,7 +501,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     <xsl:value-of select="@id"/>
                 </xsl:attribute>
             </xsl:when>
-            <xsl:when test="self::html:a/@name">
+            <xsl:when test="self::a/@name">
                 <xsl:attribute name="id">
                     <xsl:value-of select="@name"/>
                 </xsl:attribute>
@@ -499,8 +509,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         </xsl:choose>
         <xsl:if test="@align">
             <xsl:choose>
-                <xsl:when test="self::html:caption"/>
-                <xsl:when test="self::html:img or self::html:object">
+                <xsl:when test="self::caption"/>
+                <xsl:when test="self::img or self::object">
                     <xsl:if test="@align = 'bottom' or @align = 'middle' or @align = 'top'">
                         <xsl:attribute name="vertical-align">
                             <xsl:value-of select="@align"/>
@@ -543,12 +553,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 </xsl:choose>
             </xsl:variable>
             <xsl:choose>
-                <xsl:when test="$name = 'width' and (self::html:col or self::html:colgroup)">
+                <xsl:when test="$name = 'width' and (self::col or self::colgroup)">
                     <xsl:attribute name="column-width">
                         <xsl:value-of select="$value"/>
                     </xsl:attribute>
                 </xsl:when>
-                <xsl:when test="$name = 'vertical-align' and (                                  self::html:table or self::html:caption or                                  self::html:thead or self::html:tfoot or                                  self::html:tbody or self::html:colgroup or                                  self::html:col or self::html:tr or                                  self::html:th or self::html:td)">
+                <xsl:when test="$name = 'vertical-align' and (                                  self::table or self::caption or                                  self::thead or self::tfoot or                                  self::tbody or self::colgroup or                                  self::col or self::tr or                                  self::th or self::td)">
                     <xsl:choose>
                         <xsl:when test="$value = 'top'">
                             <xsl:attribute name="display-align">before</xsl:attribute>
@@ -584,61 +594,61 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Block-level
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:h1">
+    <xsl:template match="h1">
         <fo:block xsl:use-attribute-sets="h1">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:h2">
+    <xsl:template match="h2">
         <fo:block xsl:use-attribute-sets="h2">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:h3">
+    <xsl:template match="h3">
         <fo:block xsl:use-attribute-sets="h3">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:h4">
+    <xsl:template match="h4">
         <fo:block xsl:use-attribute-sets="h4">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:h5">
+    <xsl:template match="h5">
         <fo:block xsl:use-attribute-sets="h5">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:h6">
+    <xsl:template match="h6">
         <fo:block xsl:use-attribute-sets="h6">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:p">
+    <xsl:template match="p">
         <fo:block xsl:use-attribute-sets="p">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
 
   <!-- initial paragraph, preceded by h1..6 or div -->
-    <xsl:template match="html:p[preceding-sibling::*[1][                        self::html:h1 or self::html:h2 or self::html:h3 or                        self::html:h4 or self::html:h5 or self::html:h6 or                        self::html:div]]">
+    <xsl:template match="p[preceding-sibling::*[1][                        self::h1 or self::h2 or self::h3 or                        self::h4 or self::h5 or self::h6 or                        self::div]]">
         <fo:block xsl:use-attribute-sets="p-initial">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
 
   <!-- initial paragraph, first child of div, body or td -->
-    <xsl:template match="html:p[not(preceding-sibling::*) and (                        parent::html:div or parent::html:body or                        parent::html:td)]">
+    <xsl:template match="p[not(preceding-sibling::*) and (                        parent::div or parent::body or                        parent::td)]">
         <fo:block xsl:use-attribute-sets="p-initial-first">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:blockquote">
+    <xsl:template match="blockquote">
         <fo:block xsl:use-attribute-sets="blockquote">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:pre">
+    <xsl:template match="pre">
         <fo:block xsl:use-attribute-sets="pre">
             <xsl:call-template name="process-pre"/>
         </fo:block>
@@ -655,7 +665,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 </xsl:text>
         </xsl:variable>
         <xsl:variable name="cr">
-            <xsl:text></xsl:text>
+            <xsl:text>
+</xsl:text>
         </xsl:variable>
         <xsl:for-each select="node()">
             <xsl:choose>
@@ -681,17 +692,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </xsl:choose>
         </xsl:for-each>
     </xsl:template>
-    <xsl:template match="html:address">
+    <xsl:template match="address">
         <fo:block xsl:use-attribute-sets="address">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:hr">
+    <xsl:template match="hr">
         <fo:block xsl:use-attribute-sets="hr">
             <xsl:call-template name="process-common-attributes"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:div">
+    <xsl:template match="div">
     <!-- need fo:block-container? or normal fo:block -->
         <xsl:variable name="need-block-container">
             <xsl:call-template name="need-block-container"/>
@@ -735,12 +746,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <xsl:otherwise>false</xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template match="html:center">
+    <xsl:template match="center">
         <fo:block text-align="center">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:fieldset | html:form | html:dir | html:menu">
+    <xsl:template match="fieldset | form | dir | menu">
         <fo:block space-before="1em" space-after="1em">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
@@ -749,27 +760,27 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        List
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:ul">
+    <xsl:template match="ul">
         <fo:list-block xsl:use-attribute-sets="ul">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="html:li//html:ul">
+    <xsl:template match="li//ul">
         <fo:list-block xsl:use-attribute-sets="ul-nested">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="html:ol">
+    <xsl:template match="ol">
         <fo:list-block xsl:use-attribute-sets="ol">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="html:li//html:ol">
+    <xsl:template match="li//ol">
         <fo:list-block xsl:use-attribute-sets="ol-nested">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="html:ul/html:li">
+    <xsl:template match="ul/li">
         <fo:list-item xsl:use-attribute-sets="ul-li">
             <xsl:call-template name="process-ul-li"/>
         </fo:list-item>
@@ -778,7 +789,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <xsl:call-template name="process-common-attributes"/>
         <fo:list-item-label end-indent="label-end()" text-align="end" wrap-option="no-wrap">
             <fo:block>
-                <xsl:variable name="depth" select="count(ancestor::html:ul)"/>
+                <xsl:variable name="depth" select="count(ancestor::ul)"/>
                 <xsl:choose>
                     <xsl:when test="$depth = 1">
                         <fo:inline xsl:use-attribute-sets="ul-label-1">
@@ -804,7 +815,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </fo:block>
         </fo:list-item-body>
     </xsl:template>
-    <xsl:template match="html:ol/html:li">
+    <xsl:template match="ol/li">
         <fo:list-item xsl:use-attribute-sets="ol-li">
             <xsl:call-template name="process-ol-li"/>
         </fo:list-item>
@@ -813,7 +824,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <xsl:call-template name="process-common-attributes"/>
         <fo:list-item-label end-indent="label-end()" text-align="end" wrap-option="no-wrap">
             <fo:block>
-                <xsl:variable name="depth" select="count(ancestor::html:ol)"/>
+                <xsl:variable name="depth" select="count(ancestor::ol)"/>
                 <xsl:choose>
                     <xsl:when test="$depth = 1">
                         <fo:inline xsl:use-attribute-sets="ol-label-1">
@@ -839,17 +850,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </fo:block>
         </fo:list-item-body>
     </xsl:template>
-    <xsl:template match="html:dl">
+    <xsl:template match="dl">
         <fo:block xsl:use-attribute-sets="dl">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:dt">
+    <xsl:template match="dt">
         <fo:block xsl:use-attribute-sets="dt">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:dd">
+    <xsl:template match="dd">
         <fo:block xsl:use-attribute-sets="dd">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
@@ -858,7 +869,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Table
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:table">
+    <xsl:template match="table">
         <fo:table-and-caption xsl:use-attribute-sets="table-and-caption">
             <xsl:call-template name="make-table-caption"/>
             <fo:table xsl:use-attribute-sets="table">
@@ -867,12 +878,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         </fo:table-and-caption>
     </xsl:template>
     <xsl:template name="make-table-caption">
-        <xsl:if test="html:caption/@align">
+        <xsl:if test="caption/@align">
             <xsl:attribute name="caption-side">
-                <xsl:value-of select="html:caption/@align"/>
+                <xsl:value-of select="caption/@align"/>
             </xsl:attribute>
         </xsl:if>
-        <xsl:apply-templates select="html:caption"/>
+        <xsl:apply-templates select="caption"/>
     </xsl:template>
     <xsl:template name="process-table">
         <xsl:if test="@width">
@@ -932,21 +943,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </xsl:if>
         </xsl:if>
         <xsl:call-template name="process-common-attributes"/>
-        <xsl:apply-templates select="html:col | html:colgroup"/>
-        <xsl:apply-templates select="html:thead"/>
-        <xsl:apply-templates select="html:tfoot"/>
+        <xsl:apply-templates select="col | colgroup"/>
+        <xsl:apply-templates select="thead"/>
+        <xsl:apply-templates select="tfoot"/>
         <xsl:choose>
-            <xsl:when test="html:tbody">
-                <xsl:apply-templates select="html:tbody"/>
+            <xsl:when test="tbody">
+                <xsl:apply-templates select="tbody"/>
             </xsl:when>
             <xsl:otherwise>
                 <fo:table-body xsl:use-attribute-sets="tbody">
-                    <xsl:apply-templates select="html:tr"/>
+                    <xsl:apply-templates select="tr"/>
                 </fo:table-body>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template match="html:caption">
+    <xsl:template match="caption">
         <fo:table-caption xsl:use-attribute-sets="table-caption">
             <xsl:call-template name="process-common-attributes"/>
             <fo:block>
@@ -954,42 +965,42 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </fo:block>
         </fo:table-caption>
     </xsl:template>
-    <xsl:template match="html:thead">
+    <xsl:template match="thead">
         <fo:table-header xsl:use-attribute-sets="thead">
             <xsl:call-template name="process-table-rowgroup"/>
         </fo:table-header>
     </xsl:template>
-    <xsl:template match="html:tfoot">
+    <xsl:template match="tfoot">
         <fo:table-footer xsl:use-attribute-sets="tfoot">
             <xsl:call-template name="process-table-rowgroup"/>
         </fo:table-footer>
     </xsl:template>
-    <xsl:template match="html:tbody">
+    <xsl:template match="tbody">
         <fo:table-body xsl:use-attribute-sets="tbody">
             <xsl:call-template name="process-table-rowgroup"/>
         </fo:table-body>
     </xsl:template>
     <xsl:template name="process-table-rowgroup">
-        <xsl:if test="ancestor::html:table[1]/@rules = 'groups'">
+        <xsl:if test="ancestor::table[1]/@rules = 'groups'">
             <xsl:attribute name="border">1px solid</xsl:attribute>
         </xsl:if>
         <xsl:call-template name="process-common-attributes-and-children"/>
     </xsl:template>
-    <xsl:template match="html:colgroup">
+    <xsl:template match="colgroup">
         <fo:table-column xsl:use-attribute-sets="table-column">
             <xsl:call-template name="process-table-column"/>
         </fo:table-column>
     </xsl:template>
-    <xsl:template match="html:colgroup[html:col]">
+    <xsl:template match="colgroup[col]">
         <xsl:apply-templates/>
     </xsl:template>
-    <xsl:template match="html:col">
+    <xsl:template match="col">
         <fo:table-column xsl:use-attribute-sets="table-column">
             <xsl:call-template name="process-table-column"/>
         </fo:table-column>
     </xsl:template>
     <xsl:template name="process-table-column">
-        <xsl:if test="parent::html:colgroup">
+        <xsl:if test="parent::colgroup">
             <xsl:call-template name="process-col-width">
                 <xsl:with-param name="width" select="../@width"/>
             </xsl:call-template>
@@ -1009,34 +1020,34 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             <xsl:with-param name="width" select="@width"/>
       <!-- it may override parent colgroup's width -->
         </xsl:call-template>
-        <xsl:if test="ancestor::html:table[1]/@rules = 'cols'">
+        <xsl:if test="ancestor::table[1]/@rules = 'cols'">
             <xsl:attribute name="border">1px solid</xsl:attribute>
         </xsl:if>
         <xsl:call-template name="process-common-attributes"/>
     <!-- this processes also align and valign -->
     </xsl:template>
-    <xsl:template match="html:tr">
+    <xsl:template match="tr">
         <fo:table-row xsl:use-attribute-sets="tr">
             <xsl:call-template name="process-table-row"/>
         </fo:table-row>
     </xsl:template>
-    <xsl:template match="html:tr[parent::html:table and html:th and not(html:td)]">
+    <xsl:template match="tr[parent::table and th and not(td)]">
         <fo:table-row xsl:use-attribute-sets="tr" keep-with-next="always">
             <xsl:call-template name="process-table-row"/>
         </fo:table-row>
     </xsl:template>
     <xsl:template name="process-table-row">
-        <xsl:if test="ancestor::html:table[1]/@rules = 'rows'">
+        <xsl:if test="ancestor::table[1]/@rules = 'rows'">
             <xsl:attribute name="border">1px solid</xsl:attribute>
         </xsl:if>
         <xsl:call-template name="process-common-attributes-and-children"/>
     </xsl:template>
-    <xsl:template match="html:th">
+    <xsl:template match="th">
         <fo:table-cell xsl:use-attribute-sets="th">
             <xsl:call-template name="process-table-cell"/>
         </fo:table-cell>
     </xsl:template>
-    <xsl:template match="html:td">
+    <xsl:template match="td">
         <fo:table-cell xsl:use-attribute-sets="td">
             <xsl:call-template name="process-table-cell"/>
         </fo:table-cell>
@@ -1052,7 +1063,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 <xsl:value-of select="@rowspan"/>
             </xsl:attribute>
         </xsl:if>
-        <xsl:for-each select="ancestor::html:table[1]">
+        <xsl:for-each select="ancestor::table[1]">
             <xsl:if test="(@border or @rules) and (@rules = 'all' or                     not(@rules) and not(@border = '0'))">
                 <xsl:attribute name="border-style">inset</xsl:attribute>
             </xsl:if>
@@ -1068,10 +1079,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 </xsl:attribute>
             </xsl:if>
         </xsl:for-each>
-        <xsl:if test="not(@align or ../@align or                       ../parent::*[self::html:thead or self::html:tfoot or                       self::html:tbody]/@align) and                   ancestor::html:table[1]/*[self::html:col or                       self::html:colgroup]/descendant-or-self::*/@align">
+        <xsl:if test="not(@align or ../@align or                       ../parent::*[self::thead or self::tfoot or                       self::tbody]/@align) and                   ancestor::table[1]/*[self::col or                       self::colgroup]/descendant-or-self::*/@align">
             <xsl:attribute name="text-align">from-table-column()</xsl:attribute>
         </xsl:if>
-        <xsl:if test="not(@valign or ../@valign or                       ../parent::*[self::html:thead or self::html:tfoot or                       self::html:tbody]/@valign) and                   ancestor::html:table[1]/*[self::html:col or                       self::html:colgroup]/descendant-or-self::*/@valign">
+        <xsl:if test="not(@valign or ../@valign or                       ../parent::*[self::thead or self::tfoot or                       self::tbody]/@valign) and                   ancestor::table[1]/*[self::col or                       self::colgroup]/descendant-or-self::*/@valign">
             <xsl:attribute name="display-align">from-table-column()</xsl:attribute>
             <xsl:attribute name="relative-align">from-table-column()</xsl:attribute>
         </xsl:if>
@@ -1142,132 +1153,132 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Inline-level
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:b">
+    <xsl:template match="b">
         <fo:inline xsl:use-attribute-sets="b">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:strong">
-        <fo:inline xsl:use-attribute-sets="strong">
+    <xsl:template match="strong">
+        <fo:inline xsl:use-attribute-sets="strong" font-size="10pt" font-family="'Times New Roman'">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:strong//html:em | html:em//html:strong">
+    <xsl:template match="strong//em | em//strong">
         <fo:inline xsl:use-attribute-sets="strong-em">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:i">
+    <xsl:template match="i">
         <fo:inline xsl:use-attribute-sets="i">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:cite">
+    <xsl:template match="cite">
         <fo:inline xsl:use-attribute-sets="cite">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:em">
+    <xsl:template match="em">
         <fo:inline xsl:use-attribute-sets="em">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:var">
+    <xsl:template match="var">
         <fo:inline xsl:use-attribute-sets="var">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:dfn">
+    <xsl:template match="dfn">
         <fo:inline xsl:use-attribute-sets="dfn">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:tt">
+    <xsl:template match="tt">
         <fo:inline xsl:use-attribute-sets="tt">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:code">
+    <xsl:template match="code">
         <fo:inline xsl:use-attribute-sets="code">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:kbd">
+    <xsl:template match="kbd">
         <fo:inline xsl:use-attribute-sets="kbd">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:samp">
+    <xsl:template match="samp">
         <fo:inline xsl:use-attribute-sets="samp">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:big">
+    <xsl:template match="big">
         <fo:inline xsl:use-attribute-sets="big">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:small">
+    <xsl:template match="small">
         <fo:inline xsl:use-attribute-sets="small">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:sub">
+    <xsl:template match="sub">
         <fo:inline xsl:use-attribute-sets="sub">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:sup">
+    <xsl:template match="sup">
         <fo:inline xsl:use-attribute-sets="sup">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:s">
+    <xsl:template match="s">
         <fo:inline xsl:use-attribute-sets="s">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:strike">
+    <xsl:template match="strike">
         <fo:inline xsl:use-attribute-sets="strike">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:del">
+    <xsl:template match="del">
         <fo:inline xsl:use-attribute-sets="del">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:u">
+    <xsl:template match="u">
         <fo:inline xsl:use-attribute-sets="u">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:ins">
+    <xsl:template match="ins">
         <fo:inline xsl:use-attribute-sets="ins">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:abbr">
+    <xsl:template match="abbr">
         <fo:inline xsl:use-attribute-sets="abbr">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:acronym">
+    <xsl:template match="acronym">
         <fo:inline xsl:use-attribute-sets="acronym">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:span">
+    <xsl:template match="span">
         <fo:inline>
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:span[@dir]">
+    <xsl:template match="span[@dir]">
         <fo:bidi-override direction="{@dir}" unicode-bidi="embed">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:bidi-override>
     </xsl:template>
-    <xsl:template match="html:span[@style and contains(@style, 'writing-mode')]">
+    <xsl:template match="span[@style and contains(@style, 'writing-mode')]">
         <fo:inline-container alignment-baseline="central" text-indent="0pt" last-line-end-indent="0pt" start-indent="0pt" end-indent="0pt" text-align="center" text-align-last="center">
             <xsl:call-template name="process-common-attributes"/>
             <fo:block wrap-option="no-wrap" line-height="1">
@@ -1275,17 +1286,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </fo:block>
         </fo:inline-container>
     </xsl:template>
-    <xsl:template match="html:bdo">
+    <xsl:template match="bdo">
         <fo:bidi-override direction="{@dir}" unicode-bidi="bidi-override">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:bidi-override>
     </xsl:template>
-    <xsl:template match="html:br">
+    <xsl:template match="br">
         <fo:block>
             <xsl:call-template name="process-common-attributes"/>
         </fo:block>
     </xsl:template>
-    <xsl:template match="html:q">
+    <xsl:template match="q">
         <fo:inline xsl:use-attribute-sets="q">
             <xsl:call-template name="process-common-attributes"/>
             <xsl:choose>
@@ -1304,7 +1315,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             </xsl:choose>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:q//html:q">
+    <xsl:template match="q//q">
         <fo:inline xsl:use-attribute-sets="q-nested">
             <xsl:call-template name="process-common-attributes"/>
             <xsl:choose>
@@ -1326,12 +1337,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Image
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:img">
+    <xsl:template match="img">
         <fo:external-graphic xsl:use-attribute-sets="img">
             <xsl:call-template name="process-img"/>
         </fo:external-graphic>
     </xsl:template>
-    <xsl:template match="html:img[ancestor::html:a/@href]">
+    <xsl:template match="img[ancestor::a/@href]">
         <fo:external-graphic xsl:use-attribute-sets="img-link">
             <xsl:call-template name="process-img"/>
         </fo:external-graphic>
@@ -1381,30 +1392,30 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         </xsl:if>
         <xsl:call-template name="process-common-attributes"/>
     </xsl:template>
-    <xsl:template match="html:object">
+    <xsl:template match="object">
         <xsl:apply-templates/>
     </xsl:template>
-    <xsl:template match="html:param"/>
-    <xsl:template match="html:map"/>
-    <xsl:template match="html:area"/>
-    <xsl:template match="html:label"/>
-    <xsl:template match="html:input"/>
-    <xsl:template match="html:select"/>
-    <xsl:template match="html:optgroup"/>
-    <xsl:template match="html:option"/>
-    <xsl:template match="html:textarea"/>
-    <xsl:template match="html:legend"/>
-    <xsl:template match="html:button"/>
+    <xsl:template match="param"/>
+    <xsl:template match="map"/>
+    <xsl:template match="area"/>
+    <xsl:template match="label"/>
+    <xsl:template match="input"/>
+    <xsl:template match="select"/>
+    <xsl:template match="optgroup"/>
+    <xsl:template match="option"/>
+    <xsl:template match="textarea"/>
+    <xsl:template match="legend"/>
+    <xsl:template match="button"/>
 
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Link
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:a">
+    <xsl:template match="a">
         <fo:inline>
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:inline>
     </xsl:template>
-    <xsl:template match="html:a[@href]">
+    <xsl:template match="a[@href]">
         <fo:basic-link xsl:use-attribute-sets="a-link">
             <xsl:call-template name="process-a-link"/>
         </fo:basic-link>
@@ -1436,24 +1447,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Ruby
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:ruby">
+    <xsl:template match="ruby">
         <fo:inline-container alignment-baseline="central" block-progression-dimension="1em" text-indent="0pt" last-line-end-indent="0pt" start-indent="0pt" end-indent="0pt" text-align="center" text-align-last="center">
             <xsl:call-template name="process-common-attributes"/>
-            <fo:block font-size="50%" wrap-option="no-wrap" line-height="1" space-before.conditionality="retain" space-before="-1.1em" space-after="0.1em" role="html:rt">
-                <xsl:for-each select="html:rt | html:rtc[1]/html:rt">
+            <fo:block font-size="50%" wrap-option="no-wrap" line-height="1" space-before.conditionality="retain" space-before="-1.1em" space-after="0.1em" role="rt">
+                <xsl:for-each select="rt | rtc[1]/rt">
                     <xsl:call-template name="process-common-attributes"/>
                     <xsl:apply-templates/>
                 </xsl:for-each>
             </fo:block>
-            <fo:block wrap-option="no-wrap" line-height="1" role="html:rb">
-                <xsl:for-each select="html:rb | html:rbc[1]/html:rb">
+            <fo:block wrap-option="no-wrap" line-height="1" role="rb">
+                <xsl:for-each select="rb | rbc[1]/rb">
                     <xsl:call-template name="process-common-attributes"/>
                     <xsl:apply-templates/>
                 </xsl:for-each>
             </fo:block>
-            <xsl:if test="html:rtc[2]/html:rt">
-                <fo:block font-size="50%" wrap-option="no-wrap" line-height="1" space-before="0.1em" space-after.conditionality="retain" space-after="-1.1em" role="html:rt">
-                    <xsl:for-each select="html:rt | html:rtc[2]/html:rt">
+            <xsl:if test="rtc[2]/rt">
+                <fo:block font-size="50%" wrap-option="no-wrap" line-height="1" space-before="0.1em" space-after.conditionality="retain" space-after="-1.1em" role="rt">
+                    <xsl:for-each select="rt | rtc[2]/rt">
                         <xsl:call-template name="process-common-attributes"/>
                         <xsl:apply-templates/>
                     </xsl:for-each>

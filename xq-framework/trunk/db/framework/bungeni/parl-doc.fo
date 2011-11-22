@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:bu="http://portal.bungeni.org/1.0/" version="2.0">
     <xsl:output method="xml" version="2.0" indent="yes"/>
     <xsl:include href="config.xsl"/>
+    <xsl:import href="xhtml2fo.xsl"/>
     <!--xsl:include href="xhtml2fo.xsl" /-->
     <xsl:template match="document">
         <fo:root>
@@ -102,8 +103,40 @@
         text only. Ideally should preserve xhtml formatting as the portal displays
     -->
     <xsl:template mode="body" match="bu:legislativeItem/bu:body">
+        <!-- need fo:block-container? or normal fo:block -->
+        <xsl:variable name="need-block-container">
+            <xsl:call-template name="need-block-container"/>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$need-block-container = 'true'">
+                <fo:block-container font-family="'Times New Roman'" font-size="10pt">
+                    <xsl:if test="@dir">
+                        <xsl:attribute name="writing-mode">
+                            <xsl:choose>
+                                <xsl:when test="@dir = 'rtl'">rl-tb</xsl:when>
+                                <xsl:otherwise>lr-tb</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:call-template name="process-common-attributes"/>
+                    <fo:block start-indent="0pt" end-indent="0pt" font-family="'Times New Roman'" font-size="10pt">
+                        <xsl:apply-templates/>
+                    </fo:block>
+                </fo:block-container>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- normal block -->
+                <fo:block font-family="'Times New Roman'" font-size="10pt">
+                    <xsl:call-template name="process-common-attributes"/>
+                    <xsl:apply-templates/>
+                </fo:block>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>  
+   
+    <!--xsl:template mode="body" match="bu:legislativeItem/bu:body">
         <fo:block font-family="'Times New Roman', san-serif" linefeed-treatment="preserve" white-space-treatment="preserve" white-space-collapse="false" space-before="8pt" font-size="10pt" text-align="justify">
-            <xsl:apply-templates/>
+            <xsl:apply-templates />
         </fo:block>
-    </xsl:template>
+    </xsl:template-->
 </xsl:stylesheet>

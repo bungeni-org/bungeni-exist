@@ -58,7 +58,7 @@
             </div>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div class="mem-top-right" style="text-align:center;width:100%;">
+                    <div class="mem-top-right">
                         <xsl:choose>
                             <xsl:when test="docs/bu:ontology">
                                 <table class="tbl-tgl">
@@ -86,9 +86,18 @@
                                                 </xsl:choose>
                                             </td>
                                             <td class="fbt bclr">
-                                                <a href="{bu:document/@type}/text?uri={bu:legislativeItem/@uri}">
-                                                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
-                                                </a>
+                                                <xsl:choose>
+                                                    <xsl:when test="bu:document/@type = 'event'">
+                                                        <a href="bill/event?uri={bu:legislativeItem/@uri}">
+                                                            <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                                        </a>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <a href="{bu:document/@type}/text?uri={bu:legislativeItem/@uri}">
+                                                            <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                                        </a>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
                                             </td>
                                             <td class="fbt bclr">
                                                 <xsl:value-of select="bu:legislativeItem/bu:status"/>

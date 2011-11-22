@@ -122,7 +122,7 @@
                             <xsl:value-of select="$render-doc/bu:status"/>
                         </span>
                         <span>
-                            <b>Status Date:</b>
+                            <b>Date:</b>
                         </span>
                         <span>
                             <xsl:value-of select="format-dateTime($render-doc/bu:statusDate,$datetime-format,'en',(),())"/>

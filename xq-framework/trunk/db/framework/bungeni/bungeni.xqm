@@ -61,11 +61,26 @@ declare function bun:gen-pdf-output($docid as xs:string) {
 };
 
 
-declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
+    let $acl-filter := cmn:get-acl-filter($acl)
+    return
+        collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/bu:permissions/bu:permission[$acl-filter]/ancestor::bu:ontology
+};
+
+declare function bun:get-documentitems(
+            $acl as xs:string,
+            $type as xs:string,
+            $url-prefix as xs:string,
+            $stylesheet as xs:string,
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $querystr as xs:string, 
+            $where as xs:string, 
+            $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
-    let $acl-filter := cmn:get-acl-filter($acl)
+    let $stylesheet := cmn:get-xslt($stylesheet)    
+    let $coll := bun:list-documentitems-with-acl($acl, $type)
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -80,11 +95,11 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
         (: Count the total number of bills only :)
         <count>{
             count(
-                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter]
+                $coll
               )
          }</count>
-        <documentType>bill</documentType>
-        <listingUrlPrefix>bill/text</listingUrlPrefix>
+        <documentType>{$type}</documentType>
+        <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         </paginator>
@@ -92,33 +107,33 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
         {
             if ($sortby = 'st_date_oldest') then (
                (:if (fn:ni$qrystr):)
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate ascending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate ascending
                 return 
                     bun:get-reference($match)       
                 )
                 
             else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)       
                 )
             else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date ascending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:bungeni/bu:parliament/@date ascending
                 return 
                     bun:get-reference($match)         
                 )    
             else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date descending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:bungeni/bu:parliament/@date descending
                 return 
                     bun:get-reference($match)         
                 )                 
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='bill'][$acl-filter],$query-offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
                 )
@@ -138,6 +153,36 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
        
 };
 
+
+declare function bun:get-bills(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $where as xs:string, 
+        $sortby as xs:string) as element() {
+  bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+};
+
+
+declare function bun:get-questions(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $where as xs:string, 
+        $sortby as xs:string) as element() {
+  bun:get-documentitems($acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+};
+
+
+declare function bun:get-motions($acl as xs:string, $offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+  bun:get-documentitems($acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+};
+
+declare function bun:get-tableddocuments($acl as xs:string, $offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+  bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+};
 (:~
     Generates Atom FEED for Bungeni Documents
     Bills, Questions, TabledDocuments and Motions.
@@ -145,6 +190,7 @@ declare function bun:get-bills($acl as xs:string, $offset as xs:integer, $limit 
     @category type of document e.g. bill
     
     Ordered by `bu:statusDate` and limited to 10 items.
+    !+FIX_THIS - FOR ACL BASED ACCESS
 :)
 declare function bun:get-atom-feed($category as xs:string, $outputtype as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
@@ -336,7 +382,7 @@ declare function bun:get-politicalgroups($offset as xs:integer, $limit as xs:int
        
 };
 (:~
-    This function runs a sub-query to get ministry information
+    This function runs a sub-query to get related information
     It takes in primary results of main query as input to search
     for group documents with matching URI
 :)
@@ -344,13 +390,13 @@ declare function bun:get-reference($docitem as node()) {
             <document>
                 <output> 
                 {
-                    $docitem/ancestor::bu:ontology
+                    $docitem
                 }
                 </output>
                 <referenceInfo>
                     <ref>
                     {
-                        let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:group/@href)
+                        let $doc-ref := data($docitem/bu:*/bu:group/@href)
                         return 
                             collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../bu:ministry
                     }
@@ -359,194 +405,9 @@ declare function bun:get-reference($docitem as node()) {
             </document>     
 };
 
-declare function bun:get-questions($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
-    
-    (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
-    
-    (: input ONxml document in request :)
-    let $doc := <docs> 
-        <paginator>
-        (: Count the total number of questions only :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'])}</count>
-        <documentType>question</documentType>
-        <listingUrlPrefix>question/text</listingUrlPrefix>
-        <offset>{$offset}</offset>
-        <limit>{$limit}</limit>
-        </paginator>
-        <alisting>
-        {            
-            if ($sortby = 'st_date_oldest') then (
-               (:if (fn:ni$qrystr):)
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate ascending
-                return 
-                    bun:get-reference($match)       
-                )
-                
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)       
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date ascending
-                return 
-                    bun:get-reference($match)         
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date descending
-                return 
-                    bun:get-reference($match)         
-                )
-            else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='question'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)         
-                )         
-        } 
-        </alisting>
-    </docs>
-    
-    return
-        transform:transform($doc, 
-            $stylesheet, 
-            <parameters>
-                <param name="sortby" value="{$sortby}" />
-            </parameters>
-           ) 
-       
-}; 
 
-declare function bun:get-motions($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
-    
-    (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
-    
-    (: input ONxml document in request :)
-    let $doc := <docs> 
-        <paginator>
-        (: Count the total number of questions only :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'])}</count>
-        <documentType>motion</documentType>
-        <listingUrlPrefix>motion/text</listingUrlPrefix>
-        <offset>{$offset}</offset>
-        <limit>{$limit}</limit>
-        </paginator>
-        <alisting>
-        {            
-            if ($sortby = 'st_date_oldest') then (
-               (:if (fn:ni$qrystr):)
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate ascending
-                return 
-                    bun:get-reference($match)       
-                )
-                
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)       
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date ascending
-                return 
-                    bun:get-reference($match)         
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date descending
-                return 
-                    bun:get-reference($match)         
-                )             
-            else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='motion'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)         
-                )            
-        } 
-        </alisting>
-    </docs>
-    
-    return
-        transform:transform($doc, 
-            $stylesheet, 
-            <parameters>
-                <param name="sortby" value="{$sortby}" />
-            </parameters>
-           ) 
-       
-};
 
-declare function bun:get-tableddocs($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
-    
-    (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("legislativeitem-listing.xsl")    
-    
-    (: input ONxml document in request :)
-    let $doc := <docs> 
-        <paginator>
-        (: Count the total number of questions only :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'])}</count>
-        <documentType>tableddocument</documentType>
-        <listingUrlPrefix>tableddocument/text</listingUrlPrefix>
-        <offset>{$offset}</offset>
-        <limit>{$limit}</limit>
-        </paginator>
-        <alisting>
-        {            
-            if ($sortby = 'st_date_oldest') then (
-               (:if (fn:ni$qrystr):)
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate ascending
-                return 
-                    bun:get-reference($match)       
-                )
-                
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)       
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date ascending
-                return 
-                    bun:get-reference($match)         
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:bungeni/bu:parliament/@date descending
-                return 
-                    bun:get-reference($match)         
-                )               
-            else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='tableddocument'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)         
-                )              
-        } 
-        </alisting>
-    </docs>
-    
-    return
-        transform:transform($doc, 
-            $stylesheet, 
-            <parameters>
-                <param name="sortby" value="{$sortby}" />
-            </parameters>
-           ) 
-       
-};
+
 
 (: Search for the doc matching the actid in the parameter and return the tabel of contents :)
 declare function bun:get-toc($actid as xs:string) as element() {
@@ -750,7 +611,7 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
     return
         <docs>
             {
-                $match
+                $match/ancestor::bu:ontology
             }
         </docs>
     }

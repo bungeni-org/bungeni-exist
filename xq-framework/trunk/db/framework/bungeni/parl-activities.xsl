@@ -61,9 +61,10 @@
                     <div class="mem-top-right" style="text-align:center;width:100%;">
                         <xsl:choose>
                             <xsl:when test="docs/bu:ontology">
-                                <table class="tbl-tgl" style="width:90%;float:none;margin:20px auto 0 auto;text-align:left;">
+                                <table class="tbl-tgl">
                                     <tr>
                                         <td class="fbtd">type</td>
+                                        <td class="fbtd">relation</td>
                                         <td class="fbtd">title</td>
                                         <td class="fbtd">status</td>
                                         <td class="fbtd">submission date</td>
@@ -73,6 +74,16 @@
                                         <tr class="items">
                                             <td class="fbt bclr">
                                                 <xsl:value-of select="bu:document/@type"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:choose>
+                                                    <xsl:when test="$doc_uri = data(bu:legislativeItem/bu:owner/@href)">
+                                                        owner
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        sponsor
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
                                             </td>
                                             <td class="fbt bclr">
                                                 <a href="{bu:document/@type}/text?uri={bu:legislativeItem/@uri}">

@@ -44,8 +44,11 @@ table.doc-tbl-details tr td {
 }
 
 table.tbl-tgl {
-    width:100%;
     padding:2px 5px 2px 5px;
+    width:90%;
+    float:none;
+    margin:20px auto 0 auto;
+    text-align:left;    
 }
 table.tbl-tgl tr td {
     padding:2px 5px 2px 2px;

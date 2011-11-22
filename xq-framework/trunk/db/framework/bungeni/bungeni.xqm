@@ -743,12 +743,15 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
     }
     </member>
     {
-    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:owner[@href=$memberid]
+    (: Get all parliamentary documents the user is either owner or signatory :)
+    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']
+    where   bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
+            bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
     return
         <docs>
             {
-                $match/ancestor::bu:ontology
-             }
+                $match
+            }
         </docs>
     }
     </activities> 

@@ -143,7 +143,9 @@ declare function cmn:get-acl-filter($filter-name as xs:string) {
     let $acl-group := cmn:get-acl-group($filter-name)
     return 
         if ($acl-group) then (
-            concat($acl-group/@axis, '[', $acl-group/@condition, ']')
+            (: Axis not used currently :)
+            (: concat($acl-group/@axis, '[', $acl-group/@condition, ']') :)
+            data($acl-group/@condition)
             )
          else
             ()

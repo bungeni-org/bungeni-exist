@@ -11,10 +11,41 @@
                 <xd:b>Created on:</xd:b> Oct 5, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p>Lists bills from Bungeni</xd:p>
+            <xd:p>
+                
+                Lists bills from Bungeni
+
+                    
+            </xd:p>
         </xd:desc>
     </xd:doc>
-
+    
+    <!--
+        
+        THE INPUT DOCUMENT LOOKS LIKE THIS 
+        
+    <docs>
+    <paginator>
+        
+        <count>3</count>
+        <documentType>bill</documentType>
+        <listingUrlPrefix>bill/text</listingUrlPrefix>
+        <offset>3</offset>
+        <limit>3</limit>
+    </paginator>
+    <alisting>
+        <document>
+         <output> 
+            <bu:ontology .../>
+    
+         </output>
+         <referenceInfo>
+            <ref>
+            </ref>
+         </referenceInfo>
+    </alisting>
+    </docs>
+    -->
     <!-- INPUT PARAMETERS -->
 
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
@@ -39,12 +70,14 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            under consideration (<xsl:value-of select="paginator/count"/>)
+                            <xsl:text>under consideration (</xsl:text>
+                            <xsl:value-of select="paginator/count"/>
+                            <xsl:text>)</xsl:text>
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            archived
+                            <xsl:text>archived</xsl:text>
                         </a>
                     </li>
                 </ul>

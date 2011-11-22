@@ -29,15 +29,6 @@ declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT :=10;
 declare variable $bun:DOCNO := 1;
 
-
-(: Search for the doc matching the actid in the parameter and return the document :)
-declare function bun:get-doc($actid as xs:string) as element() {
-     for $match in collection(cmn:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier']
-      let $c := string($match)
-      where $c = $actid
-    return $match/ancestor::akomaNtoso
-};
-
 (:
     Renders PDF documents using xslfo module
 :)
@@ -192,7 +183,7 @@ declare function bun:get-tableddocuments($acl as xs:string, $offset as xs:intege
     Ordered by `bu:statusDate` and limited to 10 items.
     !+FIX_THIS - FOR ACL BASED ACCESS
 :)
-declare function bun:get-atom-feed($category as xs:string, $outputtype as xs:string) as element() {
+declare function bun:get-atom-feed($acl as xs:string, $category as xs:string, $outputtype as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
     let $server-path := "http://localhost:8180/exist/apps/framework"
     let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -203,7 +194,7 @@ declare function bun:get-atom-feed($category as xs:string, $outputtype as xs:str
         <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
         <link rel="self" href="/bills/rss" />
        {
-            for $i in subsequence((collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$category]),0,10)/ancestor::bu:ontology
+            for $i in subsequence(bun:list-documentitems-with-acl($acl, $category),0,10)
             order by $i/bu:legislativeItem/bu:statusDate descending
                (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
                   return ( <entry>
@@ -381,40 +372,29 @@ declare function bun:get-politicalgroups($offset as xs:integer, $limit as xs:int
            ) 
        
 };
+
 (:~
     This function runs a sub-query to get related information
     It takes in primary results of main query as input to search
     for group documents with matching URI
 :)
 declare function bun:get-reference($docitem as node()) {
-            <document>
-                <output> 
-                {
-                    $docitem
-                }
-                </output>
-                <referenceInfo>
-                    <ref>
-                    {
-                        let $doc-ref := data($docitem/bu:*/bu:group/@href)
-                        return 
-                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../bu:ministry
-                    }
-                    </ref>
-                </referenceInfo>
-            </document>     
-};
-
-
-
-
-
-(: Search for the doc matching the actid in the parameter and return the tabel of contents :)
-declare function bun:get-toc($actid as xs:string) as element() {
-     for $match in collection(cmn:get-lex-db())//akomaNtoso//docNumber[@id='ActIdentifier']
-      let $c := string($match)
-      where $c = $actid
-    return $match/ancestor::akomaNtoso//preamble/toc
+    <document>
+        <output> 
+        {
+            $docitem
+        }
+        </output>
+        <referenceInfo>
+            <ref>
+            {
+                let $doc-ref := data($docitem/bu:*/bu:group/@href)
+                return 
+                    collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../bu:ministry
+            }
+            </ref>
+        </referenceInfo>
+    </document>     
 };
 
 declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
@@ -611,7 +591,7 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
     return
         <docs>
             {
-                $match/ancestor::bu:ontology
+                $match
             }
         </docs>
     }

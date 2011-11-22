@@ -221,22 +221,22 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/bills/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed('bill','user')
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "bill","user")
                     return $act-entries-tmpl
     	else if ($EXIST-PATH eq "/questions/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed('question','user')
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view","question","user")
                     return $act-entries-tmpl    
     	else if ($EXIST-PATH eq "/motions/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed('motion','user')
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "motion","user")
                     return $act-entries-tmpl                     
     	else if ($EXIST-PATH eq "/tableddocuments/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed('tableddocument','user')
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "tableddocument","user")
                     return $act-entries-tmpl  
             
         (: PDF FO GENERATORS :)

@@ -54,8 +54,20 @@ declare function bun:gen-pdf-output($docid as xs:string) {
 
 declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
     let $acl-filter := cmn:get-acl-filter($acl)
+    
+    (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
+    make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
+    
+    let $eval-query := fn:concat("collection('",cmn:get-lex-db() ,"')",
+                                    "/bu:ontology[@type='document']",
+                                    "/bu:document[@type='",$type,"']",
+                                    "/following-sibling::bu:legislativeItem",
+                                    "/(bu:permissions except bu:versions)",
+                                    "/bu:permission[",$acl-filter,"]",
+                                    "/ancestor::bu:ontology")
     return
-        collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/bu:permissions/bu:permission[$acl-filter]/ancestor::bu:ontology
+        util:eval($eval-query)
+        (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
 };
 
 declare function bun:get-documentitems(

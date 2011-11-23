@@ -216,7 +216,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
 
         (:~
             Atom FEEDS
-            
         :)    								 
     	else if ($EXIST-PATH eq "/bills/rss")
     		 then 
@@ -242,54 +241,67 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         (: PDF FO GENERATORS :)
     	else if ($EXIST-PATH eq "/bill/pdf")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-pdf-output($docnumber)
-    		        return $act-entries-tmpl   
+                rou:get-pdf($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)
     	else if ($EXIST-PATH eq "/question/pdf")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-pdf-output($docnumber)
-    		        return $act-entries-tmpl     
+                rou:get-pdf($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)    
     	else if ($EXIST-PATH eq "/motion/pdf")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-pdf-output($docnumber)
-                    return $act-entries-tmpl    
+                rou:get-pdf($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)  
     	else if ($EXIST-PATH eq "/tableddocument/pdf")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-pdf-output($docnumber)
-                    return $act-entries-tmpl                        
+                rou:get-pdf($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)  
+    	else if ($EXIST-PATH eq "/member/pdf")   
+    		 then 
+                let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-member-pdf($memid)
+                return $act-entries-tmpl                           
           
         (:Get AkomaNtoso XML:)
     	else if ($EXIST-PATH eq "/bill/xml")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
-    		        return $act-entries-tmpl        
+                rou:get-xml($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)    
     	else if ($EXIST-PATH eq "/question/xml")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
-    		        return $act-entries-tmpl 
+                rou:get-xml($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)
     	else if ($EXIST-PATH eq "/motion/xml")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
-    		        return $act-entries-tmpl      
+                rou:get-xml($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH) 
     	else if ($EXIST-PATH eq "/tableddocument/xml")   
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
-    		        return $act-entries-tmpl    		        
+                rou:get-xml($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH) 		        
 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 

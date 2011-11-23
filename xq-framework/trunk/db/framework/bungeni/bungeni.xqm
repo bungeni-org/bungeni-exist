@@ -51,6 +51,25 @@ declare function bun:gen-pdf-output($docid as xs:string) {
     
 };
 
+declare function bun:gen-member-pdf($memberid as xs:string) {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt('member-info.fo') 
+    
+    let $doc := <document>        
+            {
+                collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology
+            }
+        </document>
+        
+    let $transformed := transform:transform($doc,$stylesheet,())
+     
+    let $pdf := xslfo:render($transformed, "application/pdf", ())
+     
+    return response:stream-binary($pdf, "application/pdf", "output.pdf")     
+    
+};
+
 
 declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
     let $acl-filter := cmn:get-acl-filter($acl)
@@ -156,7 +175,6 @@ declare function bun:get-documentitems(
        
 };
 
-
 declare function bun:get-bills(
         $acl as xs:string, 
         $offset as xs:integer, 
@@ -166,7 +184,6 @@ declare function bun:get-bills(
         $sortby as xs:string) as element() {
   bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
-
 
 declare function bun:get-questions(
         $acl as xs:string, 
@@ -178,14 +195,26 @@ declare function bun:get-questions(
   bun:get-documentitems($acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
 
-
-declare function bun:get-motions($acl as xs:string, $offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+declare function bun:get-motions(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $where as xs:string, 
+        $sortby as xs:string) as element() {
   bun:get-documentitems($acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
 
-declare function bun:get-tableddocuments($acl as xs:string, $offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+declare function bun:get-tableddocuments(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $where as xs:string, 
+        $sortby as xs:string) as element() {
   bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
+
 (:~
     Generates Atom FEED for Bungeni Documents
     Bills, Questions, TabledDocuments and Motions.
@@ -195,18 +224,20 @@ declare function bun:get-tableddocuments($acl as xs:string, $offset as xs:intege
     Ordered by `bu:statusDate` and limited to 10 items.
     !+FIX_THIS - FOR ACL BASED ACCESS
 :)
-declare function bun:get-atom-feed($acl as xs:string, $category as xs:string, $outputtype as xs:string) as element() {
+declare function bun:get-atom-feed($acl as xs:string, $doctype as xs:string, $outputtype as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
+    
     let $server-path := "http://localhost:8180/exist/apps/framework"
+    
     let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
-        <title>{concat(upper-case(substring($category, 1, 1)), substring($category, 2))}s Atom</title>
+        <title>{concat(upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>
         <id>http://portal.bungeni.org/1.0/</id>
         <updated>{current-dateTime()}</updated>
         <generator uri="http://exist.sourceforge.net/" version="1.4.5">eXist XML Database</generator>      
         <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
         <link rel="self" href="/bills/rss" />
        {
-            for $i in subsequence(bun:list-documentitems-with-acl($acl, $category),0,10)
+            for $i in subsequence(bun:list-documentitems-with-acl($acl, $doctype),0,10)
             order by $i/bu:legislativeItem/bu:statusDate descending
                (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
                   return ( <entry>
@@ -535,7 +566,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        (: Count the total number of bills only :)
+        (: Count the total number of members :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'])}</count>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
@@ -547,19 +578,19 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)                
                 order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='last_name'] descending
                 return 
-                    bun:get-reference($match)       
+                    bun:get-reference($match/ancestor::bu:ontology)       
                 )
             else if ($sortby = 'fn') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='first_name'] descending
                 return 
-                    bun:get-reference($match)         
+                    bun:get-reference($match/ancestor::bu:ontology)         
                 )                
             else  (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='last_name'] descending
                 return 
-                    bun:get-reference($match)         
+                    bun:get-reference($match/ancestor::bu:ontology)         
                 )
 
         } 

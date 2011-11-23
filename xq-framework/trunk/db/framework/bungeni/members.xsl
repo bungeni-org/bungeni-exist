@@ -13,40 +13,68 @@
     <!-- load configuration info -->
     <xsl:include href="config.xsl"/>
     <xsl:template match="docs">
-        <div id="main-doc" class="rounded-eigh tab_container" role="main">
-            <!-- container for holding listings -->
-            <div id="doc-listing" class="acts">
-                <!-- render the paginator -->
-                <div class="list-header">
-                    <xsl:apply-templates select="paginator"/>
-                    <div id="search-n-sort" class="search-bar">
-                        <form method="get" action="" name="search_sort">
-                            <label for="search_for">Search text:</label>
-                            <input id="search_for" name="q" class="search_for" type="text" value=""/>
-                            <label for="search_in">in:</label>
-                            <select name="w" id="search_w">
-                                <option value="doc" selected="">entire document</option>
-                                <option value="name">short name</option>
-                                <option value="text">body text</option>
-                                <option value="desc">description</option>
-                                <option value="changes">changes</option>
-                                <option value="versions">versions</option>
-                                <option value="owner">owner</option>
-                            </select>
-                            <label for="search_in">sort by:</label>
-                            <select name="s" id="sort_by">
-                                <option value="ln" selected="">last name</option>
-                                <option value="fn">first_name</option>
-                            </select>
-                            <input value="search" type="submit"/>
-                        </form>
+        <div id="main-wrapper">
+            <div id="title-holder" class="theme-lev-1-only">
+                <h1 id="doc-title-blue-center">Members of Parliament</h1>
+            </div>
+            <div id="tab-menu" class="ls-tabs">
+                <ul class="ls-doc-tabs">
+                    <li class="active">
+                        <a href="#">
+                            current (<xsl:value-of select="paginator/count"/>)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            archive
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="doc-downloads">
+                <ul class="ls-downloads">
+                    <li>
+                        <a href="#" title="print this page listing" class="print">
+                            <em>PRINT</em>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+                <!-- container for holding listings -->
+                <div id="doc-listing" class="acts">
+                    <!-- render the paginator -->
+                    <div class="list-header">
+                        <xsl:apply-templates select="paginator"/>
+                        <div id="search-n-sort" class="search-bar">
+                            <form method="get" action="" name="search_sort">
+                                <label for="search_for">Search text:</label>
+                                <input id="search_for" name="q" class="search_for" type="text" value=""/>
+                                <label for="search_in">in:</label>
+                                <select name="w" id="search_w">
+                                    <option value="doc" selected="">entire document</option>
+                                    <option value="name">short name</option>
+                                    <option value="text">body text</option>
+                                    <option value="desc">description</option>
+                                    <option value="changes">changes</option>
+                                    <option value="versions">versions</option>
+                                    <option value="owner">owner</option>
+                                </select>
+                                <label for="search_in">sort by:</label>
+                                <select name="s" id="sort_by">
+                                    <option value="ln" selected="">last name</option>
+                                    <option value="fn">first_name</option>
+                                </select>
+                                <input value="search" type="submit"/>
+                            </form>
+                        </div>
                     </div>
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div class="toggler-list" id="expand-all">- compress all</div>
+                    </div>                 
+                    <!-- render the actual listing-->
+                    <xsl:apply-templates select="alisting"/>
                 </div>
-                <div id="toggle-wrapper" class="clear toggle-wrapper">
-                    <div class="toggler-list" id="expand-all">- compress all</div>
-                </div>                 
-                <!-- render the actual listing-->
-                <xsl:apply-templates select="alisting"/>
             </div>
         </div>
     </xsl:template>

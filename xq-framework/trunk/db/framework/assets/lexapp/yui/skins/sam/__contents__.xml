@@ -1,192 +1,65 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/skins/sam" owner="admin" group="dba" mode="644" created="2011-10-05T11:06:53+03:00" version="1">
-    <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="ajax-loader.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="ajax-loader.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="asc.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="asc.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="autocomplete.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="autocomplete.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="back-h.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="back-h.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="back-v.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="back-v.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="bar-h.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="bar-h.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="bar-v.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="bar-v.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="bg-h.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="bg-h.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="bg-v.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="bg-v.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="blankimage.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="blankimage.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="button.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="button.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="calendar.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="calendar.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="carousel.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="carousel.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="check0.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="check0.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="check1.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="check1.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="check2.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="check2.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="colorpicker.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="colorpicker.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="container.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="container.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="datatable.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="datatable.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="desc.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="desc.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="dt-arrow-dn.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="dt-arrow-dn.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="dt-arrow-up.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="dt-arrow-up.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="editor-knob.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="editor-knob.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="editor-sprite-active.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="editor-sprite-active.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="editor-sprite.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="editor-sprite.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="editor.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="editor.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="header_background.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="header_background.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="hue_bg.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="hue_bg.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="imagecropper.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="imagecropper.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="layout.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="layout.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="layout_sprite.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="layout_sprite.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="loading.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="loading.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="logger.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="logger.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menu-button-arrow-disabled.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="menu-button-arrow-disabled.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menu-button-arrow.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="menu-button-arrow.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menu.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="menu.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menubaritem_submenuindicator.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="menubaritem_submenuindicator.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menubaritem_submenuindicator_disabled.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="menubaritem_submenuindicator_disabled.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menuitem_checkbox.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="menuitem_checkbox.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menuitem_checkbox_disabled.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="menuitem_checkbox_disabled.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menuitem_submenuindicator.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="menuitem_submenuindicator.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="menuitem_submenuindicator_disabled.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="menuitem_submenuindicator_disabled.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="paginator.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="paginator.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="picker_mask.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="picker_mask.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="profilerviewer.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="profilerviewer.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="progressbar.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="progressbar.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="resize.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="resize.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="simpleeditor.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="simpleeditor.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="skin.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="skin.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="slider.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="slider.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="split-button-arrow-active.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="split-button-arrow-active.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="split-button-arrow-disabled.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="split-button-arrow-disabled.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="split-button-arrow-focus.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="split-button-arrow-focus.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="split-button-arrow-hover.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="split-button-arrow-hover.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="split-button-arrow.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="split-button-arrow.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="sprite.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="sprite.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="sprite.psd" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="sprite.psd" mimetype="application/octet-stream">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="tabview.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="tabview.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="treeview-loading.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="treeview-loading.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="treeview-sprite.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="treeview-sprite.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="treeview.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="treeview.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="wait.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:17+03:00" modified="2011-10-05T11:05:17+03:00" filename="wait.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="yuitest.css" owner="admin" group="dba" mode="644" created="2011-10-05T11:05:18+03:00" modified="2011-10-05T11:05:18+03:00" filename="yuitest.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/skins/sam" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" version="1">
+    <resource type="BinaryResource" name="ajax-loader.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="ajax-loader.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="asc.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="asc.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="autocomplete.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="autocomplete.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="back-h.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="back-h.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="back-v.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="back-v.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="bar-h.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="bar-h.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="bar-v.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="bar-v.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="bg-h.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="bg-h.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="bg-v.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="bg-v.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="blankimage.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="blankimage.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="button.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="button.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="calendar.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="calendar.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="carousel.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="carousel.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="check0.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="check0.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="check1.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="check1.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="check2.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="check2.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="colorpicker.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="colorpicker.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="container.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="container.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="datatable.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="datatable.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="desc.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="desc.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="dt-arrow-dn.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="dt-arrow-dn.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="dt-arrow-up.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="dt-arrow-up.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="editor-knob.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="editor-knob.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="editor-sprite-active.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="editor-sprite-active.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="editor-sprite.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="editor-sprite.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="editor.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="editor.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="header_background.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="header_background.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="hue_bg.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="hue_bg.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="imagecropper.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="imagecropper.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="layout.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="layout.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="layout_sprite.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="layout_sprite.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="loading.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="loading.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="logger.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="logger.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="menu-button-arrow-disabled.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="menu-button-arrow-disabled.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menu-button-arrow.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="menu-button-arrow.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menu.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="menu.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="menubaritem_submenuindicator.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="menubaritem_submenuindicator.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menubaritem_submenuindicator_disabled.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="menubaritem_submenuindicator_disabled.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menuitem_checkbox.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="menuitem_checkbox.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menuitem_checkbox_disabled.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="menuitem_checkbox_disabled.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menuitem_submenuindicator.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="menuitem_submenuindicator.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="menuitem_submenuindicator_disabled.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="menuitem_submenuindicator_disabled.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="paginator.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="paginator.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="picker_mask.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="picker_mask.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="profilerviewer.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="profilerviewer.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="progressbar.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="progressbar.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="resize.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="resize.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="simpleeditor.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="simpleeditor.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="skin.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="skin.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="slider.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="slider.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="split-button-arrow-active.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="split-button-arrow-active.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="split-button-arrow-disabled.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="split-button-arrow-disabled.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="split-button-arrow-focus.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="split-button-arrow-focus.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="split-button-arrow-hover.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="split-button-arrow-hover.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="split-button-arrow.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="split-button-arrow.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="sprite.png" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="sprite.png" mimetype="image/png"/>
+    <resource type="BinaryResource" name="sprite.psd" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="sprite.psd" mimetype="application/octet-stream"/>
+    <resource type="BinaryResource" name="tabview.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="tabview.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="treeview-loading.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="treeview-loading.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="treeview-sprite.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="treeview-sprite.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="treeview.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="treeview.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="wait.gif" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="wait.gif" mimetype="image/gif"/>
+    <resource type="BinaryResource" name="yuitest.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="yuitest.css" mimetype="text/css"/>
 </collection>

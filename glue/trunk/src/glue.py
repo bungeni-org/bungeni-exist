@@ -15,6 +15,8 @@ from org.dom4j.io import SAXReader
 from org.dom4j.tree import DefaultAttribute
 from java.io import File
 from java.io import FileInputStream
+from java.util import HashMap
+
 
 from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
@@ -59,13 +61,21 @@ class TransformerConfig(Config):
 
 class Transformer:
     
+    
     def __init__(self, cfg):
         GlobalConfigurations.setApplicationPathPrefix(cfg.get_transformer_resources_folder())
         self.transformer = OATranslator.getInstance()
+        self._parl_info = HashMap()
+        
+    def get_parl_info(self):
+        return self._parl_info
+    
+    def set_parl_info(self, parl_info):
+        self._parl_info = parl_info   
     
     def run(self, input_file, output, metalex, config_file):
-        print "xxx ", input_file, output, metalex, config_file, "yyy  "      
-        translatedFiles = self.transformer.translate(input_file, config_file) 
+        print "xxx ", input_file, output, metalex, config_file, "yyy  "
+        translatedFiles = self.transformer.translate(input_file, config_file,  self.get_parl_info()) 
         
         #input stream
         fis  = FileInputStream(translatedFiles["anxml"])
@@ -92,13 +102,31 @@ class ParseBungeniXML:
         an_xml = File(xml_path)        
         self.xmldoc = sreader.read(an_xml)
  
-    def xpath_form_by_attr(self,name):
+    def xpath_parl_item(self,name):
 
-        return  self.__global_path__ + "field[@name='" + name + "']"
+        return self.__global_path__ + "contenttype[@name='group']/field[@name='"+name+"']"
         
     def xpath_get_attr_val(self,name):
 
-        return  self.__global_path__ + "field[@name]"        
+        return  self.__global_path__ + "field[@name]"  
+        
+    def get_parliament_info(self):
+        parl_params = HashMap()
+        
+        parliament_doc = self.xmldoc.selectSingleNode(self.xpath_parl_item("type"))
+       
+        if parliament_doc is None:
+          return None
+        if parliament_doc.getText() == "parliament" :
+            """
+            Get the parliamentary information at this juncture.
+            """
+            #parl_params['country-code'] = self.xmldoc.selectSingleNode("contenttype/field[@name='language']").getText()
+            parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
+            parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()+"/"+parl_params['parliament-election-date']
+            return parl_params
+        else:
+            return None
         
     def get_contenttype_name(self):
 
@@ -108,12 +136,22 @@ class ParseBungeniXML:
         else:
             return None
 
-class DirWalker(object):
+class GenericDirWalker(object):
 
-    def __init__(self, config_object, transformer):
-        self.cfg = config_object
-        self.transformer = transformer
+    def __init__(self, input_params = []):
+        """
+        input_params - the parameters for the callback function
+        """
         self.counter = 0
+        self.object_info = None
+        self.input_params = input_params
+        
+    def reset_counter(self):
+        """
+        This function resets the counter, e.g. after initial walk to retrieve parl_info & 
+        starting the actual transformation since they user same DirWalker
+        """
+        self.counter = 0  
 
     def walk(self, dir, callback_function):
         """ 
@@ -131,26 +169,40 @@ class DirWalker(object):
             else:
                 if fnmatch.fnmatch(nfile, "*.xml"):
                     self.counter = self.counter + 1
-                    callback_function(self.cfg, self.transformer, nfile, self.counter)
+                    info_object = callback_function(nfile, self.counter, self.input_params)
+                    if info_object[0] == True:
+                        self.object_info = info_object[1]
+                        break
+                    else:
+                        continue
 
+def parliament_info(input_file_path, count, input_params):
+    bunparse = ParseBungeniXML(input_file_path)
+    the_parl_doc = bunparse.get_parliament_info()
+    if the_parl_doc is not None:
+        return (True, the_parl_doc)
+    else :
+        return (False, None)
 
-def process_file(cfg, trans, input_file_path, count):
+def process_file(input_file_path, count, input_params):
     bunparse = ParseBungeniXML(input_file_path)
     pipe_type = bunparse.get_contenttype_name()
     if pipe_type is not None:
-        if pipe_type in cfg.get_pipelines():
-            pipe_path = cfg.get_pipelines()[pipe_type]
+        if pipe_type in input_params[0].get_pipelines():
+            pipe_path = input_params[0].get_pipelines()[pipe_type]
             output_file_name_wo_prefix  = pipe_type + "_" + str(count)
             an_xml_file = "an_" + output_file_name_wo_prefix + ".xml"
             on_xml_file = "on_" + output_file_name_wo_prefix + ".xml"
-            trans.run(input_file_path,
-                 cfg.get_akomantoso_output_folder() + an_xml_file ,
-                 cfg.get_ontoxml_output_folder() + on_xml_file,
+            input_params[1].run(input_file_path,
+                 input_params[0].get_akomantoso_output_folder() + an_xml_file ,
+                 input_params[0].get_ontoxml_output_folder() + on_xml_file,
                  pipe_path)
         else:
             print "No pipeline defined for content type %s " % pipe_type
+        return (False, None)
     else:
         print "Ignoring %s" % input_file_path
+        return (False, None)
 
 
 def __setup_output_dirs__(cfg):
@@ -175,8 +227,19 @@ def main(config_file):
         cfg = TransformerConfig(config_file)
         __setup_output_dirs__(cfg)
         transformer = Transformer(cfg)
-        d = DirWalker(cfg, transformer)
-        d.walk(cfg.get_input_folder(), process_file)
+        #Adding objects onto signature list that initializes the Direcory Walker
+        input_params = []
+        input_params.append(cfg)
+        input_params.append(transformer)
+        gdw = GenericDirWalker(input_params)
+        #Check for parliamentary document and get parliament info        
+        print "Retrieving parliament information..."
+        gdw.walk(cfg.get_input_folder(), parliament_info)
+        print gdw.object_info        
+        transformer.set_parl_info(gdw.object_info)
+        print "\nDONE! Commencing transformations..."
+        gdw.reset_counter()
+        gdw.walk(cfg.get_input_folder(), process_file)
             
     except getopt.error, msg:
         print msg

@@ -15,6 +15,20 @@
         <!-- The paginator expects a document with the following -->
         
         <!-- 
+            the type of page (for search) 
+        -->
+        <xsl:variable name="documentType">
+            <xsl:value-of select="./documentType"/>
+        </xsl:variable>        
+        
+        <!-- 
+            the search string of page (for search) 
+        -->
+        <xsl:variable name="searchString">
+            <xsl:value-of select="./searchString"/>
+        </xsl:variable>         
+        
+        <!-- 
            the starting point of the pager 
         -->
         <xsl:variable name="offset">
@@ -76,7 +90,11 @@
                 <xsl:otherwise>
                     <a title="Beginning">
                         <xsl:attribute name="href">
-                            <xsl:text>?offset=</xsl:text>
+                            <xsl:text>?type=</xsl:text>
+                            <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;q=</xsl:text>
+                            <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="0"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
@@ -97,7 +115,11 @@
                 <xsl:otherwise>
                     <a title="Previous Page">
                         <xsl:attribute name="href">
-                            <xsl:text>?offset=</xsl:text>
+                            <xsl:text>?type=</xsl:text>
+                            <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;q=</xsl:text>
+                            <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="$offset - $limit"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
@@ -130,6 +152,8 @@
                         <xsl:with-param name="count" select="$count"/>
                         <xsl:with-param name="offset" select="$offset"/>
                         <xsl:with-param name="limit" select="$limit"/>
+                        <xsl:with-param name="documentType" select="$documentType"/>
+                        <xsl:with-param name="searchString" select="$searchString"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
@@ -139,6 +163,8 @@
                         <xsl:with-param name="count" select="$count"/>
                         <xsl:with-param name="offset" select="$offset"/>
                         <xsl:with-param name="limit" select="$limit"/>
+                        <xsl:with-param name="documentType" select="$documentType"/>
+                        <xsl:with-param name="searchString" select="$searchString"/>
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -156,7 +182,11 @@
                 <xsl:otherwise>
                     <a title="Next Page">
                         <xsl:attribute name="href">
-                            <xsl:text>?offset=</xsl:text>
+                            <xsl:text>?type=</xsl:text>
+                            <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;q=</xsl:text>
+                            <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*abs($pwhere)"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
@@ -176,7 +206,11 @@
                 <xsl:otherwise>
                     <a title="Last Page">
                         <xsl:attribute name="href">
-                            <xsl:text>?offset=</xsl:text>
+                            <xsl:text>?type=</xsl:text>
+                            <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;q=</xsl:text>
+                            <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($pages*$limit) - $limit"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
@@ -203,6 +237,8 @@
         <xsl:param name="count"/>
         <xsl:param name="offset"/>
         <xsl:param name="limit"/>
+        <xsl:param name="documentType"/>
+        <xsl:param name="searchString"/>
         <!-- DEBUG
         <span>i=<xsl:value-of select="$i" />,</span>
         <span>limi=<xsl:value-of select="$limit" />,</span>
@@ -222,7 +258,11 @@
                 <xsl:otherwise>
                     <a title="Page {$i}" accesskey="{$i}">
                         <xsl:attribute name="href">
-                            <xsl:text>?offset=</xsl:text>
+                            <xsl:text>?type=</xsl:text>
+                            <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;q=</xsl:text>
+                            <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*(abs($i)-1)"/>
                             <xsl:text>&amp;limit=</xsl:text>
                             <xsl:value-of select="$limit"/>
@@ -243,6 +283,8 @@
                 <xsl:with-param name="count" select="$count"/>
                 <xsl:with-param name="offset" select="$offset"/>
                 <xsl:with-param name="limit" select="$limit"/>
+                <xsl:with-param name="documentType" select="$documentType"/>
+                <xsl:with-param name="searchString" select="$searchString"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>

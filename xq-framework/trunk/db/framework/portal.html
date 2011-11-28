@@ -13,6 +13,79 @@
         <script src="assets/bungeni/scripts/jquery.min.js"/>
         <script src="assets/bungeni/scripts/expand.js"/>
         <script src="assets/bungeni/scripts/application.js"/>
+        <style type="text/css">
+        .sb_wrapper input[type="text"],
+        ul.sb_dropdown{
+            border:1px solid #fff;
+            background: #fafafa; 
+            background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#fafafa)); 
+            background: -moz-linear-gradient(top, #f2f2f2, #fafafa);
+            font-size:0.9em;
+            font-family:"Times New Roman", sans-serif;
+            -moz-box-shadow:1px 1px 3px #555;
+            -webkit-box-shadow:1px 1px 3px #555;
+            -box-shadow:1px 1px 3px #555;
+            outline:none;
+            padding:6px 5px 6px 20px;
+            text-shadow:1px 1px 1px #fff;
+            width:230px;
+            float:right;
+            margin:3px 0px;
+        }
+        ul.sb_dropdown{
+            position:relative;
+            list-style:none;
+            width:235px;
+            padding:6px 5px;
+            -moz-border-radius:0px 0px 10px 10px;
+            -webkit-border-bottom-right-radius:10px;
+            -webkit-border-bottom-left-radius:10px;
+            border-bottom-right-radius:10px;
+            border-bottom-left-radius:10px;
+        }
+        ul.sb_dropdown li{
+            font-size:1em;
+            line-height:32px;
+            height:32px;
+            float:left;
+            width:50%;
+        }
+        ul.sb_dropdown li input[type="checkbox"]{
+            float:left;
+            margin:10px 4px 0 5px;
+        }
+        ul.sb_dropdown li.sb_filter{
+            width:223px;
+            border:1px solid #f9f9f9;
+            clear:both;
+            background: #ddd;
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            color:#444;
+            height:16px;
+            line-height:16px;
+            padding:5px;
+            -moz-box-shadow:0px 0px 2px #777;
+            -webkit-box-shadow:0px 0px 3px #555 inset;
+            -box-shadow:0px 0px 3px #555 inset;
+        
+        }            
+        .dropdown { width:240px;}
+        .dropdown dd, .dropdown dt, .dropdown ul { margin:0px; padding:0px; }
+        .dropdown dd { position:relative; }
+        .dropdown a, .dropdown a:visited { color:#816c5b; text-decoration:none; outline:none;}
+        .dropdown a:hover { color:#5d4617;}
+        .dropdown dt a:hover { color:#5d4617; border: 1px solid #d0c9af;}
+        .dropdown dt a {background:#fff url(assets/bungeni/images/arrow.png) no-repeat scroll right center; display:block; padding-right:15px;
+                        border:1px solid #8e8e8e; width:10px;}
+        .dropdown dt a span {cursor:pointer; display:block; padding:5px;}
+        .dropdown dd ul { display:none;left:0px; padding:5px 0px; position:absolute; top:2px; width:auto; min-width:170px; list-style:none;}
+        .dropdown span.value { display:none;}
+        .dropdown dd ul li a { padding:5px; display:block;}
+        .dropdown dd ul li a:hover { background-color:#d0c9af;}
+        .flagvisibility { display:none;}
+        </style>
     </head>
     <body class="portal">
         <div id="container">
@@ -34,7 +107,7 @@
                         </ul>  -->
                     </div>
                     <div class="lev-1-search" style="text-align:right;margin-top:-23px;">
-                        <form class="form-search" id="search-form" method="get" action="">
+                        <form class="form-search" id="search-form" method="get" action="/search">
                             <input type="text" value="" name="search-input" id="bah" class="text"/>
                             <input type="submit" value="Search" name="search-input" id="duh"/>
                         </form>

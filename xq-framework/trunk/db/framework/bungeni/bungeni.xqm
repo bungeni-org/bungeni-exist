@@ -114,7 +114,7 @@ declare function bun:get-documentitems(
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        (: Count the total number of bills only :)
+        (: Count the total number of documents :)
         <count>{
             count(
                 $coll
@@ -159,7 +159,7 @@ declare function bun:get-documentitems(
                 return 
                     bun:get-reference($match)         
                 )
-
+                (:ft:score($m):)
         } 
         </alisting>
     </docs>
@@ -182,7 +182,8 @@ declare function bun:get-bills(
         $querystr as xs:string, 
         $where as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+        
+        bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
 
 declare function bun:get-questions(
@@ -213,6 +214,146 @@ declare function bun:get-tableddocuments(
         $where as xs:string, 
         $sortby as xs:string) as element() {
   bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+};
+
+declare function bun:search-types(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $where as xs:string, 
+        $sortby as xs:string,
+        $typeofdoc as xs:string,
+        $filter_all as xs:string,
+        $filter_body as xs:string,
+        $filter_docno as xs:string,
+        $filter_title as xs:string) as element() {
+        
+        bun:search-documentitems($acl, $typeofdoc, "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby, $filter_all, $filter_body, $filter_docno, $filter_title)
+};
+
+declare function bun:ft-search(
+            $sort-rs as element()+, 
+            $querystr as xs:string, 
+            $filter_all as xs:string, 
+            $filter_body as xs:string,  
+            $filter_docno as xs:string,
+            $filter_title as xs:string) as element()* {
+
+        if ($filter_all = 'on') then (
+            for $search-rs in $sort-rs//bu:legislativeItem[ft:query(., $querystr)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )
+        else if ($filter_body = 'on') then (
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:body[ft:query(., $querystr)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )
+        else if ($filter_docno = 'on') then (
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:registryNumber[ft:query(., $querystr)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )
+        else (
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:shortName[ft:query(., $querystr)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )            
+            
+};
+
+declare function bun:search-documentitems(
+            $acl as xs:string,
+            $type as xs:string,
+            $url-prefix as xs:string,
+            $stylesheet as xs:string,
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $querystr as xs:string, 
+            $where as xs:string, 
+            $sortby as xs:string,
+            $filter_all as xs:string, 
+            $filter_body as xs:string,  
+            $filter_docno as xs:string,
+            $filter_title as xs:string) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($stylesheet)    
+    let $coll_rs := bun:list-documentitems-with-acl($acl, $type)
+
+    (: check if search is there so as to proceed to search or not :)    
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $filter_all, $filter_body, $filter_docno, $filter_title) else $coll_rs
+    
+    (: 
+        Logical offset is set to Zero but since there is no document Zero
+        in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
+        Need arises to  alter the $offset to 1 for the first page limit only.
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of documents :)
+        <count>{
+            count(
+                $coll
+              )
+         }</count>
+        <documentType>{$type}</documentType>
+        <searchString>{$querystr}</searchString>
+        <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        </paginator>
+        <alisting>
+        {
+            if ($sortby = 'st_date_oldest') then (
+               (:if (fn:ni$qrystr):)
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate ascending
+                return 
+                    bun:get-reference($match)       
+                )
+                
+            else if ($sortby eq 'st_date_newest') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate descending
+                return 
+                    bun:get-reference($match)       
+                )
+            else if ($sortby = 'sub_date_oldest') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:bungeni/bu:parliament/@date ascending
+                return 
+                    bun:get-reference($match)         
+                )    
+            else if ($sortby = 'sub_date_newest') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:bungeni/bu:parliament/@date descending
+                return 
+                    bun:get-reference($match)         
+                )                 
+            else  (
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate descending
+                return 
+                    bun:get-reference($match)         
+                )
+                (:ft:score($m):)
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           ) 
 };
 
 (:~

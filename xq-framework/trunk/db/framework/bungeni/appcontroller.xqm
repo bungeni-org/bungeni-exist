@@ -110,6 +110,34 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        (),
     								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     								    )
+        (:~ ITEMS SEARCH :)        
+    	else if ($EXIST-PATH eq "/search")
+    		 then 
+                let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $type := xs:string(request:get-parameter("type",'bill')),
+                    $filter_all := xs:string(request:get-parameter("all",'off')),
+                    $filter_body := xs:string(request:get-parameter("body",'off')),
+                    $filter_docno := xs:string(request:get-parameter("docno",'off')),
+                    $filter_title := xs:string(request:get-parameter("title",'on')),
+                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $acl := "public-view",
+                    $act-entries-tmpl :=  bun:search-types($acl,$offset,$limit,$qry,$whr,$sty,$type,$filter_all,$filter_body,$filter_docno,$filter_title),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    								        $REL-PATH, 
+    								        $EXIST-PATH, 
+    								        $config:DEFAULT-TEMPLATE,
+    								        cmn:get-route($EXIST-PATH),
+    								        (),
+    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								    )    								    
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
     		 then 

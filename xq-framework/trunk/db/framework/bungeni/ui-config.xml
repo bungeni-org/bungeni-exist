@@ -34,6 +34,10 @@
             <navigation>home</navigation>
             <title>Home</title>
         </route>
+        <route href="/search">
+            <navigation>business</navigation>
+            <title>Search</title>
+        </route>
         <route href="/business">
             <navigation>business</navigation>
             <title>Business</title>

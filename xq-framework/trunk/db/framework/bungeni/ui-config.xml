@@ -657,8 +657,9 @@
                 <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin value="title">Title</searchin>
+                <searchin value="title" default="true">Title</searchin>
                 <searchin value="body">Body</searchin>
+                <searchin value="docno">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="motion">
@@ -671,6 +672,7 @@
             <searchins>
                 <searchin value="title">Title</searchin>
                 <searchin value="body">Body</searchin>
+                <searchin value="docno">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="tableddocument">

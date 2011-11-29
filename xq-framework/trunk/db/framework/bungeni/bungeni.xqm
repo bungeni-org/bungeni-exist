@@ -3,6 +3,7 @@ module namespace bun = "http://exist.bungeni.org/bun";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
+import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
@@ -229,7 +230,7 @@ declare function bun:search-types(
         $filter_docno as xs:string,
         $filter_title as xs:string) as element() {
         
-        bun:search-documentitems($acl, $typeofdoc, "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby, $filter_all, $filter_body, $filter_docno, $filter_title)
+        bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $where, $sortby, $filter_all, $filter_body, $filter_docno, $filter_title)
 };
 
 declare function bun:ft-search(
@@ -241,26 +242,64 @@ declare function bun:ft-search(
             $filter_title as xs:string) as element()* {
 
         if ($filter_all = 'on') then (
-            for $search-rs in $sort-rs//bu:legislativeItem[ft:query(., $querystr)]
+            (:~ 
+                There are special characters for Lucene that we have to escape 
+                incase they form part of the user's search input. More on this...
+               
+                http://sewm.pku.edu.cn/src/other/clucene/doc/queryparsersyntax.html
+                http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
+            :)
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+            
+            for $search-rs in $sort-rs//bu:legislativeItem[ft:query(., $escaped)]
             order by ft:score($search-rs) descending
             return $search-rs/ancestor::bu:ontology    
             )
         else if ($filter_body = 'on') then (
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:body[ft:query(., $querystr)]
+        
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+                    
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:body[ft:query(., $escaped)]
             order by ft:score($search-rs) descending
             return $search-rs/ancestor::bu:ontology    
             )
         else if ($filter_docno = 'on') then (
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:registryNumber[ft:query(., $querystr)]
+            
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+                        
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:registryNumber[ft:query(., $escaped)]
             order by ft:score($search-rs) descending
             return $search-rs/ancestor::bu:ontology    
             )
         else (
+
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+            
             for $search-rs in $sort-rs//bu:legislativeItem/bu:shortName[ft:query(., $querystr)]
             order by ft:score($search-rs) descending
             return $search-rs/ancestor::bu:ontology    
             )            
             
+};
+
+declare function bun:get-search-context($embed_tmpl as xs:string) as node() {
+
+        (: get the template to be embedded :)
+        let $temp_tmpl := fw:app-tmpl($embed_tmpl),
+            (: get the set doc-types search conf:)
+            $search-filter := cmn:get-searchins-config("question")        
+        
+            return
+            	if ($temp_tmpl/descendant::xh:ul) then (
+                      element xh:li {
+                        element xh:input{
+                                attribute type { "checkbox" },
+                                "&#160;"
+                            }
+                        }
+                )
+                else
+                    ()    
 };
 
 declare function bun:search-documentitems(
@@ -295,17 +334,22 @@ declare function bun:search-documentitems(
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        (: Count the total number of documents :)
-        <count>{
-            count(
-                $coll
-              )
-         }</count>
-        <documentType>{$type}</documentType>
-        <searchString>{$querystr}</searchString>
-        <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
-        <offset>{$offset}</offset>
-        <limit>{$limit}</limit>
+            (: Count the total number of documents :)
+            <count>{
+                count(
+                    $coll
+                  )
+             }</count>
+            <documentType>{$type}</documentType>
+            <searchString>{$querystr}</searchString>
+            <sortBy>{$sortby}</sortBy>
+            <filterTitle>{$filter_title}</filterTitle>
+            <filterBody>{$filter_body}</filterBody>
+            <filterDocNo>{$filter_docno}</filterDocNo>
+            <filterAll>{$filter_all}</filterAll>
+            <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+            <offset>{$offset}</offset>
+            <limit>{$limit}</limit>
         </paginator>
         <alisting>
         {

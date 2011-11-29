@@ -15,6 +15,13 @@
         <!-- The paginator expects a document with the following -->
         
         <!-- 
+            the sort by of page (for search) 
+        -->
+        <xsl:variable name="sortBy">
+            <xsl:value-of select="./sortBy"/>
+        </xsl:variable>           
+        
+        <!-- 
             the type of page (for search) 
         -->
         <xsl:variable name="documentType">
@@ -94,6 +101,8 @@
                             <xsl:value-of select="$documentType"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;s=</xsl:text>
+                            <xsl:value-of select="$sortBy"/>
                             <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="0"/>
                             <xsl:text>&amp;limit=</xsl:text>
@@ -119,6 +128,8 @@
                             <xsl:value-of select="$documentType"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;s=</xsl:text>
+                            <xsl:value-of select="$sortBy"/>
                             <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="$offset - $limit"/>
                             <xsl:text>&amp;limit=</xsl:text>
@@ -154,6 +165,7 @@
                         <xsl:with-param name="limit" select="$limit"/>
                         <xsl:with-param name="documentType" select="$documentType"/>
                         <xsl:with-param name="searchString" select="$searchString"/>
+                        <xsl:with-param name="sortBy" select="$sortBy"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
@@ -165,6 +177,7 @@
                         <xsl:with-param name="limit" select="$limit"/>
                         <xsl:with-param name="documentType" select="$documentType"/>
                         <xsl:with-param name="searchString" select="$searchString"/>
+                        <xsl:with-param name="sortBy" select="$sortBy"/>
                     </xsl:call-template>
                 </xsl:otherwise>
             </xsl:choose>
@@ -186,6 +199,8 @@
                             <xsl:value-of select="$documentType"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;s=</xsl:text>
+                            <xsl:value-of select="$sortBy"/>
                             <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*abs($pwhere)"/>
                             <xsl:text>&amp;limit=</xsl:text>
@@ -210,6 +225,8 @@
                             <xsl:value-of select="$documentType"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;s=</xsl:text>
+                            <xsl:value-of select="$sortBy"/>
                             <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($pages*$limit) - $limit"/>
                             <xsl:text>&amp;limit=</xsl:text>
@@ -239,6 +256,7 @@
         <xsl:param name="limit"/>
         <xsl:param name="documentType"/>
         <xsl:param name="searchString"/>
+        <xsl:param name="sortBy"/>
         <!-- DEBUG
         <span>i=<xsl:value-of select="$i" />,</span>
         <span>limi=<xsl:value-of select="$limit" />,</span>
@@ -262,6 +280,8 @@
                             <xsl:value-of select="$documentType"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
+                            <xsl:text>&amp;s=</xsl:text>
+                            <xsl:value-of select="$sortBy"/>
                             <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*(abs($i)-1)"/>
                             <xsl:text>&amp;limit=</xsl:text>
@@ -285,6 +305,7 @@
                 <xsl:with-param name="limit" select="$limit"/>
                 <xsl:with-param name="documentType" select="$documentType"/>
                 <xsl:with-param name="searchString" select="$searchString"/>
+                <xsl:with-param name="sortBy" select="$sortBy"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>

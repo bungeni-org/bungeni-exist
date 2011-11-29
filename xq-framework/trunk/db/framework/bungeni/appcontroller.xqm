@@ -144,7 +144,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                             $EXIST-RESOURCE, 
                             $REL-PATH)
 
-    	else if ($EXIST-PATH eq "/questions")
+    	else if ($EXIST-PATH eq "/questions-temp")
     		 then 
                  rou:get-questions(
                     $EXIST-PATH, 
@@ -153,6 +153,31 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $EXIST-RESOURCE, 
                     $REL-PATH
                     )
+    								    
+    	else if ($EXIST-PATH eq "/questions")
+    		 then 
+    		    let
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),                
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $acl := "public-view",
+                    $act-entries-tmpl :=  bun:get-questions($acl, $offset,$limit,$qry,$whr,$sty),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									       $REL-PATH, 
+    									       $EXIST-PATH, 
+    									       $config:DEFAULT-TEMPLATE,
+    									       cmn:get-route($EXIST-PATH),
+    									       (),
+    									       (cmn:build-nav-node($EXIST-PATH,
+    									        (template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml"))))
+    										)
+    									)      								    
     								    
     	else if ($EXIST-PATH eq "/motions")
     		 then 

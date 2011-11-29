@@ -13,7 +13,7 @@
                 <xd:b>Author:</xd:b> anthony</xd:p>
             <xd:p>
                 
-                Lists bills from Bungeni
+                Search legislative items from Bungeni
 
                     
             </xd:p>
@@ -62,7 +62,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    <xsl:text>List of&#160;</xsl:text>
+                    <xsl:text>Search results in&#160;</xsl:text>
                     <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
@@ -70,7 +70,7 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            <xsl:text>under consideration (</xsl:text>
+                            <xsl:text>search results (</xsl:text>
                             <xsl:value-of select="paginator/count"/>
                             <xsl:text>)</xsl:text>
                         </a>
@@ -102,11 +102,55 @@
                     <div class="list-header">
                         <!-- call the paginator -->
                         <xsl:apply-templates select="paginator"/>
-                        <div id="search-n-sort" class="search-bar">
+                        <div id="search-n-sort" class="search-bar" style="display:inline;">
                             <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
                             <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
                             <xsl:if test="$searchins and $orderbys">
-                                <div id="search-form"/>
+                                <form method="GET" action="search" id="ui_search" name="search_sort" autocomplete="off">
+                                    <input type="hidden" name="type" value="{$input-document-type}"/>
+                                    <label class="search_for" for="search_for">Search text:&#160;</label>
+                                    <dl id="sb_box" class="dropdown">
+                                        <dt>
+                                            <input id="search_for" name="q" class="search_for" type="text" value="{paginator/searchString}"/>
+                                            <a style="display:inline" href="#"/>
+                                        </dt>
+                                        <dd>
+                                            <ul class="sb_dropdown">
+                                                <li class="sb_filter">Filter your search</li>
+                                                <li>
+                                                    <input type="checkbox" name="all" value="on"/>
+                                                    <label for="all">
+                                                        <b>Entire Document</b>
+                                                    </label>
+                                                </li>
+                                                <xsl:for-each select="$searchins/searchin">
+                                                    <li>
+                                                        <input type="checkbox" name="{@value}" value="on">
+                                                            <!-- Title is set as the default search area -->
+                                                            <xsl:if test="@value eq 'on'">
+                                                                <xsl:attribute name="checked">checked</xsl:attribute>
+                                                            </xsl:if>
+                                                        </input>
+                                                        <label for="{@value}">
+                                                            <xsl:value-of select="./text()"/>
+                                                        </label>
+                                                    </li>
+                                                </xsl:for-each>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+                                    <div style="display:inline;">
+                                        <label for="search_in">sort by:</label>
+                                        <select name="s" id="sort_by">
+                                            <xsl:for-each select="$orderbys/orderby">
+                                                <option value="{@value}">
+                                                    <xsl:value-of select="./text()"/>
+                                                </option>
+                                            </xsl:for-each>
+                                        </select>
+                                        <input value="search" type="submit"/>
+                                    </div>
+                                </form>
                             </xsl:if>
                         </div>
                     </div>

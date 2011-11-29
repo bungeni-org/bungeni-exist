@@ -6,6 +6,8 @@
 }
 .mem-top-right {
     float:right;
+    text-align:center;
+    width:auto;    
 }
 .mem-photo {
     width:180px;

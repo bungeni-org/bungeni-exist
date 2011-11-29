@@ -43,16 +43,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	fw:redirect(fn:concat(request:get-uri(), "/"))
         else if($EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
              then
-        		template:process-tmpl(
-        		   $REL-PATH, 
-        		   $EXIST-PATH, 
-        		   $config:DEFAULT-TEMPLATE,
-        		   cmn:get-route($EXIST-PATH),
-                    <route-override>
-                       <xh:title>Home - overriden</xh:title>
-                    </route-override>,         		   
-        		   cmn:build-nav-tmpl($EXIST-PATH, "index.xml")
-        		)
+        		rou:get-home(
+        		  $EXIST-PATH , 
+                  $EXIST-ROOT , 
+                  $EXIST-CONTROLLER, 
+                  $EXIST-RESOURCE, 
+                  $REL-PATH
+                  )
         		
     	(: Now we process application requests :)
     	else if ($EXIST-PATH eq "/business")
@@ -141,94 +138,41 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
     		 then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $act-entries-tmpl :=  bun:get-bills($acl,$offset,$limit,$qry,$whr,$sty),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    								    )
+    		 rou:get-bills($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)
+
     	else if ($EXIST-PATH eq "/questions")
     		 then 
-                let
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),                
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $act-entries-tmpl :=  bun:get-questions($acl, $offset,$limit,$qry,$whr,$sty),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    								    )
+                 rou:get-questions(
+                    $EXIST-PATH, 
+                    $EXIST-ROOT, 
+                    $EXIST-CONTROLLER, 
+                    $EXIST-RESOURCE, 
+                    $REL-PATH
+                    )
     								    
     	else if ($EXIST-PATH eq "/motions")
     		 then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),                
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $act-entries-tmpl :=  bun:get-motions($acl, $offset,$limit,$qry,$whr,$sty),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("motions.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    								    )
-    								    
+                 rou:get-motions(
+                    $EXIST-PATH, 
+                    $EXIST-ROOT, 
+                    $EXIST-CONTROLLER, 
+                    $EXIST-RESOURCE, 
+                    $REL-PATH
+                    )
+                    
     	else if ($EXIST-PATH eq "/tableddocuments")
     		 then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),                   
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $act-entries-tmpl :=  bun:get-tableddocuments($acl, $offset,$limit,$qry,$whr,$sty),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("tableddocuments.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    								    )
+                 rou:get-tableddocuments(
+                    $EXIST-PATH, 
+                    $EXIST-ROOT, 
+                    $EXIST-CONTROLLER, 
+                    $EXIST-RESOURCE, 
+                    $REL-PATH
+                    )
     								    
     	else if ($EXIST-PATH eq "/agendaitems")
     		 then 

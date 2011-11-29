@@ -24,6 +24,148 @@ import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
 import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm"; 
 
+(:~
+The functions here are called from the app-controller.
+
+The functions here must follow the app-controller signature / pattern
+
+declare function rou:func-name(
+        $EXIST-PATH as xs:string, 
+        $EXIST-ROOT as xs:string, 
+        $EXIST-CONTROLLER as xs:string, 
+        $EXIST-RESOURCE as xs:string, 
+        $REL-PATH as xs:string
+)
+
+:)
+
+declare function rou:get-home($EXIST-PATH as xs:string, 
+                             $EXIST-ROOT as xs:string, 
+                             $EXIST-CONTROLLER as xs:string, 
+                             $EXIST-RESOURCE as xs:string, 
+                             $REL-PATH as xs:string) {
+        template:process-tmpl(
+           $REL-PATH, 
+           $EXIST-PATH, 
+           $config:DEFAULT-TEMPLATE,
+           cmn:get-route($EXIST-PATH),
+            (),         		   
+           cmn:build-nav-tmpl($EXIST-PATH, "index.xml")
+        )
+};
+
+
+(:
+Generic Listing API
+:)
+declare function rou:listing-documentitem($EXIST-PATH as xs:string, 
+                             $EXIST-ROOT as xs:string, 
+                             $EXIST-CONTROLLER as xs:string, 
+                             $EXIST-RESOURCE as xs:string, 
+                             $REL-PATH as xs:string, 
+                             $use-tmpl as xs:string, 
+                             $doc-type as xs:string, 
+                             $page-route as xs:string,
+                             $stylesheet as xs:string) {
+     let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $where := xs:string(request:get-parameter("w",$bun:WHERE)),
+                    $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $acl := "public-view",
+                    $act-entries-tmpl := bun:get-documentitems($acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $where, $sortby),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($use-tmpl)/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    								        $REL-PATH, 
+    								        $EXIST-PATH, 
+    								        $config:DEFAULT-TEMPLATE,
+    								        cmn:get-route($EXIST-PATH),
+    								        (),
+    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								    )                             
+};
+
+declare function rou:get-bills(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+     rou:listing-documentitem($EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "bills.xml",
+                             "bill",
+                             "bill/text",
+                             "legislativeitem-listing.xsl")
+};
+
+declare function rou:get-questions(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+     rou:listing-documentitem($EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "questions.xml",
+                             "question",
+                             "question/text",
+                             "legislativeitem-listing.xsl")
+};
+
+declare function rou:get-motions(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+     rou:listing-documentitem($EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "motions.xml",
+                             "motion",
+                             "motion/text",
+                             "legislativeitem-listing.xsl")
+};
+
+declare function rou:get-tableddocuments(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+                    rou:listing-documentitem(
+                             $EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "tableddocuments.xml",
+                             "tableddocument",
+                             "tableddocument/text",
+                             "legislativeitem-listing.xsl"
+                             )
+};
+
+
+
+
 declare function rou:get-pdf($EXIST-PATH as xs:string, 
                              $EXIST-ROOT as xs:string, 
                              $EXIST-CONTROLLER as xs:string, 

@@ -581,6 +581,41 @@ declare function bun:get-reference($docitem as node()) {
     </document>     
 };
 
+declare function bun:documentitem-versions-with-acl($acl as xs:string, $docitem as node() ) {
+   if (local:filter-version-for-acl($acl, $docitem))
+   then
+      if ($docitem[self::element()])
+      then
+         element { name($docitem) } { local:recurse($acl, $docitem) }
+      else
+         if ($docitem[self::document-node()])
+         then document { local:recurse($acl, $docitem) }
+         else $docitem
+   else ()
+};
+
+declare function local:recurse($acl as xs:string, $item as node())
+{
+   for $child in ($item/@* | $item/node())
+     return bun:documentitem-versions-with-acl($acl, $child)
+} ;
+
+declare function local:filter-version-for-acl($acl as xs:string, $docitem as node()) {
+   if ($docitem/self::bu:version) then
+        if ($docitem/bu:permissions/bu:permission[@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow']) then
+          true()
+        else
+          false() 
+   else 
+     true()
+};
+
+declare function bun:documentitem-with-acl($acl as xs:string, $docid as xs:string) {
+    let $acl-filter := cmn:get-acl-filter($acl)
+    let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/(bu:permissions except bu:versions)/bu:permission[$acl-filter]/ancestor::bu:ontology
+    return bun:documentitem-versions-with-acl($acl, $match)
+};
+
 declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
@@ -589,8 +624,8 @@ declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl
  
     let $doc := <parl-doc> 
         {
-            (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter]
+            (: Return matching ontology document :)
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/(bu:permissions except bu:versions)/bu:permission[$acl-filter]/ancestor::bu:ontology
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -608,7 +643,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
     let $doc := <parl-doc> 
         {
             (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid][$acl-filter]
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/bu:permissions/bu:permission[$acl-filter]/ancestor::bu:ontology
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -621,14 +656,14 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
             <document>
                 <primary> 
                 {
-                    $docitem/ancestor::bu:ontology
+                    $docitem
                 }
                 </primary>
                 <secondary>
                     {
-                        let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:ministry/@href)
+                        let $doc-ref := data($docitem/bu:*/bu:ministry/@href)
                         return 
-                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../../bu:ontology
+                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
                     }
                 </secondary>
             </document>     

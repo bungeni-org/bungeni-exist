@@ -134,9 +134,11 @@ $(document).ready(function () {
 	*/
 	$ui.find('.sb_dropdown').find('label[for="all"]').prev().bind('click',function(){
 		$(this).parent().siblings().find(':checkbox').attr('checked',this.checked).attr('disabled',this.checked);
-	});        
-
-    $(".dropdown img.flag").addClass("flagvisibility");
+	});
+	
+	$ui.find('.sb_dropdown').find('label[for!="all"]').prev().bind('click',function(){
+		$(this).parent().siblings().find(':checkbox').attr('checked',false);
+	});	
 
     $(".dropdown dt a").click(function() {
         $(".dropdown dd ul").toggle();
@@ -146,7 +148,6 @@ $(document).ready(function () {
         var text = $(this).html();
         $(".dropdown dt a span").html(text);
         $(".dropdown dd ul").hide();
-        $("#result").html("Selected value is: " + getSelectedValue("sample"));
     });
                 
     function getSelectedValue(id) {
@@ -157,11 +158,6 @@ $(document).ready(function () {
         var $clicked = $(e.target);
         if (! $clicked.parents().hasClass("dropdown"))
             $(".dropdown dd ul").hide();
-    });
-
-
-    $("#flagSwitcher").click(function() {
-        $(".dropdown img.flag").toggleClass("flagvisibility");
     });
     
     /*

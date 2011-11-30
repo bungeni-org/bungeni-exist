@@ -106,45 +106,17 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        cmn:get-route($EXIST-PATH),
     								        (),
     								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    								    )
-        (:~ ITEMS SEARCH :)        
-    	else if ($EXIST-PATH eq "/search")
-    		 then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $type := xs:string(request:get-parameter("type",'bill')),
-                    $filter_all := xs:string(request:get-parameter("all",'off')),
-                    $filter_body := xs:string(request:get-parameter("body",'off')),
-                    $filter_docno := xs:string(request:get-parameter("docno",'off')),
-                    $filter_title := xs:string(request:get-parameter("title",'on')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $act-entries-tmpl :=  bun:search-types($acl,$offset,$limit,$qry,$whr,$sty,$type,$filter_all,$filter_body,$filter_docno,$filter_title),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("bills.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    								    )    								    
+    								    )   								    
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
     		 then 
     		 rou:get-bills($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)
+                    $EXIST-ROOT, 
+                    $EXIST-CONTROLLER, 
+                    $EXIST-RESOURCE, 
+                    $REL-PATH)
 
-    	else if ($EXIST-PATH eq "/questions-temp")
+    	else if ($EXIST-PATH eq "/questions")
     		 then 
                  rou:get-questions(
                     $EXIST-PATH, 
@@ -153,32 +125,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $EXIST-RESOURCE, 
                     $REL-PATH
                     )
-    								    
-    	else if ($EXIST-PATH eq "/questions")
-    		 then 
-    		    let
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),                
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $act-entries-tmpl :=  bun:get-questions($acl, $offset,$limit,$qry,$whr,$sty),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    									template:process-tmpl(
-    									       $REL-PATH, 
-    									       $EXIST-PATH, 
-    									       $config:DEFAULT-TEMPLATE,
-    									       cmn:get-route($EXIST-PATH),
-    									       (),
-    									       (cmn:build-nav-node($EXIST-PATH,
-    									        (template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml"))))
-    										)
-    									)      								    
-    								    
+                    
     	else if ($EXIST-PATH eq "/motions")
     		 then 
                  rou:get-motions(
@@ -197,7 +144,34 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $EXIST-CONTROLLER, 
                     $EXIST-RESOURCE, 
                     $REL-PATH
-                    )
+                    )                    
+    				
+        (:~ ITEMS SEARCH :)        
+    	else if ($EXIST-PATH eq "/search")
+    		 then 
+                let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $type := xs:string(request:get-parameter("type",'bill')),
+                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $acl := "public-view",
+                    $act-entries-tmpl :=  bun:search-legislative-items($acl,$offset,$limit,$qry,$whr,$sty,$type),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    									       $REL-PATH, 
+    									       $EXIST-PATH, 
+    									       $config:DEFAULT-TEMPLATE,
+    									       cmn:get-route($EXIST-PATH),
+    									       (),
+    									       (cmn:build-nav-node($EXIST-PATH,
+    									       (template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",$type))))
+    									     )
+    								    )
     								    
     	else if ($EXIST-PATH eq "/agendaitems")
     		 then 

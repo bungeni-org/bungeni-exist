@@ -67,7 +67,7 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                              $doc-type as xs:string, 
                              $page-route as xs:string,
                              $stylesheet as xs:string) {
-     let 
+                let 
                     $qry := xs:string(request:get-parameter("q",'')),
                     $where := xs:string(request:get-parameter("w",$bun:WHERE)),
                     $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
@@ -85,7 +85,7 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									    (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",$doc-type)))))
     								    )                             
 };
 
@@ -96,7 +96,7 @@ declare function rou:get-bills(
                         $EXIST-RESOURCE as xs:string, 
                         $REL-PATH as xs:string
                         ) {
-     rou:listing-documentitem($EXIST-PATH, 
+      rou:listing-documentitem($EXIST-PATH, 
                              $EXIST-ROOT, 
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 

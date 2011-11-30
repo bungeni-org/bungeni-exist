@@ -260,5 +260,5 @@ div#doc-downloads {
 
 
 .inline {
-    display:inline;
+    display:inline !important;
 }

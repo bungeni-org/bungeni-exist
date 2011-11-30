@@ -217,89 +217,16 @@ declare function bun:get-tableddocuments(
   bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
 
-declare function bun:search-types(
+declare function bun:search-legislative-items(
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $where as xs:string, 
         $sortby as xs:string,
-        $typeofdoc as xs:string,
-        $filter_all as xs:string,
-        $filter_body as xs:string,
-        $filter_docno as xs:string,
-        $filter_title as xs:string) as element() {
+        $typeofdoc as xs:string) as element() {
         
-        bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $where, $sortby, $filter_all, $filter_body, $filter_docno, $filter_title)
-};
-
-declare function bun:ft-search(
-            $sort-rs as element()+, 
-            $querystr as xs:string, 
-            $filter_all as xs:string, 
-            $filter_body as xs:string,  
-            $filter_docno as xs:string,
-            $filter_title as xs:string) as element()* {
-
-        if ($filter_all = 'on') then (
-            (:~ 
-                There are special characters for Lucene that we have to escape 
-                incase they form part of the user's search input. More on this...
-               
-                http://sewm.pku.edu.cn/src/other/clucene/doc/queryparsersyntax.html
-                http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
-            :)
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-            
-            for $search-rs in $sort-rs//bu:legislativeItem[ft:query(., $escaped)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )
-        else if ($filter_body = 'on') then (
-        
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-                    
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:body[ft:query(., $escaped)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )
-        else if ($filter_docno = 'on') then (
-            
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-                        
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:registryNumber[ft:query(., $escaped)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )
-        else (
-
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-            
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:shortName[ft:query(., $querystr)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )            
-            
-};
-
-declare function bun:get-search-context($embed_tmpl as xs:string) as node() {
-
-        (: get the template to be embedded :)
-        let $temp_tmpl := fw:app-tmpl($embed_tmpl),
-            (: get the set doc-types search conf:)
-            $search-filter := cmn:get-searchins-config("question")        
-        
-            return
-            	if ($temp_tmpl/descendant::xh:ul) then (
-                      element xh:li {
-                        element xh:input{
-                                attribute type { "checkbox" },
-                                "&#160;"
-                            }
-                        }
-                )
-                else
-                    ()    
+        bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
 
 declare function bun:search-documentitems(
@@ -311,18 +238,14 @@ declare function bun:search-documentitems(
             $limit as xs:integer, 
             $querystr as xs:string, 
             $where as xs:string, 
-            $sortby as xs:string,
-            $filter_all as xs:string, 
-            $filter_body as xs:string,  
-            $filter_docno as xs:string,
-            $filter_title as xs:string) as element() {
+            $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
     let $coll_rs := bun:list-documentitems-with-acl($acl, $type)
 
     (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $filter_all, $filter_body, $filter_docno, $filter_title) else $coll_rs
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr) else $coll_rs
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -343,10 +266,6 @@ declare function bun:search-documentitems(
             <documentType>{$type}</documentType>
             <searchString>{$querystr}</searchString>
             <sortBy>{$sortby}</sortBy>
-            <filterTitle>{$filter_title}</filterTitle>
-            <filterBody>{$filter_body}</filterBody>
-            <filterDocNo>{$filter_docno}</filterDocNo>
-            <filterAll>{$filter_all}</filterAll>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
             <offset>{$offset}</offset>
             <limit>{$limit}</limit>
@@ -398,6 +317,171 @@ declare function bun:search-documentitems(
                 <param name="sortby" value="{$sortby}" />
             </parameters>
            ) 
+};
+
+declare function bun:ft-search(
+            $sort-rs as element()+, 
+            $querystr as xs:string) as element()* {
+    let
+        $f_all := xs:string(request:get-parameter("all",'null')),
+        $f_body := xs:string(request:get-parameter("f_b",'null')),
+        $f_docno := xs:string(request:get-parameter("f_d",'null')),
+        $f_title := xs:string(request:get-parameter("f_t",'null'))            
+    
+    return
+        if ($f_all = 'all') then (
+            (:~ 
+                There are special characters for Lucene that we have to escape 
+                incase they form part of the user's search input. More on this...
+               
+                http://sewm.pku.edu.cn/src/other/clucene/doc/queryparsersyntax.html
+                http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
+            :)
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+            
+            for $search-rs in $sort-rs//bu:legislativeItem[ft:query(., $escaped)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )
+        else if ($f_body = 'body') then (
+        
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+                    
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:body[ft:query(., $escaped)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )
+        else if ($f_docno = 'docno') then (
+            
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+                        
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:registryNumber[ft:query(., $escaped)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )
+        else (
+
+            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+            
+            for $search-rs in $sort-rs//bu:legislativeItem/bu:shortName[ft:query(., $querystr)]
+            order by ft:score($search-rs) descending
+            return $search-rs/ancestor::bu:ontology    
+            )         
+};
+
+declare function local:rewrite-search-form($tmpl as element(), $type as xs:string)  {
+
+    (: get the current doc-types search conf:)
+    let $search-filter := cmn:get-searchins-config($type),
+        $search-orderby := cmn:get-orderby-config($type),
+        $qry := xs:string(request:get-parameter("q",'')),        
+        $f_all := xs:string(request:get-parameter("all",'null')),
+        $f_body := xs:string(request:get-parameter("f_b",'null')),
+        $f_docno := xs:string(request:get-parameter("f_d",'null')),
+        $f_title := xs:string(request:get-parameter("f_t",'null'))        
+
+    return
+      (: Re-writing the doc_type with the one we got from legi-listing :)    
+      if ($tmpl/self::xh:input[@id eq "doc_type"]) then 
+        element input {
+            attribute type { "hidden" },
+            attribute name { "type" },
+            attribute value { $type }
+        }   
+      (: Re-writing the search-field with search text :)    
+      else if ($tmpl/self::xh:input[@id eq "search_for"]) then 
+        element input {
+            attribute id { "search_for" },
+            attribute name { "q" },
+            attribute class { "search_for" },
+            attribute type { "text" },
+            attribute value { $qry }
+        }
+      (: [Re]Writing the filter_by options from ui-config :)
+      else if ($tmpl/self::xh:ul[@id eq 'filter_by']) then 
+          element ul 
+          {
+            attribute id {$tmpl/@id},
+            attribute class {$tmpl/@class},      
+            (: Default items on all search options :)
+            element li {
+                attribute class { "sb_filter" },
+                "Filter your search"
+            },
+            element li {
+                    element input {
+                        attribute type { "checkbox" },
+                        attribute name { "all" },
+                        attribute value { "on" }
+                    },
+                    element label {
+                        attribute for { "all" },
+                        element b {
+                            "Entire Document"
+                        }
+                    }
+            },   
+            (: End of Default items :)
+            for $searchins in $search-filter
+            return
+                element li {
+                    element input {
+                        (: Check if first time hence using default or custom filter and maintain filter options :)
+                        if($searchins/@default eq "true" and $qry eq '') then 
+                            attribute checked { "checked" }                    
+                        else if($f_title eq $searchins/@value or 
+                                $f_docno eq $searchins/@value or 
+                                $f_body eq $searchins/@value) then 
+                            attribute checked { "checked" }
+                        else (),
+                        attribute type { "checkbox" },
+                        attribute name { $searchins/@name },
+                        $searchins/@value
+                    },
+                    element label {
+                        attribute for { $searchins/@value},
+                        $searchins/text()
+                    }
+                }
+          }
+        (: [Re]Writing the sort_by options from ui-config :)
+        else if ($tmpl/self::xh:select[@id eq 'sort_by']) then 
+          element select 
+          {
+            attribute id {$tmpl/@id},
+            attribute name {$tmpl/@name},
+            
+            for $orderbys in $search-orderby
+            return
+                element option {
+                    attribute value { $orderbys/@value },
+                    $orderbys/text()
+                }
+          }        
+        else
+  		element { node-name($tmpl)}
+		  		 {$tmpl/@*, 
+			         for $child in $tmpl/node()
+				        return if ($child instance of element())
+					       then local:rewrite-search-form($child, $type)
+					       else $child
+				 }
+
+};
+
+(:~
+    Expected parameters
+    This currently uses search-form.xml
+:)
+
+declare function bun:get-search-context($embed_tmpl as xs:string, $doctype as xs:string) {
+
+    let $tmpl := fw:app-tmpl($embed_tmpl) (: get the template to be embedded :)
+        
+    return
+        document {
+            local:rewrite-search-form($tmpl/xh:div, $doctype)
+        }
 };
 
 (:~
@@ -656,7 +740,6 @@ declare function bun:documentitem-versions-with-acl($acl-filter as xs:string, $d
 				 }
 };
 
-
 declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
@@ -665,8 +748,8 @@ declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl
  
     let $doc := <parl-doc> 
         {
-            (: Return matching ontology document :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/(bu:permissions except bu:versions)/bu:permission[$acl-filter]/ancestor::bu:ontology
+            (: return AN document as singleton :)
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter]
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -684,7 +767,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
     let $doc := <parl-doc> 
         {
             (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/bu:permissions/bu:permission[$acl-filter]/ancestor::bu:ontology
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid][$acl-filter]
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -697,14 +780,14 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
             <document>
                 <primary> 
                 {
-                    $docitem
+                    $docitem/ancestor::bu:ontology
                 }
                 </primary>
                 <secondary>
                     {
-                        let $doc-ref := data($docitem/bu:*/bu:ministry/@href)
+                        let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:ministry/@href)
                         return 
-                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
+                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../../bu:ontology
                     }
                 </secondary>
             </document>     

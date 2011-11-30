@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" id="search-form">
     <form method="GET" action="search" id="ui_search" name="search_sort" autocomplete="off">
-        <input type="hidden" name="type" value="{$input-document-type}"/>
+        <input type="hidden" id="doc_type" name="type" value=""/>
         <label class="search_for" for="search_for">Search text:&#160;</label>
         <dl id="sb_box" class="dropdown">
             <dt>
@@ -23,7 +23,7 @@
         <div class="inline">
             <label for="search_in">sort by:</label>
             <select name="s" id="sort_by">
-                <option value="{@value}"/>
+                <option value=""/>
             </select>
             <input value="search" type="submit"/>
         </div>

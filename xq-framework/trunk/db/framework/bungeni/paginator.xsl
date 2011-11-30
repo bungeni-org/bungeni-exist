@@ -85,6 +85,8 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
+            <div style="color:#0085BE;display:inline;">Page <xsl:value-of select="$pwhere"/> of <xsl:value-of select="$pages"/>
+            </div>            
             
             <!-- This serves the purpose of showing 'First' page link -->
             <xsl:choose>

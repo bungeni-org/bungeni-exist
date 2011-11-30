@@ -625,40 +625,37 @@ declare function bun:get-reference($docitem as node()) {
     </document>     
 };
 
-declare function bun:documentitem-versions-with-acl($acl as xs:string, $docitem as node() ) {
-   if (local:filter-version-for-acl($acl, $docitem))
-   then
-      if ($docitem[self::element()])
-      then
-         element { name($docitem) } { local:recurse($acl, $docitem) }
-      else
-         if ($docitem[self::document-node()])
-         then document { local:recurse($acl, $docitem) }
-         else $docitem
-   else ()
-};
-
-declare function local:recurse($acl as xs:string, $item as node())
-{
-   for $child in ($item/@* | $item/node())
-     return bun:documentitem-versions-with-acl($acl, $child)
-} ;
-
-declare function local:filter-version-for-acl($acl as xs:string, $docitem as node()) {
-   if ($docitem/self::bu:version) then
-        if ($docitem/bu:permissions/bu:permission[@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow']) then
-          true()
-        else
-          false() 
-   else 
-     true()
-};
-
+(:~
+Get document with ACL filter
+:)
 declare function bun:documentitem-with-acl($acl as xs:string, $docid as xs:string) {
     let $acl-filter := cmn:get-acl-filter($acl)
     let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/(bu:permissions except bu:versions)/bu:permission[$acl-filter]/ancestor::bu:ontology
-    return bun:documentitem-versions-with-acl($acl, $match)
+    return bun:documentitem-versions-with-acl($acl-filter, $match)
 };
+
+(:~
+Remove Versions to which we dont have access
+:)
+declare function bun:documentitem-versions-with-acl($acl-filter as xs:string, $docitem as node() ) {
+  if ($docitem/self::bu:version) then
+        if ($docitem//bu:permission[$acl-filter]) then
+            $docitem
+        else
+            ()
+  else 
+    (:~
+     return the default 
+     :)
+  		element { node-name($docitem)}
+		  		 {$docitem/@*, 
+					for $child in $docitem/node()
+						return if ($child instance of element())
+							   then bun:documentitem-versions-with-acl($acl-filter, $child)
+							   else $child
+				 }
+};
+
 
 declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 

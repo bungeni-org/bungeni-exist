@@ -97,6 +97,13 @@ td.loginform	{ border-width: 1pt; border-style: solid; border-color: #888888; }
  	float:left;
  	height:30px;
 }
+.paginate .page-state {
+    float:left;
+    color:#0085BE;
+    display:inline;
+    padding:1px 5px 0 0;
+    height:18px;    
+}
 .paginate a 
 {
 	color:#2b92be !important;

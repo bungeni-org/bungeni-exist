@@ -9,5 +9,11 @@ import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
 
 
 
-let $actinfo := bun:get-search-context("search-form.xml")
-return $actinfo
+let $coll_rs := bun:list-documentitems-with-acl("public-view", "bill"),
+    $coll := bun:ft-search($coll_rs,"Bill OR clerk AND P1_01")
+return 
+    <batch>
+    {
+        $coll
+    }
+    </batch>

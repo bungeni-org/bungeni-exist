@@ -311,62 +311,52 @@ declare function bun:search-documentitems(
     (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
     the correct sort combo in the transformed output. See corresponding comment in XSLT :)
     return
+        (:$doc:)
         transform:transform($doc, 
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
             </parameters>
-           ) 
+           )
 };
-
 declare function bun:ft-search(
             $sort-rs as element()+, 
             $querystr as xs:string) as element()* {
     let
-        $f_all := xs:string(request:get-parameter("all",'null')),
-        $f_body := xs:string(request:get-parameter("f_b",'null')),
-        $f_docno := xs:string(request:get-parameter("f_d",'null')),
-        $f_title := xs:string(request:get-parameter("f_t",'null'))            
+        $type := xs:string(request:get-parameter("type",'bill')),
+        $search-filter := cmn:get-searchins-config($type),
+        $filter_names := fn:tokenize(request:get-parameter-names(),'\s+')
+        (:$filter_names := fn:tokenize('f_b f_t s q','\s+') !+DEBUG_WITH_test.xql:)
     
     return
-        if ($f_all = 'all') then (
-            (:~ 
-                There are special characters for Lucene that we have to escape 
-                incase they form part of the user's search input. More on this...
-               
-                http://sewm.pku.edu.cn/src/other/clucene/doc/queryparsersyntax.html
-                http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
-            :)
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-            
-            for $search-rs in $sort-rs//bu:legislativeItem[ft:query(., $escaped)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )
-        else if ($f_body = 'body') then (
+        (: 
+            There are special characters for Lucene that we have to escape 
+            incase they form part of the user's search input. More on this...
+           
+            http://sewm.pku.edu.cn/src/other/clucene/doc/queryparsersyntax.html
+            http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
+        :)
         
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-                    
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:body[ft:query(., $escaped)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )
-        else if ($f_docno = 'docno') then (
+        let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')  
+        
+        (: Loop the number of count we have for get-parameters() :)
+        for $token in $filter_names 
+            (: Loop the number of times we have <searchins> in ui-config :)
+            for $searchins in $search-filter
+                return
+                    let $search-str := if ($token eq $searchins/@name) then string-join($searchins/@field, ", ") else ()
+        
+        for $search-rs in $sort-rs//bu:legislativeItem[ft:query((bu:shortName), $escaped)]
+        order by ft:score($search-rs) descending
             
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-                        
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:registryNumber[ft:query(., $escaped)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )
-        else (
+        return
+            (:<params>{$search-str}</params> !+DEBUG_WITH_test.xql:)
+            $search-rs/ancestor::bu:ontology        
+};
 
-            let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-            
-            for $search-rs in $sort-rs//bu:legislativeItem/bu:shortName[ft:query(., $querystr)]
-            order by ft:score($search-rs) descending
-            return $search-rs/ancestor::bu:ontology    
-            )         
+declare function local:join-strings($strings)
+{
+  concat($strings[1], ", ", local:join-strings(substring($strings,2)))
 };
 
 declare function local:rewrite-search-form($tmpl as element(), $type as xs:string)  {

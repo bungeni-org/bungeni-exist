@@ -11,6 +11,7 @@
                 <ignore qname="bu:signatories"/>
             </text>
             <text match="//bu:legislativeItem"/>
+            <text match="//bu:legislativeItem/@uri"/>
             <text match="//bu:legislativeItem/bu:shortName"/>
             <text match="//bu:legislativeItem/bu:body"/>
             <text match="//bu:legislativeItem/bu:registryNumber"/>

@@ -153,6 +153,60 @@ declare function cmn:get-acl-filter($filter-name as xs:string) as xs:string {
 
 
 (:~
+
+Retrieve the permissinos for a filter name 'public-view', 'authenticated-view'
+   <acl-groups>
+        <acl name="public-view" condition="@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow'" />
+        <acl name="authenticated-view" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'" />
+    </acl-groups>
+
+:)
+
+declare function cmn:get-acl-group($filter-name as xs:string) {
+      let $acl-group := cmn:get-ui-config()/ui/acl-groups/acl[@name eq $filter-name]
+      return 
+        if ($acl-group) then (
+            $acl-group
+          )
+        else
+            ()
+};
+
+declare function cmn:get-acl-filter($filter-name as xs:string) as xs:string {
+    let $acl-group := cmn:get-acl-group($filter-name)
+    return 
+        if ($acl-group) then 
+            (: Axis not used currently :)
+            (: concat($acl-group/@axis, '[', $acl-group/@condition, ']') :)
+            data($acl-group/@condition)
+         else
+            xs:string("")
+};
+
+(:
+(:~
+:Gets the permission nodes for a named acl
+:)
+declare function cmn:get-acl-permissions($filter-name as xs:string) as node()+{
+    let $acl-group := cmn:get-acl-group($filter-name)
+    return
+        if ($acl-group) then
+            $acl-group/permission
+        else
+            ()
+};
+
+
+(:~
+: Returns the permission as a attributed string
+:)
+declare function cmn:get-acl-permission-attr($permission as node()) {
+    fn:concat("@name='",$permission/@name, "' and ", "@role='", $permission/@role, "' and ", "@setting='",$permission/@setting, "'")             
+};  
+
+:)
+
+(:~
 Loads an XSLT file 
 :)
 declare function cmn:get-xslt($value as xs:string) as document-node() {

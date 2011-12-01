@@ -699,21 +699,81 @@ declare function bun:get-reference($docitem as node()) {
     </document>     
 };
 
+
+(:~
+:
+: The following are query builder functions for generating the document access query
+: It supports applying of ACLs
+:
+:)
+(:
+declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
+    fn:concat(
+        "collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri='", 
+        $uri, 
+        "']")
+};
+
+declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
+    let $acl-permissions := cmn:get-acl-permissions($acl)
+    (:
+    : Regarding (bu:permissions except bu:versions) 
+    : see : 
+    : "XQuery wrong xpath resolution bug"
+    : <http://sourceforge.net/mailarchive/forum.php?thread_name=CAPoZz4TDjD1B1JqJOKF9z%3DWFGO%3D1xVVg5xo_ksc8y5H66hGNag%40mail.gmail.com&forum_name=exist-open>
+    :)
+    return fn:concat(
+        "(bu:permissions except bu:versions)/bu:permission[", 
+        cmn:get-acl-permission-attr($acl-permissions), 
+        "]")
+};
+
+declare function bun:xqy-docitem-ancestor-root() as xs:string{
+    xs:string("ancestor::bu:ontology")
+};
+
+declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) as xs:string {
+    fn:concat(
+        bun:xqy-docitem-uri($uri), 
+        "/", 
+        bun:xqy-docitem-perms($acl),
+        "/",
+        bun:xqy-docitem-ancestor-root()
+        )
+};
+
+
 (:~
 Get document with ACL filter
 :)
-declare function bun:documentitem-with-acl($acl as xs:string, $docid as xs:string) {
-    let $acl-filter := cmn:get-acl-filter($acl)
-    let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/(bu:permissions except bu:versions)/bu:permission[$acl-filter]/ancestor::bu:ontology
-    return bun:documentitem-versions-with-acl($acl-filter, $match)
+declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string) {
+    let $acl-permissions := cmn:get-acl-permissions($acl)
+    let $match := util:eval(bun:xqy-docitem-acl-uri($acl, $uri))
+    (:
+    let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/
+            (bu:permissions except bu:versions)/bu:permission[@name=$acl-permissions/@name and 
+                                                              @role=$acl-permissions/@role and 
+                                                              @setting=$acl-permissions/@setting]/ancestor::bu:ontology
+    :)
+    return bun:documentitem-versions-with-acl($acl-permissions, $match)
+    
 };
 
 (:~
 Remove Versions to which we dont have access
 :)
-declare function bun:documentitem-versions-with-acl($acl-filter as xs:string, $docitem as node() ) {
+declare function bun:documentitem-versions-with-acl($acl-permissions as node(), $docitem as node() ) {
   if ($docitem/self::bu:version) then
-        if ($docitem//bu:permission[$acl-filter]) then
+        if ($docitem/bu:permissions/bu:permission[
+            (:
+                @name=data($acl-permissions/@name) and 
+                @role=data($acl-permissions/@role) and 
+                @setting=data($acl-permissions/@setting)
+             :)
+                @name='zope.View' and 
+                @role='bungeni.Anonymous' and 
+                @setting='Allow'
+                ]) then
             $docitem
         else
             ()
@@ -725,11 +785,11 @@ declare function bun:documentitem-versions-with-acl($acl-filter as xs:string, $d
 		  		 {$docitem/@*, 
 					for $child in $docitem/node()
 						return if ($child instance of element())
-							   then bun:documentitem-versions-with-acl($acl-filter, $child)
+							   then bun:documentitem-versions-with-acl($acl-permissions, $child)
 							   else $child
 				 }
 };
-
+:)
 declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)

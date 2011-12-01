@@ -12,9 +12,6 @@
     <resource type="BinaryResource" name="bungeni-logo.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="bungeni-logo.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="down.png" owner="admin" group="dba" mode="644" created="2011-11-28T10:25:44+03:00" modified="2011-11-28T10:25:44+03:00" filename="down.png" mimetype="image/png">
-        <acl entries="0" version="1"/>
-    </resource>
     <resource type="BinaryResource" name="download.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="download.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
@@ -67,9 +64,6 @@
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="subnav_btn.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="subnav_btn.gif" mimetype="image/gif">
-        <acl entries="0" version="1"/>
-    </resource>
-    <resource type="BinaryResource" name="up.png" owner="admin" group="dba" mode="644" created="2011-11-28T10:25:45+03:00" modified="2011-11-28T10:25:45+03:00" filename="up.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="vdockbar-trans.gif" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="vdockbar-trans.gif" mimetype="image/gif">

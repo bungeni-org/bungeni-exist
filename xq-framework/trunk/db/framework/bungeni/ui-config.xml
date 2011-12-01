@@ -645,8 +645,9 @@
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin value="title">Title</searchin>
-                <searchin value="body">Body</searchin>
+                <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="question">
@@ -657,9 +658,9 @@
                 <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="f_t" value="title" default="true">Title</searchin>
-                <searchin name="f_b" value="body">Body</searchin>
-                <searchin name="f_d" value="docno">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="motion">

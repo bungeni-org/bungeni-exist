@@ -85,104 +85,105 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <div style="color:#0085BE;display:inline;">Page <xsl:value-of select="$pwhere"/> of <xsl:value-of select="$pages"/>
-            </div>            
-            
-            <!-- This serves the purpose of showing 'First' page link -->
-            <xsl:choose>
-                <!-- If the current page is page 1 , we dont render anything -->
-                <xsl:when test="$pwhere eq 1">
-                    <a title="Beginning" class="disabled">
-                        <xsl:text>«</xsl:text>
-                    </a>
-                </xsl:when>
-                <xsl:otherwise>
-                    <a title="Beginning">
-                        <xsl:attribute name="href">
-                            <xsl:text>?type=</xsl:text>
-                            <xsl:value-of select="$documentType"/>
-                            <xsl:text>&amp;q=</xsl:text>
-                            <xsl:value-of select="$searchString"/>
-                            <xsl:text>&amp;s=</xsl:text>
-                            <xsl:value-of select="$sortBy"/>
-                            <xsl:text>&amp;offset=</xsl:text>
-                            <xsl:value-of select="0"/>
-                            <xsl:text>&amp;limit=</xsl:text>
-                            <xsl:value-of select="$limit"/>
-                        </xsl:attribute>
-                        <xsl:text>«</xsl:text>
-                    </a>
-                </xsl:otherwise>
-            </xsl:choose>
-            
-            <!-- if is first page then set previous link a disabled, otherwise linked... -->
-            <xsl:choose>
-                <!-- If in the first page dont link back -->
-                <xsl:when test="$pwhere eq 1">
-                    <a class="disabled">
-                        <xsl:text>‹</xsl:text>
-                    </a>
-                </xsl:when>
-                <xsl:otherwise>
-                    <a title="Previous Page">
-                        <xsl:attribute name="href">
-                            <xsl:text>?type=</xsl:text>
-                            <xsl:value-of select="$documentType"/>
-                            <xsl:text>&amp;q=</xsl:text>
-                            <xsl:value-of select="$searchString"/>
-                            <xsl:text>&amp;s=</xsl:text>
-                            <xsl:value-of select="$sortBy"/>
-                            <xsl:text>&amp;offset=</xsl:text>
-                            <xsl:value-of select="$offset - $limit"/>
-                            <xsl:text>&amp;limit=</xsl:text>
-                            <xsl:value-of select="$limit"/>
-                        </xsl:attribute>
-                        <xsl:text>‹</xsl:text>
-                    </a>
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- 
-                manually set to show 5 page-links per page 
-                group, group-left and group-right an integer, 5, which eventually
-                can be factored into a user-configuration to be adjusted at user's discretion.
-            -->
-            <xsl:variable name="group" select="floor($offset div (5 * $limit))"/>
-            <!-- Calculate boundary-point while there are more pages to show on right -->
-            <xsl:variable name="group-left" select="($group+1)*5"/>
-            <!-- Calculate boundary to now show the available pages on the right -->
-            <xsl:variable name="group-right" select="($group*5)+1"/>
-            <!-- DEBUG
-            <span>;;<xsl:value-of select="$group"></xsl:value-of> ,</span>
-            <span><xsl:value-of select="$group-left"></xsl:value-of> (group-left),</span>
-            <span><xsl:value-of select="$group-right"></xsl:value-of>(group-right) ,</span>
-            <span><xsl:value-of select="$pages"></xsl:value-of>(pages) ,</span>
-            -->
-            <xsl:choose>
-                <xsl:when test="$pages &lt;= $group-left">
-                    <xsl:call-template name="generate-paginator">
-                        <xsl:with-param name="i" select="$group-right"/>
-                        <xsl:with-param name="pages" select="$pages"/>
-                        <xsl:with-param name="count" select="$count"/>
-                        <xsl:with-param name="offset" select="$offset"/>
-                        <xsl:with-param name="limit" select="$limit"/>
-                        <xsl:with-param name="documentType" select="$documentType"/>
-                        <xsl:with-param name="searchString" select="$searchString"/>
-                        <xsl:with-param name="sortBy" select="$sortBy"/>
-                    </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="generate-paginator">
-                        <xsl:with-param name="i" select="$group-right"/>
-                        <xsl:with-param name="pages" select="$group-left"/>
-                        <xsl:with-param name="count" select="$count"/>
-                        <xsl:with-param name="offset" select="$offset"/>
-                        <xsl:with-param name="limit" select="$limit"/>
-                        <xsl:with-param name="documentType" select="$documentType"/>
-                        <xsl:with-param name="searchString" select="$searchString"/>
-                        <xsl:with-param name="sortBy" select="$sortBy"/>
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
+            <div id="page-state" class="page-state">Page <xsl:value-of select="$pwhere"/> of <xsl:value-of select="$pages"/>
+            </div>
+            <div id="paginate-pages" class="inline">
+                <!-- This serves the purpose of showing 'First' page link -->
+                <xsl:choose>
+                    <!-- If the current page is page 1 , we dont render anything -->
+                    <xsl:when test="$pwhere eq 1">
+                        <a title="Beginning" class="disabled">
+                            <xsl:text>«</xsl:text>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <a title="Beginning">
+                            <xsl:attribute name="href">
+                                <xsl:text>?type=</xsl:text>
+                                <xsl:value-of select="$documentType"/>
+                                <xsl:text>&amp;q=</xsl:text>
+                                <xsl:value-of select="$searchString"/>
+                                <xsl:text>&amp;s=</xsl:text>
+                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>&amp;offset=</xsl:text>
+                                <xsl:value-of select="0"/>
+                                <xsl:text>&amp;limit=</xsl:text>
+                                <xsl:value-of select="$limit"/>
+                            </xsl:attribute>
+                            <xsl:text>«</xsl:text>
+                        </a>
+                    </xsl:otherwise>
+                </xsl:choose>
+                
+                <!-- if is first page then set previous link a disabled, otherwise linked... -->
+                <xsl:choose>
+                    <!-- If in the first page dont link back -->
+                    <xsl:when test="$pwhere eq 1">
+                        <a class="disabled">
+                            <xsl:text>‹</xsl:text>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <a title="Previous Page">
+                            <xsl:attribute name="href">
+                                <xsl:text>?type=</xsl:text>
+                                <xsl:value-of select="$documentType"/>
+                                <xsl:text>&amp;q=</xsl:text>
+                                <xsl:value-of select="$searchString"/>
+                                <xsl:text>&amp;s=</xsl:text>
+                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>&amp;offset=</xsl:text>
+                                <xsl:value-of select="$offset - $limit"/>
+                                <xsl:text>&amp;limit=</xsl:text>
+                                <xsl:value-of select="$limit"/>
+                            </xsl:attribute>
+                            <xsl:text>‹</xsl:text>
+                        </a>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <!-- 
+                    manually set to show 5 page-links per page 
+                    group, group-left and group-right an integer, 5, which eventually
+                    can be factored into a user-configuration to be adjusted at user's discretion.
+                -->
+                <xsl:variable name="group" select="floor($offset div (5 * $limit))"/>
+                <!-- Calculate boundary-point while there are more pages to show on right -->
+                <xsl:variable name="group-left" select="($group+1)*5"/>
+                <!-- Calculate boundary to now show the available pages on the right -->
+                <xsl:variable name="group-right" select="($group*5)+1"/>
+                <!-- DEBUG
+                <span>;;<xsl:value-of select="$group"></xsl:value-of> ,</span>
+                <span><xsl:value-of select="$group-left"></xsl:value-of> (group-left),</span>
+                <span><xsl:value-of select="$group-right"></xsl:value-of>(group-right) ,</span>
+                <span><xsl:value-of select="$pages"></xsl:value-of>(pages) ,</span>
+                -->
+                <xsl:choose>
+                    <xsl:when test="$pages &lt;= $group-left">
+                        <xsl:call-template name="generate-paginator">
+                            <xsl:with-param name="i" select="$group-right"/>
+                            <xsl:with-param name="pages" select="$pages"/>
+                            <xsl:with-param name="count" select="$count"/>
+                            <xsl:with-param name="offset" select="$offset"/>
+                            <xsl:with-param name="limit" select="$limit"/>
+                            <xsl:with-param name="documentType" select="$documentType"/>
+                            <xsl:with-param name="searchString" select="$searchString"/>
+                            <xsl:with-param name="sortBy" select="$sortBy"/>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="generate-paginator">
+                            <xsl:with-param name="i" select="$group-right"/>
+                            <xsl:with-param name="pages" select="$group-left"/>
+                            <xsl:with-param name="count" select="$count"/>
+                            <xsl:with-param name="offset" select="$offset"/>
+                            <xsl:with-param name="limit" select="$limit"/>
+                            <xsl:with-param name="documentType" select="$documentType"/>
+                            <xsl:with-param name="searchString" select="$searchString"/>
+                            <xsl:with-param name="sortBy" select="$sortBy"/>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
             <!-- 
                 Determines whether it's sound to show or not to show 'Next' 
                 based on whether we have insufficient pages-count or we are

@@ -15,6 +15,13 @@
         <!-- The paginator expects a document with the following -->
         
         <!-- 
+            search by title by of page (for search) 
+        -->
+        <xsl:variable name="f_title">
+            <xsl:value-of select="./fullQryStr"/>
+        </xsl:variable>        
+        
+        <!-- 
             the sort by of page (for search) 
         -->
         <xsl:variable name="sortBy">
@@ -59,6 +66,10 @@
             -->
         <div id="paginator" class="paginate" align="right">
             
+            <!--span>
+                <xsl:value-of select="$f_title" />
+            </span-->
+            
             <!-- DEBUG
             <span><xsl:value-of select="$count"></xsl:value-of>,</span>
             <span><xsl:value-of select="$limit"></xsl:value-of>,</span>
@@ -101,6 +112,8 @@
                             <xsl:attribute name="href">
                                 <xsl:text>?type=</xsl:text>
                                 <xsl:value-of select="$documentType"/>
+                                <xsl:text>&amp;f_t=</xsl:text>
+                                <xsl:value-of select="$f_title"/>
                                 <xsl:text>&amp;q=</xsl:text>
                                 <xsl:value-of select="$searchString"/>
                                 <xsl:text>&amp;s=</xsl:text>
@@ -128,6 +141,8 @@
                             <xsl:attribute name="href">
                                 <xsl:text>?type=</xsl:text>
                                 <xsl:value-of select="$documentType"/>
+                                <xsl:text>&amp;f_t=</xsl:text>
+                                <xsl:value-of select="$f_title"/>
                                 <xsl:text>&amp;q=</xsl:text>
                                 <xsl:value-of select="$searchString"/>
                                 <xsl:text>&amp;s=</xsl:text>
@@ -168,6 +183,7 @@
                             <xsl:with-param name="documentType" select="$documentType"/>
                             <xsl:with-param name="searchString" select="$searchString"/>
                             <xsl:with-param name="sortBy" select="$sortBy"/>
+                            <xsl:with-param name="f_title" select="$f_title"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
@@ -180,6 +196,7 @@
                             <xsl:with-param name="documentType" select="$documentType"/>
                             <xsl:with-param name="searchString" select="$searchString"/>
                             <xsl:with-param name="sortBy" select="$sortBy"/>
+                            <xsl:with-param name="f_title" select="$f_title"/>
                         </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -200,6 +217,8 @@
                         <xsl:attribute name="href">
                             <xsl:text>?type=</xsl:text>
                             <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;f_t=</xsl:text>
+                            <xsl:value-of select="$f_title"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
                             <xsl:text>&amp;s=</xsl:text>
@@ -226,6 +245,8 @@
                         <xsl:attribute name="href">
                             <xsl:text>?type=</xsl:text>
                             <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;f_t=</xsl:text>
+                            <xsl:value-of select="$f_title"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
                             <xsl:text>&amp;s=</xsl:text>
@@ -260,6 +281,7 @@
         <xsl:param name="documentType"/>
         <xsl:param name="searchString"/>
         <xsl:param name="sortBy"/>
+        <xsl:param name="f_title"/>
         <!-- DEBUG
         <span>i=<xsl:value-of select="$i" />,</span>
         <span>limi=<xsl:value-of select="$limit" />,</span>
@@ -281,6 +303,8 @@
                         <xsl:attribute name="href">
                             <xsl:text>?type=</xsl:text>
                             <xsl:value-of select="$documentType"/>
+                            <xsl:text>&amp;f_t=</xsl:text>
+                            <xsl:value-of select="$f_title"/>
                             <xsl:text>&amp;q=</xsl:text>
                             <xsl:value-of select="$searchString"/>
                             <xsl:text>&amp;s=</xsl:text>
@@ -309,6 +333,7 @@
                 <xsl:with-param name="documentType" select="$documentType"/>
                 <xsl:with-param name="searchString" select="$searchString"/>
                 <xsl:with-param name="sortBy" select="$sortBy"/>
+                <xsl:with-param name="f_title" select="$f_title"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>

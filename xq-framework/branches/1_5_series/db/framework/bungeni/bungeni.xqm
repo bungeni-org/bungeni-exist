@@ -73,21 +73,27 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
 
 
 declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
-    let $acl-filter := cmn:get-acl-filter($acl)
+    let $eval-query := bun:xqy-list-documentitems-with-acl($acl, $type)
+    return
+        util:eval($eval-query)
+        (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
+};
+
+declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
+  let $acl-filter := cmn:get-acl-filter($acl)
     
     (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
     make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
-    
-    let $eval-query := fn:concat("collection('",cmn:get-lex-db() ,"')",
+  return  
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
                                     "/bu:ontology[@type='document']",
                                     "/bu:document[@type='",$type,"']",
                                     "/following-sibling::bu:legislativeItem",
                                     "/(bu:permissions except bu:versions)",
                                     "/bu:permission[",$acl-filter,"]",
                                     "/ancestor::bu:ontology")
-    return
-        util:eval($eval-query)
-        (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
+  
+
 };
 
 declare function bun:get-documentitems(
@@ -229,6 +235,18 @@ declare function bun:search-legislative-items(
         bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
 };
 
+declare function local:generate-qry-str($getqrystr) {
+        let $tokened := tokenize($getqrystr,'&amp;'),
+            $loop := 0
+            
+        for $toks in $tokened 
+            return
+                if (contains($toks,"offset") or contains($toks,"limit")) then (
+                    remove($tokened,index-of($tokened,$toks))
+                )
+                else ()
+};
+
 declare function bun:search-documentitems(
             $acl as xs:string,
             $type as xs:string,
@@ -242,10 +260,11 @@ declare function bun:search-documentitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:list-documentitems-with-acl($acl, $type)
+    let $coll_rs := bun:xqy-list-documentitems-with-acl($acl, $type)
+    let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr) else $coll_rs
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else $coll_rs
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -265,6 +284,7 @@ declare function bun:search-documentitems(
              }</count>
             <documentType>{$type}</documentType>
             <searchString>{$querystr}</searchString>
+            <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <sortBy>{$sortby}</sortBy>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
             <offset>{$offset}</offset>
@@ -320,15 +340,9 @@ declare function bun:search-documentitems(
            )
 };
 declare function bun:ft-search(
-            $sort-rs as element()+, 
-            $querystr as xs:string) as element()* {
-    let
-        $type := xs:string(request:get-parameter("type",'bill')),
-        $search-filter := cmn:get-searchins-config($type),
-        $filter_names := fn:tokenize(request:get-parameter-names(),'\s+')
-        (:$filter_names := fn:tokenize('f_b f_t s q','\s+') !+DEBUG_WITH_test.xql:)
-    
-    return
+            $sort-rs as xs:string, 
+            $querystr as xs:string,
+            $type as xs:string) as element()* {
         (: 
             There are special characters for Lucene that we have to escape 
             incase they form part of the user's search input. More on this...
@@ -337,26 +351,33 @@ declare function bun:ft-search(
             http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
         :)
         
-        let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')  
-        
-        (: Loop the number of count we have for get-parameters() :)
+        let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
+            $ultimate-path := local:build-search-objects($type),
+            $eval-query := concat($sort-rs,"//bu:legislativeItem[ft:query((",$ultimate-path,"), '",$escaped,"')]")
+            
+        for $search-rs in util:eval($eval-query)
+        order by ft:score($search-rs) descending
+            
+        return
+            (:<params>{$ultimate-path}</params> !+DEBUG_WITH_test.xql:)
+            $search-rs/ancestor::bu:ontology        
+};
+
+declare function local:build-search-objects($type as xs:string) {
+    
+  let 
+    $search-filter := cmn:get-searchins-config($type),
+    $filter_names := request:get-parameter-names()
+    (:$filter_names := fn:tokenize('f_t f_b s q','\s+') !+DEBUG_WITH_test.xql:)
+  
+    let $list := 
         for $token in $filter_names 
             (: Loop the number of times we have <searchins> in ui-config :)
             for $searchins in $search-filter
                 return
-                    let $search-str := if ($token eq $searchins/@name) then string-join($searchins/@field, ", ") else ()
-        
-        for $search-rs in $sort-rs//bu:legislativeItem[ft:query((bu:shortName), $escaped)]
-        order by ft:score($search-rs) descending
-            
-        return
-            (:<params>{$search-str}</params> !+DEBUG_WITH_test.xql:)
-            $search-rs/ancestor::bu:ontology        
-};
-
-declare function local:join-strings($strings)
-{
-  concat($strings[1], ", ", local:join-strings(substring($strings,2)))
+                    if ($token eq $searchins/@name) then $searchins/@field else ()
+    return 
+      string-join($list, ",")
 };
 
 declare function local:rewrite-search-form($tmpl as element(), $type as xs:string)  {
@@ -397,20 +418,7 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
             element li {
                 attribute class { "sb_filter" },
                 "Filter your search"
-            },
-            element li {
-                    element input {
-                        attribute type { "checkbox" },
-                        attribute name { "all" },
-                        attribute value { "on" }
-                    },
-                    element label {
-                        attribute for { "all" },
-                        element b {
-                            "Entire Document"
-                        }
-                    }
-            },   
+            },  
             (: End of Default items :)
             for $searchins in $search-filter
             return
@@ -428,9 +436,14 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
                         attribute name { $searchins/@name },
                         $searchins/@value
                     },
-                    element label {
+                    element label { 
                         attribute for { $searchins/@value},
-                        $searchins/text()
+                         if($searchins/@name eq 'all') then 
+                            element b {
+                                $searchins/text()
+                            }
+                         else
+                            $searchins/text()    
                     }
                 }
           }

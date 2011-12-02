@@ -130,15 +130,23 @@ $(document).ready(function () {
 	var $ui = $('#ui_search');
 
 	/**
-	* selecting all checkboxes
+	* selecting all checkboxes and also ensure atleast a checkbox is checked (pun intented)
 	*/
 	$ui.find('.sb_dropdown').find('label[for="all"]').prev().bind('click',function(){
-		$(this).parent().siblings().find(':checkbox').attr('checked',this.checked).attr('disabled',this.checked);
-	});
+	   if(this.checked == false)
+	       $(this).parent().siblings().find(':checkbox').attr('checked',true).attr('disabled',this.checked);
+	   else
+	       $(this).parent().siblings().find(':checkbox').attr('checked',this.checked).attr('disabled',this.checked);
+	});		
 	
+	/*
+	* If any other checkbox is checked (pun), then make sure its siblings aren't... !+UNCOMMENT_TO_ENABLE
+	*/
+	/*
 	$ui.find('.sb_dropdown').find('label[for!="all"]').prev().bind('click',function(){
 		$(this).parent().siblings().find(':checkbox').attr('checked',false);
-	});	
+	});
+	*/	
 
     $(".dropdown dt a").click(function() {
         $(".dropdown dd ul").toggle();

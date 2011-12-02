@@ -9,8 +9,8 @@ import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
 
 
 
-let $coll_rs := bun:list-documentitems-with-acl("public-view", "bill"),
-    $coll := bun:ft-search($coll_rs,"Bill OR clerk AND P1_01")
+let $coll_rs := bun:xqy-list-documentitems-with-acl("public-view", "question"),
+    $coll := bun:ft-search($coll_rs,"text","question")
 return 
     <batch>
     {

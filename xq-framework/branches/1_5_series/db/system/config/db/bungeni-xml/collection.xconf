@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/">
+        <!-- Old full text index configuration. Deprecated. -->
+        <fulltext default="none" attributes="no"/>
+        <!-- New full text index based on Lucene -->
+        <lucene>
+            <analyzer id="sa" class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+            <analyzer id="ws" class="org.apache.lucene.analysis.WhitespaceAnalyzer"/>
+            <text qname="bu:ontology">
+                <ignore qname="bu:signatories"/>
+            </text>
+            <text match="//bu:legislativeItem"/>
+            <text match="//bu:legislativeItem/@uri"/>
+            <text match="//bu:legislativeItem/bu:shortName"/>
+            <text match="//bu:legislativeItem/bu:body"/>
+            <text match="//bu:legislativeItem/bu:registryNumber"/>
+            <text match="//bu:legislativeItem/bu:publicationDate"/>
+        </lucene>
+        <create path="//bu:legislativeItem/@uri" type="xs:string"/>
+        <create path="//bu:document/@type" type="xs:string"/>
+        <create path="//bu:bungeni/bu:parliament/@date" type="xs:date"/>
+    </index>
+</collection>

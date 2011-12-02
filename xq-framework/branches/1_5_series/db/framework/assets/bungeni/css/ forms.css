@@ -1,0 +1,14 @@
+
+.form-search input.text {
+    width:220px;
+    font-family: "Times New Roman", sans-serif, Arial;
+    visibility: visible;
+    color: black;
+    vertical-align: top;
+    font-size: 1em;
+    
+	background: #FCFCFC;
+	border: 1px inset #AAA;
+	margin: 0.5em 0;
+	padding: 4px 5px;    
+}

@@ -1,0 +1,5 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/get" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" version="1">
+    <resource type="BinaryResource" name="get-debug.js" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="get-debug.js" mimetype="application/x-javascript"/>
+    <resource type="BinaryResource" name="get-min.js" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="get-min.js" mimetype="application/x-javascript"/>
+    <resource type="BinaryResource" name="get.js" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:11+03:00" modified="2011-11-23T10:48:11+03:00" filename="get.js" mimetype="application/x-javascript"/>
+</collection>

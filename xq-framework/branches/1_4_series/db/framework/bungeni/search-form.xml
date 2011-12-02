@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" id="search-form">
+    <form method="GET" action="search" id="ui_search" name="search_sort" autocomplete="off">
+        <input type="hidden" id="doc_type" name="type" value=""/>
+        <label class="search_for" for="search_for">Search text:&#160;</label>
+        <dl id="sb_box" class="dropdown">
+            <dt>
+                <input id="search_for" name="q" class="search_for" type="text" value=""/>
+                <a class="inline" href="#"/>
+            </dt>
+            <dd>
+                <ul id="filter_by" class="sb_dropdown">
+                    <li class="sb_filter">Filter your search</li>
+                    <li>
+                        <input type="checkbox" name="all" value="on"/>
+                        <label for="all">
+                            <b>Entire Document</b>
+                        </label>
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+        <div class="inline">
+            <label for="search_in">sort by:</label>
+            <select name="s" id="sort_by">
+                <option value=""/>
+            </select>
+            <input value="search" type="submit"/>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,291 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/kenyalex/0-100" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:29+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="XMLResource" name="00001.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:37+03:00" modified="2010-11-03T15:30:37+03:00" filename="00001.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00002.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:36+03:00" modified="2010-11-03T15:30:36+03:00" filename="00002.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00003.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:44+03:00" modified="2010-11-03T15:30:44+03:00" filename="00003.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00004.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:31+03:00" modified="2010-11-03T15:30:31+03:00" filename="00004.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00005.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:48+03:00" modified="2010-11-03T15:30:48+03:00" filename="00005.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00006.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:54+03:00" modified="2010-11-03T15:30:54+03:00" filename="00006.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00007.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:31+03:00" modified="2010-11-03T15:30:31+03:00" filename="00007.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00008.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:58+03:00" modified="2010-11-03T15:30:58+03:00" filename="00008.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00010.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:56+03:00" modified="2010-11-03T15:30:56+03:00" filename="00010.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00011.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:58+03:00" modified="2010-11-03T15:30:58+03:00" filename="00011.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00012.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:37+03:00" modified="2010-11-03T15:30:37+03:00" filename="00012.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00013.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:32+03:00" modified="2010-11-03T15:30:32+03:00" filename="00013.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00014.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:36+03:00" modified="2010-11-03T15:30:36+03:00" filename="00014.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00015.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:45+03:00" modified="2010-11-03T15:30:45+03:00" filename="00015.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00016.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:40+03:00" modified="2010-11-03T15:30:40+03:00" filename="00016.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00017.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:46+03:00" modified="2010-11-03T15:30:46+03:00" filename="00017.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00018.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:44+03:00" modified="2010-11-03T15:30:44+03:00" filename="00018.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00019.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:37+03:00" modified="2010-11-03T15:30:37+03:00" filename="00019.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00020.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:35+03:00" modified="2010-11-03T15:30:35+03:00" filename="00020.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00021.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:43+03:00" modified="2010-11-03T15:30:43+03:00" filename="00021.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00022.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:43+03:00" modified="2010-11-03T15:30:43+03:00" filename="00022.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00023.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:51+03:00" modified="2011-01-24T21:36:58+03:00" filename="00023.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00024.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:29+03:00" modified="2010-11-03T15:30:29+03:00" filename="00024.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00025.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:55+03:00" modified="2010-11-03T15:30:55+03:00" filename="00025.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00026.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:44+03:00" modified="2010-11-03T15:30:44+03:00" filename="00026.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00027.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:53+03:00" modified="2010-11-03T15:30:53+03:00" filename="00027.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00028.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:53+03:00" modified="2010-11-03T15:30:53+03:00" filename="00028.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00029.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:39+03:00" modified="2010-11-03T15:30:39+03:00" filename="00029.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00030.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:56+03:00" modified="2010-11-03T15:30:56+03:00" filename="00030.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00031.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:57+03:00" modified="2010-11-03T15:30:57+03:00" filename="00031.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00032.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:48+03:00" modified="2010-11-03T15:30:48+03:00" filename="00032.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00033.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:47+03:00" modified="2010-11-03T15:30:47+03:00" filename="00033.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00034.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:51+03:00" modified="2010-11-03T15:30:51+03:00" filename="00034.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00035.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:56+03:00" modified="2010-11-03T15:30:56+03:00" filename="00035.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00036.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:41+03:00" modified="2010-11-03T15:30:41+03:00" filename="00036.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00037.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:45+03:00" modified="2010-11-03T15:30:45+03:00" filename="00037.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00038.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:56+03:00" modified="2010-11-03T15:30:56+03:00" filename="00038.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00039.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:57+03:00" modified="2010-11-03T15:30:57+03:00" filename="00039.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00040.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:39+03:00" modified="2010-11-03T15:30:39+03:00" filename="00040.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00041.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:38+03:00" modified="2010-11-03T15:30:38+03:00" filename="00041.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00042.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:58+03:00" modified="2010-11-03T15:30:58+03:00" filename="00042.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00043.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:56+03:00" modified="2010-11-03T15:30:56+03:00" filename="00043.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00044.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:37+03:00" modified="2010-11-03T15:30:37+03:00" filename="00044.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00045.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:56+03:00" modified="2010-11-03T15:30:56+03:00" filename="00045.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00046.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:47+03:00" modified="2010-11-03T15:30:47+03:00" filename="00046.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00047.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:45+03:00" modified="2010-11-03T15:30:45+03:00" filename="00047.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00048.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:35+03:00" modified="2010-11-03T15:30:35+03:00" filename="00048.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00049.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:43+03:00" modified="2010-11-03T15:30:43+03:00" filename="00049.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00050.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:39+03:00" modified="2010-11-03T15:30:39+03:00" filename="00050.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00052.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:41+03:00" modified="2010-11-03T15:30:41+03:00" filename="00052.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00053.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:38+03:00" modified="2010-11-03T15:30:38+03:00" filename="00053.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00054.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:40+03:00" modified="2010-11-03T15:30:40+03:00" filename="00054.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00055.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:58+03:00" modified="2010-11-03T15:30:58+03:00" filename="00055.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00056.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:36+03:00" modified="2010-11-03T15:30:36+03:00" filename="00056.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00057.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:52+03:00" modified="2010-11-03T15:30:52+03:00" filename="00057.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00058.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:48+03:00" modified="2010-11-03T15:30:48+03:00" filename="00058.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00059.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:40+03:00" modified="2010-11-03T15:30:40+03:00" filename="00059.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00060.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:37+03:00" modified="2010-11-03T15:30:37+03:00" filename="00060.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00061.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:41+03:00" modified="2010-11-03T15:30:41+03:00" filename="00061.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00062.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:46+03:00" modified="2010-11-03T15:30:46+03:00" filename="00062.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00063.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:54+03:00" modified="2010-11-03T15:30:54+03:00" filename="00063.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00064.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:46+03:00" modified="2010-11-03T15:30:46+03:00" filename="00064.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00065.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:36+03:00" modified="2010-11-03T15:30:36+03:00" filename="00065.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00066.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:35+03:00" modified="2010-11-03T15:30:35+03:00" filename="00066.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00067.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:46+03:00" modified="2010-11-03T15:30:46+03:00" filename="00067.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00068.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:36+03:00" modified="2010-11-03T15:30:36+03:00" filename="00068.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00069.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:47+03:00" modified="2010-11-03T15:30:47+03:00" filename="00069.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00070.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:43+03:00" modified="2010-11-03T15:30:43+03:00" filename="00070.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00071.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:39+03:00" modified="2010-11-03T15:30:39+03:00" filename="00071.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00072.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:31+03:00" modified="2010-11-03T15:30:31+03:00" filename="00072.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00073.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:30+03:00" modified="2010-11-03T15:30:30+03:00" filename="00073.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00074.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:51+03:00" modified="2010-11-03T15:30:51+03:00" filename="00074.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00075.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:31+03:00" modified="2010-11-03T15:30:31+03:00" filename="00075.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00076.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:35+03:00" modified="2010-11-03T15:30:35+03:00" filename="00076.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00077.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:44+03:00" modified="2010-11-03T15:30:44+03:00" filename="00077.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00078.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:47+03:00" modified="2010-11-03T15:30:47+03:00" filename="00078.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00079.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:57+03:00" modified="2010-11-03T15:30:57+03:00" filename="00079.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00080.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:38+03:00" modified="2010-11-03T15:30:38+03:00" filename="00080.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00081.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:54+03:00" modified="2010-11-03T15:30:54+03:00" filename="00081.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00082.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:38+03:00" modified="2010-11-03T15:30:38+03:00" filename="00082.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00083.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:53+03:00" modified="2010-11-03T15:30:53+03:00" filename="00083.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00084.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:38+03:00" modified="2010-11-03T15:30:38+03:00" filename="00084.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00085.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:33+03:00" modified="2010-11-03T15:30:33+03:00" filename="00085.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00086.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:54+03:00" modified="2010-11-03T15:30:54+03:00" filename="00086.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00087.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:44+03:00" modified="2010-11-03T15:30:44+03:00" filename="00087.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00088.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:30+03:00" modified="2010-11-03T15:30:30+03:00" filename="00088.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00091.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:34+03:00" modified="2010-11-03T15:30:34+03:00" filename="00091.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00092.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:51+03:00" modified="2010-11-03T15:30:51+03:00" filename="00092.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00094.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:40+03:00" modified="2010-11-03T15:30:40+03:00" filename="00094.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00095.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:55+03:00" modified="2010-11-03T15:30:55+03:00" filename="00095.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00096.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:50+03:00" modified="2010-11-03T15:30:50+03:00" filename="00096.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00097.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:39+03:00" modified="2010-11-03T15:30:39+03:00" filename="00097.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00098.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:32+03:00" modified="2010-11-03T15:30:32+03:00" filename="00098.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00099.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:48+03:00" modified="2010-11-03T15:30:48+03:00" filename="00099.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="00100.xml" owner="admin" group="dba" mode="755" created="2010-11-03T15:30:48+03:00" modified="2010-11-03T15:30:48+03:00" filename="00100.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="collection.xconf" owner="admin" group="dba" mode="755" created="2011-09-19T11:49:45+03:00" modified="2011-09-19T11:49:45+03:00" filename="collection.xconf" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Switch default application of framework by switching the default-app attribute -->
+<fw-config default-app="bungeni">
+    <apps>
+        <app name="lexapp">
+            <default-tmpl>template.xhtml</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/kenyalex</xml-collection>
+        </app>
+        <app name="bungeni">
+            <default-tmpl>portal.html</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/bungeni-xml</xml-collection>
+        </app>
+    </apps>
+</fw-config>

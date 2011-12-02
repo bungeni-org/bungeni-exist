@@ -1,0 +1,6 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db" owner="SYSTEM" group="dba" mode="644" created="2011-09-22T10:08:37+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <subcollection name="kenyalex" filename="kenyalex"/>
+    <subcollection name="system" filename="system"/>
+    <subcollection name="framework" filename="framework"/>
+</collection>

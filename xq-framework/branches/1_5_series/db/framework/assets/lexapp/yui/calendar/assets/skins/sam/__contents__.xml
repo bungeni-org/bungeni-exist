@@ -1,0 +1,4 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/calendar/assets/skins/sam" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" version="1">
+    <resource type="BinaryResource" name="calendar-skin.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="calendar-skin.css" mimetype="text/css"/>
+    <resource type="BinaryResource" name="calendar.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="calendar.css" mimetype="text/css"/>
+</collection>

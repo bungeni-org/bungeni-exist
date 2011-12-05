@@ -24,14 +24,18 @@ uses bungenicommon
 Default Variables
 :)
 declare variable $bun:SORT-BY := 'bu:statusDate';
-declare variable $bun:WHERE := 'body_text';
 
 declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT :=10;
 declare variable $bun:DOCNO := 1;
 
-(:
-    Renders PDF documents using xslfo module
+(:~
+:  Renders PDF output for parliamentary document using xslfo module
+: @param docid
+:   The URI of the document
+:
+: @return
+:   A PDF document for download
 :)
 declare function bun:gen-pdf-output($docid as xs:string) {
 
@@ -52,6 +56,13 @@ declare function bun:gen-pdf-output($docid as xs:string) {
     
 };
 
+(:~
+:  Renders PDF output for MP profile using xslfo module
+: @param memberid
+:   The URI of the parliamentary user
+: @return
+:   A PDF document for download
+:)
 declare function bun:gen-member-pdf($memberid as xs:string) {
 
     (: stylesheet to transform :)
@@ -71,14 +82,15 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     
 };
 
-
-declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
-    let $eval-query := bun:xqy-list-documentitems-with-acl($acl, $type)
-    return
-        util:eval($eval-query)
-        (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
-};
-
+(:~
+:   Generates a xquery string with applied permissions
+: @param acl
+:   permission type
+: @param type
+:   document type 
+: @return
+:   A string with embedded permissions ready for evaluation.
+:)
 declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
   let $acl-filter := cmn:get-acl-filter($acl)
     
@@ -86,16 +98,49 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
     make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                                    "/bu:ontology[@type='document']",
-                                    "/bu:document[@type='",$type,"']",
-                                    "/following-sibling::bu:legislativeItem",
-                                    "/(bu:permissions except bu:versions)",
-                                    "/bu:permission[",$acl-filter,"]",
-                                    "/ancestor::bu:ontology")
-  
-
+                "/bu:ontology[@type='document']",
+                "/bu:document[@type='",$type,"']",
+                "/following-sibling::bu:legislativeItem",
+                "/(bu:permissions except bu:versions)",
+                "/bu:permission[",$acl-filter,"]",
+                "/ancestor::bu:ontology")
 };
 
+(:~
+:   Implements xqy-list-documentitems-with-acl()
+: @param acl
+:   permission type
+: @param type
+:   document type
+: @return
+:   Evaluates xquery to return document(s) matching permission that was given
+:)
+declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
+    let $eval-query := bun:xqy-list-documentitems-with-acl($acl, $type)
+    return
+        util:eval($eval-query)
+        (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
+};
+
+(:~
+:   Returns all documents requested and applying the appropriate sort order
+: @param acl
+:   permission type
+: @param type
+:   document type
+: @param url-prefix
+:   Default page-tab to link to if needed
+: @param stylesheet
+:   The stylesheet that transforms this xml output
+: @param offset
+:   The xquery subsequence offet utilised the paginator in the stylesheet defined above
+: @param querystr
+:   User's search terms to be passed to the lucene ft-search()
+: @param sortby
+:   The element to order-by, descending / ascending
+: @return
+:   Evaluates xquery to return document(s) matching permission that was given
+:)
 declare function bun:get-documentitems(
             $acl as xs:string,
             $type as xs:string,
@@ -104,7 +149,6 @@ declare function bun:get-documentitems(
             $offset as xs:integer, 
             $limit as xs:integer, 
             $querystr as xs:string, 
-            $where as xs:string, 
             $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
@@ -114,7 +158,7 @@ declare function bun:get-documentitems(
     (: 
         Logical offset is set to Zero but since there is no document Zero
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
-        Need arises to  alter the $offset to 1 for the first page limit only.
+        Need arises to alter the $offset to 1 for the first page limit only.
     :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
     
@@ -135,13 +179,11 @@ declare function bun:get-documentitems(
         <alisting>
         {
             if ($sortby = 'st_date_oldest') then (
-               (:if (fn:ni$qrystr):)
                 for $match in subsequence($coll,$offset,$limit)
                 order by $match/bu:legislativeItem/bu:statusDate ascending
                 return 
                     bun:get-reference($match)       
-                )
-                
+                )  
             else if ($sortby eq 'st_date_newest') then (
                 for $match in subsequence($coll,$offset,$limit)
                 order by $match/bu:legislativeItem/bu:statusDate descending
@@ -182,15 +224,24 @@ declare function bun:get-documentitems(
        
 };
 
+(:~
+:   This and similar functions implement get-documentitems() to request for parliamentary documents
+: @param acl
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return
+:   Documents based on filter parameters passed in.
+:)
 declare function bun:get-bills(
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
-        $where as xs:string, 
         $sortby as xs:string) as element() {
         
-        bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+        bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-questions(
@@ -198,9 +249,8 @@ declare function bun:get-questions(
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
-        $where as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+  bun:get-documentitems($acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-motions(
@@ -208,9 +258,8 @@ declare function bun:get-motions(
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
-        $where as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+  bun:get-documentitems($acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-tableddocuments(
@@ -218,9 +267,8 @@ declare function bun:get-tableddocuments(
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
-        $where as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+  bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:search-legislative-items(
@@ -228,17 +276,23 @@ declare function bun:search-legislative-items(
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
-        $where as xs:string, 
         $sortby as xs:string,
         $typeofdoc as xs:string) as element() {
         
-        bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $where, $sortby)
+        bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
+(:~
+:   This filters out the search-centric parameters that need to be sustained with the corresponding paginator xslt
+: @param querystr
+: @return
+:   xhtml query string that will be appended to paginator.
+:)
 declare function local:generate-qry-str($getqrystr) {
         let $tokened := tokenize($getqrystr,'&amp;'),
             $loop := 0
-            
+         
+        (: Remove constant parama like limit,offset etc :)
         for $toks in $tokened 
             return
                 if (contains($toks,"offset") or contains($toks,"limit")) then (
@@ -247,6 +301,22 @@ declare function local:generate-qry-str($getqrystr) {
                 else ()
 };
 
+(:~
+:   Similar to documents listings above and implements ft-search() to perform
+:   full-text search on the sorted documents
+: @param querystr
+: @param type
+: @param url-prefix
+: @param stylesheet
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return
+:   xhtml query string that will be appended to paginator.
+: @stylesheet 
+:   search-listing.xsl
+:)
 declare function bun:search-documentitems(
             $acl as xs:string,
             $type as xs:string,
@@ -255,7 +325,6 @@ declare function bun:search-documentitems(
             $offset as xs:integer, 
             $limit as xs:integer, 
             $querystr as xs:string, 
-            $where as xs:string, 
             $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
@@ -339,8 +408,22 @@ declare function bun:search-documentitems(
             </parameters>
            )
 };
+
+(:~
+:   Performs a full-text on a set of documents, based on Lucene
+:
+: @param acl-fetch
+:   A string with acl that will be prepended to the Lucene with search terms / parameters
+: @param querystr
+:   The raw search terms / parameters by the user
+: @param type
+:   The document type to filter the search scope to particular type e.g. bill, question, motion
+: @return
+:   Results matching the search terms and returned in search index/indices field(s) that was 
+:   specified in the filter options e.g. bu:shortName, bu:registryNumber
+:)
 declare function bun:ft-search(
-            $sort-rs as xs:string, 
+            $acl-fetch as xs:string, 
             $querystr as xs:string,
             $type as xs:string) as element()* {
         (: 
@@ -353,7 +436,7 @@ declare function bun:ft-search(
         
         let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
             $ultimate-path := local:build-search-objects($type),
-            $eval-query := concat($sort-rs,"//bu:legislativeItem[ft:query((",$ultimate-path,"), '",$escaped,"')]")
+            $eval-query := concat($acl-fetch,"//bu:legislativeItem[ft:query((",$ultimate-path,"), '",$escaped,"')]")
             
         for $search-rs in util:eval($eval-query)
         order by ft:score($search-rs) descending
@@ -363,6 +446,14 @@ declare function bun:ft-search(
             $search-rs/ancestor::bu:ontology        
 };
 
+(:~
+:   Generates list of indexed items selected by user and match the ui-config option for that type of document.
+:   +NOTES: The items in the ui-config must also be indexed in the /db/system/db/config/bungeni-xml/collection.xconf
+:
+: @param type
+: @return 
+:   Comma seperated list of indexed nodes as set in the ui-config.
+:)
 declare function local:build-search-objects($type as xs:string) {
     
   let 
@@ -370,6 +461,7 @@ declare function local:build-search-objects($type as xs:string) {
     $filter_names := request:get-parameter-names()
     (:$filter_names := fn:tokenize('f_t f_b s q','\s+') !+DEBUG_WITH_test.xql:)
   
+    (: Loop the number of items checked by the user :)
     let $list := 
         for $token in $filter_names 
             (: Loop the number of times we have <searchins> in ui-config :)
@@ -377,9 +469,21 @@ declare function local:build-search-objects($type as xs:string) {
                 return
                     if ($token eq $searchins/@name) then $searchins/@field else ()
     return 
-      string-join($list, ",")
+        (: Recurvice appends the matched indexed items :)
+        string-join($list, ",")
 };
 
+(:~
+:   Re-writes the search-form used in legislative-items listing using input from <searchins>
+:   and <orderbys> in ui-config. 
+:
+: @param tmpl
+:   A xml template that has the skeleton form
+: @param type
+:   The document type
+: @return 
+:   Returns re-written nodes and elements in the form search-form.xml
+:)
 declare function local:rewrite-search-form($tmpl as element(), $type as xs:string)  {
 
     (: get the current doc-types search conf:)
@@ -392,14 +496,14 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
         $f_title := xs:string(request:get-parameter("f_t",'null'))        
 
     return
-      (: Re-writing the doc_type with the one we got from legi-listing :)    
+      (: Re-writing the doc_type with the one gotten from rou:listing-documentitem() :)    
       if ($tmpl/self::xh:input[@id eq "doc_type"]) then 
         element input {
             attribute type { "hidden" },
             attribute name { "type" },
             attribute value { $type }
         }   
-      (: Re-writing the search-field with search text :)    
+      (: [Re]writing the search-field with search text :)    
       else if ($tmpl/self::xh:input[@id eq "search_for"]) then 
         element input {
             attribute id { "search_for" },
@@ -414,12 +518,12 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
           {
             attribute id {$tmpl/@id},
             attribute class {$tmpl/@class},      
-            (: Default items on all search options :)
+            (: The filter title :)
             element li {
                 attribute class { "sb_filter" },
                 "Filter your search"
             },  
-            (: End of Default items :)
+            (: End of filter title :)
             for $searchins in $search-filter
             return
                 element li {
@@ -473,8 +577,14 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
 };
 
 (:~
-    Expected parameters
-    This currently uses search-form.xml
+:   The main search API in appcontroller that accepts all requests routed to /search
+:  
+: @param embed_tmpl
+:   XML skeleton search-form.xml that is merged into the main layout template.
+: @param doctype
+:   The document type
+: @return
+:   A Re-written search-form with relevant sort-by field and filter-options
 :)
 
 declare function bun:get-search-context($embed_tmpl as xs:string, $doctype as xs:string) {
@@ -488,15 +598,22 @@ declare function bun:get-search-context($embed_tmpl as xs:string, $doctype as xs
 };
 
 (:~
-    Generates Atom FEED for Bungeni Documents
-    Bills, Questions, TabledDocuments and Motions.
-    
-    @category type of document e.g. bill
-    
-    Ordered by `bu:statusDate` and limited to 10 items.
-    !+FIX_THIS - FOR ACL BASED ACCESS
+:   Generates Atom FEED for Bungeni Documents Bills, Questions, TabledDocuments and Motions.
+:    
+: @param acl
+:   permissions setting
+: @param doctype
+:   The document type
+: @param outputtype
+:   Can either be a "user" or "service" request.
+: @return
+:   A qualified atom feed limited to 10 items
 :)
-declare function bun:get-atom-feed($acl as xs:string, $doctype as xs:string, $outputtype as xs:string) as element() {
+declare function bun:get-atom-feed(
+            $acl as xs:string, 
+            $doctype as xs:string, 
+            $outputtype as xs:string
+            ) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
     
     let $server-path := "http://localhost:8180/exist/apps/framework"
@@ -511,30 +628,30 @@ declare function bun:get-atom-feed($acl as xs:string, $doctype as xs:string, $ou
        {
             for $i in subsequence(bun:list-documentitems-with-acl($acl, $doctype),0,10)
             order by $i/bu:legislativeItem/bu:statusDate descending
-               (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
-                  return ( <entry>
-                            <id>{data($i/bu:legislativeItem/@uri)}</id>
-                            <title>{$i/bu:legislativeItem/bu:shortName/node()}</title>
-                            {
-                               <summary> {
-                                   $i/bu:document/@type,
-                                   $i/bu:legislativeItem/bu:shortName/node()
-                               }</summary>,
-                               
-                               
-                               if ($outputtype = 'user')  then (
-                                    <link rel="alternate" type="application/xhtml" href="{$server-path}/bill/text?uri={$i/bu:legislativeItem/@uri}"/>
-                                )  (: "service" output :)
-                                else (
-                                    <link rel="alternate" type="application/xml" href="{$server-path}/bill/xml?uri={$i/bu:legislativeItem/@uri}"/>
-                                )
-                                
-                           }
-                            <content type='html'>{$i/bu:legislativeItem/bu:body/node()}</content>
-                            <published>{$i/bu:legislativeItem/bu:publicationDate/node()}</published>
-                            <updated>{$i/bu:legislativeItem/bu:statusDate/node()}</updated>                           
-                           </entry>
-                         )
+            (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
+            return 
+            (   <entry>
+                    <id>{data($i/bu:legislativeItem/@uri)}</id>
+                    <title>{$i/bu:legislativeItem/bu:shortName/node()}</title>
+                    {
+                       <summary> 
+                       {
+                           $i/bu:document/@type,
+                           $i/bu:legislativeItem/bu:shortName/node()
+                       }
+                       </summary>,
+                       if ($outputtype = 'user')  then (
+                            <link rel="alternate" type="application/xhtml" href="{$server-path}/bill/text?uri={$i/bu:legislativeItem/@uri}"/>
+                        )  (: "service" output :)
+                        else (
+                            <link rel="alternate" type="application/xml" href="{$server-path}/bill/xml?uri={$i/bu:legislativeItem/@uri}"/>
+                        )  
+                    }
+                    <content type='html'>{$i/bu:legislativeItem/bu:body/node()}</content>
+                    <published>{$i/bu:legislativeItem/bu:publicationDate/node()}</published>
+                    <updated>{$i/bu:legislativeItem/bu:statusDate/node()}</updated>                           
+                </entry>
+            )
        }
     </feed>
     
@@ -543,22 +660,37 @@ declare function bun:get-atom-feed($acl as xs:string, $doctype as xs:string, $ou
 };
 
 (:~
-    Returns the fetched document as XML document
-    @works-with Bills, Questions, TabledDocuments and Motions.
-    @category   type of document e.g. bill
-    
-    Ordered by `bu:statusDate` and limited to 10 items.
+:   Outputs the raw xml document with some omissions. Currently for legislative-items only
+: 
+: @param docid
+:   The URI for the document
+: @return
+    Returns the fetched document as a XML document
 :)
 declare function bun:get-raw-xml($docid as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
     functx:remove-elements-deep(
-    collection(cmn:get-lex-db())/bu:ontology[@type='document'][child::bu:legislativeItem[@uri eq $docid]],
-    ('bu:versions', 'bu:permissions', 'bu:changes')
+        collection(cmn:get-lex-db())/bu:ontology[@type='document'][child::bu:legislativeItem[@uri eq $docid]],
+        ('bu:versions', 'bu:permissions', 'bu:changes')
     )
 };
 
-declare function bun:get-committees($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+(:~
+:   Retieves all group documents of type committee
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return 
+:   A listing of documents of group type committee
+:)
+declare function bun:get-committees(
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string
+        ) as element() {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("committees.xsl")    
@@ -623,7 +755,21 @@ declare function bun:get-committees($offset as xs:integer, $limit as xs:integer,
        
 };
 
-declare function bun:get-politicalgroups($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+(:~
+:   Retieves all group documents of type politicalgroups
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return 
+:   A listing of documents of group type policicalgroups
+:)
+declare function bun:get-politicalgroups(
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string
+        ) as element() {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("politicalgroups.xsl")    
@@ -669,10 +815,8 @@ declare function bun:get-politicalgroups($offset as xs:integer, $limit as xs:int
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>
-                   
+                    <document>{$match/ancestor::bu:ontology}</document>                  
                 )
-
         } 
         </alisting>
     </docs>
@@ -684,14 +828,21 @@ declare function bun:get-politicalgroups($offset as xs:integer, $limit as xs:int
             <parameters>
                 <param name="sortby" value="{$sortby}" />
             </parameters>
-           ) 
-       
+           )     
 };
 
 (:~
-    This function runs a sub-query to get related information
-    It takes in primary results of main query as input to search
-    for group documents with matching URI
+:   This function runs a sub-query to get related information of type="group" and has
+:   has matching URI of the input document-docitem
+: 
+: @param docitem
+:   A document-node
+: @return
+:   docitem together with any reference group documents found... simplistic structure below
+:   <document>
+:       <output />          Main document
+:       <referenceInfo/>    Referenced Documents
+:   </document>
 :)
 declare function bun:get-reference($docitem as node()) {
     <document>
@@ -803,6 +954,15 @@ declare function bun:documentitem-versions-with-acl($acl-permissions as node(), 
 				 }
 };
 :)
+
+(:~
+:   Used to retrieve a legislative-document
+:
+: @param acl
+: @param docid
+: @param _tmpl
+:   The corresponding transform template passed by the calling funcction
+:)
 declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
@@ -821,6 +981,17 @@ declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl
         transform:transform($doc, $stylesheet, ())
 };
 
+(:~ 
+:   Used to retrieve a group document with a given URI
+:
+: @param acl
+: @param docid
+: @param _tmpl
+: @return
+:   A document-node of type group
+: @stylesheet 
+:   committee.xsl, comm-*.xsl
+:)
 declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
@@ -839,32 +1010,50 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
         transform:transform($doc, $stylesheet, ())
 };
 
+(:~
+:   Retrives all the groups assigned to the MP in the input document-node.
+:
+: @param docitem
+: @return 
+:   Document node with main document as primary and any group documents assigned to that MP as secondary
+:   <document>
+:       <primary/>
+:       <secondary/>
+:   </document>
+:)
 declare function bun:get-ref-assigned-grps($docitem as node()) {
-            <document>
-                <primary> 
-                {
-                    $docitem/ancestor::bu:ontology
-                }
-                </primary>
-                <secondary>
-                    {
-                        let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:ministry/@href)
-                        return 
-                            collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../../bu:ontology
-                    }
-                </secondary>
-            </document>     
+    <document>
+        <primary> 
+        {
+            $docitem/ancestor::bu:ontology
+        }
+        </primary>
+        <secondary>
+            {
+                let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:ministry/@href)
+                return 
+                    collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../../bu:ontology
+            }
+        </secondary>
+    </document>     
 };
 
 (:~
-    Get parliamentary document based on a version URI
-    +NOTES
-    Follows the same structure as get-parl-doc() in that it returns 
-    <document>
-        <version>id</version>
-        <primary/>
-        <secondary/>
-    </document>
+:   Get parliamentary document based on a version URI
+:   +NOTES
+:   Follows the same structure as get-parl-doc() in that it returns 
+:   <document>
+:       <version>id</version>
+:       <primary/>
+:       <secondary/>
+:   </document>
+:
+: @param versionid
+:   Unique ID for the document version
+: @param _tmpl
+:   The .xsl template that will handle the return output
+: @return 
+:   Documennt node similar to get-ref-assigned-grps() above
 :)
 declare function bun:get-doc-ver($versionid as xs:string, $_tmpl as xs:string) as element()* {
 
@@ -921,7 +1110,7 @@ declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) a
                             </parameters>)
 };
 
-declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $where as xs:string, $sortby as xs:string) as element() {
+declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("members.xsl")    

@@ -67,11 +67,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-members($offset,$limit,$qry,$whr,$sty),
+                    $act-entries-tmpl :=  bun:get-members($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("members.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -90,11 +89,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-committees($offset,$limit,$qry,$whr,$sty),
+                    $act-entries-tmpl :=  bun:get-committees($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committees.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -152,12 +150,11 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
                     $type := xs:string(request:get-parameter("type",'bill')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl :=  bun:search-legislative-items($acl,$offset,$limit,$qry,$whr,$sty,$type),
+                    $act-entries-tmpl :=  bun:search-legislative-items($acl,$offset,$limit,$qry,$sty,$type),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -278,11 +275,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
-                    $whr := xs:string(request:get-parameter("w",$bun:WHERE)),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-politicalgroups($offset,$limit,$qry,$whr,$sty),
+                    $act-entries-tmpl :=  bun:get-politicalgroups($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committees.xml")/xh:div, $act-entries-tmpl)
     								 } 

@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="297mm"
+   height="210mm"
+   id="svg2932"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="framework.svg">
+  <defs
+     id="defs2934">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 372.04724 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1052.3622 : 372.04724 : 1"
+       inkscape:persp3d-origin="526.18109 : 248.03149 : 1"
+       id="perspective2941" />
+    <inkscape:perspective
+       id="perspective3011"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3083"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2825"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2882"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2896"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2909"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2922"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2935"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2948"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3725"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2825-4"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       inkscape:collect="always"
+       id="filter4237">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.737895"
+         id="feGaussianBlur4239" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     inkscape:document-units="mm"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.07"
+     inkscape:cx="526.5117"
+     inkscape:cy="532.34982"
+     inkscape:current-layer="layer1"
+     id="namedview2936"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="725"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2938">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       y="6.9407144"
+       x="875.0047"
+       id="image3013"
+       height="50"
+       width="50"
+       xlink:href="file:///home/anthony/bungeni-documentation/bungeni-logo.png" />
+    <rect
+       style="color:#000000;fill:#2b92be;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3067"
+       width="392"
+       height="118.36456"
+       x="255.6001"
+       y="132.81021" />
+    <text
+       xml:space="preserve"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       x="349.01434"
+       y="162.22443"
+       id="text3069"><tspan
+         sodipodi:role="line"
+         id="tspan3071"
+         x="349.01434"
+         y="162.22443">Appcontroller</tspan></text>
+    <rect
+       style="color:#000000;fill:#f79f10;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3073"
+       width="155.11722"
+       height="98.460892"
+       x="6.8305054"
+       y="137.91788" />
+    <rect
+       y="137.58191"
+       x="900.3562"
+       height="100.6741"
+       width="147.1665"
+       id="rect3110"
+       style="color:#000000;fill:#f79f10;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <text
+       xml:space="preserve"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       x="15.227478"
+       y="172.33206"
+       id="text3112"><tspan
+         sodipodi:role="line"
+         id="tspan3114"
+         x="15.227478"
+         y="172.33206">Request</tspan></text>
+    <text
+       id="text3116"
+       y="169.41028"
+       x="914.18457"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       xml:space="preserve"><tspan
+         y="169.41028"
+         x="914.18457"
+         id="tspan3118"
+         sodipodi:role="line">Result</tspan></text>
+    <polygon
+       points="58.263,0.056 58.263,0.056 100,41.85 58.263,83.641 30.662,83.641 62.438,51.866 0,51.866 0,31.611 62.213,31.611 30.605,0 "
+       id="polygon3"
+       transform="matrix(0.41416291,0,0,0.41416291,-70.156424,284.36734)"
+       style="fill:#b22b14;fill-opacity:1" />
+    <polygon
+       points="21.837,38.723 78.164,38.723 78.164,42.632 100,31.974 78.164,21.316 78.164,25.224 21.837,25.224 "
+       id="polygon2864"
+       transform="matrix(0,-1,1,0,233.61651,365.12978)" />
+    <polygon
+       points="69.394,83.584 41.791,83.527 41.791,83.527 0,41.736 41.791,0 69.337,0 37.562,31.777 100,31.777 100,51.977 37.785,51.977 "
+       id="polygon2851"
+       transform="matrix(0.57,0,0,0.57,-262.32799,251.7024)" />
+    <polygon
+       points="24.771,100 0,75.161 0,75.161 0,0 75.165,0 99.934,24.769 42.75,24.769 98.944,80.893 80.753,99.083 24.771,43.171 "
+       id="polygon2840"
+       transform="matrix(0.48966318,0,0,0.48966318,-262.29499,314.55328)" />
+    <polygon
+       points="0,69.339 0.054,41.737 0.054,41.737 41.849,0 83.642,41.737 83.642,69.339 51.867,37.562 51.867,100 31.609,100 31.609,37.786 "
+       id="polygon2829"
+       transform="matrix(0.52,0,0,0.52,-163.14899,246.55328)" />
+    <path
+       transform="matrix(1,0,0,0.9354594,-313.22835,-12.9059)"
+       d="m 349.31076,137.39687 a 14.849242,15.556349 0 1 1 -29.69848,0 14.849242,15.556349 0 1 1 29.69848,0 z"
+       sodipodi:ry="15.556349"
+       sodipodi:rx="14.849242"
+       sodipodi:cy="137.39687"
+       sodipodi:cx="334.46152"
+       id="path3677"
+       style="color:#000000;fill:#434343;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc" />
+    <text
+       id="text3679"
+       y="118.76215"
+       x="7.3129835"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
+       xml:space="preserve"><tspan
+         y="118.76215"
+         x="7.3129835"
+         id="tspan3681"
+         sodipodi:role="line">start</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
+       x="277.73425"
+       y="315.60504"
+       id="text3761"><tspan
+         sodipodi:role="line"
+         id="tspan3763"
+         x="277.73425"
+         y="315.60504">modules</tspan></text>
+    <polygon
+       style="fill:#2b92be;fill-opacity:1"
+       transform="matrix(0.54567193,0,0,0.54567193,-131.0252,409.57902)"
+       id="polygon3765"
+       points="0,58.208 0,30.666 31.777,62.437 31.777,0 52.03,0 52.03,62.213 83.64,30.606 83.584,58.208 83.584,58.208 41.792,100 " />
+    <polygon
+       transform="matrix(-0.72556349,0,0,0.72556349,-31.379703,353.40036)"
+       id="polygon3781"
+       points="0,41.736 41.791,0 69.337,0 37.562,31.777 100,31.777 100,51.977 37.785,51.977 69.394,83.584 41.791,83.527 41.791,83.527 "
+       style="fill:#000501;fill-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       x="248.54726"
+       y="392.81699"
+       id="text3783"
+       transform="scale(0.98665032,1.0135303)"><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="392.81699"
+         id="tspan3791"><tspan
+   style="-inkscape-font-specification:Futura Bk BT Bold;font-family:Futura Bk BT;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:19.73300557px;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+   id="tspan3913">Bungeni</tspan> module contains most of the system logic and </tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="417.48325"
+         id="tspan2968">processing.</tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="442.14951"
+         id="tspan2970">Common module contains most of the utility functions </tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="466.81577"
+         id="tspan2972">re-used through-out the framework</tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="491.48203"
+         id="tspan3930">Route module was introduced to factor-out some of the</tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="516.14825"
+         id="tspan3762">paths in appcontroller.</tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="540.81451"
+         id="tspan3907">Framework module does all URL re-writing that app-</tspan><tspan
+         sodipodi:role="line"
+         x="248.54726"
+         y="565.48077"
+         id="tspan3911">controller uses internally.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       x="246.30762"
+       y="369.62024"
+       id="text3803"><tspan
+         sodipodi:role="line"
+         id="tspan3805"
+         x="246.30762"
+         y="369.62024">Bungeni</tspan></text>
+    <text
+       id="text3819"
+       y="227.4416"
+       x="770.2392"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Futura LT CondensedLight;-inkscape-font-specification:Futura LT CondensedLight Light"
+       xml:space="preserve"
+       transform="scale(1.1763305,0.85010122)"><tspan
+         y="227.4416"
+         x="770.2392"
+         sodipodi:role="line"
+         id="tspan4208">xhtml page rendered</tspan><tspan
+         y="252.4416"
+         x="770.2392"
+         sodipodi:role="line"
+         id="tspan4223">on web-browser.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#f79f10;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       x="926.67926"
+       y="45.31329"
+       id="text4229"><tspan
+         sodipodi:role="line"
+         id="tspan4231"
+         x="926.67926"
+         y="45.31329">Bungeni</tspan></text>
+    <text
+       id="text4233"
+       y="45.31329"
+       x="926.67926"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#f79f10;fill-opacity:1;stroke:none;filter:url(#filter4237);font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       xml:space="preserve"><tspan
+         y="45.31329"
+         x="926.67926"
+         id="tspan4235"
+         sodipodi:role="line">Bungeni</tspan></text>
+    <text
+       transform="scale(0.87080472,1.1483631)"
+       id="text2906"
+       y="377.42383"
+       x="-487.99716"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;text-anchor:start;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       xml:space="preserve"><tspan
+         id="tspan2908"
+         y="377.42383"
+         x="-487.99716"
+         sodipodi:role="line">Accepts input parameters from </tspan><tspan
+         id="tspan2910"
+         y="402.42383"
+         x="-487.99716"
+         sodipodi:role="line">glue.py, applies ontological </tspan><tspan
+         y="427.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2918">grouping to the &lt;xml/&gt; </tspan><tspan
+         id="tspan2912"
+         y="452.42383"
+         x="-487.99716"
+         sodipodi:role="line">document and passes result to </tspan><tspan
+         y="477.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2924">STEP 2...Accepts input para  from </tspan><tspan
+         y="502.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2926">glue.py, applies ontological </tspan><tspan
+         y="527.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2928">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="552.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2930">document and passes result to </tspan><tspan
+         y="577.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2932">STEP 2Accepts input meters from </tspan><tspan
+         y="602.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2934">glue.py, applies ontological </tspan><tspan
+         y="627.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2936">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="652.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2938">document and passes result to </tspan><tspan
+         y="677.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2940">STEP 2Accepts parameters from </tspan><tspan
+         y="702.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2942">glue.py, applies ontological </tspan><tspan
+         y="727.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2944">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="752.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2946">document and passes result to </tspan><tspan
+         y="777.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2948">STEP 2input parameters from </tspan><tspan
+         y="802.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2950">glue.py, applies ontological </tspan><tspan
+         y="827.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2952">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="852.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2954">document and passes result to </tspan><tspan
+         y="877.42383"
+         x="-487.99716"
+         sodipodi:role="line"
+         id="tspan2956">STEP 2</tspan></text>
+    <polygon
+       transform="matrix(0,-1,1,0,-380.38349,361.12978)"
+       id="polygon2927"
+       points="78.164,38.723 78.164,42.632 100,31.974 78.164,21.316 78.164,25.224 21.837,25.224 21.837,38.723 " />
+    <polygon
+       transform="matrix(0,-1,1,0,357.61651,365.12978)"
+       id="polygon2929"
+       points="78.164,42.632 100,31.974 78.164,21.316 78.164,25.224 21.837,25.224 21.837,38.723 78.164,38.723 " />
+    <text
+       id="text2939"
+       y="369.62024"
+       x="376.30762"
+       style="font-size:20;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       xml:space="preserve"><tspan
+         y="369.62024"
+         x="376.30762"
+         id="tspan2941"
+         sodipodi:role="line">Common</tspan></text>
+    <polygon
+       points="100,31.974 78.164,21.316 78.164,25.224 21.837,25.224 21.837,38.723 78.164,38.723 78.164,42.632 "
+       id="polygon2958"
+       transform="matrix(0,-1,1,0,485.61651,365.12978)" />
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       x="504.30762"
+       y="369.62024"
+       id="text2960"><tspan
+         sodipodi:role="line"
+         id="tspan2962"
+         x="504.30762"
+         y="369.62024">Route</tspan></text>
+    <text
+       id="text2964"
+       y="315.60504"
+       x="413.73425"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
+       xml:space="preserve"><tspan
+         y="315.60504"
+         x="413.73425"
+         id="tspan2966"
+         sodipodi:role="line">modules</tspan></text>
+    <text
+       transform="scale(0.98665032,1.0135303)"
+       id="text3764"
+       y="391.83032"
+       x="190.77637"
+       style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       xml:space="preserve"><tspan
+         id="tspan3782"
+         y="391.83032"
+         x="190.77637"
+         sodipodi:role="line"
+         style="fill:#2b92be;fill-opacity:1">(bun:)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       x="187.73579"
+       y="441.16275"
+       id="text3822"
+       transform="scale(0.98665032,1.0135303)"><tspan
+         style="fill:#2b92be;fill-opacity:1"
+         sodipodi:role="line"
+         x="187.73579"
+         y="441.16275"
+         id="tspan3824">(cmn:)</tspan></text>
+    <text
+       transform="scale(0.98665032,1.0135303)"
+       id="text3826"
+       y="490.49518"
+       x="194.83047"
+       style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       xml:space="preserve"><tspan
+         id="tspan3828"
+         y="490.49518"
+         x="194.83047"
+         sodipodi:role="line"
+         style="fill:#2b92be;fill-opacity:1">(rou:)</tspan></text>
+    <text
+       id="text3832"
+       y="162.62024"
+       x="748.30762"
+       style="font-size:24;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       xml:space="preserve"><tspan
+         y="162.62024"
+         x="748.30762"
+         id="tspan3834"
+         sodipodi:role="line">XSL+XML</tspan></text>
+    <polygon
+       transform="matrix(0.91640021,-0.40026323,0.40026323,0.91640021,631.59964,162.98586)"
+       id="polygon3840"
+       points="21.837,38.723 78.164,38.723 78.164,42.632 100,31.974 78.164,21.316 78.164,25.224 21.837,25.224 " />
+    <text
+       transform="scale(1.1763305,0.85010122)"
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Futura LT CondensedLight;-inkscape-font-specification:Futura LT CondensedLight Light"
+       x="11.098799"
+       y="232.14693"
+       id="text3866"><tspan
+         id="tspan3868"
+         sodipodi:role="line"
+         x="11.098799"
+         y="232.14693">URL request e.g. </tspan><tspan
+         id="tspan3870"
+         sodipodi:role="line"
+         x="11.098799"
+         y="257.14691">http://.../questions</tspan></text>
+    <text
+       id="text3876"
+       y="218.03096"
+       x="224.47418"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Futura LT CondensedLight;-inkscape-font-specification:Futura LT CondensedLight Light"
+       xml:space="preserve"
+       transform="scale(1.1763305,0.85010122)"><tspan
+         y="218.03096"
+         x="224.47418"
+         sodipodi:role="line"
+         id="tspan3878">This module handles all requests and does routing to </tspan><tspan
+         y="243.03096"
+         x="224.47418"
+         sodipodi:role="line"
+         id="tspan3880">approproriate pages. Utilizes rou: and cmn: in rendering </tspan><tspan
+         y="268.03094"
+         x="224.47418"
+         sodipodi:role="line"
+         id="tspan3886">the menu and template: to parse xsl/xml documents. </tspan></text>
+    <polygon
+       transform="matrix(0,-1,1,0,587.61651,365.12978)"
+       id="polygon3892"
+       points="21.837,38.723 78.164,38.723 78.164,42.632 100,31.974 78.164,21.316 78.164,25.224 21.837,25.224 " />
+    <text
+       id="text3894"
+       y="369.62024"
+       x="606.30762"
+       style="font-size:20;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       xml:space="preserve"><tspan
+         y="369.62024"
+         x="606.30762"
+         id="tspan3896"
+         sodipodi:role="line">Fw</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       x="204.96576"
+       y="535.88141"
+       id="text3900"
+       transform="scale(0.98665032,1.0135303)"><tspan
+         style="fill:#2b92be;fill-opacity:1"
+         sodipodi:role="line"
+         x="204.96576"
+         y="535.88141"
+         id="tspan3902">(fw:)</tspan></text>
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#434343;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3915"
+       sodipodi:cx="334.46152"
+       sodipodi:cy="137.39687"
+       sodipodi:rx="14.849242"
+       sodipodi:ry="15.556349"
+       d="m 349.31076,137.39687 a 14.849242,15.556349 0 1 1 -29.69848,0 14.849242,15.556349 0 1 1 29.69848,0 z"
+       transform="matrix(1,0,0,0.9354594,696.6308,-13.581956)" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
+       x="1017.1721"
+       y="118.0861"
+       id="text3917"><tspan
+         sodipodi:role="line"
+         id="tspan3919"
+         x="1017.1721"
+         y="118.0861">finish</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
+       x="529.73425"
+       y="315.60504"
+       id="text3921"><tspan
+         sodipodi:role="line"
+         id="tspan3923"
+         x="529.73425"
+         y="315.60504">modules</tspan></text>
+    <polygon
+       transform="matrix(-1,0,0,1,246.72333,183.33587)"
+       id="polygon3925"
+       points="0,10.658 21.837,21.316 21.837,17.406 78.164,17.406 78.164,3.909 21.837,3.909 21.837,0 " />
+    <text
+       transform="scale(0.98665032,1.0135303)"
+       id="text3927"
+       y="21.780878"
+       x="15.863539"
+       style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       xml:space="preserve"><tspan
+         id="tspan3945"
+         y="21.780878"
+         x="15.863539"
+         sodipodi:role="line">The Bungeni eXist portal is based on a flexible XQuery web framework powered by eXist XML DB.</tspan><tspan
+         y="21.780878"
+         x="15.863539"
+         sodipodi:role="line"
+         id="tspan3989" /></text>
+    <path
+       d="m 821.56526,349.71183 7.32396,-11.33943 47.3158,30.56052 2.12085,-3.28363 12.56012,20.80017 -24.12524,-2.89431 2.12031,-3.28279 z" />
+    <rect
+       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3998"
+       width="251.12215"
+       height="13.324029"
+       x="686.04187"
+       y="-178.1801"
+       transform="matrix(0.83222302,0.55444102,-0.53281738,0.84623025,0,0)" />
+    <rect
+       y="543.15991"
+       x="573.83179"
+       height="14.018692"
+       width="267.2897"
+       id="rect4000"
+       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <text
+       xml:space="preserve"
+       style="font-size:23.74057388px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       x="803.24005"
+       y="-168.44563"
+       id="text4002"
+       transform="matrix(0.84038989,0.54198231,-0.54198231,0.84038989,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4004"
+         x="803.24005"
+         y="-168.44563">XSL-FO</tspan></text>
+    <text
+       transform="matrix(0.7170347,0.69703747,-0.69703747,0.7170347,0,0)"
+       id="text4014"
+       y="-283.68829"
+       x="762.28473"
+       style="font-size:23.74057388px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
+       xml:space="preserve"><tspan
+         y="-283.68829"
+         x="762.28473"
+         id="tspan4016"
+         sodipodi:role="line">ATOM-FEED</tspan></text>
+  </g>
+</svg>

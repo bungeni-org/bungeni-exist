@@ -119,8 +119,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="710.65174"
-     inkscape:cy="387.77503"
+     inkscape:cx="570.91992"
+     inkscape:cy="437.19804"
      inkscape:current-layer="layer1"
      id="namedview2936"
      showgrid="false"
@@ -137,7 +137,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -146,61 +146,61 @@
      inkscape:groupmode="layer"
      id="layer1">
     <image
-       y="8.1462173"
-       x="865.42078"
+       y="9.5604305"
+       x="9.8215694"
        id="image3013"
        height="50"
        width="50"
-       xlink:href="file:///home/anthony/Desktop/bungeni_work/bungeni-logo.png" />
+       xlink:href="file:///home/anthony/bungeni-documentation/bungeni-logo.png" />
     <rect
        style="color:#000000;fill:#2b92be;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3067"
        width="460"
-       height="497.48737"
-       x="301.58578"
-       y="75.680267" />
+       height="664.36456"
+       x="581.6001"
+       y="48.810211" />
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
-       x="349"
-       y="65.094482"
+       x="585.01434"
+       y="38.224426"
        id="text3069"><tspan
          sodipodi:role="line"
          id="tspan3071"
-         x="349"
-         y="65.094482">Transformer Pipeline</tspan></text>
+         x="585.01434"
+         y="38.224426">Transformer Pipeline Steps</tspan></text>
     <rect
        style="color:#000000;fill:#f79f10;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3073"
        width="248.61017"
        height="180.46089"
-       x="6.8162327"
-       y="71.959503" />
+       x="286.83051"
+       y="47.917877" />
     <rect
-       y="530.45197"
-       x="811.61523"
+       y="511.58188"
+       x="288.3562"
        height="201.6741"
-       width="231.43858"
+       width="244.1665"
        id="rect3110"
        style="color:#000000;fill:#b22b14;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
-       x="67.213203"
-       y="60.373688"
+       x="289.22748"
+       y="36.332062"
        id="text3112"><tspan
          sodipodi:role="line"
          id="tspan3114"
-         x="67.213203"
-         y="60.373688">Input</tspan></text>
+         x="289.22748"
+         y="36.332062">Input</tspan></text>
     <text
        id="text3116"
-       y="520.28033"
-       x="812.4436"
+       y="501.41028"
+       x="289.18457"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
        xml:space="preserve"><tspan
-         y="520.28033"
-         x="812.4436"
+         y="501.41028"
+         x="289.18457"
          id="tspan3118"
          sodipodi:role="line">Output</tspan></text>
     <polygon
@@ -233,12 +233,12 @@
        id="polygon2818"
        transform="matrix(0.59,0,0,0.59,-128.83051,499.95855)" />
     <polygon
-       points="0,58.208 0,30.666 31.777,62.437 31.777,0 52.03,0 52.03,62.213 83.64,30.606 83.584,58.208 83.584,58.208 41.792,100 "
+       points="31.777,0 52.03,0 52.03,62.213 83.64,30.606 83.584,58.208 83.584,58.208 41.792,100 0,58.208 0,30.666 31.777,62.437 "
        id="polygon3-2"
-       transform="matrix(0.26282922,0,0,0.26282922,504.58411,226.32418)"
+       transform="matrix(0.26282922,0,0,0.26282922,784.5984,199.45413)"
        style="fill:#e0efe0;fill-opacity:1" />
     <path
-       transform="translate(67.757359,-13.8995)"
+       transform="translate(347.77165,-40.769558)"
        d="m 349.31076,137.39687 a 14.849242,15.556349 0 1 1 -29.69848,0 14.849242,15.556349 0 1 1 29.69848,0 z"
        sodipodi:ry="15.556349"
        sodipodi:rx="14.849242"
@@ -249,56 +249,56 @@
        sodipodi:type="arc" />
     <text
        id="text3679"
-       y="131.25473"
-       x="393.51956"
+       y="104.38467"
+       x="673.53387"
        style="font-size:23.6666851px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
        xml:space="preserve"><tspan
-         y="131.25473"
-         x="393.51956"
+         y="104.38467"
+         x="673.53387"
          id="tspan3681"
          sodipodi:role="line">1</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;fill:#2e3436;fill-opacity:1;stroke:none;font-family:Futura LT CondensedLight;-inkscape-font-specification:Futura LT CondensedLight Light"
-       x="15.79899"
-       y="146.48221"
+       x="295.81326"
+       y="122.44058"
        id="text3695"><tspan
          sodipodi:role="line"
          id="tspan3697"
-         x="15.79899"
-         y="146.48221">&lt;contenttype name=&quot;group&quot;&gt;</tspan><tspan
+         x="295.81326"
+         y="122.44058">&lt;contenttype name=&quot;group&quot;&gt;</tspan><tspan
          sodipodi:role="line"
-         x="15.79899"
-         y="168.98221"
+         x="295.81326"
+         y="144.94058"
          id="tspan3699">    &lt;field name=&quot;status&quot;&gt;active&lt;/field&gt;</tspan><tspan
          sodipodi:role="line"
-         x="15.79899"
-         y="191.48221"
+         x="295.81326"
+         y="167.44058"
          id="tspan3701">    &lt;field name=&quot;parliament_id&quot;&gt;2&lt;/field&gt;</tspan><tspan
          sodipodi:role="line"
-         x="15.79899"
-         y="213.98221"
+         x="295.81326"
+         y="189.94058"
          id="tspan3703">    &lt;members/&gt;</tspan><tspan
          sodipodi:role="line"
-         x="15.79899"
-         y="236.48221"
+         x="295.81326"
+         y="212.44058"
          id="tspan3711">    ...</tspan><tspan
          sodipodi:role="line"
-         x="15.79899"
-         y="258.98221"
+         x="295.81326"
+         y="234.94058"
          id="tspan3709" /></text>
     <text
        id="text3705"
-       y="106.37369"
-       x="19.556351"
+       y="82.332062"
+       x="299.57062"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
        xml:space="preserve"><tspan
-         y="106.37369"
-         x="19.556351"
+         y="82.332062"
+         x="299.57062"
          id="tspan3707"
          sodipodi:role="line">Raw Bungeni XML</tspan></text>
     <path
-       transform="translate(69.665856,139.12874)"
+       transform="translate(349.68015,112.25869)"
        d="m 349.31076,137.39687 a 14.849242,15.556349 0 1 1 -29.69848,0 14.849242,15.556349 0 1 1 29.69848,0 z"
        sodipodi:ry="15.556349"
        sodipodi:rx="14.849242"
@@ -309,22 +309,22 @@
        sodipodi:type="arc" />
     <text
        id="text3679-9"
-       y="284.28299"
-       x="395.42807"
+       y="257.41293"
+       x="675.44238"
        style="font-size:23.6666851px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
        xml:space="preserve"><tspan
-         y="284.28299"
-         x="395.42807"
+         y="257.41293"
+         x="675.44238"
          id="tspan3681-3"
          sodipodi:role="line">2</tspan></text>
     <text
        id="text3713-8"
-       y="286.49026"
-       x="316.29327"
+       y="259.62021"
+       x="596.30762"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
        xml:space="preserve"><tspan
-         y="286.49026"
-         x="316.29327"
+         y="259.62021"
+         x="596.30762"
          id="tspan3715-8"
          sodipodi:role="line">Step</tspan></text>
     <path
@@ -336,27 +336,27 @@
        sodipodi:rx="14.849242"
        sodipodi:ry="15.556349"
        d="m 349.31076,137.39687 a 14.849242,15.556349 0 1 1 -29.69848,0 14.849242,15.556349 0 1 1 29.69848,0 z"
-       transform="translate(69.665856,295.12874)" />
+       transform="translate(349.68015,268.25869)" />
     <text
        xml:space="preserve"
        style="font-size:23.6666851px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Arial Black;-inkscape-font-specification:'Arial Black, Bold'"
-       x="395.42807"
-       y="440.28296"
+       x="675.44238"
+       y="413.4129"
        id="text3753"><tspan
          sodipodi:role="line"
          id="tspan3755"
-         x="395.42807"
-         y="440.28296">3</tspan></text>
+         x="675.44238"
+         y="413.4129">3</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
-       x="427.71991"
-       y="130.4751"
+       x="707.73425"
+       y="103.60504"
        id="text3761"><tspan
          sodipodi:role="line"
          id="tspan3763"
-         x="427.71991"
-         y="130.4751">grouping_Level1.xsl</tspan></text>
+         x="707.73425"
+         y="103.60504">grouping_Level1.xsl</tspan></text>
     <polygon
        style="fill:#2b92be;fill-opacity:1"
        transform="matrix(0.54567193,0,0,0.54567193,-131.0252,409.57902)"
@@ -364,29 +364,29 @@
        points="0,58.208 0,30.666 31.777,62.437 31.777,0 52.03,0 52.03,62.213 83.64,30.606 83.584,58.208 83.584,58.208 41.792,100 " />
     <polygon
        style="fill:#e0efe0;fill-opacity:1"
-       transform="matrix(0.27697135,0,0,0.27697135,498.92726,378.70896)"
+       transform="matrix(0.27697135,0,0,0.27697135,778.94155,351.83891)"
        id="polygon3767"
-       points="83.64,30.606 83.584,58.208 83.584,58.208 41.792,100 0,58.208 0,30.666 31.777,62.437 31.777,0 52.03,0 52.03,62.213 " />
+       points="41.792,100 0,58.208 0,30.666 31.777,62.437 31.777,0 52.03,0 52.03,62.213 83.64,30.606 83.584,58.208 83.584,58.208 " />
     <text
        id="text3769"
-       y="283.3035"
-       x="427.71991"
+       y="256.43344"
+       x="707.73425"
        style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
        xml:space="preserve"><tspan
-         y="283.3035"
-         x="427.71991"
+         y="256.43344"
+         x="707.73425"
          id="tspan3771"
          sodipodi:role="line">grouping_Level2.xsl</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
-       x="426.30569"
-       y="439.68829"
+       x="706.32001"
+       y="412.81824"
        id="text3775"><tspan
          sodipodi:role="line"
          id="tspan3777"
-         x="426.30569"
-         y="439.68829">grouping_Level3.xsl</tspan></text>
+         x="706.32001"
+         y="412.81824">grouping_Level3.xsl</tspan></text>
     <polygon
        transform="matrix(-0.72556349,0,0,0.72556349,-31.379703,353.40036)"
        id="polygon3781"
@@ -395,153 +395,249 @@
     <text
        xml:space="preserve"
        style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
-       x="339.75037"
-       y="160.826"
+       x="623.55334"
+       y="134.31464"
        id="text3783"
        transform="scale(0.98665032,1.0135303)"><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="160.826"
-         id="tspan3791">Accepts input parameters from pipeline, applies </tspan><tspan
+         x="623.55334"
+         y="134.31464"
+         id="tspan3791">Accepts input parameters from glue.py, applies </tspan><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="185.49226"
+         x="623.55334"
+         y="158.9809"
          id="tspan3793">ontological grouping to the &lt;xml/&gt; document </tspan><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="210.15852"
+         x="623.55334"
+         y="183.64716"
          id="tspan3930">and passes result to STEP 2...</tspan></text>
     <text
        transform="scale(0.98665032,1.0135303)"
        id="text3795"
-       y="316.71655"
-       x="339.75037"
+       y="290.2052"
+       x="623.55334"
        style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
        xml:space="preserve"><tspan
          id="tspan3797"
-         y="316.71655"
-         x="339.75037"
+         y="290.2052"
+         x="623.55334"
          sodipodi:role="line">Continues where grouping_Level1.xsl left and </tspan><tspan
          id="tspan3801"
-         y="341.38281"
-         x="339.75037"
+         y="314.87146"
+         x="623.55334"
          sodipodi:role="line">adds wrapper onto the field[@name] attributes.</tspan><tspan
-         y="366.04907"
-         x="339.75037"
+         y="339.53772"
+         x="623.55334"
          sodipodi:role="line"
          id="tspan3904">No ontological grouping is done here.</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
-       x="316.29327"
-       y="132.49026"
+       x="596.30762"
+       y="105.62021"
        id="text3803"><tspan
          sodipodi:role="line"
          id="tspan3805"
-         x="316.29327"
-         y="132.49026">Step</tspan></text>
+         x="596.30762"
+         y="105.62021">Step</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#b22b14;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
-       x="316.29327"
-       y="442.49023"
+       x="596.30762"
+       y="415.62018"
        id="text3807"><tspan
          sodipodi:role="line"
          id="tspan3809"
-         x="316.29327"
-         y="442.49023">Step</tspan></text>
+         x="596.30762"
+         y="415.62018">Step</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:19.73300552px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
-       x="339.75037"
-       y="474.58188"
+       x="623.55334"
+       y="448.07053"
        id="text3811"
        transform="scale(0.98665032,1.0135303)"><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="474.58188"
+         x="623.55334"
+         y="448.07053"
          id="tspan3906">This is last STEP that applies a defined </tspan><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="499.24814"
+         x="623.55334"
+         y="472.73679"
          id="tspan3817">namespace 'bu:' onto the transformed documents.</tspan><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="523.91437"
+         x="623.55334"
+         y="497.40305"
          id="tspan3920">Also applies further processing 'post-proc' such as</tspan><tspan
          sodipodi:role="line"
-         x="339.75037"
-         y="548.58063"
+         x="623.55334"
+         y="522.06934"
          id="tspan3922">unescape that is done on embedded xhtml tags.</tspan></text>
     <text
        id="text3819"
-       y="561.19965"
-       x="884.93427"
+       y="543.60077"
+       x="323.87592"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;fill:#e0efe0;fill-opacity:1;stroke:none;font-family:Futura LT CondensedLight;-inkscape-font-specification:Futura LT CondensedLight Light"
        xml:space="preserve"
        transform="scale(0.93262858,1.0722382)"><tspan
-         y="561.19965"
-         x="884.93427"
+         y="543.60077"
+         x="323.87592"
          sodipodi:role="line"
          id="tspan3863">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?</tspan><tspan
-         y="583.69965"
-         x="884.93427"
+         y="566.10077"
+         x="323.87592"
          sodipodi:role="line"
          id="tspan4192">&lt;bu:ontology xmlns:bu=&quot;http://portal.b</tspan><tspan
-         y="606.19965"
-         x="884.93427"
+         y="588.60077"
+         x="323.87592"
          sodipodi:role="line"
          id="tspan4194">   &lt;bu:document type=&quot;bill&quot;/&gt;</tspan><tspan
-         y="628.69965"
-         x="884.93427"
+         y="611.10077"
+         x="323.87592"
          sodipodi:role="line"
          id="tspan4196">   &lt;bu:bungeni&gt;</tspan><tspan
-         y="651.19965"
-         x="884.93427"
+         y="633.60077"
+         x="323.87592"
          sodipodi:role="line"
          id="tspan4208">      &lt;bu:country&gt;ke&lt;/bu:country&gt;</tspan><tspan
-         y="673.69965"
-         x="884.93427"
+         y="656.10077"
+         x="323.87592"
          sodipodi:role="line"
          id="tspan4223">      .....</tspan></text>
     <polygon
        style="fill:#000501;fill-opacity:1"
-       points="100,31.777 100,51.977 37.785,51.977 69.394,83.584 41.791,83.527 41.791,83.527 0,41.736 41.791,0 69.337,0 37.562,31.777 "
+       points="69.394,83.584 41.791,83.527 41.791,83.527 0,41.736 41.791,0 69.337,0 37.562,31.777 100,31.777 100,51.977 37.785,51.977 "
        id="polygon3883"
-       transform="matrix(-0.39524825,0,0,0.39524825,298.45587,95.971565)" />
+       transform="matrix(-0.39524825,0,0,0.39524825,578.47016,69.101507)" />
     <polygon
-       points="99.93,100 24.772,100 0,75.228 57.115,75.228 0.992,19.035 19.18,0.848 75.159,56.829 75.159,0 99.93,24.84 99.93,24.84 "
+       points="24.772,100 0,75.228 57.115,75.228 0.992,19.035 19.18,0.848 75.159,56.829 75.159,0 99.93,24.84 99.93,24.84 99.93,100 "
        id="polygon3-4"
-       transform="matrix(0.40566376,0,0,0.40566376,765.49208,521.59708)" />
+       transform="matrix(0.40566376,0,0,0.40566376,-105.66348,148.2447)" />
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#eeeeec;fill-opacity:1;stroke:none;font-family:Frutiger LT 57 Cn;-inkscape-font-specification:Frutiger LT 57 Cn"
-       x="819.41547"
-       y="568.15546"
+       x="296.15643"
+       y="549.2854"
        id="text4225"><tspan
          sodipodi:role="line"
          id="tspan4227"
-         x="819.41547"
-         y="568.15546">Generated XML</tspan></text>
+         x="296.15643"
+         y="549.2854">Generated XML</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#f79f10;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
-       x="917.09534"
-       y="46.518791"
+       x="61.496132"
+       y="47.933006"
        id="text4229"><tspan
          sodipodi:role="line"
          id="tspan4231"
-         x="917.09534"
-         y="46.518791">Bungeni</tspan></text>
+         x="61.496132"
+         y="47.933006">Bungeni</tspan></text>
     <text
        id="text4233"
-       y="46.518791"
-       x="917.09534"
-       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#f79f10;fill-opacity:1;stroke:none;font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn;filter:url(#filter4237)"
+       y="47.933006"
+       x="61.496132"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#f79f10;fill-opacity:1;stroke:none;filter:url(#filter4237);font-family:Frutiger LT 87 ExtraBlackCn;-inkscape-font-specification:Frutiger LT 87 ExtraBlackCn"
        xml:space="preserve"><tspan
-         y="46.518791"
-         x="917.09534"
+         y="47.933006"
+         x="61.496132"
          id="tspan4235"
          sodipodi:role="line">Bungeni</tspan></text>
+    <polygon
+       transform="matrix(0.39524825,0,0,0.39524825,537.53113,660.09351)"
+       id="polygon2904"
+       points="69.337,0 37.562,31.777 100,31.777 100,51.977 37.785,51.977 69.394,83.584 41.791,83.527 41.791,83.527 0,41.736 41.791,0 "
+       style="fill:#000501;fill-opacity:1" />
+    <text
+       transform="scale(0.87080474,1.1483631)"
+       id="text2906"
+       y="82.830742"
+       x="11.360132"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:justify;text-anchor:start;fill:#000501;fill-opacity:1;stroke:none;font-family:Futura Bk BT;-inkscape-font-specification:Futura Bk BT"
+       xml:space="preserve"><tspan
+         id="tspan2908"
+         y="82.830742"
+         x="11.360132"
+         sodipodi:role="line">Accepts input parameters from </tspan><tspan
+         id="tspan2910"
+         y="107.83074"
+         x="11.360132"
+         sodipodi:role="line">glue.py, applies ontological </tspan><tspan
+         y="132.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2918">grouping to the &lt;xml/&gt; </tspan><tspan
+         id="tspan2912"
+         y="157.83075"
+         x="11.360132"
+         sodipodi:role="line">document and passes result to </tspan><tspan
+         y="182.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2924">STEP 2...Accepts input para  from </tspan><tspan
+         y="207.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2926">glue.py, applies ontological </tspan><tspan
+         y="232.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2928">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="257.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2930">document and passes result to </tspan><tspan
+         y="282.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2932">STEP 2Accepts input meters from </tspan><tspan
+         y="307.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2934">glue.py, applies ontological </tspan><tspan
+         y="332.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2936">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="357.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2938">document and passes result to </tspan><tspan
+         y="382.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2940">STEP 2Accepts parameters from </tspan><tspan
+         y="407.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2942">glue.py, applies ontological </tspan><tspan
+         y="432.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2944">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="457.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2946">document and passes result to </tspan><tspan
+         y="482.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2948">STEP 2input parameters from </tspan><tspan
+         y="507.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2950">glue.py, applies ontological </tspan><tspan
+         y="532.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2952">grouping to the &lt;xml/&gt; </tspan><tspan
+         y="557.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2954">document and passes result to </tspan><tspan
+         y="582.83075"
+         x="11.360132"
+         sodipodi:role="line"
+         id="tspan2956">STEP 2</tspan></text>
   </g>
 </svg>

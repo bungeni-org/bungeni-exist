@@ -196,6 +196,61 @@ The individual "tab" is configured as follows :
         </tabs>
 }}}
 
+== Order-by & Search-in Filters == 
+
+These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies not search or order options for the particular listing.
+
+Each defined `<doctype>` optionally provides the following :
+ * <orderbys/> - contains parameters for sort field
+ * <searchins/> - contains parameters for all the search options that can be used to filter.
+
+The filters and options are defind in xml format:
+
+{{{
+<doctypes>
+   <doctype name="bill">
+     <orderbys/>
+     <searchins/>
+   </doctypes>
+   <doctype name="group">
+     <orderbys/>
+     <searchins/>
+   </doctypes>
+   ...
+</doctypes>
+}}}
+
+=== Order-by ===
+
+These are rendered as the "sort by:" options in all documents-listing.
+ * orderby/@value - a unique name
+ * orderby/@order - either ascending or descending.
+
+The menus are defined in xml format
+
+{{{
+<menugroups>
+...
+ <menu ... />
+....
+ <menu name="business" for="business">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
+                <ul class="theme-lev-1">
+                    <li>
+                        <a name="committees" href="committees">committees</a>
+                    </li>
+                    <li>
+                        <a name="bills" href="bills">bills</a>
+                    </li>
+                    <li>
+                        <a name="questions" href="questions">questions</a>
+                    </li>
+                    <li>
+                        <a name="motions" href="motions">motions</a>
+                    </li>
+....
+}}}
+
 = Application structure = 
 
 The application must define a "Application Controller" module - this must use the following pattern :

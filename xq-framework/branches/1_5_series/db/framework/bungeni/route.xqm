@@ -69,12 +69,11 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                              $stylesheet as xs:string) {
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
-                    $where := xs:string(request:get-parameter("w",$bun:WHERE)),
                     $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $where, $sortby),
+                    $act-entries-tmpl := bun:get-documentitems($acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $sortby),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($use-tmpl)/xh:div, $act-entries-tmpl)
     								 } 

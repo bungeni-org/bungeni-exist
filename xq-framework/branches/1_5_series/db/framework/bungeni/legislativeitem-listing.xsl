@@ -22,28 +22,26 @@
     
     <!--
         
-        THE INPUT DOCUMENT LOOKS LIKE THIS 
+    THE INPUT DOCUMENT LOOKS LIKE THIS 
         
     <docs>
-    <paginator>
-        
-        <count>3</count>
-        <documentType>bill</documentType>
-        <listingUrlPrefix>bill/text</listingUrlPrefix>
-        <offset>3</offset>
-        <limit>3</limit>
-    </paginator>
-    <alisting>
-        <document>
-         <output> 
-            <bu:ontology .../>
-    
-         </output>
-         <referenceInfo>
-            <ref>
-            </ref>
-         </referenceInfo>
-    </alisting>
+        <paginator>
+            <count>3</count>
+            <documentType>bill</documentType>
+            <listingUrlPrefix>bill/text</listingUrlPrefix>
+            <offset>3</offset>
+            <limit>3</limit>
+        </paginator>
+        <alisting>
+            <document>
+             <output> 
+                <bu:ontology .../>
+             </output>
+             <referenceInfo>
+                <ref>
+                </ref>
+             </referenceInfo>
+        </alisting>
     </docs>
     -->
     <!-- INPUT PARAMETERS -->

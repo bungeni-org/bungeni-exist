@@ -625,7 +625,11 @@
         <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
     </acl-groups>
 
-    <!-- Document Types -->
+    <!-- Document Types
+        <doctype name="group">  Defines the configuration parameter for the named document type 
+        <orderby/>      Defines the order by options that are available for that document types
+        <searchins/>    Defines the search filter options that are available for the type of document speficied
+        -->
     <doctypes>
         <doctype name="group">
             <orderbys>

@@ -141,7 +141,7 @@ Various downloadable formats available such as PDF, XML, ODT...
 
 TO DO
 
-The filters and options are defind in xml format:
+The download groups are defined in xml format:
 
 {{{
 <downloadgroups>
@@ -213,7 +213,7 @@ The individual "tab" is configured as follows :
 
 == ACL Groups == 
 
-This defines the permission levels for all the documents in the XML database. Denoted by the `<aclgroups>` node.
+This defines the permission levels for all the documents in the XML database. Denoted by the `<aclgroups>` node. The permissions are concatenated with every XQuery code that retrieve document(s) from eXist database.
 
 The defined `<acl>` nodes must provide the following :
  * acl/@name - a unique name for the acl
@@ -231,7 +231,7 @@ The permissions are defined in xml format:
 
 == Order-by & Search-in Filters == 
 
-These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies not search or order options for the particular listing.
+These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies no search or order options for the particular listing.
 
 Each defined `<doctype>` optionally provides the following :
  * `<orderbys/>` - contains parameters for sort field

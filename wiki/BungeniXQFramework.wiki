@@ -226,7 +226,7 @@ These are rendered as the "sort by:" options in all documents-listing.
  * orderby/@value - a unique name
  * orderby/@order - either `asc` or `desc`.
 
-The options are defined in xml format
+The options are defined in xml format:
 
 {{{
 <orderbys>
@@ -238,12 +238,12 @@ The options are defined in xml format
 === Search-in ===
 
 These are filter options that can be applied to a search term options in all documents-listing.
- * searchin/@name - a unique name to be assigned to the xhtml form input element e.g `?*f_t*=title`
- * searchin/@value - the value of the input element as passed in query string e.g `?f_t=*title*`
+ * searchin/@name - a unique name to be assigned to the xhtml form input element e.g ?*f_t*=title
+ * searchin/@value - the value of the input element as passed in query string e.g ?f_t=*title*
  * searchin/@field - the actual indexed node or attribute in the Lucene collection index e.g. `bu:shortName`
  * searchin/@default - this denotes the default field to search into.
 
-The filters are defined in xml format
+The filters are defined in xml format:
 
 {{{
 <searchins>

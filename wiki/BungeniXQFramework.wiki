@@ -201,8 +201,8 @@ The individual "tab" is configured as follows :
 These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies not search or order options for the particular listing.
 
 Each defined `<doctype>` optionally provides the following :
- * <orderbys/> - contains parameters for sort field
- * <searchins/> - contains parameters for all the search options that can be used to filter.
+ * `<orderbys/>` - contains parameters for sort field
+ * `<searchins/>` - contains parameters for all the search options that can be used to filter.
 
 The filters and options are defind in xml format:
 
@@ -224,31 +224,34 @@ The filters and options are defind in xml format:
 
 These are rendered as the "sort by:" options in all documents-listing.
  * orderby/@value - a unique name
- * orderby/@order - either ascending or descending.
+ * orderby/@order - either `asc` or `desc`.
 
-The menus are defined in xml format
+The options are defined in xml format
 
 {{{
-<menugroups>
-...
- <menu ... />
-....
- <menu name="business" for="business">
-            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
-                <ul class="theme-lev-1">
-                    <li>
-                        <a name="committees" href="committees">committees</a>
-                    </li>
-                    <li>
-                        <a name="bills" href="bills">bills</a>
-                    </li>
-                    <li>
-                        <a name="questions" href="questions">questions</a>
-                    </li>
-                    <li>
-                        <a name="motions" href="motions">motions</a>
-                    </li>
-....
+<orderbys>
+   <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+   <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+</orderbys>
+}}}
+
+=== Search-in ===
+
+These are filter options that can be applied to a search term options in all documents-listing.
+ * searchin/@name - a unique name to be assigned to the xhtml form input element e.g `?*f_t*=title`
+ * searchin/@value - the value of the input element as passed in query string e.g `?f_t=*title*`
+ * searchin/@field - the actual indexed node or attribute in the Lucene collection index e.g. `bu:shortName`
+ * searchin/@default - this denotes the default field to search into.
+
+The filters are defined in xml format
+
+{{{
+<searchins>
+   <searchin name="all" value="all" field=".">Entire Document</searchin>
+   <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
+   <searchin name="f_b" value="body" field="bu:body">Body</searchin>
+   <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
+</searchins>
 }}}
 
 = Application structure = 

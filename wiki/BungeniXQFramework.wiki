@@ -135,6 +135,21 @@ The menus are defined in xhtml format
 ....
 }}}
 
+== Download Formats == 
+
+Various downloadable formats available such as PDF, XML, ODT...
+
+TO DO
+
+The filters and options are defind in xml format:
+
+{{{
+<downloadgroups>
+   <listings/>
+   <document/>
+</downloadgroups>
+}}}
+
 == Content Tabs ==
 
 The menus link to listings - and the listings resolve to a view of the document.
@@ -196,6 +211,24 @@ The individual "tab" is configured as follows :
         </tabs>
 }}}
 
+== ACL Groups == 
+
+This defines the permission levels for all the documents in the XML database. Denoted by the `<aclgroups>` node.
+
+The defined `<acl>` nodes must provide the following :
+ * acl/@name - a unique name for the acl
+ * acl/@axis - Xpath/XQuery string that selects the permissions  nodes in a document 
+ * acl/@condition - XQuery string that effectively applies that permission.
+
+The permissions are defined in xml format:
+
+{{{
+<acl-groups>
+   <acl name="public-view" axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission" condition="@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow'"/>
+   <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
+</acl-groups>
+}}}
+
 == Order-by & Search-in Filters == 
 
 These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies not search or order options for the particular listing.
@@ -204,7 +237,7 @@ Each defined `<doctype>` optionally provides the following :
  * `<orderbys/>` - contains parameters for sort field
  * `<searchins/>` - contains parameters for all the search options that can be used to filter.
 
-The filters and options are defind in xml format:
+The filters and options are defined in xml format:
 
 {{{
 <doctypes>
@@ -238,8 +271,8 @@ The options are defined in xml format:
 === Search-in ===
 
 These are filter options that can be applied to a search term options in all documents-listing.
- * searchin/@name - a unique name to be assigned to the xhtml form input element e.g ?*f_t*=title
- * searchin/@value - the value of the input element as passed in query string e.g ?f_t=*title*
+ * searchin/@name - a unique name to be assigned to the xhtml form input element e.g questions?*f_t*=title
+ * searchin/@value - the value of the input element as passed in query string e.g questions?f_t=*title*
  * searchin/@field - the actual indexed node or attribute in the Lucene collection index e.g. `bu:shortName`
  * searchin/@default - this denotes the default field to search into.
 

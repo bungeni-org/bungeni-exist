@@ -3,9 +3,9 @@
     ~ Copyright (c) 2010. betterForm Project - http://www.betterform.de
     ~ Licensed under the terms of BSD License
 --><?oxygen NVDLSchema="xhtml-xforms.nvdl"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
-        <title>Embedding a subform with the load action</title>
+        <title>Config Param</title>
         <meta name="author" content="anthony at googlemail.com"/>
         <meta name="author" content="ashok at parliaments.info"/>
         <meta name="description" content="XForms with config options"/>
@@ -21,59 +21,62 @@
                     <div id="mainnav" class="menu"/>
                 </div>
             </div>
-            <div id="xforms">
-                <div id="registration" class="InlineRoundBordersAlert">
-                    <div style="display:none" id="xf1">
-                        <xf:model id="m-user-config">
-                            <xf:instance xmlns="" src="../config-data.xml"/>
-                            <xf:instance id="codes">
-                                <countrylist>
-                                    <country>
-                                        <country-name>Afghanistan</country-name>
-                                        <code>AF</code>
-                                    </country>
-                                    <country>
-                                        <country-name>Land Island</country-name>
-                                        <code>AX</code>
-                                    </country>
-                                    <country>
-                                        <country-name>Albania</country-name>
-                                        <code>AL</code>
-                                    </country>
-                                    <country>
-                                        <country-name>Algeria</country-name>
-                                        <code>DZ</code>
-                                    </country>
-                                </countrylist>
-                            </xf:instance>
-                            <xf:submission id="s-send" replace="all" resource="../config-data.xml" method="post">
-                                <xf:action ev:event="xforms-submit-error">
-                                    <xf:message>Config Update failed. Please fill in valid values</xf:message>
-                                </xf:action>
-                                <xf:action ev:event="xforms-submit-done">
-                                    <xf:message>You have updated successfully.</xf:message>
-                                </xf:action>
-                            </xf:submission>
-                        <!--<xf:setfocus control="first" ev:event="xforms-ready"/>-->
-                        </xf:model>
+            <div id="main-wrapper">
+                <div id="xforms" style="margin:0 auto 0 auto;width:500px;">
+                    <div id="do-config" class="InlineRoundBordersAlert">
+                        <div style="display:none" id="xf1">
+                            <xf:model id="m-user-config">
+                                <!--xf:instance id="pcount" xmlns="" >
+                                    <data>
+                                        <range1 constraint="true">
+                                            <value>5</value>
+                                        </range1>
+                                    </data>
+                                </xf:instance-->
+                                <xf:instance xmlns="" id="uconfig" src="../config-data.xml"/>
+                                <xf:submission id="s-send" replace="all" resource="../config-data.xml" method="put">
+                                    <xf:action ev:event="xforms-submit-error">
+                                        <xf:message>Config Update failed. Please fill in valid values</xf:message>
+                                    </xf:action>
+                                    <xf:action ev:event="xforms-submit-done">
+                                        <xf:message>You have updated successfully.</xf:message>
+                                    </xf:action>
+                                </xf:submission>
+                                <!--<xf:setfocus control="first" ev:event="xforms-ready"/>-->
+                                <xf:bind id="pcount" nodeset="//range1">
+                                    <xf:bind constraint="boolean-from-string(../@constraint)" id="C190" nodeset="value" type="integer"/>
+                                </xf:bind>
+                            </xf:model>
+                        </div>
+                        <xf:group id="itema-ui" ref="instance('uconfig')" appearance="bf:verticalTable">
+                            <xf:label>Configure UI Parameters<span id="subtitle">Current settings in use.</span>
+                            </xf:label>
+                            <xf:input ref="limit">
+                                <xf:label>Limit:</xf:label>
+                                <xf:hint>how many items to list per page</xf:hint>
+                            </xf:input>
+                            <xf:input ref="orderby">
+                                <xf:label>Order By:</xf:label>
+                                <xf:hint>on listings, order by which node?</xf:hint>
+                            </xf:input>
+                            <xf:label/>
+                            <xf:range end="10" incremental="true" ref="//range1/value" start="1" step="1">
+                                <xf:label id="C195">Pagination Count</xf:label>
+                                <xf:hint id="C196">a Hint for this control</xf:hint>
+                                <xf:help id="C197">help for range1</xf:help>
+                                <xf:alert id="C198">invalid</xf:alert>
+                            </xf:range>
+                            <xf:input ref="visiblePages">
+                                <xf:label>Pagination Count:</xf:label>
+                                <xf:hint>number of pages to show to jump to</xf:hint>
+                            </xf:input>
+                            <xf:trigger appearance="triggerMiddleColumn">
+                                <xf:label>Update changes</xf:label>
+                                <xf:hint>Be calm - this is jus a tinker! ;)</xf:hint>
+                                <xf:send submission="s-send"/>
+                            </xf:trigger>
+                        </xf:group>
                     </div>
-                    <xf:group id="registration-ui" appearance="bf:verticalTable">
-                        <xf:label>Configure UI Parameters<span id="subtitle">Current settings in use.</span>
-                        </xf:label>
-                        <xf:input id="first" ref="limit">
-                            <xf:label>Limit:</xf:label>
-                            <xf:hint>how many items to list per page</xf:hint>
-                        </xf:input>
-                        <xf:input ref="orderby">
-                            <xf:label>Order By:</xf:label>
-                            <xf:hint>on listings, order by which node?</xf:hint>
-                        </xf:input>
-                        <xf:trigger appearance="triggerMiddleColumn">
-                            <xf:label>Update changes</xf:label>
-                            <xf:hint>Be calm - this is jus a tinker! ;)</xf:hint>
-                            <xf:send submission="s-send"/>
-                        </xf:trigger>
-                    </xf:group>
                 </div>
             </div>
         </div>

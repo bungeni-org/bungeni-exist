@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <limit>16</limit>
-    <orderby>bu:statusDate</orderby>
+    <limit>10</limit>
+    <orderby>bu:shortName</orderby>
+    <visiblePages>5</visiblePages>
+    <data>
+        <range1 constraint="true">
+            <value>7</value>
+        </range1>
+    </data>
 </config>

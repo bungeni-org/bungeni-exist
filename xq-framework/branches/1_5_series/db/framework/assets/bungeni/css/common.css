@@ -211,6 +211,57 @@ div#doc-downloads {
 .clear {
     clear:both;
 }
+
+/* PAGINATOR */
+.paginate {
+ 	text-align:right;
+ 	float:left;
+ 	height:30px;
+}
+.paginate .page-state {
+    float:left;
+    color:#0085BE;
+    display:inline;
+    padding:1px 5px 0 0;
+    height:18px;    
+}
+.paginate a 
+{
+	color:#2b92be !important;
+	font-size:12px;
+	font-weight:bold;
+	background:#fff;
+	border:1px solid #e3d3ff;
+	margin:0 3px 0 3px;
+	padding:2px 6px 2px 6px;
+}
+.paginate a:first-child 
+{
+	margin-left:0;
+}
+.paginate a:hover
+{
+	color: #ffffff !important;
+	background-color: #2b92be;
+	border:1px solid #2b92be;
+}
+
+.paginate a.disabled {
+	color: #f79f0e !important;
+	font-size:12px;
+	padding:2px 6px 2px 6px;
+	border:1px solid #e3d3ff;
+	background:#fff !important;
+	cursor:text;
+	text-decoration:none;
+}
+
+.paginate a.curr-no {
+	color: #ffffff !important;
+	background-color: #2b92be;
+	border:1px solid #2b92be;
+}
+/* PAGINATOR END */
  
 /*reusables*/
 .ele-center {

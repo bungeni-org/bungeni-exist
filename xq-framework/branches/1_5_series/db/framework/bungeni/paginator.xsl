@@ -98,7 +98,7 @@
             </xsl:variable>
             <div id="page-state" class="page-state">Page <xsl:value-of select="$pwhere"/> of <xsl:value-of select="$pages"/>
             </div>
-            <div id="paginate-pages" class="inline">
+            <div id="paginate-pages" class="inline" style="padding-right:0px;">
                 <!-- This serves the purpose of showing 'First' page link -->
                 <xsl:choose>
                     <!-- If the current page is page 1 , we dont render anything -->
@@ -200,74 +200,74 @@
                         </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
+               <!-- 
+                   Determines whether it's sound to show or not to show 'Next' 
+                   based on whether we have insufficient pages-count or we are
+                   on the last page.
+               -->
+                <xsl:choose>
+                    <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
+                        <a title="Next Page" href="#" class="disabled">
+                            <xsl:text>›</xsl:text>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <a title="Next Page">
+                            <xsl:attribute name="href">
+                                <xsl:text>?type=</xsl:text>
+                                <xsl:value-of select="$documentType"/>
+                                <xsl:text>&amp;f_t=</xsl:text>
+                                <xsl:value-of select="$f_title"/>
+                                <xsl:text>&amp;q=</xsl:text>
+                                <xsl:value-of select="$searchString"/>
+                                <xsl:text>&amp;s=</xsl:text>
+                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>&amp;offset=</xsl:text>
+                                <xsl:value-of select="abs($limit)*abs($pwhere)"/>
+                                <xsl:text>&amp;limit=</xsl:text>
+                                <xsl:value-of select="$limit"/>
+                            </xsl:attribute>
+                           ›</a>
+                    </xsl:otherwise>
+                </xsl:choose>
+               <!-- 
+                   Show the 'Last' page link based on similar conditions as 'Next' above.
+               -->
+                <xsl:choose>
+                    <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
+                        <a title="Last Page" href="#" class="disabled">
+                            <xsl:text>»</xsl:text>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <a title="Last Page">
+                            <xsl:attribute name="href">
+                                <xsl:text>?type=</xsl:text>
+                                <xsl:value-of select="$documentType"/>
+                                <xsl:text>&amp;f_t=</xsl:text>
+                                <xsl:value-of select="$f_title"/>
+                                <xsl:text>&amp;q=</xsl:text>
+                                <xsl:value-of select="$searchString"/>
+                                <xsl:text>&amp;s=</xsl:text>
+                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>&amp;offset=</xsl:text>
+                                <xsl:value-of select="abs($pages*$limit) - $limit"/>
+                                <xsl:text>&amp;limit=</xsl:text>
+                                <xsl:value-of select="$limit"/>
+                            </xsl:attribute>
+                           »</a>
+                    </xsl:otherwise>
+                </xsl:choose>            
+               <!-- 
+                   +KNOWN ISSUES
+                   1. Initially, the next button links to itself, ideally simply link to page 2
+                       (FIXED - 17-nov)
+                   2. Somehow page 5 has disappears into thin air...
+                       (FIXED - 17-nov)
+                   3. Otherwise it works fine, only remaining to add is 'First' and 'Last' page links.
+                       (LOOKS FINE ?)
+               -->
             </div>
-            <!-- 
-                Determines whether it's sound to show or not to show 'Next' 
-                based on whether we have insufficient pages-count or we are
-                on the last page.
-            -->
-            <xsl:choose>
-                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
-                    <a title="Next Page" href="#" class="disabled">
-                        <xsl:text>›</xsl:text>
-                    </a>
-                </xsl:when>
-                <xsl:otherwise>
-                    <a title="Next Page">
-                        <xsl:attribute name="href">
-                            <xsl:text>?type=</xsl:text>
-                            <xsl:value-of select="$documentType"/>
-                            <xsl:text>&amp;f_t=</xsl:text>
-                            <xsl:value-of select="$f_title"/>
-                            <xsl:text>&amp;q=</xsl:text>
-                            <xsl:value-of select="$searchString"/>
-                            <xsl:text>&amp;s=</xsl:text>
-                            <xsl:value-of select="$sortBy"/>
-                            <xsl:text>&amp;offset=</xsl:text>
-                            <xsl:value-of select="abs($limit)*abs($pwhere)"/>
-                            <xsl:text>&amp;limit=</xsl:text>
-                            <xsl:value-of select="$limit"/>
-                        </xsl:attribute>
-                        ›</a>
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- 
-                Show the 'Last' page link based on similar conditions as 'Next' above.
-            -->
-            <xsl:choose>
-                <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
-                    <a title="Last Page" href="#" class="disabled">
-                        <xsl:text>»</xsl:text>
-                    </a>
-                </xsl:when>
-                <xsl:otherwise>
-                    <a title="Last Page">
-                        <xsl:attribute name="href">
-                            <xsl:text>?type=</xsl:text>
-                            <xsl:value-of select="$documentType"/>
-                            <xsl:text>&amp;f_t=</xsl:text>
-                            <xsl:value-of select="$f_title"/>
-                            <xsl:text>&amp;q=</xsl:text>
-                            <xsl:value-of select="$searchString"/>
-                            <xsl:text>&amp;s=</xsl:text>
-                            <xsl:value-of select="$sortBy"/>
-                            <xsl:text>&amp;offset=</xsl:text>
-                            <xsl:value-of select="abs($pages*$limit) - $limit"/>
-                            <xsl:text>&amp;limit=</xsl:text>
-                            <xsl:value-of select="$limit"/>
-                        </xsl:attribute>
-                        »</a>
-                </xsl:otherwise>
-            </xsl:choose>            
-            <!-- 
-                +KNOWN ISSUES
-                1. Initially, the next button links to itself, ideally simply link to page 2
-                    (FIXED - 17-nov)
-                2. Somehow page 5 has disappears into thin air...
-                    (FIXED - 17-nov)
-                3. Otherwise it works fine, only remaining to add is 'First' and 'Last' page links.
-                    (LOOKS FINE ?)
-            -->
         </div>
     </xsl:template>
     

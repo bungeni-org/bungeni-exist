@@ -92,7 +92,7 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
 :   A string with embedded permissions ready for evaluation.
 :)
 declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
-  let $acl-filter := cmn:get-acl-filter($acl)
+  let $acl-filter := cmn:get-acl-permission-as-attr($acl)
     
     (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
     make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
@@ -870,7 +870,6 @@ declare function bun:get-reference($docitem as node()) {
 : It supports applying of ACLs
 :
 :)
-(:
 declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
     fn:concat(
         "collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri='", 
@@ -909,34 +908,45 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
 
 (:~
 Get document with ACL filter
+!+ACL_NEW_API - this is the new ACL API for retrieving documents
 :)
 declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string) {
     let $acl-permissions := cmn:get-acl-permissions($acl)
-    let $match := util:eval(bun:xqy-docitem-acl-uri($acl, $uri))
+    
+    (: WARNING-- because of odd behavior in eXist 1.5 branch we have to wrap the return value of the 
+    eval in a document {} object otherwise things dont work. Search in the exist mailing list for 'xpath resolution
+    bug' :)
+    let $match := 
+        document {
+            util:eval(bun:xqy-docitem-acl-uri($acl, $uri))
+        }
     (:
-    let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid]/
+    let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$uri]/
             (bu:permissions except bu:versions)/bu:permission[@name=$acl-permissions/@name and 
                                                               @role=$acl-permissions/@role and 
                                                               @setting=$acl-permissions/@setting]/ancestor::bu:ontology
     :)
-    return bun:documentitem-versions-with-acl($acl-permissions, $match)
+    (: WARNING -- we pass the node() of the document since the API expects a node, so we send the root node :)
+    return bun:documentitem-versions-with-acl($acl-permissions, $match/node())
     
 };
 
 (:~
-Remove Versions to which we dont have access
+Remove Versions to which we dont have access. This API filters a document for ONLY the versions
+the acl user has access to
+!+ACL_NEW_API
 :)
 declare function bun:documentitem-versions-with-acl($acl-permissions as node(), $docitem as node() ) {
   if ($docitem/self::bu:version) then
         if ($docitem/bu:permissions/bu:permission[
-            (:
                 @name=data($acl-permissions/@name) and 
                 @role=data($acl-permissions/@role) and 
                 @setting=data($acl-permissions/@setting)
-             :)
+                (: 
                 @name='zope.View' and 
                 @role='bungeni.Anonymous' and 
                 @setting='Allow'
+                :)
                 ]) then
             $docitem
         else
@@ -953,7 +963,7 @@ declare function bun:documentitem-versions-with-acl($acl-permissions as node(), 
 							   else $child
 				 }
 };
-:)
+
 
 (:~
 :   Used to retrieve a legislative-document
@@ -963,16 +973,22 @@ declare function bun:documentitem-versions-with-acl($acl-permissions as node(), 
 : @param _tmpl
 :   The corresponding transform template passed by the calling funcction
 :)
-declare function bun:get-parl-doc($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-parl-doc($acl as xs:string, $doc-uri as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
+    
+    (: !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
- 
+    :)
+    
     let $doc := <parl-doc> 
         {
-            (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter]
+            (:Returs a AN Document :)
+            (:!+ACL_NEW_API - changed call to use new ACL API , 
+            the root is an ontology document now not a legislativeItem:)
+            let $match := bun:documentitem-with-acl($acl, $doc-uri)
+            (: collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter] :)
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -996,12 +1012,16 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
+    (: !+FIX_THIS , !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
- 
+    :)
     let $doc := <parl-doc> 
         {
             (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid][$acl-filter]
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]
+            (: !+ACL_NEW_API, !+FIX_THIS - add acl filter for groups
+            [$acl-filter]
+            :)
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -1025,14 +1045,20 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
     <document>
         <primary> 
         {
-            $docitem/ancestor::bu:ontology
+        (:!+ACL_NEW_API 
+            $docitem/ancestor::bu:ontology :)
+            $docitem
         }
         </primary>
         <secondary>
             {
-                let $doc-ref := data($docitem/ancestor::bu:ontology/bu:*/bu:ministry/@href)
+                (:!+ACL_NEW_API - removed the ancestor axis reference here 
+                !+FIX_THIS - why use a bu:* kind of reference why a * ?!
+                :)
+                let $doc-ref := data($docitem/bu:*/bu:ministry/@href)
                 return 
-                    collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../../bu:ontology
+                    (:!+FIX_THIS - ultimately this should be replaced by the acl based group access api :)
+                    collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
         </secondary>
     </document>     
@@ -1055,17 +1081,17 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
 : @return 
 :   Documennt node similar to get-ref-assigned-grps() above
 :)
-declare function bun:get-doc-ver($versionid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-doc-ver($version-uri as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
     
     let $doc := <parl-doc>
         <document>
-            <version>{$versionid}</version>
+            <version>{$version-uri}</version>
             <primary>         
             {
-                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:versions/bu:version[@uri=$versionid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:versions/bu:version[@uri=$version-uri]/ancestor::bu:ontology
             }
             </primary>
             <secondary>

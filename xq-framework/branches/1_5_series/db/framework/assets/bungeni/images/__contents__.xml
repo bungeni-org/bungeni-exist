@@ -30,10 +30,13 @@
     <resource type="BinaryResource" name="ico-doc.png" owner="admin" group="dba" mode="644" created="2011-10-31T16:07:42+03:00" modified="2011-10-31T16:07:42+03:00" filename="ico-doc.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
+    <resource type="BinaryResource" name="ico-edit.png" owner="admin" group="dba" mode="644" created="2011-12-13T13:17:14+03:00" modified="2011-12-13T13:22:10+03:00" filename="ico-edit.png" mimetype="image/png">
+        <acl entries="0" version="1"/>
+    </resource>
     <resource type="BinaryResource" name="ico-pdf.png" owner="admin" group="dba" mode="644" created="2011-10-31T15:28:03+03:00" modified="2011-10-31T16:34:55+03:00" filename="ico-pdf.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="ico-print.png" owner="admin" group="dba" mode="644" created="2011-10-31T15:21:24+03:00" modified="2011-10-31T16:01:53+03:00" filename="ico-print.png" mimetype="image/png">
+    <resource type="BinaryResource" name="ico-print.png" owner="admin" group="biblio.users" mode="644" created="2011-10-31T15:21:24+03:00" modified="2011-10-31T16:01:53+03:00" filename="ico-print.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="ico-rss.png" owner="admin" group="dba" mode="644" created="2011-10-31T15:14:42+03:00" modified="2011-10-31T15:50:38+03:00" filename="ico-rss.png" mimetype="image/png">

@@ -59,6 +59,11 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
+                        <a href="http://localhost:8080/exist/rest/db/framework/bungeni/updater.xql?type={$doc-type}&amp;uri={$doc_uri}" title="Edit document body" class="edit">
+                            <em>EDIT</em>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{$doc-type}/pdf?uri={$doc_uri}" title="get PDF document" class="pdf">
                             <em>PDF</em>
                         </a>

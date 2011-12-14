@@ -11,6 +11,7 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="version"/>
     <xsl:template match="document">
         <xsl:variable name="ver_id" select="version"/>
@@ -53,20 +54,12 @@
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">text</xsl:with-param>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="{$doc-type}/pdf?uri={$doc_uri}" title="get PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{$doc-type}/xml?uri={$doc_uri}" title="get raw xml output" class="xml">
-                            <em>XML</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
+            </xsl:call-template>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <xsl:if test="$version eq 'true'">

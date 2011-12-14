@@ -8,6 +8,7 @@
 .bfVerticalTableValue {
     vertical-align:bottom;
     margin:10px !important;
+    height:100%;
 }
 
 /* put each textarea on its own row */
@@ -25,30 +26,24 @@ xf|textarea > xf|label {
    padding-right: 3px;
 }
 
-textarea {
-   font-family: Courier, sans-serif;
-}
-
-.small-textarea textarea { 
-   height: 4.4em; /* a bit less than four lines to demonstrate scrolling */
-   width: 300px;
-}
-
-.medium-textarea textarea { 
-   height: 6em;
-   width: 400px;
-}
-
-.large-textarea textarea {
-   font-family: Courier, sans-serif;
-   height: 10em;
-   width: 500px;
-}
-
 .xfTextarea .xfValue, .xfRange {
     display: inherit !important;
     width:60em;
-    height: 20em;
+    height: 100%;
+}
+
+.dijitEditorIFrameContainer {
+    height:auto;
+    overflow:hidden !important;
+}
+
+.bodyTextArea > span {
+    height:auto !important;
+}
+/* The loaded bu:body > div */
+.bodyTextArea > span .dijitEditorIFrameContainer {
+    padding-top:5px;
+    padding-left:5px;
 }
 
 .xfValue {

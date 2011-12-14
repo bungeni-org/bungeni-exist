@@ -3,6 +3,7 @@
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>
 
     <!-- DOCUMENTATION -->
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
@@ -80,20 +81,12 @@
                     </li>
                 </ul>
             </div>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="{$input-document-type}s/rss" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this page listing" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="render-group">listings</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$input-document-type"/>
+                <xsl:with-param name="uri">null</xsl:with-param>
+            </xsl:call-template>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">

@@ -46,6 +46,16 @@
         </xsl:call-template>
     </xsl:function>
     
+    <!-- XSLT Function to get download / view formats options for the document type or listings from ui-config.xml 
+        This can be used in a XSL for-each loop to iterate through a set of tabs
+    -->
+    <xsl:function name="xqcfg:get_downloadgroups">
+        <xsl:param name="render-group"/>
+        <xsl:call-template name="get_downloadgroups">
+            <xsl:with-param name="docgroup" select="$render-group"/>
+        </xsl:call-template>
+    </xsl:function>    
+    
     <!-- XSLT Function to get searchin configuration for a documen type from ui-config.xml 
         This can be used in a XSL for-each loop to iterate through a set of searchin elements
     -->
@@ -82,6 +92,14 @@
     <xsl:template name="get_tab">
         <xsl:param name="tab-name"/>
         <xsl:sequence select="document($ui-config)/ui/tabgroups/tabs[@name=$tab-name]"/>
+    </xsl:template>
+    
+    <!-- 
+        Accessor used to get download formats and types
+    -->
+    <xsl:template name="get_downloadgroups">
+        <xsl:param name="docgroup"/>
+        <xsl:sequence select="document($ui-config)/ui/downloadgroups/rendergroup[@name eq $docgroup]"/>
     </xsl:template>
     
     <!--

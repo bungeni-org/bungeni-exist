@@ -11,6 +11,7 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
     <xsl:param name="version"/>
@@ -56,25 +57,12 @@
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">text</xsl:with-param>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="http://localhost:8080/exist/rest/db/framework/bungeni/updater.xql?type={$doc-type}&amp;uri={$doc_uri}" title="Edit document body" class="edit">
-                            <em>EDIT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{$doc-type}/pdf?uri={$doc_uri}" title="get PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{$doc-type}/xml?uri={$doc_uri}" title="get raw xml output" class="xml">
-                            <em>XML</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
+            </xsl:call-template>
             <div id="main-doc" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <xsl:if test="$version eq 'true'">

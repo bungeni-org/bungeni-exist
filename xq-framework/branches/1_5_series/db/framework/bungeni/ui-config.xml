@@ -450,12 +450,20 @@
         Download formats
     -->
     <downloadgroups>
-        <listings>
-            
-        </listings>
-        <document>
-            
-        </document>
+        <rendergroup name="listings">
+            <format type="rss" href="null">Subscribe to Atom RSS feed</format>
+            <format type="print" href="null">Print this listing</format>
+        </rendergroup>
+        <rendergroup name="parl-doc">
+            <format type="edit" href="http://localhost:8080/exist/rest/db/framework/bungeni/updater.xql">Edit document. Will need to login to eXist</format>
+            <format type="pdf" href="null">Download PDF format</format>
+            <format type="xml" href="null">Download XML format</format>
+        </rendergroup>
+        <rendergroup name="members">
+            <format type="edit" href="http://localhost:8080/exist/rest/db/framework/bungeni/updater.xql">Edit document. Will need to login to eXist</format>
+            <format type="pdf" href="null">Download PDF format</format>
+            <format type="xml" href="null">Download XML format</format>
+        </rendergroup>
     </downloadgroups>
     
     <!--

@@ -51,6 +51,15 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
        return $doc
 };
 
+(:~
+:   Get the user ui-config file
+:)
+declare function cmn:user-preferences() as document-node() {
+    
+    $config:UI-USER-CONFIG
+    
+};
+
 
 (:~
 Get the applicable menu for a route

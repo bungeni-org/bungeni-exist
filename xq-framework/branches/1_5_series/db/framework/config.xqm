@@ -32,6 +32,8 @@ declare variable $config:APP-PREF := $config:app-prefix;
 declare variable $config:XML-COLLECTION := data($config:doc//app[@name eq $config:APP-NAME]/xml-collection);
 (: The UI configuration file of the application :)
 declare variable $config:UI-CONFIG := data($config:doc//app[@name eq $config:APP-NAME]/ui-config);
+(: The User's UI Configuration of the application :)
+declare variable $config:UI-USER-CONFIG  := fn:doc(fn:concat($config:fw-root, "/bungeni/ui-user-config.xml"));
 (: The default template used by the application :)
 declare variable $config:DEFAULT-TEMPLATE := data($config:doc//app[@name eq $config:APP-NAME]/default-tmpl); 
 

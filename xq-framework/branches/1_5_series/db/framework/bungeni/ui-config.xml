@@ -383,6 +383,9 @@
                     <li>
                         <a name="members" href="members">members</a>
                     </li>
+                    <li>
+                        <a name="preferences" href="http://localhost:8080/exist/rest/db/framework/bungeni/user-config.xql">preferences</a>
+                    </li>
                 </ul>
             </div>
         </menu>

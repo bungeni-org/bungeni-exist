@@ -26,7 +26,8 @@ Default Variables
 declare variable $bun:SORT-BY := 'bu:statusDate';
 
 declare variable $bun:OFF-SET := 0;
-declare variable $bun:LIMIT :=10;
+declare variable $bun:LIMIT := if (cmn:user-preferences()/config/limit) then cmn:user-preferences()/config/limit else 10;
+declare variable $bun:VISIBLEPAGES := if (cmn:user-preferences()/config/visiblePages/value) then cmn:user-preferences()/config/visiblePages/value else 5;
 declare variable $bun:DOCNO := 1;
 
 (:~
@@ -175,6 +176,7 @@ declare function bun:get-documentitems(
         <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {
@@ -358,6 +360,7 @@ declare function bun:search-documentitems(
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
             <offset>{$offset}</offset>
             <limit>{$limit}</limit>
+            <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {
@@ -704,6 +707,7 @@ declare function bun:get-committees(
         <listingUrlPrefix>committee/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>        
         </paginator>
         <alisting>
         {
@@ -783,6 +787,7 @@ declare function bun:get-politicalgroups(
         <listingUrlPrefix>committee/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {
@@ -1148,6 +1153,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'])}</count>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {

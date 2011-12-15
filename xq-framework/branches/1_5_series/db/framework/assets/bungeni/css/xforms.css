@@ -49,3 +49,47 @@ xf|textarea > xf|label {
 .xfValue {
     width:500px;
 }
+
+
+/* UI-PREFENCES */
+.ui-prefs #itema-ui {
+    width:500px;
+    border-collapse: separate;
+    border-spacing: 8px;
+}
+.ui-prefs .info-div {
+    width:95%;
+}
+.ui-prefs .info-div span {
+    text-align:right;
+    float:right;
+    width:auto;
+}
+.ui-prefs .info-div span > label {
+    margin:0 5px 0 10px;
+    font-style:italic;    
+}
+.ui-prefs .info-div span > span.xfValue {
+    font-weight:bold;
+}
+.ui-prefs #itema-ui tr td {
+    margin:10px !important;
+}
+.ui-prefs .ui-range-wdg > table {
+    vertical-align:bottom;
+}
+.ui-prefs .xfGroupLabel {
+    font-size:1.3em;
+}
+.ui-prefs .bfVerticalTableLabel {
+    width:auto;
+    white-space:nowrap;
+}
+.ui-prefs .bfVerticalTableLabel label {
+    text-align:right;
+    padding-right:5px;
+    float:right;
+}
+.ui-prefs .xfValue {
+    width:200px;
+}

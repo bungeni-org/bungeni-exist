@@ -30,7 +30,7 @@ declare function local:get-real-name() {
     util:document-name(collection('/db/bungeni-xml')//bu:ontology/bu:legislativeItem[@uri=$docnumber])
 };
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:bu="http://portal.bungeni.org/1.0/"  xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:bu="http://portal.bungeni.org/1.0/"  xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Config Param</title>
         <meta name="author" content="anthony at googlemail.com"/>
@@ -67,7 +67,7 @@ declare function local:get-real-name() {
             </xf:bind>
         </xf:model>        
     </head>
-    <body>
+    <body class="portal">
         <div id="container" style="background-color:#eeeeee;">
             <div id="header">
                 <div id="header-banner"/>

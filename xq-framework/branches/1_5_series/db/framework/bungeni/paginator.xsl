@@ -61,6 +61,13 @@
             <xsl:value-of select="./limit"/>
         </xsl:variable>
         
+        <!-- 
+            the jump page navigate link numbers 
+        -->
+        <xsl:variable name="visiblePages">
+            <xsl:value-of select="./visiblePages"/>
+        </xsl:variable>         
+        
         <!--
             Render the pager 
             -->
@@ -161,11 +168,11 @@
                     group, group-left and group-right an integer, 5, which eventually
                     can be factored into a user-configuration to be adjusted at user's discretion.
                 -->
-                <xsl:variable name="group" select="floor($offset div (5 * $limit))"/>
+                <xsl:variable name="group" select="floor($offset div ($visiblePages * $limit))"/>
                 <!-- Calculate boundary-point while there are more pages to show on right -->
-                <xsl:variable name="group-left" select="($group+1)*5"/>
+                <xsl:variable name="group-left" select="($group+1)*$visiblePages"/>
                 <!-- Calculate boundary to now show the available pages on the right -->
-                <xsl:variable name="group-right" select="($group*5)+1"/>
+                <xsl:variable name="group-right" select="($group*$visiblePages)+1"/>
                 <!-- DEBUG
                 <span>;;<xsl:value-of select="$group"></xsl:value-of> ,</span>
                 <span><xsl:value-of select="$group-left"></xsl:value-of> (group-left),</span>

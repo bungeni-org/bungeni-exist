@@ -9,7 +9,11 @@
             <xd:p> Tabled document item from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
-    <xsl:output method="xml"/>
+    <xsl:character-map name="div">
+        <xsl:output-character character="&lt;" string="&lt;"/>
+        <xsl:output-character character="&gt;" string="&gt;"/>
+    </xsl:character-map>
+    <xsl:output method="xml" use-character-maps="div"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="version"/>

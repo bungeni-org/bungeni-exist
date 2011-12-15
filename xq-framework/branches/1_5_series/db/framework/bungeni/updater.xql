@@ -13,7 +13,7 @@ declare variable $docnumber := xs:string(request:get-parameter("uri",""));
 declare variable $doctype := xs:string(request:get-parameter("type","question"));
     
 declare function local:get-body() as node() {
-    let $doc := collection('/db/bungeni-xml')//bu:ontology/bu:legislativeItem[@uri=$docnumber]/ancestor::bu:ontology/bu:legislativeItem/bu:body/*
+    let $doc := collection('/db/bungeni-xml')//bu:ontology/bu:legislativeItem[@uri=$docnumber]/ancestor::bu:ontology/bu:legislativeItem/bu:body/node()
     
     return
         <decoded>
@@ -26,6 +26,12 @@ declare function local:get-body() as node() {
         </decoded>
 };
 
+declare function local:get-revert($rtepaste as xs:string) {
+
+    fn:replace(fn:replace(util:serialize($rtepaste,"method=xhtml"),'&gt;','<'),'&lt;','>')                
+
+};
+
 declare function local:get-real-name() {
     util:document-name(collection('/db/bungeni-xml')//bu:ontology/bu:legislativeItem[@uri=$docnumber])
 };
@@ -35,7 +41,7 @@ declare function local:get-real-name() {
         <title>Config Param</title>
         <meta name="author" content="anthony at googlemail.com"/>
         <meta name="author" content="ashok at parliaments.info"/>
-        <meta name="description" content="XForms with config options"/>
+        <meta name="description" content="XForms to update"/>
         <link rel="stylesheet" href="../assets/bungeni/css/boilerplate.css"/>
         <link rel="stylesheet" href="../assets/bungeni/css/bungeni.css"/>
         <link rel="stylesheet" type="text/css" href="../assets/bungeni/css/xforms.css" />
@@ -62,9 +68,6 @@ declare function local:get-real-name() {
                 </xf:action>
             </xf:submission>
             <!--<xf:setfocus control="first" ev:event="xforms-ready"/>-->
-            <xf:bind id="pcount" nodeset="//range1">
-                <xf:bind constraint="boolean-from-string(../@constraint)" id="C190" nodeset="value" type="integer"/>
-            </xf:bind>
         </xf:model>        
     </head>
     <body class="portal">
@@ -99,17 +102,17 @@ declare function local:get-real-name() {
                                 <xf:help>help for textarea1</xf:help>
                                 <xf:alert>invalid</xf:alert>
                             </xf:textarea>
-                            <xf:label/>
-                            <!--xf:range end="10" incremental="true" ref="//range1/value" start="1" step="1">
-                                <xf:label id="C195">Pagination Count</xf:label>
-                                <xf:hint id="C196">a Hint for this control</xf:hint>
-                                <xf:help id="C197">help for range1</xf:help>
-                                <xf:alert id="C198">invalid</xf:alert>
-                            </xf:range-->                         
+                            <xf:label/>                       
                             <xf:trigger appearance="bf:verticalTable">
                                 <xf:label>Update changes</xf:label>
-                                <xf:hint>Be calm - this is jus a tinker! ;)</xf:hint>
-                                <xf:setvalue ref="/bu:ontology/bu:legislativeItem/bu:body/*" value="instance('requests')/body/decoded"/>
+                                <xf:hint>Hit me to eternalize the changes</xf:hint>
+                                <!-- 
+                                    +HACK
+                                    Delete the children nodes() before updating. This was after a hair-pulling experience where update was only 
+                                    prepended instead of replacing the body!! Yay!
+                                -->
+                                <xf:delete nodeset="/bu:ontology/bu:legislativeItem/bu:body/*" at="index('')"/>
+                                <xf:setvalue ref="/bu:ontology/bu:legislativeItem/bu:body" value="instance('requests')/body/decoded"/>
                                 <xf:send submission="s-send"/>
                             </xf:trigger>
                         </xf:group>                      

@@ -3,6 +3,6 @@
     <limit>8</limit>
     <orderby>bu:shortName</orderby>
     <visiblePages constraint="true">
-        <value>3</value>
+        <value>5</value>
     </visiblePages>
 </config>

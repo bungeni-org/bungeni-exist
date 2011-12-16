@@ -9,11 +9,11 @@
             <xd:p> Tabled document item from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
-    <xsl:character-map name="div">
+    <xsl:character-map name="uncode">
         <xsl:output-character character="&lt;" string="&lt;"/>
         <xsl:output-character character="&gt;" string="&gt;"/>
     </xsl:character-map>
-    <xsl:output method="xml" use-character-maps="div"/>
+    <xsl:output method="xml" use-character-maps="uncode"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="version"/>
@@ -127,7 +127,8 @@
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="$render-doc/bu:body"/>
+                            <xsl:copy-of select="$render-doc/bu:body/node()"/>
+                            <!--xsl:value-of select="$render-doc/bu:body/text()" disable-output-escaping="yes"/-->
                         </div>
                     </div>
                 </div>

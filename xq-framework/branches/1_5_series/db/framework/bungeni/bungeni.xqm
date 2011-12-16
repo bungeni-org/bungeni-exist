@@ -51,7 +51,10 @@ declare function bun:gen-pdf-output($docid as xs:string) {
         
     let $transformed := transform:transform($doc,$stylesheet,())
      
-    let $pdf := xslfo:render($transformed, "application/pdf", ())
+    let $pdf := xslfo:render($transformed, "application/pdf", 
+                                                            <parameters>
+                                                                <param name="keywords" value="Parlimentary, ddocument"/>
+                                                            </parameters>)
      
     return response:stream-binary($pdf, "application/pdf", "output.pdf")     
     
@@ -881,6 +884,19 @@ declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
         $uri, 
         "']")
 };
+(:~
+:
+: The following are query builder functions for generating the document's version access query
+: It supports applying of ACLs
+:
+:)
+declare function bun:xqy-veritem-uri($uri as xs:string) as xs:string{
+    fn:concat(
+        "collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri='", 
+        $uri, 
+        "']")
+};
+            
 
 declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
     let $acl-permissions := cmn:get-acl-permissions($acl)
@@ -905,6 +921,14 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
         bun:xqy-docitem-uri($uri), 
         "/", 
         bun:xqy-docitem-perms($acl),
+        "/",
+        bun:xqy-docitem-ancestor-root()
+        )
+};
+
+declare function bun:xqy-veritem-acl-uri($acl as xs:string, $uri as xs:string) as xs:string {
+    fn:concat(
+        bun:xqy-veritem-uri($uri), 
         "/",
         bun:xqy-docitem-ancestor-root()
         )
@@ -990,8 +1014,9 @@ declare function bun:get-parl-doc($acl as xs:string, $doc-uri as xs:string, $_tm
     let $doc := <parl-doc> 
         {
             (:Returs a AN Document :)
-            (:!+ACL_NEW_API - changed call to use new ACL API , 
-            the root is an ontology document now not a legislativeItem:)
+            (:  !+ACL_NEW_API - changed call to use new ACL API , 
+            :   the root is an ontology document now not a legislativeItem
+            :)
             let $match := bun:documentitem-with-acl($acl, $doc-uri)
             (: collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter] :)
             return
@@ -1023,7 +1048,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
     let $doc := <parl-doc> 
         {
             (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
             (: !+ACL_NEW_API, !+FIX_THIS - add acl filter for groups
             [$acl-filter]
             :)
@@ -1058,9 +1083,9 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
         <secondary>
             {
                 (:!+ACL_NEW_API - removed the ancestor axis reference here 
-                !+FIX_THIS - why use a bu:* kind of reference why a * ?!
+                !+FIXED - why use a bu:* kind of reference why a * ?!
                 :)
-                let $doc-ref := data($docitem/bu:*/bu:ministry/@href)
+                let $doc-ref := data($docitem/child::bu:group/@href)
                 return 
                     (:!+FIX_THIS - ultimately this should be replaced by the acl based group access api :)
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
@@ -1085,8 +1110,10 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
 :   The .xsl template that will handle the return output
 : @return 
 :   Documennt node similar to get-ref-assigned-grps() above
+:
+: @stylesheet [document-type]/version/text e.g question/version/text
 :)
-declare function bun:get-doc-ver($version-uri as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
@@ -1096,7 +1123,7 @@ declare function bun:get-doc-ver($version-uri as xs:string, $_tmpl as xs:string)
             <version>{$version-uri}</version>
             <primary>         
             {
-                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:versions/bu:version[@uri=$version-uri]/ancestor::bu:ontology
+                util:eval(bun:xqy-veritem-acl-uri($acl,$version-uri))
             }
             </primary>
             <secondary>

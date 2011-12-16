@@ -29,18 +29,16 @@
                             </dc:description>
                         </rdf:Description>
                         <!-- 
-                              !+FIX_THIS_TODO Add metadata properly for Keywords,
+                              !+FIXED Add metadata properly for Keywords,
                               not working properly at the moment. Current guide
                               http://xmlgraphics.apache.org/fop/0.95/metadata.html
                         -->
-                        <pdf:Keywords xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+                        <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+                            <!-- XMP properties go here -->
+                            <xmp:CreatorTool>eXist XML Database with xsl-fo module.</xmp:CreatorTool>
                             <pdf:Keywords>
                                 <xsl:value-of select="$doc-keywords"/>
                             </pdf:Keywords>
-                        </pdf:Keywords>
-                        <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
-                            <!-- XMP properties go here -->
-                            <xmp:CreatorTool>eXist XML Database with xsl-fo module.</xmp:CreatorTool>
                         </rdf:Description>
                     </rdf:RDF>
                 </x:xmpmeta>

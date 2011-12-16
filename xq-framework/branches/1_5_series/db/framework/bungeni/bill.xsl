@@ -70,20 +70,20 @@
                                 <li>
                                     <a href="{primary/bu:ontology/bu:document/@type}/text?uri={primary/bu:ontology/bu:legislativeItem/@uri}">current</a>
                                 </li>
-                                <xsl:variable name="total_versions" select="count(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version)"/>
-                                <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version">
+                                <xsl:variable name="total_versions" select="count(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[bu:permissions/bu:permission                                     [@name ='zope.View' and                                      @role = 'bungeni.Anonymous' and                                      @setting = 'Allow']                                     ])"/>
+                                <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version                                                         [bu:permissions/bu:permission                                                             [@name ='zope.View' and                                                                  @role = 'bungeni.Anonymous' and                                                                  @setting = 'Allow']                                                          ]">
                                     <xsl:sort select="bu:statusDate" order="descending"/>
                                     <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
                                     <li>
                                         <xsl:choose>
-                                            <!-- if current URI is equal to this versions URI -->
+                                                <!-- if current URI is equal to this versions URI -->
                                             <xsl:when test="$ver_uri eq @uri">
                                                 <span>version-<xsl:value-of select="$cur_pos"/>
                                                 </span>
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <a href="{$doc-type}/version/text?uri={@uri}">
-                                                    Version-<xsl:value-of select="$cur_pos"/>
+                                                        Version-<xsl:value-of select="$cur_pos"/>
                                                 </a>
                                             </xsl:otherwise>
                                         </xsl:choose>

@@ -21,7 +21,8 @@ declare function local:get-body() as node() {
             if(fn:matches(fn:string($doc),"&lt;") = true()) then
                 fn:replace(fn:replace($doc,'>','&gt;'),'<','&lt;')
             else
-                fn:replace(fn:replace(util:serialize($doc,"method=xhtml"),'>','&gt;'),'<','&lt;')                
+                (:fn:replace(fn:replace(util:serialize($doc,"method=xml"),'>','&gt;'),'<','&lt;'):) 
+                util:serialize($doc,"method=xhtml") 
         }
         </decoded>
 };
@@ -111,7 +112,7 @@ declare function local:get-real-name() {
                                     Delete the children nodes() before updating. This was after a hair-pulling experience where update was only 
                                     prepended instead of replacing the body!! Yay!
                                 -->
-                                <xf:delete nodeset="/bu:ontology/bu:legislativeItem/bu:body/*" at="index('')"/>
+                                <xf:delete nodeset="/bu:ontology/bu:legislativeItem/bu:body/*" at="index('')"/>                                
                                 <xf:setvalue ref="/bu:ontology/bu:legislativeItem/bu:body" value="instance('requests')/body/decoded"/>
                                 <xf:send submission="s-send"/>
                             </xf:trigger>

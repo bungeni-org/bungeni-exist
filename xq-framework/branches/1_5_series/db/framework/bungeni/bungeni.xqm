@@ -997,10 +997,16 @@ declare function bun:get-parl-doc($acl as xs:string, $doc-uri as xs:string, $_tm
             (:  !+ACL_NEW_API - changed call to use new ACL API , 
             :   the root is an ontology document now not a legislativeItem
             :)
-            let $match := bun:documentitem-with-acl($acl, $doc-uri)
-            (: collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$docid][$acl-filter] :)
+            let $match := bun:documentitem-with-acl($acl, $doc-uri),
+                (: !+FIX_THIS (ao, Dec 19 2011)
+                :   Decoding escaped html markup was painfully futile in XSLT, this is temporary fix since a better
+                :   solution must eXist out there. This converts the markup and returns a node that is sneaked into the 
+                :   presentation layer as <fringe/> node. See bun:get-ref-assigned-grps()
+                :)
+                $encodedbody := util:parse(fn:replace(fn:replace(util:serialize($match//bu:legislativeItem/bu:body/node(),"method=xhtml,media-type=text/xhtml"),'&amp;gt;','>'),'&amp;lt;','<'))
+            
             return
-                bun:get-ref-assigned-grps($match)   
+                bun:get-ref-assigned-grps($match, $encodedbody)
         } 
     </parl-doc>    
     return
@@ -1028,12 +1034,13 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
     let $doc := <parl-doc> 
         {
             (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology,
+                $nullnode := <node/>
             (: !+ACL_NEW_API, !+FIX_THIS - add acl filter for groups
             [$acl-filter]
            :)
             return
-                bun:get-ref-assigned-grps($match)   
+                bun:get-ref-assigned-grps($match, $nullnode)   
         } 
     </parl-doc>    
     return
@@ -1051,7 +1058,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
 :       <secondary/>
 :   </document>
 :)
-declare function bun:get-ref-assigned-grps($docitem as node()) {
+declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as node()) {
     <document>
         <primary> 
         {
@@ -1071,6 +1078,7 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
         </secondary>
+        <fringe>{$parsedbody}</fringe>
     </document>     
 };
 

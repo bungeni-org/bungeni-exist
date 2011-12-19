@@ -37,7 +37,7 @@ declare function local:get-real-name() {
     util:document-name(collection('/db/bungeni-xml')//bu:ontology/bu:legislativeItem[@uri=$docnumber])
 };
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:bu="http://portal.bungeni.org/1.0/"  xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:bu="http://portal.bungeni.org/1.0/"  xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Config Param</title>
         <meta name="author" content="anthony at googlemail.com"/>
@@ -56,11 +56,12 @@ declare function local:get-real-name() {
                     <body>{local:get-body()}</body>
                     <remote-host>{request:get-remote-host()}</remote-host>
                     <remote-ip>{request:get-remote-addr()}</remote-ip>
+                    <url>{request:get-server-port()}</url>
                 </request>                                      
             </xf:instance> 
             <xf:bind nodeset="instance('requests')/body/decoded" id="doc-body" required="true()"/>
-            <xf:submission id="s-send" replace="none" resource="../../bungeni-xml/{local:get-real-name()}" method="put" 
-            includenamespaceprefixes="#default">
+            <xf:bind nodeset="instance('requests')/output1/value" type="anyURI" />
+            <xf:submission id="s-send" replace="none" resource="../../bungeni-xml/{local:get-real-name()}" method="put">
                 <xf:action ev:event="xforms-submit-error">
                     <xf:message>Config Update failed. Please fill in valid values</xf:message>
                 </xf:action>
@@ -76,21 +77,20 @@ declare function local:get-real-name() {
             <div id="header">
                 <div id="header-banner"/>
                 <div class="header-nav">
-                    <div id="mainnav" class="menu">
-                    --incoming--
-                    </div>
+                    <div id="mainnav" class="menu" />
                 </div>
             </div>
             <div id="sub-header">
                 <div class="header-nav">
-                    <div id="subnav" class="submenu">
-                        --incoming--
-                    </div>
+                    <div id="subnav" class="submenu"/>
                 </div>
             </div>
             <div id="main-wrapper">
                 <div id="xforms" style="margin:0 auto 0 auto;width:960px;">
-                    <div id="do-config" class="InlineRoundBordersAlert">                    
+                    <div id="do-config" class="ui-update InlineRoundBordersAlert">   
+                        <div class="info-div">
+                           <a type="simple" href="http://{request:get-server-name()}:{request:get-server-port()}/exist/apps/framework/{request:get-parameter("type","bill")}/text?uri={request:get-parameter("uri","")}">&#171; BACK</a>
+                        </div>                      
                         <xf:group id="itema-ui" ref="instance('document')" appearance="bf:verticalTable">                       
                             <xf:input class="docTitle" ref="/bu:ontology/bu:legislativeItem/bu:shortName">
                                 <xf:label>Title:</xf:label>

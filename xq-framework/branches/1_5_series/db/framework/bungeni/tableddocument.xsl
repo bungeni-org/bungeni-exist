@@ -13,7 +13,7 @@
         <xsl:output-character character="&lt;" string="&lt;"/>
         <xsl:output-character character="&gt;" string="&gt;"/>
     </xsl:character-map>
-    <xsl:output method="xml" use-character-maps="uncode"/>
+    <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="version"/>
@@ -127,8 +127,14 @@
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="$render-doc/bu:body/node()"/>
-                            <!--xsl:value-of select="$render-doc/bu:body/text()" disable-output-escaping="yes"/-->
+                            <xsl:choose>
+                                <xsl:when test="matches($render-doc/bu:body/text(),'&lt;')">
+                                    <xsl:copy-of select="fringe"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:copy-of select="$render-doc/bu:body/node()"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </div>
                     </div>
                 </div>

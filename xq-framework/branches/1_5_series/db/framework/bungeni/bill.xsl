@@ -144,7 +144,14 @@
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="$render-doc/bu:body"/>
+                            <xsl:choose>
+                                <xsl:when test="matches($render-doc/bu:body/text(),'&lt;')">
+                                    <xsl:copy-of select="fringe"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:copy-of select="$render-doc/bu:body"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </div>
                     </div>
                 </div>

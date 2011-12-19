@@ -883,20 +883,7 @@ declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
         "collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri='", 
         $uri, 
         "']")
-};
-(:~
-:
-: The following are query builder functions for generating the document's version access query
-: It supports applying of ACLs
-:
-:)
-declare function bun:xqy-veritem-uri($uri as xs:string) as xs:string{
-    fn:concat(
-        "collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri='", 
-        $uri, 
-        "']")
-};
-            
+};        
 
 declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
     let $acl-permissions := cmn:get-acl-permissions($acl)
@@ -921,14 +908,6 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
         bun:xqy-docitem-uri($uri), 
         "/", 
         bun:xqy-docitem-perms($acl),
-        "/",
-        bun:xqy-docitem-ancestor-root()
-        )
-};
-
-declare function bun:xqy-veritem-acl-uri($acl as xs:string, $uri as xs:string) as xs:string {
-    fn:concat(
-        bun:xqy-veritem-uri($uri), 
         "/",
         bun:xqy-docitem-ancestor-root()
         )
@@ -1114,16 +1093,20 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
 : @stylesheet [document-type]/version/text e.g question/version/text
 :)
 declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $_tmpl as xs:string) as element()* {
-
+    
+    let $acl-permissions := cmn:get-acl-permissions($acl)
+    
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $stylesheet := cmn:get-xslt($_tmpl),
+        $match := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:versions/bu:version[@uri=$version-uri]/ancestor::bu:ontology
     
     let $doc := <parl-doc>
         <document>
             <version>{$version-uri}</version>
             <primary>         
             {
-                util:eval(bun:xqy-veritem-acl-uri($acl,$version-uri))
+                (:util:eval(bun:xqy-veritem-acl-uri($acl,$version-uri)):)
+                bun:documentitem-versions-with-acl($acl-permissions, $match)
             }
             </primary>
             <secondary>

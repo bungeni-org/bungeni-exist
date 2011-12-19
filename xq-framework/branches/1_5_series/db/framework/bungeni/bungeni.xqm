@@ -1,6 +1,7 @@
 module namespace bun = "http://exist.bungeni.org/bun";
 (:import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";:)
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
+import module namespace xps="http://www.w3.org/2005/xpath-functions";
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
@@ -1030,7 +1031,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
             let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
             (: !+ACL_NEW_API, !+FIX_THIS - add acl filter for groups
             [$acl-filter]
-            :)
+           :)
             return
                 bun:get-ref-assigned-grps($match)   
         } 
@@ -1094,19 +1095,18 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
 :)
 declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $_tmpl as xs:string) as element()* {
     
-    let $acl-permissions := cmn:get-acl-permissions($acl)
+    let $doc-uri := xps:substring-before($version-uri, "@")
+    let $match := bun:documentitem-with-acl($acl, $doc-uri)
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl),
-        $match := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:versions/bu:version[@uri=$version-uri]/ancestor::bu:ontology
+    let $stylesheet := cmn:get-xslt($_tmpl)
     
     let $doc := <parl-doc>
         <document>
             <version>{$version-uri}</version>
             <primary>         
             {
-                (:util:eval(bun:xqy-veritem-acl-uri($acl,$version-uri)):)
-                bun:documentitem-versions-with-acl($acl-permissions, $match)
+                $match
             }
             </primary>
             <secondary>
@@ -1121,6 +1121,8 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
                                 <param name="version" value="true" />
                             </parameters>)
 };
+
+
 
 declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) as element()* {
 

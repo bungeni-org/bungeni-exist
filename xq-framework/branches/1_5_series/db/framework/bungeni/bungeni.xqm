@@ -111,6 +111,22 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/ancestor::bu:ontology")
 };
 
+declare function bun:xqy-list-documentitems-with-acl-tmp($acl as xs:string, $type as xs:string) {
+  let $acl-filter := cmn:get-acl-permission-as-attr($acl)
+    
+    (:~ !+FIX_THIS (ao, 20 Dec 2011) - return bu:ontology begat a problem on eXist 1.5's Lucene where the ft:query() could
+        not traverse up to and yielded nothing.
+    :)
+  return  
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@type='document']",
+                "/bu:document[@type='",$type,"']",
+                "/following-sibling::bu:legislativeItem",
+                "/(bu:permissions except bu:versions)",
+                "/bu:permission[",$acl-filter,"]",
+                "/ancestor::bu:legislativeItem")
+};
+
 (:~
 :   Implements xqy-list-documentitems-with-acl()
 : @param acl
@@ -295,16 +311,26 @@ declare function bun:search-legislative-items(
 :   xhtml query string that will be appended to paginator.
 :)
 declare function local:generate-qry-str($getqrystr) {
-        let $tokened := tokenize($getqrystr,'&amp;'),
-            $loop := 0
+        let $rem-dups := if (matches($getqrystr,"offset")) then fn:substring-before($getqrystr, '&amp;offset') else $getqrystr,
+            $tokened := tokenize($rem-dups,'&amp;')
          
-        (: Remove constant parama like limit,offset etc :)
-        for $toks in $tokened 
+        (: Remove constant params like limit,offset etc :)
+        let $off := for $toks1 in $tokened 
             return
-                if (contains($toks,"offset") or contains($toks,"limit")) then (
-                    remove($tokened,index-of($tokened,$toks))
+                if (contains($toks1,"offset")) then (
+                    remove($tokened,index-of($tokened,$toks1))
                 )
-                else ()
+                else ($tokened)
+                
+        let $lim := for $toks2 in $tokened 
+            return
+                if (contains($toks2,"limit")) then (
+                    remove($tokened,index-of($tokened,$toks2))
+                )
+                else ($tokened)
+
+         return 
+                string(string-join(distinct-values($off[.=$lim]),"&amp;"))
 };
 
 (:~
@@ -335,7 +361,7 @@ declare function bun:search-documentitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:xqy-list-documentitems-with-acl($acl, $type)
+    let $coll_rs := bun:xqy-list-documentitems-with-acl-tmp($acl, $type)
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
@@ -358,9 +384,7 @@ declare function bun:search-documentitems(
                   )
              }</count>
             <documentType>{$type}</documentType>
-            <searchString>{$querystr}</searchString>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
-            <sortBy>{$sortby}</sortBy>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
             <offset>{$offset}</offset>
             <limit>{$limit}</limit>
@@ -407,7 +431,6 @@ declare function bun:search-documentitems(
     (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
     the correct sort combo in the transformed output. See corresponding comment in XSLT :)
     return
-        (:$doc:)
         transform:transform($doc, 
             $stylesheet, 
             <parameters>
@@ -441,16 +464,16 @@ declare function bun:ft-search(
             http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
         :)
         
-        let $escaped := replace($querystr,'(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
+        let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
             $ultimate-path := local:build-search-objects($type),
-            $eval-query := concat($acl-fetch,"//bu:legislativeItem[ft:query((",$ultimate-path,"), '",$escaped,"')]")
+            $eval-query := concat($acl-fetch,"[ft:query((",$ultimate-path,"), '",$escaped,"')]/ancestor::bu:ontology")
             
         for $search-rs in util:eval($eval-query)
-        order by ft:score($search-rs) descending
+        order by ft:score($search-rs) descending      
             
         return
             (:<params>{$ultimate-path}</params> !+DEBUG_WITH_test.xql:)
-            $search-rs/ancestor::bu:ontology        
+            $search-rs        
 };
 
 (:~
@@ -500,7 +523,7 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
         $f_all := xs:string(request:get-parameter("all",'null')),
         $f_body := xs:string(request:get-parameter("f_b",'null')),
         $f_docno := xs:string(request:get-parameter("f_d",'null')),
-        $f_title := xs:string(request:get-parameter("f_t",'null'))        
+        $f_title := xs:string(request:get-parameter("f_t",'null'))    
 
     return
       (: Re-writing the doc_type with the one gotten from rou:listing-documentitem() :)    

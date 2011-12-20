@@ -17,30 +17,9 @@
         <!-- 
             search by title by of page (for search) 
         -->
-        <xsl:variable name="f_title">
+        <xsl:variable name="qry_vars">
             <xsl:value-of select="./fullQryStr"/>
-        </xsl:variable>        
-        
-        <!-- 
-            the sort by of page (for search) 
-        -->
-        <xsl:variable name="sortBy">
-            <xsl:value-of select="./sortBy"/>
-        </xsl:variable>           
-        
-        <!-- 
-            the type of page (for search) 
-        -->
-        <xsl:variable name="documentType">
-            <xsl:value-of select="./documentType"/>
-        </xsl:variable>        
-        
-        <!-- 
-            the search string of page (for search) 
-        -->
-        <xsl:variable name="searchString">
-            <xsl:value-of select="./searchString"/>
-        </xsl:variable>         
+        </xsl:variable>                       
         
         <!-- 
            the starting point of the pager 
@@ -74,7 +53,7 @@
         <div id="paginator" class="paginate" align="right">
             
             <!--span>
-                <xsl:value-of select="$f_title" />
+                <xsl:value-of select="$qry_vars" />
             </span-->
             
             <!-- DEBUG
@@ -117,14 +96,8 @@
                     <xsl:otherwise>
                         <a title="Beginning">
                             <xsl:attribute name="href">
-                                <xsl:text>?type=</xsl:text>
-                                <xsl:value-of select="$documentType"/>
-                                <xsl:text>&amp;f_t=</xsl:text>
-                                <xsl:value-of select="$f_title"/>
-                                <xsl:text>&amp;q=</xsl:text>
-                                <xsl:value-of select="$searchString"/>
-                                <xsl:text>&amp;s=</xsl:text>
-                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>?</xsl:text>
+                                <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
                                 <xsl:value-of select="0"/>
                                 <xsl:text>&amp;limit=</xsl:text>
@@ -134,7 +107,7 @@
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
-                
+
                 <!-- if is first page then set previous link a disabled, otherwise linked... -->
                 <xsl:choose>
                     <!-- If in the first page dont link back -->
@@ -146,14 +119,8 @@
                     <xsl:otherwise>
                         <a title="Previous Page">
                             <xsl:attribute name="href">
-                                <xsl:text>?type=</xsl:text>
-                                <xsl:value-of select="$documentType"/>
-                                <xsl:text>&amp;f_t=</xsl:text>
-                                <xsl:value-of select="$f_title"/>
-                                <xsl:text>&amp;q=</xsl:text>
-                                <xsl:value-of select="$searchString"/>
-                                <xsl:text>&amp;s=</xsl:text>
-                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>?</xsl:text>
+                                <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
                                 <xsl:value-of select="$offset - $limit"/>
                                 <xsl:text>&amp;limit=</xsl:text>
@@ -187,10 +154,7 @@
                             <xsl:with-param name="count" select="$count"/>
                             <xsl:with-param name="offset" select="$offset"/>
                             <xsl:with-param name="limit" select="$limit"/>
-                            <xsl:with-param name="documentType" select="$documentType"/>
-                            <xsl:with-param name="searchString" select="$searchString"/>
-                            <xsl:with-param name="sortBy" select="$sortBy"/>
-                            <xsl:with-param name="f_title" select="$f_title"/>
+                            <xsl:with-param name="qry_vars" select="$qry_vars"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
@@ -200,10 +164,7 @@
                             <xsl:with-param name="count" select="$count"/>
                             <xsl:with-param name="offset" select="$offset"/>
                             <xsl:with-param name="limit" select="$limit"/>
-                            <xsl:with-param name="documentType" select="$documentType"/>
-                            <xsl:with-param name="searchString" select="$searchString"/>
-                            <xsl:with-param name="sortBy" select="$sortBy"/>
-                            <xsl:with-param name="f_title" select="$f_title"/>
+                            <xsl:with-param name="qry_vars" select="$qry_vars"/>
                         </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -221,14 +182,8 @@
                     <xsl:otherwise>
                         <a title="Next Page">
                             <xsl:attribute name="href">
-                                <xsl:text>?type=</xsl:text>
-                                <xsl:value-of select="$documentType"/>
-                                <xsl:text>&amp;f_t=</xsl:text>
-                                <xsl:value-of select="$f_title"/>
-                                <xsl:text>&amp;q=</xsl:text>
-                                <xsl:value-of select="$searchString"/>
-                                <xsl:text>&amp;s=</xsl:text>
-                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>?</xsl:text>
+                                <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
                                 <xsl:value-of select="abs($limit)*abs($pwhere)"/>
                                 <xsl:text>&amp;limit=</xsl:text>
@@ -249,14 +204,8 @@
                     <xsl:otherwise>
                         <a title="Last Page">
                             <xsl:attribute name="href">
-                                <xsl:text>?type=</xsl:text>
-                                <xsl:value-of select="$documentType"/>
-                                <xsl:text>&amp;f_t=</xsl:text>
-                                <xsl:value-of select="$f_title"/>
-                                <xsl:text>&amp;q=</xsl:text>
-                                <xsl:value-of select="$searchString"/>
-                                <xsl:text>&amp;s=</xsl:text>
-                                <xsl:value-of select="$sortBy"/>
+                                <xsl:text>?</xsl:text>
+                                <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
                                 <xsl:value-of select="abs($pages*$limit) - $limit"/>
                                 <xsl:text>&amp;limit=</xsl:text>
@@ -285,10 +234,7 @@
         <xsl:param name="count"/>
         <xsl:param name="offset"/>
         <xsl:param name="limit"/>
-        <xsl:param name="documentType"/>
-        <xsl:param name="searchString"/>
-        <xsl:param name="sortBy"/>
-        <xsl:param name="f_title"/>
+        <xsl:param name="qry_vars"/>
         <!-- DEBUG
         <span>i=<xsl:value-of select="$i" />,</span>
         <span>limi=<xsl:value-of select="$limit" />,</span>
@@ -308,14 +254,8 @@
                 <xsl:otherwise>
                     <a title="Page {$i}" accesskey="{$i}">
                         <xsl:attribute name="href">
-                            <xsl:text>?type=</xsl:text>
-                            <xsl:value-of select="$documentType"/>
-                            <xsl:text>&amp;f_t=</xsl:text>
-                            <xsl:value-of select="$f_title"/>
-                            <xsl:text>&amp;q=</xsl:text>
-                            <xsl:value-of select="$searchString"/>
-                            <xsl:text>&amp;s=</xsl:text>
-                            <xsl:value-of select="$sortBy"/>
+                            <xsl:text>?</xsl:text>
+                            <xsl:value-of select="$qry_vars"/>
                             <xsl:text>&amp;offset=</xsl:text>
                             <xsl:value-of select="abs($limit)*(abs($i)-1)"/>
                             <xsl:text>&amp;limit=</xsl:text>
@@ -337,10 +277,7 @@
                 <xsl:with-param name="count" select="$count"/>
                 <xsl:with-param name="offset" select="$offset"/>
                 <xsl:with-param name="limit" select="$limit"/>
-                <xsl:with-param name="documentType" select="$documentType"/>
-                <xsl:with-param name="searchString" select="$searchString"/>
-                <xsl:with-param name="sortBy" select="$sortBy"/>
-                <xsl:with-param name="f_title" select="$f_title"/>
+                <xsl:with-param name="qry_vars" select="$qry_vars"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>

@@ -37,8 +37,8 @@ JAVA_HOME=/path/to/java/home ./build.sh all
 {{{
       <!-- Required module - May not be activated by default -->
          <module uri="http://exist-db.org/xquery/xslfo" class="org.exist.xquery.modules.xslfo.XSLFOModule">
-                <parameter name="processorAdapter" value="org.exist.xquery.modules.xslfo.ApacheFopProcessorAdapter"/>
-            </module>
+            <parameter name="processorAdapter" value="org.exist.xquery.modules.xslfo.ApacheFopProcessorAdapter"/>
+         </module>
 
       <!-- Optional Modules -->
          <module class="org.exist.backup.xquery.BackupModule"

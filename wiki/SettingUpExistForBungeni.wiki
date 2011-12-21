@@ -35,18 +35,18 @@ JAVA_HOME=/path/to/java/home ./build.sh all
 
  * Activate the compression, datetime and XSLFOModule modules in conf.xml :
 {{{
-         <!-- Required module - May not be activated by default -->
-            <module uri="http://exist-db.org/xquery/xslfo" class="org.exist.xquery.modules.xslfo.XSLFOModule">
+      <!-- Required module - May not be activated by default -->
+         <module uri="http://exist-db.org/xquery/xslfo" class="org.exist.xquery.modules.xslfo.XSLFOModule">
                 <parameter name="processorAdapter" value="org.exist.xquery.modules.xslfo.ApacheFopProcessorAdapter"/>
             </module>
 
-         <!-- Optional Modules -->
-            <module class="org.exist.backup.xquery.BackupModule"
+      <!-- Optional Modules -->
+         <module class="org.exist.backup.xquery.BackupModule"
                     uri="http://exist-db.org/xquery/backups"/>
 
-            <module class="org.exist.xquery.modules.compression.CompressionModule"
+         <module class="org.exist.xquery.modules.compression.CompressionModule"
                     uri="http://exist-db.org/xquery/compression" />
-            <module class="org.exist.xquery.modules.datetime.DateTimeModule"
+         <module class="org.exist.xquery.modules.datetime.DateTimeModule"
                     uri="http://exist-db.org/xquery/datetime" />
 }}}
  * Change the default transformer to Saxon :

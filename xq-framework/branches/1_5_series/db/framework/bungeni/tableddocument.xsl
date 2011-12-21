@@ -16,8 +16,10 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
+    <xsl:param name="serverport"/>
     <xsl:param name="version"/>
     <xsl:template match="document">
+        <xsl:variable name="server_port" select="serverport"/>
         <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
         <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
@@ -60,6 +62,7 @@
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
+                <xsl:with-param name="server-port" select="$server_port"/>
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc_uri"/>

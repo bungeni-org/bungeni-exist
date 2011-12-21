@@ -1083,6 +1083,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
 :)
 declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as node()) {
     <document>
+        <serverport>{request:get-server-name()}:{request:get-server-port()}</serverport>
         <primary> 
         {
         (:!+ACL_NEW_API 
@@ -1134,6 +1135,7 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
     
     let $doc := <parl-doc>
         <document>
+            <serverport>{request:get-server-name()}:{request:get-server-port()}</serverport>
             <version>{$version-uri}</version>
             <primary>         
             {

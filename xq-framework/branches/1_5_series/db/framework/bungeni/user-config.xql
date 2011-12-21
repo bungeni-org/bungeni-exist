@@ -18,7 +18,7 @@ declare function local:get-real-name() {
         <meta name="description" content="XForms with config options"/>
         <link rel="stylesheet" href="../assets/bungeni/css/boilerplate.css"/>
         <link rel="stylesheet" href="../assets/bungeni/css/bungeni.css"/>
-        <link rel="stylesheet" href="../assets/bungeni/css/xforms.css"/>
+        <link rel="stylesheet" href="../assets/bungeni/css/xforms.css"/>       
         <xf:model id="m-user-config">
             <!--xf:instance id="pcount" xmlns="" >
                 <data>
@@ -49,7 +49,7 @@ declare function local:get-real-name() {
                 <xf:bind nodeset="//limit" type="integer"/>
                 <xf:bind constraint="boolean-from-string(../@constraint)" nodeset="//value" type="integer"/>
             </xf:bind>
-        </xf:model>        
+        </xf:model> 
     </head>
     <body>
         <div id="container" style="background-color:#eeeeee;">
@@ -114,5 +114,14 @@ declare function local:get-real-name() {
                 </div>                    
             </div>
         </div>
+        <script type="text/javascript" defer="defer">
+            <![CDATA[
+            dojo.addOnLoad(function(){
+                dojo.subscribe("/xf/ready", function() {
+                    fluxProcessor.skipshutdown=true;
+                });
+            });
+           ]]>
+        </script>      
     </body>
 </html>

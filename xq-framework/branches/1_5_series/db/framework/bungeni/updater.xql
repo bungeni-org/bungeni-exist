@@ -121,5 +121,14 @@ declare function local:get-real-name() {
                  </div>
             </div>
         </div>
+        <script type="text/javascript" defer="defer">
+            <![CDATA[
+            dojo.addOnLoad(function(){
+                dojo.subscribe("/xf/ready", function() {
+                    fluxProcessor.skipshutdown=true;
+                });
+            });
+           ]]>
+        </script>         
     </body>
 </html>

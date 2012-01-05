@@ -51,6 +51,25 @@ The application is configured via a configuration file in the framework root. Wi
  * app/ui-config - the ui configuration file for the specific application. this is a path relative to the application folder.
  * app/xml-collection - the path to the xml document collection queries by the framework app.
 
+Note: For XForms to render correctly in the framework you may need to go into webapps/WEB-INF/web.xml in the eXist installation and change the filter mapping for the XForms servlet.
+
+From : 
+{{{
+    <filter-mapping>
+      <filter-name>XFormsFilter</filter-name>
+      <url-pattern>/rest/db/*</url-pattern>
+   </filter-mapping>
+}}}
+
+To : 
+{{{
+    <filter-mapping>
+      <filter-name>XFormsFilter</filter-name>
+      <url-pattern>/apps/*</url-pattern>
+   </filter-mapping>
+}}}
+
+
 = Application Configuration = 
 
 Applications developed in the framework are configured via ui-config file.  The ui-config file is specified in the `app/ui-config` parameter in the framework configuration.

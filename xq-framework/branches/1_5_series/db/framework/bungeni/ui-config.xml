@@ -384,7 +384,7 @@
                         <a name="members" href="members">members</a>
                     </li>
                     <li>
-                        <a name="preferences" href="http://localhost:8080/exist/rest/db/framework/bungeni/user-config.xql">preferences</a>
+                        <a name="preferences" href="preferences">preferences</a>
                     </li>
                 </ul>
             </div>
@@ -663,9 +663,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="question">
@@ -677,9 +677,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="motion">
@@ -691,9 +691,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">All</searchin>
-                <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
         </doctype>
         <doctype name="tableddocument">
@@ -705,9 +705,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
         </doctype>
     </doctypes>

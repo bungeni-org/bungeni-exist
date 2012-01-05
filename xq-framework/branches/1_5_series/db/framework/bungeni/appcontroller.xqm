@@ -1279,6 +1279,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 (),
                 cmn:build-nav-tmpl($EXIST-PATH, "publications.xml")
                )  
+       else if ($EXIST-PATH eq "/preferences")
+             then
+               fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")
                                         
     	(:else if ($EXIST-PATH eq "/by-capno")
     		 then 

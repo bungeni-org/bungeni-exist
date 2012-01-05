@@ -111,12 +111,24 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/ancestor::bu:ontology")
 };
 
+(:~ !+FIXED(ah,05-01-2012) 
+
+- the searchin/@field configuration must be relative to bu:ontology, it had field mappings 
+as bu:shortName, bu:body etc. the collection context for the search is bu:ontology - so the full text search fails because 
+there is no node context for bu:ontology/bu:shortName. This is fixed by setting the searchin/@field relative to bu:ontology.
+from : bu:shortName to bu:legislativeItem/bu:shortName. 
+
+- additionally the return context of the ft search was ancestor::bu:ontology this is not required because the ft:search is 
+run in the context of bu:ontology (i.e. bu:ontology[ft:search()] ...) and not in a sub-context (i.e. bu:ontology/ft:search() )
+:)
+(:~ !+WAS_FIX_THIS (ao, 20 Dec 2011) - return bu:ontology begat a problem on eXist 1.5's Lucene where the ft:query() could
+    not traverse up to and yielded nothing.
+:)
+(:
 declare function bun:xqy-list-documentitems-with-acl-tmp($acl as xs:string, $type as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
     
-    (:~ !+FIX_THIS (ao, 20 Dec 2011) - return bu:ontology begat a problem on eXist 1.5's Lucene where the ft:query() could
-        not traverse up to and yielded nothing.
-    :)
+
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@type='document']",
@@ -126,6 +138,7 @@ declare function bun:xqy-list-documentitems-with-acl-tmp($acl as xs:string, $typ
                 "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:legislativeItem")
 };
+:)
 
 (:~
 :   Implements xqy-list-documentitems-with-acl()
@@ -361,7 +374,7 @@ declare function bun:search-documentitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:xqy-list-documentitems-with-acl-tmp($acl, $type)
+    let $coll_rs := bun:xqy-list-documentitems-with-acl($acl, $type)
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
@@ -442,8 +455,8 @@ declare function bun:search-documentitems(
 (:~
 :   Performs a full-text on a set of documents, based on Lucene
 :
-: @param acl-fetch
-:   A string with acl that will be prepended to the Lucene with search terms / parameters
+: @param collection query
+:   A xquery to return the collection of documents we want to search in 
 : @param querystr
 :   The raw search terms / parameters by the user
 : @param type
@@ -453,7 +466,7 @@ declare function bun:search-documentitems(
 :   specified in the filter options e.g. bu:shortName, bu:registryNumber
 :)
 declare function bun:ft-search(
-            $acl-fetch as xs:string, 
+            $coll-query as xs:string, 
             $querystr as xs:string,
             $type as xs:string) as element()* {
         (: 
@@ -466,7 +479,7 @@ declare function bun:ft-search(
         
         let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
             $ultimate-path := local:build-search-objects($type),
-            $eval-query := concat($acl-fetch,"[ft:query((",$ultimate-path,"), '",$escaped,"')]/ancestor::bu:ontology")
+            $eval-query := concat($coll-query,"[ft:query((",$ultimate-path,"), '",$escaped,"')]")
             
         for $search-rs in util:eval($eval-query)
         order by ft:score($search-rs) descending      

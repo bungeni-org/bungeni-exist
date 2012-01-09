@@ -41,3 +41,7 @@ declare variable $config:DEFAULT-TEMPLATE := data($config:doc//app[@name eq $con
 declare variable $config:fw-app-root := fn:concat($config:fw-root, "/", $config:app-prefix);
 (: Ontology files :)
 declare variable $config:xml-ontology-collection := fn:concat($config:XML-COLLECTION, "/ontology");
+
+(: Security related configs :)
+declare variable $config:fw-group := "bungeni.users";
+declare variable $config:fw-manager-group := "dba";

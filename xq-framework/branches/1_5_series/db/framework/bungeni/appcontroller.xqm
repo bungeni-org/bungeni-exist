@@ -1279,6 +1279,16 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 (),
                 cmn:build-nav-tmpl($EXIST-PATH, "publications.xml")
                )  
+       else if ($EXIST-PATH eq "/admin") 
+            then
+               template:process-tmpl(
+                   $REL-PATH,
+                   $EXIST-PATH,
+                   $config:DEFAULT-TEMPLATE,
+                   cmn:get-route($EXIST-PATH),
+                   (),
+                   cmn:build-nav-tmpl($EXIST-PATH, "admin-ui.xml")
+                   )
        else if ($EXIST-PATH eq "/preferences")
              then
                fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")

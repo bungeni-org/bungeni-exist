@@ -357,6 +357,10 @@
             <navigation>business</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
+        <route href="/admin">
+            <title>Admin Section</title>
+            <navigation>admin</navigation>
+        </route>
     </routes>
     
     <!--
@@ -384,7 +388,7 @@
                         <a name="members" href="members">members</a>
                     </li>
                     <li>
-                        <a name="preferences" href="preferences">preferences</a>
+                        <a name="admin" href="admin">admin</a>
                     </li>
                 </ul>
             </div>
@@ -443,6 +447,21 @@
                     </li>
                     <li>
                         <a name="politicalgroups" href="politicalgroups">politicalgroups</a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+        <menu name="admin" for="admin">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
+                <ul class="theme-lev-1">
+                    <li>
+                        <a name="adm-navs" href="navigation">navigation</a>
+                    </li>
+                    <li>
+                        <a name="adm-doctypes" href="doctypes">doctypes</a>
+                    </li>
+                    <li>
+                        <a name="adm-tabs" href="tabs">tabs</a>
                     </li>
                 </ul>
             </div>
@@ -642,6 +661,7 @@
         <doctype name="group">  Defines the configuration parameter for the named document type 
         <orderby/>      Defines the order by options that are available for that document types
         <searchins/>    Defines the search filter options that are available for the type of document speficied
+        searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
         <doctype name="group">

@@ -38,7 +38,7 @@
                     </ul>
                 </div>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div style="width:80%;">
                         <table class="listing timeline tbl-tgl">

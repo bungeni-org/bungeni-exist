@@ -13,7 +13,7 @@
     <!-- load configuration info -->
     <xsl:include href="config.xsl"/>
     <xsl:template match="docs">
-        <div id="main-doc" class="rounded-eigh tab_container" role="main">
+        <div id="region-content" class="rounded-eigh tab_container" role="main">
             <!-- container for holding listings -->
             <div id="doc-listing" class="acts">
                 <!-- render the paginator -->

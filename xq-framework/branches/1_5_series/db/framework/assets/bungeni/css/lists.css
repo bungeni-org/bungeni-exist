@@ -394,6 +394,33 @@ ul.ls-doc-tabs li.selected {
     border-bottom-right-radius: 6px 6px; 
 }
 
+#global-language {
+    width:960px;
+    height:18px;
+    margin:0 auto;
+    padding:0;
+}
+ul#portal-languageselector {
+    list-style-type:none;
+    float:left;
+    padding:0;
+    margin:0;
+}
+ul#portal-personaltools {
+    list-style-type:none;
+    padding:0;
+    margin:0;    
+}
+#portal-languageselector li,
+#portal-personaltools li {
+    display:inline;
+}
+#portal-languageselector li a,
+#portal-personaltools li a {
+    color:white;
+    padding-right:5px;
+}
+
 li.bcolor { border-color:#000; }
 li.fleft	{ border-left-width: 1pt; border-left-style: solid; }
 li.fright	{ border-right-width: 1pt; border-right-style: solid; }

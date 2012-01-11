@@ -377,7 +377,7 @@
         -->
         <menu name="mainnav" for="/">
             <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
-                <ul class="theme-lev-1" id="menu-level-mainnav">
+                <ul class="theme-lev-1" id="portal-globalnav">
                     <li>
                         <a name="home" href="home">home</a>
                     </li>
@@ -402,7 +402,7 @@
         </menu>
         <menu name="business" for="business">
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
-                <ul class="theme-lev-1">
+                <ul class="theme-lev-1" id="portal-personaltools">
                     <li>
                         <a name="committees" href="committees">committees</a>
                     </li>

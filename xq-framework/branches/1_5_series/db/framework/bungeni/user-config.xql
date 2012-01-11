@@ -73,7 +73,7 @@ declare function local:get-real-name() {
                 <div id="title-holder" class="theme-lev-1-only">
                     <h1 id="doc-title-blue">Edit UI Preferences</h1>
                 </div>
-                <div id="main-doc" class="rounded-eigh tab_container">
+                <div id="region-content" class="rounded-eigh tab_container">
                     <div id="xforms" style="margin-left:0px;padding-left:10px;width:100%;">
                         <div id="ui-prefs" class="ui-prefs InlineRoundBordersAlert">
                             <div class="info-div">

@@ -87,7 +87,7 @@
                 <xsl:with-param name="doc-type" select="$input-document-type"/>
                 <xsl:with-param name="uri">null</xsl:with-param>
             </xsl:call-template>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
                     <div class="list-header">

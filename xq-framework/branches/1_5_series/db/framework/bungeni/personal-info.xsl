@@ -56,7 +56,7 @@
                     </li>
                 </ul>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h2 id="doc-item-desc2" class="doc-headers-darkgrey">
                         <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', bu:user/bu:field[@name='last_name'])"/>

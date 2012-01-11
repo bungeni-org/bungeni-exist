@@ -3,9 +3,9 @@ body {background-color:#eeeeee}
 div#header {
     width:100%;
     margin:0;
-    height:98px;
+    height:116px;
     background-color:#434343;
-    padding-top:10px;
+    padding-top:0;
 }
 div#sub-header {
     clear:none;
@@ -106,7 +106,7 @@ div#title-holder {
     width:100%;
 }
 
-div#main-doc {
+div#region-content {
     width:960px;
     height:auto;
     min-height:400px;
@@ -117,7 +117,7 @@ div#main-doc {
     border:1px solid #c1c1c0;
 }
 
-div#main-doc div {
+div#region-content div {
     margin: 0 auto;
 }
 

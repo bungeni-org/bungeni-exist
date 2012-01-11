@@ -82,7 +82,7 @@
                     </li>
                 </ul>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="list-block">
                         <div class="block-label">Doc Id</div>

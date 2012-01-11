@@ -4,6 +4,6 @@
         <div id="title-holder" class="theme-lev-1-only">
             <h1 id="doc-title-blue">Publications</h1>
         </div>
-        <div id="main-doc" class="rounded-eigh tab_container" role="main"/>
+        <div id="region-content" class="rounded-eigh tab_container" role="main"/>
     </div>
 </div>

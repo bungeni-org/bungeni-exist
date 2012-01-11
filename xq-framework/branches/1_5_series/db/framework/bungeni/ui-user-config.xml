@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <limit>8</limit>
+    <limit>15</limit>
     <orderby>bu:shortName</orderby>
     <visiblePages constraint="true">
-        <value>5</value>
+        <value>4</value>
     </visiblePages>
 </config>

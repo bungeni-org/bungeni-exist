@@ -134,6 +134,7 @@
                     manually set to show 5 page-links per page 
                     group, group-left and group-right an integer, 5, which eventually
                     can be factored into a user-configuration to be adjusted at user's discretion.
+                    (FIXED - Dec 2011, as $visiblePages)
                 -->
                 <xsl:variable name="group" select="floor($offset div ($visiblePages * $limit))"/>
                 <!-- Calculate boundary-point while there are more pages to show on right -->

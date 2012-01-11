@@ -2,6 +2,13 @@ select {
     padding: initial;
 }
 
+input, select {
+    margin-left:3px !important;
+}
+label {
+    margin-left:3px;
+}
+
 select, input.search_for {
     display: inline-block;
     height: 20px;
@@ -86,7 +93,7 @@ ul.sb_dropdown li.sb_filter{
     -webkit-box-shadow:0px 0px 3px #555 inset;
     -box-shadow:0px 0px 3px #555 inset;
 }            
-.dropdown { width:240px;float:left;display:inline;margin:0;margin-top:1px;padding:0;}
+.dropdown { width:230px;float:left;display:inline;margin:0;margin-top:1px;padding:0;}
 .dropdown dd, .dropdown dt, .dropdown ul { margin:0px; padding:0px; }
 .dropdown dd { position:relative; }
 .dropdown a, .dropdown a:visited { color:#816c5b; text-decoration:none; outline:none;}

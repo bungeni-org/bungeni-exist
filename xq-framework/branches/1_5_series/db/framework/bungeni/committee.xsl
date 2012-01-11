@@ -59,7 +59,7 @@
                     </li>
                 </ul>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">
                         KENYA PARLIAMENT

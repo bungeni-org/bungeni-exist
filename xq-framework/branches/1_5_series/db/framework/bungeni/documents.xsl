@@ -70,7 +70,7 @@
                     </ul>
                 </div>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="blocks" style="width:100%;margin: 0 auto;">
                         <div class="list-block">

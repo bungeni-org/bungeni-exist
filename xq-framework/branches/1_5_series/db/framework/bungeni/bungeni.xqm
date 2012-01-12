@@ -27,8 +27,8 @@ Default Variables
 declare variable $bun:SORT-BY := 'bu:statusDate';
 
 declare variable $bun:OFF-SET := 0;
-declare variable $bun:LIMIT := if (cmn:user-preferences()/config/limit) then cmn:user-preferences()/config/limit else 10;
-declare variable $bun:VISIBLEPAGES := if (cmn:user-preferences()/config/visiblePages/value) then cmn:user-preferences()/config/visiblePages/value else 5;
+declare variable $bun:LIMIT := cmn:get-listings-config-limit();
+declare variable $bun:VISIBLEPAGES := cmn:get-listings-config-visiblepages();
 declare variable $bun:DOCNO := 1;
 
 (:~
@@ -57,7 +57,7 @@ declare function bun:gen-pdf-output($docid as xs:string) {
                                                                 <param name="keywords" value="Parlimentary, ddocument"/>
                                                             </parameters>)
      
-    return response:stream-binary($pdf, "application/pdf", "output.pdf")     
+   response:stream-binary($pdf, "application/pdf", "output.pdf")     
     
 };
 

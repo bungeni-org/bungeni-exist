@@ -54,11 +54,15 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
 (:~
 :   Get the user ui-config file
 :)
+(:
 declare function cmn:user-preferences() as document-node() {
     
     $config:UI-USER-CONFIG
     
 };
+:)
+
+
 
 
 (:~
@@ -127,6 +131,27 @@ declare function cmn:get-searchins-config($doctype as xs:string)  {
     else
         ()
 };
+
+
+
+
+declare function cmn:get-listings-config() {
+    cmn:get-ui-config()/ui/listings
+};
+
+declare function cmn:get-listings-config-limit() as xs:string {
+    data(cmn:get-listings-config()/limit)
+};
+
+declare function cmn:get-listings-config-limit() as xs:integer {
+    xs:integer(data(cmn:get-listings-config()/limit))
+};
+
+declare function cmn:get-listings-config-visiblepages() as xs:integer {
+    xs:integer(data(cmn:get-listings-config()/visiblePages))
+};
+
+
 
 (:~
 

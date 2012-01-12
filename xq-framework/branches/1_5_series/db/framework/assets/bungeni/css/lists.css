@@ -415,9 +415,9 @@ ul#portal-personaltools {
 #portal-personaltools li {
     display:inline;
 }
-#portal-languageselector li a,
-#portal-personaltools li a {
-    color:white;
+#global-language #portal-languageselector li a,
+#global-language #portal-personaltools li a {
+    color:#e0efe0;
     padding-right:5px;
 }
 

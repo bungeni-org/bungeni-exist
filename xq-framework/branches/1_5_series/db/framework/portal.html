@@ -17,24 +17,59 @@
     <body class="portal">
         <div id="container">
             <div id="header">
+                <div id="global-language">
+                    <ul id="portal-languageselector">
+                        <li>
+                            <a href="http://localhost:8080/change-language?language=fr" title="Français">Français</a>
+                        </li>
+                        <li class="selected available">
+                            <a href="http://localhost:8080/change-language?language=en" title="English">English</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8080/change-language?language=pt" title="Português">Português</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8080/change-language?language=sw" title="Swahili">Swahili</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8080/change-language?language=it" title="Italiano">Italiano</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8080/change-language?language=nl-sr" title="Dutch (Suriname)">Dutch (Suriname)</a>
+                        </li>
+                    </ul>
+                    <ul id="portal-personaltools" style="float:right;">
+                        <li>
+                            <a href="http://localhost:8080/profile">
+                                <span>clerk.P1_06</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:8080/plone/logout">
+                                <span>logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div style="clear:both"/>
                 <div id="header-banner"/>
                 <div class="header-nav">
                     <div id="mainnav" class="menu">
                         <!--
-                        <ul class="theme-lev-1">
+                            <ul class="theme-lev-1">
                             <li>
-                                <a href="home">home</a>
+                            <a href="home">home</a>
                             </li>
                             <li>
-                                <a href="business">business</a>
+                            <a href="business">business</a>
                             </li>
                             <li>
-                                <a href="members">members</a>
+                            <a href="members">members</a>
                             </li>
-                        </ul>  -->
+                            </ul>  -->
                     </div>
                     <div class="lev-1-search" style="text-align:right;margin-top:-23px;">
-                        <form class="form-search" id="search-form" method="get" action="/search">
+                        <form class="section-form" id="alchemist-form" method="get" action="/search">
                             <input type="text" value="" name="search-input" id="bah" class="text"/>
                             <input type="submit" value="Search" name="search-input" id="duh"/>
                         </form>
@@ -45,54 +80,29 @@
                 <div class="header-nav">
                     <div id="subnav" class="submenu">
                         <!--
-                        <ul class=" theme-lev-1">
+                            <ul class=" theme-lev-1">
                             <li>
-                                <a href="whatson">what's on</a>
+                            <a href="whatson">what's on</a>
                             </li>
                             <li>
-                                <a href="committees">committees</a>
+                            <a href="committees">committees</a>
                             </li>
                             <li>
-                                <a href="bills">bills</a>
+                            <a href="bills">bills</a>
                             </li>
-                            <li>
-                                <a href="questions">questions</a>
-                            </li>
-                            <li>
-                                <a href="motions">motions</a>
-                            </li>
-                            <li>
-                                <a href="tableddocuments">tabled documents</a>
-                            </li>
-                            <li>
-                                <a href="agenda">agenda items</a>
-                            </li>
-                            <li>
-                                <a href="sittings">sittings</a>
-                            </li>
-                            <li>
-                                <a href="publications">publications</a>
-                            </li>
-                            <li>
-                                <a href="politicalgroups">politicalgroups</a>
-                            </li>
-                        </ul> -->
+                            ...
+                            </ul> -->
                     </div>
                 </div>
             </div>
             <div id="content">
                 <div id="main-wrapper">
                     <div id="title-holder" class="theme-lev-1-only">
-                        <h1 id="doc-title-blue">List</h1>
+                        <h1 id="doc-title-blue" class="title">List</h1>
                     </div>
-                    <div id="main-doc" class="rounded-eigh tab_container"/>
+                    <div id="region-content" class="rounded-eigh tab_container"/>
                 </div>
             </div>
         </div>
-
-        <!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script-->
-        <!--script src="assets/bungeni/scripts/jquery.min.js"></script>
-    <script>window.jQuery||document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>');</script>
-    <script defer src='assets/bungeni/scripts/debugger.js'></script-->
     </body>
 </html>

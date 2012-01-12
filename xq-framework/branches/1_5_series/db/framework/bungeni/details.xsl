@@ -11,10 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>      
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
          document as opposed to main document. -->
+    <xsl:param name="serverport"/>
     <xsl:param name="version"/>
     <xsl:template match="document">
+        <xsl:variable name="server_port" select="serverport"/>
         <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
         <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
@@ -53,35 +56,13 @@
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">related</xsl:with-param>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="server-port" select="$server_port"/>
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
+            </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="list-block">

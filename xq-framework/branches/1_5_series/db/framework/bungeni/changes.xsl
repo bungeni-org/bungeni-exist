@@ -11,7 +11,10 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>
+    <xsl:param name="serverport"/>
     <xsl:template match="document">
+        <xsl:variable name="server_port" select="serverport"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
         <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
@@ -27,17 +30,13 @@
                 <xsl:with-param name="tab-path">timeline</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
             </xsl:call-template>
-            <div style="float:right;width:400px;height:18px;">
-                <div id="doc-downloads">
-                    <ul class="ls-downloads">
-                        <li>
-                            <a href="#" title="get as RSS feed" class="rss">
-                                <em>RSS</em>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="server-port" select="$server_port"/>
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
+            </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div style="width:80%;">

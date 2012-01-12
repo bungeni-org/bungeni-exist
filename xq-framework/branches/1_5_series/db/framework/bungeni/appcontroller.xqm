@@ -81,7 +81,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",'user')))))
     								    )                  
                
         (:~ Handlers for business submenu :)
@@ -103,7 +103,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",'group')))))
     								    )   								    
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
@@ -289,7 +289,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",'group')))))
     								    )
     	else if ($EXIST-PATH eq "/committee/profile" )
     		 then 

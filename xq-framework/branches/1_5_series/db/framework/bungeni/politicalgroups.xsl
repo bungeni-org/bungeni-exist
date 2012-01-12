@@ -57,49 +57,13 @@
                 <div id="doc-listing" class="acts">
                     <!-- render the paginator -->
                     <div class="list-header">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
+                        <!-- call the paginator -->
                         <xsl:apply-templates select="paginator"/>
                         <div id="search-n-sort" class="search-bar">
                             <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
                             <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
                             <xsl:if test="$searchins and $orderbys">
-                                <form method="get" action="" name="search_sort">
-                                    <label for="search_for">Search text:</label>
-                                    <input id="search_for" name="q" class="search_for" type="text" value=""/>
-                                    <label for="search_in">in:</label>
-                                    <select name="w" id="search_w">
-                                        <xsl:for-each select="$searchins/searchin">
-                                            <option value="{@value}">
-                                                <xsl:value-of select="./text()"/>
-                                            </option>
-                                        </xsl:for-each>
-                                        <!--
-                                            <option value="doc" selected="">entire document</option>
-                                            <option value="name">short name</option>
-                                            <option value="text">body text</option>
-                                            <option value="desc">description</option>
-                                            <option value="changes">changes</option>
-                                            <option value="versions">versions</option>
-                                            <option value="owner">owner</option>
-                                        -->
-                                    </select>
-                                    <label for="search_in">sort by:</label>
-                                    <select name="s" id="sort_by">
-                                        <xsl:for-each select="$orderbys/orderby">
-                                            <option value="{@value}">
-                                                <xsl:value-of select="./text()"/>
-                                            </option>
-                                        </xsl:for-each>
-                                        <!--
-                                            <option value="st_date_newest" selected="selected">status date
-                                            [newest]</option>
-                                            <option value="st_date_oldest">status date [oldest]</option>
-                                            <option value="sub_date_newest">submission date [newest]</option>
-                                            <option value="sub_date_oldest">submission date [oldest]</option>
-                                        -->
-                                    </select>
-                                    <input value="search" type="submit"/>
-                                </form>
+                                <div id="search-form"/>
                             </xsl:if>
                         </div>
                     </div>

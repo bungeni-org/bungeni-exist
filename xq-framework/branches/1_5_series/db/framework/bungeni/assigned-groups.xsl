@@ -11,11 +11,14 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>    
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
-        document as opposed to main document. -->
+    document as opposed to main document. -->
+    <xsl:param name="serverport"/>
     <xsl:param name="version"/>
     <xsl:template match="document">
         <xsl:variable name="ver_id" select="version"/>
+        <xsl:variable name="server_port" select="serverport"/>
         <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
         <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
         <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
@@ -54,17 +57,13 @@
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">assigned</xsl:with-param>
             </xsl:call-template>
-            <div style="float:right;width:400px;height:18px;">
-                <div id="doc-downloads">
-                    <ul class="ls-downloads">
-                        <li>
-                            <a href="#" title="get as RSS feed" class="rss">
-                                <em>RSS</em>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="server-port" select="$server_port"/>
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
+            </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div style="width:700px;margin: 0 auto;text-align:center">

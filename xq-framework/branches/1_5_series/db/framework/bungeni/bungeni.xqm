@@ -111,6 +111,18 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/ancestor::bu:ontology")
 };
 
+declare function bun:xqy-list-groupitem($type as xs:string) {
+  let $acl-filter := cmn:get-acl-permission-as-attr($acl)
+    
+    (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
+    make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
+  return  
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@type='group']",
+                "/bu:group[@type='",$type,"']",
+                "/ancestor::bu:ontology")
+};
+
 (:~ !+FIXED(ah,05-01-2012) 
 
 - the searchin/@field configuration must be relative to bu:ontology, it had field mappings 
@@ -317,6 +329,17 @@ declare function bun:search-legislative-items(
         bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
+declare function bun:search-group-items(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string,
+        $typeofdoc as xs:string) as element() {
+        
+        bun:search-groupitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
+};
+
 (:~
 :   This filters out the search-centric parameters that need to be sustained with the corresponding paginator xslt
 : @param querystr
@@ -378,7 +401,100 @@ declare function bun:search-documentitems(
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else $coll_rs
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else util:eval($coll_rs)
+    
+    (: 
+        Logical offset is set to Zero but since there is no document Zero
+        in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
+        Need arises to  alter the $offset to 1 for the first page limit only.
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+            (: Count the total number of documents :)
+            <count>{
+                count(
+                    $coll
+                  )
+             }</count>
+            <documentType>{$type}</documentType>
+            <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
+            <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+            <offset>{$offset}</offset>
+            <limit>{$limit}</limit>
+            <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+        </paginator>
+        <alisting>
+        {
+            if ($sortby = 'st_date_oldest') then (
+               (:if (fn:ni$qrystr):)
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate ascending
+                return 
+                    bun:get-reference($match)       
+                )
+                
+            else if ($sortby eq 'st_date_newest') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate descending
+                return 
+                    bun:get-reference($match)       
+                )
+            else if ($sortby = 'sub_date_oldest') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:bungeni/bu:parliament/@date ascending
+                return 
+                    bun:get-reference($match)         
+                )    
+            else if ($sortby = 'sub_date_newest') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:bungeni/bu:parliament/@date descending
+                return 
+                    bun:get-reference($match)         
+                )                 
+            else  (
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislativeItem/bu:statusDate descending
+                return 
+                    bun:get-reference($match)         
+                )
+                (:ft:score($m):)
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           )
+};
+
+(:~
+:   Similar to bun:search-documentitems()
+:)
+declare function bun:search-groupitems(
+            $acl as xs:string,
+            $type as xs:string,
+            $url-prefix as xs:string,
+            $stylesheet as xs:string,
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $querystr as xs:string, 
+            $sortby as xs:string) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($stylesheet)    
+    let $coll_rs := bun:xqy-list-documentitems-with-acl($acl, $type)
+    let $getqrystr := xs:string(request:get-query-string())
+
+    (: check if search is there so as to proceed to search or not :)    
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else util:eval($coll_rs)
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -532,11 +648,8 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
     (: get the current doc-types search conf:)
     let $search-filter := cmn:get-searchins-config($type),
         $search-orderby := cmn:get-orderby-config($type),
-        $qry := xs:string(request:get-parameter("q",'')),        
-        $f_all := xs:string(request:get-parameter("all",'null')),
-        $f_body := xs:string(request:get-parameter("f_b",'null')),
-        $f_docno := xs:string(request:get-parameter("f_d",'null')),
-        $f_title := xs:string(request:get-parameter("f_t",'null'))    
+        $qry := xs:string(request:get-parameter("q",'')),          
+        $allparams := request:get-parameter-names()       
 
     return
       (: Re-writing the doc_type with the one gotten from rou:listing-documentitem() :)    
@@ -568,31 +681,39 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
             },  
             (: End of filter title :)
             for $searchins in $search-filter
-            return
-                element li {
-                    element input {
-                        (: Check if first time hence using default or custom filter and maintain filter options :)
-                        if($searchins/@default eq "true" and $qry eq '') then 
-                            attribute checked { "checked" }                    
-                        else if($f_title eq $searchins/@value or 
-                                $f_docno eq $searchins/@value or 
-                                $f_body eq $searchins/@value) then 
-                            attribute checked { "checked" }
-                        else (),
-                        attribute type { "checkbox" },
-                        attribute name { $searchins/@name },
-                        $searchins/@value
-                    },
-                    element label { 
-                        attribute for { $searchins/@value},
-                         if($searchins/@name eq 'all') then 
-                            element b {
-                                $searchins/text()
-                            }
-                         else
-                            $searchins/text()    
+                return
+                    element li {
+                        element input {
+                            (: Check if first time hence using default or custom filter and maintain filter options :)
+                            if($searchins/@default eq "true" and $qry eq '') 
+                            
+                                then attribute checked { "checked" }    
+                                
+                            else if($searchins/@default eq "true" and $qry ne '') 
+                            
+                                then (
+                                        for $param in $allparams 
+                                        return
+                                            if($param eq $searchins/@name) then
+                                                attribute checked { $searchins/@name }
+                                            else ()
+                                     )
+                                     
+                            else (),
+                            attribute type { "checkbox" },
+                            attribute name { $searchins/@name },
+                            $searchins/@value
+                        },
+                        element label { 
+                            attribute for { $searchins/@value},
+                             if($searchins/@name eq 'all') then 
+                                element b {
+                                    $searchins/text()
+                                }
+                             else
+                                $searchins/text()    
+                        }
                     }
-                }
           }
         (: [Re]Writing the sort_by options from ui-config :)
         else if ($tmpl/self::xh:select[@id eq 'sort_by']) then 

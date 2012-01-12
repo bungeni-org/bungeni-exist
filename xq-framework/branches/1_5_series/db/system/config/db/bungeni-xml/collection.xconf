@@ -10,12 +10,23 @@
             <text qname="bu:ontology">
                 <ignore qname="bu:signatories"/>
             </text>
+            <!-- Parliamentary Documents -->
             <text match="//bu:legislativeItem"/>
             <text match="//bu:legislativeItem/@uri"/>
             <text match="//bu:legislativeItem/bu:shortName"/>
             <text match="//bu:legislativeItem/bu:body"/>
             <text match="//bu:legislativeItem/bu:registryNumber"/>
             <text match="//bu:legislativeItem/bu:publicationDate"/>
+            <!-- Group Documents -->
+            <text match="//bu:legislature/bu:fullName"/>
+            <text match="//bu:legislature/bu:shortName"/>
+            <text match="//bu:legislature/bu:description"/>
+            <!-- User / Members Documents -->
+            <text match="//bu:user/bu:firstName"/>
+            <text match="//bu:user/bu:lastName"/>
+            <text match="//bu:user/bu:description"/>
+            <text match="//bu:user/bu:email"/>
+            <text match="//bu:user/bu:active"/>
         </lucene>
         <create path="//bu:legislativeItem/@uri" type="xs:string"/>
         <create path="//bu:document/@type" type="xs:string"/>

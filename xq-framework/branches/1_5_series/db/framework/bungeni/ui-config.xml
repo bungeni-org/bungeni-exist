@@ -6,13 +6,24 @@
     -->
 <ui>
 
+    <!-- GENERAL FORMAT PREFERNCES -->
     <!-- 
         specify date and datetime formats here , these formats are used by the XSLT scripts
         We use the XSLT date formatting style to format dates
     -->
     <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
     <format type="date">[D1o] [MNn,*-3], [Y]</format>
+
+    <!-- LISTING CONFIG PREFERNCES -->
+    <listings>
+        <!-- limits the number of items shown on a listing page -->
+        <limit>3</limit>
+        <!-- number of pages linked on the paginator before showing next -->
+        <visiblePages>5</visiblePages>
+    </listings>
     
+    
+    <!-- APPLICATION ROUTING -->
     <!--
         Route Map
         This describes properties associated with every url supported by the application.
@@ -361,10 +372,15 @@
             <title>Admin Section</title>
             <navigation>admin</navigation>
         </route>
+        <route href="/admin/navigation">
+            <title>Navigation Preferences</title>
+            <navigation>admin</navigation>
+            <subnavigation>navigation</subnavigation>
+        </route>
     </routes>
     
     <!--
-        Menu groups 
+       MENU GROUPS
         -->
     <menugroups>
         
@@ -455,13 +471,13 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a name="adm-navs" href="navigation">navigation</a>
+                        <a name="navigation" href="admin/navigation">navigation</a>
                     </li>
                     <li>
-                        <a name="adm-doctypes" href="doctypes">doctypes</a>
+                        <a name="doctypes" href="admin/doctypes">doctypes</a>
                     </li>
                     <li>
-                        <a name="adm-tabs" href="tabs">tabs</a>
+                        <a name="tabs" href="admin/tabs">tabs</a>
                     </li>
                 </ul>
             </div>
@@ -469,7 +485,7 @@
     </menugroups>
     
     <!-- 
-        Download formats
+       DOWNLOAD FORMATS
     -->
     <downloadgroups>
         <rendergroup name="listings">

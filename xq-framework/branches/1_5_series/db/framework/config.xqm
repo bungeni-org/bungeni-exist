@@ -33,7 +33,9 @@ declare variable $config:XML-COLLECTION := data($config:doc//app[@name eq $confi
 (: The UI configuration file of the application :)
 declare variable $config:UI-CONFIG := data($config:doc//app[@name eq $config:APP-NAME]/ui-config);
 (: The User's UI Configuration of the application :)
+(:
 declare variable $config:UI-USER-CONFIG  := fn:doc(fn:concat($config:fw-root, "/bungeni/ui-user-config.xml"));
+:)
 (: The default template used by the application :)
 declare variable $config:DEFAULT-TEMPLATE := data($config:doc//app[@name eq $config:APP-NAME]/default-tmpl); 
 
@@ -43,5 +45,14 @@ declare variable $config:fw-app-root := fn:concat($config:fw-root, "/", $config:
 declare variable $config:xml-ontology-collection := fn:concat($config:XML-COLLECTION, "/ontology");
 
 (: Security related configs :)
+
+(: THis may be used internally to sudo to admin :)
+declare variable $config:admin-username := "admin";
+declare variable $config:admin-password := "";
+
+declare variable $config:guest-username := "guest";
+declare variable $config:guest-password := "";
+
+
 declare variable $config:fw-group := "bungeni.users";
 declare variable $config:fw-manager-group := "dba";

@@ -22,7 +22,7 @@
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">Political Groups</h1>
+                <h1 id="doc-title-blue-center">Political-groups</h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">

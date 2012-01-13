@@ -28,8 +28,16 @@
             <text match="//bu:user/bu:email"/>
             <text match="//bu:user/bu:active"/>
         </lucene>
-        <create path="//bu:legislativeItem/@uri" type="xs:string"/>
+        <!-- Range Indexes by qname -->
+        <create qname="@uri" type="xs:string"/>
+        <create qname="@href" type="xs:string"/>
+        <create qname="bu:shortName" type="xs:string"/>
+        <create qname="bu:body" type="xs:string"/>
+        <create qname="bu:registryNumber" type="xs:string"/>
+        <create qname="bu:statusDate" type="xs:dateTime"/>     
+        <!-- Range Indexes by path -->
         <create path="//bu:document/@type" type="xs:string"/>
+        <create path="//bu:legislativeItem/bu:publicationDate/@date" type="xs:date"/>
         <create path="//bu:bungeni/bu:parliament/@date" type="xs:date"/>
     </index>
 </collection>

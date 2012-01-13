@@ -12,6 +12,8 @@
             <xd:p> Members of parliament from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
+    <!-- CONVENIENCE VARIABLES -->
+    <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
@@ -48,8 +50,8 @@
                         <!-- call the paginator -->
                         <xsl:apply-templates select="paginator"/>
                         <div id="search-n-sort" class="search-bar">
-                            <xsl:variable name="searchins" select="xqcfg:get_searchin('user')"/>
-                            <xsl:variable name="orderbys" select="xqcfg:get_orderby('user')"/>
+                            <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
+                            <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
                             <xsl:if test="$searchins and $orderbys">
                                 <div id="search-form"/>
                             </xsl:if>

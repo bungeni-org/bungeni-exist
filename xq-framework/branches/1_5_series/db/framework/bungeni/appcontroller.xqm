@@ -81,7 +81,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",'user')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"search-form.xml",'userdata')))))
     								    )                  
                
         (:~ Handlers for business submenu :)
@@ -103,7 +103,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",'group')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"search-form.xml",'committee')))))
     								    )   								    
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
@@ -150,11 +150,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
                     $type := xs:string(request:get-parameter("type",'bill')),
+                    (:
+                      override_path : For the search we want to override the automatic 
+                      navigation rendering based on routes. So the search form, embeds 
+                      a navigation context as a hidden input field. The hidden input 
+                      field captures the origin search context e.g. if the search is being
+                      done from a listing for a question. 
+                      
+                      So we use override_path instead of EXIST-PATH only in the context
+                      of rendering the navigation correctly, and not in other cases e.g 
+                      copy-and-replace or process-tmpl where the EXIST-PATH is used for 
+                      rendering the correct template.
+                      
+                      Hence we use override_path only for build-nav-node() and get-route()
+                      to re-route the navigation.
+                    :)
+                    $override_path := xs:string(request:get-parameter("exist_path","/search")),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl :=  bun:search-legislative-items($acl,$offset,$limit,$qry,$sty,$type),
+                    $act-entries-tmpl :=  bun:search-criteria($acl,$offset,$limit,$qry,$sty,$type),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -163,10 +179,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       $REL-PATH, 
     									       $EXIST-PATH, 
     									       $config:DEFAULT-TEMPLATE,
-    									       cmn:get-route($EXIST-PATH),
+    									       cmn:get-route($override_path),
     									       (),
-    									       (cmn:build-nav-node($EXIST-PATH,
-    									       (template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",$type))))
+    									       (cmn:build-nav-node($override_path,
+    									           (template:merge($EXIST-PATH, 
+    									               $act-entries-repl, 
+    									               bun:get-search-context($override_path, 
+    									                   "search-form.xml",
+    									                   $type))))
     									     )
     								    )
     								    
@@ -289,7 +309,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context("search-form.xml",'group')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH, "search-form.xml",'political-group')))))
     								    )
     	else if ($EXIST-PATH eq "/committee/profile" )
     		 then 

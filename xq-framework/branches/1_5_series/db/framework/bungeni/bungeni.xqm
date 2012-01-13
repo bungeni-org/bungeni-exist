@@ -57,7 +57,7 @@ declare function bun:gen-pdf-output($docid as xs:string) {
                                                                 <param name="keywords" value="Parlimentary, ddocument"/>
                                                             </parameters>)
      
-   response:stream-binary($pdf, "application/pdf", "output.pdf")     
+    return response:stream-binary($pdf, "application/pdf", "output.pdf")     
     
 };
 
@@ -680,39 +680,44 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
                 "Filter your search"
             },  
             (: End of filter title :)
-            for $searchins in $search-filter
-                return
-                    element li {
-                        element input {
-                            (: Check if first time hence using default or custom filter and maintain filter options :)
-                            if($searchins/@default eq "true" and $qry eq '') 
-                            
-                                then attribute checked { "checked" }    
-                                
-                            else if($searchins/@default eq "true" and $qry ne '') 
-                            
-                                then (
-                                        for $param in $allparams 
-                                        return
-                                            if($param eq $searchins/@name) then
-                                                attribute checked { $searchins/@name }
-                                            else ()
-                                     )
-                                     
-                            else (),
+            
+            (: initialize form-filter to field set in ui-config.xml :)
+            if ($qry eq '') 
+               then 
+                for $searchins in $search-filter
+                    return 
+                        element li {
+                            element input {
+                                if ($searchins/@default eq "true")
+                                  then
+                                   attribute checked { "checked" }
+                                else
+                                   ()
+                            ,
                             attribute type { "checkbox" },
                             attribute name { $searchins/@name },
                             $searchins/@value
                         },
-                        element label { 
-                            attribute for { $searchins/@value},
-                             if($searchins/@name eq 'all') then 
-                                element b {
-                                    $searchins/text()
-                                }
-                             else
-                                $searchins/text()    
-                        }
+                        local:filter-labels($searchins)
+                    }
+            else
+               for $searchins in $search-filter
+                return
+                    element li {
+                        element input {
+                             for $param in $allparams 
+                                return
+                                    if($param eq $searchins/@name) 
+                                      then
+                                        attribute checked { "checked" }
+                                    else 
+                                        () 
+                            ,                    
+                            attribute type { "checkbox" },
+                            attribute name { $searchins/@name },
+                            $searchins/@value
+                        },
+                        local:filter-labels($searchins)
                     }
           }
         (: [Re]Writing the sort_by options from ui-config :)
@@ -738,6 +743,18 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
 					       else $child
 				 }
 
+};
+
+declare function local:filter-labels($searchins as element()) {
+    element label { 
+        attribute for { $searchins/@value},
+         if($searchins/@name eq 'all') then 
+            element b {
+                $searchins/text()
+            }
+         else
+            $searchins/text()    
+    }
 };
 
 (:~

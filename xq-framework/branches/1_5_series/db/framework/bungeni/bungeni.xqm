@@ -112,15 +112,17 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
 };
 
 declare function bun:xqy-list-groupitem($type as xs:string) {
-  let $acl-filter := cmn:get-acl-permission-as-attr($acl)
-    
-    (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
-    make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
-  return  
+
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@type='group']",
                 "/bu:group[@type='",$type,"']",
                 "/ancestor::bu:ontology")
+};
+
+declare function bun:xqy-list-userdata($type as xs:string) {
+
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@type='",$type,"']")
 };
 
 (:~ !+FIXED(ah,05-01-2012) 
@@ -318,7 +320,7 @@ declare function bun:get-tableddocuments(
   bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
-declare function bun:search-legislative-items(
+declare function bun:search-criteria(
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
@@ -326,18 +328,12 @@ declare function bun:search-legislative-items(
         $sortby as xs:string,
         $typeofdoc as xs:string) as element() {
         
-        bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
-};
-
-declare function bun:search-group-items(
-        $acl as xs:string, 
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string,
-        $typeofdoc as xs:string) as element() {
-        
-        bun:search-groupitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
+        if ($typeofdoc eq "committee" or $typeofdoc eq "political-group") then
+            bun:search-groupitems($acl, $typeofdoc, "bill/text", "committees.xsl", $offset, $limit, $querystr, $sortby)
+        else if ($typeofdoc eq "userdata") then
+            bun:search-userdata($acl, $typeofdoc, "bill/text", "members.xsl", $offset, $limit, $querystr, $sortby)
+        else
+            bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 (:~
@@ -490,7 +486,7 @@ declare function bun:search-groupitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:xqy-list-documentitems-with-acl($acl, $type)
+    let $coll_rs := bun:xqy-list-groupitem($type)
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
@@ -524,34 +520,89 @@ declare function bun:search-groupitems(
             if ($sortby = 'st_date_oldest') then (
                (:if (fn:ni$qrystr):)
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate ascending
+                order by $match/bu:legislature/bu:statusDate ascending
                 return 
-                    bun:get-reference($match)       
-                )
-                
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate descending
-                return 
-                    bun:get-reference($match)       
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:bungeni/bu:parliament/@date ascending
-                return 
-                    bun:get-reference($match)         
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:bungeni/bu:parliament/@date descending
-                return 
-                    bun:get-reference($match)         
-                )                 
+                    <document>{$match}</document>      
+                )             
             else  (
                 for $match in subsequence($coll,$query-offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate descending
+                order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    bun:get-reference($match)         
+                    <document>{$match}</document>        
+                )
+                (:ft:score($m):)
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           )
+};
+
+(:~
+:   Similar to bun:search-documentitems()
+:)
+declare function bun:search-userdata(
+            $acl as xs:string,
+            $type as xs:string,
+            $url-prefix as xs:string,
+            $stylesheet as xs:string,
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $querystr as xs:string, 
+            $sortby as xs:string) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($stylesheet)    
+    let $coll_rs := bun:xqy-list-userdata($type)
+    let $getqrystr := xs:string(request:get-query-string())
+
+    (: check if search is there so as to proceed to search or not :)    
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else util:eval($coll_rs)
+    
+    (: 
+        Logical offset is set to Zero but since there is no document Zero
+        in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
+        Need arises to  alter the $offset to 1 for the first page limit only.
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+            (: Count the total number of documents :)
+            <count>{
+                count(
+                    $coll
+                  )
+             }</count>
+            <documentType>{$type}</documentType>
+            <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
+            <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+            <offset>{$offset}</offset>
+            <limit>{$limit}</limit>
+            <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+        </paginator>
+        <alisting>
+        {
+            if ($sortby = 'st_date_oldest') then (
+               (:if (fn:ni$qrystr):)
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislature/bu:statusDate ascending
+                return 
+                    bun:get-reference($match)   
+                )             
+            else  (
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    bun:get-reference($match)          
                 )
                 (:ft:score($m):)
         } 
@@ -592,7 +643,7 @@ declare function bun:ft-search(
             http://sewm.pku.edu.cn/src/other/clucene/doc/queryparsersyntax.html
             http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
         :)
-        
+
         let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
             $ultimate-path := local:build-search-objects($type),
             $eval-query := concat($coll-query,"[ft:query((",$ultimate-path,"), '",$escaped,"')]")
@@ -643,7 +694,7 @@ declare function local:build-search-objects($type as xs:string) {
 : @return 
 :   Returns re-written nodes and elements in the form search-form.xml
 :)
-declare function local:rewrite-search-form($tmpl as element(), $type as xs:string)  {
+declare function local:rewrite-search-form($EXIST-PATH as xs:string, $tmpl as element(), $type as xs:string)  {
 
     (: get the current doc-types search conf:)
     let $search-filter := cmn:get-searchins-config($type),
@@ -659,6 +710,12 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
             attribute name { "type" },
             attribute value { $type }
         }   
+      else if($tmpl/self::xh:input[@id eq "exist_path"]) then
+        element input {
+            attribute type { "hidden" },
+            attribute name { "exist_path" },
+            attribute value { $EXIST-PATH }
+        }       
       (: [Re]writing the search-field with search text :)    
       else if ($tmpl/self::xh:input[@id eq "search_for"]) then 
         element input {
@@ -668,6 +725,7 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
             attribute type { "text" },
             attribute value { $qry }
         }
+       
       (: [Re]Writing the filter_by options from ui-config :)
       else if ($tmpl/self::xh:ul[@id eq 'filter_by']) then 
           element ul 
@@ -739,7 +797,7 @@ declare function local:rewrite-search-form($tmpl as element(), $type as xs:strin
 		  		 {$tmpl/@*, 
 			         for $child in $tmpl/node()
 				        return if ($child instance of element())
-					       then local:rewrite-search-form($child, $type)
+					       then local:rewrite-search-form($EXIST-PATH, $child, $type)
 					       else $child
 				 }
 
@@ -768,13 +826,13 @@ declare function local:filter-labels($searchins as element()) {
 :   A Re-written search-form with relevant sort-by field and filter-options
 :)
 
-declare function bun:get-search-context($embed_tmpl as xs:string, $doctype as xs:string) {
+declare function bun:get-search-context($EXIST-PATH as xs:string, $embed_tmpl as xs:string, $doctype as xs:string) {
 
     let $tmpl := fw:app-tmpl($embed_tmpl) (: get the template to be embedded :)
         
     return
         document {
-            local:rewrite-search-form($tmpl/xh:div, $doctype)
+            local:rewrite-search-form($EXIST-PATH,$tmpl/xh:div, $doctype)
         }
 };
 
@@ -876,12 +934,17 @@ declare function bun:get-committees(
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("committees.xsl")    
     
+    (: 
+        The line below is documented in bun:get-documentitems()
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset    
+    
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'])}</count>
-        <documentType>group</documentType>
+        <documentType>committee</documentType>
         <listingUrlPrefix>committee/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
@@ -956,13 +1019,18 @@ declare function bun:get-politicalgroups(
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt("politicalgroups.xsl")    
     
+    (: 
+        The line below is documented in bun:get-documentitems()
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset      
+    
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'])}</count>
-        <documentType>group</documentType>
-        <listingUrlPrefix>committee/profile</listingUrlPrefix>        
+        <documentType>political-group</documentType>
+        <listingUrlPrefix>political-group/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
@@ -1347,6 +1415,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
         <paginator>
         (: Count the total number of members :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'])}</count>
+        <documentType>userdata</documentType>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>

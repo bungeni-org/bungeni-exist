@@ -17,7 +17,7 @@
     <!-- LISTING CONFIG PREFERNCES -->
     <listings>
         <!-- limits the number of items shown on a listing page -->
-        <limit>3</limit>
+        <limit>5</limit>
         <!-- number of pages linked on the paginator before showing next -->
         <visiblePages>5</visiblePages>
     </listings>
@@ -680,28 +680,40 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype name="user">
+        <doctype name="userdata">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="f_b" value="body" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislature/bu:description">Description</searchin>
+                <searchin name="fn" value="fstname" field="bu:user/bu:firstName" default="true">First Name</searchin>
+                <searchin name="ln" value="lsname" field="bu:user/bu:lastName">Last Name</searchin>
+                <searchin name="ds" value="desc" field="bu:user/bu:description">Description</searchin>
             </searchins>
         </doctype>
-        <doctype name="group">
+        <doctype name="committee">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="f_b" value="body" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislature/bu:description">Description</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+            </searchins>
+        </doctype>
+        <doctype name="political-group">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
             </searchins>
         </doctype>
         <doctype name="bill">

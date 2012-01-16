@@ -657,6 +657,98 @@ declare function bun:ft-search(
 };
 
 (:~
+:   Similar to bun:search-documentitems()
+:)
+declare function bun:search-global(
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $querystr as xs:string, 
+            $sortby as xs:string) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt("global-search-summary.xsl")    
+    (:let $coll_rs := bun:xqy-list-groupitem("userdata"):)
+    let $getqrystr := xs:string(request:get-query-string())
+
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+            (: Count the total number of documents :)
+            <count>{ count(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)]) }</count>
+            <documentType>global</documentType>
+            <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
+            <offset>{$offset}</offset>
+            <limit>{$limit}</limit>
+            <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+        </paginator>
+        <alisting>
+            <legislatives>
+            {
+                (: check if search is there so as to proceed to search or not :) 
+                if($querystr ne "") then (
+                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)],1,3)
+                    order by ft:score($search-rs) descending
+                    return 
+                        <document>{$search-rs}</document>
+                     )
+                 else (<doc>{$querystr}</doc>)                
+            } 
+            </legislatives>
+            <groups>
+            {
+                (: check if search is there so as to proceed to search or not :) 
+                if($querystr ne "") then (
+                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)],1,3)
+                    order by ft:score($search-rs) descending
+                    return 
+                        <document>{$search-rs}</document>
+                     )
+                 else (<doc>{$querystr}</doc>)                
+            } 
+            </groups>     
+            <users>
+            {
+                (: check if search is there so as to proceed to search or not :) 
+                if($querystr ne "") then (
+                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)],1,3)
+                    order by ft:score($search-rs) descending
+                    return 
+                        <document>{$search-rs}</document>
+                     )
+                 else (<doc>{$querystr}</doc>)                
+            } 
+            </users>            
+        </alisting>
+    </docs>
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           )
+};
+
+declare function bun:ft-global-search(
+            $coll-query as xs:string, 
+            $querystr as xs:string,
+            $type as xs:string) as element()* {
+
+        let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
+            $ultimate-path := local:build-search-objects($type),
+            $eval-query := concat("collection('/db/bungeni-xml')/bu:ontology","[ft:query(., '",$escaped,"')]")
+            
+        for $search-rs in util:eval($eval-query)
+        order by ft:score($search-rs) descending      
+            
+        return
+            (:<params>{$ultimate-path}</params> !+DEBUG_WITH_test.xql:)
+            $search-rs        
+};
+
+(:~
 :   Generates list of indexed items selected by user and match the ui-config option for that type of document.
 :   +NOTES: The items in the ui-config must also be indexed in the /db/system/db/config/bungeni-xml/collection.xconf
 :
@@ -692,9 +784,9 @@ declare function local:build-search-objects($type as xs:string) {
 : @param type
 :   The document type
 : @return 
-:   Returns re-written nodes and elements in the form search-form.xml
+:   Returns re-written nodes and elements in the form listing-search-form.xml
 :)
-declare function local:rewrite-search-form($EXIST-PATH as xs:string, $tmpl as element(), $type as xs:string)  {
+declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tmpl as element(), $type as xs:string)  {
 
     (: get the current doc-types search conf:)
     let $search-filter := cmn:get-searchins-config($type),
@@ -703,7 +795,7 @@ declare function local:rewrite-search-form($EXIST-PATH as xs:string, $tmpl as el
         $allparams := request:get-parameter-names()       
 
     return
-      (: Re-writing the doc_type with the one gotten from rou:listing-documentitem() :)    
+      (: [Re]writing the doc_type with the one gotten from rou:listing-documentitem() :)    
       if ($tmpl/self::xh:input[@id eq "doc_type"]) then 
         element input {
             attribute type { "hidden" },
@@ -723,6 +815,7 @@ declare function local:rewrite-search-form($EXIST-PATH as xs:string, $tmpl as el
             attribute name { "q" },
             attribute class { "search_for" },
             attribute type { "text" },
+            attribute placeholder { concat("Search ",$type,"s...") },
             attribute value { $qry }
         }
        
@@ -797,7 +890,7 @@ declare function local:rewrite-search-form($EXIST-PATH as xs:string, $tmpl as el
 		  		 {$tmpl/@*, 
 			         for $child in $tmpl/node()
 				        return if ($child instance of element())
-					       then local:rewrite-search-form($EXIST-PATH, $child, $type)
+					       then local:rewrite-listing-search-form($EXIST-PATH, $child, $type)
 					       else $child
 				 }
 
@@ -816,23 +909,69 @@ declare function local:filter-labels($searchins as element()) {
 };
 
 (:~
+:   Re-writes the search-form-global that does a full-text search across all documents.
+:
+: @param tmpl
+:   A xml template that has the skeleton form
+: @param type
+:   The document type
+: @return 
+:   Returns re-written nodes and elements in the form global-search-form.xml
+:)
+declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmpl as element(), $type as xs:string)  {
+
+    (: get the current doc-types search conf:)
+    let $qry := xs:string(request:get-parameter("q",'')),          
+        $allparams := request:get-parameter-names()       
+
+    return    
+      (: [Re]writing the search-field with search text :)    
+      if ($tmpl/self::xh:input[@id eq "global-search"]) then 
+        element input {
+            attribute id { "global-search" },
+            attribute name { "q" },
+            attribute class { "search_for" },
+            attribute type { "text" },
+            attribute placeholder { "Search all Bungeni documents..." },
+            attribute value { $qry }
+        } 
+        else
+  		element { node-name($tmpl)}
+		  		 {$tmpl/@*, 
+			         for $child in $tmpl/node()
+				        return if ($child instance of element())
+					       then local:rewrite-global-search-form($EXIST-PATH, $child, $type)
+					       else $child
+				 }
+
+};
+
+(:~
 :   The main search API in appcontroller that accepts all requests routed to /search
 :  
 : @param embed_tmpl
-:   XML skeleton search-form.xml that is merged into the main layout template.
+:   XML skeleton global/listing-search-form.xml that is merged into the main layout template.
 : @param doctype
 :   The document type
 : @return
 :   A Re-written search-form with relevant sort-by field and filter-options
 :)
 
-declare function bun:get-search-context($EXIST-PATH as xs:string, $embed_tmpl as xs:string, $doctype as xs:string) {
+declare function bun:get-search-context(
+                        $EXIST-PATH as xs:string, 
+                        $embed_tmpl as xs:string, 
+                        $scope as xs:string, 
+                        $doctype as xs:string
+                  ) {
 
     let $tmpl := fw:app-tmpl($embed_tmpl) (: get the template to be embedded :)
         
     return
         document {
-            local:rewrite-search-form($EXIST-PATH,$tmpl/xh:div, $doctype)
+            if($scope eq "global") then 
+                local:rewrite-global-search-form($EXIST-PATH, $tmpl/xh:div, $doctype)
+            else
+                local:rewrite-listing-search-form($EXIST-PATH, $tmpl/xh:div, $doctype)
         }
 };
 

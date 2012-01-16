@@ -81,7 +81,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"search-form.xml",'userdata')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"listing-search-form.xml","listing",'userdata')))))
     								    )                  
                
         (:~ Handlers for business submenu :)
@@ -103,7 +103,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"search-form.xml",'committee')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"listing-search-form.xml","listing",'committee')))))
     								    )   								    
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
@@ -144,11 +144,43 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $REL-PATH
                     )                    
     				
-        (:~ ITEMS SEARCH :)        
-    	else if ($EXIST-PATH eq "/search")
+        (:~ ITEMS SEARCH :)     
+ 	    else if ($EXIST-PATH eq "/search-all")
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $act-entries-tmpl :=  bun:search-global($offset,$limit,$qry,$sty),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    									       $REL-PATH, 
+    									       $EXIST-PATH, 
+    									       $config:DEFAULT-TEMPLATE,
+    									       cmn:get-route($EXIST-PATH),
+    									       (),
+    									       (cmn:build-nav-node($EXIST-PATH,
+    									           (template:merge($EXIST-PATH, 
+    									               $act-entries-repl, 
+    									               bun:get-search-context($EXIST-PATH, 
+    									                   "global-search-form.xml",
+    									                   "global",
+    									                   "global"))))
+    									     )
+    								    )        
+        else if ($EXIST-PATH eq "/search")
+    		 then 
+                let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    (: 
+                        $scope is either global or listing - Let's us know which search form 
+                        has been called to action.
+                    :)
+                    $scope := xs:string(request:get-parameter("scope",'listing')),
                     $type := xs:string(request:get-parameter("type",'bill')),
                     (:
                       override_path : For the search we want to override the automatic 
@@ -185,7 +217,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									           (template:merge($EXIST-PATH, 
     									               $act-entries-repl, 
     									               bun:get-search-context($override_path, 
-    									                   "search-form.xml",
+    									                   "listing-search-form.xml",
+    									                   "listing",
     									                   $type))))
     									     )
     								    )
@@ -309,7 +342,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH, "search-form.xml",'political-group')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH, "listing-search-form.xml","listing",'political-group')))))
     								    )
     	else if ($EXIST-PATH eq "/committee/profile" )
     		 then 
@@ -1268,6 +1301,16 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									)       									
     									
         (:~ UNMAPPED :)		
+    	else if ($EXIST-PATH eq "/whatson")
+    		 then 
+               template:process-tmpl(
+                $REL-PATH, 
+                $EXIST-PATH, 
+                $config:DEFAULT-TEMPLATE, 
+                cmn:get-route($EXIST-PATH),
+                (),
+                cmn:build-nav-tmpl($EXIST-PATH, "whatson.xml")
+               )  	        
         else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
                template:process-tmpl(
@@ -1276,8 +1319,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),(),
                 cmn:build-nav-tmpl($EXIST-PATH, "politicalgroups.xml")
-               )
-					    
+               )	    
     	else if ($EXIST-PATH eq "/sittings")
     		 then 
                template:process-tmpl(
@@ -1288,7 +1330,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 (),
                 cmn:build-nav-tmpl($EXIST-PATH, "sittings.xml")
                )  	
-               
     	else if ($EXIST-PATH eq "/publications")
     		 then 
                template:process-tmpl(

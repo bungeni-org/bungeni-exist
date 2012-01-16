@@ -19,7 +19,7 @@
         <!-- limits the number of items shown on a listing page -->
         <limit>5</limit>
         <!-- number of pages linked on the paginator before showing next -->
-        <visiblePages>5</visiblePages>
+        <visiblePages>20</visiblePages>
     </listings>
     
     
@@ -44,6 +44,10 @@
         <route href="/home">
             <navigation>home</navigation>
             <title>Home</title>
+        </route>
+        <route href="/search-all">
+            <navigation>home</navigation>
+            <title>Search</title>
         </route>
         <route href="/search">
             <navigation>business</navigation>
@@ -353,6 +357,11 @@
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
+        <route href="/whatson">
+            <title>Business | Sittings </title>
+            <navigation>business</navigation>
+            <subnavigation>whatson</subnavigation>
+        </route>
         <route href="/sittings">
             <title>Business | Sittings </title>
             <navigation>business</navigation>
@@ -419,6 +428,9 @@
         <menu name="business" for="business">
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1" id="portal-personaltools">
+                    <li>
+                        <a name="whatson" href="whatson">what's on</a>
+                    </li>
                     <li>
                         <a name="committees" href="committees">committees</a>
                     </li>

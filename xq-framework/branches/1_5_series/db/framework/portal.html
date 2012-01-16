@@ -64,10 +64,11 @@
                             </li>
                             </ul>  -->
                     </div>
-                    <div class="lev-1-search" style="text-align:right;margin-top:-23px;">
-                        <form class="section-form" id="alchemist-form" method="get" action="/search">
-                            <input type="text" value="" name="search-input" id="bah" class="text"/>
-                            <input type="submit" value="Search" name="search-input" id="duh"/>
+                    <div class="lev-1-search" id="search-form-global" style="text-align:right;margin-top:-23px;">
+                        <form class="section-form" id="alchemist-form" method="GET" action="search-all">
+                            <input type="hidden" value="global" name="scope"/>
+                            <input type="text" value="" name="q" id="global-search" class="text search_for" placeholder="Search all Bungeni documents..."/>
+                            <input type="submit" value="Search" id="global-srch-btn"/>
                         </form>
                     </div>
                 </div>

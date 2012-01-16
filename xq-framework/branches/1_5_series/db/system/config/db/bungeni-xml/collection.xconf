@@ -7,8 +7,12 @@
         <lucene>
             <analyzer id="sa" class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
             <analyzer id="ws" class="org.apache.lucene.analysis.WhitespaceAnalyzer"/>
+            <!-- All Bungeni Documents -->
             <text qname="bu:ontology">
                 <ignore qname="bu:signatories"/>
+                <ignore qname="bu:permissions"/>
+                <ignore qname="bu:versions"/>
+                <ignore qname="bu:changes"/>
             </text>
             <!-- Parliamentary Documents -->
             <text match="//bu:legislativeItem"/>

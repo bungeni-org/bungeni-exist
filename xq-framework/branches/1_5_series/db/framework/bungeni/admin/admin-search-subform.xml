@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+XForm for editing Order configurations    
+This is loaded by admin-order.xql
+-->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="orderby" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="default">
+            <orderbys/>
+            <!--
+            <orderby order="asc" value="start_dt_oldest">
+                start date [oldest]
+            </orderby>
+            -->
+        </xf:instance>
+        <xf:bind id="b-orderby-order" nodeset="@order" type="string"/>
+        <xf:bind id="b-orderby-value" nodeset="@value" type="string"/>
+        <xf:bind id="b-orderby" nodeset="." type="string"/>
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/searchins" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Order editor loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/searchins" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Order saved</xf:message>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to edit loaded route -->
+    <xf:group appearance="full">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
+        <xf:repeat id="searchins" nodeset="searchin">
+            <xf:label id="editing-subform">Search Subform</xf:label>
+            <xf:select1 id="searchby" ref="@order" appearance="full" class="toggle-sort" incremental="true">
+                <xf:label>Search</xf:label>
+                <xf:hint>search form</xf:hint>
+                <xf:help>Toggle between asceding and descending</xf:help>
+                <xf:item>
+                    <xf:label>ascending</xf:label>
+                    <xf:value>asc</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>descending</xf:label>
+                    <xf:value>desc</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:input ref="@value">
+                <xf:hint>sort value</xf:hint>
+                <xf:help>Warning: Editing this field requires updating the module with this new value.</xf:help>
+                <xf:label id="lbl-b-orderby">Value</xf:label>
+            </xf:input>
+            <xf:input ref=".">
+                <xf:label id="lbl-b-orderby">Title / Label</xf:label>
+            </xf:input>
+        </xf:repeat>
+        <xf:trigger appearance="triggerMiddleColumn">
+            <xf:label>update routes</xf:label>
+            <xf:hint>Click apply to update the document configuration</xf:hint>
+            <xf:send submission="s-update-master"/>
+        </xf:trigger>
+    </xf:group>
+</div>

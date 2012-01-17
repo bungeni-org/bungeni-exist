@@ -117,7 +117,38 @@
             <title>Business | Committee's Staff</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
-        </route>        
+        </route> 
+        <!-- #POLICAL-GROUPS -->
+        <route href="/political-group/profile">
+            <title>Business | Political Group's Profile</title>
+            <navigation>business</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/political-group/members">
+            <title>Business | Political Group's Members</title>
+            <navigation>business</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/political-group/assigned-items">
+            <title>Business | Political Group's Assigned Items</title>
+            <navigation>business</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/political-group/sittings">
+            <title>Business | Political Group's Sittings</title>
+            <navigation>business</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/political-group/staff">
+            <title>Business | Political Group's Staff</title>
+            <navigation>business</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/political-group/contacts">
+            <title>Business | Political Group's Staff</title>
+            <navigation>business</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>         
         <!-- #BILLS -->
         <route href="/bills">
             <title>Business | Bills</title>

@@ -695,44 +695,47 @@ declare function bun:search-global(
             <limit>{$limit}</limit>
             <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
-        <alisting>
+
             <legislatives>
+                <count>{ count(collection('/db/bungeni-xml')/bu:ontology[@type='document']/bu:document[@type='question']/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow']/ancestor::bu:ontology[ft:query(., $querystr)]) }</count>
             {
                 (: check if search is there so as to proceed to search or not :) 
                 if($querystr ne "") then (
-                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)],1,3)
+                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[@type='document']/bu:document[@type='question']/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow']/ancestor::bu:ontology[ft:query(., $querystr)],1,3)
                     order by ft:score($search-rs) descending
                     return 
                         <document>{$search-rs}</document>
                      )
-                 else (<doc>{$querystr}</doc>)                
+                 else (<none>{$querystr}</none>)                
             } 
             </legislatives>
             <groups>
+                <count>{ count(collection('/db/bungeni-xml')/bu:ontology[@type='group'][ft:query(., $querystr)]) }</count>
             {
                 (: check if search is there so as to proceed to search or not :) 
                 if($querystr ne "") then (
-                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)],1,3)
+                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[@type='group'][ft:query(., $querystr)],1,3)
                     order by ft:score($search-rs) descending
                     return 
                         <document>{$search-rs}</document>
                      )
-                 else (<doc>{$querystr}</doc>)                
+                 else (<none>{$querystr}</none>)                
             } 
             </groups>     
-            <users>
+            <members>
+                <count>{ count(collection('/db/bungeni-xml')/bu:ontology[@type='userdata']/bu:metadata[@type='user']/ancestor::bu:ontology[ft:query(., $querystr)]) }</count>
             {
                 (: check if search is there so as to proceed to search or not :) 
                 if($querystr ne "") then (
-                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)],1,3)
+                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[@type='userdata']/bu:metadata[@type='user']/ancestor::bu:ontology[ft:query(., $querystr)],1,3)
                     order by ft:score($search-rs) descending
                     return 
                         <document>{$search-rs}</document>
                      )
-                 else (<doc>{$querystr}</doc>)                
+                 else (<none>{$querystr}</none>)                
             } 
-            </users>            
-        </alisting>
+            </members>            
+
     </docs>
     return
         transform:transform($doc, 

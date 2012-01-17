@@ -16,7 +16,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         <meta name="author" content="anthony at googlemail.com"/>
         <meta name="author" content="ashok at parliaments.info"/>
         <meta name="description" content="XForms with config options"/>
-        <link rel="stylesheet" href="../assets/admin/style.css"/>
+        <link rel="stylesheet" href="../../assets/admin/style.css"/>
     </head>
     <body>
     
@@ -24,9 +24,9 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         
         <div style="display:none">
         <xf:model id="m-user-config">
-            <xf:instance xmlns="" id="uconfig" src="test-ui-config.xml"/>
+            <xf:instance xmlns="" id="uconfig" src="../test-ui-config.xml"/>
             
-            <xf:submission id="s-send" replace="none" resource="test-ui-config.xml" method="put">
+            <xf:submission id="s-send" replace="none" resource="../test-ui-config.xml" method="put">
                 <xf:action ev:event="xforms-submit-error">
                     <xf:message level="ephemeral">Navigation Preferences Update failed. Please fill in valid values</xf:message>
                 </xf:action>
@@ -49,6 +49,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         <a href="admin-route.xql" title="Route Configurations">Routes</a>
         <span class="sep">|</span>
         <a href="admin-order.xql" title="Order Configurations">Order</a>
+        <span class="sep">|</span>
+        <a href="admin-search.xql" title="Search Configurations">Search</a>
     </div>
     <div class="section" dojotype="dijit.layout.ContentPane">
               <xf:group id="itema-ui" 

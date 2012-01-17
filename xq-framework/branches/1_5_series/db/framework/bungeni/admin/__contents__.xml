@@ -1,0 +1,36 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/bungeni/admin" owner="admin" group="dba" mode="644" created="2012-01-17T13:38:28+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="XMLResource" name="admin-doctype-subform.xml" owner="admin" group="biblio.users" mode="644" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T12:44:53+03:00" filename="admin-doctype-subform.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="admin-doctype.xql" owner="admin" group="dba" mode="744" created="2012-01-13T17:17:15+03:00" modified="2012-01-17T12:44:53+03:00" filename="admin-doctype.xql" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="admin-nav.xql" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-17T18:20:33+03:00" filename="admin-nav.xql" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="admin-navigation.xml" owner="admin" group="dba" mode="644" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T12:44:53+03:00" filename="admin-navigation.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="admin-order-subform.xml" owner="admin" group="dba" mode="744" created="2012-01-17T18:13:01+03:00" modified="2012-01-17T18:13:01+03:00" filename="admin-order-subform.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="admin-order.xql" owner="admin" group="dba" mode="644" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T18:23:07+03:00" filename="admin-order.xql" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="admin-route-subform.xml" owner="admin" group="dba" mode="644" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T12:44:53+03:00" filename="admin-route-subform.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="admin-route.xql" owner="admin" group="dba" mode="744" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T13:43:00+03:00" filename="admin-route.xql" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="admin-search-subform.xml" owner="admin" group="dba" mode="644" created="2012-01-17T18:34:20+03:00" modified="2012-01-17T18:34:20+03:00" filename="admin-search-subform.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="admin-search.xql" owner="admin" group="dba" mode="644" created="2012-01-17T18:15:07+03:00" modified="2012-01-17T18:43:34+03:00" filename="admin-search.xql" mimetype="application/xquery">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="admin-ui.xml" owner="admin" group="dba" mode="744" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="admin-ui.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

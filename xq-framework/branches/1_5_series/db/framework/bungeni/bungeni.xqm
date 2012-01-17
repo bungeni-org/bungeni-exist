@@ -56,8 +56,15 @@ declare function bun:gen-pdf-output($docid as xs:string) {
                                                             <parameters>
                                                                 <param name="keywords" value="Parlimentary, ddocument"/>
                                                             </parameters>)
-     
-    return response:stream-binary($pdf, "application/pdf", "output.pdf")     
+    (: 
+    Set the content disposition header with the file name and the return type as attachment 
+    For some odd reason return the response stream binary fails the request, i have to send
+    a valid xml document as the last thing returned from the response
+    :) 
+    let $header := 
+        response:set-header("Content-Disposition" , concat("attachment; filename=",  "output.pdf")) 
+    let $out := response:stream-binary($pdf, "application/pdf")     
+    return <xml />
     
 };
 
@@ -82,8 +89,13 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     let $transformed := transform:transform($doc,$stylesheet,())
      
     let $pdf := xslfo:render($transformed, "application/pdf", ())
-     
-    return response:stream-binary($pdf, "application/pdf", "output.pdf")     
+    
+    let $header := 
+        response:set-header("Content-Disposition" , concat("attachment; filename=",  "output.pdf"))  
+    
+    let $out := response:stream-binary($pdf, "application/pdf")     
+    
+    return <xml />
     
 };
 

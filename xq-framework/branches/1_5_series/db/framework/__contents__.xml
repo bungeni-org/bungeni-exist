@@ -1,42 +1,42 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework" owner="admin" group="dba" mode="755" created="2011-12-08T14:14:53+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="README.txt" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="README.txt" mimetype="text/plain">
+    <resource type="BinaryResource" name="README.txt" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="README.txt" mimetype="text/plain">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="common.xqm" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="common.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="common.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="common.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="config.xml" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="config.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="config.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="config.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="config.xqm" owner="admin" group="biblio.users" mode="645" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="config.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="config.xqm" owner="admin" group="dba" mode="645" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="config.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="controller.xql" owner="admin" group="biblio.users" mode="645" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="controller.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="645" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="controller.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="functx.xqm" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="functx.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="functx.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="functx.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="fw.xqm" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="fw.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="fw.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="fw.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="ontology.xqm" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="ontology.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="ontology.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="ontology.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="portal.html" owner="admin" group="biblio.users" mode="644" created="2012-01-16T18:11:34+03:00" modified="2012-01-16T18:11:34+03:00" filename="portal.html" mimetype="text/html">
+    <resource type="XMLResource" name="portal.html" owner="admin" group="dba" mode="644" created="2012-01-16T18:11:34+03:00" modified="2012-01-16T18:11:34+03:00" filename="portal.html" mimetype="text/html">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="security.xqm" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="security.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="security.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="security.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="template.xhtml" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="template.xhtml" mimetype="application/xhtml+xml">
+    <resource type="XMLResource" name="template.xhtml" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="template.xhtml" mimetype="application/xhtml+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="template.xqm" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="template.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="template.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="template.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="workspace.html" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="workspace.html" mimetype="text/html">
+    <resource type="XMLResource" name="workspace.html" owner="admin" group="dba" mode="644" created="2012-01-13T17:15:51+03:00" modified="2012-01-13T17:15:51+03:00" filename="workspace.html" mimetype="text/html">
         <acl entries="0" version="1"/>
     </resource>
     <subcollection name="lexapp" filename="lexapp"/>

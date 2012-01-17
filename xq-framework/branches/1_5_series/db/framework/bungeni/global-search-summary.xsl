@@ -27,35 +27,75 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
-                <div id="doc-listing" class="acts">
+                <div id="search-summary" class="acts">
                     <!-- render the paginator -->
                     <div class="list-header">
-                        <!-- call the paginator -->
-                        <xsl:apply-templates select="paginator"/>
                         <div id="search-n-sort" class="search-bar">
                             <!-- listing search removed -->
                         </div>
                     </div>                 
                     <!-- render the actual listing-->
-                    <xsl:apply-templates select="alisting"/>
+                    <xsl:apply-templates select="legislatives"/>
+                    <xsl:apply-templates select="groups"/>
+                    <xsl:apply-templates select="members"/>
                 </div>
             </div>
         </div>
     </xsl:template>
     
-    
-    <!-- Include the paginator generator -->
-    <xsl:include href="paginator.xsl"/>
-    <xsl:template match="alisting">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
-            <xsl:apply-templates mode="renderui"/>
+    <!-- legislative items -->
+    <xsl:template match="legislatives">
+        <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
+            <a href="?scope=legi">See all results from legislative items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+            </a>
+        </div>
+        <ul class="ls-row" style="margin-left:15px;clear:both">
+            <xsl:apply-templates select="document" mode="renderui1"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
+    <xsl:template match="document" mode="renderui1" priority="3">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
-            <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{bu:ontology/bu:document/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+            </a>
+        </li>
+    </xsl:template>
+    
+    <!-- group items -->
+    <xsl:template match="groups">
+        <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
+            <a href="?scope=group">See all results from group items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+            </a>
+        </div>
+        <ul class="ls-row" style="margin-left:15px;clear:both">
+            <xsl:apply-templates select="document" mode="renderui2"/>
+        </ul>
+    </xsl:template>
+    <xsl:template match="document" mode="renderui2">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
+        <li>
+            <a href="{bu:ontology/bu:group/@type}/profile?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
+            </a>
+        </li>
+    </xsl:template>  
+    
+    <!-- users items -->
+    <xsl:template match="members">
+        <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
+            <a href="?scope=members">See all results from members items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+            </a>
+        </div>
+        <ul class="ls-row" style="margin-left:15px;clear:both">
+            <xsl:apply-templates select="document" mode="renderui3"/>
+        </ul>
+    </xsl:template>
+    <xsl:template match="document" mode="renderui3">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:user/@uri"/>
+        <li>
+            <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="concat(bu:ontology/bu:user/bu:titles,'. ',bu:ontology/bu:user/bu:firstName,' ', bu:ontology/bu:user/bu:lastName)"/>
             </a>
         </li>
     </xsl:template>

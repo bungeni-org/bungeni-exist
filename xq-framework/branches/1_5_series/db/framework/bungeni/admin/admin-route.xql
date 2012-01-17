@@ -19,7 +19,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     <meta name="author" content="anthony at googlemail.com"/>
     <meta name="author" content="ashok at parliaments.info"/>
     <meta name="description" content="XForms with config options"/>
-    <link rel="stylesheet" href="../assets/admin/style.css"/>
+    <link rel="stylesheet" href="../../assets/admin/style.css"/>
 </head>
 <body>
  <div id="xforms">
@@ -28,7 +28,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         "master" model used by the subform
         -->
         <xf:model id="master">
-            <xf:instance xmlns="" id="ui-config" src="test-ui-config.xml" />
+            <xf:instance xmlns="" id="ui-config" src="../test-ui-config.xml" />
             <xf:submission id="update-subform" 
                 resource="model:route#instance('default')/route" 
                 method="post" 

@@ -85,7 +85,7 @@
     <xsl:template match="document" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
-            <a href="committee/profile?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="political-group/profile?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
             </a>
             <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parent_group/bu:shortName"/>

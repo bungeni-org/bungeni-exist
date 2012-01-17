@@ -21,57 +21,68 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         <link rel="stylesheet" href="../assets/bungeni/css/xforms.css"/>       
         
         
-        <xf:model id="m-user-config">
-            <xf:instance xmlns="" id="uconfig" src="test-ui-config.xml"/>
-            
-            <xf:submission id="s-send" replace="none" resource="test-ui-config.xml" method="put">
-                <xf:action ev:event="xforms-submit-error">
-                    <xf:message>Doctype Preferences Update failed. Please fill in valid values</xf:message>
-                </xf:action>
-                <xf:action ev:event="xforms-submit-done">
-                    <xf:message>You have updated Doctype Preferences successfully.</xf:message>
-                </xf:action>
-            </xf:submission>
-            
-            <xf:bind id="nav-bind" nodeset="instance('uconfig')">
-                <xf:bind id="bind-doctypes" nodeset="/ui/doctypes/doctype"  />
-            </xf:bind>
-
-        </xf:model>
-
     </head>
     <body>
     
  
-       
-            <div id="main-wrapper">
-                <div id="title-holder" class="theme-lev-1-only">
-                    <h1 id="doc-title-blue">Doctype Preferences</h1>
-                </div>
-                    <div id="xforms" style="margin-left:0px;padding-left:10px;width:100%;">
-                        
-                        <div id="ui-prefs" class="ui-prefs InlineRoundBordersAlert">
-                                <xf:label>Configure Doctype Parameters</xf:label>   
-                                <xf:repeat id="rep-doctypes" bind="bind-doctypes" appearance="compact">
-                                  
-                                <xf:output ref="@name">
-                                    <xf:label>Doc Type : </xf:label>
-                                </xf:output>  
-                                
-                                
-                                 </xf:repeat>
-                                
-                                <xf:trigger appearance="triggerMiddleColumn">
-                                    <xf:label>Update preferences</xf:label>
-                                    <xf:hint>Be calm - this is jus a tinker! ;)</xf:hint>
-                                    <xf:send submission="s-send"/>
-                                </xf:trigger>
-                           
-                        </div>
-                    </div>
+ <div id="xforms">
+            <div style="display:none">
+                <xf:model id="master">
+                    <xf:instance xmlns="" id="ui-config" src="test-ui-config.xml" />
+                    <xf:submission id="update-subform" resource="model:doctype#instance('default')/doctype" method="post" replace="none" ref="doctype[index('doctypes')]">
+						<!--<xf:message ev:event="xforms-submit-done" level="ephemeral">Masterform has updated Subform.</xf:message>-->
+                    </xf:submission>
+                </xf:model>
+            </div>
+            <div class="Section" dojotype="dijit.layout.ContentPane">
+                <xf:group appearance="full" id="ui-config" >
+                    <xf:action ev:event="unload-subforms">
+                        <xf:message level="ephemeral">unloading subform...</xf:message>
+                        <xf:load show="none" targetid="doctype"/>
+                    </xf:action>
+                    <xf:repeat id="doctypes" nodeset="/ui/doctypes/doctype[@name='question']" appearance="compact" class="doctypesRepeat">
+                       <xf:output ref="@name">
+                            <xf:label class="orderListHeader">Doc Type</xf:label>
+                        </xf:output>
+                        <xf:repeat id="orderbys" nodeset="orderbys/orderby"  appearance="compact" class="orderbysRepeat" >
+                             <xf:output ref="@value">
+                              <xf:label class="orderListHeader">Orderby Value</xf:label>
+                             </xf:output>
+                             <xf:output ref="@order">
+                              <xf:label class="orderListHeader">Order</xf:label>
+                             </xf:output>
+                             <xf:output ref=".">
+                                <xf:label class="orderListHeader">Text</xf:label>
+                             </xf:output>
+          
+                        </xf:repeat>
+                     
+                    </xf:repeat>
+                </xf:group>
                 
-                </div>                    
-        <script type="text/javascript" defer="defer">
+                <xf:group appearance="minimal" class="doctypesTriggerGroup">
+                    <xf:trigger class="doctypesSubTrigger">
+                        <xf:label>edit selected</xf:label>
+                        <xf:hint>This button will push the selected data into the subform.</xf:hint>
+                        <xf:action>
+                            <xf:message level="ephemeral">loading subform...</xf:message>
+                            <xf:load show="embed" targetid="doctype">
+                                <xf:resource value="'./admin-doctype-subform.xml'"/>
+                            </xf:load>
+                        </xf:action>
+                    </xf:trigger>
+                </xf:group>
+                
+                <xf:group appearance="full" class="doctypesFullGroup">
+                    <div class="doctypesSubForm">
+                        <div id="doctype"/>
+                    </div>
+                </xf:group>
+                
+            </div>
+        </div>
+
+    <script type="text/javascript" defer="defer">
             <![CDATA[
             dojo.addOnLoad(function(){
                 dojo.subscribe("/xf/ready", function() {
@@ -79,6 +90,6 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 });
             });
            ]]>
-        </script>      
-    </body>
+        </script>
+        </body>
 </html>

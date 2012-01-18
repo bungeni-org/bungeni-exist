@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" id="search-form-global">
     <form class="section-form" id="alchemist-form" name="search_form" method="GET" action="search">
-        <input type="hidden" value="global" name="scope"/>
         <input type="text" value="" name="q" id="global-search" class="text search_for" placeholder="Search all Bungeni documents..."/>
         <input type="submit" value="Search" id="global-srch-btn"/>
     </form>

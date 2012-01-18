@@ -1,5 +1,7 @@
 xquery version "1.0";
 
+import module namespace adm = "http://exist.bungeni.org/adm" at "admin.xqm";
+
 (:
 Order Editor container XForm
 :)
@@ -38,15 +40,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
              </xf:submission>
         </xf:model>
     </div>
-    <div class="section">
-        <a href="admin-nav.xql" title="Navigation Preferences">Navigation</a>
-        <span class="sep">|</span>
-        <a href="admin-route.xql" title="Route Configurations">Routes</a>
-        <span class="sep">|</span>
-        <a href="admin-order.xql" title="Order Configurations">Order</a>
-        <span class="sep">|</span>
-        <a href="admin-search.xql" title="Search Configurations">Search</a>        
-    </div>
+    <!-- MAIN MENU -->
+    <div class="section">{adm:main-menu('order')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         
         <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >

@@ -53,9 +53,66 @@
     text-align:  center;
 }
 
-
-
 .section .description{
     padding:5px;
     background:#fafafa;
+}
+
+.configsTriggerGroup {
+    margin-top:10px;
+}
+
+/* NAVIGATION */
+#adm-main-menu {
+    margin:0;
+    padding:0;
+    list-style-type:none;
+}
+#adm-main-menu li {
+   display:inline;
+   margin-right:8px;
+}
+#adm-main-menu li a,
+#adm-main-menu li a:visited {
+    text-decoration:none;
+    color:#0085BE;
+}
+#adm-main-menu li a:hover {
+    text-decoration:underline;
+    color:#36b9f1;
+}
+
+/* ORDERS */
+.sortorders {
+    display:inline !important;
+    clear:both;
+}
+.sortorders > div {
+    display:inline !important;
+    width:100px !important;
+    cursor:pointer;
+}
+.sortorders * {
+    display:inline !important;
+}
+
+
+div.sortorders table {
+    width:100%;
+} 
+div.sortorders table tr.xfRepeatItem {
+    display: table-row !important;
+    position: relative;
+}
+div.sortorders table tr td {
+    width:auto !important;
+    white-space:nowrap;
+} 
+
+/* TOAST MESSAGES */
+.dijitToasterClip {
+    width:100% !important;   
+}
+.dijitToasterContainer {
+    width:100% !important;
 }

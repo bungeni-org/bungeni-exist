@@ -29,26 +29,25 @@ This is loaded by admin-order.xql
         <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
         <xf:repeat id="searchins" nodeset="searchin">
             <xf:label id="editing-subform">Search Subform</xf:label>
-            <xf:select1 id="searchby" ref="@order" appearance="full" class="toggle-sort" incremental="true">
-                <xf:label>Search</xf:label>
-                <xf:hint>search form</xf:hint>
-                <xf:help>Toggle between asceding and descending</xf:help>
-                <xf:item>
-                    <xf:label>ascending</xf:label>
-                    <xf:value>asc</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>descending</xf:label>
-                    <xf:value>desc</xf:value>
-                </xf:item>
-            </xf:select1>
+            <xf:input ref="@name">
+                <xf:hint>form name field</xf:hint>
+                <xf:help>This is what will be name field on the HTML form.</xf:help>
+                <xf:label>Name</xf:label>
+            </xf:input>
             <xf:input ref="@value">
-                <xf:hint>sort value</xf:hint>
-                <xf:help>Warning: Editing this field requires updating the module with this new value.</xf:help>
-                <xf:label id="lbl-b-orderby">Value</xf:label>
+                <xf:hint>form value</xf:hint>
+                <xf:help>The form name above corresponds to this value on the HTML form.</xf:help>
+                <xf:label>Value</xf:label>
+            </xf:input>
+            <xf:input ref="@field">
+                <xf:hint>Lucene-indexed path</xf:hint>
+                <xf:help>This is the field that has been indexed in collection.xconf</xf:help>
+                <xf:label>Search Path</xf:label>
             </xf:input>
             <xf:input ref=".">
-                <xf:label id="lbl-b-orderby">Title / Label</xf:label>
+                <xf:hint>Field label</xf:hint>
+                <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
+                <xf:label>Form Title / Label</xf:label>
             </xf:input>
         </xf:repeat>
         <xf:trigger appearance="triggerMiddleColumn">

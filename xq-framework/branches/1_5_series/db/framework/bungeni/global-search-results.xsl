@@ -25,25 +25,6 @@
                     Search Results
                 </h1>
             </div>
-            <div id="tab-menu" class="ls-tabs">
-                <ul class="ls-doc-tabs">
-                    <li class="active">
-                        <a href="#">
-                            legilastive documents (<xsl:value-of select="paginator/count"/>)
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            archive documents
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li/>
-                </ul>
-            </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
@@ -59,7 +40,9 @@
                         <div class="toggler-list" id="expand-all">- compress all</div>
                     </div>                    
                     <!-- render the actual listing-->
-                    <xsl:apply-templates select="alisting"/>
+                    <xsl:apply-templates select="legis"/>
+                    <xsl:apply-templates select="groups"/>
+                    <xsl:apply-templates select="members"/>
                 </div>
             </div>
         </div>
@@ -68,12 +51,16 @@
     
     <!-- Include the paginator generator -->
     <xsl:include href="paginator.xsl"/>
-    <xsl:template match="alisting">
+    
+    <!-- legislative items -->
+    <xsl:template match="legis">
         <ul id="list-toggle" class="ls-row" style="clear:both">
-            <xsl:apply-templates mode="renderui"/>
+            <xsl:if test="not(none)">
+                <xsl:apply-templates mode="renderui1"/>
+            </xsl:if>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
+    <xsl:template match="document" mode="renderui1">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
@@ -114,6 +101,90 @@
                         <td class="labels">ministry:</td>
                         <td>
                             <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+    </xsl:template>
+    
+    
+    <!-- groups items -->
+    <xsl:template match="groups">
+        <ul id="list-toggle" class="ls-row" style="clear:both">
+            <xsl:if test="not(none)">
+                <xsl:apply-templates mode="renderui2"/>
+            </xsl:if>
+        </ul>
+    </xsl:template>
+    <xsl:template match="document" mode="renderui2">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <li>
+            <a href="committee/profile?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
+            </a>
+            <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
+            </div>
+            <span>-</span>
+            <div class="doc-toggle">
+                <table class="doc-tbl-details">
+                    <tr>
+                        <td class="labels">start date:</td>
+                        <td>
+                            <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labels">election date:</td>
+                        <td>
+                            <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:parentGroup/bu:electionDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+    </xsl:template> 
+    
+    <!-- members items -->
+    <xsl:template match="members">
+        <ul id="list-toggle" class="ls-row" style="clear:both">
+            <xsl:if test="not(none)">
+                <xsl:apply-templates mode="renderui3"/>
+            </xsl:if>
+        </ul>
+    </xsl:template>
+    <xsl:template match="document" mode="renderui3">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <li>
+            <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="concat(bu:ontology/bu:user/bu:titles,'. ',bu:ontology/bu:user/bu:firstName,' ', bu:ontology/bu:user/bu:lastName)"/>
+            </a>
+            <div style="display:inline-block;">/ Constitutency / Party</div>
+            <span>-</span>
+            <div class="doc-toggle">
+                <table class="doc-tbl-details">
+                    <tr>
+                        <td class="labels">id:</td>
+                        <td>
+                            <xsl:value-of select="$docIdentifier"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labels">gender:</td>
+                        <td>
+                            <xsl:value-of select="bu:ontology/bu:user/bu:gender"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labels">date of birth:</td>
+                        <td>
+                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:user/bu:dateOfBirth),$date-format,'en',(),())"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labels">status:</td>
+                        <td>
+                            <xsl:value-of select="bu:ontology/bu:user/bu:status"/>
                         </td>
                     </tr>
                 </table>

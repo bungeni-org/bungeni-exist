@@ -1,5 +1,7 @@
 xquery version "1.0";
 
+import module namespace adm = "http://exist.bungeni.org/adm" at "admin.xqm";
+
 (:
 Order Editor container XForm
 :)
@@ -10,6 +12,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
 
 <html xmlns="http://www.w3.org/1999/xhtml" 
     xmlns:xhtml="http://www.w3.org/1999/xhtml" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
     xmlns:ev="http://www.w3.org/2001/xml-events" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
     xmlns:bf="http://betterform.sourceforge.net/xforms" 
@@ -38,15 +41,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
              </xf:submission>
         </xf:model>
     </div>
-    <div class="section">
-        <a href="admin-nav.xql" title="Navigation Preferences">Navigation</a>
-        <span class="sep">|</span>
-        <a href="admin-route.xql" title="Route Configurations">Routes</a>
-        <span class="sep">|</span>
-        <a href="admin-order.xql" title="Order Configurations">Order</a>
-        <span class="sep">|</span>
-        <a href="admin-search.xql" title="Search Configurations">Search</a>         
-    </div>
+    <!-- MAIN MENU -->
+    <div class="section">{adm:main-menu('search')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         
         <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
@@ -76,7 +72,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 <xf:label>load selected configuration</xf:label>
                 <xf:hint>Edit the Selected row in a form.</xf:hint>
                 <xf:action>
-                    <xf:message level="ephemeral">Loading Order By Editor...</xf:message>
+                    <xf:message level="ephemeral">Loading Search In Editor...</xf:message>
                     <xf:load show="embed" targetid="doctype">
                         <xf:resource value="'./admin-search-subform.xml'"/>
                     </xf:load>

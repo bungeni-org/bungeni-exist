@@ -18,6 +18,7 @@
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
+    <xsl:variable name="input-fullqrystr" select="/docs/paginator/fullQryStr"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
@@ -35,7 +36,7 @@
                         </div>
                     </div>                 
                     <!-- render the actual listing-->
-                    <xsl:apply-templates select="legislatives"/>
+                    <xsl:apply-templates select="legis"/>
                     <xsl:apply-templates select="groups"/>
                     <xsl:apply-templates select="members"/>
                 </div>
@@ -44,9 +45,9 @@
     </xsl:template>
     
     <!-- legislative items -->
-    <xsl:template match="legislatives">
+    <xsl:template match="legis">
         <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
-            <a href="?scope=legi">See all results from legislative items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+            <a href="?scope=legis&amp;{$input-fullqrystr}">See all results from legislative items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
             </a>
         </div>
         <ul class="ls-row" style="margin-left:15px;clear:both">
@@ -65,7 +66,7 @@
     <!-- group items -->
     <xsl:template match="groups">
         <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
-            <a href="?scope=group">See all results from group items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+            <a href="?scope=groups&amp;{$input-fullqrystr}">See all results from group items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
             </a>
         </div>
         <ul class="ls-row" style="margin-left:15px;clear:both">
@@ -84,7 +85,7 @@
     <!-- users items -->
     <xsl:template match="members">
         <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
-            <a href="?scope=members">See all results from members items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+            <a href="?scope=members&amp;{$input-fullqrystr}">See all results from members items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
             </a>
         </div>
         <ul class="ls-row" style="margin-left:15px;clear:both">

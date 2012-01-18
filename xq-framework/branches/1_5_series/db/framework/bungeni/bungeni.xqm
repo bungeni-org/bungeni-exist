@@ -39,7 +39,8 @@ declare variable $bun:DOCNO := 1;
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-pdf-output($docid as xs:string) {
+declare function bun:gen-pdf-output($docid as xs:string)
+{
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt('parl-doc.fo') 
@@ -64,7 +65,7 @@ declare function bun:gen-pdf-output($docid as xs:string) {
     let $header := 
         response:set-header("Content-Disposition" , concat("attachment; filename=",  "output.pdf")) 
     let $out := response:stream-binary($pdf, "application/pdf")     
-    return <xml />
+    return <xml />    
     
 };
 
@@ -95,8 +96,7 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     
     let $out := response:stream-binary($pdf, "application/pdf")     
     
-    return <xml />
-    
+    return <xml />     
 };
 
 (:~
@@ -122,6 +122,16 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
+declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
+  let $acl-filter := cmn:get-acl-permission-as-attr($acl)
+  return  
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@type='document']",
+                "/bu:legislativeItem",
+                "/(bu:permissions except bu:versions)",
+                "/bu:permission[",$acl-filter,"]",
+                "/ancestor::bu:ontology")
+};
 
 declare function bun:xqy-list-groupitem($type as xs:string) {
 
@@ -130,11 +140,20 @@ declare function bun:xqy-list-groupitem($type as xs:string) {
                 "/bu:group[@type='",$type,"']",
                 "/ancestor::bu:ontology")
 };
+declare function bun:xqy-search-group() {
+
+    fn:concat("collection('",cmn:get-lex-db() ,"')","/bu:ontology[@type='group']")
+};
 
 declare function bun:xqy-list-userdata($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@type='",$type,"']")
+};
+declare function bun:xqy-search-userdata() {
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+            "/bu:ontology[@type='userdata']",
+            "/bu:metadata[@type='user']/ancestor::bu:ontology")
 };
 
 (:~ !+FIXED(ah,05-01-2012) 
@@ -672,69 +691,107 @@ declare function bun:ft-search(
 :   Similar to bun:search-documentitems()
 :)
 declare function bun:search-global(
+            $acl as xs:string,
             $offset as xs:integer, 
             $limit as xs:integer, 
             $querystr as xs:string, 
+            $scope as xs:string,
             $sortby as xs:string) as element() {
+            
+    (: convinience variables :)
+    let $qry-available := if($querystr ne "") then true() else false() 
     
-    (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("global-search-summary.xsl")    
+    (: stylesheet to transform: ephemeral or paginated :)
+    let $stylesheet := if ($scope eq "global" ) then 
+                            cmn:get-xslt("global-search-summary.xsl") 
+                       else cmn:get-xslt("global-search-results.xsl")
+    
     (:let $coll_rs := bun:xqy-list-groupitem("userdata"):)
     let $getqrystr := xs:string(request:get-query-string())
 
+    (: toggle summary and categorized :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-limit := if ($scope eq "global" ) then 3 else $limit
+    
+    let $coll-legis := bun:xqy-search-legis-with-acl($acl),
+        $coll-groups := bun:xqy-search-group(),
+        $coll-members := bun:xqy-search-userdata()
+    
+    (: Escape all invalid characters :)
+    let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')       
+      
+    let $count :=   if($scope eq "legis") then (
+                        count(util:eval(concat($coll-legis,"[ft:query(., '",$escaped,"')]")))
+                    )
+                    else if($scope eq "groups") then (
+                        count(util:eval(concat($coll-groups,"[ft:query(., '",$escaped,"')]")))
+                    )
+                    else if($scope eq "members") then (
+                        count(util:eval(concat($coll-members,"[ft:query(., '",$escaped,"')]")))
+                    )   
+                    else()
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
             (: Count the total number of documents :)
-            <count>{ count(collection('/db/bungeni-xml')/bu:ontology[ft:query(., $querystr)]) }</count>
+            <count>{ $count }</count>
             <documentType>global</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <offset>{$offset}</offset>
             <limit>{$limit}</limit>
             <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
-
-            <legislatives>
-                <count>{ count(collection('/db/bungeni-xml')/bu:ontology[@type='document']/bu:document[@type='question']/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow']/ancestor::bu:ontology[ft:query(., $querystr)]) }</count>
+        <legis>
             {
                 (: check if search is there so as to proceed to search or not :) 
-                if($querystr ne "") then (
-                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[@type='document']/bu:document[@type='question']/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow']/ancestor::bu:ontology[ft:query(., $querystr)],1,3)
+                if(($querystr ne "" and $scope eq "global") or
+                    ($querystr ne "" and $scope eq "legis")) then (
+                    element count { count(util:eval(concat($coll-legis,"[ft:query(., '",$escaped,"')]"))) }, 
+                    
+                    let $eval-query := concat("subsequence(",$coll-legis,"[ft:query(., '",$escaped,"')]",",$query-offset,$query-limit)")
+                    
+                    for $search-rs in util:eval($eval-query)
                     order by ft:score($search-rs) descending
                     return 
                         <document>{$search-rs}</document>
                      )
                  else (<none>{$querystr}</none>)                
             } 
-            </legislatives>
-            <groups>
-                <count>{ count(collection('/db/bungeni-xml')/bu:ontology[@type='group'][ft:query(., $querystr)]) }</count>
+        </legis>
+        <groups>
             {
-                (: check if search is there so as to proceed to search or not :) 
-                if($querystr ne "") then (
-                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[@type='group'][ft:query(., $querystr)],1,3)
+                attribute having { "ola"},
+                if(($querystr ne "" and $scope eq "global") or
+                    ($querystr ne "" and $scope eq "groups")) then (
+                    element count { count(util:eval(concat($coll-groups,"[ft:query(., '",$escaped,"')]"))) },
+                    
+                    let $eval-query := concat("subsequence(",$coll-groups,"[ft:query(., '",$escaped,"')]",",$query-offset,$query-limit)")
+                    
+                    for $search-rs in util:eval($eval-query)
                     order by ft:score($search-rs) descending
                     return 
                         <document>{$search-rs}</document>
                      )
                  else (<none>{$querystr}</none>)                
             } 
-            </groups>     
-            <members>
-                <count>{ count(collection('/db/bungeni-xml')/bu:ontology[@type='userdata']/bu:metadata[@type='user']/ancestor::bu:ontology[ft:query(., $querystr)]) }</count>
+        </groups>     
+        <members>
             {
-                (: check if search is there so as to proceed to search or not :) 
-                if($querystr ne "") then (
-                    for $search-rs in subsequence(collection('/db/bungeni-xml')/bu:ontology[@type='userdata']/bu:metadata[@type='user']/ancestor::bu:ontology[ft:query(., $querystr)],1,3)
+                if(($querystr ne "" and $scope eq "global") or
+                    ($querystr ne "" and $scope eq "members")) then (
+                    element count { count(util:eval(concat($coll-members,"[ft:query(., '",$escaped,"')]"))) },
+                    
+                    let $eval-query := concat("subsequence(",$coll-members,"[ft:query(., '",$escaped,"')]",",$query-offset,$query-limit)")
+                    
+                    for $search-rs in util:eval($eval-query)
                     order by ft:score($search-rs) descending
                     return 
                         <document>{$search-rs}</document>
                      )
                  else (<none>{$querystr}</none>)                
             } 
-            </members>            
+        </members>            
 
     </docs>
     return
@@ -933,13 +990,8 @@ declare function local:filter-labels($searchins as element()) {
 : @return 
 :   Returns re-written nodes and elements in the form global-search-form.xml
 :)
-declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmpl as element(), $type as xs:string)  {
-
-    (: get the current doc-types search conf:)
-    let $qry := xs:string(request:get-parameter("q",'')),          
-        $allparams := request:get-parameter-names()       
-
-    return    
+declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmpl as element(), $qry as xs:string)  {
+   
       (: [Re]writing the search-field with search text :)    
       if ($tmpl/self::xh:input[@id eq "global-search"]) then 
         element input {
@@ -947,15 +999,15 @@ declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmp
             attribute name { "q" },
             attribute class { "search_for" },
             attribute type { "text" },
-            attribute placeholder { "Search all Bungeni documents..." },
-            attribute value { $qry }
+            attribute placeholder { "Searched all Bungeni documents..." },
+            attribute value { "BOOHOO" }
         } 
         else
   		element { node-name($tmpl)}
-		  		 {$tmpl/@*, 
+		  		 {$tmpl/@*,
 			         for $child in $tmpl/node()
 				        return if ($child instance of element())
-					       then local:rewrite-global-search-form($EXIST-PATH, $child, $type)
+					       then local:rewrite-global-search-form($EXIST-PATH, $child, $qry)
 					       else $child
 				 }
 
@@ -966,27 +1018,38 @@ declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmp
 :  
 : @param embed_tmpl
 :   XML skeleton global/listing-search-form.xml that is merged into the main layout template.
+: @param scope
+:   Can either be known 'doctype' or '"global"'
 : @param doctype
 :   The document type
 : @return
 :   A Re-written search-form with relevant sort-by field and filter-options
 :)
-
-declare function bun:get-search-context(
+declare function bun:get-listing-search-context(
                         $EXIST-PATH as xs:string, 
-                        $embed_tmpl as xs:string, 
-                        $scope as xs:string, 
-                        $doctype as xs:string
-                  ) {
+                        $embed_tmpl as xs:string,
+                        $doctype as xs:string) {
 
-    let $tmpl := fw:app-tmpl($embed_tmpl) (: get the template to be embedded :)
-        
+    (: get the template to be embedded :)
+    let $tmpl := fw:app-tmpl($embed_tmpl) 
+    
     return
         document {
-            if($scope eq "global") then 
-                local:rewrite-global-search-form($EXIST-PATH, $tmpl/xh:div, $doctype)
-            else
                 local:rewrite-listing-search-form($EXIST-PATH, $tmpl/xh:div, $doctype)
+        }
+};
+declare function bun:get-global-search-context(
+                        $EXIST-PATH as xs:string, 
+                        $embed_tmpl as xs:string, 
+                        $scope as xs:string) {
+
+    (: get the template to be embedded :)
+    let $tmpl := fw:app-tmpl($embed_tmpl), 
+        $qry := xs:string(request:get-parameter("q",'')) 
+    
+    return
+        document {
+                local:rewrite-global-search-form($EXIST-PATH, $tmpl/xh:div, $qry)
         }
 };
 

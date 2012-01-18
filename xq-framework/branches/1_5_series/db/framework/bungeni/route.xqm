@@ -84,7 +84,7 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    									    (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"listing-search-form.xml","listing",$doc-type)))))
+    									    (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",$doc-type)))))
     								    )                             
 };
 

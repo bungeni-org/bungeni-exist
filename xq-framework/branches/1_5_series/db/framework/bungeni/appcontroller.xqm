@@ -81,7 +81,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"listing-search-form.xml","listing",'userdata')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'userdata')))))
     								    )                  
                
         (:~ Handlers for business submenu :)
@@ -103,7 +103,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH,"listing-search-form.xml","listing",'committee')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'committee')))))
     								    )   								    
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
@@ -149,10 +149,12 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
+                    $scope := xs:string(request:get-parameter("scope",'global')),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:search-global($offset,$limit,$qry,$sty),
+                    $acl := "public-view",
+                    $act-entries-tmpl :=  bun:search-global($acl,$offset,$limit,$qry,$scope,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -166,10 +168,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       (cmn:build-nav-node($EXIST-PATH,
     									           (template:merge($EXIST-PATH, 
     									               $act-entries-repl, 
-    									               bun:get-search-context($EXIST-PATH, 
+    									               bun:get-global-search-context($EXIST-PATH, 
     									                   "global-search-form.xml",
-    									                   "global",
-    									                   "global"))))
+    									                   $scope))))
     									     )
     								    )        
         else if ($EXIST-PATH eq "/search")
@@ -216,9 +217,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       (cmn:build-nav-node($override_path,
     									           (template:merge($EXIST-PATH, 
     									               $act-entries-repl, 
-    									               bun:get-search-context($override_path, 
+    									               bun:get-listing-search-context($override_path, 
     									                   "listing-search-form.xml",
-    									                   "listing",
     									                   $type))))
     									     )
     								    )
@@ -342,7 +342,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-search-context($EXIST-PATH, "listing-search-form.xml","listing",'political-group')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "listing-search-form.xml",'political-group')))))
     								    )
     	else if ($EXIST-PATH eq "/political-group/profile" )
     		 then 

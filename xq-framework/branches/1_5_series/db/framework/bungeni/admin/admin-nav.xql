@@ -1,5 +1,7 @@
 xquery version "1.0";
 
+import module namespace adm = "http://exist.bungeni.org/adm" at "admin.xqm";
+
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace bu="http://portal.bungeni.org/1.0/";
@@ -43,15 +45,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>
         </div>
         
-    <div class="section">
-        <a href="admin-nav.xql" title="Navigation Preferences">Navigation</a>
-        <span class="sep">|</span>
-        <a href="admin-route.xql" title="Route Configurations">Routes</a>
-        <span class="sep">|</span>
-        <a href="admin-order.xql" title="Order Configurations">Order</a>
-        <span class="sep">|</span>
-        <a href="admin-search.xql" title="Search Configurations">Search</a>
-    </div>
+    <!-- MAIN MENU -->
+    <div class="section">{adm:main-menu('search')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
               <xf:group id="itema-ui" 
                     ref="instance('uconfig')" 

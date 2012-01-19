@@ -14,7 +14,7 @@ declare function adm:main-menu($active as xs:string) {
         <li><a href="admin-route.xql" title="Route Configurations">Routes</a></li>
         <li><a href="admin-order.xql" title="Order Configurations">Order</a></li>
         <li><a href="admin-search.xql" title="Search Configurations">Search</a></li>
-        <li><a href="admin-tabgroups.xql" title="Tab Groups Configurations">Tabgroups</a></li>
-        <li><a href="admin-downloads.xql" title="Download-options Configurations">Downloads</a></li>
+        <li><a href="admin-tabgroup.xql" title="Tab Groups Configurations">Tabgroups</a></li>
+        <li><a href="admin-download.xql" title="Download-options Configurations">Downloads</a></li>
     </ul>              
 };

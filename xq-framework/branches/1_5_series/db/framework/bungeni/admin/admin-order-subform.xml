@@ -13,14 +13,17 @@ This is loaded by admin-order.xql
             </orderby>
             -->
         </xf:instance>
-        <xf:bind id="b-orderby-order" nodeset="@order" type="string"/>
-        <xf:bind id="b-orderby-value" nodeset="@value" type="string"/>
-        <xf:bind id="b-orderby" nodeset="." type="string"/>
+        <xf:bind id="b-orderby-order" nodeset="@order" type="xs:string"/>
+        <xf:bind id="b-orderby-value" nodeset="@value" type="xs:string"/>
+        <xf:bind id="b-orderby" nodeset="." type="xs:string"/>
         <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/orderbys" replace="instance" method="get">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Order editor loaded</xf:message>
         </xf:submission>
         <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/orderbys" replace="none" method="post">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Order saved</xf:message>
+            <xf:action ev:event="xforms-submit-error">
+                <xf:message level="ephemeral">Sorry - your update failed.</xf:message>
+            </xf:action>
         </xf:submission>
         <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
     </xf:model>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    XForm for editing Tab-group configurations    
+    This is loaded by admin-tabgroup.xql
+-->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="mtabgroup" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="default">
+            <tabs/>
+        </xf:instance>
+        <xf:bind id="b-tabgroup-path" nodeset="@path" type="xs:string"/>
+        <xf:bind id="b-tabgroup-id" nodeset="@id" type="xs:string"/>
+        <xf:bind id="b-tabgroup-title" nodeset="title" type="xs:string"/>
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/tabgroups/tabs[index('tabgroups')]" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group editor loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/tabgroups/tabs[index('tabgroups')]/tab" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group saved</xf:message>
+            <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to edit loaded route -->
+    <xf:group appearance="full">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
+        <xf:repeat id="tabgroups-id" nodeset="tab">
+            <xf:label id="editing-subform">Tab-group Subform</xf:label>
+            <xf:input bind="b-tabgroup-path">
+                <xf:hint>form name field</xf:hint>
+                <xf:help>This is what will be name field on the HTML form.</xf:help>
+                <xf:label>URL Path</xf:label>
+            </xf:input>
+            <xf:input bind="b-tabgroup-id">
+                <xf:hint>Internal ID</xf:hint>
+                <xf:help>Mainly used by function that creates the tabs at runtime.</xf:help>
+                <xf:label>Unique ID</xf:label>
+            </xf:input>
+            <xf:input bind="b-tabgroup-title">
+                <xf:hint>Field label</xf:hint>
+                <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
+                <xf:label>Tab Label</xf:label>
+            </xf:input>
+        </xf:repeat>
+        <xf:trigger appearance="triggerMiddleColumn">
+            <xf:label>update routes</xf:label>
+            <xf:hint>Click apply to update the document configuration</xf:hint>
+            <xf:send submission="s-update-master"/>
+        </xf:trigger>
+    </xf:group>
+</div>

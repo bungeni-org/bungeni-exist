@@ -12,18 +12,19 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
 
 <html xmlns="http://www.w3.org/1999/xhtml" 
     xmlns:xhtml="http://www.w3.org/1999/xhtml" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
     xmlns:ev="http://www.w3.org/2001/xml-events" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
     xmlns:bf="http://betterform.sourceforge.net/xforms" 
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<head>
-    <title>Ordering Preferences</title>
-    <meta name="author" content="anthony at googlemail.com"/>
-    <meta name="author" content="ashok at parliaments.info"/>
-    <meta name="description" content="XForms with config options"/>
-    <link rel="stylesheet" href="../../assets/admin/style.css"/>
-</head>
+    <head>
+        <title>Download /Format Preferences</title>
+        <meta name="author" content="anthony at googlemail.com"/>
+        <meta name="author" content="ashok at parliaments.info"/>
+        <meta name="description" content="XForms with config options"/>
+        <link rel="stylesheet" href="../../assets/admin/style.css"/>
+    </head>
 <body>
  <div id="xforms">
     <div style="display:none">
@@ -33,15 +34,15 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         <xf:model id="master">
             <xf:instance xmlns="" id="ui-config" src="../test-ui-config.xml" />
             <xf:submission id="update-subform" 
-                resource="model:orderby#instance('default')/orderby" 
-                method="post" 
+                resource="model:mtabgroup#instance('default')/tabs" 
+                method="put" 
                 replace="none" 
-                ref="orderby[index('orderbys')]">
+                ref="tabs[index('tabgroups')]">
              </xf:submission>
         </xf:model>
     </div>
     <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('order')}</div>
+    <div class="section">{adm:main-menu('tabgroup')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         
         <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
@@ -52,15 +53,15 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 <xf:load show="none" targetid="orderby"/>
             </xf:action>
             
-            <div class="headline">Order Configurations</div>
+            <div class="headline">Downloads / Formats Configurations</div>
             <div class="description">
-                <p>Edit the Order configurations</p>
+                <p>Edit the Downloads configurations</p>
             </div>
            
             <!--
-            List all the orderby per content type
+            List all the tab-groups
             -->
-            <xf:repeat id="doctypes" nodeset="/ui/doctypes/doctype" appearance="full" class="sortorders">
+            <xf:repeat id="downloadgroups" nodeset="/ui/downloadgroups/rendergroup" appearance="full" class="sortorders">
                 <xf:output ref="@name"/>
             </xf:repeat>
         </xf:group>
@@ -71,9 +72,9 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 <xf:label>load selected configuration</xf:label>
                 <xf:hint>Edit the Selected row in a form.</xf:hint>
                 <xf:action>
-                    <xf:message level="ephemeral">Loading Order By Editor...</xf:message>
-                    <xf:load show="embed" targetid="doctype">
-                        <xf:resource value="'./admin-order-subform.xml'"/>
+                    <xf:message level="ephemeral">Loading Downloads In Editor...</xf:message>
+                    <xf:load show="embed" targetid="downloads">
+                        <xf:resource value="'./admin-download-subform.xml'"/>
                     </xf:load>
                 </xf:action>
             </xf:trigger>
@@ -84,7 +85,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         -->
         <xf:group appearance="full" class="configsFullGroup">
             <div class="configsSubForm">
-                <div id="doctype"/>
+                <div id="downloads"/>
             </div>
             
         </xf:group> 

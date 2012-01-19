@@ -15,7 +15,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
         <title>Navigation Preferences</title>
-        <meta name="author" content="anthony at googlemail.com"/>
+        <meta name="author" content="aowino at googlemail.com"/>
         <meta name="author" content="ashok at parliaments.info"/>
         <meta name="description" content="XForms with config options"/>
         <link rel="stylesheet" href="../../assets/admin/style.css"/>
@@ -45,9 +45,9 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>
         </div>
         
-    <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('search')}</div>
-    <div class="section" dojotype="dijit.layout.ContentPane">
+        <!-- MAIN MENU -->
+        <div class="section">{adm:main-menu('search')}</div>
+        <div class="section" dojotype="dijit.layout.ContentPane">
               <xf:group id="itema-ui" 
                     ref="instance('uconfig')" 
                     appearance="bf:verticalTable">
@@ -78,8 +78,6 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     <xf:send submission="s-send"/>
                 </xf:trigger>
             </xf:group>
-                      
-        
         </div>
        
        </div>

@@ -51,6 +51,11 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
        return $doc
 };
 
+declare function cmn:get-tabgroups($exist-path as xs:string) as node() {
+    let $doc := cmn:get-ui-config()/ui/tabgroups/tabs[@name eq $exist-path]
+        return $doc
+};
+
 (:~
 :   Get the user ui-config file
 :)

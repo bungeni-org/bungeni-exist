@@ -121,32 +121,32 @@
         <!-- #POLICAL-GROUPS -->
         <route href="/political-group/profile">
             <title>Business | Political Group's Profile</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/members">
             <title>Business | Political Group's Members</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/assigned-items">
             <title>Business | Political Group's Assigned Items</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/sittings">
             <title>Business | Political Group's Sittings</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/staff">
             <title>Business | Political Group's Staff</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/contacts">
             <title>Business | Political Group's Staff</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>         
         <!-- #BILLS -->
@@ -405,7 +405,7 @@
         </route>
         <route href="/politicalgroups">
             <title>Business | Political Groups </title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/admin">
@@ -435,16 +435,10 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
                 <ul class="theme-lev-1" id="portal-globalnav">
                     <li>
-                        <a name="home" href="home">home</a>
-                    </li>
-                    <li>
                         <a name="business" href="business">business</a>
                     </li>
                     <li>
                         <a name="members" href="members">members</a>
-                    </li>
-                    <li>
-                        <a name="admin" href="admin">admin</a>
                     </li>
                 </ul>
             </div>
@@ -486,9 +480,6 @@
                     <li>
                         <a name="publications" href="publications">publications</a>
                     </li>
-                    <li>
-                        <a name="politicalgroups" href="politicalgroups">politicalgroups</a>
-                    </li>
                 </ul>
             </div>
         </menu>
@@ -499,17 +490,12 @@
                         <a name="current" href="members">current</a>
                     </li>
                     <li>
-                        <a name="sittings" href="sittings">sittings</a>
-                    </li>
-                    <li>
-                        <a name="publications" href="publications">publications</a>
-                    </li>
-                    <li>
                         <a name="politicalgroups" href="politicalgroups">politicalgroups</a>
                     </li>
                 </ul>
             </div>
         </menu>
+        <!--
         <menu name="admin" for="admin">
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
@@ -525,6 +511,7 @@
                 </ul>
             </div>
         </menu>
+        -->
     </menugroups>
     
     <!-- 

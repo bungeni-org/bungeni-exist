@@ -304,6 +304,52 @@ ul.ls-doc-tabs li.selected {
     color:#f8f8f8;   
 }
 
+/* BREADCRUMBS */
+#crumbs {
+    height: 19px;
+    margin: 0 auto;
+    width:960px;
+}
+#crumbs ul {
+    margin:0;
+    padding:0;
+    padding-left:0;
+    background: #82A91C url(../images/breadcrumbs.png) no-repeat right -119px;
+    padding-right: 7px;
+    width:auto;
+}
+#crumbs ul, #crumbs li {
+    float: left;
+    height: 19px;
+    font-size: 11px;
+    list-style-type: none;
+    color: white;
+    background-color:#eee;
+}
+#crumbs li a.first {
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0.90, #8e8e8e), color-stop(1.0, #989898));
+    padding-left: 12px;
+    border-bottom-left-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -webkit-border-bottom-left-radius: 8px;    
+}
+#crumbs li a.last {
+    background: #f79f0e url(../images/breadcrumbs.png) no-repeat left -1px;
+    color:#fff !important;
+}
+#crumbs li a:link, #crumbs li a:visited {
+    color: white;
+    text-decoration: none;
+}
+#crumbs li a {
+    background: #8E8E8E url(../images/breadcrumbs.png) no-repeat left -60px;
+    display: block;
+    padding: 3px 10px 3px 19px;
+}
+#crumbs li a:hover {
+    text-decoration:underline;
+}
+
 /* Same for workspace */
 .workspace ul.ls-doc-tabs {
 	margin: 0;

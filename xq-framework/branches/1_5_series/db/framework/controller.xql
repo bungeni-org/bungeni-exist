@@ -55,6 +55,3 @@ let $ret := appcontroller:controller(
                 $exist:resource,
                 $REL-PATH
             ) return $ret
-    
-    
-

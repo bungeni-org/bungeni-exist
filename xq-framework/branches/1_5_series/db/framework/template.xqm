@@ -43,6 +43,7 @@ declare namespace xh = "http://www.w3.org/1999/xhtml";
 declare namespace pg = "http://bungeni.org/page";
 
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
 
 
 (:~
@@ -247,6 +248,37 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			else
 			  $content
 	)
+	else if ($content/ancestor::xh:div[@id="crumbs"] and $content/self::xh:ul) then (
+    	(: This creates the breadcrumbs :)	
+        element ul {
+    			if ($route/navigation and not($route/subnavigation)) then (
+    		          if($route/@href ne "/") then (
+                            element li {    				
+        				        <xh:a class="first" href=".">home</xh:a>
+        				    },
+                            element li {    				
+        				        <xh:a class="last" href="{$route/@href}">{data(local:route-title($route/navigation))}</xh:a>
+        				    }
+        		      )
+        		      else (attribute style { "display:none;"} )
+    			)
+    			else (
+        			if ($route/navigation and $route/navigation) then (
+                            element li {    				
+        				        <xh:a class="first" href=".">home</xh:a>
+        				    },    			
+                            element li {    				
+        				        <xh:a href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
+        				    },
+                            element li {    				
+        				        <xh:a class="last" href="{$content/@href}">{data(local:route-title($route/subnavigation))}</xh:a>
+        				    }    				    
+        			)
+        			else 
+        			     ()      
+        	   )
+        }
+	)
     
 	else 
     (:~
@@ -261,6 +293,14 @@ declare function local:set-meta($route as element(), $override as element(), $co
 				 }
 };
 
+(: 
+:   Retrieves the corresponding title for the route from <menugroups/>
+:)
+declare function local:route-title($navroute as element()) {
+    
+    cmn:get-ui-config()//menugroups/menu//xh:a[@name eq $navroute]
+    
+};
 
 
 

@@ -14,7 +14,7 @@
         <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/tabgroups/tabs[index('tabgroups')]" replace="instance" method="get">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group editor loaded</xf:message>
         </xf:submission>
-        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/tabgroups/tabs[index('tabgroups')]/tab" replace="none" method="post">
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/tabgroups/tabs[index('tabgroups')]" replace="none" method="post">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group saved</xf:message>
             <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
         </xf:submission>

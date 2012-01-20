@@ -688,7 +688,19 @@ declare function bun:ft-search(
 };
 
 (:~
-:   Similar to bun:search-documentitems()
+:   Searches the entire document for matching text/strings within the lucene-indexed fields
+:   in the Bungeni collection.
+: @param acl
+: @param offset
+: @param limit
+: @param querystr
+: @param scope
+: @param sortby
+: @return
+:   A <doc/> with paginator items where applicable and also found results wrapped in respective
+:   category. Three categories define at the moment <legis/>, <groups/> and <members/>.
+: @stylesheet 
+:   global-search-summary.xsl OR global-search-results.xsl
 :)
 declare function bun:search-global(
             $acl as xs:string,
@@ -737,6 +749,7 @@ declare function bun:search-global(
             (: Count the total number of documents :)
             <count>{ $count }</count>
             <documentType>global</documentType>
+            <qryStr>{$querystr}</qryStr>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <offset>{$offset}</offset>
             <limit>{$limit}</limit>
@@ -801,23 +814,6 @@ declare function bun:search-global(
                 <param name="sortby" value="{$sortby}" />
             </parameters>
            )
-};
-
-declare function bun:ft-global-search(
-            $coll-query as xs:string, 
-            $querystr as xs:string,
-            $type as xs:string) as element()* {
-
-        let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
-            $ultimate-path := local:build-search-objects($type),
-            $eval-query := concat("collection('/db/bungeni-xml')/bu:ontology","[ft:query(., '",$escaped,"')]")
-            
-        for $search-rs in util:eval($eval-query)
-        order by ft:score($search-rs) descending      
-            
-        return
-            (:<params>{$ultimate-path}</params> !+DEBUG_WITH_test.xql:)
-            $search-rs        
 };
 
 (:~

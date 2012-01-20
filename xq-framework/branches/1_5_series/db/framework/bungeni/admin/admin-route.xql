@@ -30,13 +30,17 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         "master" model used by the subform
         -->
         <xf:model id="master">
-            <xf:instance xmlns="" id="ui-config" src="../test-ui-config.xml" />
-            <xf:submission id="update-subform" 
-                resource="model:route#instance('default')/route" 
-                method="post" 
+            
+            <xf:instance xmlns="" 
+                id="ui-config" 
+                src="../test-ui-config.xml" />
+                
+             <xf:submission id="save-form" 
                 replace="none" 
-                ref="route[index('routes')]">
+                resource="../test-ui-config.xml" 
+                method="put">
              </xf:submission>
+   
         </xf:model>
     </div>
     <!-- MAIN MENU -->
@@ -64,20 +68,10 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                <xf:output ref="@href">
                     <xf:label class="configListHeader">Path</xf:label>
                 </xf:output>
-                <!--
-               <xf:output ref="title">
-                    <xf:label class="configListHeader">Title</xf:label>
-                </xf:output>
-                -->
+       
                <xf:output value="concat(title, ' [', navigation, '&#8594;', subnavigation, '] ')">
                     <xf:label class="configListHeader">Title [Navigation]</xf:label>
                 </xf:output>
-                <!-- we show the navigation and subnavigation in the same cell -->
-                <!--
-               <xf:output ref="subnavigation">
-                    <xf:label class="configListHeader">Sub-Navigation</xf:label>
-                </xf:output>
-                -->
             </xf:repeat>
             
         </xf:group>
@@ -93,6 +87,18 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     </xf:load>
                 </xf:action>
             </xf:trigger>
+            
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>save changes</xf:label>
+                <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Saving Document...</xf:message>
+                    <xf:send submission="save-form" />
+                </xf:action>
+            </xf:trigger>
+            
+            
+            
         </xf:group>
         <!-- 
             the subform is embedded here 

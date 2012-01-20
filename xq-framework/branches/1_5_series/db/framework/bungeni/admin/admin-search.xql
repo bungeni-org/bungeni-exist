@@ -33,12 +33,13 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         -->
         <xf:model id="master">
             <xf:instance xmlns="" id="ui-config" src="../test-ui-config.xml" />
-            <xf:submission id="update-subform" 
-                resource="model:orderby#instance('default')/orderby" 
-                method="post" 
+           
+            <xf:submission id="save-form" 
                 replace="none" 
-                ref="orderby[index('orderbys')]">
+                resource="../test-ui-config.xml" 
+                method="put">
              </xf:submission>
+             
         </xf:model>
     </div>
     <!-- MAIN MENU -->
@@ -78,6 +79,17 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     </xf:load>
                 </xf:action>
             </xf:trigger>
+            
+                        
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>save changes</xf:label>
+                <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Saving Document...</xf:message>
+                    <xf:send submission="save-form" />
+                </xf:action>
+            </xf:trigger>
+            
         </xf:group>
         
         <!-- 

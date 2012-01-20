@@ -6,7 +6,7 @@
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
     <xf:model id="mtabgroup" ev:event="xforms-revalidate" ev:defaultAction="cancel">
         <xf:instance xmlns="" id="default">
-            <tabs/>
+            <rendergroup/>
         </xf:instance>     
         <!-- All download formats must be listed here -->
         <xf:instance xmlns="" id="docformats">
@@ -21,9 +21,9 @@
         <xf:bind id="b-downloadg-type" nodeset="@type" type="xs:string"/>
         <xf:bind id="b-downloadg" nodeset="." type="xs:string"/>
         <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/downloadgroups/rendergroup[index('downloadgroups')]" replace="instance" method="get">
-            <xf:message ev:event="xforms-submit-done" level="ephemeral">Downloadp editor loaded</xf:message>
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Download editor loaded</xf:message>
         </xf:submission>
-        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/downloadgroups/rendergroup[index('downloadgroups')]/tab" replace="none" method="post">
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/downloadgroups/rendergroup[index('downloadgroups')]" replace="none" method="post">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Download saved</xf:message>
             <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
         </xf:submission>

@@ -262,6 +262,12 @@ div#doc-downloads {
 	border:1px solid #2b92be;
 }
 /* PAGINATOR END */
+
+/* SEARCH */
+.quoted-qry {
+    font-style:italic;
+    color:#36B9F1;
+}
  
 /*reusables*/
 .ele-center {
@@ -308,7 +314,6 @@ div#doc-downloads {
     clear:none;
     float:none;
 }
-
 
 .inline {
     display:inline !important;

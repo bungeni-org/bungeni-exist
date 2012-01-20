@@ -19,11 +19,14 @@
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
     <xsl:variable name="input-fullqrystr" select="/docs/paginator/fullQryStr"/>
+    <xsl:variable name="input-qrystr" select="/docs/paginator/qryStr"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    Search Results Summary
+                    Search Results Summary “<span class="quoted-qry">
+                        <xsl:value-of select="$input-qrystr"/>
+                    </span>”
                 </h1>
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">

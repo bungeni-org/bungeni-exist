@@ -18,11 +18,14 @@
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
+    <xsl:variable name="input-qrystr" select="/docs/paginator/qryStr"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    Search Results
+                    Search Results “<span class="quoted-qry">
+                        <xsl:value-of select="$input-qrystr"/>
+                    </span>”
                 </h1>
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
@@ -63,7 +66,7 @@
     <xsl:template match="document" mode="renderui1">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
-            <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{bu:ontology/bu:document/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>-</span>
@@ -120,7 +123,7 @@
     <xsl:template match="document" mode="renderui2">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
-            <a href="committee/profile?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{bu:ontology/bu:group/@type}/profile?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
             </a>
             <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>

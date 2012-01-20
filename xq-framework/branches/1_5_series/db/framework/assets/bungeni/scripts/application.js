@@ -1,6 +1,14 @@
-
-
 $(document).ready(function () {
+    /* query-params-set */
+    $.urlParam = function(name){
+        var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1].split("+").join(" ") || 0;
+    } 
+    if(window.location.search) { 
+        if($.urlParam('scope'))
+            $("#global-search").val($.urlParam('q'));  
+    }
+    
     /*** TOGGLE FEATURES **/
     
     /** toggling doc items per item isolated not in <li>**/  

@@ -67,9 +67,6 @@ declare function cmn:user-preferences() as document-node() {
 };
 :)
 
-
-
-
 (:~
 Get the applicable menu for a route
 :)
@@ -101,10 +98,57 @@ The node parameter is the "cooked" page as a node
 declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) as node()+ {
      let $main-nav := cmn:get-menu("mainnav")
      let $sub-nav := cmn:get-menu-from-route($exist-path)
-     let $out := ($main-nav, $sub-nav, $node)
+     let $crumb := <crumb>
+                        <div id="crumbs" xmlns="http://www.w3.org/1999/xhtml">
+                        {local:build-breadcrumbs($exist-path)}
+                        </div>
+                    </crumb>
+     let $out := ($main-nav, $sub-nav,$crumb, $node )
      return $out
 };
 
+(:~ 
+:   Builds the breadcrumbs
+:)
+declare function local:build-breadcrumbs($exist-path as xs:string) {
+    let $route := cmn:get-route($exist-path)
+    
+    return
+        element ul {
+        	if ($route/navigation and not($route/subnavigation)) then (
+                    element li {
+                      <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
+                    },
+                    element li {    				
+            	        <xh:a class="last" href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
+            	    }
+        	)
+        	else (
+            	if ($route/navigation and $route/subnavigation) then (
+                    element li {    				
+            	        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
+            	    },    			
+                    element li {    				
+            	        <xh:a href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
+            	    },
+                    element li {    				
+            	        <xh:a class="last" href="{$route/subnavigation}">{data(local:route-title($route/subnavigation))}</xh:a>
+            	    }    				    
+            	)
+            	else 
+            	     ()      
+           )
+        }
+};
+
+(:~ 
+:   Retrieves the corresponding title for the route from <menugroups/>
+:)
+declare function local:route-title($navroute as element()) {
+    
+    cmn:get-ui-config()//menugroups/menu//xh:a[@name eq $navroute]
+    
+};
 
 declare function cmn:get-doctype-config($doctype as xs:string) {
    let $config := cmn:get-ui-config()

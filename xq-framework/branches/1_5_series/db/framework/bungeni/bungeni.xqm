@@ -1517,6 +1517,7 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
     <document>
         <serverport>{request:get-server-name()}:{request:get-server-port()}</serverport>
         <primary> 
+            <documentType>{$docitem/bu:legislature/bu:type}</documentType>
         {
         (:!+ACL_NEW_API 
             $docitem/ancestor::bu:ontology :)
@@ -1709,7 +1710,7 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
 declare function bun:get-assigned-items($committeeid as xs:string, $_tmpl as xs:string) as element()* {
 
      (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $stylesheet := cmn:get-xslt($_tmpl)
 
     (: return AN Committee document with all items assigned to it :)
     let $doc := <assigned-items>

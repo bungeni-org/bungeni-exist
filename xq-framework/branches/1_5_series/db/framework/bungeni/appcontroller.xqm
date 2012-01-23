@@ -54,14 +54,24 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	(: Now we process application requests :)
     	else if ($EXIST-PATH eq "/business")
     		 then 
-               template:process-tmpl(
-                $REL-PATH, 
-                $EXIST-PATH, 
-                $config:DEFAULT-TEMPLATE, 
-                cmn:get-route($EXIST-PATH),
-                (),
-                cmn:build-nav-tmpl($EXIST-PATH, "business.xml")
-               )
+                let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $act-entries-tmpl :=  "Do nothing now",
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("business.xml")/xh:div, <div/>)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    								        $REL-PATH, 
+    								        $EXIST-PATH, 
+    								        $config:DEFAULT-TEMPLATE,
+    								        cmn:get-route($EXIST-PATH),
+    								        (),
+    								        (cmn:build-nav-node($EXIST-PATH,$act-entries-repl))
+    								    )
                
         else if ($EXIST-PATH eq "/members")
     		 then 
@@ -81,7 +91,11 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'userdata')))))
+    								        (cmn:build-nav-node($EXIST-PATH,
+    								                    (template:merge($EXIST-PATH, 
+    								                    $act-entries-repl, 
+    								                    bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'userdata')
+    								                   ))))
     								    )                  
                
         (:~ Handlers for business submenu :)
@@ -348,7 +362,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,"committee.xsl"),
+                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,"political-group.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committee.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -362,7 +376,45 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									 )       								    
+    									 ) 
+    	else if ($EXIST-PATH eq "/political-group/members" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,"poli-members.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committee.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 )
+    	else if ($EXIST-PATH eq "/political-group/contacts" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,"poli-contacts.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committee.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 )    									 
     	else if ($EXIST-PATH eq "/committee/profile" )
     		 then 
                 let 
@@ -1322,14 +1374,24 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         (:~ UNMAPPED :)		
     	else if ($EXIST-PATH eq "/whatson")
     		 then 
-               template:process-tmpl(
-                $REL-PATH, 
-                $EXIST-PATH, 
-                $config:DEFAULT-TEMPLATE, 
-                cmn:get-route($EXIST-PATH),
-                (),
-                cmn:build-nav-tmpl($EXIST-PATH, "whatson.xml")
-               )  	        
+                let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $act-entries-tmpl :=  "Do nothing now",
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("whatson.xml")/xh:div, <div/>)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    								        $REL-PATH, 
+    								        $EXIST-PATH, 
+    								        $config:DEFAULT-TEMPLATE,
+    								        cmn:get-route($EXIST-PATH),
+    								        (),
+    								        (cmn:build-nav-node($EXIST-PATH,$act-entries-repl))
+    								    )        
         else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
                template:process-tmpl(
@@ -1372,7 +1434,18 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
        else if ($EXIST-PATH eq "/preferences")
              then
                fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")
-                                        
+       else if ($EXIST-PATH eq "/testing/blue/color") 
+              then
+              cmn:get-tabgroups("committee")
+               (:
+                <xml>
+                    <exist-path>{$EXIST-PATH}</exist-path>
+                    <exist-controller>{$EXIST-CONTROLLER}</exist-controller>
+                    <exist-resource>{$EXIST-RESOURCE}</exist-resource>
+                    <exist-root>{$EXIST-ROOT}</exist-root>
+                    <exist-relpath>{$REL-PATH}</exist-relpath>                
+                </xml>
+                :)
     	(:else if ($EXIST-PATH eq "/by-capno")
     		 then 
                let $act-entries-tmpl := bun:get-bills(0,0),

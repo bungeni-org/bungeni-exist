@@ -12,7 +12,7 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="assigned-items">
-        <xsl:variable name="doc-type" select="group/bu:ontology/@type"/>
+        <xsl:variable name="doc-type" select="group/bu:ontology/bu:legislature/bu:type"/>
         <xsl:variable name="doc_uri" select="group/bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">

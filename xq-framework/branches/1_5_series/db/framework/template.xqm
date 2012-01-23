@@ -44,6 +44,7 @@ declare namespace pg = "http://bungeni.org/page";
 
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
+declare namespace request="http://exist-db.org/xquery/request";
 
 
 (:~
@@ -77,11 +78,12 @@ declare function template:process-tmpl(
         $content as node()+
         ) { 
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
-    $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] 
+       $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
     (: extracts top level content and content from within an id less container :)
-    let $processed-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
+     $processed-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
-    return template:process-page-meta($route-map, $route-override, $processed-doc)
+    return 
+    template:process-page-meta($route-map, $route-override, $processed-doc)  
 };
 
 
@@ -207,7 +209,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     (:~
     Check set the title from the page-info attribute 
     :)
-
+   
 	if ($content/self::xh:title and $route/title) then (
 		   <title>{
 		   if ($override/xh:title) then 
@@ -248,38 +250,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			else
 			  $content
 	)
-	else if ($content/ancestor::xh:div[@id="crumbs"] and $content/self::xh:ul) then (
-    	(: This creates the breadcrumbs :)	
-        element ul {
-    			if ($route/navigation and not($route/subnavigation)) then (
-    		          if($route/@href ne "/") then (
-                            element li {    				
-        				        <xh:a class="first" href=".">home</xh:a>
-        				    },
-                            element li {    				
-        				        <xh:a class="last" href="{$route/@href}">{data(local:route-title($route/navigation))}</xh:a>
-        				    }
-        		      )
-        		      else (attribute style { "display:none;"} )
-    			)
-    			else (
-        			if ($route/navigation and $route/navigation) then (
-                            element li {    				
-        				        <xh:a class="first" href=".">home</xh:a>
-        				    },    			
-                            element li {    				
-        				        <xh:a href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
-        				    },
-                            element li {    				
-        				        <xh:a class="last" href="{$content/@href}">{data(local:route-title($route/subnavigation))}</xh:a>
-        				    }    				    
-        			)
-        			else 
-        			     ()      
-        	   )
-        }
-	)
-    
+
 	else 
     (:~
      return the default 
@@ -292,16 +263,6 @@ declare function local:set-meta($route as element(), $override as element(), $co
 							   else $child
 				 }
 };
-
-(: 
-:   Retrieves the corresponding title for the route from <menugroups/>
-:)
-declare function local:route-title($navroute as element()) {
-    
-    cmn:get-ui-config()//menugroups/menu//xh:a[@name eq $navroute]
-    
-};
-
 
 
 (:~

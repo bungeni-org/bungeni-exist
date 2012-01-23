@@ -54,13 +54,12 @@
             <title>Search</title>
         </route>
         <route href="/business">
-            <navigation>business</navigation>
             <title>Business</title>
+            <navigation>business</navigation>
         </route>
         <route href="/members">
             <title>Members</title>
             <navigation>members</navigation>
-            <subnavigation>current</subnavigation>
         </route>
         <route href="/member">
             <title>Business | Member of Parliament</title>
@@ -126,21 +125,6 @@
         </route>
         <route href="/political-group/members">
             <title>Business | Political Group's Members</title>
-            <navigation>members</navigation>
-            <subnavigation>politicalgroups</subnavigation>
-        </route>
-        <route href="/political-group/assigned-items">
-            <title>Business | Political Group's Assigned Items</title>
-            <navigation>members</navigation>
-            <subnavigation>politicalgroups</subnavigation>
-        </route>
-        <route href="/political-group/sittings">
-            <title>Business | Political Group's Sittings</title>
-            <navigation>members</navigation>
-            <subnavigation>politicalgroups</subnavigation>
-        </route>
-        <route href="/political-group/staff">
-            <title>Business | Political Group's Staff</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
@@ -389,7 +373,7 @@
             <subnavigation>agendaitems</subnavigation>
         </route>
         <route href="/whatson">
-            <title>Business | Sittings </title>
+            <title>Business | What's on </title>
             <navigation>business</navigation>
             <subnavigation>whatson</subnavigation>
         </route>
@@ -434,6 +418,9 @@
         <menu name="mainnav" for="/">
             <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
                 <ul class="theme-lev-1" id="portal-globalnav">
+                    <li>
+                        <a name="home" href="home">home</a>
+                    </li>
                     <li>
                         <a name="business" href="business">business</a>
                     </li>
@@ -542,7 +529,7 @@
             Tabgroups are like navigation but they describe navigation relative to content 
             The name is always that of a content type
         -->
-        <tabs name="group">
+        <tabs name="committee">
             <tab path="committee/profile" id="profile">
                 <title>profile</title>
             </tab>
@@ -559,6 +546,17 @@
                 <title>staff</title>
             </tab>
             <tab path="committee/contacts" id="contacts">
+                <title>contacts</title>
+            </tab>
+        </tabs>
+        <tabs name="political-group">
+            <tab path="political-group/profile" id="profile">
+                <title>profile</title>
+            </tab>
+            <tab path="political-group/members" id="members">
+                <title>members</title>
+            </tab>
+            <tab path="political-group/contacts" id="contacts">
                 <title>contacts</title>
             </tab>
         </tabs>

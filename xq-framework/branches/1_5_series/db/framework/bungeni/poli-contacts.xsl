@@ -11,23 +11,25 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="assigned-items">
-        <xsl:variable name="doc-type" select="group/bu:ontology/bu:legislature/bu:type"/>
-        <xsl:variable name="doc_uri" select="group/bu:ontology/bu:group/@uri"/>
+    <xsl:template match="document">
+        <xsl:variable name="ver_id" select="version"/>
+        <xsl:variable name="doc-type" select="primary/bu:ontology/@type"/>
+        <xsl:variable name="doc-sub-type" select="primary/documentType"/>
+        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="group/bu:ontology/bu:legislature/bu:fullName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-type"/>
+                    <xsl:value-of select="$doc-sub-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="uri">
                     <xsl:value-of select="$doc_uri"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">sittings</xsl:with-param>
+                <xsl:with-param name="tab-path">contacts</xsl:with-param>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
@@ -63,25 +65,26 @@
                     <div style="width:90%;margin: 0 auto;text-align:center">
                         <table class="tbl-tgl">
                             <tr>
-                                <td class="fbtd">item</td>
-                                <td class="fbtd">start date</td>
-                                <td class="fbtd">end date</td>
-                                <td class="fbtd">due date</td>
+                                <td class="fbtd">
+                                    <a>name</a>
+                                </td>
+                                <td class="fbtd">
+                                    <a>start</a>
+                                </td>
+                                <td class="fbtd">
+                                    <a>end</a>
+                                </td>
                             </tr>
-                            <xsl:for-each select="items/bu:ontology">
-                                <tr class="items">
-                                    <td class="fbt bclr" style="text-align-left;">
-                                        <a href="{bu:document/@type}/text?uri={bu:legislativeItem/@uri}">
-                                            <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
-                                        </a>
-                                    </td>
-                                    <td class="fbt bclr">None</td>
-                                    <td class="fbt bclr">
-                                        <xsl:value-of select="format-date(bu:legislativeItem/bu:publicationDate,$date-format,'en',(),())"/>
-                                    </td>
-                                    <td class="fbt bclr">None</td>
-                                </tr>
-                            </xsl:for-each>
+                            <tr class="items">
+                                <td class="fbt bclr" style="text-align-left;">Member, P0_01</td>
+                                <td class="fbt bclr">Jan 18, 2001</td>
+                                <td class="fbt bclr">Jan 18, 2001</td>
+                            </tr>
+                            <tr class="items">
+                                <td class="fbt bclr" style="text-align-left;">Member, P0_01</td>
+                                <td class="fbt bclr">jan 18, 2001</td>
+                                <td class="fbt bclr">Jan 18, 2001</td>
+                            </tr>
                         </table>
                     </div>
                 </div>

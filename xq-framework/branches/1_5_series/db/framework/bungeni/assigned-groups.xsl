@@ -66,32 +66,33 @@
             </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:700px;margin: 0 auto;text-align:center">
+                    <div style="width:860px;margin: 0 auto;text-align:center">
                         <xsl:choose>
-                            <xsl:when test="boolean(secondary/bu:committee/bu:fullName)">
-                                <table class="listing timeline tbl-tgl">
+                            <xsl:when test="primary//bu:item_assignments">
+                                <table class="tbl-tgl">
                                     <tr>
-                                        <th>name</th>
-                                        <th>start date</th>
-                                        <th>status date</th>
+                                        <td class="fbtd">committee</td>
+                                        <td class="fbtd">start date</td>
+                                        <td class="fbtd">end date</td>
+                                        <td class="fbtd">due date</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <span>
-                                                <xsl:value-of select="secondary/bu:committee/bu:fullName"/>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span>
-                                                <xsl:value-of select="secondary/bu:legislature/bu:statusDate"/>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span>
-                                                <xsl:value-of select="secondary/bu:group/bu:startDate"/>
-                                            </span>
-                                        </td>
-                                    </tr>
+                                    <xsl:for-each select="primary//bu:item_assignments">
+                                        <xsl:sort select="bu:item_assignment/bu:startDate" order="descending"/>
+                                        <tr class="items">
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:item_assignment/bu:groupId"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="format-date(bu:item_assignment/bu:startDate,$date-format,'en',(),())"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="format-date(bu:item_assignment/bu:startDate,$date-format,'en',(),())"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:item_assignment/bu:groupId"/>
+                                            </td>
+                                        </tr>
+                                    </xsl:for-each>
                                 </table>
                             </xsl:when>
                             <xsl:otherwise>

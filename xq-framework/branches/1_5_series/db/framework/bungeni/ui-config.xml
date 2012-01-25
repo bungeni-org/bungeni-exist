@@ -230,6 +230,11 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
+        <route href="/question/assigned-groups">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
         <route href="/question/documents">
             <title>Business | Attachments</title>
             <navigation>business</navigation>
@@ -266,18 +271,8 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/version/timeline">
-            <title>Business | Motion Version Timeline</title>
-            <navigation>business</navigation>
-            <subnavigation>motions</subnavigation>
-        </route>
         <route href="/motion/details">
             <title>Business | Motion</title>
-            <navigation>business</navigation>
-            <subnavigation>motions</subnavigation>
-        </route>
-        <route href="/motion/version/details">
-            <title>Business | Motion Version Details</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
@@ -564,9 +559,6 @@
             <tab path="bill/version/text" id="text">
                 <title>text</title>
             </tab>
-            <tab path="bill/version/details" id="related">
-                <title>details</title>
-            </tab>
             <tab path="bill/version/documents" id="attachments">
                 <title>documents</title>
             </tab>
@@ -592,9 +584,6 @@
             <tab path="question/version/text" id="text">
                 <title>text</title>
             </tab>
-            <tab path="question/version/details" id="related">
-                <title>details</title>
-            </tab>
             <tab path="question/version/documents" id="attachments">
                 <title>documents</title>
             </tab>
@@ -609,19 +598,19 @@
             <tab path="question/details" id="related">
                 <title>details</title>
             </tab>
+            <tab path="question/assigned-groups" id="assigned">
+                <title>assigned groups</title>
+            </tab>
             <tab path="question/documents" id="attachments">
                 <title>documents</title>
             </tab>
         </tabs>
         <tabs name="motion-ver">
-            <tab path="motion/text" id="text">
+            <tab path="motion/version/text" id="text">
                 <title>text</title>
             </tab>
-            <tab path="motion/timeline" id="timeline">
-                <title>history</title>
-            </tab>
-            <tab path="motion/details" id="related">
-                <title>details</title>
+            <tab path="motion/version/documents" id="attachments">
+                <title>documents</title>
             </tab>
         </tabs>
         <tabs name="motion">
@@ -644,9 +633,6 @@
         <tabs name="tableddocument-ver">
             <tab path="tableddocument/version/text" id="text">
                 <title>text</title>
-            </tab>
-            <tab path="tableddocument/version/details" id="related">
-                <title>details</title>
             </tab>
         </tabs>
         <tabs name="tableddocument">
@@ -692,7 +678,7 @@
         concat(@axis,[,@condition,])
         -->
     <acl-groups>
-
+s
         <!-- !+FIX_THIS_TODO (ah, nov-2011) axis needs to be factored as a sub-element since axis is different for different content 
             types -->
         <acl name="public-view" axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission">

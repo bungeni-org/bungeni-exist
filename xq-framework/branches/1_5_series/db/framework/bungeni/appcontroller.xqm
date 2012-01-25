@@ -400,7 +400,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,"poli-contacts.xsl"),
+                    $act-entries-tmpl := bun:get-contacts-by-uri("public-view","group",$docnumber),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committee.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -858,7 +858,25 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									
-    									
+    	else if ($EXIST-PATH eq "/question/assigned-groups" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"assigned-groups.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)    									
     	else if ($EXIST-PATH eq "/question/documents" )
     		 then 
                 let 
@@ -975,26 +993,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)
-    	else if ($EXIST-PATH eq "/motion/version/timeline" )
-    		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-doc-ver("public-view", $docnumber,"changes.xsl"),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    									template:process-tmpl(
-    									   $REL-PATH, 
-    									   $EXIST-PATH, 
-    									   $config:DEFAULT-TEMPLATE, 
-    									   cmn:get-route($EXIST-PATH),
-                                            <route-override>
-                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                            </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)    									
+    									)  									
     									
     	else if ($EXIST-PATH eq "/motion/version" )
     		 then 
@@ -1075,6 +1074,25 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
+    	else if ($EXIST-PATH eq "/motion/version/documents" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-doc-ver("public-view",$docnumber,"documents.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)    									
     	else if ($EXIST-PATH eq "/motion/event" )
     		 then 
                 let 
@@ -1355,7 +1373,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-member($docnumber,"contacts.xsl"),
+                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","user",$docnumber),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("member.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -1369,8 +1387,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)       									
-    									
+    									)		
         (:~ UNMAPPED :)		
     	else if ($EXIST-PATH eq "/whatson")
     		 then 

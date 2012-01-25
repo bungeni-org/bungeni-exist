@@ -17,7 +17,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(member/bu:ontology/bu:user/bu:field[@name='first_name'],' ', member/bu:ontology/bu:user/bu:field[@name='last_name'])"/>
+                    <xsl:value-of select="concat(member/bu:ontology/bu:user/bu:firstName,' ', member/bu:ontology/bu:user/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">

@@ -122,6 +122,7 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
+
 declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
   return  
@@ -1537,6 +1538,48 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
         </secondary>
         <fringe>{$parsedbody}</fringe>
     </document>     
+};
+
+(:~
+:   Retrives contacts for member/group eith particular id.
+:
+: @param focal - the focal-point, group/user who(s) addresses we want to get
+: @param acl - access control list
+: @return 
+:   Document node with main document as primary and any group documents assigned to that MP as secondary
+:   <document>
+:       <primary/>
+:       <secondary/>
+:   </document>
+:)
+declare function bun:get-contacts-by-uri($acl as xs:string, $address-type as xs:string, $focal as xs:string) {
+    let $stylesheet := cmn:get-xslt("contacts.xsl"), 
+        $acl-filter := cmn:get-acl-permission-as-attr($acl),
+        $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
+                            "/bu:ontology[@type='address']",
+                            "/bu:address[@uri eq '",$focal,"']",
+                            "/following-sibling::bu:bungeni/(bu:permissions except bu:versions)",
+                            "/bu:permission[",$acl-filter,"]",
+                            "/ancestor::bu:ontology")
+    let $doc := <document>
+                    <primary>
+                        {
+                            if($address-type eq 'group') then 
+                                collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal]/ancestor::bu:ontology
+                            else
+                                collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$focal]/ancestor::bu:ontology
+                        }
+                    </primary>
+                    <secondary>
+                        {
+                            util:eval($build-qry)
+                        }
+                    </secondary>
+                </document>     
+    return
+        transform:transform($doc, $stylesheet, <parameters>
+                                                 <param name="address_type" value="{$address-type}" />
+                                               </parameters>)        
 };
 
 (:~

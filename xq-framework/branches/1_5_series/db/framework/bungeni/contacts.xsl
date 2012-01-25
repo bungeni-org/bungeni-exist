@@ -11,13 +11,39 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:metadata/@type"/>
-        <xsl:variable name="doc_uri" select="bu:user/@uri"/>
+    <xsl:param name="address_type"/>
+    <xsl:template match="document">
+        <xsl:variable name="doc-type">
+            <xsl:choose>
+                <xsl:when test="$address_type eq 'user'">
+                    <xsl:value-of select="$address_type"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="primary/bu:ontology/bu:group/@type"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="doc_uri">
+            <xsl:choose>
+                <xsl:when test="$address_type eq 'user'">
+                    <xsl:value-of select="primary/bu:ontology/bu:user/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="primary/bu:ontology/bu:group/@uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:user/bu:field[@name='first_name'],' ', bu:user/bu:field[@name='last_name'])"/>
+                    <xsl:choose>
+                        <xsl:when test="$address_type eq 'user'">
+                            <xsl:value-of select="concat(primary/bu:ontology/bu:user/bu:firstName,' ', primary/bu:ontology/bu:user/bu:lastName)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -39,79 +65,59 @@
                             <em>PRINT</em>
                         </a>
                     </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
                 </ul>
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="mem-profile">
-                        <div class="mem-photo mem-top-left">
-                            <p class="imgonlywrap">
-                                <img width="150" height="200" src="assets/bungeni/images/mp.jpg" alt="The Speaker"/>
-                            </p>
-                        </div>
-                        <div class="mem-top-right">
-                            <table class="mem-tbl-details">
-                                <tr>
-                                    <td class="labels fbt">name:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', .//bu:user/bu:field[@name='last_name'])"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">elected/nominated:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">election/nomination date:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">start date:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">language:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">constituency:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">province:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">region:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">political party:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">notes:</td>
-                                    <td class="fbt">
-                                        <xsl:copy-of select="bu:user/bu:description"/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                        <xsl:choose>
+                            <xsl:when test="secondary/bu:ontology">
+                                <table class="tbl-tgl">
+                                    <tr>
+                                        <td class="fbtd">addr type</td>
+                                        <td class="fbtd">postal addr type</td>
+                                        <td class="fbtd">city</td>
+                                        <td class="fbtd">zip code</td>
+                                        <td class="fbtd">country</td>
+                                        <td class="fbtd">phone number(s)</td>
+                                        <td class="fbtd">fax number(s)</td>
+                                        <td class="fbtd">email</td>
+                                    </tr>
+                                    <xsl:for-each select="secondary/bu:ontology">
+                                        <xsl:sort select="bu:descriptors/bu:statusDate" order="descending"/>
+                                        <tr class="items">
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/@type"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:postalAddressType"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:city"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:zipCode"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:countryId"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:phone"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:fax"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:address/bu:email"/>
+                                            </td>
+                                        </tr>
+                                    </xsl:for-each>
+                                </table>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <div style="text-align:center;">None</div>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </div>
                 </div>
             </div>

@@ -70,46 +70,48 @@
                         <div class="list-block">
                             <b>Doc Id</b> : <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                         </div>
-                        <div id="block1" class="list-block">
-                            <div style="width:100%;">
-                                <span class="tgl" style="margin-right:10px">-</span>
-                                <a href="#1">versions</a>
-                            </div>
-                            <div class="doc-toggle opened">
-                                <table class="listing timeline tbl-tgl">
-                                    <tr>
-                                        <th>status</th>
-                                        <th>description</th>
-                                        <th>date</th>
-                                    </tr>
-                                    <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version">
-                                        <xsl:sort select="bu:statusDate" order="descending"/>
-                                        <xsl:variable name="action" select="bu:status"/>
-                                        <xsl:variable name="content_id" select="bu:field[@name='change_id']"/>
-                                        <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
+                        <xsl:if test="$version ne 'true'">
+                            <div id="block1" class="list-block">
+                                <div style="width:100%;">
+                                    <span class="tgl" style="margin-right:10px">-</span>
+                                    <a href="#1">versions</a>
+                                </div>
+                                <div class="doc-toggle opened">
+                                    <table class="listing timeline tbl-tgl">
                                         <tr>
-                                            <td>
-                                                <span>
-                                                    <xsl:value-of select="$action"/>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span>
-                                                    <a href="{//primary/bu:ontology/bu:document/@type}/version/text?uri={@uri}">
-                                                        <xsl:value-of select="bu:shortName"/>
-                                                    </a>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span>
-                                                    <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
-                                                </span>
-                                            </td>
+                                            <th>status</th>
+                                            <th>description</th>
+                                            <th>date</th>
                                         </tr>
-                                    </xsl:for-each>
-                                </table>
+                                        <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version">
+                                            <xsl:sort select="bu:statusDate" order="descending"/>
+                                            <xsl:variable name="action" select="bu:status"/>
+                                            <xsl:variable name="content_id" select="bu:field[@name='change_id']"/>
+                                            <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
+                                            <tr>
+                                                <td>
+                                                    <span>
+                                                        <xsl:value-of select="$action"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        <a href="{//primary/bu:ontology/bu:document/@type}/version/text?uri={@uri}">
+                                                            <xsl:value-of select="bu:shortName"/>
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span>
+                                                        <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </xsl:for-each>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+                        </xsl:if>
                         <xsl:if test="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
                             <div id="block2" class="list-block">
                                 <div style="width:100%;">

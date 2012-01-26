@@ -26,9 +26,7 @@ Application imports
 :)
 import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
 import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";
-import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm"; 
-
-
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 
 (:~
 All applications using the XQ framework must implement the appcontroller namespace module with the function 
@@ -1453,7 +1451,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")
        else if ($EXIST-PATH eq "/testing/blue/color") 
               then
-              cmn:get-tabgroups("committee")
+                <xml>{request:get-uri()}</xml>
+              (:cmn:get-tabgroups("question"):)
                (:
                 <xml>
                     <exist-path>{$EXIST-PATH}</exist-path>

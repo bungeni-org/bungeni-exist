@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogue xml:lang="sw">
+    <welcome>Karibu</welcome>
+    <navigation>
+        <home>nyumbani</home>
+        <business>shughli</business>
+        <members>wadau</members>
+    </navigation>
+    <questions>
+        <qnsList>Orodha ya&#160;</qnsList>
+    </questions>
+    <tabs>
+        
+    </tabs>
+    <errors>
+        
+    </errors>
+    <legis>
+        
+    </legis>
+    <users>
+        
+    </users>
+</catalogue>

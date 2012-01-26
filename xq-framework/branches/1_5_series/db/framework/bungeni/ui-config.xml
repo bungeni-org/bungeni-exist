@@ -233,7 +233,7 @@
         <route href="/question/assigned-groups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
+            <subnavigation>questions</subnavigation>
         </route>
         <route href="/question/documents">
             <title>Business | Attachments</title>

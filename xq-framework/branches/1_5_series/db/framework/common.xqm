@@ -51,6 +51,9 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
        return $doc
 };
 
+(:~
+Get a tabgroubs configuration from the --------.
+:)
 declare function cmn:get-tabgroups($exist-path as xs:string) as node() {
     let $doc := cmn:get-ui-config()/ui/tabgroups/tabs[@name eq $exist-path]
         return $doc
@@ -124,7 +127,22 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
             	    }
         	)
         	else (
-            	if ($route/navigation and $route/subnavigation) then (
+        	       (: !+FIX_THIS (ao, jan2012) Need some changes to framework to adequtely accomodate tabs too. :)
+            	if ($route/navigation and not($route/subnavigation)) then (
+                    element li {    				
+                        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
+                    },    			
+                    element li {    				
+                        <xh:a href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
+                    },
+                    element li {    				
+                        <xh:a href="{$route/subnavigation}">{data(local:route-title($route/subnavigation))}</xh:a>
+                    },
+                    element li {    				
+                        <xh:a class="last" href="{cmn:get-tabgroups('question')/tab[@path eq fn:substring-after('/exist/framework/question/text', 'framework')]}?uri=ola">{request:get-effective-uri()}</xh:a>
+                    }             	    
+            	)
+            	else (
                     element li {    				
             	        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
             	    },    			
@@ -133,10 +151,8 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
             	    },
                     element li {    				
             	        <xh:a class="last" href="{$route/subnavigation}">{data(local:route-title($route/subnavigation))}</xh:a>
-            	    }    				    
-            	)
-            	else 
-            	     ()      
+            	    }                    	    
+            	)      
            )
         }
 };

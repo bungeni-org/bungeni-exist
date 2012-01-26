@@ -44,6 +44,7 @@ declare namespace pg = "http://bungeni.org/page";
 
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
+import module namespace i18n = "http://exist-db.org/xquery/i18n" at "i18n.xql";
 declare namespace request="http://exist-db.org/xquery/request";
 
 
@@ -80,7 +81,8 @@ declare function template:process-tmpl(
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
        $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
     (: extracts top level content and content from within an id less container :)
-     $processed-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
+     $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content),
+     $processed-doc := i18n:process($proc-doc,'sw','/db/framework/i18n','en')
     (: process page meta and return :)
     return 
     template:process-page-meta($route-map, $route-override, $processed-doc)  
@@ -236,7 +238,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			  $content
 	)
     (:~
-    Set the sub-navigation tab to the active one as spoecified in the route
+    Set the sub-navigation tab to the active one as specified in the route
     :)
 
     else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:a) then (

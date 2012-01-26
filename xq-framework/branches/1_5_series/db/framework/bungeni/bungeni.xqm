@@ -1,5 +1,6 @@
 module namespace bun = "http://exist.bungeni.org/bun";
 (:import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";:)
+import module namespace i18n = "http://exist-db.org/xquery/i18n" at "../i18n.xql";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 import module namespace xps="http://www.w3.org/2005/xpath-functions";
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
@@ -30,6 +31,26 @@ declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT := cmn:get-listings-config-limit();
 declare variable $bun:VISIBLEPAGES := cmn:get-listings-config-visiblepages();
 declare variable $bun:DOCNO := 1;
+
+(:
+declare function bun:translate($node as node(), $params as element(parameters)?, $model as item()*) {
+    let $selectedLang := $params/param[@name = "lang"]/@value
+    let $catalogues := $params/param[@name = "catalogues"]/@value
+    let $cpath :=
+        (: if path to catalogues is relative, resolve it relative to the app root :)
+        if (starts-with($catalogues, "/")) then
+            $catalogues
+        else
+            concat($config:app-root, "/", $catalogues)
+    let $translated :=
+        i18n:process($node/*, $selectedLang, $cpath, ())
+    return
+        element { node-name($node) } {
+            $node/@*,
+            templates:process($translated, $model)
+        }
+};
+:)
 
 (:~
 :  Renders PDF output for parliamentary document using xslfo module

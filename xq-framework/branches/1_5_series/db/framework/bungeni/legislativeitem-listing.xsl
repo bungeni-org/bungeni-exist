@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -58,12 +58,15 @@
         MAIN RENDERING TEMPLATE
         -->
     <xsl:template match="docs">
-        <div id="main-wrapper">
+        <div id="main-wrapper" class="bun:translate?lang=sw&amp;catalogues=/db/framework/i18n">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    <xsl:text>List of&#160;</xsl:text>
+                    <i18n:text key="qnsList">Liste of&#160;</i18n:text>
                     <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
+                <div style="border:1px solid red;width:200px;">
+                    <i18n:text key="business">testbiz</i18n:text>
+                </div>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">

@@ -24,15 +24,9 @@ declare function fw:get($param as xs:string) as xs:string {
     request:get-parameter($param, "")
 };
 
-
-
-
 declare function fw:app-tmpl($uri as xs:string) as document-node() {
    fn:doc(fn:concat($config:app-prefix, $uri))
 };
-
-
-
 
 (: do nothing ! :)
 declare function fw:ignore() as element(exist:ignore) {

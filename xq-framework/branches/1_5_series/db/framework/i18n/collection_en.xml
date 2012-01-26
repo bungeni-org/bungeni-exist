@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogue xml:lang="en">
+    <welcome>Welcome</welcome>
+    <navigation>
+        <home>home</home>
+        <business>business</business>
+        <members>members</members>
+    </navigation>
+    <questions>
+        <qnsList>List of&#160;</qnsList>
+    </questions>
+    <tabs>
+        
+    </tabs>
+    <errors>
+        
+    </errors>
+    <legis>
+        
+    </legis>
+    <users>
+        
+    </users>
+</catalogue>

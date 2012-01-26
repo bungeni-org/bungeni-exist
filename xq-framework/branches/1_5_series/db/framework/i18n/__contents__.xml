@@ -1,0 +1,9 @@
+<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/i18n" owner="admin" group="biblio.users" mode="644" created="2012-01-26T17:05:22+03:00" version="1">
+    <acl entries="0" version="1"/>
+    <resource type="XMLResource" name="collection_en.xml" owner="admin" group="biblio.users" mode="644" created="2012-01-26T19:01:26+03:00" modified="2012-01-26T19:01:26+03:00" filename="collection_en.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="collection_sw.xml" owner="admin" group="biblio.users" mode="644" created="2012-01-26T18:58:40+03:00" modified="2012-01-26T18:58:40+03:00" filename="collection_sw.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+</collection>

@@ -41,13 +41,20 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	fw:redirect(fn:concat(request:get-uri(), "/"))
         else if($EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
              then
-        		rou:get-home(
+        	   rou:get-home(
         		  $EXIST-PATH , 
                   $EXIST-ROOT , 
                   $EXIST-CONTROLLER, 
                   $EXIST-RESOURCE, 
                   $REL-PATH
                   )
+                  
+    	(: LANGUAGE-SETTER :)
+    	else if ($EXIST-PATH eq "/switch")
+    		 then (
+                template:set-lang(),
+                fw:redirect-rel($EXIST-PATH, request:get-header("Referer"))
+            )
         		
     	(: Now we process application requests :)
     	else if ($EXIST-PATH eq "/business")

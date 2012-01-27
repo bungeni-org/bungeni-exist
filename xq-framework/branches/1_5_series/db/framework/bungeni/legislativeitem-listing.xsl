@@ -61,12 +61,9 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    <i18n:text key="qnsList">Liste of&#160;</i18n:text>
+                    <i18n:text key="listing">List of&#160;</i18n:text>
                     <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
-                <div style="border:1px solid red;width:200px;">
-                    <i18n:text key="business"/>
-                </div>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogue xml:lang="it">
+    <welcome>Benvenuto</welcome>
+    <!-- TOP_LEVEL NAV -->
+    <home>casa</home>
+    <business>lavori</business>
+    <members>membri</members>
+    <!-- SUB_LEVEL NAV -->
+    <whatson>in agenda</whatson>
+    <committees>commissioni</committees>
+    <bills>disegni legge</bills>
+    <questions>interpellanze</questions>
+    <motions>mozioni</motions>
+    <tableddocuments>documenti depositali</tableddocuments>
+    <agendaitems>punti dell'ordine</agendaitems>
+    <sittings>sedute</sittings>
+    <publications>publicazzioni</publications>
+    <current>corrente</current>
+    <politicalgroups>gruppi politici</politicalgroups>    
+    <!-- LISTINGS -->
+    <listing>Lista di&#160;</listing>   
+    <!-- TABS -->
+    <tab-profile>profilo</tab-profile>
+    <tab-members>membri</tab-members>
+    <tab-contacts>contatti</tab-contacts>
+</catalogue>

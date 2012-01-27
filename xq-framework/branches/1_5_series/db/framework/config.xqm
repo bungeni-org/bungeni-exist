@@ -15,7 +15,7 @@ module namespace config = "http://bungeni.org/xquery/config";
 
 declare variable $config:db-root-collection := "/db";
 
-(: Which xml collection to query ? :)
+
 (: Framework files :)
 
 declare variable $config:fw-root := fn:concat($config:db-root-collection, "/framework");
@@ -29,18 +29,23 @@ declare variable $config:app-prefix :=  fn:concat($config:APP-NAME, "/") ; (: "l
 (: The Application prefix i.e. the folder prefix :)
 declare variable $config:APP-PREF := $config:app-prefix;
 (: The XML collection queried by this application :)
-declare variable $config:XML-COLLECTION := data($config:doc//app[@name eq $config:APP-NAME]/xml-collection);
+
+declare variable $config:__ACTIVE_APP__ := $config:doc//app[@name eq $config:APP-NAME] ;
+
+declare variable $config:XML-COLLECTION := data($config:__ACTIVE_APP__/xml-collection);
 (: The UI configuration file of the application :)
-declare variable $config:UI-CONFIG := data($config:doc//app[@name eq $config:APP-NAME]/ui-config);
-(: The User's UI Configuration of the application :)
-(:
-declare variable $config:UI-USER-CONFIG  := fn:doc(fn:concat($config:fw-root, "/bungeni/ui-user-config.xml"));
-:)
+declare variable $config:UI-CONFIG := data($config:__ACTIVE_APP__/ui-config);
 (: The default template used by the application :)
-declare variable $config:DEFAULT-TEMPLATE := data($config:doc//app[@name eq $config:APP-NAME]/default-tmpl); 
+declare variable $config:DEFAULT-TEMPLATE := data($config:__ACTIVE_APP__/default-tmpl); 
+
 
 (: Application root :)
 declare variable $config:fw-app-root := fn:concat($config:fw-root, "/", $config:app-prefix);
+
+declare variable $config:I18N-MESSAGES := fn:concat($config:fw-root, "/", data($config:__ACTIVE_APP__/i18n-messages));
+
+declare variable $config:DEFAULT-LANG := data($config:__ACTIVE_APP__/default-lang);
+
 (: Ontology files :)
 declare variable $config:xml-ontology-collection := fn:concat($config:XML-COLLECTION, "/ontology");
 

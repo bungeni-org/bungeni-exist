@@ -45,8 +45,8 @@ declare namespace pg = "http://bungeni.org/page";
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
 import module namespace i18n = "http://exist-db.org/xquery/i18n" at "i18n.xql";
-declare namespace request="http://exist-db.org/xquery/request";
-
+declare namespace request = "http://exist-db.org/xquery/request";
+declare namespace response = "http://exist-db.org/xquery/response";
 
 (:~
 : Merges an XHTML template with XHTML content snippets
@@ -284,6 +284,19 @@ declare function template:filter-page-namespace(
            }
 };
 
+(:~
+:   Sets the UI language
+:)
+declare function template:set-lang() {
+        if(string-length(request:get-parameter("language","")) gt 0) then 
+            response:set-cookie('lang',request:get-parameter("language",""))
+            
+        else if(string-length(request:get-cookie-value('lang')) gt 0) then
+            request:get-cookie-value('lang')                
+            
+        else    
+            response:set-cookie('lang',$config:DEFAULT-LANG)         
+};
 
 (:~
 : Process the metadata for the page by querying the route map
@@ -297,7 +310,6 @@ declare function template:filter-page-namespace(
 :)
 declare function template:process-page-meta($route as element(), $override as element(), $doc as element()) as element() {
 	let $metazed := local:set-meta($route, $override, $doc)
-	 (: !+FIX_THIS - the second parameter 'sw' is hard-coded, we need to switch languages via a url switcher,
-	 which sets a cookie and the active language is determined from the cookie :)
-	  return i18n:process($metazed, 'sw', $config:I18N-MESSAGES, $config:DEFAULT-LANG) 
+	return
+	   i18n:process($metazed, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
 };

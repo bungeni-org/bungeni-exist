@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="en">
     <welcome>Welcome</welcome>
+    <!-- TOP_LEVEL NAV -->
     <home>home</home>
     <business>business</business>
     <members>members</members>
-    <qnsList>List of&#160;</qnsList>
-    <dutch>This is Dutch!</dutch>
+    <!-- SUB_LEVEL NAV -->
+    <whatson>what's on</whatson>
+    <committees>committees</committees>
+    <bills>bills</bills>
+    <questions>questions</questions>
+    <motions>motions</motions>
+    <tableddocuments>tabled documents</tableddocuments>
+    <agendaitems>agenda items</agendaitems>
+    <sittings>sittings</sittings>
+    <publications>publications</publications>
+    <current>members</current>
+    <politicalgroups>politicalgroups</politicalgroups>
+    <!-- LISTINGS -->
+    <listing>List of&#160;</listing>
+    <!-- TABS -->
+    <tab-profile>profile</tab-profile>
+    <tab-members>members</tab-members>
+    <tab-contacts>contacts</tab-contacts>
 </catalogue>

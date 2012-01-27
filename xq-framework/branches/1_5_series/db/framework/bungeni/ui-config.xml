@@ -3,11 +3,11 @@
     
     This file is the UI configuration file used by the System 
     It describes date formats , route navigations and tab structures for the application
-    -->
+-->
 <ui xmlns:i18n="http://exist-db.org/xquery/i18n">
 
     <!-- GENERAL FORMAT PREFERNCES -->
-    <!-- 
+    <!-- "http://exist-db.org/xquery/i18n" 
         specify date and datetime formats here , these formats are used by the XSLT scripts
         We use the XSLT date formatting style to format dates
     -->
@@ -34,7 +34,7 @@
     <routes>
         <!--
             href - the incoming url, this is used to load the main menu
-            navigation - specifies the active navigation level 1
+            navigation - specifies the active navigation level 1"http://exist-db.org/xquery/i18n" 
             subnavigation - specifies te active navigation level 2
             -->
         <route href="/">
@@ -414,11 +414,13 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
                 <ul class="theme-lev-1" id="portal-globalnav">
                     <li>
-                        <a name="home" href="home">home</a>
+                        <a name="home" href="home">
+                            <i18n:text key="home">home</i18n:text>
+                        </a>
                     </li>
                     <li>
                         <a name="business" href="business">
-                            <i18n:text key="business"/>
+                            <i18n:text key="business">business</i18n:text>
                         </a>
                     </li>
                     <li>
@@ -440,33 +442,49 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1" id="portal-personaltools">
                     <li>
-                        <a name="whatson" href="whatson">what's on</a>
-                    </li>
-                    <li>
-                        <a name="committees" href="committees">committees</a>
-                    </li>
-                    <li>
-                        <a name="bills" href="bills">bills</a>
-                    </li>
-                    <li>
-                        <a name="questions" href="questions">questions</a>
-                    </li>
-                    <li>
-                        <a name="motions" href="motions">
-                            <i18n:text key="dutch"/>
+                        <a name="whatson" href="whatson">
+                            <i18n:text key="whatson">what's on(nt)</i18n:text>
                         </a>
                     </li>
                     <li>
-                        <a name="tableddocuments" href="tableddocuments">tabled documents</a>
+                        <a name="committees" href="committees">
+                            <i18n:text key="committees">committees(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a name="agendaitems" href="agendaitems">agenda items</a>
+                        <a name="bills" href="bills">
+                            <i18n:text key="bills">bills(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a name="sittings" href="sittings">sittings</a>
+                        <a name="questions" href="questions">
+                            <i18n:text key="questions">questions(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a name="publications" href="publications">publications</a>
+                        <a name="motions" href="motions">
+                            <i18n:text key="motions">motions(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="tableddocuments" href="tableddocuments">
+                            <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="agendaitems" href="agendaitems">
+                            <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="sittings" href="sittings">
+                            <i18n:text key="sittings">sittings(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="publications" href="publications">
+                            <i18n:text key="publications">publications(nt)</i18n:text>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -475,10 +493,14 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a name="current" href="members">current</a>
+                        <a name="current" href="members">
+                            <i18n:text key="current">current(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a name="politicalgroups" href="politicalgroups">politicalgroups</a>
+                        <a name="politicalgroups" href="politicalgroups">
+                            <i18n:text key="politicalgroups">political groups(nt)</i18n:text>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -532,33 +554,51 @@
         -->
         <tabs name="committee">
             <tab path="committee/profile" id="profile">
-                <title>profile</title>
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="committee/members" id="members">
-                <title>members</title>
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="committee/assigned-items" id="assigned">
-                <title>assigned items</title>
+                <title>
+                    <i18n:text key="tab-assigned">assigned items(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="committee/sittings" id="sittings">
-                <title>sittings</title>
+                <title>
+                    <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="committee/staff" id="staff">
-                <title>staff</title>
+                <title>
+                    <i18n:text key="tab-staff">staff(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="committee/contacts" id="contacts">
-                <title>contacts</title>
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="political-group">
             <tab path="political-group/profile" id="profile">
-                <title>profile</title>
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="political-group/members" id="members">
-                <title>members</title>
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
             </tab>
             <tab path="political-group/contacts" id="contacts">
-                <title>contacts</title>
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="bill-ver">

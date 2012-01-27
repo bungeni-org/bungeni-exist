@@ -6,6 +6,7 @@ declare namespace util="http://exist-db.org/xquery/util";
 declare namespace request="http://exist-db.org/xquery/request";
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "fw.xqm";
+declare namespace i18n = "http://exist-db.org/xquery/i18n";
 
 
 (:
@@ -120,39 +121,22 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
         element ul {
         	if ($route/navigation and not($route/subnavigation)) then (
                     element li {
-                      <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
+                      <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
                     },
                     element li {    				
-            	        <xh:a class="last" href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
+            	        <xh:a class="last" href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    }
         	)
         	else (
-        	       (: !+FIX_THIS (ao, jan2012) Need some changes to framework to adequtely accomodate tabs too. :)
-            	if ($route/navigation and not($route/subnavigation)) then (
                     element li {    				
-                        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
-                    },    			
-                    element li {    				
-                        <xh:a href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
-                    },
-                    element li {    				
-                        <xh:a href="{$route/subnavigation}">{data(local:route-title($route/subnavigation))}</xh:a>
-                    },
-                    element li {    				
-                        <xh:a class="last" href="{cmn:get-tabgroups('question')/tab[@path eq fn:substring-after('/exist/framework/question/text', 'framework')]}?uri=ola">{request:get-effective-uri()}</xh:a>
-                    }             	    
-            	)
-            	else (
-                    element li {    				
-            	        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{data(local:route-title(cmn:get-route('/')/navigation))}</xh:a>
+            	        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
             	    },    			
                     element li {    				
-            	        <xh:a href="{$route/navigation}">{data(local:route-title($route/navigation))}</xh:a>
+            	        <xh:a href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    },
                     element li {    				
-            	        <xh:a class="last" href="{$route/subnavigation}">{data(local:route-title($route/subnavigation))}</xh:a>
-            	    }                    	    
-            	)      
+            	        <xh:a class="last" href="{$route/subnavigation}">{local:route-title($route/subnavigation)}</xh:a>
+            	    }      
            )
         }
 };
@@ -162,7 +146,7 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
 :)
 declare function local:route-title($navroute as element()) {
     
-    cmn:get-ui-config()//menugroups/menu//xh:a[@name eq $navroute]
+    cmn:get-ui-config()//menugroups/menu//xh:a[@name eq $navroute]/i18n:text
     
 };
 

@@ -4,7 +4,7 @@
     This file is the UI configuration file used by the System 
     It describes date formats , route navigations and tab structures for the application
     -->
-<ui>
+<ui xmlns:i18n="http://exist-db.org/xquery/i18n">
 
     <!-- GENERAL FORMAT PREFERNCES -->
     <!-- 
@@ -417,10 +417,14 @@
                         <a name="home" href="home">home</a>
                     </li>
                     <li>
-                        <a name="business" href="business">business</a>
+                        <a name="business" href="business">
+                            <i18n:text key="business"/>
+                        </a>
                     </li>
                     <li>
-                        <a name="members" href="members">members</a>
+                        <a name="members" href="members">
+                            <i18n:text key="members">members</i18n:text>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -448,7 +452,9 @@
                         <a name="questions" href="questions">questions</a>
                     </li>
                     <li>
-                        <a name="motions" href="motions">motions</a>
+                        <a name="motions" href="motions">
+                            <i18n:text key="dutch"/>
+                        </a>
                     </li>
                     <li>
                         <a name="tableddocuments" href="tableddocuments">tabled documents</a>
@@ -515,7 +521,7 @@
             <format type="xml" href="null">Download XML format</format>
         </rendergroup>
     </downloadgroups>
-    
+    DEFAULT
     <!--
         Tab Groups
         -->

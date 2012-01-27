@@ -81,11 +81,10 @@ declare function template:process-tmpl(
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
        $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
     (: extracts top level content and content from within an id less container :)
-     $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content),
-     $processed-doc := i18n:process($proc-doc,'sw','/db/framework/i18n','en')
+     $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
-    return 
-    template:process-page-meta($route-map, $route-override, $processed-doc)  
+      return 
+       template:process-page-meta($route-map, $route-override, $proc-doc)  
 };
 
 
@@ -229,7 +228,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:a) then (
 			if ($route/navigation) then (
 				if ($content/self::xh:a[@name=$route/navigation/text()]) then (
-				    <xh:a class="current" href="{$content/@href}">{data($content)}</xh:a>
+				    <xh:a class="current" href="{$content/@href}">{$content/i18n:text}</xh:a>
 				) 
 				else  
 				 $content
@@ -244,7 +243,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:a) then (
 			if ($route/subnavigation) then (
 				if ($content/self::xh:a[@name=$route/subnavigation/text()]) then (
-				    <xh:a class="current" href="{$content/@href}">{data($content)}</xh:a>
+				    <xh:a class="current" href="{$content/@href}">{$content/i18n:text}</xh:a>
 				) 
 				else  
 				 $content
@@ -288,7 +287,7 @@ declare function template:filter-page-namespace(
 
 (:~
 : Process the metadata for the page by querying the route map
-: 
+: Apply i18n translation process
 : @param route
 :   route map
 : @param override
@@ -297,5 +296,8 @@ declare function template:filter-page-namespace(
 :   The page content being processed by the template 
 :)
 declare function template:process-page-meta($route as element(), $override as element(), $doc as element()) as element() {
-	local:set-meta($route, $override, $doc)
+	let $metazed := local:set-meta($route, $override, $doc)
+	 (: !+FIX_THIS - the second parameter 'sw' is hard-coded, we need to switch languages via a url switcher,
+	 which sets a cookie and the active language is determined from the cookie :)
+	  return i18n:process($metazed, 'sw', $config:I18N-MESSAGES, $config:DEFAULT-LANG) 
 };

@@ -58,14 +58,14 @@
         MAIN RENDERING TEMPLATE
         -->
     <xsl:template match="docs">
-        <div id="main-wrapper" class="bun:translate?lang=sw&amp;catalogues=/db/framework/i18n">
+        <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
                     <i18n:text key="qnsList">Liste of&#160;</i18n:text>
                     <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
                 <div style="border:1px solid red;width:200px;">
-                    <i18n:text key="business">testbiz</i18n:text>
+                    <i18n:text key="business"/>
                 </div>
             </div>
             <div id="tab-menu" class="ls-tabs">

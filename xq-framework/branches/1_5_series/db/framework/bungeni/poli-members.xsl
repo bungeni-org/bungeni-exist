@@ -62,7 +62,7 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:90%;margin: 0 auto;text-align:center">
+                    <div style="width:100%;margin: 0 auto;text-align:center">
                         <table class="tbl-tgl">
                             <tr>
                                 <td class="fbtd">

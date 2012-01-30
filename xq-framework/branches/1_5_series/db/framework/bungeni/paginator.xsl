@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -82,7 +82,8 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <div id="page-state" class="page-state">Page <xsl:value-of select="$pwhere"/> of <xsl:value-of select="$pages"/>
+            <div id="page-state" class="page-state">
+                <i18n:text key="page">Page(nt)</i18n:text>&#160;<xsl:value-of select="$pwhere"/>&#160;<i18n:text key="pageof">of(nt)</i18n:text>&#160;<xsl:value-of select="$pages"/>
             </div>
             <div id="paginate-pages" class="inline" style="padding-right:0px;">
                 <!-- This serves the purpose of showing 'First' page link -->

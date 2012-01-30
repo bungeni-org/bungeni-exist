@@ -21,6 +21,17 @@
     <msg key="listing">Orodha ya&#160;</msg>
     <msg key="uc">kwenye mashauri</msg>
     <msg key="archive">nyaraka</msg>
+    <msg key="pri-sponsor">mdhamini mkuu</msg>
+    <msg key="last-event">tukio la mwisho</msg>
+    <msg key="date-on">tarehe</msg>
+    <msg key="submit-date">tarehe ya wasilisho</msg>
+    <msg key="ministry">wizara</msg>
+    <msg key="gender">jinsia</msg>
+    <msg key="dob">tarehe ya kuzaliwa</msg>
+    <msg key="status">kiwango</msg>
+    <msg key="listing-search">tafuta maandiko</msg>
+    <msg key="sort-by">namna hii</msg>
+    <msg key="btn-search">tafuta</msg>    
     <!-- TABS -->
     <msg key="tab-profile">maumbo</msg>
     <msg key="tab-members">wanachama</msg>
@@ -34,4 +45,9 @@
     <msg key="tab-details">vipengele</msg>
     <msg key="tab-assigned">vikundi vilivyo awazwa</msg>
     <msg key="tab-documents">hati</msg>
+    <!-- PAGINATION -->
+    <msg key="page">Ukurasa</msg>
+    <msg key="pageof">kwa</msg>
+    <msg key="compress">shindilia zote</msg>
+    <msg key="expand">panua zote</msg>
 </catalogue>

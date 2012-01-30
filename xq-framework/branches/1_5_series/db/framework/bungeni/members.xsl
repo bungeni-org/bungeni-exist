@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -58,7 +58,8 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
+                        <div class="toggler-list" id="expand-all">- <i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
                     </div>                 
                     <!-- render the actual listing-->
                     <xsl:apply-templates select="alisting"/>
@@ -93,19 +94,22 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">gender:</td>
+                        <td class="labels">
+                            <i18n:text key="gender">gender(nt)</i18n:text>:</td>
                         <td>
                             <xsl:value-of select="bu:ontology/bu:user/bu:gender"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">date of birth:</td>
+                        <td class="labels">
+                            <i18n:text key="dob">date of birth(nt)</i18n:text>:</td>
                         <td>
                             <xsl:value-of select="format-date(xs:date(bu:ontology/bu:user/bu:dateOfBirth),$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">status:</td>
+                        <td class="labels">
+                            <i18n:text key="status">status(nt)</i18n:text>:</td>
                         <td>
                             <xsl:value-of select="bu:ontology/bu:user/bu:status"/>
                         </td>

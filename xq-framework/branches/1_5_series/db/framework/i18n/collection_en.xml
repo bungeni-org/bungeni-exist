@@ -21,6 +21,17 @@
     <msg key="listing">List of&#160;</msg>
     <msg key="uc">under consideration</msg>
     <msg key="archive">archived</msg>
+    <msg key="pri-sponsor">primary sponsor</msg>
+    <msg key="last-event">last event</msg>
+    <msg key="date-on">on</msg>
+    <msg key="submit-date">submission date</msg>
+    <msg key="ministry">ministry</msg>
+    <msg key="gender">gender</msg>
+    <msg key="dob">date of birth</msg>
+    <msg key="status">status</msg>
+    <msg key="listing-search">search text</msg>
+    <msg key="sort-by">sort by</msg>
+    <msg key="btn-search">search</msg>    
     <!-- TABS -->
     <msg key="tab-profile">profile</msg>
     <msg key="tab-members">members</msg>
@@ -33,5 +44,10 @@
     <msg key="tab-history">history</msg>
     <msg key="tab-details">details</msg>
     <msg key="tab-assigned">assigned groups</msg>
-    <msg key="tab-documents">documents</msg>
+    <msg key="tab-documents">documents</msg> 
+    <!-- PAGINATION -->
+    <msg key="page">Page</msg>
+    <msg key="pageof">of</msg>
+    <msg key="compress">compress all</msg>
+    <msg key="expand">expand all</msg>
 </catalogue>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -69,14 +69,15 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            <xsl:text>under consideration (</xsl:text>
+                            <i18n:text key="uc">under consideration(nt)</i18n:text>
+                            <xsl:text>&#160;(</xsl:text>
                             <xsl:value-of select="paginator/count"/>
                             <xsl:text>)</xsl:text>
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            <xsl:text>archived</xsl:text>
+                            <i18n:text key="archive">archived(nt)</i18n:text>
                         </a>
                     </li>
                 </ul>
@@ -102,7 +103,8 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
+                        <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
                     </div>                    
                     <!-- 
                     !+LISTING_GENERATOR
@@ -140,7 +142,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">primary sponsor:</td>
+                        <td class="labels">
+                            <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>:</td>
                         <td>
                             <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
                                 <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
@@ -148,21 +151,25 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">last event:</td>
+                        <td class="labels">
+                            <i18n:text key="last-event">last event(nt)</i18n:text>:</td>
                         <td>
                             <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
-                            &#160;&#160;<b>on:</b>&#160;&#160;
+                            &#160;&#160;<b>
+                                <i18n:text key="date-on">on(nt)</i18n:text>:</b>&#160;&#160;
                             <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">submission date:</td>
+                        <td class="labels">
+                            <i18n:text key="submit-date">submission date(nt)</i18n:text>:</td>
                         <td>
                             <xsl:value-of select="format-date(output/bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">ministry:</td>
+                        <td class="labels">
+                            <i18n:text key="ministry">ministry(nt)</i18n:text>:</td>
                         <td>
                             <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
                         </td>

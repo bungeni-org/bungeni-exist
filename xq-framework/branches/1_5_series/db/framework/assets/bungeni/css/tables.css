@@ -34,6 +34,7 @@ table.doc-tbl-details tr td.labels {
     text-align:left;
     width:100px;
     vertical-align:bottom;
+    white-space:nowrap;
 }
 table.doc-tbl-details tr td {
     border-width:1px;

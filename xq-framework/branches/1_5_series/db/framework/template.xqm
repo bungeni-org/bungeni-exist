@@ -251,6 +251,25 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			else
 			  $content
 	)
+	
+	(:~ highlight active lang :)
+    else if ($content/ancestor::xh:ul[@id="portal-languageselector"] and $content/self::xh:li) then (
+    
+            for $anchor in $content/self::xh:li
+            return 
+    			if ($anchor/xh:a[@id = template:set-lang()]) then (
+    			     element li {
+    			        attribute class { "active" }, 
+                        $anchor/xh:a
+                     }
+                )
+    			else ( 
+    			     element li {
+    			         $anchor/xh:a
+    			     }   
+    			)
+	)
+	
 
 	else 
     (:~

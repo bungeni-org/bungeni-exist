@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="it">
-    <welcome>Benvenuto</welcome>
+    <msg key="welcome">Benvenuto</msg>
     <!-- TOP_LEVEL NAV -->
-    <home>casa</home>
-    <business>lavori</business>
-    <members>membri</members>
+    <msg key="home">casa</msg>
+    <msg key="business">lavori</msg>
+    <msg key="members">membri</msg>
     <!-- SUB_LEVEL NAV -->
-    <whatson>in agenda</whatson>
-    <committees>commissioni</committees>
-    <bills>disegni legge</bills>
-    <questions>interpellanze</questions>
-    <motions>mozioni</motions>
-    <tableddocuments>documenti depositali</tableddocuments>
-    <agendaitems>punti dell'ordine</agendaitems>
-    <sittings>sedute</sittings>
-    <publications>publicazzioni</publications>
-    <current>corrente</current>
-    <politicalgroups>gruppi politici</politicalgroups>    
+    <msg key="whatson">in agenda</msg>
+    <msg key="committees">commissioni</msg>
+    <msg key="bills">disegni legge</msg>
+    <msg key="questions">interpellanze</msg>
+    <msg key="motions">mozioni</msg>
+    <msg key="tableddocuments">documenti depositali</msg>
+    <msg key="agendaitems">punti dell'ordine</msg>
+    <msg key="sittings">sedute</msg>
+    <msg key="publications">publicazzioni</msg>
+    <msg key="current">corrente</msg>
+    <msg key="politicalgroups">gruppi politici</msg>    
     <!-- LISTINGS -->
-    <listing>Lista di&#160;</listing>   
+    <msg key="listing">Lista di&#160;</msg>
+    <msg key="uc">sotto considerazione</msg>
+    <msg key="archive">archiviati</msg>
     <!-- TABS -->
-    <tab-profile>profilo</tab-profile>
-    <tab-members>membri</tab-members>
-    <tab-contacts>contatti</tab-contacts>
+    <msg key="tab-profile">profilo</msg>
+    <msg key="tab-members">membri</msg>
+    <msg key="tab-contacts">contatti</msg>
+    <msg key="tab-member">membro</msg>
+    <msg key="tab-offices">offico heldo</msg>
+    <msg key="tab-info">informa</msg>
+    <msg key="tab-parlacts">parlemento activ</msg>
+    <msg key="tab-text">testo</msg>
+    <msg key="tab-history">storia</msg>
+    <msg key="tab-details">dettagli</msg>
+    <msg key="tab-assigned">assegnato gruppi</msg>
+    <msg key="tab-documents">documentazione</msg>
 </catalogue>

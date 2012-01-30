@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="en">
-    <welcome>Welcome</welcome>
+    <msg key="welcome">Welcome</msg>
     <!-- TOP_LEVEL NAV -->
-    <home>home</home>
-    <business>business</business>
-    <members>members</members>
+    <msg key="home">home</msg>
+    <msg key="business">business</msg>
+    <msg key="members">members</msg>
     <!-- SUB_LEVEL NAV -->
-    <whatson>what's on</whatson>
-    <committees>committees</committees>
-    <bills>bills</bills>
-    <questions>questions</questions>
-    <motions>motions</motions>
-    <tableddocuments>tabled documents</tableddocuments>
-    <agendaitems>agenda items</agendaitems>
-    <sittings>sittings</sittings>
-    <publications>publications</publications>
-    <current>members</current>
-    <politicalgroups>politicalgroups</politicalgroups>
+    <msg key="whatson">what's on</msg>
+    <msg key="committees">committees</msg>
+    <msg key="bills">bills</msg>
+    <msg key="questions">questions</msg>
+    <msg key="motions">motions</msg>
+    <msg key="tableddocuments">tabled documents</msg>
+    <msg key="agendaitems">agenda items</msg>
+    <msg key="sittings">sittings</msg>
+    <msg key="publications">publications</msg>
+    <msg key="current">members</msg>
+    <msg key="politicalgroups">politicalgroups</msg>
     <!-- LISTINGS -->
-    <listing>List of&#160;</listing>
+    <msg key="listing">List of&#160;</msg>
+    <msg key="uc">under consideration</msg>
+    <msg key="archive">archived</msg>
     <!-- TABS -->
-    <tab-profile>profile</tab-profile>
-    <tab-members>members</tab-members>
-    <tab-contacts>contacts</tab-contacts>
+    <msg key="tab-profile">profile</msg>
+    <msg key="tab-members">members</msg>
+    <msg key="tab-contacts">contacts</msg>
+    <msg key="tab-member">member</msg>
+    <msg key="tab-offices">offices held</msg>
+    <msg key="tab-info">infomation</msg>
+    <msg key="tab-parlacts">parliament activities</msg>
+    <msg key="tab-text">text</msg>
+    <msg key="tab-history">history</msg>
+    <msg key="tab-details">details</msg>
+    <msg key="tab-assigned">assigned groups</msg>
+    <msg key="tab-documents">documents</msg>
 </catalogue>

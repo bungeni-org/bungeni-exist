@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="sw">
-    <welcome>Karibu</welcome>
+    <msg key="welcome">Karibu</msg>
     <!-- TOP_LEVEL NAV -->
-    <home>nyumbani</home>
-    <business>shughli</business>
-    <members>wadau</members>
+    <msg key="home">nyumbani</msg>
+    <msg key="business">shughli</msg>
+    <msg key="members">wanachama</msg>
     <!-- SUB_LEVEL NAV -->
-    <whatson>yaliyomo</whatson>
-    <committees>kamati</committees>
-    <bills>miswada</bills>
-    <questions>maswali</questions>
-    <motions>misukumo</motions>
-    <tableddocuments>hati ziliziopendekezwa</tableddocuments>
-    <agendaitems>pointi za ajenda</agendaitems>
-    <sittings>vikao</sittings>
-    <publications>machapisho</publications>
-    <current>sasa</current>
-    <politicalgroups>makundi ya kisiasa</politicalgroups>
+    <msg key="whatson">yaliyomo</msg>
+    <msg key="committees">kamati</msg>
+    <msg key="bills">miswada</msg>
+    <msg key="questions">maswali</msg>
+    <msg key="motions">misukumo</msg>
+    <msg key="tableddocuments">hati ziliziopendekezwa</msg>
+    <msg key="agendaitems">pointi za ajenda</msg>
+    <msg key="sittings">vikao</msg>
+    <msg key="publications">machapisho</msg>
+    <msg key="current">sasa</msg>
+    <msg key="politicalgroups">makundi ya kisiasa</msg>
     <!-- LISTINGS -->
-    <listing>Orodha ya&#160;</listing>    
+    <msg key="listing">Orodha ya&#160;</msg>
+    <msg key="uc">kwenye mashauri</msg>
+    <msg key="archive">nyaraka</msg>
     <!-- TABS -->
-    <tab-profile>maumbo</tab-profile>
-    <tab-members>wadau</tab-members>
-    <tab-contacts>vioungo</tab-contacts>
+    <msg key="tab-profile">maumbo</msg>
+    <msg key="tab-members">wanachama</msg>
+    <msg key="tab-contacts">mawasiliano</msg>
+    <msg key="tab-member">mwanachama</msg>
+    <msg key="tab-offices">nyadhifa za kale</msg>
+    <msg key="tab-info">habari</msg>
+    <msg key="tab-parlacts">shugli za bunge</msg>
+    <msg key="tab-text">andiko</msg>
+    <msg key="tab-history">historia</msg>
+    <msg key="tab-details">vipengele</msg>
+    <msg key="tab-assigned">vikundi vilivyo awazwa</msg>
+    <msg key="tab-documents">hati</msg>
 </catalogue>

@@ -18,8 +18,20 @@
     <msg key="current">sasa</msg>
     <msg key="politicalgroups">makundi ya kisiasa</msg>
     <!-- LISTINGS -->
+    <msg key="doc-whatson">Yaliyomo</msg>
     <msg key="listing">Orodha ya&#160;</msg>
+    <msg key="list-t-committee">Kamati</msg>
+    <msg key="list-t-bill">Miswada</msg>
+    <msg key="list-t-question">Maswali</msg>
+    <msg key="list-t-motion">Misukumo</msg>
+    <msg key="list-t-tableddocument">Hati zilizopebdekezwa</msg>
+    <msg key="list-t-agendaitem">Pointi za agenda Items</msg>
+    <msg key="list-t-sittings">Vikao</msg>
+    <msg key="list-t-pubs">Machapisho</msg>
+    <msg key="list-t-members">Wabunge</msg>
+    <msg key="list-t-pts">Makundi-ya-kisiasa</msg>
     <msg key="uc">kwenye mashauri</msg>
+    <msg key="list-tab-cur">sasa</msg>
     <msg key="archive">nyaraka</msg>
     <msg key="pri-sponsor">mdhamini mkuu</msg>
     <msg key="last-event">tukio la mwisho</msg>
@@ -50,4 +62,7 @@
     <msg key="pageof">kwa</msg>
     <msg key="compress">shindilia zote</msg>
     <msg key="expand">panua zote</msg>
+    <!-- PLACEHOLDERS -->
+    <msg key="ph-searchall">Tafuta kwenye hati zote Bungeni...</msg>
+    <msg key="ph-searchlisting">tafuta katika orodha hii</msg>
 </catalogue>

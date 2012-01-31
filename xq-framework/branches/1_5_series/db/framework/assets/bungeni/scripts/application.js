@@ -5,9 +5,14 @@ $(document).ready(function () {
         return results[1].split("+").join(" ") || 0;
     } 
     if(window.location.search) { 
-        if($.urlParam('scope'))
-            $("#global-search").val($.urlParam('q'));  
+        if(window.location.search.search("scope") !== -1) {
+            if($.urlParam('scope'))
+                $("#global-search").val($.urlParam('q'));
+        }
     }
+    /* stores locally the literals for toggling compress/expand... */
+    $('body').data('compress',$("#i-compress").html());
+    $('body').data('expand',$("#i-expand").html());
     
     /*** TOGGLE FEATURES **/
     
@@ -97,14 +102,14 @@ $(document).ready(function () {
                 text.slideUp('200');
                 $(this).parent().parent().find('span').html('+');
                             
-                $("#expand-all").text("+ expand all")
+                $("#expand-all").text("+ "+$("body").data("expand"))
                 .stop();            
             }, function(){
                 var text = $('.ls-row').find('li div.doc-toggle');
                 text.slideDown('200');
                 $(this).parent().parent().find('span').html('-');     
    
-                $("#expand-all").text("- compress all")
+                $("#expand-all").text("- "+$("body").data("compress"))
                 .stop();
             });
         });    

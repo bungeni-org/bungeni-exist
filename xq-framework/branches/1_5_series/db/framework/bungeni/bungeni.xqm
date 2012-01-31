@@ -274,6 +274,7 @@ declare function bun:get-documentitems(
          }</count>
         <documentType>{$type}</documentType>
         <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+        <i18nlabel>{$type}</i18nlabel>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
@@ -905,7 +906,7 @@ declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tm
             attribute name { "q" },
             attribute class { "search_for" },
             attribute type { "text" },
-            attribute placeholder { concat("Search ",$type,"s...") },
+            attribute placeholder { "i18n(ph-searchlisting,search...)" },
             attribute value { $qry }
         }
        
@@ -1017,7 +1018,6 @@ declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmp
             attribute name { "q" },
             attribute class { "search_for" },
             attribute type { "text" },
-            attribute placeholder { "Searched all Bungeni documents..." },
             attribute value { "BOOHOO" }
         } 
         else

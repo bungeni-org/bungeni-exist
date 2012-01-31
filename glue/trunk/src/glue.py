@@ -7,14 +7,15 @@
 @created = 18 Oct, 2011
 """
 
-import os, sys, errno, getopt
+import os, os.path, sys, errno, getopt
 import ConfigParser
 
 from org.dom4j.io import SAXReader
 from java.io import File
 from java.io import FileInputStream
 from java.util import HashMap
-
+from net.lingala.zip4j.core import ZipFile
+from net.lingala.zip4j.exception import ZipException
 
 from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
@@ -125,7 +126,7 @@ class ParseBungeniXML:
  
     def xpath_parl_item(self,name):
 
-        return self.__global_path__ + "contenttype[@name='group']/field[@name='"+name+"']"
+        return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
         
     def xpath_get_attr_val(self,name):
 
@@ -157,6 +158,23 @@ class ParseBungeniXML:
         else:
             return None
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+
+    def disable(self):
+        self.HEADER = ''
+        self.OKBLUE = ''
+        self.OKGREEN = ''
+        self.WARNING = ''
+        self.FAIL = ''
+        self.ENDC = ''
+
+
 class GenericDirWalker(object):
 
     def __init__(self, input_params = None):
@@ -167,7 +185,20 @@ class GenericDirWalker(object):
         self.object_info = None
         self.input_params = input_params
 
-
+    def extractor(self, zip_file):
+        """
+        extracts any .zip files in folder matching original name file.
+        http://www.lingala.net/zip4j/
+        """
+        try:
+			#Initiate ZipFile object with the path/name of the zip file.
+			unzipper = ZipFile(zip_file)
+			#Extracts all files to the path specified
+			unzipper.extractAll(os.path.splitext(zip_file)[0])
+			print bcolors.WARNING + "Extracted zip file... " + zip_file+bcolors.ENDC
+        except ZipException, e:
+			e.printStackTrace()
+			
     def walk(self, folder):
         """ 
         walk a folder and recursively walk through sub-folders
@@ -181,6 +212,8 @@ class GenericDirWalker(object):
             nfile = os.path.join(folder, a_file)
             if os.path.isdir(nfile):
                 self.walk(nfile)
+            elif fnmatch.fnmatch(nfile, "*.zip"): 
+                self.extractor(nfile)                 
             else:
                 if fnmatch.fnmatch(nfile, "*.xml"):
                     self.counter = self.counter + 1
@@ -274,9 +307,9 @@ def main(config_file):
     try:
         cfg = TransformerConfig(config_file)
         __setup_output_dirs__(cfg)
-        print "Retrieving parliament information..."
+        print bcolors.HEADER + "Retrieving parliament information..." + bcolors.ENDC
         parl_info = get_parl_info(cfg)
-        print "Retrieved Parliament info ", parl_info
+        print bcolors.OKGREEN,"Retrieved Parliament info ", parl_info, bcolors.ENDC
         print "Transforming ...."        
         do_transform(cfg, parl_info)    
     except getopt.error, msg:
@@ -288,6 +321,6 @@ if __name__ == "__main__":
     if (len(sys.argv) > 1):
         main(sys.argv[1])
     else:
-        print "config.ini file must be an input parameter"
+        print bcolors.FAIL + "config.ini file must be an input parameter" + bcolors.ENDC
 
 

@@ -18,8 +18,20 @@
     <msg key="current">members</msg>
     <msg key="politicalgroups">politicalgroups</msg>
     <!-- LISTINGS -->
+    <msg key="doc-whatson">What's on</msg>
     <msg key="listing">List of&#160;</msg>
+    <msg key="list-t-committee">Committees</msg>
+    <msg key="list-t-bill">Bills</msg>
+    <msg key="list-t-question">Questions</msg>
+    <msg key="list-t-motion">Motions</msg>
+    <msg key="list-t-tableddocument">Tabled Documents</msg>
+    <msg key="list-t-agendaitem">Agenda Items</msg>
+    <msg key="list-t-sittings">Sittings</msg>
+    <msg key="list-t-pubs">Publications</msg>
+    <msg key="list-t-members">Members of Parliament</msg>
+    <msg key="list-t-pts">Political-groups</msg>
     <msg key="uc">under consideration</msg>
+    <msg key="list-tab-cur">current</msg>
     <msg key="archive">archived</msg>
     <msg key="pri-sponsor">primary sponsor</msg>
     <msg key="last-event">last event</msg>
@@ -50,4 +62,7 @@
     <msg key="pageof">of</msg>
     <msg key="compress">compress all</msg>
     <msg key="expand">expand all</msg>
+    <!-- PLACEHOLDERS -->
+    <msg key="ph-searchall">Search all Bungeni documents...</msg>
+    <msg key="ph-searchlisting">search this listing</msg>
 </catalogue>

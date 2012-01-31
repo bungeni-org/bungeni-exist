@@ -18,8 +18,20 @@
     <msg key="current">corrente</msg>
     <msg key="politicalgroups">gruppi politici</msg>    
     <!-- LISTINGS -->
+    <msg key="doc-whatson">In agenda</msg>
     <msg key="listing">Lista di&#160;</msg>
+    <msg key="list-t-committee">Comitati</msg>
+    <msg key="list-t-bill">Banconote</msg>
+    <msg key="list-t-question">Domande</msg>
+    <msg key="list-t-motion">Mozioni</msg>
+    <msg key="list-t-tableddocument">Presentato Documenti</msg>
+    <msg key="list-t-agendaitem">Agenda articoli</msg>
+    <msg key="list-t-sittings">Sedute</msg>
+    <msg key="list-t-pubs">Pubblicazioni</msg>
+    <msg key="list-t-members">Membri del Parlamento</msg>
+    <msg key="list-t-pts">Gruppi-politici</msg>
     <msg key="uc">sotto considerazione</msg>
+    <msg key="list-tab-cur">corrente</msg>
     <msg key="archive">archiviati</msg>
     <msg key="pri-sponsor">primario sponsor</msg>
     <msg key="last-event">scorso evento</msg>
@@ -50,4 +62,7 @@
     <msg key="pageof">di</msg>
     <msg key="compress">tutti compremere</msg>
     <msg key="expand">tutti espandere</msg>
+    <!-- PLACEHOLDERS -->
+    <msg key="ph-searchall">Cerca tutti i documenti Bungeni...</msg>
+    <msg key="ph-searchlisting">ricerca questo annuncio</msg>
 </catalogue>

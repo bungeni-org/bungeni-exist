@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -14,7 +14,7 @@
                 <xd:b>Author:</xd:b> anthony</xd:p>
             <xd:p>
                 
-                Lists bills from Bungeni
+                Lists legis-items from Bungeni
 
                     
             </xd:p>
@@ -53,6 +53,7 @@
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
     <xsl:variable name="listing-url-prefix" select="/docs/paginator/listingUrlPrefix"/>
+    <xsl:variable name="label" select="/docs/paginator/i18nlabel"/>
 
     <!--
         MAIN RENDERING TEMPLATE
@@ -63,7 +64,8 @@
                 <h1 id="doc-title-blue-center">
                     <i18n:text key="listing">List of&#160;</i18n:text>
                     <!-- Capitalize the first letter -->
-                    <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
+                    <i18n:text key="list-t-{$label}">legis-items(nt)</i18n:text>
+                </h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
@@ -103,6 +105,14 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div id="toggle-i18n" style="display:none;">
+                            <span id="i-compress">
+                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                            </span>
+                        </div>
                         <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
                         </div>
                     </div>                    

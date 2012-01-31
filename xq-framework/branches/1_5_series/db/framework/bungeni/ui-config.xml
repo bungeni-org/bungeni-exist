@@ -19,7 +19,7 @@
         <!-- limits the number of items shown on a listing page -->
         <limit>5</limit>
         <!-- number of pages linked on the paginator before showing next -->
-        <visiblePages>6</visiblePages>
+        <visiblePages>3</visiblePages>
     </listings>
     
     

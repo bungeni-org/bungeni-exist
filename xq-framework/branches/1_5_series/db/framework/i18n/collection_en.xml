@@ -32,8 +32,10 @@
     <msg key="list-t-pts">Political-groups</msg>
     <msg key="uc">under consideration</msg>
     <msg key="list-tab-cur">current</msg>
+    <msg key="list-tab-gaz">gazette</msg>
     <msg key="archive">archived</msg>
     <msg key="pri-sponsor">primary sponsor</msg>
+    <msg key="sponsors">sponsors</msg>
     <msg key="last-event">last event</msg>
     <msg key="date-on">on</msg>
     <msg key="submit-date">submission date</msg>
@@ -43,7 +45,12 @@
     <msg key="status">status</msg>
     <msg key="listing-search">search text</msg>
     <msg key="sort-by">sort by</msg>
-    <msg key="btn-search">search</msg>    
+    <msg key="btn-search">search</msg>
+    <msg key="doc-question">Question</msg>
+    <msg key="doc-motion">Motion</msg>
+    <msg key="doc-bill">Bill</msg>
+    <msg key="doc-tableddocument">Tabled Document</msg>
+    <msg key="doc-committee">Committee</msg>
     <!-- TABS -->
     <msg key="tab-profile">profile</msg>
     <msg key="tab-members">members</msg>
@@ -65,4 +72,7 @@
     <!-- PLACEHOLDERS -->
     <msg key="ph-searchall">Search all Bungeni documents...</msg>
     <msg key="ph-searchlisting">search this listing</msg>
+    <!-- MISC -->
+    <msg key="none">None</msg>
+    <msg key="number">Number</msg>
 </catalogue>

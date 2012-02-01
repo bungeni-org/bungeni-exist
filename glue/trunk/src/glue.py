@@ -8,7 +8,7 @@
 """
 
 import os, os.path, sys, errno, getopt
-import ConfigParser
+import ConfigParser, jarray
 
 from org.dom4j.io import SAXReader
 from java.io import File
@@ -16,6 +16,9 @@ from java.io import FileInputStream
 from java.util import HashMap
 from net.lingala.zip4j.core import ZipFile
 from net.lingala.zip4j.exception import ZipException
+from com.googlecode.sardine import Sardine
+from com.googlecode.sardine.impl import SardineException
+from com.googlecode.sardine import SardineFactory
 
 from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
@@ -241,7 +244,6 @@ class ParliamentInfoWalker(GenericDirWalker):
             return (True, the_parl_doc)
         else :
             return (False, None)
-        
 
 class ProcessXmlFilesWalker(GenericDirWalker):
     """
@@ -270,7 +272,68 @@ class ProcessXmlFilesWalker(GenericDirWalker):
         else:
             print "Ignoring %s" % input_file_path
             return (False, None)
-        
+            
+class PostProcessWalker(GenericDirWalker):
+    """
+    
+    Pushes files one-by-one into eXist server
+    """
+    
+    def fn_callback(self, input_file_path):
+        self.username = self.input_params["webdav_config"].get_username()
+        self.password = self.input_params["webdav_config"].get_password()
+        self.xml_folder = self.input_params["webdav_config"].get_bungeni_xml_folder()
+        webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+        webdaver.pushFile(input_file_path)
+        return (False, None)            
+
+class WebDavConfig(Config):
+    """
+    Configuration information for eXist WebDav
+    """
+
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_pipes = {}
+    
+    def get_bungeni_xml_folder(self):
+        return self.get("webdav", "bungeni_xml_folder")
+
+    def get_username(self):
+        return self.get("webdav", "username")
+    
+    def get_password(self):
+        return self.get("webdav", "password")
+
+class WebDavClient:
+    """        
+    Connects to eXist via WebDav and finally places the files to rest.
+    """
+    def __init__(self, username, password, put_folder = None):
+        self.put_folder = put_folder
+        self.sardine = SardineFactory.begin(username, password)
+
+    def pushFile(self, onto_file):
+        a_file = File(onto_file)
+        inputStream = FileInputStream(a_file)
+        length = a_file.length()
+        bytes = jarray.zeros(length,'b')
+        #Read in the bytes
+        #http://www.flexonjava.net/2009/08/jython-convert-file-into-byte-array.html
+        offset = 0
+        numRead = 0
+        while offset<length:
+            if numRead>= 0:
+                #print numRead #For debugging
+                numRead=inputStream.read(bytes, offset, length-offset)
+                offset = offset + numRead
+                
+        try:
+            self.sardine.put(self.put_folder+os.path.basename(onto_file), bytes)
+            print "PUT: "+self.put_folder+os.path.basename(onto_file)
+        except SardineException, e:
+			print bcolors.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , bcolors.ENDC
+			sys.exit()
 
 def __setup_output_dirs__(cfg):
  
@@ -291,34 +354,48 @@ def __setup_output_dirs__(cfg):
 def get_parl_info(cfg):
     piw = ParliamentInfoWalker()
     piw.walk(cfg.get_input_folder())
-    return piw.object_info
+    if piw.object_info is None:
+        print bcolors.FAIL,"ERROR: Could not find Parliament info :(", bcolors.ENDC
+        return sys.exit()
+    else:
+        return piw.object_info
 
 def do_transform(cfg, parl_info):
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
-    print "Commencing transformations..."
+    print bcolors.OKGREEN, "Commencing transformations...", bcolors.ENDC
     pxf = ProcessXmlFilesWalker([cfg,transformer])
     pxf.walk(cfg.get_input_folder())
-    print "Completed transformations !"
+    print bcolors.OKGREEN, "Completed transformations !", bcolors.ENDC
+    
+def webdav_upload(cfg, wd_cfg):
+    print bcolors.OKGREEN, "Commencing uploads to eXist via WebDav...", bcolors.ENDC
+    ppw = PostProcessWalker({"main_config":cfg, "webdav_config" : wd_cfg})
+    ppw.walk(cfg.get_ontoxml_output_folder())
+    print bcolors.OKGREEN + "Completed uploads to eXist !" + bcolors.ENDC  
        
                         
 def main(config_file):
     # parse command line options if any
     try:
         cfg = TransformerConfig(config_file)
+        wd_cfg = WebDavConfig(config_file)
         __setup_output_dirs__(cfg)
         print bcolors.HEADER + "Retrieving parliament information..." + bcolors.ENDC
         parl_info = get_parl_info(cfg)
-        print bcolors.OKGREEN,"Retrieved Parliament info ", parl_info, bcolors.ENDC
-        print "Transforming ...."        
-        do_transform(cfg, parl_info)    
+        print bcolors.OKGREEN,"Retrieved Parliament info...", parl_info, bcolors.ENDC
+        print bcolors.HEADER + "Transforming ...." + bcolors.ENDC      
+        do_transform(cfg, parl_info)
+        webdav_upload(cfg, wd_cfg)
     except getopt.error, msg:
         print msg
-        print "There was an exception during startup !"
+        print bcolors.FAIL + "There was an exception during startup !" + bcolors.ENDC
         sys.exit(2)
 
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
+        from org.apache.log4j import PropertyConfigurator
+        PropertyConfigurator.configure("./src/log4j.properties");
         main(sys.argv[1])
     else:
         print bcolors.FAIL + "config.ini file must be an input parameter" + bcolors.ENDC

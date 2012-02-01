@@ -9,3 +9,4 @@ dom4j http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/dom4j
 xerces http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/xerces
 transformer http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/transformer
 zip4j http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/zip4j
+sardine http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/sardine

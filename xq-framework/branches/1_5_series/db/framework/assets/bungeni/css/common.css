@@ -281,6 +281,9 @@ div#doc-downloads {
 .bspacer10 {
     margin-bottom:10px;
 }  
+.camel-txt {
+    text-transform:capitalize;
+}
 
 /* div blocks */
 .list-block {

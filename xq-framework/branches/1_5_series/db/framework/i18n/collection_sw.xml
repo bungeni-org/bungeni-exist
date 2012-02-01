@@ -32,8 +32,10 @@
     <msg key="list-t-pts">Makundi-ya-kisiasa</msg>
     <msg key="uc">kwenye mashauri</msg>
     <msg key="list-tab-cur">sasa</msg>
+    <msg key="list-tab-gaz">kwenye jarida</msg>
     <msg key="archive">nyaraka</msg>
     <msg key="pri-sponsor">mdhamini mkuu</msg>
+    <msg key="sponsors">wadhamini</msg>
     <msg key="last-event">tukio la mwisho</msg>
     <msg key="date-on">tarehe</msg>
     <msg key="submit-date">tarehe ya wasilisho</msg>
@@ -43,7 +45,12 @@
     <msg key="status">kiwango</msg>
     <msg key="listing-search">tafuta maandiko</msg>
     <msg key="sort-by">namna hii</msg>
-    <msg key="btn-search">tafuta</msg>    
+    <msg key="btn-search">tafuta</msg>
+    <msg key="doc-question">Swali</msg>
+    <msg key="doc-motion">Msukumo</msg>
+    <msg key="doc-bill">Mswada</msg>
+    <msg key="doc-tableddocument">Hati iliyopendekezwa</msg>
+    <msg key="doc-committee">Kamati</msg>     
     <!-- TABS -->
     <msg key="tab-profile">maumbo</msg>
     <msg key="tab-members">wanachama</msg>
@@ -65,4 +72,7 @@
     <!-- PLACEHOLDERS -->
     <msg key="ph-searchall">Tafuta kwenye hati zote Bungeni...</msg>
     <msg key="ph-searchlisting">tafuta katika orodha hii</msg>
+    <!-- MISC -->
+    <msg key="none">Bila</msg>
+    <msg key="number">Nambari</msg>
 </catalogue>

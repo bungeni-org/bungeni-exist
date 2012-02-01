@@ -25,7 +25,8 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    Bill <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                    
+                    <i18n:text key="doc-{$doc-type}">Bill(nt)</i18n:text>
+                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                    
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
@@ -102,10 +103,12 @@
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Bill Number: 
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
+                        <i18n:text key="doc-{$doc-type}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Primary Sponsor: <i>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
+                        <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
                             <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">
                                 <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
@@ -125,7 +128,7 @@
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
-                                None
+                                <i18n:text key="none">None(nt)</i18n:text>
                             </xsl:otherwise>
                         </xsl:choose> 
                         )
@@ -133,13 +136,15 @@
                     <xsl:variable name="render-doc" select="if ($version eq 'true') then                         primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]                          else                         primary/bu:ontology/bu:legislativeItem                         "/>
                     <div class="doc-status">
                         <span>
-                            <b>Last Event:</b>
+                            <b class="camel-txt">
+                                <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
                         </span>
                         <span>
                             <xsl:value-of select="$render-doc/bu:status"/>
                         </span>
                         <span>
-                            <b>Date:</b>
+                            <b class="camel-txt">
+                                <i18n:text key="date-on">Date(nt)</i18n:text>:</b>
                         </span>
                         <span>
                             <xsl:value-of select="format-dateTime($render-doc/bu:statusDate,$datetime-format,'en',(),())"/>

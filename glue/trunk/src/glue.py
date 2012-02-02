@@ -7,12 +7,15 @@
 @created = 18 Oct, 2011
 """
 
-import os, os.path, sys, errno, getopt
+import os, os.path, sys, errno, getopt, array, uuid
 import ConfigParser, jarray
 
 from org.dom4j.io import SAXReader
+from org.dom4j.io import OutputFormat
+from org.dom4j.io import XMLWriter
 from java.io import File
 from java.io import FileInputStream
+from java.io import FileOutputStream
 from java.util import HashMap
 from net.lingala.zip4j.core import ZipFile
 from net.lingala.zip4j.exception import ZipException
@@ -131,9 +134,21 @@ class ParseBungeniXML:
 
         return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
         
+    def xpath_get_attachments(self):
+        
+        return self.__global_path__ + "attached_files"
+        
+    def xpath_get_att_nodes(self):
+        
+        return self.__global_path__ + "attached_files/attached_file"        
+
+    def xpath_get_saved_file(self):
+        
+        return "field[@name='saved_file']"        
+        
     def xpath_get_attr_val(self,name):
 
-        return  self.__global_path__ + "field[@name]"  
+        return self.__global_path__ + "field[@name]"  
         
     def get_parliament_info(self):
         parl_params = HashMap()
@@ -150,6 +165,33 @@ class ParseBungeniXML:
             parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
             parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()+"/"+parl_params['parliament-election-date']
             return parl_params
+        else:
+            return None
+            
+    def attachments_seek_rename(self, current_file):
+        #get a copy for writing
+        self.buffer_dom = self.xmldoc
+        self.buffer_doc = FileOutputStream(self.xmlfile)    
+        attachments = self.buffer_dom.selectSingleNode(self.xpath_get_attachments())
+        nodes = self.buffer_dom.selectNodes(self.xpath_get_att_nodes())
+        
+        if attachments is not None:
+            if len(nodes) > 0:
+                for node in nodes:
+                    if node.selectSingleNode(self.xpath_get_saved_file()) is not None:
+                        original_name = node.selectSingleNode(self.xpath_get_saved_file()).getText()
+                        new_name = str(uuid.uuid4())
+                        #rename files with uuid
+                        os.rename(os.path.dirname(current_file) + "/" + original_name, os.path.dirname(current_file) + "/" + new_name)
+                        att_name = node.addElement("field").addText(new_name).addAttribute("name","att_uuid")
+                        print original_name, new_name
+                self.format = OutputFormat.createPrettyPrint()
+                self.writer = XMLWriter(self.buffer_doc, self.format)
+                self.writer.write(self.buffer_dom)
+                self.writer.flush()
+                #os.remove(os.path.dirname(current_file) + "/" + original_name)                        
+            else:            
+                return None
         else:
             return None
         
@@ -244,6 +286,21 @@ class ParliamentInfoWalker(GenericDirWalker):
             return (True, the_parl_doc)
         else :
             return (False, None)
+
+class SeekBindAttachmentsWalker(GenericDirWalker):
+    """
+    
+    Does not have any input params. Looks for files with attachments
+    and then the renames them appropriately
+    """
+    
+    def fn_callback(self, input_file_path):
+        bunparse = ParseBungeniXML(input_file_path)
+        the_parl_doc = bunparse.attachments_seek_rename(input_file_path)
+        if the_parl_doc is not None:
+            return (True, the_parl_doc)
+        else :
+            return (False, None)            
 
 class ProcessXmlFilesWalker(GenericDirWalker):
     """
@@ -360,6 +417,14 @@ def get_parl_info(cfg):
     else:
         return piw.object_info
 
+def do_bind_attachments(cfg):
+    sba = SeekBindAttachmentsWalker()
+    sba.walk(cfg.get_input_folder())
+    if sba.object_info is not None:
+        print bcolors.OKBLUE,"ATT: Found attachment ", bcolors.ENDC
+    else:
+        return sba.object_info
+
 def do_transform(cfg, parl_info):
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
@@ -384,6 +449,9 @@ def main(config_file):
         print bcolors.HEADER + "Retrieving parliament information..." + bcolors.ENDC
         parl_info = get_parl_info(cfg)
         print bcolors.OKGREEN,"Retrieved Parliament info...", parl_info, bcolors.ENDC
+        print bcolors.OKGREEN + "Seeking attachments..." + bcolors.ENDC
+        do_bind_attachments(cfg)
+        print bcolors.OKGREEN + "Done with attachments..." + bcolors.ENDC
         print bcolors.HEADER + "Transforming ...." + bcolors.ENDC      
         do_transform(cfg, parl_info)
         webdav_upload(cfg, wd_cfg)
@@ -399,5 +467,3 @@ if __name__ == "__main__":
         main(sys.argv[1])
     else:
         print bcolors.FAIL + "config.ini file must be an input parameter" + bcolors.ENDC
-
-

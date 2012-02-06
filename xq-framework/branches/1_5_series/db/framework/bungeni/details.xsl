@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -28,7 +28,8 @@
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <xsl:if test="$version eq 'true'">
                         <br/>
-                        <span style="color:#b22b14">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        <span style="color:#b22b14">
+                            <i18n:text key="tab-t-version">Version(nt)</i18n:text> - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
                 </h1>
@@ -66,46 +67,59 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="list-block">
-                        <div class="block-label">Doc Id</div>
+                        <div class="block-label">
+                            <i18n:text key="docid">Doc Id(nt)</i18n:text>
+                        </div>
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                     </div>
                     <div class="list-block">
-                        <div class="block-label">Parliament</div>
+                        <div class="block-label">
+                            <i18n:text key="parliament">Parliament(nt)</i18n:text>
+                        </div>
                         <xsl:value-of select="primary/bu:ontology/bu:bungeni/bu:parliament/@href"/>
                     </div>
                     <div class="list-block">
-                        <div class="block-label">Session Year</div>
+                        <div class="block-label">
+                            <i18n:text key="session-yr">Session Year(nt)</i18n:text>
+                        </div>
                         <xsl:value-of select="substring-before(primary/bu:ontology/bu:bungeni/bu:parliament/@date,'-')"/>
                     </div>
                     <div class="list-block">
-                        <div class="block-label">Session Number</div>
+                        <div class="block-label">
+                            <i18n:text key="session-no">Session Number(nt)</i18n:text>
+                        </div>
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:legislativeItemId"/>
                     </div>
                     <ul class="ls-row" id="list-toggle-wide">
                         <li>
                             <div style="width:100%;">
                                 <span class="tgl" style="margin-right:10px">-</span>
-                                <a href="#1">profile</a>
+                                <a href="#1">
+                                    <i18n:text key="tab-profile">umbo(nt)</i18n:text>
+                                </a>
                             </div>
                             <div class="doc-toggle open">
                                 <table class="doc-tbl-details">
                                     <tr>
-                                        <td class="labels">submission date:</td>
+                                        <td class="labels">
+                                            <i18n:text key="submit-date">submission date(nt)</i18n:text>:</td>
                                         <td>
                                             <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels">
-                                            <xsl:value-of select="primary/bu:ontology/bu:document/@type"/> type :</td>
+                                        <td class="labels lower-txt">
+                                            <i18n:text key="typeofdoc">type of(nt)</i18n:text>&#160;<i18n:text key="doc-{$doc-type}">document(nt)</i18n:text> :</td>
                                         <td>Private Notice</td>
                                     </tr>
                                     <tr>
-                                        <td class="labels">Response type :</td>
+                                        <td class="labels">
+                                            <i18n:text key="resp-type">response type(nt)</i18n:text> :</td>
                                         <td>Written</td>
                                     </tr>
                                     <tr>
-                                        <td class="labels">ministry:</td>
+                                        <td class="labels">
+                                            <i18n:text key="ministry">ministry(nt)</i18n:text>:</td>
                                         <td>
                                             <xsl:choose>
                                                 <xsl:when test="primary/bu:ontology/bu:document[@type='question']">
@@ -118,11 +132,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels">admission date:</td>
+                                        <td class="labels">
+                                            <i18n:text key="admit-date">admission date(nt)</i18n:text>:</td>
                                         <td>May 18, 2011</td>
                                     </tr>
                                     <tr>
-                                        <td class="labels">registry number:</td>
+                                        <td class="labels">
+                                            <i18n:text key="registry-no">registry number(nt)</i18n:text>:</td>
                                         <td>
                                             <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                                         </td>
@@ -135,7 +151,9 @@
                             <li>
                                 <div style="width:100%;">
                                     <span class="tgl" style="margin-right:10px">-</span>
-                                    <a href="#1">summary</a>
+                                    <a href="#1">
+                                        <i18n:text key="summary">summary(nt)</i18n:text>
+                                    </a>
                                 </div>
                                 <div class="doc-toggle open">
                                     <xsl:copy-of select="primary/bu:ontology/bu:ministry/bu:field[@name='description']"/>

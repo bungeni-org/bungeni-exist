@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -71,10 +71,18 @@
                             <xsl:when test="primary//bu:item_assignments">
                                 <table class="tbl-tgl">
                                     <tr>
-                                        <td class="fbtd">committee</td>
-                                        <td class="fbtd">start date</td>
-                                        <td class="fbtd">end date</td>
-                                        <td class="fbtd">due date</td>
+                                        <td class="fbtd lower-txt">
+                                            <i18n:text key="doc-committee">committee(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="date-start">start date(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="date-end">end date(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="date-due">due date(nt)</i18n:text>
+                                        </td>
                                     </tr>
                                     <xsl:for-each select="primary//bu:item_assignments">
                                         <xsl:sort select="bu:item_assignment/bu:startDate" order="descending"/>

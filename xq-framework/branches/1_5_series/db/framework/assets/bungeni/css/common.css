@@ -284,6 +284,9 @@ div#doc-downloads {
 .camel-txt {
     text-transform:capitalize;
 }
+.lower-txt {
+    text-transform:lowercase;
+}
 
 /* div blocks */
 .list-block {

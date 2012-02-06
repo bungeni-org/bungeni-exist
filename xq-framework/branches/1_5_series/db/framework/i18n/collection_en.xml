@@ -39,10 +39,21 @@
     <msg key="last-event">last event</msg>
     <msg key="date-on">on</msg>
     <msg key="submit-date">submission date</msg>
+    <msg key="admit-date">admission date</msg>
+    <msg key="date-start">start date</msg>
+    <msg key="date-end">end date</msg>
+    <msg key="date-due">due date</msg>
+    <msg key="registry-no">registry number</msg>
+    <msg key="summary">summary</msg>
     <msg key="ministry">ministry</msg>
     <msg key="gender">gender</msg>
     <msg key="dob">date of birth</msg>
     <msg key="status">status</msg>
+    <msg key="docid">Doc Id</msg>
+    <msg key="parliament">Parliament</msg>
+    <msg key="session-yr">Session Year</msg>
+    <msg key="session-no">Session Number</msg>
+    <msg key="resp-type">response type</msg>
     <msg key="listing-search">search text</msg>
     <msg key="sort-by">sort by</msg>
     <msg key="btn-search">search</msg>
@@ -51,7 +62,11 @@
     <msg key="doc-bill">Bill</msg>
     <msg key="doc-tableddocument">Tabled Document</msg>
     <msg key="doc-committee">Committee</msg>
-    <!-- TABS -->
+    <msg key="typeofdoc">type of</msg>
+    <msg key="versions">versions</msg>
+    <msg key="events">events</msg>
+    <msg key="attachedfiles">attached files</msg>
+    <!-- TABS - messages found on or within tabs -->
     <msg key="tab-profile">profile</msg>
     <msg key="tab-members">members</msg>
     <msg key="tab-contacts">contacts</msg>
@@ -63,7 +78,11 @@
     <msg key="tab-history">history</msg>
     <msg key="tab-details">details</msg>
     <msg key="tab-assigned">assigned groups</msg>
-    <msg key="tab-documents">documents</msg> 
+    <msg key="tab-documents">documents</msg>
+    <msg key="tab-type">type</msg>
+    <msg key="tab-desc">description</msg>
+    <msg key="tab-date">date</msg>
+    <msg key="tab-file-title">file title</msg>
     <!-- PAGINATION -->
     <msg key="page">Page</msg>
     <msg key="pageof">of</msg>

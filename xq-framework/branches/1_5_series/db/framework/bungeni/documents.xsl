@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -68,20 +68,30 @@
                 <div id="doc-main-section">
                     <div class="blocks" style="width:100%;margin: 0 auto;">
                         <div class="list-block">
-                            <b>Doc Id</b> : <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            <b>
+                                <i18n:text key="docid">Doc Id(nt)</i18n:text>
+                            </b> : <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                         </div>
                         <xsl:if test="$version ne 'true'">
                             <div id="block1" class="list-block">
                                 <div style="width:100%;">
                                     <span class="tgl" style="margin-right:10px">-</span>
-                                    <a href="#1">versions</a>
+                                    <a href="#1">
+                                        <i18n:text key="versions">versions(nt)</i18n:text>
+                                    </a>
                                 </div>
                                 <div class="doc-toggle opened">
                                     <table class="listing timeline tbl-tgl">
                                         <tr>
-                                            <th>status</th>
-                                            <th>description</th>
-                                            <th>date</th>
+                                            <th>
+                                                <i18n:text key="status">status(nt)</i18n:text>
+                                            </th>
+                                            <th>
+                                                <i18n:text key="tab-desc">description(nt)</i18n:text>
+                                            </th>
+                                            <th>
+                                                <i18n:text key="tab-date">date(nt)</i18n:text>
+                                            </th>
                                         </tr>
                                         <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version">
                                             <xsl:sort select="bu:statusDate" order="descending"/>
@@ -116,7 +126,9 @@
                             <div id="block2" class="list-block">
                                 <div style="width:100%;">
                                     <span class="tgl" style="margin-right:10px">-</span>
-                                    <a href="#1">Events</a>
+                                    <a href="#1">
+                                        <i18n:text key="events">events(nt)</i18n:text>
+                                    </a>
                                 </div>
                                 <div class="doc-toggle opened">
                                     <ul class="ls-row">
@@ -137,22 +149,30 @@
                         <div id="block3" class="list-block">
                             <div style="width:100%;">
                                 <span class="tgl" style="margin-right:10px">-</span>
-                                <a href="#1">attached files</a>
+                                <a href="#1">
+                                    <i18n:text key="attachedfiles">attached files(nt)</i18n:text>
+                                </a>
                             </div>
                             <div class="doc-toggle opened">
                                 <table class="listing timeline">
                                     <tr>
-                                        <th>file title</th>
-                                        <th>type</th>
-                                        <th>date</th>
+                                        <th>
+                                            <i18n:text key="tab-file-title">file title(nt)</i18n:text>
+                                        </th>
+                                        <th>
+                                            <i18n:text key="tab-type">type(nt)</i18n:text>
+                                        </th>
+                                        <th>
+                                            <i18n:text key="tab-date">date(nt)</i18n:text>
+                                        </th>
                                     </tr>
                                     <xsl:for-each select="primary/bu:ontology/bu:attached_files/bu:attached_file">
                                         <xsl:sort select="bu:statusDate" order="descending"/>
                                         <tr>
                                             <td>
-                                                <span>
+                                                <a href="../../bungeni-atts/{bu:field[@name='att_uuid']}">
                                                     <xsl:value-of select="bu:field[@name='file_title']"/>
-                                                </span>
+                                                </a>
                                             </td>
                                             <td>
                                                 <span>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -42,9 +42,15 @@
                     <div style="width:80%;">
                         <table class="listing timeline tbl-tgl">
                             <tr>
-                                <th>type</th>
-                                <th>description</th>
-                                <th>date</th>
+                                <th>
+                                    <i18n:text key="tab-type">type(nt)</i18n:text>
+                                </th>
+                                <th>
+                                    <i18n:text key="tab-desc">description(nt)</i18n:text>
+                                </th>
+                                <th>
+                                    <i18n:text key="tab-date">date(nt)</i18n:text>
+                                </th>
                             </tr>
                             <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
                                 <xsl:sort select="./bu:field[@name='date_active']" order="descending"/>

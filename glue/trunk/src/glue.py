@@ -157,10 +157,6 @@ class ParseBungeniXML:
         
         return self.__global_path__ + "attached_files"
         
-    def xpath_get_att_nodes(self):
-        
-        return self.__global_path__ + "attached_files/attached_file"
-        
     def xpath_get_attr_val(self,name):
 
         return self.__global_path__ + "field[@name]"  
@@ -478,7 +474,7 @@ class WebDavClient:
     def reset_remote_folder(self, put_folder):
         try:
             if self.sardine.exists(put_folder):
-                print bcolors.OKBLUE + "Deleting resource"  + put_folder + ": May take a while..." + bcolors.ENDC
+                print bcolors.OKBLUE + "Deleting resource "  + put_folder + ": May take a while..." + bcolors.ENDC
                 self.sardine.delete(put_folder)
                 self.sardine.createDirectory(put_folder)
             else:
@@ -486,6 +482,9 @@ class WebDavClient:
                 self.sardine.createDirectory(put_folder)
         except SardineException, e:
             print bcolors.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , bcolors.ENDC
+            sys.exit()
+        except HttpHostConnectException, e:
+            print bcolors.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , bcolors.ENDC
             sys.exit()
 
     def pushFile(self, onto_file):

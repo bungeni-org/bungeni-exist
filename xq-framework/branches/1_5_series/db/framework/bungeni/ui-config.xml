@@ -22,7 +22,6 @@
         <visiblePages>3</visiblePages>
     </listings>
     
-    
     <!-- APPLICATION ROUTING -->
     <!--
         Route Map
@@ -357,15 +356,66 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <!-- #AGENDA ITEMS -->
+        <route href="/agendaitems">
+            <title>Business | Agenda items </title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/text">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/text">
+            <title>Business | Agenda item Version Document</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/timeline">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/details">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/details">
+            <title>Business | Agenda item Version Details</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/assigned-groups">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/assigned-groups">
+            <title>Business | Agenda item Version Assigned-groups</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/documents">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/documents">
+            <title>Business | Agenda item Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/agendaitem/event">
+            <title>Business | Agenda item Event</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
         <route href="/committees">
             <title>Business | Committees </title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
-        </route>
-        <route href="/agendaitems">
-            <title>Business | Agenda Items </title>
-            <navigation>business</navigation>
-            <subnavigation>agendaitems</subnavigation>
         </route>
         <route href="/whatson">
             <title>Business | What's on </title>
@@ -726,7 +776,7 @@
             </tab>
         </tabs>
         <tabs name="tableddocument">
-            <tab path="motion/text" id="text">
+            <tab path="tableddocument/text" id="text">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
@@ -748,7 +798,41 @@
             </tab>
             <tab path="tableddocument/documents" id="attachments">
                 <title>
-                    <i18n:text key="tab-text">documents(nt)</i18n:text>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+            </tab>
+        </tabs>
+        <tabs name="agendaitem-ver">
+            <tab path="agendaitem/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+            </tab>
+        </tabs>
+        <tabs name="agendaitem">
+            <tab path="agendaitem/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/timeline" id="timeline">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/details" id="related">
+                <title>
+                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/assigned-groups" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
             </tab>
         </tabs>

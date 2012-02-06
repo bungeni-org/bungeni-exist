@@ -3,12 +3,16 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Nov 03, 2011</xd:p>
+                <xd:b>Created on:</xd:b> Feb 6, 2012</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Question item from Bungeni</xd:p>
+            <xd:p> Agenda item document item from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
+    <xsl:character-map name="uncode">
+        <xsl:output-character character="&lt;" string="&lt;"/>
+        <xsl:output-character character="&gt;" string="&gt;"/>
+    </xsl:character-map>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
@@ -23,7 +27,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <i18n:text key="doc-{$doc-type}">Motion(nt)</i18n:text>&#160;<xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                     
+                    <i18n:text key="doc-{$doc-type}">Agenda item(nt)</i18n:text>&#160;<xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>:&#160;                     
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
@@ -94,41 +98,18 @@
                         </div>
                     </xsl:if>
                     <h3 id="doc-heading" class="doc-headers">
+                        <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS -->
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
-                        <i18n:text key="doc-{$doc-type}">Motion(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
-                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:itemNumber"/>
-                    </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
                         <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
                             <a href="member?uri={primary/bu:ontology/bu:legislativeItem/bu:owner/@href}">
                                 <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
                         </i>
-                    </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
-                        <i18n:text key="sponsors">sponsors(nt)</i18n:text>: ( 
-                        <xsl:choose>
-                            <!-- check whether we have signatories or not -->
-                            <xsl:when test="primary/bu:ontology/bu:signatories/bu:signatory">
-                                <xsl:for-each select="primary/bu:ontology/bu:signatories/bu:signatory">
-                                    <i>
-                                        <a href="member?uri={@href}">
-                                            <xsl:value-of select="@showAs"/>
-                                        </a>
-                                    </i>
-                                    <xsl:if test="position() &lt; last()">,</xsl:if>
-                                </xsl:for-each>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <i18n:text key="none">None(nt)</i18n:text>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        )
                     </h4>
                     <xsl:variable name="render-doc" select="if ($version eq 'true') then                         primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]                          else                         primary/bu:ontology/bu:legislativeItem                         "/>
                     <div class="doc-status">
@@ -154,7 +135,7 @@
                                     <xsl:copy-of select="fringe"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:copy-of select="$render-doc/bu:body"/>
+                                    <xsl:copy-of select="$render-doc/bu:body/node()"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </div>

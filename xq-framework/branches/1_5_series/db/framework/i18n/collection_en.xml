@@ -61,6 +61,7 @@
     <msg key="doc-motion">Motion</msg>
     <msg key="doc-bill">Bill</msg>
     <msg key="doc-tableddocument">Tabled Document</msg>
+    <msg key="doc-agendaitem">Agenda Item</msg>
     <msg key="doc-committee">Committee</msg>
     <msg key="typeofdoc">type of</msg>
     <msg key="versions">versions</msg>

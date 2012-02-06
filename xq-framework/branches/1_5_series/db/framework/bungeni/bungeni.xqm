@@ -374,6 +374,15 @@ declare function bun:get-tableddocuments(
   bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
+declare function bun:get-agendaitems(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+  bun:get-documentitems($acl, "agendaitem", "agendaitem/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+};
+
 declare function bun:search-criteria(
         $acl as xs:string, 
         $offset as xs:integer, 

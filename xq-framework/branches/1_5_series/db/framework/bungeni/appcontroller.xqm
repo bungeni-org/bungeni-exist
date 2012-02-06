@@ -161,7 +161,17 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $EXIST-CONTROLLER, 
                     $EXIST-RESOURCE, 
                     $REL-PATH
-                    )                    
+                    ) 
+                    
+    	else if ($EXIST-PATH eq "/agendaitems")
+    		 then 
+                 rou:get-agendaitems(
+                    $EXIST-PATH, 
+                    $EXIST-ROOT, 
+                    $EXIST-CONTROLLER, 
+                    $EXIST-RESOURCE, 
+                    $REL-PATH
+                    )                     
     				
         (:~ ITEMS SEARCH :)     
  	    else if ($EXIST-PATH eq "/search-all")
@@ -241,17 +251,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									                   $type))))
     									     )
     								    )
-    								    
-    	else if ($EXIST-PATH eq "/agendaitems")
-    		 then 
-               template:process-tmpl(
-                $REL-PATH, 
-                $EXIST-PATH, 
-                $config:DEFAULT-TEMPLATE, 
-                cmn:get-route($EXIST-PATH),
-                (),
-                cmn:build-nav-tmpl($EXIST-PATH, "agendaitems.xml")
-               ) 
                
 
         (:~
@@ -277,6 +276,11 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let
                     $act-entries-tmpl :=  bun:get-atom-feed("public-view", "tableddocument","user")
                     return $act-entries-tmpl  
+    	else if ($EXIST-PATH eq "/agendaitems/rss")
+    		 then 
+                let
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "agendaitem","user")
+                    return $act-entries-tmpl                    
             
         (: PDF FO GENERATORS :)
     	else if ($EXIST-PATH eq "/bill/pdf")   
@@ -307,6 +311,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                             $EXIST-CONTROLLER, 
                             $EXIST-RESOURCE, 
                             $REL-PATH)  
+    	else if ($EXIST-PATH eq "/agendaitem/pdf")   
+    		 then 
+                rou:get-pdf($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)                             
     	else if ($EXIST-PATH eq "/member/pdf")   
     		 then 
                 let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -341,7 +352,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                             $EXIST-ROOT, 
                             $EXIST-CONTROLLER, 
                             $EXIST-RESOURCE, 
-                            $REL-PATH) 		        
+                            $REL-PATH)
+    	else if ($EXIST-PATH eq "/agendaitem/xml")   
+    		 then 
+                rou:get-xml($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)                             
 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
@@ -1293,7 +1311,184 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)       									 
+    									)  
+        (: AGENDA ITEMS :)
+    	else if ($EXIST-PATH eq "/agendaitem/text" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"agendaitem.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("agendaitem.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)
+    	else if ($EXIST-PATH eq "/agendaitem/version/text" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-doc-ver("public-view", $docnumber,"agendaitem.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("agendaitem.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									) 									
+    									
+    	else if ($EXIST-PATH eq "/agendaitem/timeline" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)
+    									
+    	else if ($EXIST-PATH eq "/agendaitem/details" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"details.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)
+    	else if ($EXIST-PATH eq "/agendaitem/version/details" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-doc-ver("public-view", $docnumber,"details.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("details.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)    									
+    									
+    	else if ($EXIST-PATH eq "/agendaitem/assigned-groups" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view", $docnumber,"assigned-groups.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("assigned-groups.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)
+    									
+    	else if ($EXIST-PATH eq "/agendaitem/documents" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view", $docnumber,"documents.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 )
+    									 
+    	else if ($EXIST-PATH eq "/agendaitem/version" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-doc-ver("public-view", $docnumber,"version.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("version.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 ) 
+    	else if ($EXIST-PATH eq "/agendaitem/event" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
+                    $act-entries-tmpl :=  bun:get-doc-event($docnumber,"event.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)         
         (:~ MEMBER INFORMATION :)
     
     	else if ($EXIST-PATH eq "/member" )

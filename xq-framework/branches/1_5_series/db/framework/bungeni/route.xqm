@@ -166,8 +166,25 @@ declare function rou:get-tableddocuments(
                              )
 };
 
-
-
+declare function rou:get-agendaitems(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+                    rou:listing-documentitem(
+                             $EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "agendaitems.xml",
+                             "agendaitem",
+                             "agendaitem/text",
+                             "legislativeitem-listing.xsl"
+                             )
+};
 
 declare function rou:get-pdf($EXIST-PATH as xs:string, 
                              $EXIST-ROOT as xs:string, 

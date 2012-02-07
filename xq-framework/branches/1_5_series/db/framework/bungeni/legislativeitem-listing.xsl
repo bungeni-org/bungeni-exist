@@ -13,10 +13,7 @@
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
             <xd:p>
-                
-                Lists legis-items from Bungeni
-
-                    
+                Lists legis-items from Bungeni 
             </xd:p>
         </xd:desc>
     </xd:doc>
@@ -49,6 +46,7 @@
 
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
     <xsl:param name="sortby"/>
+    <xsl:param name="listing-tab"/>
 
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -67,23 +65,26 @@
                     <i18n:text key="list-t-{$label}">legis-items(nt)</i18n:text>
                 </h1>
             </div>
+            <!-- Renders listings tabs -->
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
-                    <li class="active">
-                        <a href="#">
-                            <i18n:text key="uc">under consideration(nt)</i18n:text>
-                            <xsl:text>&#160;(</xsl:text>
-                            <xsl:value-of select="paginator/count"/>
-                            <xsl:text>)</xsl:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i18n:text key="archive">archived(nt)</i18n:text>
-                        </a>
-                    </li>
+                    <xsl:for-each select="/docs/paginator/tags/tag">
+                        <li>
+                            <xsl:if test="@id eq $listing-tab">
+                                <xsl:attribute name="class">active</xsl:attribute>
+                            </xsl:if>
+                            <a href="?tab={@id}">
+                                <i18n:translate>
+                                    <i18n:text key="{@id}">Text to translate with ({1})</i18n:text>
+                                    <i18n:param>
+                                        <xsl:value-of select="@count"/>
+                                    </i18n:param>
+                                </i18n:translate>
+                            </a>
+                        </li>
+                    </xsl:for-each>
                 </ul>
-            </div>
+            </div>            
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
                 <xsl:with-param name="render-group">listings</xsl:with-param>

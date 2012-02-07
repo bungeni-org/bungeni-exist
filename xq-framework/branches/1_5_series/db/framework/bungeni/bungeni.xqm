@@ -144,6 +144,21 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/ancestor::bu:ontology")
 };
 
+declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $type as xs:string, $tag as xs:string) {
+    let $acl-filter := cmn:get-acl-permission-as-attr($acl),
+        $list-tabs :=  cmn:get-listings-config($type)[@id eq $tag]/text()
+    
+  return  
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@type='document']",
+                "/bu:bungeni[",$list-tabs,"]",
+                "/preceding-sibling::bu:document[@type='",$type,"']",
+                "/following-sibling::bu:legislativeItem",
+                "/(bu:permissions except bu:versions)",
+                "/bu:permission[",$acl-filter,"]",
+                "/ancestor::bu:ontology")
+};
+
 declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
   return  
@@ -223,6 +238,12 @@ declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:
         (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
 };
 
+declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, $type as xs:string, $tag as xs:string) {
+    let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tag)
+    return
+        util:eval($eval-query)
+};
+
 (:~
 :   Returns all documents requested and applying the appropriate sort order
 : @param acl
@@ -254,7 +275,10 @@ declare function bun:get-documentitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll := bun:list-documentitems-with-acl($acl, $type)
+    let $tab := xs:string(request:get-parameter("tab",'uc'))    
+    let $coll := bun:list-documentitems-with-acl-n-tabs($acl, $type, $tab)
+    let $listings-filter := cmn:get-listings-config($type)
+    let $getqrystr := xs:string(request:get-query-string())    
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -266,14 +290,25 @@ declare function bun:get-documentitems(
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        (: Count the total number of documents :)
+        (: Count the total number of documents | current count if the view is tabbed :)
         <count>{
-            count(
-                $coll
-              )
+            if($tab) then (
+                count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tab)))
+            )
+            else (
+                count($coll)
+            )
          }</count>
+        <tags>
+        {
+            for $listing in $listings-filter
+                return 
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
+         }
+         </tags>         
         <documentType>{$type}</documentType>
         <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+        <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
         <i18nlabel>{$type}</i18nlabel>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
@@ -306,12 +341,12 @@ declare function bun:get-documentitems(
                     bun:get-reference($match)         
                 )                 
             else  (
-                for $match in subsequence($coll,$query-offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit) 
+                (:where $coll/bu:bungeni/bu:tags[contains(bu:tag,'terminal')]:)
                 order by $match/bu:legislativeItem/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
                 )
-                (:ft:score($m):)
         } 
         </alisting>
     </docs>
@@ -322,6 +357,7 @@ declare function bun:get-documentitems(
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
+                <param name="listing-tab" value="{xs:string(request:get-parameter('tab','uc'))}" />
             </parameters>
            ) 
        

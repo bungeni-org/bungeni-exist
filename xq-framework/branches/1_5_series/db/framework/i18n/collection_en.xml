@@ -30,10 +30,10 @@
     <msg key="list-t-pubs">Publications</msg>
     <msg key="list-t-members">Members of Parliament</msg>
     <msg key="list-t-pts">Political-groups</msg>
-    <msg key="uc">under consideration</msg>
+    <msg key="uc">under consideration ({1})</msg>
     <msg key="list-tab-cur">current</msg>
     <msg key="list-tab-gaz">gazette</msg>
-    <msg key="archive">archived</msg>
+    <msg key="archive">archived ({1})</msg>
     <msg key="pri-sponsor">primary sponsor</msg>
     <msg key="sponsors">sponsors</msg>
     <msg key="last-event">last event</msg>

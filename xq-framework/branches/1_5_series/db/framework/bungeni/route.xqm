@@ -69,6 +69,7 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                              $stylesheet as xs:string) {
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
+                    $tab := xs:string(request:get-parameter("tab",'uc')),
                     $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),

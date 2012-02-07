@@ -181,8 +181,15 @@ declare function cmn:get-searchins-config($doctype as xs:string)  {
         ()
 };
 
-
-
+declare function cmn:get-listings-config($doctype as xs:string)  {
+    let $dc-config := cmn:get-doctype-config($doctype)
+    return 
+    if ($dc-config) then (
+       $dc-config/listingfilters/listingfilter
+       )
+    else
+        ()
+};
 
 declare function cmn:get-listings-config() {
     cmn:get-ui-config()/ui/listings

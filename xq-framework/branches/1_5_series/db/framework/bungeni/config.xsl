@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -45,6 +45,16 @@
             <xsl:with-param name="tab-name" select="$tab-group"/>
         </xsl:call-template>
     </xsl:function>
+    
+    <!-- XSLT Function to get tags for a specific tab-tags node from ui-config.xml 
+        This can be used in a XSL for-each loop to iterate through a set of tab-tags
+    -->
+    <xsl:function name="xqcfg:get_tag">
+        <xsl:param name="tag-tabs"/>
+        <xsl:call-template name="get_tag">
+            <xsl:with-param name="tag-name" select="$tag-tabs"/>
+        </xsl:call-template>
+    </xsl:function>    
     
     <!-- XSLT Function to get download / view formats options for the document type or listings from ui-config.xml 
         This can be used in a XSL for-each loop to iterate through a set of tabs
@@ -93,6 +103,14 @@
         <xsl:param name="tab-name"/>
         <xsl:sequence select="document($ui-config)/ui/tabgroups/tabs[@name=$tab-name]"/>
     </xsl:template>
+    
+    <!--
+        Accessor Template used by get_tag function to listings-tab information from configuration
+    -->
+    <xsl:template name="get_tag">
+        <xsl:param name="tag-name"/>
+        <xsl:sequence select="document($ui-config)/ui/tab-tags/tab[@name=$tag-name]"/>
+    </xsl:template>    
     
     <!-- 
         Accessor used to get download formats and types

@@ -30,10 +30,10 @@
     <msg key="list-t-pubs">Machapisho</msg>
     <msg key="list-t-members">Wabunge</msg>
     <msg key="list-t-pts">Makundi-ya-kisiasa</msg>
-    <msg key="uc">kwenye mashauri</msg>
+    <msg key="uc">kwenye mashauri ({1})</msg>
     <msg key="list-tab-cur">sasa</msg>
     <msg key="list-tab-gaz">kwenye jarida</msg>
-    <msg key="archive">nyaraka</msg>
+    <msg key="archive">nyaraka ({1})</msg>
     <msg key="pri-sponsor">mdhamini mkuu</msg>
     <msg key="sponsors">wadhamini</msg>
     <msg key="last-event">tukio la mwisho</msg>

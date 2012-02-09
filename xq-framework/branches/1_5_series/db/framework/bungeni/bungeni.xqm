@@ -290,14 +290,12 @@ declare function bun:get-documentitems(
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        (: Count the total number of documents | current count if the view is tabbed :)
+        (: Count the total number of documents | active-tab count if the view is tabbed :)
         <count>{
-            if($tab) then (
+            if($tab) then 
                 count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tab)))
-            )
-            else (
+            else
                 count($coll)
-            )
          }</count>
         <tags>
         {
@@ -357,7 +355,7 @@ declare function bun:get-documentitems(
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
-                <param name="listing-tab" value="{xs:string(request:get-parameter('tab','uc'))}" />
+                <param name="listing-tab" value="{$tab}" />
             </parameters>
            ) 
        
@@ -1442,7 +1440,8 @@ Get document with ACL filter
 !+ACL_NEW_API - this is the new ACL API for retrieving documents
 :)
 declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string) {
-    let $acl-permissions := cmn:get-acl-permissions($acl)
+    let $acl-permissions := cmn:get-acl-permissions($acl),
+        $tab-context := functx:substring-after-last(request:get-effective-uri(), '/')
     
     (: WARNING-- because of odd behavior in eXist 1.5 branch we have to wrap the return value of the 
     eval in a document {} object otherwise things dont work. Search in the exist mailing list for 'xpath resolution
@@ -1457,8 +1456,15 @@ declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string)
                                                               @role=$acl-permissions/@role and 
                                                               @setting=$acl-permissions/@setting]/ancestor::bu:ontology
     :)
+    
     (: WARNING -- we pass the node() of the document since the API expects a node, so we send the root node :)
-    return bun:documentitem-versions-with-acl($acl-permissions, $match/node())
+    return 
+        if($tab-context eq 'timeline') then
+            bun:documentitem-changes-with-acl($acl-permissions,$match/node())
+        else if($tab-context eq 'documents') then 
+            bun:documentitem-versions-with-acl($acl-permissions, $match/node())
+        else
+            $match
     
 };
 
@@ -1494,6 +1500,56 @@ declare function bun:documentitem-versions-with-acl($acl-permissions as node(), 
 							   else $child
 				 }
 };
+(:~ 
+    Similar to Versions... removes timeline changes that don't fit the permissions given.
+:)
+declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $docitem as node() ) {
+  if ($docitem/self::bu:change) then
+        if ($docitem/bu:permissions/bu:permission[
+                @name=data($acl-permissions/@name) and 
+                @role=data($acl-permissions/@role) and 
+                @setting=data($acl-permissions/@setting)
+                ]) then
+            $docitem
+        else
+            ()
+  else 
+    (:~
+     return the default 
+     :)
+  		element { node-name($docitem)}
+		  		 {$docitem/@*, 
+					for $child in $docitem/node()
+						return if ($child instance of element())
+							   then bun:documentitem-changes-with-acl($acl-permissions, $child)
+							   else $child
+				 }
+};
+(:~ 
+    Similar to Versions... removes attached_files that don't fit the permissions given.
+:)
+declare function bun:documentitem-attachments-with-acl($acl-permissions as node(), $docitem as node() ) {
+  if ($docitem/self::bu:attached_file) then
+        if ($docitem/bu:permissions/bu:permission[
+                @name=data($acl-permissions/@name) and 
+                @role=data($acl-permissions/@role) and 
+                @setting=data($acl-permissions/@setting)
+                ]) then
+            $docitem
+        else
+            ()
+  else 
+    (:~
+     return the default 
+     :)
+  		element { node-name($docitem)}
+		  		 {$docitem/@*, 
+					for $child in $docitem/node()
+						return if ($child instance of element())
+							   then bun:documentitem-attachments-with-acl($acl-permissions, $child)
+							   else $child
+				 }
+};
 
 
 (:~
@@ -1502,9 +1558,12 @@ declare function bun:documentitem-versions-with-acl($acl-permissions as node(), 
 : @param acl
 : @param docid
 : @param _tmpl
+: @param tab
 :   The corresponding transform template passed by the calling funcction
 :)
-declare function bun:get-parl-doc($acl as xs:string, $doc-uri as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-parl-doc($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $_tmpl as xs:string) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 

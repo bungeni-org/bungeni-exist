@@ -596,7 +596,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
+                    $act-entries-tmpl := bun:get-parl-doc("public-view",$docnumber,"changes.xsl"),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("changes.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -1653,7 +1653,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")
        else if ($EXIST-PATH eq "/testing/blue/color") 
               then
-                <xml>{request:get-uri()}</xml>
+                <xml>{request:get-effective-uri()}</xml>
               (:cmn:get-tabgroups("question"):)
                (:
                 <xml>

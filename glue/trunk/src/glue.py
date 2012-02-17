@@ -9,7 +9,7 @@
         -upload XML documents + attachments to eXist database
 """
 
-import os, os.path, sys, errno, getopt, array, shutil, uuid
+import os.path, sys, errno, getopt, shutil, uuid
 import ConfigParser, jarray
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
@@ -25,12 +25,12 @@ from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
 from java.io import File,FileWriter
 from java.io import FileInputStream
-from java.io import FileOutputStream
+#from java.io import FileOutputStream
 from java.util import HashMap
 from net.lingala.zip4j.core import ZipFile
 from net.lingala.zip4j.exception import ZipException
-from com.googlecode.sardine import Sardine
-from com.googlecode.sardine import DavResource
+#from com.googlecode.sardine import Sardine
+#from com.googlecode.sardine import DavResource
 from com.googlecode.sardine.impl import SardineException
 from org.apache.http.conn import HttpHostConnectException
 from com.googlecode.sardine import SardineFactory
@@ -39,7 +39,7 @@ from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
 from org.bungeni.translators.utility.files import FileUtility
 
-from org.apache.log4j import * 
+from org.apache.log4j import PropertyConfigurator,Logger
 glogger = Logger.getLogger("glue")
 
 class Config:
@@ -235,7 +235,6 @@ class GenericDirWalker(object):
         walk a folder and recursively walk through sub-folders
         for every file in the folder call the processing function
         """
-        import fnmatch
         folder = os.path.abspath(folder)
         for a_file in [
           a_file for a_file in os.listdir(folder) if not a_file in [".",".."]
@@ -275,7 +274,6 @@ class GenericDirWalkerATTS(GenericDirWalker):
     """
     
     def fn_callback(self, nfile):
-        import fnmatch
         glogger.debug("in GenericDirWalker ATTS callback" + nfile)
         if nfile:
             self.counter = self.counter + 1
@@ -361,7 +359,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
                     # move file to attachments folder and use derived uuid as new name for the file
                     shutil.move(current_dir + "/" + original_name, self.atts_folder + new_name)
                     # add new node on document with uuid
-                    att_name = node.addElement("field").addText(new_name).addAttribute("name","att_uuid")
+                    node.addElement("field").addText(new_name).addAttribute("name","att_uuid")
                     document_updated = True
             if document_updated:
                 inputdoc.write_to_disk()
@@ -375,7 +373,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
             bunparse = ParseBungeniXML(input_file_path)
             # now we process the attachment
             glogger.debug("Calling attachment_seek_rename for " + input_file_path )
-            the_parl_doc = self.attachments_seek_rename(bunparse)
+            self.attachments_seek_rename(bunparse)
         return (False,None)
 
 class ProcessXmlFilesWalker(GenericDirWalkerXML):
@@ -585,7 +583,7 @@ def webdav_upload(cfg, wd_cfg):
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_bungeni_xml_folder())    
-     # upload xmls at this juncture
+    # upload xmls at this juncture
     pdxw = ProcessedXmlFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pdxw.walk(cfg.get_ontoxml_output_folder())
     print bcolors.OKGREEN, "Commencing ATTACHMENT files upload to eXist via WebDav...", bcolors.ENDC
@@ -624,7 +622,7 @@ def main(config_file):
 
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
-        from org.apache.log4j import PropertyConfigurator
+        #from org.apache.log4j import PropertyConfigurator
         PropertyConfigurator.configure("./src/log4j.properties");
         main(sys.argv[1])
     else:

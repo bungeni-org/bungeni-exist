@@ -25,12 +25,9 @@ from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
 from java.io import File,FileWriter
 from java.io import FileInputStream
-#from java.io import FileOutputStream
 from java.util import HashMap
 from net.lingala.zip4j.core import ZipFile
 from net.lingala.zip4j.exception import ZipException
-#from com.googlecode.sardine import Sardine
-#from com.googlecode.sardine import DavResource
 from com.googlecode.sardine.impl import SardineException
 from org.apache.http.conn import HttpHostConnectException
 from com.googlecode.sardine import SardineFactory
@@ -42,13 +39,14 @@ from org.bungeni.translators.utility.files import FileUtility
 from org.apache.log4j import PropertyConfigurator,Logger
 glogger = Logger.getLogger("glue")
 
-class Config:
+class Config(object):
     """
     Provides access to the configuration file via ConfigParser
     """
     
     def __init__(self, config_file):
         self.cfg = ConfigParser.RawConfigParser()
+        print "Reading config file : " , os.path.abspath(config_file)
         self.cfg.read(config_file)
     
     def get(self, section, key):
@@ -88,7 +86,7 @@ class TransformerConfig(Config):
         return self.dict_pipes
 
 
-class Transformer:
+class Transformer(object):
     """
     Access the Transformer via this class
     """
@@ -131,7 +129,7 @@ class Transformer:
         FileUtility.getInstance().copyFile(fisMlx, outMlx)
 
 
-class ParseBungeniXML:
+class ParseBungeniXML(object):
     """
     Parses XML output from Bungeni using Xerces
     """
@@ -198,7 +196,7 @@ class ParseBungeniXML:
         writer.close()
 
 
-class bcolors:
+class _COLOR(object):
     """
     Color definitions used for color-coding significant runtime events 
     or raised exceptions as applied on python print() function
@@ -296,7 +294,7 @@ class GenericDirWalkerUNZIP(GenericDirWalker):
             unzipper = ZipFile(zip_file)
             #Extracts all files to the path specified
             unzipper.extractAll(os.path.splitext(zip_file)[0])
-            print bcolors.WARNING + "Extracted zip file... " + zip_file+bcolors.ENDC
+            print _COLOR.WARNING + "Extracted zip file... " + zip_file+_COLOR.ENDC
         except ZipException, e:
             glogger.error("Error while processing zip "+ zip_file + e)
 
@@ -398,7 +396,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                          pipe_path
                          )
                 else:
-                    print bcolors.WARNING, "No pipeline defined for content type %s " % pipe_type, bcolors.ENDC
+                    print _COLOR.WARNING, "No pipeline defined for content type %s " % pipe_type, _COLOR.ENDC
                 return (False, None)
             else:
                 print "Ignoring %s" % input_file_path
@@ -461,7 +459,7 @@ class WebDavConfig(Config):
     def get_password(self):
         return self.get("webdav", "password")
 
-class WebDavClient:
+class WebDavClient(object):
     """        
     Connects to eXist via WebDav and finally places the files to rest.
     """
@@ -472,17 +470,17 @@ class WebDavClient:
     def reset_remote_folder(self, put_folder):
         try:
             if self.sardine.exists(put_folder):
-                print bcolors.OKBLUE + "Deleting resource "  + put_folder + ": May take a while..." + bcolors.ENDC
+                print _COLOR.OKBLUE + "Deleting resource "  + put_folder + ": May take a while..." + _COLOR.ENDC
                 self.sardine.delete(put_folder)
                 self.sardine.createDirectory(put_folder)
             else:
-                print bcolors.WARNING + "INFO: " + put_folder + " folder wasn't there !" + bcolors.ENDC            
+                print _COLOR.WARNING + "INFO: " + put_folder + " folder wasn't there !" + _COLOR.ENDC            
                 self.sardine.createDirectory(put_folder)
         except SardineException, e:
-            print bcolors.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , bcolors.ENDC
+            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , _COLOR.ENDC
             sys.exit()
         except HttpHostConnectException, e:
-            print bcolors.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , bcolors.ENDC
+            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
             sys.exit()
 
     def pushFile(self, onto_file):
@@ -504,10 +502,10 @@ class WebDavClient:
             self.sardine.put(self.put_folder+os.path.basename(onto_file), bytes)
             print "PUT: "+self.put_folder+os.path.basename(onto_file)
         except SardineException, e:
-            print bcolors.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , bcolors.ENDC
+            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , _COLOR.ENDC
             sys.exit()
         except HttpHostConnectException, e:
-            print bcolors.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , bcolors.ENDC
+            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
             sys.exit()
 
 def __empty_output_dir__(folder):
@@ -550,7 +548,7 @@ def get_parl_info(cfg):
     piw = ParliamentInfoWalker()
     piw.walk(cfg.get_input_folder())
     if piw.object_info is None:
-        print bcolors.FAIL,"ERROR: Could not find Parliament info :(", bcolors.ENDC
+        print _COLOR.FAIL,"ERROR: Could not find Parliament info :(", _COLOR.ENDC
         return sys.exit()
     else:
         return piw.object_info
@@ -565,20 +563,20 @@ def do_bind_attachments(cfg):
     sba = SeekBindAttachmentsWalker({"main_config":cfg})
     sba.walk(cfg.get_input_folder())
     if sba.object_info is not None:
-        print bcolors.OKBLUE,"ATT: Found attachment ", bcolors.ENDC
+        print _COLOR.OKBLUE,"ATT: Found attachment ", _COLOR.ENDC
     else:
         return sba.object_info
 
 def do_transform(cfg, parl_info):
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
-    print bcolors.OKGREEN, "Commencing transformations...", bcolors.ENDC
+    print _COLOR.OKGREEN, "Commencing transformations...", _COLOR.ENDC
     pxf = ProcessXmlFilesWalker([cfg,transformer])
     pxf.walk(cfg.get_input_folder())
-    print bcolors.OKGREEN, "Completed transformations !", bcolors.ENDC
+    print _COLOR.OKGREEN, "Completed transformations !", _COLOR.ENDC
     
 def webdav_upload(cfg, wd_cfg):
-    print bcolors.OKGREEN, "Commencing XML files upload to eXist via WebDav...", bcolors.ENDC
+    print _COLOR.OKGREEN, "Commencing XML files upload to eXist via WebDav...", _COLOR.ENDC
     """ uploading xml documents """
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
@@ -586,44 +584,80 @@ def webdav_upload(cfg, wd_cfg):
     # upload xmls at this juncture
     pdxw = ProcessedXmlFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pdxw.walk(cfg.get_ontoxml_output_folder())
-    print bcolors.OKGREEN, "Commencing ATTACHMENT files upload to eXist via WebDav...", bcolors.ENDC
+    print _COLOR.OKGREEN, "Commencing ATTACHMENT files upload to eXist via WebDav...", _COLOR.ENDC
     """ now uploading found attachments """
     # first reset attachments folder
     webdaver.reset_remote_folder(wd_cfg.get_bungeni_atts_folder())
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pafw.walk(cfg.get_attachments_output_folder())
-    print bcolors.OKGREEN + "Completed uploads to eXist !" + bcolors.ENDC
+    print _COLOR.OKGREEN + "Completed uploads to eXist !" + _COLOR.ENDC
 
-def main(config_file):
+
+def main_transform(config_file):
+    """
+    process the -transform option by running the transformation
+    """
+    cfg = TransformerConfig(config_file)
+    # create the output folders
+    __setup_output_dirs__(cfg)
+    print _COLOR.HEADER + "Retrieving parliament information..." + _COLOR.ENDC
+    # look for the parliament document - and get the info which is used in the
+    # following transformations
+    parl_info = get_parl_info(cfg)
+    print _COLOR.OKGREEN,"Retrieved Parliament info...", parl_info, _COLOR.ENDC
+    print _COLOR.OKGREEN + "Seeking attachments..." + _COLOR.ENDC
+    do_bind_attachments(cfg)
+    print _COLOR.OKGREEN + "Done with attachments..." + _COLOR.ENDC
+    print _COLOR.HEADER + "Transforming ...." + _COLOR.ENDC      
+    do_transform(cfg, parl_info)
+
+def main_upload(config_file):
+    """
+    process the --upload option by calling the webdav upload
+    """
+    wd_cfg = WebDavConfig(config_file)
+    webdav_upload(TransformerConfig(config_file), wd_cfg)
+
+def main(options):
     # parse command line options if any
     try:
-        # get the configuraiton info for the transformer
-        cfg = TransformerConfig(config_file)
-        # get the configuration info for webdav upload
-        wd_cfg = WebDavConfig(config_file)
-        # create the output folders
-        __setup_output_dirs__(cfg)
-        print bcolors.HEADER + "Retrieving parliament information..." + bcolors.ENDC
-        # look for the parliament document - and get the info which is used in the
-        # following transformations
-        parl_info = get_parl_info(cfg)
-        print bcolors.OKGREEN,"Retrieved Parliament info...", parl_info, bcolors.ENDC
-        print bcolors.OKGREEN + "Seeking attachments..." + bcolors.ENDC
-        do_bind_attachments(cfg)
-        print bcolors.OKGREEN + "Done with attachments..." + bcolors.ENDC
-        print bcolors.HEADER + "Transforming ...." + bcolors.ENDC      
-        do_transform(cfg, parl_info)
-        webdav_upload(cfg, wd_cfg)
+        # first get the configuration file from the command line
+        config_file = __parse_options(options, ("-c", "--config"))
+        # transform and upload are independent options and can be called individually
+        if config_file is not None and len(str(config_file)) > 0 :
+            transform = __parse_options(options, ("-t", "--transform"))
+            if transform is not None:
+                main_transform(config_file)
+            upload = __parse_options(options, ("-u", "--upload"))
+            if upload is not None:
+                main_upload(config_file)
+            else:
+                print "upload not specified"
+        else:
+            print _COLOR.FAIL," config.ini specified incorrectly !",_COLOR.ENDC
     except getopt.error, msg:
         print msg
-        print bcolors.FAIL + "There was an exception during startup !" + bcolors.ENDC
+        print _COLOR.FAIL + "There was an exception during startup !" + _COLOR.ENDC
         sys.exit(2)
+
+def __parse_options(options, look_for=()):
+    input_arg = None
+    for opt,arg in options:
+        if opt in look_for:
+            input_arg = arg
+    return input_arg
 
 if __name__ == "__main__":
     if (len(sys.argv) > 1):
         #from org.apache.log4j import PropertyConfigurator
-        PropertyConfigurator.configure("./src/log4j.properties");
-        main(sys.argv[1])
+        PropertyConfigurator.configure("./src/log4j.properties")
+        # process input command line options
+        options, remainder = getopt.getopt(sys.argv[1:], 
+          "c:tu",
+          ["config=", "transform","upload"]
+        )
+        # call main
+        main(options)
     else:
-        print bcolors.FAIL + "config.ini file must be an input parameter" + bcolors.ENDC
+        print _COLOR.FAIL , " config.ini file must be an input parameter " , _COLOR.ENDC

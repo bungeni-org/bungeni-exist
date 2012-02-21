@@ -103,7 +103,7 @@ declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) a
      let $main-nav := cmn:get-menu("mainnav")
      let $sub-nav := cmn:get-menu-from-route($exist-path)
      let $crumb := <crumb>
-                        <div id="crumbs" xmlns="http://www.w3.org/1999/xhtml">
+                        <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">
                         {local:build-breadcrumbs($exist-path)}
                         </div>
                     </crumb>

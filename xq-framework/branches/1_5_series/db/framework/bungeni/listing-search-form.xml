@@ -8,7 +8,7 @@
         <dl id="sb_box" class="dropdown">
             <dt>
                 <input id="search_for" name="q" class="search_for" type="text" value=""/>
-                <a class="inline" href="#"/>
+                <a class="inline" href="#" onclick="javascript:return false;"/>
             </dt>
             <dd>
                 <ul id="filter_by" class="sb_dropdown">

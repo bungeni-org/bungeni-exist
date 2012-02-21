@@ -305,12 +305,12 @@ ul.ls-doc-tabs li.selected {
 }
 
 /* BREADCRUMBS */
-#crumbs {
+#portal-breadcrumbs {
     height: 19px;
     margin: 0 auto;
     width:960px;
 }
-#crumbs ul {
+#portal-breadcrumbs ul {
     margin:0;
     padding:0;
     padding-left:0;
@@ -318,7 +318,7 @@ ul.ls-doc-tabs li.selected {
     padding-right: 7px;
     width:auto;
 }
-#crumbs ul, #crumbs li {
+#portal-breadcrumbs ul, #portal-breadcrumbs li {
     float: left;
     height: 19px;
     font-size: 11px;
@@ -326,27 +326,27 @@ ul.ls-doc-tabs li.selected {
     color: white;
     background-color:#eee;
 }
-#crumbs li a.first {
+#portal-breadcrumbs li a.first {
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0.90, #8e8e8e), color-stop(1.0, #989898));
     padding-left: 12px;
     border-bottom-left-radius: 8px;
     -moz-border-radius-bottomleft: 8px;
     -webkit-border-bottom-left-radius: 8px;    
 }
-#crumbs li a.last {
+#portal-breadcrumbs li a.last {
     background: #f79f0e url(../images/breadcrumbs.png) no-repeat left -1px;
     color:#fff !important;
 }
-#crumbs li a:link, #crumbs li a:visited {
+#portal-breadcrumbs li a:link, #portal-breadcrumbs li a:visited {
     color: white;
     text-decoration: none;
 }
-#crumbs li a {
+#portal-breadcrumbs li a {
     background: #8E8E8E url(../images/breadcrumbs.png) no-repeat left -60px;
     display: block;
     padding: 3px 10px 3px 19px;
 }
-#crumbs li a:hover {
+#portal-breadcrumbs li a:hover {
     text-decoration:underline;
 }
 

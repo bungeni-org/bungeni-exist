@@ -1279,6 +1279,91 @@ declare function bun:get-committees(
 };
 
 (:~
+:   Retieves all group documents of type sittings
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return 
+:   A listing of documents of group type sittings
+:)
+declare function bun:get-sittings(
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string
+        ) as element() {
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt("sittings.xsl")    
+    
+    (: 
+        The line below is documented in bun:get-documentitems()
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset    
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of groups :)
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'])}</count>
+        <documentType>groupsitting</documentType>
+        <listingUrlPrefix>sittings/profile</listingUrlPrefix>        
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>        
+        </paginator>
+        <alisting>
+        {
+            if ($sortby = 'start_dt_oldest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
+                return 
+                    <document>{$match}</document>  
+                )
+                
+            else if ($sortby eq 'start_dt_newest') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
+                return 
+                    <document>{$match}</document>     
+                )
+            else if ($sortby = 'fN_asc') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
+                return 
+                    <document>{$match}</document>      
+                )    
+            else if ($sortby = 'fN_desc') then (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
+                return 
+                    <document>{$match}</document>        
+                )                 
+            else  (
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    <document>{$match}</document>
+                   
+                )
+
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+            </parameters>
+           ) 
+       
+};
+
+(:~
 :   Retieves all group documents of type politicalgroups
 : @param offset
 : @param limit

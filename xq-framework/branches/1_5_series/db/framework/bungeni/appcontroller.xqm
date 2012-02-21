@@ -1620,14 +1620,24 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                )	    
     	else if ($EXIST-PATH eq "/sittings")
     		 then 
-               template:process-tmpl(
-                $REL-PATH, 
-                $EXIST-PATH, 
-                $config:DEFAULT-TEMPLATE, 
-                cmn:get-route($EXIST-PATH),
-                (),
-                cmn:build-nav-tmpl($EXIST-PATH, "sittings.xml")
-               )  	
+                let 
+                    $qry := xs:string(request:get-parameter("q",'')),
+                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $act-entries-tmpl :=  bun:get-sittings($offset,$limit,$qry,$sty),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("sittings.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    								        $REL-PATH, 
+    								        $EXIST-PATH, 
+    								        $config:DEFAULT-TEMPLATE,
+    								        cmn:get-route($EXIST-PATH),
+    								        (),
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'whatson')))))
+    								    ) 	
     	else if ($EXIST-PATH eq "/publications")
     		 then 
                template:process-tmpl(

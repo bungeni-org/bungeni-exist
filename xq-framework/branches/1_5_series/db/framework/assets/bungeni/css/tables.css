@@ -18,7 +18,7 @@ table.listings tr td.norm-cell {
 }
 .doc-status span {
     font-size:15px !important;
-    padding-left:5px;
+    padding-right:5px;
 }
 table.doc-tbl-details {
     width:695px;

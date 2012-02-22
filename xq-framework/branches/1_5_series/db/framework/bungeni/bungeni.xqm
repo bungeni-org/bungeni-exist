@@ -1344,7 +1344,7 @@ declare function bun:get-sittings(
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <document>{$match}</document>
+                    local:get-sitting-items($match)
                    
                 )
 
@@ -1361,6 +1361,52 @@ declare function bun:get-sittings(
             </parameters>
            ) 
        
+};
+
+(:~
+:   Retieves all group documents of type sittings
+: @param acl
+: @param doc-uri
+: @param _tmpl
+: @return 
+:   A listing of documents of group type sittings
+:)
+declare function bun:get-sitting($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $_tmpl as xs:string) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($_tmpl) 
+
+    let $doc := 
+            (:Returs a Sittings Document :)
+            let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
+                                            "bu:ontology[@type='groupsitting']/",
+                                            "bu:groupsitting[@uri eq '",$doc-uri,"']/",
+                                            "following-sibling::bu:bungeni/",
+                                            bun:xqy-docitem-perms($acl)))
+            
+            return
+                local:get-sitting-items($match/ancestor::bu:ontology)   
+    return
+        transform:transform($doc, $stylesheet, ())
+ };
+
+declare function local:get-sitting-items($sittingdoc as node()) {
+    <document>
+        <sitting> 
+        {
+            $sittingdoc
+        }
+        </sitting>
+        <sitting_items>
+            {
+                for $eachitem in $sittingdoc/bu:groupsitting/bu:item_schedule/bu:item_schedule
+                return 
+                    collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem/bu:legislativeItemId[text() eq $eachitem/bu:itemId/text()]/ancestor::bu:ontology
+            }
+        </sitting_items>
+    </document>     
 };
 
 (:~

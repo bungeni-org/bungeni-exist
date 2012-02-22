@@ -422,8 +422,14 @@
             <navigation>business</navigation>
             <subnavigation>whatson</subnavigation>
         </route>
+        <!-- #SITTINGS -->
         <route href="/sittings">
             <title>Business | Sittings </title>
+            <navigation>business</navigation>
+            <subnavigation>sittings</subnavigation>
+        </route>
+        <route href="/sitting">
+            <title>Business | Sitting Session</title>
             <navigation>business</navigation>
             <subnavigation>sittings</subnavigation>
         </route>

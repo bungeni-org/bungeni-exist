@@ -9,7 +9,7 @@
     <resource type="XMLResource" name="agendaitems.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="agendaitems.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="appcontroller.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-02-06T17:49:35+03:00" filename="appcontroller.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="appcontroller.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-02-22T14:52:31+03:00" filename="appcontroller.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="assigned-groups.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="assigned-groups.xml" mimetype="application/xml">
@@ -24,13 +24,13 @@
     <resource type="XMLResource" name="bill.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="bill.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="bill.xsl" owner="admin" group="dba" mode="644" created="2012-02-01T17:54:47+03:00" modified="2012-02-01T17:54:47+03:00" filename="bill.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="bill.xsl" owner="admin" group="dba" mode="644" created="2012-02-15T14:33:10+03:00" modified="2012-02-15T14:33:10+03:00" filename="bill.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="bills.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="bills.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-02-06T17:16:31+03:00" filename="bungeni.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="bungeni.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-02-22T15:42:07+03:00" filename="bungeni.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="business.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="business.xml" mimetype="application/xml">
@@ -66,10 +66,10 @@
     <resource type="XMLResource" name="committees.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="committees.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="committees.xsl" owner="admin" group="dba" mode="644" created="2012-01-31T18:12:24+03:00" modified="2012-01-31T18:12:24+03:00" filename="committees.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="committees.xsl" owner="admin" group="dba" mode="644" created="2012-02-14T17:17:42+03:00" modified="2012-02-14T17:17:42+03:00" filename="committees.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="config.xsl" owner="admin" group="dba" mode="644" created="2012-01-27T18:24:32+03:00" modified="2012-01-27T18:24:32+03:00" filename="config.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="config.xsl" owner="admin" group="dba" mode="644" created="2012-02-07T11:58:43+03:00" modified="2012-02-07T11:58:43+03:00" filename="config.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="contacts.xsl" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="contacts.xsl" mimetype="application/xslt+xml">
@@ -78,13 +78,13 @@
     <resource type="XMLResource" name="context_downloads.xsl" owner="admin" group="dba" mode="644" created="2012-01-31T17:20:55+03:00" modified="2012-01-31T17:20:55+03:00" filename="context_downloads.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="context_tabs.xsl" owner="admin" group="dba" mode="644" created="2012-01-30T10:43:50+03:00" modified="2012-01-30T10:43:50+03:00" filename="context_tabs.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="context_tabs.xsl" owner="admin" group="dba" mode="644" created="2012-02-07T15:32:08+03:00" modified="2012-02-07T15:32:08+03:00" filename="context_tabs.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="details.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="details.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="details.xsl" owner="admin" group="dba" mode="644" created="2012-02-06T11:50:35+03:00" modified="2012-02-06T11:50:35+03:00" filename="details.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="details.xsl" owner="admin" group="dba" mode="644" created="2012-02-09T12:17:49+03:00" modified="2012-02-09T12:17:49+03:00" filename="details.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="documents.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="documents.xml" mimetype="application/xml">
@@ -111,13 +111,13 @@
     <resource type="XMLResource" name="index.xml" owner="admin" group="dba" mode="644" created="2012-01-20T16:28:30+03:00" modified="2012-01-20T16:28:30+03:00" filename="index.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="legislativeitem-listing.xsl" owner="admin" group="dba" mode="644" created="2012-01-31T18:10:13+03:00" modified="2012-01-31T18:10:13+03:00" filename="legislativeitem-listing.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="legislativeitem-listing.xsl" owner="admin" group="dba" mode="644" created="2012-02-07T18:40:37+03:00" modified="2012-02-07T18:40:37+03:00" filename="legislativeitem-listing.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="listing-search-form.xml" owner="admin" group="dba" mode="644" created="2012-01-31T16:54:07+03:00" modified="2012-01-31T16:54:07+03:00" filename="listing-search-form.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="listing-search-form.xml" owner="admin" group="dba" mode="644" created="2012-02-15T13:41:40+03:00" modified="2012-02-15T13:41:40+03:00" filename="listing-search-form.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="member-info.fo" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="member-info.fo" mimetype="application/xml">
+    <resource type="XMLResource" name="member-info.fo" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="member-info.fo" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="member.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="member.xml" mimetype="application/xml">
@@ -129,7 +129,7 @@
     <resource type="XMLResource" name="members.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="members.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="members.xsl" owner="admin" group="dba" mode="644" created="2012-01-31T18:16:53+03:00" modified="2012-01-31T18:16:53+03:00" filename="members.xsl" mimetype="application/xslt+xml">
+    <resource type="XMLResource" name="members.xsl" owner="admin" group="biblio.users" mode="644" created="2012-02-14T16:39:52+03:00" modified="2012-02-14T16:39:52+03:00" filename="members.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="menu.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="menu.xml" mimetype="application/xml">
@@ -192,13 +192,22 @@
     <resource type="XMLResource" name="questions.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="questions.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="route.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-02-06T17:19:34+03:00" filename="route.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="route.xqm" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-02-07T10:41:59+03:00" filename="route.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="search-listing.xsl" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="search-listing.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
+    <resource type="XMLResource" name="sitting.xml" owner="admin" group="dba" mode="644" created="2012-02-22T14:38:02+03:00" modified="2012-02-22T14:38:02+03:00" filename="sitting.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="sitting.xsl" owner="admin" group="dba" mode="644" created="2012-02-22T18:03:21+03:00" modified="2012-02-22T18:03:21+03:00" filename="sitting.xsl" mimetype="application/xslt+xml">
+        <acl entries="0" version="1"/>
+    </resource>
     <resource type="XMLResource" name="sittings.xml" owner="admin" group="dba" mode="644" created="2012-01-31T16:44:03+03:00" modified="2012-01-31T16:44:03+03:00" filename="sittings.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="XMLResource" name="sittings.xsl" owner="admin" group="dba" mode="644" created="2012-02-22T14:35:56+03:00" modified="2012-02-22T14:35:56+03:00" filename="sittings.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="tableddocument.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="tableddocument.xml" mimetype="application/xml">
@@ -207,7 +216,7 @@
     <resource type="XMLResource" name="tableddocument.xsl" owner="admin" group="dba" mode="644" created="2012-02-01T17:59:13+03:00" modified="2012-02-01T17:59:13+03:00" filename="tableddocument.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="tableddocuments.xml" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="tableddocuments.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="tableddocuments.xml" owner="admin" group="biblio.users" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="tableddocuments.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="td-listing.xsl" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="td-listing.xsl" mimetype="application/xslt+xml">
@@ -222,7 +231,7 @@
     <resource type="XMLResource" name="test.xsl" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="test.xsl" mimetype="application/xslt+xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="ui-config.xml" owner="admin" group="dba" mode="644" created="2012-02-06T17:41:46+03:00" modified="2012-02-06T17:41:46+03:00" filename="ui-config.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="ui-config.xml" owner="admin" group="dba" mode="644" created="2012-02-22T14:44:10+03:00" modified="2012-02-22T14:44:10+03:00" filename="ui-config.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="updater.xql" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:16+03:00" modified="2012-01-13T17:17:16+03:00" filename="updater.xql" mimetype="application/xquery">

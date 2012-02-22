@@ -63,6 +63,7 @@
     <msg key="doc-tableddocument">Documento depositato</msg>
     <msg key="doc-agendaitem">Punto all'ordine del giorno</msg>
     <msg key="doc-committee">Comitato</msg>
+    <msg key="doc-groupsitting">Seduta</msg>
     <msg key="typeofdoc">tipo di</msg>
     <msg key="versions">versione</msg>
     <msg key="events">eventi</msg>

@@ -6,31 +6,34 @@
     <resource type="BinaryResource" name="boilerplate.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="boilerplate.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="bungeni-ws.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="bungeni-ws.css" mimetype="text/css">
+    <resource type="BinaryResource" name="bungeni-ws.css" owner="admin" group="dba" mode="644" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="bungeni-ws.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="bungeni.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="bungeni.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="common.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-12-09T12:14:10+03:00" filename="common.css" mimetype="text/css">
+    <resource type="BinaryResource" name="common.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2012-02-21T15:42:54+03:00" filename="common.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="forms.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="forms.css" mimetype="text/css">
+    <resource type="BinaryResource" name="forms.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2012-02-15T13:44:42+03:00" filename="forms.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="lists.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-12-13T13:17:50+03:00" filename="lists.css" mimetype="text/css">
+    <resource type="BinaryResource" name="fullcalendar.css" owner="admin" group="dba" mode="755" created="2012-02-22T17:54:43+03:00" modified="2012-02-22T18:41:41+03:00" filename="fullcalendar.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="main.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="main.css" mimetype="text/css">
+    <resource type="BinaryResource" name="lists.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2012-02-17T10:41:34+03:00" filename="lists.css" mimetype="text/css">
+        <acl entries="0" version="1"/>
+    </resource>
+    <resource type="BinaryResource" name="main.css" owner="admin" group="dba" mode="644" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="main.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="member.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="member.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="tables.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-12-09T11:54:50+03:00" filename="tables.css" mimetype="text/css">
+    <resource type="BinaryResource" name="tables.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2012-02-15T14:34:59+03:00" filename="tables.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="workspace.css" owner="admin" group="dba" mode="644" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="workspace.css" mimetype="text/css">
+    <resource type="BinaryResource" name="workspace.css" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:09+03:00" modified="2011-11-23T10:48:09+03:00" filename="workspace.css" mimetype="text/css">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="xforms.css" owner="admin" group="dba" mode="755" created="2011-12-13T11:56:51+03:00" modified="2011-12-13T16:49:28+03:00" filename="xforms.css" mimetype="text/css">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -10,16 +10,20 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
-    <xsl:include href="context_downloads.xsl"/>    
+    <xsl:include href="context_downloads.xsl"/> 
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
     <xsl:param name="serverport"/>
     <xsl:template match="document">
         <xsl:variable name="server_port" select="serverport"/>
         <xsl:variable name="doc-type" select="sitting/bu:ontology/@type"/>
-        <xsl:variable name="doc_uri" select="sitting/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="doc_uri" select="sitting/bu:ontology/bu:groupsitting/@uri"/>
         <xsl:variable name="mover_uri" select="sitting/bu:ontology/bu:legislativeItem/bu:owner/@href"/>
+        <xsl:variable name="j-obj" select="json"/>
         <div id="main-wrapper">
+            <div id="uri" style="display:none;">
+                <xsl:value-of select="$doc_uri"/>
+            </div>
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
                     <i18n:text key="doc-{$doc-type}">Sitting(nt)</i18n:text>:&#160;                  

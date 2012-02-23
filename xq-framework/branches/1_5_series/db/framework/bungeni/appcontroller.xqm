@@ -1508,7 +1508,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									 )    									
+    									 )  
+    	else if ($EXIST-PATH eq "/get-sitting.xql" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-sitting-json("public-view",$docnumber)
+                    return $act-entries-tmpl
+                    
         (:~ MEMBER INFORMATION :)
     
     	else if ($EXIST-PATH eq "/member" )

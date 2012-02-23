@@ -10,6 +10,7 @@ import module namespace functx = "http://www.functx.com" at "../functx.xqm";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
 declare namespace xslfo="http://exist-db.org/xquery/xslfo";
+import module namespace json="http://www.json.org";
 
 
 declare namespace util="http://exist-db.org/xquery/util";
@@ -1391,6 +1392,41 @@ declare function bun:get-sitting($acl as xs:string,
     return
         transform:transform($doc, $stylesheet, ())
  };
+ 
+declare function bun:strip-namespace($e as node()) {
+  element {QName((), local-name($e))} {
+    for $child in $e/(@*,*)
+    return
+      if ($child instance of element())
+      then bun:strip-namespace($child)
+      else $child
+  }
+};
+
+declare function bun:get-sitting-json($acl as xs:string, 
+            $doc-uri as xs:string) as element()* {
+    util:declare-option("exist:serialize", "method=json media-type=text/javascript"),
+
+    let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
+                                            "bu:ontology[@type='groupsitting']/",
+                                            "bu:groupsitting[@uri eq '",$doc-uri,"']/",
+                                            "following-sibling::bu:bungeni/",
+                                            bun:xqy-docitem-perms($acl))),
+        $json_ready := functx:remove-elements-deep($match/ancestor::bu:ontology,('bu:bungeni', 'bu:permissions'))
+    
+     return
+         $json_ready
+};
+ 
+declare function bun:strip-namespace($e as node()) {
+  element {QName((), local-name($e))} {
+    for $child in $e/(@*,*)
+    return
+      if ($child instance of element())
+      then bun:strip-namespace($child)
+      else $child
+  }
+};
 
 declare function local:get-sitting-items($sittingdoc as node()) {
     <document>
@@ -1927,8 +1963,8 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
     let $doc := <docs> 
         <paginator>
         (: Count the total number of members :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'])}</count>
-        <documentType>userdata</documentType>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='membership'])}</count>
+        <documentType>membership</documentType>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
@@ -1937,22 +1973,34 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
         {
             if ($sortby = 'ln') then (
             
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)                
-                order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='last_name'] descending
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)                
+                order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
-                    bun:get-reference($match/ancestor::bu:ontology)       
+                    <document>
+                    {
+                        $match      
+                    }
+                    </document>
                 )
             else if ($sortby = 'fn') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='first_name'] descending
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
-                    bun:get-reference($match/ancestor::bu:ontology)         
+                    <document>
+                    {
+                        $match      
+                    }
+                    </document>         
                 )                
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='userdata']/bu:metadata[@type='user'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:user/bu:field[@name='last_name'] descending
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)
+                order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
-                    bun:get-reference($match/ancestor::bu:ontology)         
+                    <document>
+                    {
+                        $match      
+                    }
+                    </document>        
                 )
 
         } 
@@ -1970,7 +2018,7 @@ declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as 
     let $stylesheet := cmn:get-xslt($_tmpl) 
 
     (: return AN Member document as singleton :)
-    let $doc := collection(cmn:get-lex-db())//bu:ontology//bu:user[@uri=$memberid]/ancestor::bu:ontology
+    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
     
     return
         transform:transform($doc, $stylesheet, ())
@@ -1985,7 +2033,7 @@ declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:st
     let $doc := <activities>
     <member>
     {
-        collection(cmn:get-lex-db())/bu:ontology//bu:user[@uri=$memberid]/ancestor::bu:ontology
+        collection(cmn:get-lex-db())/bu:ontology//bu:membership[@uri=$memberid]/ancestor::bu:ontology
     }
     </member>
     {

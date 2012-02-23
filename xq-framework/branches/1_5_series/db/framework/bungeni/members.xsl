@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -91,15 +91,15 @@
     <xsl:template match="alisting">
         <ul id="list-toggle" class="ls-row" style="clear:both">
             <xsl:apply-templates mode="renderui">
-                <xsl:sort select="bu:ontology/bu:user/bu:firstName" order="ascending"/>
+                <xsl:sort select="bu:ontology/bu:membership/bu:firstName" order="ascending"/>
             </xsl:apply-templates>
         </ul>
     </xsl:template>
-    <xsl:template match="output" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:user/@uri"/>
+    <xsl:template match="document" mode="renderui">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:user/bu:titles,'. ',bu:ontology/bu:user/bu:firstName,' ', bu:ontology/bu:user/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
             <div style="display:inline-block;">/ Constitutency / Party</div>
             <span>-</span>
@@ -115,21 +115,21 @@
                         <td class="labels">
                             <i18n:text key="gender">gender(nt)</i18n:text>:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:user/bu:gender"/>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:gender"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">
                             <i18n:text key="dob">date of birth(nt)</i18n:text>:</td>
                         <td>
-                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:user/bu:dateOfBirth),$date-format,'en',(),())"/>
+                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">
                             <i18n:text key="status">status(nt)</i18n:text>:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:user/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:bungeni/bu:status"/>
                         </td>
                     </tr>
                 </table>

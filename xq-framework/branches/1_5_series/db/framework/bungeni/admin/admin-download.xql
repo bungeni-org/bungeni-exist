@@ -32,10 +32,10 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         "master" model used by the subform
         -->
         <xf:model id="master">
-            <xf:instance xmlns="" id="ui-config" src="../test-ui-config.xml" />
+            <xf:instance xmlns="" id="ui-config" src="../ui-config.xml" />
             <xf:submission id="save-form" 
                 replace="none" 
-                resource="../test-ui-config.xml" 
+                resource="../ui-config.xml" 
                 method="put">
              </xf:submission>
         </xf:model>

@@ -1,4 +1,5 @@
 module namespace adm = "http://exist.bungeni.org/adm";
+declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
 
 (:~
 :  Renders the admin's main menu
@@ -9,12 +10,12 @@ module namespace adm = "http://exist.bungeni.org/adm";
 :   a HTML node()
 :)
 declare function adm:main-menu($active as xs:string) {
-    <ul id="adm-main-menu">
-        <li><a href="admin-nav.xql" title="Navigation Preferences">Navigation</a></li>
-        <li><a href="admin-route.xql" title="Route Configurations">Routes</a></li>
-        <li><a href="admin-order.xql" title="Order Configurations">Order</a></li>
-        <li><a href="admin-search.xql" title="Search Configurations">Search</a></li>
-        <li><a href="admin-tabgroup.xql" title="Tab Groups Configurations">Tabgroups</a></li>
-        <li><a href="admin-download.xql" title="Download-options Configurations">Downloads</a></li>
-    </ul>              
+    <xhtml:ul id="adm-main-menu">
+        <xhtml:li><xhtml:a href="admin-nav.xql" title="Navigation Preferences">Navigation</xhtml:a></xhtml:li>
+        <xhtml:li><xhtml:a href="admin-route.xql" title="Route Configurations">Routes</xhtml:a></xhtml:li>
+        <xhtml:li><xhtml:a href="admin-order.xql" title="Order Configurations">Order</xhtml:a></xhtml:li>
+        <xhtml:li><xhtml:a href="admin-search.xql" title="Search Configurations">Search</xhtml:a></xhtml:li>
+        <xhtml:li><xhtml:a href="admin-tabgroup.xql" title="Tab Groups Configurations">Tabgroups</xhtml:a></xhtml:li>
+        <xhtml:li><xhtml:a href="admin-download.xql" title="Download-options Configurations">Downloads</xhtml:a></xhtml:li>
+    </xhtml:ul>              
 };

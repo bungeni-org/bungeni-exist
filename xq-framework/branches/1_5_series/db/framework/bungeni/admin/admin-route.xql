@@ -33,11 +33,11 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             
             <xf:instance xmlns="" 
                 id="ui-config" 
-                src="../test-ui-config.xml" />
+                src="../ui-config.xml" />
                 
              <xf:submission id="save-form" 
                 replace="none" 
-                resource="../test-ui-config.xml" 
+                resource="../ui-config.xml" 
                 method="put">
              </xf:submission>
    

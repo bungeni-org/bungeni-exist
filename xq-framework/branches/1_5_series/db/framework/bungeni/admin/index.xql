@@ -1,13 +1,16 @@
 xquery version "1.0";
 
 import module namespace adm = "http://exist.bungeni.org/adm" at "admin.xqm";
+declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
 
 (:
 Order Editor container XForm
 :)
+
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace bu="http://portal.bungeni.org/1.0/";
+
 declare option exist:serialize "method=xhtml media-type=text/html indent=no";
 
 <html xmlns="http://www.w3.org/1999/xhtml" 
@@ -31,23 +34,13 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     <div class="section">{adm:main-menu('search')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         
-        <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
-            <!-- 
-                unload the subform, we may have to call this explicitly
-                on switching rows in the repeater -->
-            <xf:action ev:event="unload-subforms">
-                <xf:load show="none" targetid="orderby"/>
-            </xf:action>
-            
             <div class="headline">Admin Section</div>
             <div class="description desc-center">
                 <p>
-                    <![CDATA[ (: Welcome to administrator panel for Bungeni eXist portal :) ]]>
+                    Welcome to administrator panel for Bungeni XML Repository portal 
                 </p>
             </div>
 
-        </xf:group>
-        
     </div>
  </div>
 </body>

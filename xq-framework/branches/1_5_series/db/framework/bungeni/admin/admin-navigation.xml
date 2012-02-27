@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="content">
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="content">
     <div id="main-wrapper">
         <h1>Navigation Preferences</h1>
         <xf:model id="m-user-config">
@@ -13,7 +13,7 @@
             <!--
             <xf:instance xmlns="" id="uconfig" src="bungeni/test-ui-config.xml"/>
             -->
-            <xf:instance xmlns="" id="uconfig" src="bungeni/test-ui-config.xml"/>
+            <xf:instance xmlns="" id="uconfig" src="bungeni/ui-config.xml"/>
             <!--
             <xf:instance id="requests">
                 <request xmlns="">
@@ -23,7 +23,7 @@
                     <remote-ip>{request:get-remote-addr()}</remote-ip>
                 </request>                                      
                 </xf:instance>-->
-            <xf:submission id="s-send" replace="none" resource="../bungeni/test-ui-config.xml" method="put">
+            <xf:submission id="s-send" replace="none" resource="../bungeni/ui-config.xml" method="put">
                 <xf:action ev:event="xforms-submit-error">
                     <xf:message>Config Update failed. Please fill in valid values</xf:message>
                 </xf:action>

@@ -26,9 +26,9 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         
         <div style="display:none">
         <xf:model id="m-user-config">
-            <xf:instance xmlns="" id="uconfig" src="../test-ui-config.xml"/>
+            <xf:instance xmlns="" id="uconfig" src="../ui-config.xml"/>
             
-            <xf:submission id="s-send" replace="none" resource="../test-ui-config.xml" method="put">
+            <xf:submission id="s-send" replace="none" resource="../ui-config.xml" method="put">
                 <xf:action ev:event="xforms-submit-error">
                     <xf:message level="ephemeral">Navigation Preferences Update failed. Please fill in valid values</xf:message>
                 </xf:action>

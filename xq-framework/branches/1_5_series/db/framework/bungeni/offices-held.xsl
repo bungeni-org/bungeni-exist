@@ -12,12 +12,12 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:metadata/@type"/>
-        <xsl:variable name="doc_uri" select="bu:user/@uri"/>
+        <xsl:variable name="doc-type" select="@type"/>
+        <xsl:variable name="doc_uri" select="bu:membership/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:user/bu:firstName,' ', bu:user/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -69,7 +69,7 @@
                                 <tr>
                                     <td class="labels fbt">name:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', .//bu:user/bu:field[@name='last_name'])"/>
+                                        <xsl:value-of select="concat(bu:membership/bu:titles,'. ',bu:membership/bu:firstName,' ', .//bu:membership/bu:lastName)"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -107,7 +107,7 @@
                                 <tr>
                                     <td class="labels fbottom">notes:</td>
                                     <td class="fbt">
-                                        <xsl:copy-of select="bu:user/bu:description"/>
+                                        <xsl:copy-of select="bu:membership/bu:description"/>
                                     </td>
                                 </tr>
                             </table>

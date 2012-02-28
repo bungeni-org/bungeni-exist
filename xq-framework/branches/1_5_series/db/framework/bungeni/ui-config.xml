@@ -842,7 +842,7 @@
                 </title>
             </tab>
         </tabs>
-        <tabs name="user">
+        <tabs name="membership">
             <tab path="member" id="member">
                 <title>
                     <i18n:text key="tab-member">member(nt)</i18n:text>
@@ -893,7 +893,7 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype name="userdata">
+        <doctype name="membership">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>

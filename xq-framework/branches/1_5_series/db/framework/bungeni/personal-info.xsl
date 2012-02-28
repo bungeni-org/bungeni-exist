@@ -12,12 +12,12 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:metadata/@type"/>
-        <xsl:variable name="doc_uri" select="bu:user/@uri"/>
+        <xsl:variable name="doc-type" select="@type"/>
+        <xsl:variable name="doc_uri" select="bu:membership/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:user/bu:firstName,' ', bu:user/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -59,11 +59,11 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h2 id="doc-item-desc2" class="doc-headers-darkgrey">
-                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', bu:user/bu:field[@name='last_name'])"/>
+                        <xsl:value-of select="concat(bu:membership/bu:titles,'. ',bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
                     </h2>
                     <div class="mem-profile">
                         <div class="mem-top-right" style="padding:10px 40px;">
-                            <xsl:copy-of select="bu:user/bu:description"/>
+                            <xsl:copy-of select="bu:membership/bu:description"/>
                         </div>
                     </div>
                 </div>

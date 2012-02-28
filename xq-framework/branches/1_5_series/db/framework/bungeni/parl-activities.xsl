@@ -12,12 +12,12 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="activities">
-        <xsl:variable name="doc-type" select="member/bu:ontology/bu:metadata/@type"/>
-        <xsl:variable name="doc_uri" select="member/bu:ontology/bu:user/@uri"/>
+        <xsl:variable name="doc-type" select="member/bu:ontology/@type"/>
+        <xsl:variable name="doc_uri" select="member/bu:ontology/bu:membership/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(member/bu:ontology/bu:user/bu:firstName,' ', member/bu:ontology/bu:user/bu:lastName)"/>
+                    <xsl:value-of select="concat(member/bu:ontology/bu:membership/bu:firstName,' ', member/bu:ontology/bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">

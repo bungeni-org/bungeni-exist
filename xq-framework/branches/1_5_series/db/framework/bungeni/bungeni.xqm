@@ -1355,7 +1355,7 @@ declare function bun:get-sittings(
     (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
     the correct sort combo in the transformed output. See corresponding comment in XSLT :)
     return
-        transform:transform($doc, 
+        transform:transform($doc,
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
@@ -1403,19 +1403,22 @@ declare function bun:strip-namespace($e as node()) {
   }
 };
 
-declare function bun:get-sitting-json($acl as xs:string, 
-            $doc-uri as xs:string) as element()* {
+declare function bun:get-sittings-json($acl as xs:string) as element()* {
     util:declare-option("exist:serialize", "method=json media-type=text/javascript"),
 
     let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
                                             "bu:ontology[@type='groupsitting']/",
-                                            "bu:groupsitting[@uri eq '",$doc-uri,"']/",
-                                            "following-sibling::bu:bungeni/",
-                                            bun:xqy-docitem-perms($acl))),
-        $json_ready := functx:remove-elements-deep($match/ancestor::bu:ontology,('bu:bungeni', 'bu:permissions'))
+                                            "bu:bungeni/",
+                                            bun:xqy-docitem-perms($acl),"/",
+                                            "ancestor::bu:ontology")),
+        $json_ready := functx:remove-elements-deep($match,('bu:bungeni', 'bu:permissions'))
     
      return
+        <sittings>
+        {
          $json_ready
+        }
+        </sittings>
 };
  
 declare function bun:strip-namespace($e as node()) {

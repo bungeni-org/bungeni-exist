@@ -13,7 +13,7 @@
     <msg key="motions">misukumo</msg>
     <msg key="tableddocuments">hati ziliziopendekezwa</msg>
     <msg key="agendaitems">pointi za ajenda</msg>
-    <msg key="sittings">vikao</msg>
+    <msg key="sittings">kalenda</msg>
     <msg key="publications">machapisho</msg>
     <msg key="current">sasa</msg>
     <msg key="politicalgroups">makundi ya kisiasa</msg>
@@ -64,6 +64,10 @@
     <msg key="doc-agendaitem">Kipengele cha Ajenda</msg>
     <msg key="doc-committee">Kamati</msg>
     <msg key="doc-groupsitting">Kikao</msg>
+    <msg key="doc-calendar">Kalenda ya Vikao</msg>
+    <msg key="sitting-activity">Aina ya Shughuli</msg>
+    <msg key="sitting-convocation">Aina ya Kusanyiko</msg>
+    <msg key="sitting-venue">Ukumbi</msg>
     <msg key="typeofdoc">aina ya</msg>
     <msg key="versions">insha</msg>
     <msg key="events">matukio</msg>

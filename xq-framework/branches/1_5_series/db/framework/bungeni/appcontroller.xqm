@@ -1509,11 +1509,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  
-    	else if ($EXIST-PATH eq "/get-sitting.xql" )
+    	else if ($EXIST-PATH eq "/get-sittings-json" )
     		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting-json("public-view",$docnumber)
+                let $act-entries-tmpl :=  bun:get-sittings-json("public-view")
                     return $act-entries-tmpl
                     
         (:~ MEMBER INFORMATION :)
@@ -1623,38 +1621,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  "Do nothing now",
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("whatson.xml")/xh:div, <div/>)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,$act-entries-repl))
-    								    )        
-        else if ($EXIST-PATH eq "/politicalgroups")
-    		 then 
-               template:process-tmpl(
-                $REL-PATH, 
-                $EXIST-PATH, 
-                $config:DEFAULT-TEMPLATE, 
-                cmn:get-route($EXIST-PATH),(),
-                cmn:build-nav-tmpl($EXIST-PATH, "politicalgroups.xml")
-               )	    
-    	else if ($EXIST-PATH eq "/sittings")
-    		 then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $act-entries-tmpl :=  bun:get-sittings($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("sittings.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("whatson.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -1664,7 +1633,35 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        cmn:get-route($EXIST-PATH),
     								        (),
     								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'whatson')))))
-    								    ) 	
+    								    ) 	       
+        else if ($EXIST-PATH eq "/politicalgroups")
+    		 then 
+               template:process-tmpl(
+                $REL-PATH, 
+                $EXIST-PATH, 
+                $config:DEFAULT-TEMPLATE, 
+                cmn:get-route($EXIST-PATH),(),
+                cmn:build-nav-tmpl($EXIST-PATH, "politicalgroups.xml")
+               )	    
+    	else if ($EXIST-PATH eq "/calendar")
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"calendar.xsl"),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("calendar.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 ) 	
     	else if ($EXIST-PATH eq "/publications")
     		 then 
                template:process-tmpl(

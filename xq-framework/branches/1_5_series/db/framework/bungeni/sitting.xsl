@@ -46,13 +46,54 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="sitting/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="sitting/bu:ontology/bu:legislature/bu:shortName"/>
                     </h4>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+                        <i18n:text key="sitting-activity">sitting activity(nt)</i18n:text>: <i>
+                            <xsl:value-of select="sitting/bu:ontology/bu:groupsitting/bu:activityType"/>
+                        </i>
+                    </h4>
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+                        <i18n:text key="sitting-convocation">sitting convocation(nt)</i18n:text>: <i>
+                            <xsl:value-of select="sitting/bu:ontology/bu:groupsitting/bu:convocationType"/>
+                        </i>
+                    </h4>
+                    <div class="doc-status">
+                        <span>
+                            <b class="camel-txt">
+                                <i18n:text key="sitting-venue">Venue(nt)</i18n:text>:</b>
+                        </span>
+                        <span>
+                            <xsl:value-of select="sitting/bu:ontology/bu:groupsitting/bu:venue/bu:shortName"/>
+                        </span>
+                        <span>
+                            <b class="camel-txt">
+                                <i18n:text key="date-on">Type(nt)</i18n:text>:</b>
+                        </span>
+                        <span>
+                            <xsl:value-of select="format-dateTime(sitting/bu:ontology/bu:groupsitting/bu:startDate,$datetime-format,'en',(),())"/>
+                        </span>
+                    </div>
                     <div id="doc-content-area">
-                        <div>
-                            <xsl:copy-of select="sitting/bu:ontology/bu:legislativeItem/bu:body"/>
-                            <div id="calendar" style="width:700px;margin:0 auto !important;"/>
-                        </div>
+                        <table class="doc-tbl-details">
+                            <xsl:for-each select="sitting_items/bu:ontology">
+                                <xsl:variable name="subDocIdentifier" select="bu:legislativeItem/@uri"/>
+                                <tr>
+                                    <td>
+                                        <xsl:choose>
+                                            <xsl:when test="bu:document/@type eq 'heading'">
+                                                <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <a href="{bu:document/@type}/text?uri={$subDocIdentifier}">
+                                                    <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                                </a>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </td>
+                                </tr>
+                            </xsl:for-each>
+                        </table>
                     </div>
                 </div>
             </div>

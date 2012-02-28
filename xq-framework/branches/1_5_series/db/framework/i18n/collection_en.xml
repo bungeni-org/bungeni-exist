@@ -13,7 +13,7 @@
     <msg key="motions">motions</msg>
     <msg key="tableddocuments">tabled documents</msg>
     <msg key="agendaitems">agenda items</msg>
-    <msg key="sittings">sittings</msg>
+    <msg key="sittings">calendar</msg>
     <msg key="publications">publications</msg>
     <msg key="current">members</msg>
     <msg key="politicalgroups">politicalgroups</msg>
@@ -64,6 +64,10 @@
     <msg key="doc-agendaitem">Agenda Item</msg>
     <msg key="doc-committee">Committee</msg>
     <msg key="doc-groupsitting">Sitting</msg>
+    <msg key="doc-calendar">Sittings Calendar</msg>
+    <msg key="sitting-activity">Activity Type</msg>
+    <msg key="sitting-convocation">Convocation Type</msg>
+    <msg key="sitting-venue">Venue</msg>
     <msg key="typeofdoc">type of</msg>
     <msg key="versions">versions</msg>
     <msg key="events">events</msg>

@@ -209,56 +209,52 @@ $(document).ready(function () {
 		header: {
 			left: 'prev,next today',
 			center: 'title',
-			right: 'month,basicWeek,agendaDay'
+			right: 'agendaDay,basicWeek,month'
 		},
-        defaultView: 'agendaDay',
+        defaultView: 'month',
 		editable: true,
+		disableDragging: true,
+        events: function(start, end, callback) {
+            $.ajax({
+                url: 'get-sittings-json',
+                dataType: 'json',
+                data: {
+                    uri: "all",
+                    // our hypothetical feed requires UNIX timestamps
+                    start: Math.round(start.getTime() / 1000),
+                    end: Math.round(end.getTime() / 1000)
+                },
+                success: function(data) {
+                    var events = [];
+                    for (var i = 0; i < data.ontology.length; i++) {
+                        events.push({
+                            title: data.ontology[i].legislature.shortName+" at the "+data.ontology[i].groupsitting.venue.shortName,
+                            start: data.ontology[i].groupsitting.startDate["#text"],
+                            end: data.ontology[i].groupsitting.endDate["#text"],
+                            url: "sitting?uri="+data.ontology[i].groupsitting.uri,
+                            allDay: false
+                        });                       
+                    }                   
+                    callback(events);
+                }
+            });
+        }		
+		/*events: $('#events_json').data('locations')
 		events: [
 			{
-				title: 'All Day Event',
-				start: new Date(y, m, 1)
-			},
-			{
-				title: 'Long Event',
-				start: new Date(y, m, d-5),
-				end: new Date(y, m, d-2)
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false
-			},
-			{
 				title: 'Meeting',
-				start: new Date(y, m, d, 10, 30),
+				start: 'Thu Feb 23 2012 10:08:01 GMT+0300 (EAT)',
 				allDay: false
 			},
 			{
 				title: 'Lunch',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
+				start: 'Thu Feb 23 2012 12:00 GMT+0300 (EAT)',
+				end: 'Thu Feb 23 2012 16:00 GMT+0300 (EAT)',
 				allDay: false
-			},
-			{
-				title: 'Birthday Party',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false
-			},
-			{
-				title: 'Click for Google',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'http://google.com/'
 			}
-			]
-	});    
+			]*/
+	}); 
+	console.log("Looks Good! "+Date());
+	
 });   
 

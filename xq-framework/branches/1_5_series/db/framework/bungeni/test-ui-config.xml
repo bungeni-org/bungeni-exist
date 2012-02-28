@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui>
+<!-- 
+    
+    This file is the UI configuration file used by the System 
+    It describes date formats , route navigations and tab structures for the application
+-->
+<ui xmlns:i18n="http://exist-db.org/xquery/i18n">
+
+    <!-- GENERAL FORMAT PREFERNCES -->
+    <!-- "http://exist-db.org/xquery/i18n" 
+        specify date and datetime formats here , these formats are used by the XSLT scripts
+        We use the XSLT date formatting style to format dates
+    -->
     <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
     <format type="date">[D1o] [MNn,*-3], [Y]</format>
+
+    <!-- LISTING CONFIG PREFERNCES -->
     <listings>
+        <!-- limits the number of items shown on a listing page -->
         <limit>5</limit>
-        <visiblePages>9</visiblePages>
+        <!-- number of pages linked on the paginator before showing next -->
+        <visiblePages>3</visiblePages>
     </listings>
+    
+    <!-- APPLICATION ROUTING -->
+    <!--
+        Route Map
+        This describes properties associated with every url supported by the application.
+        The route map describes what will be the default title used on the page resolving to the route,
+        also describes what the active navigation and subnavigation for the route. Eventually this can 
+        be used to render a breadcrumb
+        -->
     <routes>
+        <!--
+            href - the incoming url, this is used to load the main menu
+            navigation - specifies the active navigation level 1"http://exist-db.org/xquery/i18n" 
+            subnavigation - specifies te active navigation level 2
+            -->
         <route href="/">
             <navigation>home</navigation>
             <title>Home</title>
@@ -24,13 +53,12 @@
             <title>Search</title>
         </route>
         <route href="/business">
-            <navigation>business</navigation>
             <title>Business</title>
+            <navigation>business</navigation>
         </route>
         <route href="/members">
             <title>Members</title>
             <navigation>members</navigation>
-            <subnavigation>current</subnavigation>
         </route>
         <route href="/member">
             <title>Business | Member of Parliament</title>
@@ -57,6 +85,7 @@
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
+        <!-- #COMMITTEES -->
         <route href="/committee/profile">
             <title>Business | Committee's Profile</title>
             <navigation>business</navigation>
@@ -86,37 +115,24 @@
             <title>Business | Committee's Staff</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
-        </route>
+        </route> 
+        <!-- #POLICAL-GROUPS -->
         <route href="/political-group/profile">
             <title>Business | Political Group's Profile</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/members">
             <title>Business | Political Group's Members</title>
-            <navigation>business</navigation>
-            <subnavigation>politicalgroups</subnavigation>
-        </route>
-        <route href="/political-group/assigned-items">
-            <title>Business | Political Group's Assigned Items</title>
-            <navigation>business</navigation>
-            <subnavigation>politicalgroups</subnavigation>
-        </route>
-        <route href="/political-group/sittings">
-            <title>Business | Political Group's Sittings</title>
-            <navigation>business</navigation>
-            <subnavigation>politicalgroups</subnavigation>
-        </route>
-        <route href="/political-group/staff">
-            <title>Business | Political Group's Staff</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/political-group/contacts">
             <title>Business | Political Group's Staff</title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
-        </route>
+        </route>         
+        <!-- #BILLS -->
         <route href="/bills">
             <title>Business | Bills</title>
             <navigation>business</navigation>
@@ -176,7 +192,8 @@
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
-        </route>
+        </route>               
+        <!-- #QUESTIONS -->
         <route href="/questions">
             <title>Business | Questions </title>
             <navigation>business</navigation>
@@ -212,6 +229,11 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
+        <route href="/question/assigned-groups">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
         <route href="/question/documents">
             <title>Business | Attachments</title>
             <navigation>business</navigation>
@@ -226,7 +248,8 @@
             <title>Business | Question Event</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
-        </route>
+        </route>          
+        <!-- #MOTIONS -->
         <route href="/motions">
             <title>Business | Motions </title>
             <navigation>business</navigation>
@@ -247,18 +270,8 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/version/timeline">
-            <title>Business | Motion Version Timeline</title>
-            <navigation>business</navigation>
-            <subnavigation>motions</subnavigation>
-        </route>
         <route href="/motion/details">
             <title>Business | Motion</title>
-            <navigation>business</navigation>
-            <subnavigation>motions</subnavigation>
-        </route>
-        <route href="/motion/version/details">
-            <title>Business | Motion Version Details</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
@@ -286,7 +299,8 @@
             <title>Business | Motion Event</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
-        </route>
+        </route>          
+        <!-- #TABLED DOCUMENTS -->
         <route href="/tableddocuments">
             <title>Business | Tabled Documents </title>
             <navigation>business</navigation>
@@ -342,23 +356,80 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <!-- #AGENDA ITEMS -->
+        <route href="/agendaitems">
+            <title>Business | Agenda items </title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/text">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/text">
+            <title>Business | Agenda item Version Document</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/timeline">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/details">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/details">
+            <title>Business | Agenda item Version Details</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/assigned-groups">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/assigned-groups">
+            <title>Business | Agenda item Version Assigned-groups</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/documents">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem/version/documents">
+            <title>Business | Agenda item Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/agendaitem/event">
+            <title>Business | Agenda item Event</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
         <route href="/committees">
             <title>Business | Committees </title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/agendaitems">
-            <title>Business | Agenda Items </title>
-            <navigation>business</navigation>
-            <subnavigation>agendaitems</subnavigation>
-        </route>
         <route href="/whatson">
-            <title>Business | Sittings </title>
+            <title>Business | What's on </title>
             <navigation>business</navigation>
             <subnavigation>whatson</subnavigation>
         </route>
+        <!-- #SITTINGS -->
         <route href="/sittings">
             <title>Business | Sittings </title>
+            <navigation>business</navigation>
+            <subnavigation>sittings</subnavigation>
+        </route>
+        <route href="/sitting">
+            <title>Business | Sitting Session</title>
             <navigation>business</navigation>
             <subnavigation>sittings</subnavigation>
         </route>
@@ -369,7 +440,7 @@
         </route>
         <route href="/politicalgroups">
             <title>Business | Political Groups </title>
-            <navigation>business</navigation>
+            <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/admin">
@@ -382,359 +453,577 @@
             <subnavigation>navigation</subnavigation>
         </route>
     </routes>
+    
+    <!--
+       MENU GROUPS
+        -->
     <menugroups>
-        <menu for="/" name="mainnav">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="menu" id="mainnav">
+        
+        <!-- 
+            The menu navigation is defined here 
+            The menus themselves are defined in XHTML 
+                - the main navigation uses the id "mainnav"
+                - the sub navigation uses the id "subnav"
+                - the for attribute refers to a /route/navigation
+        -->
+        <menu name="mainnav" for="/">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
                 <ul class="theme-lev-1" id="portal-globalnav">
                     <li>
-                        <a href="home" name="home">home</a>
+                        <a name="home" href="home">
+                            <i18n:text key="home">home</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="business" name="business">business</a>
+                        <a name="business" href="business">
+                            <i18n:text key="business">business</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="members" name="members">members</a>
-                    </li>
-                    <li>
-                        <a href="admin" name="admin">admin</a>
+                        <a name="members" href="members">
+                            <i18n:text key="members">members</i18n:text>
+                        </a>
                     </li>
                 </ul>
             </div>
         </menu>
-        <menu for="home" name="home">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+        <menu name="home" for="home">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul id="portal-home">
                     <li/>
                 </ul>
             </div>
         </menu>
-        <menu for="business" name="business">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+        <menu name="business" for="business">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1" id="portal-personaltools">
                     <li>
-                        <a href="whatson" name="whatson">what's on</a>
+                        <a name="whatson" href="whatson">
+                            <i18n:text key="whatson">what's on(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="committees" name="committees">committees</a>
+                        <a name="committees" href="committees">
+                            <i18n:text key="committees">committees(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="bills" name="bills">bills</a>
+                        <a name="bills" href="bills">
+                            <i18n:text key="bills">bills(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="questions" name="questions">questions</a>
+                        <a name="questions" href="questions">
+                            <i18n:text key="questions">questions(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="motions" name="motions">motions</a>
+                        <a name="motions" href="motions">
+                            <i18n:text key="motions">motions(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="tableddocuments" name="tableddocuments">tabled documents</a>
+                        <a name="tableddocuments" href="tableddocuments">
+                            <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="agendaitems" name="agendaitems">agenda items</a>
+                        <a name="agendaitems" href="agendaitems">
+                            <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="sittings" name="sittings">sittings</a>
+                        <a name="sittings" href="sittings">
+                            <i18n:text key="sittings">sittings(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="publications" name="publications">publications</a>
-                    </li>
-                    <li>
-                        <a href="politicalgroups" name="politicalgroups">politicalgroups</a>
+                        <a name="publications" href="publications">
+                            <i18n:text key="publications">publications(nt)</i18n:text>
+                        </a>
                     </li>
                 </ul>
             </div>
         </menu>
-        <menu for="members" name="members">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+        <menu name="members" for="members">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a href="members" name="current">current</a>
+                        <a name="current" href="members">
+                            <i18n:text key="current">current(nt)</i18n:text>
+                        </a>
                     </li>
                     <li>
-                        <a href="sittings" name="sittings">sittings</a>
-                    </li>
-                    <li>
-                        <a href="publications" name="publications">publications</a>
-                    </li>
-                    <li>
-                        <a href="politicalgroups" name="politicalgroups">politicalgroups</a>
+                        <a name="politicalgroups" href="politicalgroups">
+                            <i18n:text key="politicalgroups">political groups(nt)</i18n:text>
+                        </a>
                     </li>
                 </ul>
             </div>
         </menu>
-        <menu for="admin" name="admin">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+        <!--
+        <menu name="admin" for="admin">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1">
                     <li>
-                        <a href="admin/navigation" name="navigation">navigation</a>
+                        <a name="navigation" href="admin/navigation">navigation</a>
                     </li>
                     <li>
-                        <a href="admin/doctypes" name="doctypes">doctypes</a>
+                        <a name="doctypes" href="admin/doctypes">doctypes</a>
                     </li>
                     <li>
-                        <a href="admin/tabs" name="tabs">tabs</a>
+                        <a name="tabs" href="admin/tabs">tabs</a>
                     </li>
                 </ul>
             </div>
         </menu>
+        -->
     </menugroups>
+    
+    <!-- 
+       DOWNLOAD FORMATS
+    -->
     <downloadgroups>
         <rendergroup name="listings">
-            <format href="null" type="rss">Subscribe to Atom RSS feed</format>
-            <format href="null" type="print">Print this listing</format>
+            <format type="rss" href="null">Subscribe to Atom RSS feed</format>
+            <format type="print" href="null">Print this listing</format>
         </rendergroup>
         <rendergroup name="parl-doc">
-            <format href="build" type="edit">Edit document. Will need to login to eXist</format>
-            <format href="null" type="pdf">Download PDF format</format>
-            <format href="null" type="xml">Download XML format</format>
+            <format type="edit" href="build">Edit document. Will need to login to eXist</format>
+            <format type="pdf" href="null">Download PDF format</format>
+            <format type="xml" href="null">Download XML format</format>
         </rendergroup>
         <rendergroup name="members">
-            <format href="build" type="edit">Edit document. Will need to login to eXist</format>
-            <format href="null" type="pdf">Download PDF format</format>
-            <format href="null" type="xml">Download XML format</format>
+            <format type="edit" href="build">Edit document. Will need to login to eXist</format>
+            <format type="pdf" href="null">Download PDF format</format>
+            <format type="xml" href="null">Download XML format</format>
         </rendergroup>
     </downloadgroups>
+    DEFAULT
+    <!--
+        Tab Groups
+        -->
     <tabgroups>
-        <tabs name="group">
-            <tab id="profile" path="committee/profile">
-                <title>profile</title>
+        <!-- 
+            Tabgroups are like navigation but they describe navigation relative to content 
+            The name is always that of a content type
+        -->
+        <tabs name="committee">
+            <tab path="committee/profile" id="profile">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="members" path="committee/members">
-                <title>members</title>
+            <tab path="committee/members" id="members">
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="assigned" path="committee/assigned-items">
-                <title>assigned items</title>
+            <tab path="committee/assigned-items" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned items(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="sittings" path="committee/sittings">
-                <title>sittings</title>
+            <tab path="committee/sittings" id="sittings">
+                <title>
+                    <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="staff" path="committee/staff">
-                <title>staff</title>
+            <tab path="committee/staff" id="staff">
+                <title>
+                    <i18n:text key="tab-staff">staff(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="contacts" path="committee/contacts">
-                <title>contacts</title>
+            <tab path="committee/contacts" id="contacts">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
+            </tab>
+        </tabs>
+        <tabs name="political-group">
+            <tab path="political-group/profile" id="profile">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="political-group/members" id="members">
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="political-group/contacts" id="contacts">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="bill-ver">
-            <tab id="text" path="bill/version/text">
-                <title>text</title>
+            <tab path="bill/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="related" path="bill/version/details">
-                <title>details</title>
-            </tab>
-            <tab id="attachments" path="bill/version/documents">
-                <title>documents</title>
+            <tab path="bill/version/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="bill">
-            <tab id="text" path="bill/text">
-                <title>text</title>
+            <tab path="bill/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="timeline" path="bill/timeline">
-                <title>history</title>
+            <tab path="bill/timeline" id="timeline">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="related" path="bill/details">
-                <title>details</title>
+            <tab path="bill/details" id="related">
+                <title>
+                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="assigned" path="bill/assigned-groups">
-                <title>assigned groups</title>
+            <tab path="bill/assigned-groups" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="attachments" path="bill/documents">
-                <title>documents</title>
+            <tab path="bill/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="question-ver">
-            <tab id="text" path="question/version/text">
-                <title>text</title>
+            <tab path="question/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="related" path="question/version/details">
-                <title>details</title>
-            </tab>
-            <tab id="attachments" path="question/version/documents">
-                <title>documents</title>
+            <tab path="question/version/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="question">
-            <tab id="text" path="question/text">
-                <title>text</title>
+            <tab path="question/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="timeline" path="question/timeline">
-                <title>history</title>
+            <tab path="question/timeline" id="timeline">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="related" path="question/details">
-                <title>details</title>
+            <tab path="question/details" id="related">
+                <title>
+                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="attachments" path="question/documents">
-                <title>documents</title>
+            <tab path="question/assigned-groups" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="question/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="motion-ver">
-            <tab id="text" path="motion/text">
-                <title>text</title>
+            <tab path="motion/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="timeline" path="motion/timeline">
-                <title>history</title>
-            </tab>
-            <tab id="related" path="motion/details">
-                <title>details</title>
+            <tab path="motion/version/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-text">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="motion">
-            <tab id="text" path="motion/text">
-                <title>text</title>
+            <tab path="motion/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="timeline" path="motion/timeline">
-                <title>history</title>
+            <tab path="motion/timeline" id="timeline">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="related" path="motion/details">
-                <title>details</title>
+            <tab path="motion/details" id="related">
+                <title>
+                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="assigned" path="motion/assigned-groups">
-                <title>assigned groups</title>
+            <tab path="motion/assigned-groups" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="attachments" path="motion/documents">
-                <title>documents</title>
+            <tab path="motion/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="tableddocument-ver">
-            <tab id="text" path="tableddocument/version/text">
-                <title>text</title>
-            </tab>
-            <tab id="related" path="tableddocument/version/details">
-                <title>details</title>
+            <tab path="tableddocument/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="tableddocument">
-            <tab id="text" path="motion/text">
-                <title>text</title>
+            <tab path="tableddocument/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="timeline" path="tableddocument/timeline">
-                <title>history</title>
+            <tab path="tableddocument/timeline" id="timeline">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="related" path="tableddocument/details">
-                <title>details</title>
+            <tab path="tableddocument/details" id="related">
+                <title>
+                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="assigned" path="tableddocument/assigned-groups">
-                <title>assigned groups</title>
+            <tab path="tableddocument/assigned-groups" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="attachments" path="tableddocument/documents">
-                <title>documents</title>
+            <tab path="tableddocument/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+            </tab>
+        </tabs>
+        <tabs name="agendaitem-ver">
+            <tab path="agendaitem/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+            </tab>
+        </tabs>
+        <tabs name="agendaitem">
+            <tab path="agendaitem/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/timeline" id="timeline">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/details" id="related">
+                <title>
+                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/assigned-groups" id="assigned">
+                <title>
+                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
+                </title>
+            </tab>
+            <tab path="agendaitem/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
         <tabs name="user">
-            <tab id="member" path="member">
-                <title>member</title>
+            <tab path="member" id="member">
+                <title>
+                    <i18n:text key="tab-member">member(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="info" path="member/personal-info">
-                <title>information</title>
+            <tab path="member/personal-info" id="info">
+                <title>
+                    <i18n:text key="tab-info">information(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="offices" path="member/offices-held">
-                <title>offices held</title>
+            <tab path="member/offices-held" id="offices">
+                <title>
+                    <i18n:text key="tab-offices">offices held(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="activities" path="member/parl-activities">
-                <title>parliament activities</title>
+            <tab path="member/parl-activities" id="activities">
+                <title>
+                    <i18n:text key="tab-parlacts">parliament activities(nt)</i18n:text>
+                </title>
             </tab>
-            <tab id="contacts" path="member/contacts">
-                <title>contacts</title>
+            <tab path="member/contacts" id="contacts">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
             </tab>
         </tabs>
     </tabgroups>
+    
+    <!--
+        ACL GROUPS define permission accessors for documents 
+        
+        the @axis and @condition are combined to create a filter on a legislativeitem document.
+        concat(@axis,[,@condition,])
+        -->
     <acl-groups>
-        <acl axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission" name="public-view">
+        <!-- !+FIX_THIS_TODO (ah, nov-2011) axis needs to be factored as a sub-element since axis is different for different content 
+            types -->
+        <acl name="public-view" axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission">
             <permission name="zope.View" role="bungeni.Anonymous" setting="Allow"/>
         </acl>
-        <acl axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'" name="authenticated-view"/>
-    </acl-groups>
+        <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
+    </acl-groups>  
+
+    <!-- Document Types
+        <doctype name="group">  Defines the configuration parameter for the named document type 
+        <orderby/>      Defines the order by options that are available for that document types
+        <searchins/>    Defines the search filter options that are available for the type of document speficied
+        searchin/@field parameter must be a node path relative to bu:ontology.
+        -->
     <doctypes>
         <doctype name="userdata">
             <orderbys>
-                <orderby order="asc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="desc" value="st_date_newest">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">Entire Document</searchin>
-                <searchin default="true" field="bu:user/bu:firstName" name="fn" value="fstname">First Name</searchin>
-                <searchin field="bu:user/bu:lastName" name="ln" value="lsname">Last Name</searchin>
-                <searchin field="bu:user/bu:description" name="ds" value="desc">Description</searchin>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fstname" field="bu:user/bu:firstName" default="true">First Name</searchin>
+                <searchin name="ln" value="lsname" field="bu:user/bu:lastName">Last Name</searchin>
+                <searchin name="ds" value="desc" field="bu:user/bu:description">Description</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
+                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
+            </listingfilters>
         </doctype>
         <doctype name="committee">
             <orderbys>
-                <orderby order="desc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="asc" value="st_date_newest">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">Entire Document</searchin>
-                <searchin default="true" field="bu:legislature/bu:fullName" name="fn" value="fname">Full Name</searchin>
-                <searchin field="bu:legislature/bu:shortName" name="sn" value="sname">Short Name</searchin>
-                <searchin field="bu:legislature/bu:description" name="ds" value="desc">Description</searchin>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
             </searchins>
         </doctype>
         <doctype name="political-group">
             <orderbys>
-                <orderby order="asc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="desc" value="st_date_newest">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">Entire Document</searchin>
-                <searchin default="true" field="bu:legislature/bu:fullName" name="fn" value="fname">Full Name</searchin>
-                <searchin field="bu:legislature/bu:shortName" name="sn" value="sname">Short Name</searchin>
-                <searchin field="bu:legislature/bu:description" name="ds" value="desc">Description</searchin>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
         </doctype>
         <doctype name="bill">
             <orderbys>
-                <orderby order="asc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="desc" value="st_date_newest">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">Entire Document</searchin>
-                <searchin default="true" field="bu:legislativeItem/bu:shortName" name="f_t" value="title">Title</searchin>
-                <searchin field="bu:legislativeItem/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:legislativeItem/bu:registryNumber" name="f_d" value="docno">Doc No.</searchin>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
         </doctype>
         <doctype name="question">
             <orderbys>
-                <orderby order="asc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="desc" value="st_date_newest">status date [newest]</orderby>
-                <orderby order="asc" value="sub_date_oldest">submission date [oldest]</orderby>
-                <orderby order="desc" value="sub_date_newest">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">Entire Document</searchin>
-                <searchin default="true" field="bu:legislativeItem/bu:shortName" name="f_t" value="title">Title</searchin>
-                <searchin field="bu:legislativeItem/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:legislativeItem/bu:registryNumber" name="f_d" value="docno">Doc No.</searchin>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
         </doctype>
         <doctype name="motion">
             <orderbys>
-                <orderby order="asc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="desc" value="st_date_newest">status date [newest]</orderby>
-                <orderby order="asc" value="sub_date_oldest">submission date [oldest]</orderby>
-                <orderby order="desc" value="sub_date_newest">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">All</searchin>
-                <searchin default="true" field="bu:legislativeItem/bu:shortName" name="f_t" value="title">Title</searchin>
-                <searchin field="bu:legislativeItem/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:legislativeItem/bu:registryNumber" name="f_d" value="docno">Doc No.</searchin>
+                <searchin name="all" value="all" field=".">All</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
         </doctype>
         <doctype name="tableddocument">
             <orderbys>
-                <orderby order="asc" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby order="desc" value="st_date_newest">status date [newest]</orderby>
-                <orderby order="asc" value="sub_date_oldest">submission date [oldest]</orderby>
-                <orderby order="desc" value="sub_date_newest">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin field="." name="all" value="all">Entire Document</searchin>
-                <searchin default="true" field="bu:legislativeItem/bu:shortName" name="f_t" value="title">Title</searchin>
-                <searchin field="bu:legislativeItem/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:legislativeItem/bu:registryNumber" name="f_d" value="docno">Doc No.</searchin>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype name="agendaitem">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
         </doctype>
     </doctypes>
 </ui>

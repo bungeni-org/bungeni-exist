@@ -13,7 +13,7 @@
     <msg key="motions">mozioni</msg>
     <msg key="tableddocuments">documenti depositali</msg>
     <msg key="agendaitems">punti dell'ordine</msg>
-    <msg key="sittings">sedute</msg>
+    <msg key="sittings">calendario</msg>
     <msg key="publications">publicazzioni</msg>
     <msg key="current">corrente</msg>
     <msg key="politicalgroups">gruppi politici</msg>    
@@ -64,6 +64,10 @@
     <msg key="doc-agendaitem">Punto all'ordine del giorno</msg>
     <msg key="doc-committee">Comitato</msg>
     <msg key="doc-groupsitting">Seduta</msg>
+    <msg key="doc-calendar">Calendario Sedute</msg>
+    <msg key="sitting-activity">Tipo di Attività</msg>
+    <msg key="sitting-convocation">Tipo di Convocazione</msg>
+    <msg key="sitting-venue">Sede</msg>
     <msg key="typeofdoc">tipo di</msg>
     <msg key="versions">versione</msg>
     <msg key="events">eventi</msg>

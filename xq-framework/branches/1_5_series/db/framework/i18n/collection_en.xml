@@ -46,6 +46,7 @@
     <msg key="registry-no">registry number</msg>
     <msg key="summary">summary</msg>
     <msg key="ministry">ministry</msg>
+    <msg key="assignedto">assigned to</msg>
     <msg key="gender">gender</msg>
     <msg key="dob">date of birth</msg>
     <msg key="status">status</msg>

@@ -29,6 +29,7 @@
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">timeline</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="excludes" select="exlude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">

@@ -12,6 +12,7 @@
             <default-tmpl>portal.html</default-tmpl>
             <ui-config>ui-config.xml</ui-config>
             <xml-collection>/db/bungeni-xml</xml-collection>
+            <att-collection>/db/bungeni-atts</att-collection>
             <!-- relative path from framework root -->
             <i18n-messages>i18n</i18n-messages>
             <default-lang>en</default-lang>

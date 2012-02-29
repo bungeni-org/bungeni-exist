@@ -19,10 +19,17 @@ rather than an Application level library
 
 
 (:~
-Get the path to the lex collection
+Get the path to the bungeni collection
 :)
 declare function cmn:get-lex-db() as xs:string {
     $config:XML-COLLECTION
+ };
+ 
+ (:~
+Get the path to the attachments collection
+:)
+declare function cmn:get-att-db() as xs:string {
+    $config:ATT-COLLECTION
  };
  
 

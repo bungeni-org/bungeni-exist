@@ -33,6 +33,7 @@ declare variable $config:APP-PREF := $config:app-prefix;
 declare variable $config:__ACTIVE_APP__ := $config:doc//app[@name eq $config:APP-NAME] ;
 
 declare variable $config:XML-COLLECTION := data($config:__ACTIVE_APP__/xml-collection);
+declare variable $config:ATT-COLLECTION := data($config:__ACTIVE_APP__/att-collection);
 (: The UI configuration file of the application :)
 declare variable $config:UI-CONFIG := data($config:__ACTIVE_APP__/ui-config);
 (: The default template used by the application :)

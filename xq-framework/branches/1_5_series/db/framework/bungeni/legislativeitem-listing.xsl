@@ -185,6 +185,17 @@
                             <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
                         </td>
                     </tr>
+                    <xsl:if test="output/bu:ontology/bu:question/bu:item_assignments">
+                        <tr>
+                            <td class="labels">
+                                <i18n:text key="assignedto">assigned to(nt)</i18n:text>:</td>
+                            <td>
+                                <a href="#" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                    <xsl:value-of select="output/bu:ontology/bu:question/bu:group/@isA"/>
+                                </a>
+                            </td>
+                        </tr>
+                    </xsl:if>
                 </table>
             </div>
         </li>

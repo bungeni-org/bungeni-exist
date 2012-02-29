@@ -92,6 +92,38 @@ declare function bun:gen-pdf-output($docid as xs:string)
 };
 
 (:~
+:  streams the attachment with the given id
+: @param acl 
+:   permissions scheme allowed for this file
+: @param uri 
+:   for thi document
+: @param attid 
+:   file id of the attachment as defined
+: @return
+:   A document for download with original name and extension and correct mimeType
+:)
+declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid as xs:integer) {
+    
+    (: get the document through acl as validation :)
+    let $doc-acl := document { util:eval(bun:xqy-docitem-acl-uri($acl, $uri)) } 
+    let $acl-permissions := cmn:get-acl-permissions($acl)
+    let $att-acl := bun:documentitem-attachments-with-acl($acl-permissions, $doc-acl/node())   
+
+    (: get the attachment with the given file id :)
+    for $attachedfile in $att-acl/bu:attached_files/bu:attached_file
+    return
+        if($attachedfile/bu:attachedFileId cast as xs:integer eq $attid) then (
+            response:stream-binary(
+                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:attachedFileUuid)) cast as xs:base64Binary,
+                $attachedfile/bu:fileMimetype,
+                $attachedfile/bu:fileName),
+            response:set-header("Content-Disposition" , concat("attachment; filename=",  $attachedfile/bu:fileName)),
+            <xml/>
+        )
+        else () 
+};
+
+(:~
 :  Renders PDF output for MP profile using xslfo module
 : @param memberid
 :   The URI of the parliamentary user
@@ -1831,6 +1863,13 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
         </secondary>
+        <exlude>
+            {
+                if(not($docitem//bu:item_assignments)) then 
+                    <tab>assigned</tab>
+                else ()
+            }
+        </exlude>
         <fringe>{$parsedbody}</fringe>
     </document>     
 };
@@ -1899,7 +1938,8 @@ declare function bun:get-contacts-by-uri($acl as xs:string, $address-type as xs:
 declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $_tmpl as xs:string) as element()* {
     
     let $doc-uri := xps:substring-before($version-uri, "@")
-    let $match := bun:documentitem-with-acl($acl, $doc-uri)
+    let $match := document { util:eval(bun:xqy-docitem-acl-uri($acl, $doc-uri)) }
+    let $acl-permissions := cmn:get-acl-permissions($acl)
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl)
@@ -1910,7 +1950,7 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
             <version>{$version-uri}</version>
             <primary>         
             {
-                $match
+                bun:documentitem-versions-with-acl($acl-permissions, $match/node())
             }
             </primary>
             <secondary>
@@ -1943,18 +1983,19 @@ declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) a
             </primary>
             <secondary>
             {
-                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='event']/../bu:legislativeItem[@uri eq $eventid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='event']/following-sibling::bu:legislativeItem[@uri eq $eventid]/ancestor::bu:ontology
             }            
             </secondary>
         </document>
     </parl-doc>   
     
     return
-        transform:transform($doc, 
+        $doc
+        (:transform:transform($doc, 
                             $stylesheet, 
                             <parameters>
                                 <param name="version" value="true" />
-                            </parameters>)
+                            </parameters>):)
 };
 
 declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $sortby as xs:string) as element() {

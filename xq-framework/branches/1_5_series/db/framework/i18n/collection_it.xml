@@ -46,6 +46,7 @@
     <msg key="registry-no">numero di registro</msg>
     <msg key="summary">riassunto</msg>
     <msg key="ministry">ministero</msg>
+    <msg key="assignedto">gruppi assegnati</msg>
     <msg key="gender">genere</msg>
     <msg key="dob">data di nascita</msg>
     <msg key="status">stato</msg>

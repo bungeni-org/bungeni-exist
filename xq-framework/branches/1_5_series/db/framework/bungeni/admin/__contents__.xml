@@ -1,12 +1,12 @@
 <collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/bungeni/admin" owner="admin" group="dba" mode="644" created="2012-01-17T13:38:28+03:00" version="1">
     <acl entries="0" version="1"/>
-    <resource type="XMLResource" name="admin-download-subform.xml" owner="admin" group="biblio.users" mode="645" created="2012-01-20T10:01:31+03:00" modified="2012-01-20T10:01:31+03:00" filename="admin-download-subform.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="admin-download-subform.xml" owner="admin" group="dba" mode="644" created="2012-01-20T10:01:31+03:00" modified="2012-01-20T10:01:31+03:00" filename="admin-download-subform.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="admin-download.xql" owner="SYSTEM" group="dba" mode="744" created="2012-01-19T13:37:03+03:00" modified="2012-01-20T09:46:48+03:00" filename="admin-download.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="admin-nav.xql" owner="SYSTEM" group="dba" mode="744" created="2012-01-13T17:17:15+03:00" modified="2012-01-19T14:21:29+03:00" filename="admin-nav.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="admin-nav.xql" owner="admin" group="dba" mode="644" created="2012-01-13T17:17:15+03:00" modified="2012-01-19T14:21:29+03:00" filename="admin-nav.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="admin-navigation.xml" owner="admin" group="dba" mode="644" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T12:44:53+03:00" filename="admin-navigation.xml" mimetype="application/xml">
@@ -18,16 +18,19 @@
     <resource type="BinaryResource" name="admin-order.xql" owner="SYSTEM" group="dba" mode="744" created="2012-01-17T12:44:53+03:00" modified="2012-01-20T10:27:32+03:00" filename="admin-order.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
+    <resource type="XMLResource" name="admin-route-add.xml" owner="admin" group="dba" mode="644" created="2012-03-02T17:51:34+03:00" modified="2012-03-02T17:51:34+03:00" filename="admin-route-add.xml" mimetype="application/xml">
+        <acl entries="0" version="1"/>
+    </resource>
     <resource type="XMLResource" name="admin-route-subform.xml" owner="admin" group="dba" mode="644" created="2012-01-17T12:44:53+03:00" modified="2012-01-17T12:44:53+03:00" filename="admin-route-subform.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="admin-route.xql" owner="admin" group="dba" mode="744" created="2012-01-17T12:44:53+03:00" modified="2012-01-20T09:42:16+03:00" filename="admin-route.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="admin-route.xql" owner="admin" group="dba" mode="744" created="2012-01-17T12:44:53+03:00" modified="2012-03-02T13:01:28+03:00" filename="admin-route.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="admin-search-subform.xml" owner="SYSTEM" group="dba" mode="744" created="2012-01-19T17:20:24+03:00" modified="2012-01-19T17:20:24+03:00" filename="admin-search-subform.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="admin-search.xql" owner="admin" group="dba" mode="644" created="2012-01-17T18:15:07+03:00" modified="2012-01-20T09:45:45+03:00" filename="admin-search.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="admin-search.xql" owner="SYSTEM" group="dba" mode="744" created="2012-01-17T18:15:07+03:00" modified="2012-01-20T09:45:45+03:00" filename="admin-search.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="XMLResource" name="admin-tabgroup-subform.xml" owner="SYSTEM" group="dba" mode="744" created="2012-01-20T09:56:26+03:00" modified="2012-01-20T09:56:26+03:00" filename="admin-tabgroup-subform.xml" mimetype="application/xml">
@@ -36,13 +39,13 @@
     <resource type="BinaryResource" name="admin-tabgroup.xql" owner="admin" group="dba" mode="645" created="2012-01-19T09:41:25+03:00" modified="2012-01-20T09:44:49+03:00" filename="admin-tabgroup.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="XMLResource" name="admin-ui.xml" owner="SYSTEM" group="dba" mode="744" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="admin-ui.xml" mimetype="application/xml">
+    <resource type="XMLResource" name="admin-ui.xml" owner="SYSTEM" group="dba" mode="745" created="2012-01-13T17:17:15+03:00" modified="2012-01-13T17:17:15+03:00" filename="admin-ui.xml" mimetype="application/xml">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="admin.xqm" owner="admin" group="dba" mode="644" created="2012-01-18T12:22:13+03:00" modified="2012-02-26T17:23:23+03:00" filename="admin.xqm" mimetype="application/xquery">
+    <resource type="BinaryResource" name="admin.xqm" owner="SYSTEM" group="dba" mode="744" created="2012-01-18T12:22:13+03:00" modified="2012-02-26T17:23:23+03:00" filename="admin.xqm" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
-    <resource type="BinaryResource" name="controller.xql" owner="SYSTEM" group="dba" mode="744" created="2012-02-26T17:38:11+03:00" modified="2012-02-26T17:40:04+03:00" filename="controller.xql" mimetype="application/xquery">
+    <resource type="BinaryResource" name="controller.xql" owner="admin" group="dba" mode="644" created="2012-02-26T17:38:11+03:00" modified="2012-02-26T17:40:04+03:00" filename="controller.xql" mimetype="application/xquery">
         <acl entries="0" version="1"/>
     </resource>
     <resource type="BinaryResource" name="index.xql" owner="admin" group="dba" mode="644" created="2012-01-20T12:43:26+03:00" modified="2012-02-26T17:30:41+03:00" filename="index.xql" mimetype="application/xquery">

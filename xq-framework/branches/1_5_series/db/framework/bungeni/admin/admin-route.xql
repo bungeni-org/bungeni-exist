@@ -78,6 +78,17 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         
         <xf:group appearance="minimal" class="configsTriggerGroup">
             <xf:trigger class="configsSubTrigger">
+                <xf:label>add route</xf:label>
+                <xf:hint>Add a new route for navigation.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Loading Route Add Form...</xf:message>
+                    <xf:load show="embed" targetid="route">
+                        <xf:resource value="'./admin-route-add.xml'"/>
+                    </xf:load>
+                </xf:action>
+            </xf:trigger>        
+        
+            <xf:trigger class="configsSubTrigger">
                 <xf:label>edit selected</xf:label>
                 <xf:hint>Edit the Selected row in a form.</xf:hint>
                 <xf:action>
@@ -96,8 +107,6 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     <xf:send submission="save-form" />
                 </xf:action>
             </xf:trigger>
-            
-            
             
         </xf:group>
         <!-- 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+XForm for adding new Route configuration    
+This is loaded by admin-route.xql
+-->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="route" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance id="tmpl-route">
+            <route xmlns="" href="/">
+                <title>Testing</title>
+                <navigation>business</navigation>
+                <subnavigation>current</subnavigation>
+            </route>
+        </xf:instance>
+        <xf:instance id="topmenu">
+            <default xmlns="">
+                <navigation>home</navigation>
+                <navigation>business</navigation>
+                <navigation>members</navigation>
+            </default>
+        </xf:instance>
+        <xf:bind id="b-route-href" nodeset="instance('tmpl-route')/@href" required="true()"/> <!-- Add constraint starts with '/' -->
+        <xf:bind id="b-route-title" nodeset="instance('tmpl-route')/title" type="string"/>
+        <xf:bind id="b-route-nav" nodeset="instance('tmpl-route')/navigation" type="string" required="true()"/>
+        <xf:bind id="b-route-subnav" nodset="instance('tmpl-route')/subnavigation" type="string"/>
+        <xf:submission id="s-load-from-master" resource="instance('tmpl-route')/route" replace="instance">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Route add form loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/routes/route[last()]" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Route saved</xf:message>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to add new route -->
+    <xf:group ref="instance('tmpl-route')" appearance="full">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config">
+            <xf:insert nodeset="model:master#instance('ui-config')/ui/routes/route[last()]" context="model:master#instance('ui-config')/ui/routes" at="last()" position="after" if="exists(model:master#instance('ui-config')/ui/routes/route[last()])"/>
+            <xf:setvalue bind="b-route-href" ref="model:master#instance('ui-config')/ui/routes/route/@href" value="@href"/>
+            <xf:setvalue bind="b-route-title" ref="model:master#instance('ui-config')/ui/routes/route/title" value="title"/>
+            <xf:setvalue bind="b-route-nav" ref="model:master#instance('ui-config')/ui/routes/route/navigation" value="navigation"/>
+            <xf:setvalue bind="b-route-subnav" ref="model:master#instance('ui-config')/ui/routes/route/subnavigation" value="subnavigation"/>
+        </xf:action>
+        <xf:label id="addroute-subform">Add New Route Subform</xf:label>
+        <xf:input ref="@href">
+            <xf:hint>a framework path for this route</xf:hint>
+            <xf:help>like '/business/sittings'</xf:help>
+            <xf:alert>invalid path entered</xf:alert>
+            <xf:label id="lbl-b-route-href">Route Path</xf:label>
+        </xf:input>
+        <xf:input ref="title">
+            <xf:hint>a default title for this route</xf:hint>
+            <xf:help>like 'Business | Sittings'</xf:help>
+            <xf:label id="lbl-b-route-title">Route Title</xf:label>
+        </xf:input>
+        <xf:select1 ref="navigation" selection="open" incremental="true">
+            <xf:label id="lbl-b-route-nav">Navigation</xf:label>
+            <xf:hint>top top-level menu for this route</xf:hint>
+            <xf:help>like 'business'</xf:help>
+            <xf:alert>invalid path entered</xf:alert>
+            <xf:itemset nodeset="instance('topmenu')/navigation">
+                <xf:label ref="."/>
+                <xf:value ref="."/>
+            </xf:itemset>
+        </xf:select1>
+        <xf:input ref="subnavigation">
+            <xf:hint>a second-level menu for this route</xf:hint>
+            <xf:help>like 'sittings'</xf:help>
+            <xf:label id="lbl-b-route-subnav">Sub-Navigation</xf:label>
+        </xf:input>
+        <xf:trigger appearance="triggerMiddleColumn">
+            <xf:label>add routes configuration</xf:label>
+            <xf:hint>Click apply to add a new route configuration</xf:hint>
+            <xf:send submission="s-update-master"/>
+        </xf:trigger>
+    </xf:group>
+</div>

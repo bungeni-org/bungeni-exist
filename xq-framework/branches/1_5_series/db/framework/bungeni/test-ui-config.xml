@@ -423,15 +423,15 @@
             <subnavigation>whatson</subnavigation>
         </route>
         <!-- #SITTINGS -->
-        <route href="/sittings">
+        <route href="/calendar">
             <title>Business | Sittings </title>
             <navigation>business</navigation>
-            <subnavigation>sittings</subnavigation>
+            <subnavigation>calendar</subnavigation>
         </route>
         <route href="/sitting">
             <title>Business | Sitting Session</title>
             <navigation>business</navigation>
-            <subnavigation>sittings</subnavigation>
+            <subnavigation>calendar</subnavigation>
         </route>
         <route href="/publications">
             <title>Business | Publications </title>
@@ -533,8 +533,8 @@
                         </a>
                     </li>
                     <li>
-                        <a name="sittings" href="sittings">
-                            <i18n:text key="sittings">sittings(nt)</i18n:text>
+                        <a name="calendar" href="calendar">
+                            <i18n:text key="sittings">calendar(nt)</i18n:text>
                         </a>
                     </li>
                     <li>
@@ -842,7 +842,7 @@
                 </title>
             </tab>
         </tabs>
-        <tabs name="user">
+        <tabs name="membership">
             <tab path="member" id="member">
                 <title>
                     <i18n:text key="tab-member">member(nt)</i18n:text>
@@ -893,7 +893,7 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype name="userdata">
+        <doctype name="membership">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>

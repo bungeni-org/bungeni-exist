@@ -11,6 +11,7 @@ declare namespace bu="http://portal.bungeni.org/1.0/";
 declare option exist:serialize "method=xhtml media-type=text/html indent=no";
 
 <html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:i18n="http://exist-db.org/xquery/i18n" 
     xmlns:xhtml="http://www.w3.org/1999/xhtml" 
     xmlns:xlink="http://www.w3.org/1999/xlink" 
     xmlns:ev="http://www.w3.org/2001/xml-events" 
@@ -19,8 +20,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
-        <title>Tab-group Preferences</title>
-        <meta name="author" content="anthony at googlemail.com"/>
+        <title>Navigation Preferences</title>
+        <meta name="author" content="aowino at googlemail.com"/>
         <meta name="author" content="ashok at parliaments.info"/>
         <meta name="description" content="XForms with config options"/>
         <link rel="stylesheet" href="../../assets/admin/style.css"/>
@@ -52,9 +53,9 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             <xf:load show="none" targetid="orderby"/>
         </xf:action>
         
-        <div class="headline">Tab-group Configurations</div>
+        <div class="headline">Navigation Configurations</div>
         <div class="description">
-            <p>Edit the Tab-group configurations</p>
+            <p>Edit the Navigation configurations</p>
         </div>
 
         <xf:group appearance="minimal" class="configsTriggerGroup">
@@ -63,7 +64,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 <xf:label>load selected configuration</xf:label>
                 <xf:hint>Edit the Selected row in a form.</xf:hint>
                 <xf:action>
-                    <xf:message level="ephemeral">Loading Tab-group In Editor...</xf:message>
+                    <xf:message level="ephemeral">Loading Navigation In Editor...</xf:message>
                     <xf:load show="embed" targetid="tabgroup">
                         <xf:resource value="'./admin-tabgroup-subform.xml'"/>
                     </xf:load>
@@ -74,11 +75,11 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         <div class="section" dojotype="dijit.layout.ContentPane">
             <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
                 <!--
-                List all the tab-groups
+                List all the Navigation-items
                 -->
                 <div class="itemgroups">
-                    <xf:repeat id="tabgroups" nodeset="/ui/tabgroups/tabs" appearance="full" class="itemgroups">
-                        <xf:output ref="@name"/>
+                    <xf:repeat id="navgroups" nodeset="/ui/menugroups/menu[@name='mainnav']/xhtml:div/xhtml:ul/xhtml:li" appearance="full" class="itemgroups">
+                        <xf:output ref="xhtml:a/@name"/>
                     </xf:repeat>
                     
                     <xf:group appearance="minimal" class="configsTriggerGroup">

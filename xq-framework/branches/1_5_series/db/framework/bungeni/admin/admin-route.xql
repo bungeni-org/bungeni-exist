@@ -33,7 +33,11 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             
             <xf:instance xmlns="" 
                 id="ui-config" 
-                src="../ui-config.xml" />
+                src="../ui-config.xml" />    
+                
+            <xf:instance id="tmpl-route" xmlns="">
+                <route/>
+            </xf:instance>         
                 
              <xf:submission id="save-form" 
                 replace="none" 
@@ -41,7 +45,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 method="put">
              </xf:submission>
    
-        </xf:model>
+        </xf:model>       
     </div>
     <!-- MAIN MENU -->
     <div class="section">{adm:main-menu('route')}</div>
@@ -76,12 +80,13 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             
         </xf:group>
         
-        <xf:group appearance="minimal" class="configsTriggerGroup">
+        <xf:group appearance="minimal" model="master" class="configsTriggerGroup">
             <xf:trigger class="configsSubTrigger">
                 <xf:label>add route</xf:label>
                 <xf:hint>Add a new route for navigation.</xf:hint>
                 <xf:action>
                     <xf:message level="ephemeral">Loading Route Add Form...</xf:message>
+                    <xf:insert nodeset="/ui/routes/route" at="last()" ev:event="DOMActivate" origin="instance('tmpl-route')"/>
                     <xf:load show="embed" targetid="route">
                         <xf:resource value="'./admin-route-add.xml'"/>
                     </xf:load>
@@ -98,6 +103,15 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     </xf:load>
                 </xf:action>
             </xf:trigger>
+            
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>delete selected</xf:label>
+                <xf:hint>Delete the Selected row in a form.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Deleting selected route...</xf:message>
+                    <xf:delete nodeset="/ui/routes/route" at="index('routes')" ev:event="DOMActivate"/>
+                </xf:action>
+            </xf:trigger>            
             
             <xf:trigger class="configsSubTrigger">
                 <xf:label>save changes</xf:label>

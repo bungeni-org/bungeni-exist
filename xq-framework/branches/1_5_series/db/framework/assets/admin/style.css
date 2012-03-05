@@ -83,9 +83,28 @@
 }
 
 /* ORDERS */
+.itemgroups {
+    display:block !important;
+    width:170px !important;
+    height:auto !important;
+    clear:both;  
+    float:left;
+}
+.editpane {
+    float:left;
+    width:73%;
+}
+.subform-pane {
+    border:1px solid #dfdfdf;
+}
+.action-save {
+    float:left;
+}
+
+/* ORDERS */
 .sortorders {
     display:inline !important;
-    clear:both;
+    clear:both; 
 }
 .sortorders > div {
     display:inline !important;

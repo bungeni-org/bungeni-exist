@@ -19,7 +19,7 @@ This is loaded by admin-route.xql
                 <navigation>members</navigation>
             </default>
         </xf:instance>
-        <xf:bind id="b-route-href" nodeset="instance('tmpl-route')/@href" required="true()"/> <!-- Add constraint starts with '/' -->
+        <xf:bind id="b-route-href" nodeset="instance('tmpl-route')/@href" required="true()"/> <!-- !#FIX_THIS (ao, mar 2012) Add constraint starts with '/' -->
         <xf:bind id="b-route-title" nodeset="instance('tmpl-route')/title" type="string"/>
         <xf:bind id="b-route-nav" nodeset="instance('tmpl-route')/navigation" type="string" required="true()"/>
         <xf:bind id="b-route-subnav" nodset="instance('tmpl-route')/subnavigation" type="string"/>
@@ -32,7 +32,7 @@ This is loaded by admin-route.xql
         <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
     </xf:model>
     <!-- subform to add new route -->
-    <xf:group ref="instance('tmpl-route')" appearance="full">
+    <xf:group appearance="full">
         <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config">
             <xf:insert nodeset="model:master#instance('ui-config')/ui/routes/route[last()]" context="model:master#instance('ui-config')/ui/routes" at="last()" position="after" if="exists(model:master#instance('ui-config')/ui/routes/route[last()])"/>
             <xf:setvalue bind="b-route-href" ref="model:master#instance('ui-config')/ui/routes/route/@href" value="@href"/>

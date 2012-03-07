@@ -3,48 +3,82 @@
     XForm for editing Navigation configurations    
     This is loaded by admin-navigation.xql
 -->
-<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
-    <xf:model id="mtabgroup" ev:event="xforms-revalidate" ev:defaultAction="cancel">
-        <xf:instance xmlns="" id="default">
-            <menugroups/>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="mnavgroup" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="tmpl-navigation">
+            <data>
+                <xhtml:li>
+                    <xhtml:a name="" href="">
+                        <i18n:text key="">default (nt)</i18n:text>
+                    </xhtml:a>
+                </xhtml:li>
+            </data>
         </xf:instance>
-        <xf:bind id="b-tabgroup-path" nodeset="@path" type="xs:string"/>
-        <xf:bind id="b-tabgroup-id" nodeset="@id" type="xs:string"/>
-        <xf:bind id="b-tabgroup-title" nodeset="title" type="xs:string"/>
-        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[@name='business']/xhtml:div/xhtml:ul/xhtml:li" replace="instance" method="get">
-            <xf:message ev:event="xforms-submit-done" level="ephemeral">Navigation editor loaded</xf:message>
+        <xf:bind id="b-nav-href" nodeset="xhtml:a/@href" type="xs:string"/>
+        <xf:bind id="b-nav-name" nodeset="xhtml:a/@name" type="xs:string"/>
+        <xf:bind id="b-nav-i18nkey" nodeset="xhtml:a/i18n:text/@key" type="xs:string"/>
+        <xf:bind id="b-nav-i18ntitle" nodeset="xhtml:a/i18n:text" type="xs:string"/>
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[index('navgroups')+1]/xhtml:div/xhtml:ul" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Sub-navigation editor loaded</xf:message>
         </xf:submission>
-        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/tabgroups/tabs[index('tabgroups')]" replace="none" method="post">
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[index('navgroups')+1]/xhtml:div/xhtml:ul" replace="none" method="post">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Navigation saved</xf:message>
             <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
         </xf:submission>
         <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
     </xf:model>
-    <!-- subform to edit loaded route -->
+    <!-- subform to edit loaded sub-navigation -->
     <xf:group appearance="full" class="subform-pane">
         <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
-        <xf:repeat id="tabgroups-id" nodeset="tab">
+        <xf:repeat id="navgroups-id" nodeset="xhtml:li">
             <xf:label id="editing-subform">Sub-Navigation form</xf:label>
-            <xf:input bind="b-tabgroup-path">
-                <xf:hint>form name field</xf:hint>
-                <xf:help>This is what will be name field on the HTML form.</xf:help>
-                <xf:label>URL Path</xf:label>
-            </xf:input>
-            <xf:input bind="b-tabgroup-id">
+            <xf:input bind="b-nav-href">
                 <xf:hint>Internal ID</xf:hint>
-                <xf:help>Mainly used by function that creates the tabs at runtime.</xf:help>
-                <xf:label>Unique ID</xf:label>
+                <xf:help>This has to be identical to the @href defined in routes element for this navigation.</xf:help>
+                <xf:label>@href name</xf:label>
             </xf:input>
-            <xf:input bind="b-tabgroup-title">
-                <xf:hint>Field label</xf:hint>
-                <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
-                <xf:label>Tab Label</xf:label>
+            <xf:input bind="b-nav-name">
+                <xf:hint>Internal ID</xf:hint>
+                <xf:help>Acts as a referential key to its parent menu.</xf:help>
+                <xf:label>@name name</xf:label>
+            </xf:input>
+            <xf:input bind="b-nav-i18nkey">
+                <xf:hint>Internationalization message key</xf:hint>
+                <xf:help>This is what gets the translation message set in the i18n files.</xf:help>
+                <xf:label>i18n Message Key</xf:label>
+            </xf:input>
+            <xf:input bind="b-nav-i18ntitle">
+                <xf:hint>Default navigation title</xf:hint>
+                <xf:help>This shown when no translation is provided for this menu in current language selected. Add (nt) after the name.</xf:help>
+                <xf:label>Default name</xf:label>
             </xf:input>
         </xf:repeat>
-        <xf:trigger appearance="triggerMiddleColumn">
-            <xf:label>update navigation</xf:label>
-            <xf:hint>Click apply to update the document configuration</xf:hint>
-            <xf:send submission="s-update-master"/>
-        </xf:trigger>
+        <xf:group appearance="minimal" class="configsTriggerGroup buttons-pane">
+            <xf:trigger class="configsSubTrigger buttons-inline">
+                <xf:label>add sub-navigation</xf:label>
+                <xf:hint>Add a new sub-navigation to above list.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Loading Sub-navigation Add Form...</xf:message>
+                    <xf:insert nodeset="xhtml:li[last()]" at="last()" origin="instance('tmpl-navigation')/xhtml:li[last()]" ev:event="DOMActivate"/>
+                    <xf:setvalue bind="b-nav-href" ref="xhtml:a/@href" model="mnavgroup" value="this"/>
+                    <!--xf:setvalue bind="b-nav-href" value="value XPath">value</xf:setvalue>
+                    <xf:setvalue bind="b-nav-href" ref="instance('tmpl-navigation')/xhtml:li/xhtml:a/@href"/-->
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>delete selected</xf:label>
+                <xf:hint>Delete the Selected row in a form.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Deleting selected sub-navigation...</xf:message>
+                    <xf:delete nodeset="xhtml:li" at="index('navgroups-id')" ev:event="DOMActivate"/>
+                </xf:action>
+            </xf:trigger>
+            →
+            <xf:trigger appearance="triggerMiddleColumn buttons-inline">
+                <xf:label>apply changes</xf:label>
+                <xf:hint>Click apply to update the document configuration</xf:hint>
+                <xf:send submission="s-update-master"/>
+            </xf:trigger>
+        </xf:group>
     </xf:group>
 </div>

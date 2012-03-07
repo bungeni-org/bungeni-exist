@@ -46,13 +46,13 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </div>
         
         <!-- MAIN MENU -->
-        <div class="section">{adm:main-menu('search')}</div>
+        <div class="section" id="mainnav">{adm:main-menu('search')}</div>
         <div class="section" dojotype="dijit.layout.ContentPane">
+                <div class="headline">Pagination Preferences</div>        
               <xf:group id="itema-ui" 
                     ref="instance('uconfig')" 
                     appearance="bf:verticalTable">
 
-                <div class="headline">Pagination Preferences</div>
                 <div class="description">
                     <p>Edit the Pagination Preferencs</p>
                 </div>

@@ -41,64 +41,66 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>
     </div>
     <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('order')}</div>
+    <div class="section" id="mainnav">{adm:main-menu('order')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
-        
-        <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
-            <!-- 
-                unload the subform, we may have to call this explicitly
-                on switching rows in the repeater -->
-            <xf:action ev:event="unload-subforms">
-                <xf:load show="none" targetid="orderby"/>
-            </xf:action>
-            
-            <div class="headline">Order Configurations</div>
-            <div class="description">
-                <p>Edit the Order configurations</p>
-            </div>
-           
-            <!--
-            List all the orderby per content type
-            -->
-            <xf:repeat id="doctypes" nodeset="/ui/doctypes/doctype" appearance="full" class="sortorders">
-                <xf:output ref="@name"/>
-            </xf:repeat>
-        </xf:group>
-        
-        <xf:group appearance="minimal" class="configsTriggerGroup">
-        
-            <xf:trigger class="configsSubTrigger">
-                <xf:label>load selected configuration</xf:label>
-                <xf:hint>Edit the Selected row in a form.</xf:hint>
-                <xf:action>
-                    <xf:message level="ephemeral">Loading Order By Editor...</xf:message>
-                    <xf:load show="embed" targetid="doctype">
-                        <xf:resource value="'./admin-order-subform.xml'"/>
-                    </xf:load>
-                </xf:action>
-            </xf:trigger>
-            
-                        
-            <xf:trigger class="configsSubTrigger">
-                <xf:label>save changes</xf:label>
-                <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
-                <xf:action>
-                    <xf:message level="ephemeral">Saving Document...</xf:message>
-                    <xf:send submission="save-form" />
-                </xf:action>
-            </xf:trigger>
-            
-        </xf:group>
-        
         <!-- 
-            the subform is embedded here 
-        -->
-        <xf:group appearance="full" class="configsFullGroup">
-            <div class="configsSubForm">
-                <div id="doctype"/>
-            </div>
+            unload the subform, we may have to call this explicitly
+            on switching rows in the repeater -->
+        <xf:action ev:event="unload-subforms">
+            <xf:load show="none" targetid="orderby"/>
+        </xf:action>
+        
+        <div class="headline">Order Configurations</div>
+        <div class="description">
+            <p>Edit the Order configurations</p>
+        </div>
+       
+        <div class="section" dojotype="dijit.layout.ContentPane">
+            <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
+                <!--
+                List all the orderby per content type
+                -->
+                <div class="itemgroups"> 
+                    <xf:group appearance="minimal" class="configsTriggerGroup">
+                          <xf:trigger class="configsSubTrigger">
+                              <xf:label>load selected</xf:label>
+                              <xf:hint>Edit the Selected row in a form.</xf:hint>
+                              <xf:action>
+                                  <xf:message level="ephemeral">Loading Order By Editor...</xf:message>
+                                  <xf:load show="embed" targetid="doctype">
+                                      <xf:resource value="'./admin-order-subform.xml'"/>
+                                  </xf:load>
+                              </xf:action>
+                          </xf:trigger>
+                    </xf:group>                 
+                
+                    <xf:repeat id="doctypes" nodeset="/ui/doctypes/doctype" appearance="full" class="itemgroups">
+                        <xf:output ref="@name"/>
+                    </xf:repeat>
+                    
+                    <xf:group appearance="minimal" class="configsTriggerGroup">            
+                        <xf:trigger class="configsSubTrigger">
+                            <xf:label>save changes</xf:label>
+                            <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
+                            <xf:action>
+                                <xf:message level="ephemeral">Saving Document...</xf:message>
+                                <xf:send submission="save-form" />
+                            </xf:action>
+                        </xf:trigger>
+                        
+                    </xf:group>
+                 </div>
+            </xf:group>
             
-        </xf:group> 
+            <!-- 
+                the subform is embedded here 
+            -->
+            <xf:group appearance="full" class="configsFullGroup">
+                <div class="configsSubForm">
+                    <div id="doctype" class="editpane"/>
+                </div>
+            </xf:group>             
+         </div> 
         
     </div>
  </div>

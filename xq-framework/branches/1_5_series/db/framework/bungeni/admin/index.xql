@@ -31,7 +31,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
 <body>
  <div id="xforms">
     <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('search')}</div>
+    <div class="section" id="mainnav">{adm:main-menu('search')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         
             <div class="headline">Admin Section</div>

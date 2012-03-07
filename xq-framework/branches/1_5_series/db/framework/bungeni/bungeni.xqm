@@ -1703,7 +1703,7 @@ declare function bun:documentitem-versions-with-acl($acl-permissions as node(), 
 				 }
 };
 (:~ 
-    Similar to Versions... removes timeline changes that don't fit the permissions given.
+    Similar to Versions... removes changes that don't fit the permissions given.
 :)
 declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $docitem as node() ) {
   if ($docitem/self::bu:change) then
@@ -1990,12 +1990,11 @@ declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) a
     </parl-doc>   
     
     return
-        $doc
-        (:transform:transform($doc, 
+        transform:transform($doc, 
                             $stylesheet, 
                             <parameters>
                                 <param name="version" value="true" />
-                            </parameters>):)
+                            </parameters>)
 };
 
 declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $sortby as xs:string) as element() {

@@ -30,9 +30,9 @@
         <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
     </xf:model>
     <!-- subform to edit loaded route -->
-    <xf:group appearance="full">
+    <xf:group appearance="full" class="subform-pane">
         <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
-        <xf:repeat id="tabgroups-id" nodeset="format">
+        <xf:repeat id="downloadgroups-id" nodeset="format">
             <xf:label id="editing-subform">Tab-group Subform</xf:label>
             <xf:select1 bind="b-downloadg-type" appearance="minimal">
                 <xf:hint>pre-defined type</xf:hint>
@@ -49,10 +49,32 @@
                 <xf:label>Title / Label</xf:label>
             </xf:input>
         </xf:repeat>
-        <xf:trigger appearance="triggerMiddleColumn">
-            <xf:label>update download-formats</xf:label>
-            <xf:hint>Click apply to update the document configuration</xf:hint>
-            <xf:send submission="s-update-master"/>
-        </xf:trigger>
+        <xf:group appearance="minimal" class="configsTriggerGroup buttons-pane">
+            <xf:trigger class="configsSubTrigger buttons-inline">
+                <xf:label>add download-format item</xf:label>
+                <xf:hint>Add a new download-format to above list.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Loading Download-format item Add Form...</xf:message>
+                    <xf:insert nodeset="format[last()]" at="last()" origin="instance('default')/format[last()]" ev:event="DOMActivate"/>
+                    <!--xf:setvalue bind="b-nav-href" ref="xhtml:a/@href" model="mnavgroup" value="this"/>
+                        <xf:setvalue bind="b-nav-href" value="value XPath">value</xf:setvalue>
+                        <xf:setvalue bind="b-nav-href" ref="instance('tmpl-navigation')/xhtml:li/xhtml:a/@href"/-->
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>delete selected</xf:label>
+                <xf:hint>Delete the Selected row in a form.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Deleting selected sub-navigation...</xf:message>
+                    <xf:delete nodeset="format" at="index('downloadgroups-id')" ev:event="DOMActivate"/>
+                </xf:action>
+            </xf:trigger>
+            →   
+            <xf:trigger appearance="triggerMiddleColumn">
+                <xf:label>apply changes</xf:label>
+                <xf:hint>Click apply to update the document configuration</xf:hint>
+                <xf:send submission="s-update-master"/>
+            </xf:trigger>
+        </xf:group>
     </xf:group>
 </div>

@@ -41,64 +41,66 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>
     </div>
     <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('tabgroup')}</div>
+    <div class="section" id="mainnav">{adm:main-menu('tabgroup')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
-        
-        <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
-            <!-- 
-                unload the subform, we may have to call this explicitly
-                on switching rows in the repeater -->
-            <xf:action ev:event="unload-subforms">
-                <xf:load show="none" targetid="orderby"/>
-            </xf:action>
-            
-            <div class="headline">Downloads / Formats Configurations</div>
-            <div class="description">
-                <p>Edit the Downloads configurations</p>
-            </div>
-           
-            <!--
-            List all the tab-groups
-            -->
-            <xf:repeat id="downloadgroups" nodeset="/ui/downloadgroups/rendergroup" appearance="full" class="sortorders">
-                <xf:output ref="@name"/>
-            </xf:repeat>
-        </xf:group>
-        
-        <xf:group appearance="minimal" class="configsTriggerGroup">
-        
-            <xf:trigger class="configsSubTrigger">
-                <xf:label>load selected configuration</xf:label>
-                <xf:hint>Edit the Selected row in a form.</xf:hint>
-                <xf:action>
-                    <xf:message level="ephemeral">Loading Downloads In Editor...</xf:message>
-                    <xf:load show="embed" targetid="downloads">
-                        <xf:resource value="'./admin-download-subform.xml'"/>
-                    </xf:load>
-                </xf:action>
-            </xf:trigger>
-            
-                        
-            <xf:trigger class="configsSubTrigger">
-                <xf:label>save changes</xf:label>
-                <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
-                <xf:action>
-                    <xf:message level="ephemeral">Saving Document...</xf:message>
-                    <xf:send submission="save-form" />
-                </xf:action>
-            </xf:trigger>
-            
-        </xf:group>
-        
         <!-- 
-            the subform is embedded here 
-        -->
-        <xf:group appearance="full" class="configsFullGroup">
-            <div class="configsSubForm">
-                <div id="downloads"/>
-            </div>
-            
-        </xf:group> 
+            unload the subform, we may have to call this explicitly
+            on switching rows in the repeater -->
+        <xf:action ev:event="unload-subforms">
+            <xf:load show="none" targetid="orderby"/>
+        </xf:action>
+        
+        <div class="headline">Downloads / Formats Configurations</div>
+        <div class="description">
+            <p>Edit the Downloads configurations</p>
+        </div>
+        
+        <div class="section" dojotype="dijit.layout.ContentPane">
+           <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
+               <!--
+               List all the download-groups
+               -->
+               <div class="itemgroups">
+                    <xf:group appearance="minimal" class="configsTriggerGroup">        
+                        <xf:trigger class="configsSubTrigger">
+                            <xf:label>load selected</xf:label>
+                            <xf:hint>Edit the Selected row in a form.</xf:hint>
+                            <xf:action>
+                                <xf:message level="ephemeral">Loading Downloads In Editor...</xf:message>
+                                <xf:load show="embed" targetid="downloads">
+                                    <xf:resource value="'./admin-download-subform.xml'"/>
+                                </xf:load>
+                            </xf:action>
+                        </xf:trigger>        
+                    </xf:group>               
+               
+                   <xf:repeat id="downloadgroups" nodeset="/ui/downloadgroups/rendergroup" appearance="full" class="itemgroups">
+                       <xf:output ref="@name"/>
+                   </xf:repeat>
+                   
+                   <xf:group appearance="minimal" class="configsTriggerGroup">       
+                       <xf:trigger class="configsSubTrigger">
+                           <xf:label>save changes</xf:label>
+                           <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
+                           <xf:action>
+                               <xf:message level="ephemeral">Saving Document...</xf:message>
+                               <xf:send submission="save-form" />
+                           </xf:action>
+                       </xf:trigger>
+                   </xf:group>                   
+               </div>
+           </xf:group>
+           
+           <!-- 
+               the subform is embedded here 
+           -->
+           <xf:group appearance="full" class="configsFullGroup">
+               <div class="configsSubForm">
+                   <div id="downloads" class="editpane"/>
+               </div>
+               
+           </xf:group> 
+        </div>
         
     </div>
  </div>

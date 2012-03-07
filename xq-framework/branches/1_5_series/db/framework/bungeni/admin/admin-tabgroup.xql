@@ -43,7 +43,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>
     </div>
     <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('tabgroup')}</div>
+    <div class="section" id="mainnav">{adm:main-menu('tabgroup')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         <!-- 
             unload the subform, we may have to call this explicitly
@@ -57,26 +57,25 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             <p>Edit the Tab-group configurations</p>
         </div>
 
-        <xf:group appearance="minimal" class="configsTriggerGroup">
-        
-            <xf:trigger class="configsSubTrigger">
-                <xf:label>load selected configuration</xf:label>
-                <xf:hint>Edit the Selected row in a form.</xf:hint>
-                <xf:action>
-                    <xf:message level="ephemeral">Loading Tab-group In Editor...</xf:message>
-                    <xf:load show="embed" targetid="tabgroup">
-                        <xf:resource value="'./admin-tabgroup-subform.xml'"/>
-                    </xf:load>
-                </xf:action>
-            </xf:trigger>
-            
-        </xf:group>
         <div class="section" dojotype="dijit.layout.ContentPane">
             <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
                 <!--
                 List all the tab-groups
                 -->
                 <div class="itemgroups">
+                    <xf:group appearance="minimal" class="configsTriggerGroup">
+                        <xf:trigger class="configsSubTrigger">
+                            <xf:label>load selected</xf:label>
+                            <xf:hint>Edit the Selected row in a form.</xf:hint>
+                            <xf:action>
+                                <xf:message level="ephemeral">Loading Tab-group In Editor...</xf:message>
+                                <xf:load show="embed" targetid="tabgroup">
+                                    <xf:resource value="'./admin-tabgroup-subform.xml'"/>
+                                </xf:load>
+                            </xf:action>
+                        </xf:trigger>
+                    </xf:group>                
+                
                     <xf:repeat id="tabgroups" nodeset="/ui/tabgroups/tabs" appearance="full" class="itemgroups">
                         <xf:output ref="@name"/>
                     </xf:repeat>

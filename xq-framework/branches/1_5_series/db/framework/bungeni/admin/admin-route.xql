@@ -18,7 +18,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <head>
     <title>Route Preferences</title>
-    <meta name="author" content="anthony at googlemail.com"/>
+    <meta name="author" content="aowino at googlemail.com"/>
     <meta name="author" content="ashok at parliaments.info"/>
     <meta name="description" content="XForms with config options"/>
     <link rel="stylesheet" href="../../assets/admin/style.css"/>
@@ -48,7 +48,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>       
     </div>
     <!-- MAIN MENU -->
-    <div class="section">{adm:main-menu('route')}</div>
+    <div class="section" id="mainnav">{adm:main-menu('route')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         
         <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
@@ -69,13 +69,33 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             List all the routes 
             -->
             <xf:repeat id="routes" nodeset="/ui/routes/route" appearance="compact" class="configsRepeat">
-               <xf:output ref="@href">
+                <xf:output ref="@href">
                     <xf:label class="configListHeader">Path</xf:label>
                 </xf:output>
        
-               <xf:output value="concat(title, ' [', navigation, '&#8594;', subnavigation, '] ')">
+                <xf:output value="concat(title, ' [', navigation, '&#8594;', subnavigation, '] ')">
                     <xf:label class="configListHeader">Title [Navigation]</xf:label>
                 </xf:output>
+                
+                <!--xf:trigger class="configsSubTrigger">
+                    <xf:label>edit</xf:label>
+                    <xf:hint>Edit the Selected row in a form.</xf:hint>
+                    <xf:action>
+                        <xf:message level="ephemeral">Loading Route Editor...</xf:message>
+                        <xf:load show="embed" targetid="route" ref="index('routes')">
+                            <xf:resource value="'./admin-route-subform.xml'"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger-->                
+                
+                <xf:trigger class="configsSubTrigger">
+                    <xf:label>delete</xf:label>
+                    <xf:hint>Delete the Selected row in a form.</xf:hint>
+                    <xf:action>
+                        <xf:message level="ephemeral">Deleting selected route...</xf:message>
+                        <xf:delete nodeset="/ui/routes/route" at="index('routes')" ev:event="DOMActivate"/>
+                    </xf:action>
+                </xf:trigger>                 
             </xf:repeat>
             
         </xf:group>
@@ -101,15 +121,6 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     <xf:load show="embed" targetid="route">
                         <xf:resource value="'./admin-route-subform.xml'"/>
                     </xf:load>
-                </xf:action>
-            </xf:trigger>
-            
-            <xf:trigger class="configsSubTrigger">
-                <xf:label>delete selected</xf:label>
-                <xf:hint>Delete the Selected row in a form.</xf:hint>
-                <xf:action>
-                    <xf:message level="ephemeral">Deleting selected route...</xf:message>
-                    <xf:delete nodeset="/ui/routes/route" at="index('routes')" ev:event="DOMActivate"/>
                 </xf:action>
             </xf:trigger>            
             

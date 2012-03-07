@@ -761,9 +761,21 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-doc-event($docnumber,"event.xsl")
-                    return $act-entries-tmpl
-    								    
+                    $act-entries-tmpl :=  bun:get-doc-event($docnumber,"event.xsl"),
+                    $act-entries-repl:= document {
+                                        template:copy-and-replace($EXIST-PATH, fw:app-tmpl("documents.xml")/xh:div, $act-entries-tmpl)
+                                    }
+                                    return
+                                        template:process-tmpl(
+                                            $REL-PATH,
+                                            $EXIST-PATH,
+                                            $config:DEFAULT-TEMPLATE,
+                                            cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>,
+                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                        )    
     	else if ($EXIST-PATH eq "/question/text" )
     		 then 
                 let 

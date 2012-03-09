@@ -1663,11 +1663,32 @@ declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string)
     return 
         if($tab-context eq 'timeline') then
             bun:documentitem-changes-with-acl($acl-permissions,$match/node())
+        (:else if($tab-context eq 'documents') then 
+            bun:documentitem-eventdocs-with-acl($acl-permissions, $match):)            
         else if($tab-context eq 'documents') then 
             bun:documentitem-versions-with-acl($acl-permissions, $match/node())
         else
             $match
     
+};
+
+(:~
+    Remove Events to which we dont have access. This API filters a document for ONLY the versions
+    the acl user has access to !+ACL_NEW_API
+:)
+declare function bun:documentitem-eventdocs-with-acl($acl-permissions as node(), $docitem as node() ) {
+
+  for $anevent in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
+  let $gotevent := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem[@uri eq data($anevent/@href)]/ancestor::bu:ontology
+    
+  return 
+    if ($gotevent/bu:legislativeItem/bu:permissions/bu:permission[
+          @name=data($acl-permissions/@name) and 
+          @role=data($acl-permissions/@role) and 
+          @setting=data($acl-permissions/@setting)]) then
+          $docitem/ancestor::bu:ontology
+    else
+          ()
 };
 
 (:~

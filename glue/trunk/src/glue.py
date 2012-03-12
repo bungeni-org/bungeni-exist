@@ -90,6 +90,8 @@ class Transformer(object):
     """
     Access the Transformer via this class
     """
+    __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
+    __global_path__ = "//"
     
     def __init__(self, cfg):
         # point the transformer to the correct configuration folder
@@ -105,8 +107,12 @@ class Transformer(object):
     
     def set_params(self, params):
         # sets the parliament info object
-        self._params = params   
-    
+        self._params = params
+
+    def get_doc_uri(self):
+        
+        return self.__global_path__ + "bu:ontology/child::*/@uri"
+
     def run(self, input_file, output, metalex, config_file):
         """
         Run the transformer on the input file
@@ -116,14 +122,22 @@ class Transformer(object):
             input_file, 
             config_file,  
             self.get_params()
-            ) 
+            )
+            
         
         #input stream
         fis  = FileInputStream(translatedFiles["anxml"])
         fisMlx  = FileInputStream(translatedFiles["metalex"])
+        """
+        Get the new xml document from the path
+        """
+        sreader = SAXReader()
+        self.xmldoc = sreader.read(translatedFiles["metalex"])
+        uri = self.xmldoc.selectSingleNode(self.get_doc_uri()).getValue()
+        uri_name = uri.replace("/","_")
         
         outFile = File(output)
-        outMlx = File(metalex)
+        outMlx = File(metalex + uri_name + ".xml")
         #copy transformed files to disk
         FileUtility.getInstance().copyFile(fis, outFile)
         FileUtility.getInstance().copyFile(fisMlx, outMlx)
@@ -388,11 +402,11 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     pipe_path = self.input_params[0].get_pipelines()[pipe_type]
                     output_file_name_wo_prefix  =   pipe_type + "_" + str(self.counter)
                     an_xml_file = "an_" + output_file_name_wo_prefix + ".xml"
-                    on_xml_file = "on_" + output_file_name_wo_prefix + ".xml"
+                    on_xml_file = "on_" + output_file_name_wo_prefix
                     self.input_params[1].run(
                          input_file_path,
                          self.input_params[0].get_akomantoso_output_folder() + an_xml_file ,
-                         self.input_params[0].get_ontoxml_output_folder() + on_xml_file,
+                         self.input_params[0].get_ontoxml_output_folder() + on_xml_file ,
                          pipe_path
                          )
                 else:

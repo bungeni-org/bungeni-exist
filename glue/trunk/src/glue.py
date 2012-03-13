@@ -20,10 +20,14 @@ __maintainer__ = "Anthony Oduor"
 __created__ = "18th Oct 2011"
 __status__ = "Development"
 
+from org.dom4j import Element
+from org.dom4j import Document
+from org.dom4j import DocumentFactory
 from org.dom4j.io import SAXReader
 from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
 from java.io import File,FileWriter
+from java.io import FileOutputStream
 from java.io import FileInputStream
 from java.util import HashMap
 from net.lingala.zip4j.core import ZipFile
@@ -109,9 +113,19 @@ class Transformer(object):
         # sets the parliament info object
         self._params = params
 
-    def get_doc_uri(self):
+    def xpath_get_doc_uri(self):
         #returns a documents URI
         return self.__global_path__ + "bu:ontology/child::*/@uri"
+
+    def get_sync_status(self,input_file):
+        sreader = SAXReader()
+        self.xmldoc = sreader.read(input_file)
+        return self.xmldoc.selectSingleNode("/file_status/exists")
+
+    def get_doc_uri(self,input_file):
+        sreader = SAXReader()
+        self.xmldoc = sreader.read(input_file)
+        return self.xmldoc.selectSingleNode(self.xpath_get_doc_uri()).getValue()
 
     def replace_all(self, uri, dic):
         #multiple replace characters
@@ -134,12 +148,8 @@ class Transformer(object):
         #input stream
         fis  = FileInputStream(translatedFiles["anxml"])
         fisMlx  = FileInputStream(translatedFiles["metalex"])
-        """
-        Get the new xml document from the path
-        """
-        sreader = SAXReader()
-        self.xmldoc = sreader.read(translatedFiles["metalex"])
-        uri = self.xmldoc.selectSingleNode(self.get_doc_uri()).getValue()
+        #get the document's URI
+        uri = self.get_doc_uri(translatedFiles["metalex"])
         rep_dict = {'/':'_', ':':','}
         uri_name = self.replace_all(uri, rep_dict)
         
@@ -461,6 +471,59 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
         else:
             return (False,None)
 
+class SyncXmlFilesWalker(GenericDirWalkerXML):
+    """
+    
+    Synchronizes XML files one-by-one with the eXist XML repository
+    """
+
+    def create_sync_file(self):
+        OutputFormat.createPrettyPrint()
+        format = OutputFormat.createCompactFormat()
+        self.document = DocumentFactory.getInstance().createDocument()
+        self.root = self.document.addElement("collection")
+        self.root.addAttribute("name", "synclist")
+        return self.root
+
+    def add_item_to_repo(self,repo_bound_file):
+        name = self.root.addElement("file")
+        name.addText(repo_bound_file)
+        format = OutputFormat.createPrettyPrint()
+        writer = XMLWriter(FileWriter("/home/undesa/bungeni-glue/reposync.xml"), format)
+        writer.write(self.document)
+        writer.flush()
+        writer.close()
+
+    def get_uri(self, input_file):
+        transformer = Transformer(self.input_params["main_config"])
+        return transformer.get_doc_uri(input_file)
+
+    def get_sync(self, input_file):
+        transformer = Transformer(self.input_params["main_config"])
+        return transformer.get_sync_status(input_file)
+
+    def fn_callback(self, input_file_path):
+        if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
+            print self.get_uri(input_file_path)
+            statinfo = os.stat(input_file_path)
+            import httplib, urllib
+            headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/xml"}
+            conn = httplib.HTTPConnection("localhost",8088,50)
+            conn.request("GET", "/exist/apps/framework/check-update?uri="+self.get_uri(input_file_path)+"&moddate="+str(statinfo.st_ctime)+"")
+            response = conn.getresponse()
+            if(response.status == 200):
+                print _COLOR.OKGREEN, response.status , _COLOR.ENDC
+                self.add_item_to_repo(input_file_path)
+                data = response.read()
+                #print self.get_sync(data)
+                print _COLOR.OKBLUE, data, _COLOR.ENDC
+            else:
+                 print _COLOR.FAIL, response.status, response.reason, _COLOR.ENDC
+            conn.close()
+            return (False, None)
+        else:
+            return (False,None)
+
 class WebDavConfig(Config):
     """
     Configuration information for eXist WebDav
@@ -597,7 +660,15 @@ def do_transform(cfg, parl_info):
     pxf = ProcessXmlFilesWalker([cfg,transformer])
     pxf.walk(cfg.get_input_folder())
     print _COLOR.OKGREEN, "Completed transformations !", _COLOR.ENDC
-    
+
+def do_sync(cfg, wd_cfg):
+    print _COLOR.OKGREEN + "Syncing with eXist repository..." + _COLOR.ENDC
+    """ synchronizing xml documents """
+    sxw = SyncXmlFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
+    sxw.create_sync_file()
+    sxw.walk(cfg.get_ontoxml_output_folder())
+    print _COLOR.OKGREEN + "Completed synching to eXist !" + _COLOR.ENDC
+
 def webdav_upload(cfg, wd_cfg):
     print _COLOR.OKGREEN, "Commencing XML files upload to eXist via WebDav...", _COLOR.ENDC
     """ uploading xml documents """
@@ -635,6 +706,10 @@ def main_transform(config_file):
     print _COLOR.HEADER + "Transforming ...." + _COLOR.ENDC      
     do_transform(cfg, parl_info)
 
+def main_sync(config_file):
+    wd_cfg = WebDavConfig(config_file)
+    do_sync(TransformerConfig(config_file), wd_cfg)
+
 def main_upload(config_file):
     """
     process the --upload option by calling the webdav upload
@@ -652,6 +727,8 @@ def main(options):
             transform = __parse_options(options, ("-t", "--transform"))
             if transform is not None:
                 main_transform(config_file)
+            #perform sysnc at this juncture
+            main_sync(config_file)
             upload = __parse_options(options, ("-u", "--upload"))
             if upload is not None:
                 main_upload(config_file)
@@ -663,7 +740,6 @@ def main(options):
         print msg
         print _COLOR.FAIL + "There was an exception during startup !" + _COLOR.ENDC
         sys.exit(2)
-
 def __parse_options(options, look_for=()):
     input_arg = None
     for opt,arg in options:
@@ -672,6 +748,7 @@ def __parse_options(options, look_for=()):
     return input_arg
 
 if __name__ == "__main__":
+    from asyncore import loop
     if (len(sys.argv) > 1):
         #from org.apache.log4j import PropertyConfigurator
         PropertyConfigurator.configure("./src/log4j.properties")

@@ -53,6 +53,24 @@ declare function bun:translate($node as node(), $params as element(parameters)?,
 };
 :)
 
+declare function bun:check-update($uri as xs:string, $moddate as xs:string) {
+    util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
+    
+    let $doc := <file_status>        
+        {
+            if(collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]) then (
+                <exists>true</exists>,
+                <file>{util:document-name(collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri])}</file>,
+                <moddate>{xmldb:created(cmn:get-lex-db(),util:document-name(collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]))}</moddate>
+            )
+            else
+                <exists>false</exists>
+        }
+        </file_status>   
+        
+    return $doc
+};
+
 (:~
 :  Renders PDF output for parliamentary document using xslfo module
 : @param docid
@@ -1643,7 +1661,8 @@ Get document with ACL filter
 :)
 declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string) {
     let $acl-permissions := cmn:get-acl-permissions($acl),
-        $tab-context := functx:substring-after-last(request:get-effective-uri(), '/')
+        $tab-context := functx:substring-after-last(request:get-effective-uri(), '/'),
+        $permit := <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>
     
     (: WARNING-- because of odd behavior in eXist 1.5 branch we have to wrap the return value of the 
     eval in a document {} object otherwise things dont work. Search in the exist mailing list for 'xpath resolution
@@ -1664,7 +1683,7 @@ declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string)
         if($tab-context eq 'timeline') then
             bun:documentitem-changes-with-acl($acl-permissions,$match/node())
         (:else if($tab-context eq 'documents') then 
-            bun:documentitem-eventdocs-with-acl($acl-permissions, $match):)            
+            bun:documentitem-eventdocs-with-acl($permit, $match/node()):)           
         else if($tab-context eq 'documents') then 
             bun:documentitem-versions-with-acl($acl-permissions, $match/node())
         else
@@ -1678,17 +1697,21 @@ declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string)
 :)
 declare function bun:documentitem-eventdocs-with-acl($acl-permissions as node(), $docitem as node() ) {
 
-  for $anevent in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
-  let $gotevent := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem[@uri eq data($anevent/@href)]/ancestor::bu:ontology
+    (:for $anevent in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
+    let $gotevent := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem[@uri eq data($anevent/@href)]/ancestor::bu:ontology
     
-  return 
+    return 
     if ($gotevent/bu:legislativeItem/bu:permissions/bu:permission[
           @name=data($acl-permissions/@name) and 
           @role=data($acl-permissions/@role) and 
           @setting=data($acl-permissions/@setting)]) then
-          $docitem/ancestor::bu:ontology
+          <ola>{data($anevent/@href)}</ola>
     else
-          ()
+          <ola>{data($anevent/@href)}</ola>:)
+          
+    for $thisone in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent 
+    
+        return <test/>
 };
 
 (:~

@@ -49,6 +49,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                   $REL-PATH
                   )
                   
+    	(: GLUE-SERVICE :)
+    	else if ($EXIST-PATH eq "/check-update" )
+    		 then 
+                let $docuri := xs:string(request:get-parameter("uri","")), 
+                    $moddate := xs:string(request:get-parameter("moddate","")),
+                    $check-up-results :=  bun:check-update($docuri,$moddate)
+                return $check-up-results        
+                  
     	(: LANGUAGE-SETTER :)
     	else if ($EXIST-PATH eq "/switch")
     		 then (

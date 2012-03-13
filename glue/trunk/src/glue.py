@@ -110,8 +110,14 @@ class Transformer(object):
         self._params = params
 
     def get_doc_uri(self):
-        
+        #returns a documents URI
         return self.__global_path__ + "bu:ontology/child::*/@uri"
+
+    def replace_all(self, uri, dic):
+        #multiple replace characters
+        for i, j in dic.iteritems():
+            uri = uri.replace(i, j)
+        return uri
 
     def run(self, input_file, output, metalex, config_file):
         """
@@ -134,9 +140,10 @@ class Transformer(object):
         sreader = SAXReader()
         self.xmldoc = sreader.read(translatedFiles["metalex"])
         uri = self.xmldoc.selectSingleNode(self.get_doc_uri()).getValue()
-        uri_name = uri.replace("/","_")
+        rep_dict = {'/':'_', ':':','}
+        uri_name = self.replace_all(uri, rep_dict)
         
-        outFile = File(output)
+        outFile = File(output + uri_name + ".xml")
         outMlx = File(metalex + uri_name + ".xml")
         #copy transformed files to disk
         FileUtility.getInstance().copyFile(fis, outFile)
@@ -401,8 +408,10 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                 if pipe_type in self.input_params[0].get_pipelines():
                     pipe_path = self.input_params[0].get_pipelines()[pipe_type]
                     output_file_name_wo_prefix  =   pipe_type + "_" + str(self.counter)
-                    an_xml_file = "an_" + output_file_name_wo_prefix + ".xml"
-                    on_xml_file = "on_" + output_file_name_wo_prefix
+                    #truncate to first-3 characters only
+                    truncated_prefix = output_file_name_wo_prefix[:3]
+                    an_xml_file = "an_" + truncated_prefix
+                    on_xml_file = "on_" + truncated_prefix
                     self.input_params[1].run(
                          input_file_path,
                          self.input_params[0].get_akomantoso_output_folder() + an_xml_file ,

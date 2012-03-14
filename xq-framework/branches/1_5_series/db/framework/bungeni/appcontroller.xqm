@@ -53,8 +53,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/check-update" )
     		 then 
                 let $docuri := xs:string(request:get-parameter("uri","")), 
-                    $moddate := xs:string(request:get-parameter("moddate","")),
-                    $check-up-results :=  bun:check-update($docuri,$moddate)
+                    $statusdate := xs:string(request:get-parameter("t","")),
+                    $check-up-results :=  bun:check-update($docuri,$statusdate)
                 return $check-up-results        
                   
     	(: LANGUAGE-SETTER :)
@@ -80,9 +80,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  "Do nothing now",
+                    $act-entries-tmpl :=  bun:get-sittings($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("business.xml")/xh:div, <div/>)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("business.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -91,8 +91,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,$act-entries-repl))
-    								    )
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'whatson')))))
+    								    ) 
                
         else if ($EXIST-PATH eq "/members")
     		 then 

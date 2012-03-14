@@ -53,20 +53,41 @@ declare function bun:translate($node as node(), $params as element(parameters)?,
 };
 :)
 
-declare function bun:check-update($uri as xs:string, $moddate as xs:string) {
+(:~
+    Service for checking status of file before update eXist repository
+    @param uri
+        Document URI
+    @param statusdate
+        The status date in the document
+        
+    @return <response>
+                <status>overwrite|new|ignore</status>
+            </response>
+:)
+declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
     
-    let $doc := <file_status>        
+    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]/ancestor::bu:ontology
+    let $doc := <response>        
         {
-            if(collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]) then (
-                <exists>true</exists>,
-                <file>{util:document-name(collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri])}</file>,
-                <moddate>{xmldb:created(cmn:get-lex-db(),util:document-name(collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]))}</moddate>
+            if($docitem) then (
+                if($statusdate eq "") then 
+                    (:  Means no `bu:statusDate` node in the external document, default is to overwrite  
+                        repository version 
+                    :)
+                    <status>overwrite</status>
+                else if(xs:dateTime($docitem/child::*/bu:statusDate) lt $statusdate cast as xs:dateTime) then 
+                    (: Means eXist version of the doc is old... do replace by all means :)
+                    <status>overwrite</status>
+                else
+                    (: Ambiguous scenario, ignore :)
+                    <status>ignore</status>
             )
             else
-                <exists>false</exists>
+                (: Not found on eXist :)
+                <status>new</status>
         }
-        </file_status>   
+        </response>   
         
     return $doc
 };

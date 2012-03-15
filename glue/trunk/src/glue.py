@@ -9,7 +9,7 @@
         -upload XML documents + attachments to eXist database
 """
 
-import httplib, urllib #used in sync check
+import httplib, socket #used in sync check
 import os.path, sys, errno, getopt, shutil, uuid
 import ConfigParser, jarray
 
@@ -20,6 +20,8 @@ __version__ = "1.0.1"
 __maintainer__ = "Anthony Oduor"
 __created__ = "18th Oct 2011"
 __status__ = "Development"
+
+__sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
 from org.dom4j import Element
 from org.dom4j import Document
@@ -82,6 +84,9 @@ class TransformerConfig(Config):
     def get_attachments_output_folder(self):
         return self.get("general","attachments_output_folder")
 
+    def get_temp_files_folder(self):
+        return self.get("general","temp_files_folder")
+
     def get_pipelines(self):
         # list of key,values pairs as tuples 
         if len(self.dict_pipes) == 0:
@@ -95,7 +100,7 @@ class Transformer(object):
     """
     Access the Transformer via this class
     """
-    __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
+
     __global_path__ = "//"
     
     def __init__(self, cfg):
@@ -160,8 +165,7 @@ class Transformer(object):
             config_file,  
             self.get_params()
             )
-            
-        
+
         #input stream
         fis  = FileInputStream(translatedFiles["anxml"])
         fisMlx  = FileInputStream(translatedFiles["metalex"])
@@ -181,9 +185,6 @@ class ParseDOMXML(object):
     Parses an XML document using Xerces
     """
 
-    __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
-    __global_path__ = "//"
-    
     def __init__(self):
         """
         Load the xml document from the path
@@ -199,9 +200,8 @@ class ParseBungeniXML(object):
     Parses XML output from Bungeni using Xerces
     """
 
-    __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
     __global_path__ = "//"
-    
+
     def __init__(self, xml_path):
         """
         Load the xml document from the path
@@ -243,7 +243,6 @@ class ParseBungeniXML(object):
             return None
 
     def get_contenttype_name(self):
-
         root_element = self.xmldoc.getRootElement()
         if root_element.getName() == "contenttype":
             return root_element.attributeValue("name")   
@@ -317,6 +316,7 @@ class GenericDirWalker(object):
     def fn_callback(self, nfile):
         glogger.debug("in GenericDirWalker BASE callback" + nfile)
         return (False, None)
+
 
 class GenericDirWalkerXML(GenericDirWalker):
 
@@ -395,6 +395,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         else:
             return (False,None)
 
+
 class SeekBindAttachmentsWalker(GenericDirWalkerXML):
     """
     Walker that finds files with attachments and adds uuids
@@ -439,6 +440,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
             self.attachments_seek_rename(bunparse)
         return (False,None)
 
+
 class ProcessXmlFilesWalker(GenericDirWalkerXML):
     """
     Walker that is used to transform XML Files
@@ -471,6 +473,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
         else:
             return (False,None)
 
+
 class RepoSyncUploader(object):
     """
     
@@ -479,35 +482,45 @@ class RepoSyncUploader(object):
     def __init__(self, input_params):
         self.input_params = input_params
         self.bunparse = ParseDOMXML()
-        self.dom = self.bunparse.doc_dom("/home/undesa/bungeni-glue/reposync.xml")
+        self.main_cfg = input_params["main_config"]
+        self.webdav_cfg = input_params["webdav_config"]
+        self.dom = self.bunparse.doc_dom(self.main_cfg.get_temp_files_folder()+"reposync.xml")
 
     def upload_files(self):
         coll = self.dom.selectSingleNode("//collection")
         paths = coll.elements("file")
         for path in paths:
             path_name = path.getText()
-            self.username = self.input_params["webdav_config"].get_username()
-            self.password = self.input_params["webdav_config"].get_password()
-            self.xml_folder = self.input_params["webdav_config"].get_bungeni_xml_folder()
+            self.username = self.webdav_cfg.get_username()
+            self.password = self.webdav_cfg.get_password()
+            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
             webdaver = WebDavClient(self.username, self.password, self.xml_folder)
             webdaver.pushFile(path_name)
+
 
 class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
     """
     
     Pushes Attachment files one-by-one into eXist server
     """
-    
+    def __init__(self, input_params = None):
+        """
+        input_params - the parameters for the callback function
+        """
+        super(GenericDirWalkerATTS, self).__init__()
+        self.webdav_cfg = input_params["webdav_config"]
+
     def fn_callback(self, input_file_path):
         if GenericDirWalkerATTS.fn_callback(self, input_file_path)[0] == True:
-            self.username = self.input_params["webdav_config"].get_username()
-            self.password = self.input_params["webdav_config"].get_password()
-            self.xml_folder = self.input_params["webdav_config"].get_bungeni_atts_folder()
+            self.username = self.webdav_cfg.get_username()
+            self.password = self.webdav_cfg.get_password()
+            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_atts_folder()
             webdaver = WebDavClient(self.username, self.password, self.xml_folder)
             webdaver.pushFile(input_file_path)
             return (False, None)
         else:
             return (False,None)
+
 
 class SyncXmlFilesWalker(GenericDirWalkerXML):
     """
@@ -519,7 +532,9 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         input_params - the parameters for the callback function
         """
         super(GenericDirWalkerXML, self).__init__()
-        self.transformer = Transformer(input_params["main_config"])
+        self.main_cfg = input_params["main_config"]
+        self.webdav_cfg = input_params["webdav_config"]
+        self.transformer = Transformer(self.main_cfg)
 
     def create_sync_file(self):
         OutputFormat.createPrettyPrint()
@@ -535,7 +550,7 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
 
     def close_sync_file(self):
         self.format = OutputFormat.createPrettyPrint()
-        self.writer = XMLWriter(FileWriter("/home/undesa/bungeni-glue/reposync.xml"), self.format)
+        self.writer = XMLWriter(FileWriter(self.main_cfg.get_temp_files_folder()+"reposync.xml"), self.format)
         self.writer.write(self.document)
         self.writer.flush()
         self.writer.close()
@@ -547,29 +562,36 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         return self.transformer.get_sync_status(input_file)
 
     def fn_callback(self, input_file_path):
+        """
+        Calls a service on the eXist repository requesting status of file with 
+        the given URI + status_date. Depending on response, adds it to a list of 
+        documents that need to be uploaded to repository.
+        """
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             file_uri = self.get_params(input_file_path)['uri']
             file_stat_date = self.get_params(input_file_path)['status_date']
             statinfo = os.stat(input_file_path)
-            collection_doc_updated = False
             headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/xml"}
-            conn = httplib.HTTPConnection("localhost",8088,50)
-            conn.request("GET", "/exist/apps/framework/check-update?uri=" + file_uri+"&t=" + file_stat_date)
-            response = conn.getresponse()
-            if(response.status == 200):
-                data = response.read()
-                if(self.get_sync(data) != 'ignore'):
-                    # if 'false' means that its not in the repository 
-                    # so we add it into to the synclist
-                    print _COLOR.WARNING, response.status, "[",self.get_sync(data),"]" ,"- ", os.path.basename(input_file_path), _COLOR.ENDC
-                    self.add_item_to_repo(input_file_path)
-                    collection_doc_updated = True
-                    glogger.debug( data )
+            try:
+                conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),50)
+                conn.request("GET", "/exist/apps/framework/check-update?uri=" + file_uri+"&t=" + file_stat_date)
+                response = conn.getresponse()
+                if(response.status == 200):
+                    data = response.read()
+                    if(self.get_sync(data) != 'ignore'):
+                        print _COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
+                        # 'ignore' means that its in the repository so we add anything that that is not `ignore` to the reposync list
+                        self.add_item_to_repo(input_file_path)
+                        glogger.debug( data )
+                    else:
+                        print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
                 else:
-                    print _COLOR.OKGREEN, response.status, "- Dropped...", _COLOR.ENDC
-            else:
-                 print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
-            conn.close()
+                     print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
+                conn.close()
+            except socket.error, (code, message):
+                print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
+                sys.exit()
+
             return (False, None)
         else:
             return (False,None)
@@ -595,6 +617,15 @@ class WebDavConfig(Config):
     def get_password(self):
         return self.get("webdav", "password")
 
+    def get_server(self):
+        return self.get("webdav", "server")
+
+    def get_port(self):
+        return int(self.get("webdav", "port"))
+
+    def get_http_server_port(self):
+        return "http://"+self.get_server()+":"+str(self.get_port())
+
 class WebDavClient(object):
     """        
     Connects to eXist via WebDav and finally places the files to rest.
@@ -605,11 +636,7 @@ class WebDavClient(object):
 
     def reset_remote_folder(self, put_folder):
         try:
-            if self.sardine.exists(put_folder):
-                print _COLOR.OKBLUE + "Deleting resource "  + put_folder + ": May take a while..." + _COLOR.ENDC
-                self.sardine.delete(put_folder)
-                self.sardine.createDirectory(put_folder)
-            else:
+            if self.sardine.exists(put_folder) is False:
                 print _COLOR.WARNING + "INFO: " + put_folder + " folder wasn't there !" + _COLOR.ENDC            
                 self.sardine.createDirectory(put_folder)
         except SardineException, e:
@@ -661,11 +688,7 @@ def __setup_output_dirs__(cfg):
             if os.error.errno == errno.EEXIST:
                 pass
             else: raise
-    #!TO_DO (ao, 3rd Jan 2012) Deleting the files especially generated xmls 
-    # is not ideal but being done at the moment in development stage... ideally
-    # we should have a way of only pushing 'new' files to eXist rather than 
-    # emptying eXist everytime we do an upload because it takes a while when 
-    # doing a huge batch.
+
     if not os.path.isdir(cfg.get_akomantoso_output_folder()):
         mkdir_p(cfg.get_akomantoso_output_folder())
     else:
@@ -678,6 +701,10 @@ def __setup_output_dirs__(cfg):
         mkdir_p(cfg.get_attachments_output_folder())
     else:
         __empty_output_dir__(cfg.get_attachments_output_folder())
+    if not os.path.isdir(cfg.get_temp_files_folder()):
+        mkdir_p(cfg.get_temp_files_folder())
+    else:
+        __empty_output_dir__(cfg.get_temp_files_folder())
 
 def get_parl_info(cfg):
     piw = ParliamentInfoWalker()
@@ -724,14 +751,14 @@ def webdav_upload(cfg, wd_cfg):
     """ uploading xml documents """
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
-    webdaver.reset_remote_folder(wd_cfg.get_bungeni_xml_folder())    
+    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
     # upload xmls at this juncture
     rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
     rsu.upload_files()
     print _COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + _COLOR.ENDC
     """ now uploading found attachments """
     # first reset attachments folder
-    webdaver.reset_remote_folder(wd_cfg.get_bungeni_atts_folder())
+    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pafw.walk(cfg.get_attachments_output_folder())

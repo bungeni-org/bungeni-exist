@@ -1455,7 +1455,6 @@ declare function bun:get-sitting($acl as xs:string,
             let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
                                             "bu:ontology[@type='groupsitting']/",
                                             "bu:groupsitting[@uri eq '",$doc-uri,"']/",
-                                            "following-sibling::bu:bungeni/",
                                             bun:xqy-docitem-perms($acl)))
             
             return
@@ -1479,8 +1478,7 @@ declare function bun:get-sittings-json($acl as xs:string) as element()* {
 
     let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
                                             "bu:ontology[@type='groupsitting']/",
-                                            "bu:bungeni/",
-                                            bun:xqy-docitem-perms($acl),"/",
+                                            bun:xqy-generic-perms($acl),"/",
                                             "ancestor::bu:ontology")),
         $json_ready := functx:remove-elements-deep($match,('bu:bungeni', 'bu:permissions'))
     
@@ -1657,6 +1655,19 @@ declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
     :)
     return fn:concat(
         "(bu:permissions except bu:versions)/bu:permission[", 
+        cmn:get-acl-permission-attr($acl-permissions), 
+        "]")
+};
+
+declare function bun:xqy-generic-perms($acl as xs:string) as xs:string{
+    let $acl-permissions := cmn:get-acl-permissions($acl)
+    (:
+    : !+NOTES(ao, 16 Mar 2012) After moving permissions into main ontological document 
+    : containing the uri of a document, the bun:xqy-docitem-perms() applies in less instances 
+    : if any and will be deprecated.
+    :)
+    return fn:concat(
+        "bu:permissions/bu:permission[", 
         cmn:get-acl-permission-attr($acl-permissions), 
         "]")
 };
@@ -1954,11 +1965,17 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
 declare function bun:get-contacts-by-uri($acl as xs:string, $address-type as xs:string, $focal as xs:string) {
     let $stylesheet := cmn:get-xslt("contacts.xsl"), 
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
+        $user-uri := if ($address-type eq 'group') then 
+                        $focal 
+                     else 
+                        data(collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$focal]/bu:referenceToUser/@uri),
         $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
                             "/bu:ontology[@type='address']",
-                            "/bu:address[@uri eq '",$focal,"']",
-                            "/following-sibling::bu:bungeni/(bu:permissions except bu:versions)",
-                            "/bu:permission[",$acl-filter,"]",
+                            "/bu:address/bu:assignedTo[@uri eq '",$user-uri,"']",
+                            (: !+NOTE (ao, 16 Mar 2012) Commented permissions check below since currently
+                             : we only have public permissions which dont apply in this case 
+                             :)
+                            (:"/following-sibling::bu:permissions/bu:permission[",$acl-filter,"]",:)
                             "/ancestor::bu:ontology")
     let $doc := <document>
                     <primary>
@@ -1966,7 +1983,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string, $address-type as xs:
                             if($address-type eq 'group') then 
                                 collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal]/ancestor::bu:ontology
                             else
-                                collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$focal]/ancestor::bu:ontology
+                                collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$focal]/ancestor::bu:ontology
                         }
                     </primary>
                     <secondary>

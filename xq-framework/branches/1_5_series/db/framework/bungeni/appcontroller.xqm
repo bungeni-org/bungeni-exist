@@ -1614,7 +1614,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),                
-                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","user",$docnumber),
+                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","membership",$docnumber),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("member.xml")/xh:div, $act-entries-tmpl)
     								 } 

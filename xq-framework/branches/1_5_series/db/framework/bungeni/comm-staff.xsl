@@ -12,7 +12,7 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="assigned-items">
-        <xsl:variable name="doc-type" select="group/bu:ontology/@type"/>
+        <xsl:variable name="doc-type" select="group/bu:ontology/bu:group/@type"/>
         <xsl:variable name="doc-sub-type" select="group/documentType"/>
         <xsl:variable name="doc_uri" select="group/bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
@@ -23,12 +23,13 @@
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-sub-type"/>
+                    <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="uri">
                     <xsl:value-of select="$doc_uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">staff</xsl:with-param>
+                <xsl:with-param name="excludes" select="exlude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">

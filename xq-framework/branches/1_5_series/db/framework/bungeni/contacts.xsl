@@ -15,7 +15,7 @@
     <xsl:template match="document">
         <xsl:variable name="doc-type">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'user'">
+                <xsl:when test="$address_type eq 'membership'">
                     <xsl:value-of select="$address_type"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -25,8 +25,8 @@
         </xsl:variable>
         <xsl:variable name="doc_uri">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'user'">
-                    <xsl:value-of select="primary/bu:ontology/bu:user/@uri"/>
+                <xsl:when test="$address_type eq 'membership'">
+                    <xsl:value-of select="primary/bu:ontology/bu:membership/@uri"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="primary/bu:ontology/bu:group/@uri"/>
@@ -37,8 +37,8 @@
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
                     <xsl:choose>
-                        <xsl:when test="$address_type eq 'user'">
-                            <xsl:value-of select="concat(primary/bu:ontology/bu:user/bu:firstName,' ', primary/bu:ontology/bu:user/bu:lastName)"/>
+                        <xsl:when test="$address_type eq 'membership'">
+                            <xsl:value-of select="concat(primary/bu:ontology/bu:membership/bu:firstName,' ', primary/bu:ontology/bu:membership/bu:lastName)"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>

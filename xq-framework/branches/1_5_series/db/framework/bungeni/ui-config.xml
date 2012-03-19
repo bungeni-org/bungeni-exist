@@ -48,6 +48,14 @@
             <navigation>home</navigation>
             <title>Search</title>
         </route>
+        <route href="/advanced-search">
+            <navigation>home</navigation>
+            <title>Advanced Search</title>
+        </route>
+        <route href="/search-settings">
+            <navigation>home</navigation>
+            <title>Search Settings</title>
+        </route>
         <route href="/search">
             <navigation>business</navigation>
             <title>Search</title>
@@ -900,9 +908,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fstname" field="bu:user/bu:firstName" default="true">First Name</searchin>
-                <searchin name="ln" value="lsname" field="bu:user/bu:lastName">Last Name</searchin>
-                <searchin name="ds" value="desc" field="bu:user/bu:description">Description</searchin>
+                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName" default="true">First Name</searchin>
+                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
+                <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>

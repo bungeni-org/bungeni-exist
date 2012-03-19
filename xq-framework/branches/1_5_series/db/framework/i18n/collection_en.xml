@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="en">
     <msg key="welcome">Welcome</msg>
+    <msg key="adv-search">Advanced Search</msg>
+    <msg key="search-settings">Search Settings</msg>
     <!-- TOP_LEVEL NAV -->
     <msg key="home">home</msg>
     <msg key="business">business</msg>
@@ -59,6 +61,7 @@
     <msg key="listing-search">search text</msg>
     <msg key="sort-by">sort by</msg>
     <msg key="btn-search">search</msg>
+    <msg key="btn-adv-search">advanced search</msg>
     <msg key="doc-question">Question</msg>
     <msg key="doc-motion">Motion</msg>
     <msg key="doc-bill">Bill</msg>
@@ -77,6 +80,8 @@
     <!-- TABS - messages found on or within tabs -->
     <msg key="tab-profile">profile</msg>
     <msg key="tab-members">members</msg>
+    <msg key="tab-sittings">sittings</msg>
+    <msg key="tab-staff">staff</msg>
     <msg key="tab-contacts">contacts</msg>
     <msg key="tab-member">member</msg>
     <msg key="tab-offices">offices held</msg>

@@ -218,7 +218,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									                   "global-search-form.xml",
     									                   $scope))))
     									     )
-    								    )        
+    								    )    
+    	else if ($EXIST-PATH eq "/search-settings")
+    		 then 
+               template:process-tmpl(
+                $REL-PATH, 
+                $EXIST-PATH, 
+                $config:DEFAULT-TEMPLATE, 
+                cmn:get-route($EXIST-PATH),
+                (),
+                cmn:build-nav-tmpl($EXIST-PATH, "search-settings.xml")
+               )     								    
+    	else if ($EXIST-PATH eq "/advanced-search")
+    		 then 
+               template:process-tmpl(
+                $REL-PATH, 
+                $EXIST-PATH, 
+                $config:DEFAULT-TEMPLATE, 
+                cmn:get-route($EXIST-PATH),
+                (),
+                cmn:build-nav-tmpl($EXIST-PATH, "advanced-search.xml")
+               )         
         else if ($EXIST-PATH eq "/search")
     		 then 
                 let 

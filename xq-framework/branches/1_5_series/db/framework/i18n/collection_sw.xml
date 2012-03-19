@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="sw">
     <msg key="welcome">Karibu</msg>
+    <msg key="adv-search">Tafuta kwa Hali ya juu</msg>
+    <msg key="search-settings">Mazingira ya Kutafuta</msg>        
     <!-- TOP_LEVEL NAV -->
     <msg key="home">nyumbani</msg>
     <msg key="business">shughli</msg>
@@ -59,6 +61,7 @@
     <msg key="listing-search">tafuta maandiko</msg>
     <msg key="sort-by">namna hii</msg>
     <msg key="btn-search">tafuta</msg>
+    <msg key="btn-adv-search">tafuta kwa hali ya juu</msg>
     <msg key="doc-question">Swali</msg>
     <msg key="doc-motion">Msukumo</msg>
     <msg key="doc-bill">Mswada</msg>
@@ -77,6 +80,8 @@
     <!-- TABS -->
     <msg key="tab-profile">maumbo</msg>
     <msg key="tab-members">wanachama</msg>
+    <msg key="tab-sittings">vikao</msg>
+    <msg key="tab-staff">wafanyikazi</msg>
     <msg key="tab-contacts">mawasiliano</msg>
     <msg key="tab-member">mwanachama</msg>
     <msg key="tab-offices">nyadhifa za kale</msg>

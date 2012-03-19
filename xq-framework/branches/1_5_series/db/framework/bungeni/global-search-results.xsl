@@ -160,7 +160,7 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:user/bu:titles,'. ',bu:ontology/bu:user/bu:firstName,' ', bu:ontology/bu:user/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
             <div style="display:inline-block;">/ Constitutency / Party</div>
             <span>-</span>
@@ -175,19 +175,19 @@
                     <tr>
                         <td class="labels">gender:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:user/bu:gender"/>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:gender"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">date of birth:</td>
                         <td>
-                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:user/bu:dateOfBirth),$date-format,'en',(),())"/>
+                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">status:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:user/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:status"/>
                         </td>
                     </tr>
                 </table>

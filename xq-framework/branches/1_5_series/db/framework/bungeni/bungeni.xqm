@@ -259,10 +259,9 @@ declare function bun:xqy-list-userdata($type as xs:string) {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@type='",$type,"']")
 };
-declare function bun:xqy-search-userdata() {
+declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-            "/bu:ontology[@type='userdata']",
-            "/bu:metadata[@type='user']/ancestor::bu:ontology")
+            "/bu:ontology[@type='membership']")
 };
 
 (:~ !+FIXED(ah,05-01-2012) 
@@ -865,7 +864,7 @@ declare function bun:search-global(
     
     let $coll-legis := bun:xqy-search-legis-with-acl($acl),
         $coll-groups := bun:xqy-search-group(),
-        $coll-members := bun:xqy-search-userdata()
+        $coll-members := bun:xqy-search-membership()
     
     (: Escape all invalid characters :)
     let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')       

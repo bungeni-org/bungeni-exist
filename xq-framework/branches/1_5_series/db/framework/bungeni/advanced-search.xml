@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" id="content">
+    <div id="main-wrapper">
+        <div id="title-holder" class="theme-lev-1-only">
+            <h1 id="doc-title-blue">
+                <i18n:text key="adv-search">Advanced Search(nt)</i18n:text>
+            </h1>
+        </div>
+        <div id="region-content" class="rounded-eigh tab_container" role="main">
+            <div id="adv-search-wrapper" style="margin:0 auto;width:96%;height:50%;padding:5px;">
+                <form method="GET" action="advanced-search" id="ui_search" name="search_sort" autocomplete="off">
+                    <fieldset>
+                        <legend>&#160;Find documents with&#160;</legend>
+                        <div class="row">
+                            <span class="label" for="all-words">all these words:</span>
+                            <span class="formw">
+                                <input id="all-words" class="search_for" type="text"/>
+                            </span>
+                            <span class="example">E.g. Type the key words <span class="mono">withdrawn public approved</span>
+                            </span>
+                        </div>
+                        <div class="row">
+                            <span class="label">the exact words or phrase:</span>
+                            <span class="formw">
+                                <input type="text" class="search_for"/>
+                            </span>
+                            <span class="example">E.g. <span class="mono">"object of the Bill is to"</span>  with quotes</span>
+                        </div>
+                        <div class="row">
+                            <span class="label">contains any of these words:</span>
+                            <span class="formw">
+                                <input type="text" class="search_for"/>
+                            </span>
+                            <span class="example">E.g. <span class="mono">withdrawn OR approved</span> with the OR</span>
+                        </div>
+                        <div class="row">
+                            <span class="label">&#160;</span>
+                            <span class="formw">
+                                <input class="button" value="i18n(btn-adv-search,search)" type="submit"/>
+                            </span>
+                            <span class="example">&#160;</span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>&#160;Filter the returned results by&#160;</legend>
+                        <div class="row">
+                            <span class="label" for="all-words">
+                                select scope of documents to filter in:
+                                <ul>
+                                    <li>question <input type="checkbox" name="question"/>
+                                    </li>
+                                    <li>motion <input type="checkbox" name="motion"/>
+                                    </li>
+                                    <li>agenda items <input type="checkbox" name="agendas"/>
+                                    </li>
+                                    <li>bills <input type="checkbox" name="bills"/>
+                                    </li>
+                                    <li>tabled documents <input type="checkbox" name="tableddocs"/>
+                                    </li>
+                                    <li>committees <input type="checkbox" name="committees"/>
+                                    </li>
+                                    <li>members <input type="checkbox" name="members"/>
+                                    </li>
+                                </ul>
+                            </span>
+                            <span class="middle">
+                                <label for="startdate">
+                                    First name
+                                    <input id="startdate" name="startdate" type="text" value="Start Date"/>
+                                </label>
+                                <br/>
+                                <label for="enddate">
+                                    End name
+                                    <input id="enddate" name="enddate" type="text" value="End Date"/>
+                                </label>
+                            </span>
+                            <span class="example">
+                                <input class="button" value="i18n(btn-adv-search,search)" type="submit"/>
+                            </span>
+                        </div>
+                        <div class="spacer">
+                            &#160;
+                        </div>
+                    </fieldset>                    
+                    <!--input type="hidden" id="doc_type" name="type" value=""/>
+                    <input type="hidden" id="exist_path" name="exist_path" value=""/>
+                    <label class="search_for" for="search_for">
+                        <i18n:text key="listing-search">Search text(nt)</i18n:text>: </label>
+                    <dl id="sb_box" class="dropdown">
+                        <dt>
+                            <input id="search_for" name="q" class="search_for" type="text" value=""/>
+                            <a class="inline" href="#" onclick="javascript:return false;"/>
+                        </dt>
+                        <dd>
+                            <ul id="filter_by" class="sb_dropdown">
+                                <li class="sb_filter">Filter your search</li>
+                                <li>
+                                    <input type="checkbox" name="all" value="on"/>
+                                    <label for="all">
+                                        <b>Entire Document</b>
+                                    </label>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <div class="inline">
+                        <label for="search_in">
+                            <i18n:text key="sort-by">sort by(nt)</i18n:text>:</label>
+                        <select name="s" id="sort_by">
+                            <option value=""/>
+                        </select>
+                        <input value="i18n(btn-search,search)" type="submit"/>
+                    </div-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

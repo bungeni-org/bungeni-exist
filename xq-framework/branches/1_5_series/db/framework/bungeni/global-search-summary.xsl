@@ -85,7 +85,7 @@
         </li>
     </xsl:template>  
     
-    <!-- users items -->
+    <!-- members items -->
     <xsl:template match="members">
         <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
             <a href="?scope=members&amp;{$input-fullqrystr}">See all results from members items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
@@ -96,10 +96,10 @@
         </ul>
     </xsl:template>
     <xsl:template match="document" mode="renderui3">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:user/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:user/bu:titles,'. ',bu:ontology/bu:user/bu:firstName,' ', bu:ontology/bu:user/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
         </li>
     </xsl:template>

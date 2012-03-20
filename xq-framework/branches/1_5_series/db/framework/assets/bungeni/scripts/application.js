@@ -1,4 +1,8 @@
 $(document).ready(function () {
+
+    $('#startdate').Zebra_DatePicker();
+    $('#enddate').Zebra_DatePicker();
+
     /* query-params-set */
     $.urlParam = function(name){
         var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -150,7 +154,7 @@ $(document).ready(function () {
 	       $(this).parent().siblings().find(':checkbox').attr('checked',true).attr('disabled',this.checked);
 	   else
 	       $(this).parent().siblings().find(':checkbox').attr('checked',this.checked).attr('disabled',this.checked);
-	});		
+	});
 	
 	/*
 	* If any other checkbox is checked (pun), then make sure its siblings aren't... !+UNCOMMENT_TO_ENABLE
@@ -180,6 +184,16 @@ $(document).ready(function () {
         if (! $clicked.parents().hasClass("dropdown"))
             $(".dropdown dd ul").hide();
     });
+    
+    var $adv = $('#adv-search-wrapper');
+	$adv.find('.b-left').find('input[name="types"]').bind('click',function(){
+	   if(this.checked == false) {
+	       $(this).parent().siblings().find(":checkbox").attr('checked',true).attr('disabled',this.checked);
+	   }
+	   else {
+	       $(this).parent().siblings().find(":checkbox").attr('checked',true).attr('disabled',this.checked).attr('disabled',this.checked);
+	   }
+	});	    
     
     /*
 	$(".tab_content").hide(); //Hide all content

@@ -640,6 +640,89 @@ declare function bun:search-documentitems(
 };
 
 (:~
+:   
+: @param qryall
+: @param qryexact
+: @param qryhas
+: @param parent-types
+: @param doc-types
+: @param limit
+: @param offset
+: @param sortby
+: @return
+:   all documents that matched filters
+: @stylesheet 
+:   advanced-search.xsl
+:)
+declare function bun:advanced-search($qryall as xs:string,
+            $qryexact as xs:string,
+            $qryhas as xs:string, 
+            $parent-types as xs:string,
+            $doc-types as xs:string,
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $sortby as xs:string) as element() {
+      
+
+    let $raw-listings :=    if(empty($parent-types)) then (
+                                (: iterate through the sections received :)
+                                for $ptype in $parent-types
+                                return
+                                    <docs>$ptype</docs>
+                                    
+                            )
+                            else (
+                                (: iterate through the doctypes received :)
+                                for $dtype in $doc-types
+                                return
+                                    <docs>$dtype</docs>
+                            )
+    
+    let $coll_rs := bun:xqy-list-documentitems-with-acl("public-view", "question")
+    let $getqrystr := xs:string(request:get-query-string())
+    let $stylesheet := "advanced-search.xsl"
+
+    (: check if search is there so as to proceed to search or not :)    
+    let $coll := collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="question"]/ancestor::bu:ontology
+    
+    let $query-offset := if ($bun:OFF-SET eq 0 ) then 1 else $bun:OFF-SET
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+            (: Count the total number of documents :)
+            <count>{
+                count(
+                    $coll
+                  )
+             }</count>
+            <documentType>question</documentType>
+            <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
+            <listingUrlPrefix>{$doc-types}</listingUrlPrefix>
+            <offset>{$bun:OFF-SET}</offset>
+            <limit>{$bun:LIMIT}</limit>
+            <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+        </paginator>
+        <alisting>
+        {
+                for $match in subsequence($coll,$query-offset,$bun:LIMIT)
+                order by $match/bu:legislativeItem/bu:statusDate descending
+                return 
+                    bun:get-reference($match)         
+
+        } 
+        </alisting>
+    </docs>
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="testing" />
+            </parameters>
+           )
+};
+
+(:~
 :   Similar to bun:search-documentitems()
 :)
 declare function bun:search-groupitems(

@@ -238,7 +238,46 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 cmn:get-route($EXIST-PATH),
                 (),
                 cmn:build-nav-tmpl($EXIST-PATH, "advanced-search.xml")
-               )         
+               ) 
+        else if ($EXIST-PATH eq "/search-adv")
+    		 then 
+                let 
+                    $qryall := xs:string(request:get-parameter("qa",'')),
+                    $qryexact := xs:string(request:get-parameter("qe",'')),
+                    $qryhas := xs:string(request:get-parameter("qh",'')),
+                    
+                    (: accepts a sequence of parent types as request :)
+                    $parenttypes := request:get-parameter("types",()),                    
+                    (: accepts a sequence of document types as request :)
+                    $doctypes := request:get-parameter("docs",()),
+                    
+                    $override_path := xs:string(request:get-parameter("exist_path","/search-adv")),
+                    $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    
+                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    
+                    $acl := "public-view",
+                    $act-entries-tmpl :=  bun:advanced-search($qryall,
+                                                            $qryexact,
+                                                            $qryhas,
+                                                            $parenttypes,                                                            
+                                                            $doctypes,
+                                                            $offset,
+                                                            $limit,
+                                                            $sortby),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    								    template:process-tmpl(
+    									       $REL-PATH, 
+    									       $EXIST-PATH, 
+    									       $config:DEFAULT-TEMPLATE,
+    									       cmn:get-route($override_path),
+    									       (),
+    									       cmn:build-nav-node($override_path,$act-entries-repl)
+    								    )               
         else if ($EXIST-PATH eq "/search")
     		 then 
                 let 

@@ -15,6 +15,9 @@
     <resource type="BinaryResource" name="bungeni-logo.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="bungeni-logo.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>
+    <resource type="BinaryResource" name="calendar.png" owner="admin" group="dba" mode="644" created="2012-03-20T10:09:03+03:00" modified="2012-03-20T13:37:30+03:00" filename="calendar.png" mimetype="image/png">
+        <acl entries="0" version="1"/>
+    </resource>
     <resource type="BinaryResource" name="download.png" owner="admin" group="dba" mode="644" created="2011-10-05T11:55:36+03:00" modified="2011-10-05T11:55:36+03:00" filename="download.png" mimetype="image/png">
         <acl entries="0" version="1"/>
     </resource>

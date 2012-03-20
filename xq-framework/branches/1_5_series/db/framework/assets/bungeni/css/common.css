@@ -38,9 +38,14 @@ div.header-nav {
 }
 .lev-1-search {
     margin:auto 0px 10px auto;
+    float:right !important;
     width:600px;
-    height:20px;
+    height:40px;
     text-align:right;
+}
+#search-form-global .header-links {
+    margin-right:2px;
+    color:#36b9f1;
 }
 
 div#main-wrapper {
@@ -323,4 +328,86 @@ div#doc-downloads {
 
 .inline {
     display:inline !important;
+}
+
+/* ADV search filters */
+#adv-search-wrapper fieldset {
+    display: block;
+    margin: 0 0 1em 0;
+    border: 0 solid white;
+    border-top: 1px solid black;
+    padding: 0 1em 1em 1em;
+}
+
+div.row {
+    float:left;
+    width:850px;
+    height:30px;
+    padding-top: 5px;  
+ }
+
+div.row span.label {
+    float: left;
+    width: 170px;
+    text-align: right;  
+}
+
+div.row span.formw {
+    float: left;
+    width: 320px;
+    text-align: left;
+}
+div.row span.formw input {
+    vertical-align:text-top;
+    width:315px;
+}
+div.row span.formw input.button {
+    float:right;
+    width:auto;
+    text-align:right;
+}
+
+div.row span.example {
+    float: right;
+    width: 310px;
+    text-align: left;
+    font-family: "Arial","Helvetica",sans-serif;
+    font-size:0.9em;
+    color:gray;
+}
+
+div.row span.mono {
+    font-family: monospace;
+    font-size:0.9em;
+    color:black;
+}
+
+div.row ul {
+    margin-top:20px;
+    list-style-type: none;
+}
+div.row ul li span {
+    text-align:left;
+}
+
+div.row div.b-left {
+    float:left;
+    width:600px;
+    text-align:right;
+    padding-right:20px;
+    border-right:1px solid #c1c1c0;
+ }
+div.row div.b-right {
+    width:200px;
+    float: right;
+    display: block;
+}
+div.row div.b-right input.button {
+    margin-top:20px;
+    width:auto;
+    text-align:right;
+}
+
+.ul-list-header {
+    font-weight:bold;
 }

@@ -52,6 +52,10 @@
             <navigation>home</navigation>
             <title>Advanced Search</title>
         </route>
+        <route href="/search-adv">
+            <navigation>home</navigation>
+            <title>Advanced Search Results</title>
+        </route>
         <route href="/search-settings">
             <navigation>home</navigation>
             <title>Search Settings</title>

@@ -16,7 +16,7 @@
                         <div class="row">
                             <span class="label" for="all-words">all these words:</span>
                             <span class="formw">
-                                <input id="all-words" class="search_for" type="text"/>
+                                <input id="all-words" name="qa" class="search_for" type="text"/>
                             </span>
                             <span class="example">E.g. Type the key words <span class="mono">withdrawn public approved</span>
                             </span>
@@ -24,14 +24,14 @@
                         <div class="row">
                             <span class="label">the exact words or phrase:</span>
                             <span class="formw">
-                                <input type="text" class="search_for"/>
+                                <input type="text" name="qe" class="search_for"/>
                             </span>
                             <span class="example">E.g. <span class="mono">"object of the Bill is to"</span>  with quotes</span>
                         </div>
                         <div class="row">
                             <span class="label">contains any of these words:</span>
                             <span class="formw">
-                                <input type="text" class="search_for"/>
+                                <input type="text" name="qh" class="search_for"/>
                             </span>
                             <span class="example">E.g. <span class="mono">withdrawn OR approved</span> with the OR</span>
                         </div>
@@ -71,11 +71,15 @@
                                         <input type="checkbox" name="types" value="grps"/>
                                     </span>
                                     <ul>
-                                        <li>committees <input type="checkbox" name="docs" value="committees"/>
+                                        <li>committees <input type="checkbox" name="docs" value="committee"/>
                                         </li>
                                         <li>offices <input type="checkbox" name="docs" value="office"/>
                                         </li>
                                         <li>political groups <input type="checkbox" name="docs" value="political-group"/>
+                                        </li>
+                                        <li>ministries <input type="checkbox" name="docs" value="ministry"/>
+                                        </li>
+                                        <li>government <input type="checkbox" name="docs" value="government"/>
                                         </li>
                                         <li>sittings <input type="checkbox" name="docs" value="groupsitting"/>
                                         </li>
@@ -84,7 +88,7 @@
                                 <div style="float:left;">
                                     <span class="ul-list-header">users<br/>
                                         <span style="font-weight:normal;font-size:.9em;font-style:italic">check all</span>
-                                        <input type="checkbox" name="types" value="users"/>
+                                        <input type="checkbox" name="types" value="mps"/>
                                     </span>
                                     <ul>
                                         <li>members of parliament <input type="checkbox" name="docs" value="membership"/>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+    <!-- IMPORTS -->
+    <xsl:import href="config.xsl"/>
+    <xsl:import href="paginator.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -52,10 +56,35 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
+                <div id="doc-listing" class="acts">
+                    <div class="list-header">
+                        <!-- call the paginator -->
+                        <xsl:apply-templates select="paginator"/>
+                    </div>
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div id="toggle-i18n" style="display:none;">
+                            <span id="i-compress">
+                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
+                    </div>                    
+                    <!-- 
+                        !+LISTING_GENERATOR
+                        render the actual listing
+                    -->
+                    <xsl:apply-templates select="alisting"/>
+                </div>
             </div>
         </div>
     </xsl:template>
     
+    <!-- Include the paginator generator -->
+    <xsl:include href="paginator.xsl"/>    
     
     <!-- 
         !+LISTING_GENERATOR
@@ -67,49 +96,28 @@
         </ul>
     </xsl:template>
     <xsl:template match="document" mode="renderui">
-        <xsl:variable name="doc-type" select="output/bu:ontology/@type"/>
-        <xsl:variable name="doc-sub-type" select="output/documentType"/>
-        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="doc-type" select="nodes/bu:ontology/@type"/>
+        <xsl:variable name="doc-sub-type" select="nodes/bu:ontology/child::*/@type"/>
+        <xsl:variable name="docIdentifier" select="nodes/bu:ontology/child::*/@uri"/>
         <li>
             <span>-</span>
+            <a href="?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="nodes/bu:ontology/child::*/bu:shortName"/>
+            </a> sponsored by                             
+            <xsl:value-of select="nodes/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">id:</td>
-                        <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">primary sponsor:</td>
-                        <td>
-                            <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">last event:</td>
-                        <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
-                            &#160;&#160;<b>on:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">submission date:</td>
-                        <td>
-                            <xsl:value-of select="format-date(output/bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">ministry:</td>
-                        <td>
-                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
-                        </td>
-                    </tr>
-                </table>
+                <div class="search-subh">
+                    <xsl:value-of select="format-dateTime(nodes/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                    &#160;-&#160;
+                    <i>status</i>&#160;<xsl:value-of select="nodes/bu:ontology/bu:legislativeItem/bu:status"/>
+                </div>
+                <div class="search-snippet">
+                    <xsl:apply-templates select="nodes/kwic"/>
+                </div>
             </div>
         </li>
+    </xsl:template>
+    <xsl:template match="kwic">
+        <xsl:copy-of select="child::*"/>
     </xsl:template>
 </xsl:stylesheet>

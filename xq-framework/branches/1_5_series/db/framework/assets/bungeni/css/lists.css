@@ -52,7 +52,7 @@ ul.ls-row li {
     color:#494949;
     margin-bottom:10px;
 }
-ul.ls-row span {
+ul.ls-row li > span {
     width:5px;
     float:left;
     cursor:pointer;

@@ -7,9 +7,10 @@ import module namespace config = "http://bungeni.org/xquery/config" at "../confi
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
+import module namespace kwic="http://exist-db.org/xquery/kwic";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
-declare namespace xslfo="http://exist-db.org/xquery/xslfo";
+declare namespace xslfo="http://exist-db.org/xquery/xslfo"; 
 import module namespace json="http://www.json.org";
 
 
@@ -661,30 +662,77 @@ declare function bun:advanced-search($qryall as xs:string,
             $doc-types as xs:string,
             $offset as xs:integer, 
             $limit as xs:integer, 
-            $sortby as xs:string) as element() {
+            $sortby as xs:string) as element()* {
       
 
-    let $raw-listings :=    if(empty($parent-types)) then (
-                                (: iterate through the sections received :)
-                                for $ptype in $parent-types
-                                return
-                                    <docs>$ptype</docs>
-                                    
-                            )
-                            else (
-                                (: iterate through the doctypes received :)
-                                for $dtype in $doc-types
-                                return
-                                    <docs>$dtype</docs>
-                            )
+    let $subset-parents-coll :=    if(not(empty($parent-types))) then (
+                                        (: iterate through the sections received :)
+                                        for $ptype in $parent-types
+                                        return
+                                            if($ptype eq 'legis') then 
+                                                collection(cmn:get-lex-db())/bu:ontology[@type="document"]
+                                            else if($ptype eq 'grps') then 
+                                                collection(cmn:get-lex-db())/bu:ontology[@type="group"]
+                                            else if($ptype eq 'mps') then
+                                                collection(cmn:get-lex-db())/bu:ontology[@type="membership"]
+                                            else
+                                                collection(cmn:get-lex-db())/bu:ontology[@type ne "document" and 
+                                                                                         @type ne "group" and 
+                                                                                         @type ne "membership"]
+                                    )
+                                    else ()
+                            
+    let $subset-docs-coll :=    if(not(empty($doc-types))) then (
+                                    (: iterate through the sections received :)
+                                    for $dtype in $doc-types
+                                    return
+                                        (: legislative documents :)
+                                        if($dtype eq 'question') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="question"]/ancestor::bu:ontology
+                                        else if($dtype eq 'motion') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="motion"]/ancestor::bu:ontology
+                                        else if($dtype eq 'agendaitem') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="agendaitem"]/ancestor::bu:ontology
+                                        else if($dtype eq 'bill') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="bill"]/ancestor::bu:ontology
+                                        else if($dtype eq 'tableddocument') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="tableddocument"]/ancestor::bu:ontology
+                                        else if($dtype eq 'event') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="event"]/ancestor::bu:ontology
+                                        (: groups and sittings :)  
+                                        else if($dtype eq 'committee') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="committee"]/ancestor::bu:ontology
+                                        else if($dtype eq 'office') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="office"]/ancestor::bu:ontology  
+                                        else if($dtype eq 'ministry') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="ministry"]/ancestor::bu:ontology 
+                                        else if($dtype eq 'government') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="government"]/ancestor::bu:ontology
+                                        else if($dtype eq 'groupsitting') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="groupsitting"]
+                                        (: mps :)
+                                        else if($dtype eq 'membership') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="membership"]   
+                                        (: other types not categorized :)
+                                        else if($dtype eq 'address') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="address"]      
+                                        else if($dtype eq 'report') then 
+                                            collection(cmn:get-lex-db())/bu:ontology[@type="report"]                                          
+                                        else ()
+                                    )
+                                    else ()    
+       
+    (: merge both sets :)
+    let $coll_subset := ($subset-parents-coll, $subset-docs-coll)
     
-    let $coll_rs := bun:xqy-list-documentitems-with-acl("public-view", "question")
+    (: check if search is there so as to proceed to search or not :)    
+    let $subset_rs := if ($qryall ne "" or $qryexact ne "" or $qryhas ne "") then 
+                        bun:adv-ft-search($coll_subset, $qryall, $qryexact, $qryhas) 
+                    else 
+                        $coll_subset
+    
     let $getqrystr := xs:string(request:get-query-string())
     let $stylesheet := "advanced-search.xsl"
-
-    (: check if search is there so as to proceed to search or not :)    
-    let $coll := collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="question"]/ancestor::bu:ontology
-    
     let $query-offset := if ($bun:OFF-SET eq 0 ) then 1 else $bun:OFF-SET
     
     (: input ONxml document in request :)
@@ -693,7 +741,7 @@ declare function bun:advanced-search($qryall as xs:string,
             (: Count the total number of documents :)
             <count>{
                 count(
-                    $coll
+                    $subset_rs
                   )
              }</count>
             <documentType>question</documentType>
@@ -705,11 +753,10 @@ declare function bun:advanced-search($qryall as xs:string,
         </paginator>
         <alisting>
         {
-                for $match in subsequence($coll,$query-offset,$bun:LIMIT)
+                for $match in subsequence($subset_rs,$query-offset,$bun:LIMIT)
                 order by $match/bu:legislativeItem/bu:statusDate descending
                 return 
-                    bun:get-reference($match)         
-
+                    <document>{$match}</document>
         } 
         </alisting>
     </docs>
@@ -720,6 +767,24 @@ declare function bun:advanced-search($qryall as xs:string,
                 <param name="sortby" value="testing" />
             </parameters>
            )
+};
+
+declare function bun:adv-ft-search(
+            $coll-subset as node()*, 
+            $qryall as xs:string,
+            $qryexact as xs:string,
+            $qryhas as xs:string) as element()* {
+
+        let $escaped := replace($qryall,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
+   
+        for $search-rs in $coll-subset[ft:query(., $qryall)]
+        let $expanded := kwic:expand($search-rs),
+        $config := <config xmlns="" width="160"/>
+        order by ft:score($search-rs) descending
+        return
+            <nodes>{$search-rs}
+            <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+            </nodes>
 };
 
 (:~
@@ -845,13 +910,13 @@ declare function bun:search-userdata(
             if ($sortby = 'st_date_oldest') then (
                (:if (fn:ni$qrystr):)
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislature/bu:statusDate ascending
+                order by $match/child::*/bu:statusDate ascending
                 return 
                     bun:get-reference($match)   
                 )             
             else  (
                 for $match in subsequence($coll,$query-offset,$limit)
-                order by $match/bu:legislature/bu:statusDate descending
+                order by $match/child::*/bu:statusDate descending
                 return 
                     bun:get-reference($match)          
                 )
@@ -1775,8 +1840,8 @@ Get document with ACL filter
 :)
 declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string) {
     let $acl-permissions := cmn:get-acl-permissions($acl),
-        $tab-context := functx:substring-after-last(request:get-effective-uri(), '/'),
-        $permit := <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>
+        $tab-context := functx:substring-after-last(request:get-effective-uri(), '/')
+        (:$permit := <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>:)
     
     (: WARNING-- because of odd behavior in eXist 1.5 branch we have to wrap the return value of the 
     eval in a document {} object otherwise things dont work. Search in the exist mailing list for 'xpath resolution

@@ -104,14 +104,14 @@ $(document).ready(function () {
             $("#expand-all").toggle(function (){
                 var text = $('.ls-row').find('li div.doc-toggle');
                 text.slideUp('200');
-                $(this).parent().parent().find('span').html('+');
+                $(this).parent().siblings("ul").children('li').children('span').html('+');
                             
                 $("#expand-all").text("+ "+$("body").data("expand"))
                 .stop();            
             }, function(){
                 var text = $('.ls-row').find('li div.doc-toggle');
                 text.slideDown('200');
-                $(this).parent().parent().find('span').html('-');     
+                $(this).parent().siblings("ul").children('li').children('span').html('-');     
    
                 $("#expand-all").text("- "+$("body").data("compress"))
                 .stop();

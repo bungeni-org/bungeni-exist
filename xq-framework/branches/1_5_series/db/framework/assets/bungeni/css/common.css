@@ -122,7 +122,7 @@ div#region-content {
     border:1px solid #c1c1c0;
 }
 
-div#region-content div {
+div#region-content > div {
     margin: 0 auto;
 }
 
@@ -409,5 +409,24 @@ div.row div.b-right input.button {
 }
 
 .ul-list-header {
+    font-weight:bold;
+}
+
+/* Lucene */
+.search-subh {
+    margin-left:10px;
+    color:#ff8a00;
+    width:100%;
+}
+.search-snippet {
+    margin-left:10px;
+    color:#000000;
+    width:90%;
+}
+.snippet span {
+    width:100% !important;
+}
+.hi {
+    color:#b32c13;
     font-weight:bold;
 }

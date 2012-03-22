@@ -23,14 +23,12 @@ __status__ = "Development"
 
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
-from org.dom4j import Element
-from org.dom4j import Document
 from org.dom4j import DocumentFactory
 from org.dom4j.io import SAXReader
 from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
 from java.io import File, FileWriter
-from java.io import FileOutputStream, FileInputStream
+from java.io import FileInputStream
 from java.io import StringReader
 from java.util import HashMap
 from net.lingala.zip4j.core import ZipFile
@@ -44,7 +42,7 @@ from org.bungeni.translators.globalconfigurations import GlobalConfigurations
 from org.bungeni.translators.utility.files import FileUtility
 
 from org.apache.log4j import PropertyConfigurator,Logger
-glogger = Logger.getLogger("glue")
+LOG = Logger.getLogger("glue")
 
 class Config(object):
     """
@@ -216,10 +214,6 @@ class ParseBungeniXML(object):
 
         return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
         
-    def xpath_get_attachments(self):
-        
-        return self.__global_path__ + "attached_files"
-        
     def xpath_get_attr_val(self,name):
 
         return self.__global_path__ + "field[@name]"  
@@ -248,8 +242,15 @@ class ParseBungeniXML(object):
             return root_element.attributeValue("name")   
         else:
             return None
+
+    def xpath_get_attachments(self):
+        
+        return self.__global_path__ + "attached_files"
             
     def get_attached_files(self):
+        """
+        Gets the attached_files node for a document
+        """
         return self.xmldoc.selectSingleNode(self.xpath_get_attachments())
 
     def write_to_disk(self):
@@ -283,7 +284,11 @@ class _COLOR(object):
 
 
 class GenericDirWalker(object):
-
+    """
+    Walks a directory tree and invokes a
+    callback API for every file in the tree
+    """
+    
     def __init__(self, input_params = None):
         """
         input_params - the parameters for the callback function
@@ -314,22 +319,27 @@ class GenericDirWalker(object):
                     continue
 
     def fn_callback(self, nfile):
-        glogger.debug("in GenericDirWalker BASE callback" + nfile)
+        LOG.debug("in GenericDirWalker BASE callback" + nfile)
         return (False, None)
 
 
 class GenericDirWalkerXML(GenericDirWalker):
+    """
+    Walks a directory tree, but the callback filters on for 
+    XML documents
+    """
 
     def fn_callback(self, nfile):
         import fnmatch
-        glogger.debug("in GenericDirWalker XML callback" + nfile)
+        LOG.debug("in GenericDirWalker XML callback" + nfile)
         if fnmatch.fnmatch(nfile, "*.xml"):
             self.counter = self.counter + 1
-            glogger.debug("returning TRUE GenericDirWalker XML callback" + nfile )
+            LOG.debug("returning TRUE GenericDirWalker XML callback" + nfile )
             return (True, None)
         else:
-            glogger.debug("returning FALSE GenericDirWalker XML callback" + nfile )
+            LOG.debug("returning FALSE GenericDirWalker XML callback" + nfile )
             return (False,None)
+
 
 class GenericDirWalkerATTS(GenericDirWalker):
     """
@@ -337,14 +347,15 @@ class GenericDirWalkerATTS(GenericDirWalker):
     """
     
     def fn_callback(self, nfile):
-        glogger.debug("in GenericDirWalker ATTS callback" + nfile)
+        LOG.debug("in GenericDirWalker ATTS callback" + nfile)
         if nfile:
             self.counter = self.counter + 1
-            glogger.debug("returning TRUE GenericDirWalker XML callback" + nfile )
+            LOG.debug("returning TRUE GenericDirWalker XML callback" + nfile )
             return (True, None)
         else:
-            glogger.debug("returning FALSE GenericDirWalker XML callback" + nfile )
+            LOG.debug("returning FALSE GenericDirWalker XML callback" + nfile )
             return (False,None)
+
 
 
 class GenericDirWalkerUNZIP(GenericDirWalker):
@@ -361,7 +372,7 @@ class GenericDirWalkerUNZIP(GenericDirWalker):
             unzipper.extractAll(os.path.splitext(zip_file)[0])
             print _COLOR.WARNING + "Extracted zip file... " + zip_file+_COLOR.ENDC
         except ZipException, e:
-            glogger.error("Error while processing zip "+ zip_file + e)
+            LOG.error("Error while processing zip "+ zip_file + e)
 
     def fn_callback(self, nfile):
         import fnmatch
@@ -405,16 +416,25 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
         return "field[@name='saved_file']"
 
     def attachments_seek_rename(self, inputdoc):
+        """
+        Attachments arrive from bungeni in zip files and use a non-random filename,
+        we randomize this file name by renaming it to a unique id, and then repoint
+        the XML file to the new attachment name
+        """
+        # get the folder where the attachments are written to
         self.atts_folder = self.input_params["main_config"].get_attachments_output_folder()
-        #get a copy for writing
+        # get the attached_files node in the document
         attachments = inputdoc.get_attached_files()
         if (attachments is not None):
-            glogger.debug("In attachments_seek_rename " + inputdoc.xmlfile + " HAS attachments ")
+            LOG.debug("In attachments_seek_rename " + inputdoc.xmlfile + " HAS attachments ")
+            # get the attached_file nodes within attached_files
             nodes = attachments.elements("attached_file")
             document_updated = False
             for node in nodes:
+                # for each attached_file
                 saved_file_node = node.selectSingleNode(self.xpath_get_saved_file())
                 if saved_file_node is not None:
+                    # get the name of the saved file node
                     original_name = saved_file_node.getText()
                     # rename file with uuid
                     new_name = str(uuid.uuid4())
@@ -429,14 +449,14 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
                 inputdoc.write_to_disk()
             
         else:
-            glogger.debug("In attachments_seek_rename " + inputdoc.xmlfile + " NO attachments")
+            LOG.debug("In attachments_seek_rename " + inputdoc.xmlfile + " NO attachments")
 
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             # get the DOM of the input document
             bunparse = ParseBungeniXML(input_file_path)
             # now we process the attachment
-            glogger.debug("Calling attachment_seek_rename for " + input_file_path )
+            LOG.debug("Calling attachment_seek_rename for " + input_file_path )
             self.attachments_seek_rename(bunparse)
         return (False,None)
 
@@ -451,17 +471,17 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
             bunparse = ParseBungeniXML(input_file_path)
             pipe_type = bunparse.get_contenttype_name()
             if pipe_type is not None:
-                if pipe_type in self.input_params[0].get_pipelines():
-                    pipe_path = self.input_params[0].get_pipelines()[pipe_type]
+                if pipe_type in self.input_params["main_config"].get_pipelines():
+                    pipe_path = self.input_params["main_config"].get_pipelines()[pipe_type]
                     output_file_name_wo_prefix  =   pipe_type + "_" + str(self.counter)
                     #truncate to first-3 characters only
                     truncated_prefix = output_file_name_wo_prefix[:3]
                     an_xml_file = "an_" + truncated_prefix
                     on_xml_file = "on_" + truncated_prefix
-                    self.input_params[1].run(
+                    self.input_params["transformer"].run(
                          input_file_path,
-                         self.input_params[0].get_akomantoso_output_folder() + an_xml_file ,
-                         self.input_params[0].get_ontoxml_output_folder() + on_xml_file ,
+                         self.input_params["main_config"].get_akomantoso_output_folder() + an_xml_file ,
+                         self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                          pipe_path
                          )
                 else:
@@ -570,8 +590,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             file_uri = self.get_params(input_file_path)['uri']
             file_stat_date = self.get_params(input_file_path)['status_date']
-            statinfo = os.stat(input_file_path)
-            headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/xml"}
+            #statinfo = os.stat(input_file_path)
+            #headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/xml"}
             try:
                 conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),50)
                 conn.request("GET", "/exist/apps/framework/check-update?uri=" + file_uri+"&t=" + file_stat_date)
@@ -582,11 +602,11 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                         print _COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
                         # 'ignore' means that its in the repository so we add anything that that is not `ignore` to the reposync list
                         self.add_item_to_repo(input_file_path)
-                        glogger.debug( data )
+                        LOG.debug( data )
                     else:
                         print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
                 else:
-                     print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
+                    print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
                 conn.close()
             except socket.error, (code, message):
                 print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
@@ -721,7 +741,8 @@ def do_bind_attachments(cfg):
     unzipwalker = GenericDirWalkerUNZIP()
     unzipwalker.walk(cfg.get_input_folder())
     # Now the files are unzipped in sub-folders - so we process the XML 
-    # for the attachments
+    # for the attachments, the attachments are renamed to a unique id
+    # and the reference reset in the source document
     sba = SeekBindAttachmentsWalker({"main_config":cfg})
     sba.walk(cfg.get_input_folder())
     if sba.object_info is not None:
@@ -733,7 +754,7 @@ def do_transform(cfg, parl_info):
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
     print _COLOR.OKGREEN + "Commencing transformations..." + _COLOR.ENDC
-    pxf = ProcessXmlFilesWalker([cfg,transformer])
+    pxf = ProcessXmlFilesWalker({"main_config":cfg, "transformer":transformer})
     pxf.walk(cfg.get_input_folder())
     print _COLOR.OKGREEN + "Completed transformations !" + _COLOR.ENDC
 
@@ -783,9 +804,11 @@ def main_transform(config_file):
     print _COLOR.HEADER + "Transforming ...." + _COLOR.ENDC      
     do_transform(cfg, parl_info)
 
+
 def main_sync(config_file):
     wd_cfg = WebDavConfig(config_file)
     do_sync(TransformerConfig(config_file), wd_cfg)
+
 
 def main_upload(config_file):
     """
@@ -794,6 +817,22 @@ def main_upload(config_file):
     wd_cfg = WebDavConfig(config_file)
     webdav_upload(TransformerConfig(config_file), wd_cfg)
 
+
+def __md5_file(f, block_size=2**20):
+    """
+    Gets the md5sum for a file
+    """
+    import hashlib
+    md5 = hashlib.md5()
+    while True:
+        data = f.read(block_size)
+        if not data:
+            break
+        md5.update(data)
+    return md5.digest()
+
+
+
 def main(options):
     # parse command line options if any
     try:
@@ -801,15 +840,16 @@ def main(options):
         config_file = __parse_options(options, ("-c", "--config"))
         # transform and upload are independent options and can be called individually
         if config_file is not None and len(str(config_file)) > 0 :
+
             transform = __parse_options(options, ("-t", "--transform"))
             if transform is not None:
                 main_transform(config_file)
+
             sync = __parse_options(options, ("-s", "--synchronize"))
             if sync is not None:
                 #perform sync at this juncture
                 main_sync(config_file)
-            else:
-                print "synchronize not specified"
+
             upload = __parse_options(options, ("-u", "--upload"))
             if upload is not None:
                 main_upload(config_file)
@@ -821,6 +861,8 @@ def main(options):
         print msg
         print _COLOR.FAIL + "There was an exception during startup !" + _COLOR.ENDC
         sys.exit(2)
+        
+        
 def __parse_options(options, look_for=()):
     input_arg = None
     for opt,arg in options:
@@ -829,10 +871,19 @@ def __parse_options(options, look_for=()):
     return input_arg
 
 if __name__ == "__main__":
-    from asyncore import loop
+    """
+    Three command line parameters are supported
+    
+      --config=config_file_name - specifies the config file name 
+      --transform - runs a transform
+      --synchronize - synchronizes with a xml db
+      --upload - uploades to a xml db
+    """
+    
+    script_path = os.path.dirname(os.path.realpath(__file__))
     if (len(sys.argv) > 1):
         #from org.apache.log4j import PropertyConfigurator
-        PropertyConfigurator.configure("./src/log4j.properties")
+        PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
         # process input command line options
         options, remainder = getopt.getopt(sys.argv[1:], 
           "c:tsu",

@@ -7,7 +7,7 @@
             </h1>
         </div>
         <div id="region-content" class="rounded-eigh tab_container" role="main">
-            <div id="adv-search-wrapper" style="margin:0 auto;width:96%;height:50%;padding:5px;">
+            <div id="adv-search-wrapper">
                 <form method="GET" action="search-adv" id="ui_search" name="search_sort" autocomplete="off">
                     <input type="hidden" id="exist_path" name="exist_path" value="/search-adv"/>
                     <input name="st" type="hidden" value="adv"/>
@@ -35,78 +35,12 @@
                             </span>
                             <span class="example">E.g. <span class="mono">withdrawn OR approved</span> with the OR</span>
                         </div>
-                        <div class="row">
-                            <span class="label">&#160;</span>
-                            <span class="formw">&#160;</span>
-                            <span class="example">&#160;</span>
-                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>&#160;Filter the returned results by&#160;</legend>
                         <div class="row">
-                            <div class="b-left" for="all-words">
-                                <div style="float:left;">
-                                    <span class="ul-list-header">legislative documents<br/>
-                                        <span class="ola" style="font-weight:normal;font-size:.9em;font-style:italic">check all</span>
-                                        <input type="checkbox" name="types" value="legis"/>
-                                    </span>
-                                    <ul>
-                                        <li>questions <input type="checkbox" name="docs" value="question"/>
-                                        </li>
-                                        <li>motions <input type="checkbox" name="docs" value="motion"/>
-                                        </li>
-                                        <li>agenda items <input type="checkbox" name="docs" value="agendaitem"/>
-                                        </li>
-                                        <li>bills <input type="checkbox" name="docs" value="bill"/>
-                                        </li>
-                                        <li>tabled documents <input type="checkbox" name="docs" value="tableddocument"/>
-                                        </li>
-                                        <li>events <input type="checkbox" name="docs" value="event"/>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div style="float:left;">
-                                    <span class="ul-list-header">groups<br/>
-                                        <span style="font-weight:normal;font-size:.9em;font-style:italic">check all</span>
-                                        <input type="checkbox" name="types" value="grps"/>
-                                    </span>
-                                    <ul>
-                                        <li>committees <input type="checkbox" name="docs" value="committee"/>
-                                        </li>
-                                        <li>offices <input type="checkbox" name="docs" value="office"/>
-                                        </li>
-                                        <li>political groups <input type="checkbox" name="docs" value="political-group"/>
-                                        </li>
-                                        <li>ministries <input type="checkbox" name="docs" value="ministry"/>
-                                        </li>
-                                        <li>government <input type="checkbox" name="docs" value="government"/>
-                                        </li>
-                                        <li>sittings <input type="checkbox" name="docs" value="groupsitting"/>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div style="float:left;">
-                                    <span class="ul-list-header">users<br/>
-                                        <span style="font-weight:normal;font-size:.9em;font-style:italic">check all</span>
-                                        <input type="checkbox" name="types" value="mps"/>
-                                    </span>
-                                    <ul>
-                                        <li>members of parliament <input type="checkbox" name="docs" value="membership"/>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div style="float:left;">
-                                    <span class="ul-list-header">others<br/>
-                                        <span style="font-weight:normal;font-size:.9em;font-style:italic">check all</span>
-                                        <input type="checkbox" name="types" value="other"/>
-                                    </span>
-                                    <ul>
-                                        <li>addresses <input type="checkbox" name="docs" value="address"/>
-                                        </li>
-                                        <li>reports <input type="checkbox" name="docs" value="report"/>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <div class="b-left" id="search-groups">
+                                <!-- categorized doctypes will be rendered here -->
                             </div>
                             <div class="b-right">
                                 <label for="status">

@@ -101,6 +101,19 @@ declare function cmn:build-nav-tmpl($exist-path as xs:string, $app-tmpl as xs:st
 };
 
 (:~
+ Builds a content template nodes
+ The mainnav is provided by default.
+ The subnavigation is rendered based on the incoming request path
+ The app-tmpl parameter is a node that has been rewritten as final page template to be processed.
+:)
+declare function cmn:rewrite-tmpl($exist-path as xs:string, $app-tmpl as node()+) as node()+ {
+     let $main-nav := cmn:get-menu("mainnav")
+     let $sub-nav := cmn:get-menu-from-route($exist-path)
+     let $out := ($main-nav, $sub-nav, $app-tmpl)
+     return $out
+};
+
+(:~
 Build navigation template nodes for a request path 
 The mainnav is provided by default.
 The subnavigation is rendered based on the incoming request path
@@ -160,6 +173,20 @@ declare function local:route-title($navroute as element()) {
 declare function cmn:get-doctype-config($doctype as xs:string) {
    let $config := cmn:get-ui-config()
    let $dc-config := $config/ui/doctypes/doctype[@name eq $doctype]
+   return 
+    if ($dc-config) then (
+        $dc-config
+      )
+    else
+        ()
+};
+
+(:
+ : return <doctype/> nodes
+ :)
+declare function cmn:get-doctypes() {
+   let $config := cmn:get-ui-config()
+   let $dc-config := $config/ui/doctypes/doctype
    return 
     if ($dc-config) then (
         $dc-config

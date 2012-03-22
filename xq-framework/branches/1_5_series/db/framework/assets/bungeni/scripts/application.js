@@ -36,9 +36,9 @@ $(document).ready(function () {
     });     
     
     /** toggling doc items per item isolated **/  
-    $('.ls-row span').click(function () {
+    $('.ls-row li > span').click(function () {
  
-        var text = $(this).next('div.doc-toggle');
+        var text = $(this).siblings('div.doc-toggle');
  
         if (text.is(':hidden')) {
             text.slideDown('200');

@@ -905,51 +905,7 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype name="membership">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName" default="true">First Name</searchin>
-                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
-                <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
-            </searchins>
-            <listingfilters>
-                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
-                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
-            </listingfilters>
-        </doctype>
-        <doctype name="committee">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
-            </searchins>
-        </doctype>
-        <doctype name="political-group">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
-            </searchins>
-            <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
-            </listingfilters>
-        </doctype>
-        <doctype name="bill">
+        <doctype category="legis" name="bill">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -965,7 +921,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="question">
+        <doctype category="legis" name="question">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -983,7 +939,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="motion">
+        <doctype category="legis" name="motion">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1001,7 +957,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="tableddocument">
+        <doctype category="legis" name="tableddocument">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1019,7 +975,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="agendaitem">
+        <doctype category="legis" name="agendaitem">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1037,5 +993,56 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
+        <doctype category="legis" name="event"/>
+        <doctype category="groups" name="committee">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+            </searchins>
+        </doctype>
+        <doctype category="groups" name="political-group">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="groups" name="office"/>
+        <doctype category="groups" name="ministry"/>
+        <doctype category="groups" name="government"/>
+        <doctype category="groups" name="groupsitting"/>
+        <doctype category="members" name="membership">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName" default="true">First Name</searchin>
+                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
+                <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
+                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="others" name="address"/>
+        <doctype category="others" name="report"/>
     </doctypes>
 </ui>

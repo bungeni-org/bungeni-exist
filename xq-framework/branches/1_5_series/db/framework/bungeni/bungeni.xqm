@@ -67,7 +67,7 @@ declare function bun:translate($node as node(), $params as element(parameters)?,
 :)
 declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
-    
+
     let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]/ancestor::bu:ontology
     let $doc := <response>        
         {
@@ -664,16 +664,17 @@ declare function bun:advanced-search($qryall as xs:string,
             $limit as xs:integer, 
             $sortby as xs:string) as element()* {
       
-
+    let $search-filter := cmn:get-doctypes()
+    
     let $subset-parents-coll :=    if(not(empty($parent-types))) then (
                                         (: iterate through the sections received :)
                                         for $ptype in $parent-types
                                         return
                                             if($ptype eq 'legis') then 
                                                 collection(cmn:get-lex-db())/bu:ontology[@type="document"]
-                                            else if($ptype eq 'grps') then 
+                                            else if($ptype eq 'groups') then 
                                                 collection(cmn:get-lex-db())/bu:ontology[@type="group"]
-                                            else if($ptype eq 'mps') then
+                                            else if($ptype eq 'members') then
                                                 collection(cmn:get-lex-db())/bu:ontology[@type="membership"]
                                             else
                                                 collection(cmn:get-lex-db())/bu:ontology[@type ne "document" and 
@@ -733,7 +734,7 @@ declare function bun:advanced-search($qryall as xs:string,
     
     let $getqrystr := xs:string(request:get-query-string())
     let $stylesheet := "advanced-search.xsl"
-    let $query-offset := if ($bun:OFF-SET eq 0 ) then 1 else $bun:OFF-SET
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -747,16 +748,16 @@ declare function bun:advanced-search($qryall as xs:string,
             <documentType>question</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$doc-types}</listingUrlPrefix>
-            <offset>{$bun:OFF-SET}</offset>
-            <limit>{$bun:LIMIT}</limit>
+            <offset>{$offset}</offset>
+            <limit>{$limit}</limit>
             <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {
-                for $match in subsequence($subset_rs,$query-offset,$bun:LIMIT)
-                order by $match/bu:legislativeItem/bu:statusDate descending
+                for $match in subsequence($subset_rs,$query-offset,$limit)
+                order by $match/child::*/bu:statusDate descending
                 return 
-                    <document>{$match}</document>
+                    $match
         } 
         </alisting>
     </docs>
@@ -774,16 +775,33 @@ declare function bun:adv-ft-search(
             $qryall as xs:string,
             $qryexact as xs:string,
             $qryhas as xs:string) as element()* {
-
-        let $escaped := replace($qryall,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')
-   
-        for $search-rs in $coll-subset[ft:query(., $qryall)]
+        
+        let $qryall-words := tokenize($qryall, '\s')
+        let $qryhas-words := tokenize($qryhas, 'OR')
+        let $query-node :=  <query>
+                                <bool> {
+                                    for $word in $qryall-words
+                                        return
+                                        <term occur="must">{$word}</term>
+                                    }
+                                </bool>                                    
+                                <phrase>{$qryexact}</phrase>
+                                <bool> {
+                                    for $word in $qryhas-words
+                                        return
+                                        <term occur="should">{$word}</term>
+                                    }
+                                </bool>                                    
+                            </query>        
+        
+        for $search-rs in $coll-subset[ft:query(., $query-node)]
         let $expanded := kwic:expand($search-rs),
         $config := <config xmlns="" width="160"/>
         order by ft:score($search-rs) descending
         return
-            <nodes>{$search-rs}
-            <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+            <nodes>
+                {$search-rs}
+                <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
             </nodes>
 };
 
@@ -1273,23 +1291,23 @@ declare function local:filter-labels($searchins as element()) {
 :)
 declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmpl as element(), $qry as xs:string)  {
    
-      (: [Re]writing the search-field with search text :)    
-      if ($tmpl/self::xh:input[@id eq "global-search"]) then 
+    (: [Re]writing the search-field with search text :)    
+    if ($tmpl/self::xh:input[@id eq "global-search"]) then 
         element input {
             attribute id { "global-search" },
             attribute name { "q" },
             attribute class { "search_for" },
             attribute type { "text" },
             attribute value { "BOOHOO" }
-        } 
-        else
-  		element { node-name($tmpl)}
-		  		 {$tmpl/@*,
-			         for $child in $tmpl/node()
-				        return if ($child instance of element())
-					       then local:rewrite-global-search-form($EXIST-PATH, $child, $qry)
-					       else $child
-				 }
+    } 
+    else
+      element { node-name($tmpl)}
+      		 {$tmpl/@*,
+    	         for $child in $tmpl/node()
+    		        return if ($child instance of element())
+    			       then local:rewrite-global-search-form($EXIST-PATH, $child, $qry)
+    			       else $child
+    		 }
 
 };
 
@@ -1331,6 +1349,92 @@ declare function bun:get-global-search-context(
         document {
                 local:rewrite-global-search-form($EXIST-PATH, $tmpl/xh:div, $qry)
         }
+};
+
+declare function bun:get-advanced-search-context($EXIST-PATH as xs:string, $embed_tmpl as xs:string) {
+
+    (: get the template to be embedded :)
+    let $tmpl := fw:app-tmpl($embed_tmpl)
+    
+    return
+        document {
+                local:rewrite-advanced-search-form($EXIST-PATH, $tmpl/xh:div)
+        }
+};
+
+(:~
+:   The advanced search API 
+:  
+: @param EXIST-PATH
+:   default path
+: @param tmpl
+:   The advanced search template
+: @return
+:   A Re-written advanced search form
+:)
+declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $tmpl as element())  {
+   
+    let $search-filter := cmn:get-doctypes()
+    
+    return
+    (: test [Re]writing the search text :)    
+    if ($tmpl/self::xh:div[@id eq "search-groups"]) then 
+    element div {
+        attribute id { "search-groups" },
+        attribute class { "b-left" },
+        (: loops through categories filtering duplicates :)
+        for $category in distinct-values($search-filter/@category) 
+            return 
+                element div {
+                    attribute style {"float:left"},
+                    element span {
+                        attribute class {"ul-list-header"},
+                        $category,
+                        element br {},
+                        element span {
+                            attribute class {"checkall"},
+                            "check all"
+                        },
+                        element input {
+                            attribute type {"checkbox"},
+                            attribute name {"types"},
+                            attribute value {$category}
+                        }
+                    },
+                    element ul {
+                        for $doctype in $search-filter
+                            return  
+                                if($doctype/@category eq $category) then (
+                                    element li {
+                                        $doctype/@name cast as xs:string,
+                                        element input {
+                                            attribute type {"checkbox"},
+                                            attribute name {"docs"},
+                                            attribute value {$doctype/@name}
+                                        }
+                                    }
+                                )
+                                else ()
+                    }
+                }
+    }     
+    else if ($tmpl/self::xh:input[@id eq "all-words"]) then 
+    element input {
+        attribute id { "all-words" },
+        attribute name { "qa" },
+        attribute class { "search_for" },
+        attribute type { "text" },
+        attribute placeholder { "boohoo" }
+    } 
+    else
+      element { node-name($tmpl)}
+      		 {$tmpl/@*,
+    	         for $child in $tmpl/node()
+    		        return if ($child instance of element())
+    			       then local:rewrite-advanced-search-form($EXIST-PATH, $child)
+    			       else $child
+    		 }
+
 };
 
 (:~

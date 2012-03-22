@@ -237,7 +237,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),
                 (),
-                cmn:build-nav-tmpl($EXIST-PATH, "advanced-search.xml")
+                cmn:rewrite-tmpl($EXIST-PATH, bun:get-advanced-search-context($EXIST-PATH,"advanced-search.xml"))
                ) 
         else if ($EXIST-PATH eq "/search-adv")
     		 then 

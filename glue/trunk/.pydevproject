@@ -13,7 +13,6 @@
 <path>/glue-integrator/lib/commons-lang/commons-lang-2.3.jar</path>
 <path>/glue-integrator/lib/jaxen/jaxen.jar</path>
 <path>/glue-integrator/lib/dom4j/dom4j-1.6.1.jar</path>
-<path>/glue-integrator/lib/transformer/odttransformer-generic.jar</path>
 <path>/glue-integrator/lib/xerces/xercesImpl.jar</path>
 <path>/glue-integrator/lib/saxon/saxon9he.jar</path>
 <path>/glue-integrator/lib/sardine/commons-codec-1.4.jar</path>
@@ -23,5 +22,6 @@
 <path>/glue-integrator/lib/sardine/sardine.jar</path>
 <path>/glue-integrator/lib/sardine/slf4j-api-1.6.2.jar</path>
 <path>/glue-integrator/lib/zip4j/zip4j_1.2.8.jar</path>
+<path>/glue-integrator/lib/transformer/odttransformer.jar</path>
 </pydev_pathproperty>
 </pydev_project>

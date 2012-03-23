@@ -252,7 +252,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $doctypes := request:get-parameter("docs",()),
                     
                     $override_path := xs:string(request:get-parameter("exist_path","/search-adv")),
-                    $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                    $status := xs:string(request:get-parameter("std","")),
+                    $startdate := xs:string(request:get-parameter("sd",())),  
+                    $enddate := xs:string(request:get-parameter("ed",())),
+                    $sortby := xs:string(request:get-parameter("sort",$bun:SORT-BY)),
                     
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
@@ -265,19 +268,22 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                             $doctypes,
                                                             $offset,
                                                             $limit,
+                                                            $status,
+                                                            $startdate,
+                                                            $enddate,
                                                             $sortby),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    									       $REL-PATH, 
-    									       $EXIST-PATH, 
-    									       $config:DEFAULT-TEMPLATE,
-    									       cmn:get-route($override_path),
-    									       (),
-    									       cmn:build-nav-node($override_path,$act-entries-repl)
-    								    )               
+    		        $act-entries-repl := document {
+    									   template:copy-and-replace($EXIST-PATH, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+                                        } 
+                                        return 
+                                        template:process-tmpl(
+                                               $REL-PATH, 
+                                               $EXIST-PATH, 
+                                               $config:DEFAULT-TEMPLATE,
+                                               cmn:get-route($override_path),
+                                               (),
+                                               cmn:build-nav-node($override_path,$act-entries-repl)
+                                        )              
         else if ($EXIST-PATH eq "/search")
     		 then 
                 let 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -15,41 +15,32 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    
+    <!-- CONVENIENCE VARIABLES -->
+    <xsl:variable name="input-qryall" select="/docs/paginator/qryAll"/>
+    <xsl:variable name="input-qryexact" select="/docs/paginator/qryExact"/>
+    <xsl:variable name="input-qryhas" select="/docs/paginator/qryHas"/>
     <xsl:template match="docs">
         <xsl:variable name="ver_id" select="version"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
                     <xsl:text>Search results for&#160;</xsl:text>
-                    <!-- Capitalize the first letter -->
-                    s</h1>
+                    “<span class="quoted-qry">
+                        <xsl:value-of select="$input-qryall"/>&#160;
+                        <xsl:value-of select="$input-qryexact"/>&#160;
+                        <xsl:value-of select="$input-qryhas"/>
+                    </span>”                    
+                </h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            <xsl:text>search results (</xsl:text>
+                            <i18n:text key="search-results">search results(nt)</i18n:text>
+                            <xsl:text>&#160;(</xsl:text>
                             <xsl:value-of select="paginator/count"/>
                             <xsl:text>)</xsl:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <xsl:text>archived</xsl:text>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="s/rss" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this page listing" class="print">
-                            <em>PRINT</em>
                         </a>
                     </li>
                 </ul>
@@ -59,7 +50,9 @@
                 <div id="doc-listing" class="acts">
                     <div class="list-header">
                         <!-- call the paginator -->
-                        <xsl:apply-templates select="paginator"/>
+                        <xsl:if test="paginator/count cast as xs:integer gt 1">
+                            <xsl:apply-templates select="paginator"/>
+                        </xsl:if>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
                         <div id="toggle-i18n" style="display:none;">
@@ -70,8 +63,10 @@
                                 <i18n:text key="expand">+ expand all(nt)</i18n:text>
                             </span>
                         </div>
-                        <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
-                        </div>
+                        <xsl:if test="paginator/count cast as xs:integer gt 1">
+                            <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                            </div>
+                        </xsl:if>
                     </div>                    
                     <!-- 
                         !+LISTING_GENERATOR
@@ -101,7 +96,7 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/child::*/@uri"/>
         <li>
             <span>-</span>
-            <a href="?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{bu:ontology/child::*/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/child::*/bu:shortName"/>
             </a> sponsored by                             
             <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>

@@ -662,90 +662,95 @@ declare function bun:advanced-search($qryall as xs:string,
             $doc-types as xs:string,
             $offset as xs:integer, 
             $limit as xs:integer, 
+            $status as xs:string,
+            $startdate as xs:string,
+            $enddate as xs:string,            
             $sortby as xs:string) as element()* {
       
+    let $stylesheet := "advanced-search.xsl"      
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $getqrystr := xs:string(request:get-query-string())    
     let $search-filter := cmn:get-doctypes()
     
     let $subset-parents-coll :=    if(not(empty($parent-types))) then (
-                                        (: iterate through the sections received :)
-                                        for $ptype in $parent-types
-                                        return
-                                            if($ptype eq 'legis') then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@type="document"]
-                                            else if($ptype eq 'groups') then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@type="group"]
-                                            else if($ptype eq 'members') then
-                                                collection(cmn:get-lex-db())/bu:ontology[@type="membership"]
-                                            else
-                                                collection(cmn:get-lex-db())/bu:ontology[@type ne "document" and 
-                                                                                         @type ne "group" and 
-                                                                                         @type ne "membership"]
+                                        (: iterate through the all known (distinctly)categories from config :)
+                                        for $category in distinct-values($search-filter/@category)
+                                            (: iterate through the categories received from search form :)
+                                            for $ptype in $parent-types
+                                                return
+                                                    if($ptype eq $category) then 
+                                                        collection(cmn:get-lex-db())/bu:ontology[@type=$category]
+                                                    else ()
                                     )
                                     else ()
                             
     let $subset-docs-coll :=    if(not(empty($doc-types))) then (
-                                    (: iterate through the sections received :)
-                                    for $dtype in $doc-types
-                                    return
-                                        (: legislative documents :)
-                                        if($dtype eq 'question') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="question"]/ancestor::bu:ontology
-                                        else if($dtype eq 'motion') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="motion"]/ancestor::bu:ontology
-                                        else if($dtype eq 'agendaitem') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="agendaitem"]/ancestor::bu:ontology
-                                        else if($dtype eq 'bill') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="bill"]/ancestor::bu:ontology
-                                        else if($dtype eq 'tableddocument') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="tableddocument"]/ancestor::bu:ontology
-                                        else if($dtype eq 'event') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="document"]/bu:document[@type="event"]/ancestor::bu:ontology
-                                        (: groups and sittings :)  
-                                        else if($dtype eq 'committee') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="committee"]/ancestor::bu:ontology
-                                        else if($dtype eq 'office') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="office"]/ancestor::bu:ontology  
-                                        else if($dtype eq 'ministry') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="ministry"]/ancestor::bu:ontology 
-                                        else if($dtype eq 'government') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="group"]/bu:group[@type="government"]/ancestor::bu:ontology
-                                        else if($dtype eq 'groupsitting') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="groupsitting"]
-                                        (: mps :)
-                                        else if($dtype eq 'membership') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="membership"]   
-                                        (: other types not categorized :)
-                                        else if($dtype eq 'address') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="address"]      
-                                        else if($dtype eq 'report') then 
-                                            collection(cmn:get-lex-db())/bu:ontology[@type="report"]                                          
-                                        else ()
+                                    (: iterate through the all known categories from config :)
+                                    for $filter in $search-filter                                    
+                                        (: iterate through the doctypes received :)
+                                        for $dtype in $doc-types
+                                        return
+                                            (:  as per current structure, these types dont need summons to bu:ontology ancestor::
+                                                this is determined when the (ontology type is the same as the document type) in 
+                                                a child node 
+                                            :)
+                                            if(($filter/@name eq $filter/@category) and $dtype eq $filter/@name) then 
+                                                collection(cmn:get-lex-db())/bu:ontology[@type=$filter/@name]
+                                            (: check for ontology type only, which represents a category of a particular 
+                                                type of documents 
+                                            :)
+                                            else if($dtype eq $filter/@name) then 
+                                                collection(cmn:get-lex-db())/bu:ontology[@type=$filter/@category]/bu:document[@type=$filter/@name]/ancestor::bu:ontology                                       
+                                            else ()
                                     )
                                     else ()    
        
     (: merge both sets :)
     let $coll_subset := ($subset-parents-coll, $subset-docs-coll)
     
-    (: check if search is there so as to proceed to search or not :)    
+    (: trim collection subset by bu:status :)
+    let $subset_w_status := if ($status ne "none") then (
+                                for $match in $coll_subset
+                                (:  this is placed here and not with the order by sort 
+                                    because it affects the <count/> if put after the search 
+                                    of the total documents found 
+                                :)
+                                where $match/child::*/bu:status eq $status 
+                                return 
+                                    $match 
+                            )
+                            else 
+                                $coll_subset
+                                
+    (: trim collection subset by bu:statusDate :)
+    let $subset_w_st_date := if ($startdate ne "" and $enddate ne "") then (
+                                for $match in $subset_w_status
+                                return 
+                                    $match/child::*[bu:statusDate gt xs:dateTime(concat($startdate,"T00:00:00"))]
+                                    [bu:statusDate lt xs:dateTime(concat($enddate,"T23:59:59"))]/ancestor::bu:ontology
+                                )
+                                else 
+                                    $coll_subset                                
+    
+    (: check if search is there are search terms so as to proceed to search or not :)    
     let $subset_rs := if ($qryall ne "" or $qryexact ne "" or $qryhas ne "") then 
-                        bun:adv-ft-search($coll_subset, $qryall, $qryexact, $qryhas) 
+                        bun:adv-ft-search($subset_w_st_date, $qryall, $qryexact, $qryhas) 
                     else 
-                        $coll_subset
+                        ()
     
-    let $getqrystr := xs:string(request:get-query-string())
-    let $stylesheet := "advanced-search.xsl"
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
-    
-    (: input ONxml document in request :)
+    (: document node to be returned to transforming stylesheet :)
     let $doc := <docs> 
         <paginator>
-            (: Count the total number of documents :)
+            (: Count the total number of documents for display.  :)
             <count>{
                 count(
                     $subset_rs
                   )
              }</count>
             <documentType>question</documentType>
+            <qryAll>{$qryall}</qryAll>
+            <qryExact>{$qryexact}</qryExact>
+            <qryHas>{$qryhas}</qryHas>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$doc-types}</listingUrlPrefix>
             <offset>{$offset}</offset>
@@ -754,10 +759,18 @@ declare function bun:advanced-search($qryall as xs:string,
         </paginator>
         <alisting>
         {
-                for $match in subsequence($subset_rs,$query-offset,$limit)
-                order by $match/child::*/bu:statusDate descending
-                return 
-                    $match
+                if ($sortby = 'std_oldest') then (
+                    for $match in subsequence($subset_rs,$query-offset,$limit)              
+                    order by $match/bu:ontology/child::*/bu:statusDate ascending 
+                    return 
+                        $match 
+                )
+                else  (
+                    for $match in subsequence($subset_rs,$query-offset,$limit)              
+                    order by $match/bu:ontology/child::*/bu:statusDate descending 
+                    return 
+                        $match     
+                )        
         } 
         </alisting>
     </docs>
@@ -765,11 +778,20 @@ declare function bun:advanced-search($qryall as xs:string,
         transform:transform($doc, 
             $stylesheet, 
             <parameters>
-                <param name="sortby" value="testing" />
+                <param name="sort" value="{$sortby}" />
             </parameters>
            )
 };
 
+(:~
+:   Performs a lucene search using the XML syntax
+: @param coll-subset
+: @param qryall
+: @param qryexact
+: @param qryhas
+: @return
+:   search results in a <nodes/> document
+:)
 declare function bun:adv-ft-search(
             $coll-subset as node()*, 
             $qryall as xs:string,
@@ -779,19 +801,21 @@ declare function bun:adv-ft-search(
         let $qryall-words := tokenize($qryall, '\s')
         let $qryhas-words := tokenize($qryhas, 'OR')
         let $query-node :=  <query>
-                                <bool> {
-                                    for $word in $qryall-words
-                                        return
-                                        <term occur="must">{$word}</term>
-                                    }
-                                </bool>                                    
-                                <phrase>{$qryexact}</phrase>
-                                <bool> {
-                                    for $word in $qryhas-words
-                                        return
-                                        <term occur="should">{$word}</term>
-                                    }
-                                </bool>                                    
+                                <bool>
+                                    <bool> {
+                                        for $word in $qryall-words
+                                            return
+                                            <term occur="must">{$word}</term>
+                                        }
+                                    </bool>                                    
+                                    <phrase>{$qryexact}</phrase>
+                                    <bool> {
+                                       for $word in $qryhas-words
+                                           return
+                                           <term occur="should">{$word}</term>
+                                       }
+                                    </bool>      
+                                </bool>
                             </query>        
         
         for $search-rs in $coll-subset[ft:query(., $query-node)]
@@ -799,6 +823,11 @@ declare function bun:adv-ft-search(
         $config := <config xmlns="" width="160"/>
         order by ft:score($search-rs) descending
         return
+            (: <nodes>
+                <bu:ontology/>
+                <kwic/>
+               </nodes>
+            :)
             <nodes>
                 {$search-rs}
                 <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
@@ -1374,10 +1403,11 @@ declare function bun:get-advanced-search-context($EXIST-PATH as xs:string, $embe
 :)
 declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $tmpl as element())  {
    
-    let $search-filter := cmn:get-doctypes()
+    let $search-filter := cmn:get-doctypes(),
+        $statuses := cmn:get-statuses()
     
     return
-    (: test [Re]writing the search text :)    
+    (: writing the search categories and doctypes :)    
     if ($tmpl/self::xh:div[@id eq "search-groups"]) then 
     element div {
         attribute id { "search-groups" },
@@ -1417,14 +1447,22 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
                                 else ()
                     }
                 }
-    }     
-    else if ($tmpl/self::xh:input[@id eq "all-words"]) then 
-    element input {
-        attribute id { "all-words" },
-        attribute name { "qa" },
-        attribute class { "search_for" },
-        attribute type { "text" },
-        attribute placeholder { "boohoo" }
+    }   
+    (: render the status dropdown :)
+    else if ($tmpl/self::xh:select[@id eq "status"]) then 
+    element select {
+        attribute id { "status" },
+        attribute name { "std" },
+        element option {
+            attribute value {"none"},
+            "-- select one --"
+        },
+        for $status in $statuses
+            return 
+            element option {
+                attribute value {$status},
+                $status
+            }
     } 
     else
       element { node-name($tmpl)}

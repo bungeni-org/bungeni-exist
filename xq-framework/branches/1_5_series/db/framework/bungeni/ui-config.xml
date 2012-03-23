@@ -905,7 +905,7 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype category="legis" name="bill">
+        <doctype category="document" name="bill">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -921,7 +921,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="legis" name="question">
+        <doctype category="document" name="question">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -939,7 +939,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="legis" name="motion">
+        <doctype category="document" name="motion">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -957,7 +957,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="legis" name="tableddocument">
+        <doctype category="document" name="tableddocument">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -975,7 +975,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="legis" name="agendaitem">
+        <doctype category="document" name="agendaitem">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -993,8 +993,8 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="legis" name="event"/>
-        <doctype category="groups" name="committee">
+        <doctype category="document" name="event"/>
+        <doctype category="group" name="committee">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1006,7 +1006,7 @@
                 <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
             </searchins>
         </doctype>
-        <doctype category="groups" name="political-group">
+        <doctype category="group" name="political-group">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1022,11 +1022,11 @@
                 <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="groups" name="office"/>
-        <doctype category="groups" name="ministry"/>
-        <doctype category="groups" name="government"/>
-        <doctype category="groups" name="groupsitting"/>
-        <doctype category="members" name="membership">
+        <doctype category="group" name="office"/>
+        <doctype category="group" name="ministry"/>
+        <doctype category="group" name="government"/>
+        <doctype category="group" name="groupsitting"/>
+        <doctype category="membership" name="membership">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1042,7 +1042,18 @@
                 <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="others" name="address"/>
-        <doctype category="others" name="report"/>
+        <doctype category="address" name="address"/>
+        <doctype category="report" name="report"/>
     </doctypes>
+    
+    <!-- Document status types -->
+    <statuses>
+        <status>attached</status>
+        <status>active</status>
+        <status>admissible</status>
+        <status>gazetted</status>
+        <status>response_completed</status>
+        <status>published_agenda</status>
+        <status>public</status>
+    </statuses>
 </ui>

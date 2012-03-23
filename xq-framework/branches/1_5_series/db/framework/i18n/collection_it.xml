@@ -2,7 +2,18 @@
 <catalogue xml:lang="it">
     <msg key="welcome">Benvenuto</msg>
     <msg key="adv-search">Ricerca Avanzata</msg>
-    <msg key="search-settings">Impostazioni di Ricerca</msg>    
+    <msg key="search-settings">Impostazioni di Ricerca</msg>
+    <msg key="search-results">risultati della ricerca</msg>
+    <msg key="select-all">seleziona tutto</msg>
+    <msg key="find-docs-with">Trovare documenti con</msg>
+    <msg key="filter-results">Filtra i risultati restituiti da</msg>
+    <msg key="words-all">tutte queste parole</msg>
+    <msg key="words-exact">le parole o frase esatta</msg>
+    <msg key="words-any">ha alcuna di queste parole</msg>
+    <msg key="eg">A.e.</msg>
+    <msg key="eg-keywords">Digitare le parole chiave</msg>
+    <msg key="eg-w-quotes">con le citazioni</msg>
+    <msg key="eg-w-OR">con l' OR</msg>    
     <!-- TOP_LEVEL NAV -->
     <msg key="home">casa</msg>
     <msg key="business">lavori</msg>
@@ -61,7 +72,7 @@
     <msg key="listing-search">ricerca a testo</msg>
     <msg key="sort-by">ordinamento</msg>
     <msg key="btn-search">ricerca</msg>
-    <msg key="btn-adv-search">ricerca avanzata</msg>
+    <msg key="btn-adv-search">ricerca avanzata »</msg>
     <msg key="doc-question">Interpellanze</msg>
     <msg key="doc-motion">Mozione</msg>
     <msg key="doc-bill">Disegno di legge</msg>

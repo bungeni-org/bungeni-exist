@@ -185,14 +185,14 @@ declare function cmn:get-doctype-config($doctype as xs:string) {
  : return <doctype/> nodes
  :)
 declare function cmn:get-doctypes() {
-   let $config := cmn:get-ui-config()
-   let $dc-config := $config/ui/doctypes/doctype
-   return 
-    if ($dc-config) then (
-        $dc-config
-      )
-    else
-        ()
+   cmn:get-ui-config()/ui/doctypes/doctype
+};
+
+(:
+ : return <statuses/> nodes
+ :)
+declare function cmn:get-statuses() {
+   cmn:get-ui-config()/ui/statuses/status
 };
 
 declare function cmn:get-orderby-config($doctype as xs:string)  {

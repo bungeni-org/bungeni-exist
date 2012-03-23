@@ -9,7 +9,7 @@
 */
 
 .Zebra_DatePicker *                          { margin: 0; padding: 0; color: #000 }
-.Zebra_DatePicker                            { position: absolute; margin-top:320px; background: #434343; border: 3px solid #434343; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; display: none; z-index: 100; font-family: Tahoma, Arial, Helvetica, sans-serif; font-size: 13px }
+.Zebra_DatePicker                            { position: absolute; margin-top:0px; background: #434343; border: 3px solid #434343; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; display: none; z-index: 100; font-family: Tahoma, Arial, Helvetica, sans-serif; font-size: 13px }
 
 /* = GLOBALS
 ----------------------------------------------------------------------------------------------------------------------*/

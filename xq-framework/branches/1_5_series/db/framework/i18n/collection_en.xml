@@ -3,6 +3,17 @@
     <msg key="welcome">Welcome</msg>
     <msg key="adv-search">Advanced Search</msg>
     <msg key="search-settings">Search Settings</msg>
+    <msg key="search-results">search results</msg>
+    <msg key="select-all">check all</msg>
+    <msg key="find-docs-with">Find documents with</msg>
+    <msg key="filter-results">Filter the returned results by</msg>
+    <msg key="words-all">all these words</msg>
+    <msg key="words-exact">the exact words or phrase</msg>
+    <msg key="words-any">contains any of these words</msg>
+    <msg key="eg">E.g.</msg>
+    <msg key="eg-keywords">Type the key words</msg>
+    <msg key="eg-w-quotes">with quotes</msg>
+    <msg key="eg-w-OR">with the OR</msg>
     <!-- TOP_LEVEL NAV -->
     <msg key="home">home</msg>
     <msg key="business">business</msg>
@@ -61,7 +72,7 @@
     <msg key="listing-search">search text</msg>
     <msg key="sort-by">sort by</msg>
     <msg key="btn-search">search</msg>
-    <msg key="btn-adv-search">advanced search</msg>
+    <msg key="btn-adv-search">advanced search »</msg>
     <msg key="doc-question">Question</msg>
     <msg key="doc-motion">Motion</msg>
     <msg key="doc-bill">Bill</msg>

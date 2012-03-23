@@ -8,36 +8,44 @@
         </div>
         <div id="region-content" class="rounded-eigh tab_container" role="main">
             <div id="adv-search-wrapper">
-                <form method="GET" action="search-adv" id="ui_search" name="search_sort" autocomplete="off">
+                <form method="GET" action="search-adv" id="ui_search" name="search_sort">
                     <input type="hidden" id="exist_path" name="exist_path" value="/search-adv"/>
                     <input name="st" type="hidden" value="adv"/>
                     <fieldset>
-                        <legend>&#160;Find documents with&#160;</legend>
+                        <legend>&#160;<i18n:text key="find-docs-with">Find documents with(nt)</i18n:text>&#160;</legend>
                         <div class="row">
-                            <span class="label" for="all-words">all these words:</span>
+                            <span class="label" for="all-words">
+                                <i18n:text key="words-all">all these words(nt)</i18n:text>:</span>
                             <span class="formw">
                                 <input id="all-words" name="qa" class="search_for" type="text"/>
                             </span>
-                            <span class="example">E.g. Type the key words <span class="mono">withdrawn public approved</span>
+                            <span class="example">
+                                <i18n:text key="eg">E.g.(nt)</i18n:text>&#160;<i18n:text key="eg-keywords">Type the key words(nt)</i18n:text>&#160;<span class="mono">withdrawn public approved</span>
                             </span>
                         </div>
                         <div class="row">
-                            <span class="label">the exact words or phrase:</span>
+                            <span class="label">
+                                <i18n:text key="words-exact">the exact words or phrase(nt)</i18n:text>:</span>
                             <span class="formw">
                                 <input type="text" name="qe" class="search_for"/>
                             </span>
-                            <span class="example">E.g. <span class="mono">"object of the Bill is to"</span>  with quotes</span>
+                            <span class="example">
+                                <i18n:text key="eg">E.g.(nt)</i18n:text>&#160;<span class="mono">"object of the Bill is to"</span>&#160;<i18n:text key="eg-w-quotes">with quotes(nt)</i18n:text>
+                            </span>
                         </div>
                         <div class="row">
-                            <span class="label">contains any of these words:</span>
+                            <span class="label">
+                                <i18n:text key="words-any">contains any of these words(nt)</i18n:text>:</span>
                             <span class="formw">
                                 <input type="text" name="qh" class="search_for"/>
                             </span>
-                            <span class="example">E.g. <span class="mono">withdrawn OR approved</span> with the OR</span>
+                            <span class="example">
+                                <i18n:text key="eg">E.g.(nt)</i18n:text>&#160;<span class="mono">withdrawn OR approved</span>&#160;<i18n:text key="eg-w-OR">with the OR(nt)</i18n:text>
+                            </span>
                         </div>
                     </fieldset>
                     <fieldset>
-                        <legend>&#160;Filter the returned results by&#160;</legend>
+                        <legend>&#160;<i18n:text key="filter-results">Filter the returned results by(nt)</i18n:text>&#160;</legend>
                         <div class="row">
                             <div class="b-left" id="search-groups">
                                 <!-- categorized doctypes will be rendered here -->
@@ -46,10 +54,7 @@
                                 <label for="status">
                                     select status 
                                     <div>
-                                        <select id="status" name="doc_status">
-                                            <option value="st_date_newest">status date newest</option>
-                                            <option value="st_date_oldest">status date oldest</option>
-                                        </select>
+                                        <select id="status" name="std"/>
                                     </div>
                                 </label>
                                 <br/>
@@ -57,20 +62,32 @@
                                 <label for="startdate">
                                     start date
                                     <div>
-                                        <input id="startdate" name="startdate" type="text" value="start date"/>
-                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="left: -40px; top: 0.5px; ">Pick a date</button>
+                                        <input id="startdate" name="sd" type="text" placeholder="YYYY-MM-DD"/>
+                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="display:none;">Pick a date</button>
                                     </div>
                                 </label>
                                 <br/>
                                 <label for="enddate">
                                     end date
                                     <div>
-                                        <input id="enddate" name="enddate" type="text" value="end date"/>
-                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="left: -40px; top: 0.5px; ">Pick a date</button>
+                                        <input id="enddate" name="ed" type="text" placeholder="YYYY-MM-DD"/>
+                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="display:none;">Pick a date</button>
                                     </div>
                                 </label>
+                                <br/>
+                                <br/>
+                                <label for="status">
+                                    sort status date
+                                    <div>
+                                        <select id="status_date" name="sort">
+                                            <option value="std_newest">status date newest</option>
+                                            <option value="std_oldest">status date oldest</option>
+                                        </select>
+                                    </div>
+                                </label>
+                                <br/>
                                 <div class="b-right">
-                                    <input class="button" value="i18n(btn-adv-search,search)" type="submit"/>
+                                    <input class="button" id="adv-search-btn" value="i18n(btn-adv-search,search)" type="submit"/>
                                 </div>
                             </div>
                         </div>

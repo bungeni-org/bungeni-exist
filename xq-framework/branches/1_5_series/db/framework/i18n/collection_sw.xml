@@ -2,7 +2,18 @@
 <catalogue xml:lang="sw">
     <msg key="welcome">Karibu</msg>
     <msg key="adv-search">Tafuta kwa Hali ya juu</msg>
-    <msg key="search-settings">Mazingira ya Kutafuta</msg>        
+    <msg key="search-settings">Mazingira ya Kutafuta</msg>
+    <msg key="search-results">matokeo ya utafutaji</msg>
+    <msg key="select-all">chagua yote</msg>
+    <msg key="find-docs-with">Pata hati zilizo na</msg>
+    <msg key="filter-results">Chuja matokeo ya utafutaji kwa</msg>
+    <msg key="words-all">haya maneno yote</msg>
+    <msg key="words-exact">maneno kamili au kifungu</msg>
+    <msg key="words-any">ina mojawapo ya maneno haya</msg>
+    <msg key="eg">K.m.</msg>
+    <msg key="eg-keywords">Andika maneno muhimu</msg>
+    <msg key="eg-w-quotes">na manukuu</msg>
+    <msg key="eg-w-OR">na hiyo OR</msg>    
     <!-- TOP_LEVEL NAV -->
     <msg key="home">nyumbani</msg>
     <msg key="business">shughli</msg>
@@ -61,7 +72,7 @@
     <msg key="listing-search">tafuta maandiko</msg>
     <msg key="sort-by">namna hii</msg>
     <msg key="btn-search">tafuta</msg>
-    <msg key="btn-adv-search">tafuta kwa hali ya juu</msg>
+    <msg key="btn-adv-search">tafuta kwa hali ya juu »</msg>
     <msg key="doc-question">Swali</msg>
     <msg key="doc-motion">Msukumo</msg>
     <msg key="doc-bill">Mswada</msg>

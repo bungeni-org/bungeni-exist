@@ -1,7 +1,13 @@
 $(document).ready(function () {
 
-    $('#startdate').Zebra_DatePicker();
-    $('#enddate').Zebra_DatePicker();
+    $('#startdate').Zebra_DatePicker({
+        readonly_element: false,
+        inside: false
+    });
+    $('#enddate').Zebra_DatePicker({
+        readonly_element: false,
+        inside: false
+    });
 
     /* query-params-set */
     $.urlParam = function(name){

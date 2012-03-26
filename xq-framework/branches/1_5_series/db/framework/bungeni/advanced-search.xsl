@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -96,15 +96,26 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/child::*/@uri"/>
         <li>
             <span>-</span>
-            <a href="{bu:ontology/child::*/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="bu:ontology/child::*/bu:shortName"/>
-            </a> sponsored by                             
-            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
-            <div class="doc-toggle">
-                <div class="search-subh">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:legislativeItem/bu:owner/@showAs">
+                    <a href="{bu:ontology/child::*/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                        <xsl:value-of select="bu:ontology/child::*/bu:shortName"/>
+                    </a> sponsored by <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <a href="{bu:ontology/child::*/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                        <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
+                    </a>
                     <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                     &#160;-&#160;
-                    <i>status</i>&#160;<xsl:value-of select="bu:ontology/bu:legislativeItem/bu:status"/>
+                    <i> group type</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:type"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <div class="doc-toggle">
+                <div class="search-subh">
+                    <xsl:value-of select="format-dateTime(bu:ontology/child::*/bu:statusDate,$datetime-format,'en',(),())"/>
+                    &#160;-&#160;
+                    <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status"/>
                 </div>
                 <div class="search-snippet">
                     <xsl:apply-templates select="kwic"/>

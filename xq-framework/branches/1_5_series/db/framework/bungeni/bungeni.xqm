@@ -730,7 +730,7 @@ declare function bun:advanced-search($qryall as xs:string,
                                     [bu:statusDate lt xs:dateTime(concat($enddate,"T23:59:59"))]/ancestor::bu:ontology
                                 )
                                 else 
-                                    $coll_subset                                
+                                    $subset_w_status                                
     
     (: check if search is there are search terms so as to proceed to search or not :)    
     let $subset_rs := if ($qryall ne "" or $qryexact ne "" or $qryhas ne "") then 
@@ -1455,6 +1455,7 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
         attribute name { "std" },
         element option {
             attribute value {"none"},
+            attribute selected {"selected"},
             "-- select one --"
         },
         for $status in $statuses

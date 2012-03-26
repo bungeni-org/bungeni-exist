@@ -24,6 +24,7 @@ __status__ = "Development"
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
 from org.dom4j import DocumentFactory
+from org.dom4j import DocumentException
 from org.dom4j.io import SAXReader
 from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
@@ -230,6 +231,7 @@ class ParseBungeniXML(object):
             Get the parliamentary information at this juncture.
             """
             #parl_params['country-code'] = self.xmldoc.selectSingleNode("contenttype/field[@name='language']").getText()
+            parl_params['parliament-id'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("parliament_id")).getText()
             parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
             parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()+"/"+parl_params['parliament-election-date']
             return parl_params
@@ -504,7 +506,11 @@ class RepoSyncUploader(object):
         self.bunparse = ParseDOMXML()
         self.main_cfg = input_params["main_config"]
         self.webdav_cfg = input_params["webdav_config"]
-        self.dom = self.bunparse.doc_dom(self.main_cfg.get_temp_files_folder()+"reposync.xml")
+        try:
+            self.dom = self.bunparse.doc_dom(self.main_cfg.get_temp_files_folder()+"reposync.xml")
+        except DocumentException, e:
+            print _COLOR.FAIL, e, '\nERROR: reposync.xml is not generated. Run with `-s` switch to sync with repository first.', _COLOR.ENDC
+            sys.exit()
 
     def upload_files(self):
         coll = self.dom.selectSingleNode("//collection")

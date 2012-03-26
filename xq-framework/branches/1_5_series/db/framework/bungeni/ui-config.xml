@@ -98,7 +98,7 @@
             <subnavigation>current</subnavigation>
         </route>
         <!-- #COMMITTEES -->
-        <route href="/committee/profile">
+        <route href="/committee/text">
             <title>Business | Committee's Profile</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
@@ -129,7 +129,7 @@
             <subnavigation>committees</subnavigation>
         </route> 
         <!-- #POLICAL-GROUPS -->
-        <route href="/political-group/profile">
+        <route href="/political-group/text">
             <title>Business | Political Group's Profile</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
@@ -621,7 +621,7 @@
             The name is always that of a content type
         -->
         <tabs name="committee">
-            <tab path="committee/profile" id="profile">
+            <tab path="committee/text" id="profile">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
@@ -653,7 +653,7 @@
             </tab>
         </tabs>
         <tabs name="political-group">
-            <tab path="political-group/profile" id="profile">
+            <tab path="political-group/text" id="profile">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>

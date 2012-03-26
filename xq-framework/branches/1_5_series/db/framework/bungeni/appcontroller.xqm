@@ -463,7 +463,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        (),
     								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "listing-search-form.xml",'political-group')))))
     								    )
-    	else if ($EXIST-PATH eq "/political-group/profile" )
+    	else if ($EXIST-PATH eq "/political-group/text" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -520,7 +520,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    									 
-    	else if ($EXIST-PATH eq "/committee/profile" )
+    	else if ($EXIST-PATH eq "/committee/text" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),

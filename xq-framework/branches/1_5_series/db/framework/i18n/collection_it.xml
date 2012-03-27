@@ -5,6 +5,11 @@
     <msg key="search-settings">Impostazioni di Ricerca</msg>
     <msg key="search-results">risultati della ricerca</msg>
     <msg key="select-all">seleziona tutto</msg>
+    <msg key="status-select">selezionare lo stato</msg>
+    <msg key="status-default">-- selezionare una --</msg>
+    <msg key="status-date-sort">sorta di stato data</msg>
+    <msg key="sort-date-new">novità del data stato</msg>
+    <msg key="sort-date-old">stato data più antica</msg>
     <msg key="find-docs-with">Trovare documenti con</msg>
     <msg key="filter-results">Filtra i risultati restituiti da</msg>
     <msg key="words-all">tutte queste parole</msg>
@@ -73,14 +78,22 @@
     <msg key="sort-by">ordinamento</msg>
     <msg key="btn-search">ricerca</msg>
     <msg key="btn-adv-search">ricerca avanzata »</msg>
-    <msg key="doc-question">Interpellanze</msg>
-    <msg key="doc-motion">Mozione</msg>
-    <msg key="doc-bill">Disegno di legge</msg>
-    <msg key="doc-tableddocument">Documento depositato</msg>
-    <msg key="doc-agendaitem">Punto all'ordine del giorno</msg>
-    <msg key="doc-committee">Comitato</msg>
-    <msg key="doc-groupsitting">Seduta</msg>
-    <msg key="doc-calendar">Calendario Sedute</msg>
+    <msg key="doc-question">interpellanze</msg>
+    <msg key="doc-motion">mozione</msg>
+    <msg key="doc-bill">disegno di legge</msg>
+    <msg key="doc-tableddocument">documento depositato</msg>
+    <msg key="doc-agendaitem">punto all'ordine del giorno</msg>
+    <msg key="doc-committee">comitato</msg>
+    <msg key="doc-groupsitting">seduta</msg>
+    <msg key="doc-calendar">calendario sedute</msg>
+    <msg key="doc-event">evento</msg>
+    <msg key="doc-political-group">gruppo politico</msg>
+    <msg key="doc-office">ufficio</msg>
+    <msg key="doc-ministry">ministero</msg>
+    <msg key="doc-government">governo</msg>
+    <msg key="doc-membership">membri</msg>
+    <msg key="doc-report">riferire</msg>
+    <msg key="doc-address">indirizzo</msg>
     <msg key="sitting-activity">Tipo di Attività</msg>
     <msg key="sitting-convocation">Tipo di Convocazione</msg>
     <msg key="sitting-venue">Sede</msg>
@@ -88,6 +101,12 @@
     <msg key="versions">versione</msg>
     <msg key="events">eventi</msg>
     <msg key="attachedfiles">file allegati</msg>    
+    <!-- categories -->
+    <msg key="cate-document">documento</msg>
+    <msg key="cate-group">gruppo</msg>
+    <msg key="cate-membership">membri</msg>
+    <msg key="cate-address">indirizzo</msg>
+    <msg key="cate-report">riferire</msg>    
     <!-- TABS -->
     <msg key="tab-profile">profilo</msg>
     <msg key="tab-members">membri</msg>

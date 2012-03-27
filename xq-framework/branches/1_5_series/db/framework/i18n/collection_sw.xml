@@ -5,6 +5,11 @@
     <msg key="search-settings">Mazingira ya Kutafuta</msg>
     <msg key="search-results">matokeo ya utafutaji</msg>
     <msg key="select-all">chagua yote</msg>
+    <msg key="status-select">chagua hadhi</msg>
+    <msg key="status-default">-- chagua moja --</msg>
+    <msg key="status-date-sort">namna hadhi ya tarehe</msg>
+    <msg key="sort-date-new">hadhi za majuzi</msg>
+    <msg key="sort-date-old">hadhi za zamani</msg>
     <msg key="find-docs-with">Pata hati zilizo na</msg>
     <msg key="filter-results">Chuja matokeo ya utafutaji kwa</msg>
     <msg key="words-all">haya maneno yote</msg>
@@ -73,14 +78,22 @@
     <msg key="sort-by">namna hii</msg>
     <msg key="btn-search">tafuta</msg>
     <msg key="btn-adv-search">tafuta kwa hali ya juu »</msg>
-    <msg key="doc-question">Swali</msg>
-    <msg key="doc-motion">Msukumo</msg>
-    <msg key="doc-bill">Mswada</msg>
-    <msg key="doc-tableddocument">Hati iliyopendekezwa</msg>
-    <msg key="doc-agendaitem">Kipengele cha Ajenda</msg>
-    <msg key="doc-committee">Kamati</msg>
-    <msg key="doc-groupsitting">Kikao</msg>
-    <msg key="doc-calendar">Kalenda ya Vikao</msg>
+    <msg key="doc-question">swali</msg>
+    <msg key="doc-motion">msukumo</msg>
+    <msg key="doc-bill">mswada</msg>
+    <msg key="doc-tableddocument">hati iliyopendekezwa</msg>
+    <msg key="doc-agendaitem">kipengele cha ajenda</msg>
+    <msg key="doc-committee">kamati</msg>
+    <msg key="doc-groupsitting">kikao</msg>
+    <msg key="doc-calendar">kalenda ya vikao</msg>
+    <msg key="doc-event">tukio</msg>
+    <msg key="doc-political-group">kundi la kisiasa</msg>
+    <msg key="doc-office">ofisi</msg>
+    <msg key="doc-ministry">wizara</msg>
+    <msg key="doc-government">serikali</msg>
+    <msg key="doc-membership">uanachama</msg>
+    <msg key="doc-report">ripoti</msg>
+    <msg key="doc-address">anwani</msg>
     <msg key="sitting-activity">Aina ya Shughuli</msg>
     <msg key="sitting-convocation">Aina ya Kusanyiko</msg>
     <msg key="sitting-venue">Ukumbi</msg>
@@ -88,6 +101,12 @@
     <msg key="versions">insha</msg>
     <msg key="events">matukio</msg>
     <msg key="attachedfiles">faili zilizoambatishwa</msg>    
+    <!-- categories -->
+    <msg key="cate-document">hati</msg>
+    <msg key="cate-group">kundi</msg>
+    <msg key="cate-membership">uanachama</msg>
+    <msg key="cate-address">anwani</msg>
+    <msg key="cate-report">taarifa</msg>     
     <!-- TABS -->
     <msg key="tab-profile">maumbo</msg>
     <msg key="tab-members">wanachama</msg>

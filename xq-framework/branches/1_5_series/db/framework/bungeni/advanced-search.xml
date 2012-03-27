@@ -52,7 +52,7 @@
                             </div>
                             <div class="b-right">
                                 <label for="status">
-                                    select status 
+                                    <i18n:text key="status-select">select status (nt)</i18n:text>
                                     <div>
                                         <select id="status" name="std"/>
                                     </div>
@@ -60,7 +60,7 @@
                                 <br/>
                                 <br/>
                                 <label for="startdate">
-                                    start date
+                                    <i18n:text key="date-start">start date(nt)</i18n:text>
                                     <div>
                                         <input id="startdate" name="sd" type="text" placeholder="YYYY-MM-DD"/>
                                         <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="display:none;">Pick a date</button>
@@ -68,7 +68,7 @@
                                 </label>
                                 <br/>
                                 <label for="enddate">
-                                    end date
+                                    <i18n:text key="date-end">end date(nt)</i18n:text>
                                     <div>
                                         <input id="enddate" name="ed" type="text" placeholder="YYYY-MM-DD"/>
                                         <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="display:none;">Pick a date</button>
@@ -77,11 +77,15 @@
                                 <br/>
                                 <br/>
                                 <label for="status">
-                                    sort status date
+                                    <i18n:text key="status-date-sort">sort status date(nt)</i18n:text>
                                     <div>
                                         <select id="status_date" name="sort">
-                                            <option value="std_newest">status date newest</option>
-                                            <option value="std_oldest">status date oldest</option>
+                                            <option value="std_newest">
+                                                <i18n:text key="sort-date-new">status date newest(nt)</i18n:text>
+                                            </option>
+                                            <option value="std_oldest">
+                                                <i18n:text key="sort-date-old">status date oldest(nt)</i18n:text>
+                                            </option>
                                         </select>
                                     </div>
                                 </label>

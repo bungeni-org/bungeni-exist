@@ -1416,14 +1416,14 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
         for $category in distinct-values($search-filter/@category) 
             return 
                 element div {
-                    attribute style {"float:left"},
+                    attribute class {"category-block"},
                     element span {
                         attribute class {"ul-list-header"},
-                        $category,
+                        <i18n:text key="{concat('cate-',$category)}">{$category}(nt)</i18n:text>,
                         element br {},
                         element span {
                             attribute class {"checkall"},
-                            "check all"
+                            <i18n:text key="select-all">check all(nt)</i18n:text>
                         },
                         element input {
                             attribute type {"checkbox"},
@@ -1436,7 +1436,7 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
                             return  
                                 if($doctype/@category eq $category) then (
                                     element li {
-                                        $doctype/@name cast as xs:string,
+                                        <i18n:text key="{concat('doc-',$doctype/@name)}">{lower-case($doctype/@name)}(nt)</i18n:text>,
                                         element input {
                                             attribute type {"checkbox"},
                                             attribute name {"docs"},
@@ -1456,7 +1456,7 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
         element option {
             attribute value {"none"},
             attribute selected {"selected"},
-            "-- select one --"
+            <i18n:text key="status-default">select one(nt)</i18n:text>
         },
         for $status in $statuses
             return 

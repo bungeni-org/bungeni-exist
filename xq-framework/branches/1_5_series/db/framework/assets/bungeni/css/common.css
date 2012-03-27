@@ -347,6 +347,12 @@ div#doc-downloads {
     padding: 0 1em 1em 1em;
 }
 
+div.category-block {
+    float:left;
+    width:180px;
+    border:1px solid transparent;
+}
+
 div.row {
     float:left;
     width:860px;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -61,7 +61,9 @@
                     <div class="rounded-eigh tab_container hanging-menu">
                         <ul class="doc-versions">
                             <li>
-                                <a href="{primary/bu:ontology/bu:document/@type}/text?uri={primary/bu:ontology/bu:legislativeItem/@uri}">current</a>
+                                <a href="{primary/bu:ontology/bu:document/@type}/text?uri={primary/bu:ontology/bu:legislativeItem/@uri}">
+                                    <i18n:text key="list-tab-cur">current(nt)</i18n:text>
+                                </a>
                             </li>
                             <xsl:variable name="total_versions" select="count(primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent)"/>
                             <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
@@ -71,12 +73,13 @@
                                     <xsl:choose>
                                         <!-- if current URI is equal to this versions URI -->
                                         <xsl:when test="$event_uri eq @href">
-                                            <span>Event-<xsl:value-of select="$cur_pos"/>
+                                            <span>
+                                                <i18n:text key="doc-event">event(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </span>
                                         </xsl:when>
                                         <xsl:otherwise>
                                             <a href="{$doc-type}/event?uri={@href}">
-                                                  Event-<xsl:value-of select="$cur_pos"/>
+                                                <i18n:text key="doc-event">event(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </a>
                                         </xsl:otherwise>
                                     </xsl:choose>
@@ -92,13 +95,16 @@
                     </h4>
                     <div class="doc-status">
                         <span>
-                            <b>Last Event:</b>
+                            <b>
+                                <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
                         </span>
                         <span>
                             <xsl:value-of select="secondary/bu:ontology/bu:legislativeItem/bu:status"/>
                         </span>
                         <span>
-                            <b>Status Date:</b>
+                            <b>
+                                <i18n:text key="status">Status(nt)</i18n:text>
+                                &#160;<i18n:text key="date-on">Date(nt)</i18n:text>:</b>
                         </span>
                         <span>
                             <xsl:value-of select="format-dateTime(secondary/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>

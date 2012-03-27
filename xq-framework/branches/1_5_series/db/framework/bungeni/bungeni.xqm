@@ -1585,7 +1585,7 @@ declare function bun:get-committees(
         (: Count the total number of groups :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'])}</count>
         <documentType>committee</documentType>
-        <listingUrlPrefix>committee/profile</listingUrlPrefix>        
+        <listingUrlPrefix>committee/text</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>        
@@ -1837,7 +1837,7 @@ declare function bun:get-politicalgroups(
         (: Count the total number of groups :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'])}</count>
         <documentType>political-group</documentType>
-        <listingUrlPrefix>political-group/profile</listingUrlPrefix>        
+        <listingUrlPrefix>political-group/text</listingUrlPrefix>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>

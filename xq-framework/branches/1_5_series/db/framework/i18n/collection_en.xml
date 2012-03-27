@@ -101,6 +101,8 @@
     <msg key="versions">versions</msg>
     <msg key="events">events</msg>
     <msg key="attachedfiles">attached files</msg>
+    <msg key="title">title</msg>
+    <msg key="relation">relation</msg>
     <!-- categories -->
     <msg key="cate-document">document</msg>
     <msg key="cate-group">group</msg>
@@ -126,6 +128,15 @@
     <msg key="tab-desc">description</msg>
     <msg key="tab-date">date</msg>
     <msg key="tab-file-title">file title</msg>
+    <!-- address /  contacts -->
+    <msg key="addr-type">addr type</msg>
+    <msg key="addr-post-type">postal addr type</msg>
+    <msg key="addr-city">city</msg>
+    <msg key="addr-zip">ZIP code</msg>
+    <msg key="addr-country">country</msg>
+    <msg key="addr-phone">phone number(s)</msg>
+    <msg key="addr-fax">fax number(s)</msg>
+    <msg key="addr-email">email</msg>    
     <!-- PAGINATION -->
     <msg key="page">Page</msg>
     <msg key="pageof">of</msg>
@@ -135,6 +146,8 @@
     <msg key="ph-searchall">Search all Bungeni documents...</msg>
     <msg key="ph-searchlisting">search this listing</msg>
     <!-- MISC -->
-    <msg key="none">None</msg>
+    <msg key="language">language</msg>
+    <msg key="acronym">acronym</msg>
+    <msg key="none">none</msg>
     <msg key="number">Number</msg>
 </catalogue>

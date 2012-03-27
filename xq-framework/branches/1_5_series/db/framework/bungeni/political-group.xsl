@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -69,20 +69,23 @@
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Language: 
+                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+                        <i18n:text key="language">language(nt)</i18n:text>: 
                         <i>
                             <xsl:value-of select="primary/bu:ontology/bu:bungeni/bu:language"/>
                         </i>
                     </h4>
                     <div class="doc-status">
                         <span>
-                            <b>Acronym:</b>
+                            <b>
+                                <i18n:text key="acronym">acronym(nt)</i18n:text>:</b>
                         </span>
                         <span>
                             <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:shortName"/>
                         </span>
                         <span>
-                            <b>Start Date:</b>
+                            <b>
+                                <i18n:text key="date-start">start date(nt)</i18n:text>:</b>
                         </span>
                         <span>
                             <xsl:value-of select="format-date(primary/bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>

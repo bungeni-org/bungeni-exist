@@ -100,7 +100,9 @@
     <msg key="typeofdoc">tipo di</msg>
     <msg key="versions">versione</msg>
     <msg key="events">eventi</msg>
-    <msg key="attachedfiles">file allegati</msg>    
+    <msg key="attachedfiles">file allegati</msg>
+    <msg key="title">titolo</msg>
+    <msg key="relation">relazione</msg>
     <!-- categories -->
     <msg key="cate-document">documento</msg>
     <msg key="cate-group">gruppo</msg>
@@ -126,6 +128,15 @@
     <msg key="tab-desc">descrizione</msg>
     <msg key="tab-date">data</msg>
     <msg key="tab-file-title">titolo del file</msg>    
+    <!-- address /  contacts -->
+    <msg key="addr-type">tipo di indirizzo</msg>
+    <msg key="addr-post-type">tipo di indirizzo postale</msg>
+    <msg key="addr-city">città</msg>
+    <msg key="addr-zip">codice di avviamento postale</msg>
+    <msg key="addr-country">paese</msg>
+    <msg key="addr-phone">numero/i di telefono</msg>
+    <msg key="addr-fax">numero/i di fax</msg>
+    <msg key="addr-email">e-mail</msg>     
     <!-- PAGINATION -->
     <msg key="page">Pagina</msg>
     <msg key="pageof">di</msg>
@@ -135,6 +146,8 @@
     <msg key="ph-searchall">Cerca tutti i documenti Bungeni...</msg>
     <msg key="ph-searchlisting">ricerca questo annuncio</msg>
     <!-- MISC -->
-    <msg key="none">Nessuno</msg>
+    <msg key="language">lingua</msg>
+    <msg key="acronym">acronimo</msg>
+    <msg key="none">nessuno</msg>
     <msg key="number">Numero</msg>
 </catalogue>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -59,16 +59,26 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div class="mem-top-right">
+                    <div class="mem-table-wrapper">
                         <xsl:choose>
                             <xsl:when test="docs/bu:ontology">
                                 <table class="tbl-tgl">
                                     <tr>
-                                        <td class="fbtd">type</td>
-                                        <td class="fbtd">relation</td>
-                                        <td class="fbtd">title</td>
-                                        <td class="fbtd">status</td>
-                                        <td class="fbtd">submission date</td>
+                                        <td class="fbtd">
+                                            <i18n:text key="tab-type">type(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="relation">relation(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="title">title(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="status">status(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="submit-date">submission date(nt)</i18n:text>
+                                        </td>
                                     </tr>
                                     <xsl:for-each select="docs/bu:ontology">
                                         <xsl:sort select="bu:legislativeItem/bu:statusDate" order="descending"/>
@@ -90,7 +100,7 @@
                                                 <xsl:choose>
                                                     <xsl:when test="bu:document/@type = 'event'">
                                                         <a href="bill/event?uri={bu:legislativeItem/@uri}">
-                                                            <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                                            <xsl:value-of select="bu:legislativeItem/bu:shortTitle"/>
                                                         </a>
                                                     </xsl:when>
                                                     <xsl:otherwise>
@@ -111,7 +121,7 @@
                                 </table>
                             </xsl:when>
                             <xsl:otherwise>
-                                None
+                                <i18n:text key="none">none(nt)</i18n:text>
                             </xsl:otherwise>
                         </xsl:choose>
                     </div>

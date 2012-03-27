@@ -100,7 +100,9 @@
     <msg key="typeofdoc">aina ya</msg>
     <msg key="versions">insha</msg>
     <msg key="events">matukio</msg>
-    <msg key="attachedfiles">faili zilizoambatishwa</msg>    
+    <msg key="attachedfiles">faili zilizoambatishwa</msg>
+    <msg key="title">kichwa</msg>
+    <msg key="relation">uhusiano</msg>
     <!-- categories -->
     <msg key="cate-document">hati</msg>
     <msg key="cate-group">kundi</msg>
@@ -126,6 +128,15 @@
     <msg key="tab-desc">elezo</msg>
     <msg key="tab-date">tarehe</msg>
     <msg key="tab-file-title">Kichwa cha maneno ya faili</msg>    
+    <!-- address /  contacts -->
+    <msg key="addr-type">aina ya anwani</msg>
+    <msg key="addr-post-type">aina ya anwani ya posta</msg>
+    <msg key="addr-city">mji</msg>
+    <msg key="addr-zip">ishara ya anwani</msg>
+    <msg key="addr-country">nchi</msg>
+    <msg key="addr-phone">namba ya(za) simu</msg>
+    <msg key="addr-fax">namba ya(za) kipepesi</msg>
+    <msg key="addr-email">barua pepe</msg>     
     <!-- PAGINATION -->
     <msg key="page">Ukurasa</msg>
     <msg key="pageof">kwa</msg>
@@ -135,6 +146,8 @@
     <msg key="ph-searchall">Tafuta kwenye hati zote Bungeni...</msg>
     <msg key="ph-searchlisting">tafuta katika orodha hii</msg>
     <!-- MISC -->
-    <msg key="none">Bila</msg>
+    <msg key="language">lugha</msg>
+    <msg key="acronym">kifupi</msg>
+    <msg key="none">bila</msg>
     <msg key="number">Nambari</msg>
 </catalogue>

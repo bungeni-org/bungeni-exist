@@ -4,6 +4,7 @@
     <msg key="adv-search">Ricerca Avanzata</msg>
     <msg key="search-settings">Impostazioni di Ricerca</msg>
     <msg key="search-results">risultati della ricerca</msg>
+    <msg key="for">per</msg>
     <msg key="select-all">seleziona tutto</msg>
     <msg key="status-select">selezionare lo stato</msg>
     <msg key="status-default">-- selezionare una --</msg>

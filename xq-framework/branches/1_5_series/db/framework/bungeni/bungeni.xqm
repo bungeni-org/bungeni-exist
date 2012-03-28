@@ -2439,27 +2439,32 @@ declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as 
         transform:transform($doc, $stylesheet, ())
 };
 
-declare function bun:get-parl-activities($memberid as xs:string, $_tmpl as xs:string) as element()* {
-
+declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:string, $_tmpl as xs:string) as element()* {
      (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
-
+    
+    (: retrieve members events in their document context :)
+    let $events-in-docs :=  for $uri in data(collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='event']/following-sibling::bu:legislativeItem/bu:owner[@href=$memberid]/parent::node()/@uri)
+                            let $event-in-doc := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:wfevents/bu:wfevent[@href=$uri]/ancestor::bu:ontology
+                            return 
+                               $event-in-doc
+   
     (: return AN Member document with his/her activities :)
     let $doc := <activities>
     <member>
     {
-        collection(cmn:get-lex-db())/bu:ontology//bu:membership[@uri=$memberid]/ancestor::bu:ontology
+        collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
     }
     </member>
     {
     (: Get all parliamentary documents the user is either owner or signatory :)
-    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']
-    where   bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
-            bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
+    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type ne 'event']/ancestor::bu:ontology
+    where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
+          bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
     return
         <docs>
             {
-                $match
+                ($match,$events-in-docs)
             }
         </docs>
     }

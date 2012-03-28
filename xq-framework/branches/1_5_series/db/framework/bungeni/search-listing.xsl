@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -62,7 +62,8 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    <xsl:text>Search results in&#160;</xsl:text>
+                    <i18n:text key="search-results">search results(nt)</i18n:text>&#160;
+                    <i18n:text key="for">for(nt)</i18n:text>&#160;
                     <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
@@ -70,14 +71,10 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            <xsl:text>search results (</xsl:text>
+                            <i18n:text key="search-results">search results(nt)</i18n:text>
+                            <xsl:text> (</xsl:text>
                             <xsl:value-of select="paginator/count"/>
                             <xsl:text>)</xsl:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <xsl:text>archived</xsl:text>
                         </a>
                     </li>
                 </ul>

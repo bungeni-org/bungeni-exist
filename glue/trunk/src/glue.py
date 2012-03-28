@@ -233,7 +233,7 @@ class ParseBungeniXML(object):
             #parl_params['country-code'] = self.xmldoc.selectSingleNode("contenttype/field[@name='language']").getText()
             parl_params['parliament-id'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("parliament_id")).getText()
             parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
-            parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()+"/"+parl_params['parliament-election-date']
+            parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()
             return parl_params
         else:
             return None

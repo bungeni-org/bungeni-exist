@@ -28,7 +28,7 @@
                     <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <xsl:if test="$version eq 'true'">
                         <br/>
-                        <span style="color:#b22b14">
+                        <span class="bu-red">
                             <i18n:text key="tab-t-version">Version(nt)</i18n:text> - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
@@ -93,10 +93,10 @@
                     </div>
                     <ul class="ls-row" id="list-toggle-wide">
                         <li>
-                            <div style="width:100%;">
-                                <span class="tgl" style="margin-right:10px">-</span>
+                            <div>
+                                <span class="tgl tgl-wrap">-</span>
                                 <a href="#1">
-                                    <i18n:text key="tab-profile">umbo(nt)</i18n:text>
+                                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
                                 </a>
                             </div>
                             <div class="doc-toggle open">
@@ -150,8 +150,8 @@
                         <!-- if question type show ministry summary -->
                         <xsl:if test="primary/bu:ontology/bu:document[@type='question']">
                             <li>
-                                <div style="width:100%;">
-                                    <span class="tgl" style="margin-right:10px">-</span>
+                                <div>
+                                    <span class="tgl tgl-wrap">-</span>
                                     <a href="#1">
                                         <i18n:text key="summary">summary(nt)</i18n:text>
                                     </a>

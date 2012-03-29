@@ -17,7 +17,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="group/bu:ontology/bu:legislature/bu:fullName"/>
+                    <xsl:value-of select="group/bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -28,6 +28,7 @@
                     <xsl:value-of select="$doc_uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">assigned</xsl:with-param>
+                <xsl:with-param name="excludes" select="exlude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
@@ -60,7 +61,7 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:90%;margin: 0 auto;text-align:center">
+                    <div class="doc-table-wrapper">
                         <table class="tbl-tgl">
                             <tr>
                                 <td class="fbtd">item</td>

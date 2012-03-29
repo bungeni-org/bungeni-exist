@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div id="toggle-i18n" style="display:none;">
+                        <div id="toggle-i18n" class="hide">
                             <span id="i-compress">
                                 <i18n:text key="compress">- compress all(nt)</i18n:text>
                             </span>
@@ -89,7 +89,7 @@
     <!-- Include the paginator generator -->
     <xsl:include href="paginator.xsl"/>
     <xsl:template match="alisting">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
+        <ul id="list-toggle" class="ls-row clear">
             <xsl:apply-templates mode="renderui">
                 <xsl:sort select="bu:ontology/bu:membership/bu:firstName" order="ascending"/>
             </xsl:apply-templates>
@@ -101,7 +101,7 @@
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
-            <div style="display:inline-block;">/ Constitutency / Party</div>
+            <div class="struct-ib">/ Constitutency / Party</div>
             <span>-</span>
             <div class="doc-toggle">
                 <table class="doc-tbl-details">

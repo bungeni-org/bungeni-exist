@@ -9,10 +9,19 @@
     text-align:center;
     width:auto;    
 }
+.mem-table-wrapper {
+    margin:0 auto;
+    text-align:center;
+    width:auto;    
+}
 .mem-photo {
     width:180px;
     height:200px;
     margin:0 auto auto 20px;
+}
+.mem-inline-content {
+    padding:10px 40px;
+    text-align:center;
 }
 
 p.imgonlywrap {
@@ -24,12 +33,14 @@ p.imgonlywrap {
   }
   
 p.imgonlywrap img {
-	  display: block;
-	  position: relative;
-	  background-color: #fff;
-	  border: 1px solid #a9a9a9;
-	  margin: -6px 6px 6px -6px;
-	  padding: 4px;
+    width:150px;
+    height:200px;
+    display: block;
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #a9a9a9;
+    margin: -6px 6px 6px -6px;
+    padding: 4px;
   }  
   
 table.mem-tbl-details {

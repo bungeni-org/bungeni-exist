@@ -49,11 +49,11 @@
     
     <!-- legislative items -->
     <xsl:template match="legis">
-        <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
-            <a href="?scope=legis&amp;{$input-fullqrystr}">See all results from legislative items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+        <div class="global-preview-head">
+            <a href="?scope=legis&amp;{$input-fullqrystr}">See all results from legislative items (found <xsl:value-of select="count"/>) <big class="r-prompts">»</big>
             </a>
         </div>
-        <ul class="ls-row" style="margin-left:15px;clear:both">
+        <ul class="ls-row global-preview-summary">
             <xsl:apply-templates select="document" mode="renderui1"/>
         </ul>
     </xsl:template>
@@ -68,11 +68,11 @@
     
     <!-- group items -->
     <xsl:template match="groups">
-        <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
-            <a href="?scope=groups&amp;{$input-fullqrystr}">See all results from group items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+        <div class="global-preview-head">
+            <a href="?scope=groups&amp;{$input-fullqrystr}">See all results from group items (found <xsl:value-of select="count"/>) <big class="r-prompts">»</big>
             </a>
         </div>
-        <ul class="ls-row" style="margin-left:15px;clear:both">
+        <ul class="ls-row global-preview-summary">
             <xsl:apply-templates select="document" mode="renderui2"/>
         </ul>
     </xsl:template>
@@ -87,11 +87,11 @@
     
     <!-- members items -->
     <xsl:template match="members">
-        <div style="clear:both;margin-left:15px;font-size:1.6em;font-style:italic;">
-            <a href="?scope=members&amp;{$input-fullqrystr}">See all results from members items (found <xsl:value-of select="count"/>) <big style="color:#36b9f1;font-size:1.5em">»</big>
+        <div class="global-preview-head">
+            <a href="?scope=members&amp;{$input-fullqrystr}">See all results from members items (found <xsl:value-of select="count"/>) <big class="r-promts">»</big>
             </a>
         </div>
-        <ul class="ls-row" style="margin-left:15px;clear:both">
+        <ul class="ls-row global-preview-summary">
             <xsl:apply-templates select="document" mode="renderui3"/>
         </ul>
     </xsl:template>

@@ -19,7 +19,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -63,7 +63,8 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:90%;margin: 0 auto;text-align:center">
+                    <div class="doc-table-wrapper">
+                        (baked)
                         <table class="tbl-tgl">
                             <tr>
                                 <td class="fbtd">
@@ -77,12 +78,12 @@
                                 </td>
                             </tr>
                             <tr class="items">
-                                <td class="fbt bclr" style="text-align-left;">Member, P0_01</td>
+                                <td class="fbt bclr">Member, P0_01</td>
                                 <td class="fbt bclr">Jan 18, 2001</td>
                                 <td class="fbt bclr">Jan 18, 2001</td>
                             </tr>
                             <tr class="items">
-                                <td class="fbt bclr" style="text-align-left;">Member, P0_01</td>
+                                <td class="fbt bclr">Member, P0_01</td>
                                 <td class="fbt bclr">jan 18, 2001</td>
                                 <td class="fbt bclr">Jan 18, 2001</td>
                             </tr>

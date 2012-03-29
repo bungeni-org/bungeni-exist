@@ -57,7 +57,7 @@
     
     <!-- legislative items -->
     <xsl:template match="legis">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
+        <ul id="list-toggle" class="ls-row clear">
             <xsl:if test="not(none)">
                 <xsl:apply-templates mode="renderui1"/>
             </xsl:if>
@@ -126,7 +126,7 @@
             <a href="{bu:ontology/bu:group/@type}/profile?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
             </a>
-            <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
             </div>
             <span>-</span>
             <div class="doc-toggle">
@@ -150,7 +150,7 @@
     
     <!-- members items -->
     <xsl:template match="members">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
+        <ul id="list-toggle" class="ls-row clear">
             <xsl:if test="not(none)">
                 <xsl:apply-templates mode="renderui3"/>
             </xsl:if>
@@ -162,7 +162,7 @@
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
-            <div style="display:inline-block;">/ Constitutency / Party</div>
+            <div class="struct-ib">/ Constitutency / Party</div>
             <span>-</span>
             <div class="doc-toggle">
                 <table class="doc-tbl-details">

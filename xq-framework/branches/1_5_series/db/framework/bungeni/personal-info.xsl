@@ -63,7 +63,7 @@
                         <xsl:value-of select="concat(bu:membership/bu:titles,'. ',bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
                     </h2>
                     <div class="mem-profile">
-                        <div class="mem-top-right" style="padding:10px 40px;">
+                        <div class="mem-inline-content">
                             <xsl:copy-of select="bu:membership/bu:description"/>
                         </div>
                     </div>

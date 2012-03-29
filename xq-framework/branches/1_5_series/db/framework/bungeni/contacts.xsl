@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -13,6 +13,7 @@
     <xsl:include href="context_tabs.xsl"/>
     <xsl:param name="address_type"/>
     <xsl:template match="document">
+        <xsl:variable name="onto-type" select="primary/bu:ontology/@type"/>
         <xsl:variable name="doc-type">
             <xsl:choose>
                 <xsl:when test="$address_type eq 'membership'">
@@ -39,6 +40,9 @@
                     <xsl:choose>
                         <xsl:when test="$address_type eq 'membership'">
                             <xsl:value-of select="concat(primary/bu:ontology/bu:membership/bu:firstName,' ', primary/bu:ontology/bu:membership/bu:lastName)"/>
+                        </xsl:when>
+                        <xsl:when test="$onto-type eq 'group'">
+                            <xsl:value-of select="primary/bu:ontology/bu:group/bu:fullName"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
@@ -132,7 +136,7 @@
                                 </table>
                             </xsl:when>
                             <xsl:otherwise>
-                                <div style="text-align:center;">
+                                <div class="txt-center">
                                     <i18n:text key="none">none(nt)</i18n:text>
                                 </div>
                             </xsl:otherwise>

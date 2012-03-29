@@ -19,7 +19,7 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
+                    <xsl:value-of select="primary/bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -67,7 +67,7 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="primary/bu:ontology/bu:group/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Language: 
                         <i>
@@ -79,7 +79,7 @@
                             <b>Acronym:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:shortName"/>
+                            <xsl:value-of select="primary/bu:ontology/bu:group/bu:shortName"/>
                         </span>
                         <span>
                             <b>Start Date:</b>
@@ -90,7 +90,7 @@
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="primary/bu:ontology/bu:legislature/bu:description"/>
+                            <xsl:copy-of select="primary/bu:ontology/bu:group/bu:description"/>
                         </div>
                     </div>
                 </div>

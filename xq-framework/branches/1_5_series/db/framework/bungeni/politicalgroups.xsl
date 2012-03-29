@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div id="toggle-i18n" style="display:none;">
+                        <div id="toggle-i18n" class="hide">
                             <span id="i-compress">
                                 <i18n:text key="compress">- compress all(nt)</i18n:text>
                             </span>
@@ -94,7 +94,7 @@
     <!-- Include the paginator generator -->
     <xsl:include href="paginator.xsl"/>
     <xsl:template match="alisting">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
+        <ul id="list-toggle" class="ls-row clear">
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
@@ -102,9 +102,9 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
             <a href="political-group/text?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
+                <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
-            <div style="display:inline-block;">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
             </div>
             <span>-</span>
             <div class="doc-toggle">

@@ -85,7 +85,7 @@
             <div id="page-state" class="page-state">
                 <i18n:text key="page">Page(nt)</i18n:text>&#160;<xsl:value-of select="$pwhere"/>&#160;<i18n:text key="pageof">of(nt)</i18n:text>&#160;<xsl:value-of select="$pages"/>
             </div>
-            <div id="paginate-pages" class="inline" style="padding-right:0px;">
+            <div id="paginate-pages" class="inline">
                 <!-- This serves the purpose of showing 'First' page link -->
                 <xsl:choose>
                     <!-- If the current page is page 1 , we dont render anything -->

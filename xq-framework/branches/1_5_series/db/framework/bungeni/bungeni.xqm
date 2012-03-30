@@ -2252,8 +2252,11 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
 :       <secondary/>
 :   </document>
 :)
-declare function bun:get-contacts-by-uri($acl as xs:string, $address-type as xs:string, $focal as xs:string) {
-    let $stylesheet := cmn:get-xslt("contacts.xsl"), 
+declare function bun:get-contacts-by-uri($acl as xs:string, 
+                    $address-type as xs:string, 
+                    $focal as xs:string,
+                    $_tmpl as xs:string) {
+    let $stylesheet := cmn:get-xslt($_tmpl), 
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
         $user-uri := if ($address-type eq 'group') then 
                         $focal 

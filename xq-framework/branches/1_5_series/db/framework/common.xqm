@@ -68,6 +68,16 @@ declare function cmn:get-tabgroups($exist-path as xs:string) as node() {
 };
 
 (:~
+    Get a tabs/tab path configuration as per context. Currently 
+    returns a template and stylesheet for document transformations
+:)
+declare function cmn:get-tab-parts($exist-path as xs:string) as node()* {
+    let $rel-path := substring-after($exist-path,'/'),
+        $doc := cmn:get-ui-config()/ui/tabgroups/tabs/tab[@path eq $rel-path]
+        return $doc
+};
+
+(:~
 :   Get the user ui-config file
 :)
 (:

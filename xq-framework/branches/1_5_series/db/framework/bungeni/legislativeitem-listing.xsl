@@ -31,14 +31,12 @@
             <limit>3</limit>
         </paginator>
         <alisting>
-            <document>
-             <output> 
+            <doc>
                 <bu:ontology .../>
-             </output>
-             <referenceInfo>
-                <ref>
-                </ref>
-             </referenceInfo>
+                 <ref>
+                    <bu:ontology/>
+                 </ref>
+            </doc>
         </alisting>
     </docs>
     -->
@@ -137,11 +135,11 @@
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
-        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+    <xsl:template match="doc" mode="renderui">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
@@ -149,15 +147,15 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">
                             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>:</td>
                         <td>
-                            <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                            <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
                         </td>
                     </tr>
@@ -165,33 +163,33 @@
                         <td class="labels">
                             <i18n:text key="last-event">last event(nt)</i18n:text>:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:status"/>
                             &#160;&#160;<b>
                                 <i18n:text key="date-on">on(nt)</i18n:text>:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">
                             <i18n:text key="submit-date">submission date(nt)</i18n:text>:</td>
                         <td>
-                            <xsl:value-of select="format-date(output/bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
+                            <xsl:value-of select="format-date(bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">
                             <i18n:text key="ministry">ministry(nt)</i18n:text>:</td>
                         <td>
-                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
+                            <xsl:value-of select="ref/bu:ministry/bu:shortName"/>
                         </td>
                     </tr>
-                    <xsl:if test="output/bu:ontology/bu:question/bu:item_assignments">
+                    <xsl:if test="bu:ontology/bu:question/bu:item_assignments">
                         <tr>
                             <td class="labels">
                                 <i18n:text key="assignedto">assigned to(nt)</i18n:text>:</td>
                             <td>
-                                <a href="#" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                    <xsl:value-of select="output/bu:ontology/bu:question/bu:group/@isA"/>
+                                <a href="#" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                    <xsl:value-of select="bu:ontology/bu:question/bu:group/@isA"/>
                                 </a>
                             </td>
                         </tr>

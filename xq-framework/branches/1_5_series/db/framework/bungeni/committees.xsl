@@ -99,7 +99,7 @@
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
+    <xsl:template match="doc" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
             <a href="committee/text?uri={$docIdentifier}" id="{$docIdentifier}">

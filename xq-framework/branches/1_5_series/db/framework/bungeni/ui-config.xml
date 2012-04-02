@@ -699,7 +699,7 @@
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </tab>
-            <tab path="motion/event">
+            <tab path="bill/event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </tab>

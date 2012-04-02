@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -77,20 +77,20 @@
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
-        <xsl:variable name="docIdentifier" select="sitting/bu:ontology/bu:groupsitting/@uri"/>
+    <xsl:template match="doc" mode="renderui">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:groupsitting/@uri"/>
         <li>
             <a href="sitting?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="sitting/bu:ontology/bu:legislature/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
             </a>
-            <div class="struct-ib">/ ( <xsl:value-of select="format-dateTime(sitting/bu:ontology/bu:groupsitting/bu:startDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+            <div class="struct-ib">/ ( <xsl:value-of select="format-dateTime(bu:ontology/bu:groupsitting/bu:startDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                 <b>↔</b>
-                <xsl:value-of select="format-dateTime(sitting/bu:ontology/bu:groupsitting/bu:endDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/> )
+                <xsl:value-of select="format-dateTime(bu:ontology/bu:groupsitting/bu:endDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/> )
             </div>
             <span>-</span>
             <div class="doc-toggle">
                 <table class="doc-tbl-details">
-                    <xsl:for-each select="sitting_items/bu:ontology">
+                    <xsl:for-each select="ref/bu:ontology">
                         <xsl:variable name="subDocIdentifier" select="bu:legislativeItem/@uri"/>
                         <tr>
                             <td>

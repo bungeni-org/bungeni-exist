@@ -14,22 +14,21 @@
     <xsl:include href="context_downloads.xsl"/>    
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
     document as opposed to main document. -->
-    <xsl:param name="serverport"/>
     <xsl:param name="version"/>
-    <xsl:template match="document">
+    <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="server_port" select="serverport"/>
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
                         <br/>
-                        <span class="bu-red">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        <span class="bu-red">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
                 </h1>
@@ -60,7 +59,6 @@
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
-                <xsl:with-param name="server-port" select="$server_port"/>
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc_uri"/>
@@ -69,7 +67,7 @@
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">
                         <xsl:choose>
-                            <xsl:when test="primary//bu:item_assignments">
+                            <xsl:when test="//bu:item_assignments">
                                 <table class="tbl-tgl">
                                     <tr>
                                         <td class="fbtd lower-txt">
@@ -85,7 +83,7 @@
                                             <i18n:text key="date-due">due date(nt)</i18n:text>
                                         </td>
                                     </tr>
-                                    <xsl:for-each select="primary//bu:item_assignments">
+                                    <xsl:for-each select="//bu:item_assignments">
                                         <xsl:sort select="bu:item_assignment/bu:startDate" order="descending"/>
                                         <tr class="items">
                                             <td class="fbt bclr">

@@ -1596,32 +1596,32 @@ declare function bun:get-committees(
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>  
+                    <doc>{$match/ancestor::bu:ontology}</doc>  
                 )
                 
             else if ($sortby eq 'start_dt_newest') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>     
+                    <doc>{$match/ancestor::bu:ontology}</doc>     
                 )
             else if ($sortby = 'fN_asc') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>      
+                    <doc>{$match/ancestor::bu:ontology}</doc>      
                 )    
             else if ($sortby = 'fN_desc') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>        
+                    <doc>{$match/ancestor::bu:ontology}</doc>        
                 )                 
             else  (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>
+                    <doc>{$match/ancestor::bu:ontology}</doc>
                    
                 )
 
@@ -1677,39 +1677,10 @@ declare function bun:get-sittings(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'start_dt_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
-                return 
-                    <document>{$match}</document>  
-                )
-                
-            else if ($sortby eq 'start_dt_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
-                return 
-                    <document>{$match}</document>     
-                )
-            else if ($sortby = 'fN_asc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
-                return 
-                    <document>{$match}</document>      
-                )    
-            else if ($sortby = 'fN_desc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
-                return 
-                    <document>{$match}</document>        
-                )                 
-            else  (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     local:get-sitting-items($match)
-                   
-                )
-
         } 
         </alisting>
     </docs>
@@ -1773,11 +1744,11 @@ declare function bun:get-sittings-json($acl as xs:string) as element()* {
         $json_ready := functx:remove-elements-deep($match,('bu:bungeni', 'bu:permissions'))
     
      return
-        <sittings>
+        <json>
         {
          $json_ready
         }
-        </sittings>
+        </json>
 };
  
 declare function bun:strip-namespace($e as node()) {
@@ -1791,20 +1762,16 @@ declare function bun:strip-namespace($e as node()) {
 };
 
 declare function local:get-sitting-items($sittingdoc as node()) {
-    <document>
-        <sitting> 
-        {
-            $sittingdoc
-        }
-        </sitting>
-        <sitting_items>
+    <doc>
+        {$sittingdoc}
+        <ref>
             {
                 for $eachitem in $sittingdoc/bu:groupsitting/bu:item_schedule/bu:item_schedule
                 return 
                     collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem/bu:legislativeItemId[text() eq $eachitem/bu:itemId/text()]/ancestor::bu:ontology
             }
-        </sitting_items>
-    </document>     
+        </ref>
+    </doc>     
 };
 
 (:~
@@ -1848,32 +1815,32 @@ declare function bun:get-politicalgroups(
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>  
+                    <doc>{$match/ancestor::bu:ontology}</doc>  
                 )
                 
             else if ($sortby eq 'start_dt_newest') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>     
+                    <doc>{$match/ancestor::bu:ontology}</doc>     
                 )
             else if ($sortby = 'fN_asc') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>      
+                    <doc>{$match/ancestor::bu:ontology}</doc>      
                 )    
             else if ($sortby = 'fN_desc') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>        
+                    <doc>{$match/ancestor::bu:ontology}</doc>        
                 )                 
             else  (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <document>{$match/ancestor::bu:ontology}</document>                  
+                    <doc>{$match/ancestor::bu:ontology}</doc>                  
                 )
         } 
         </alisting>
@@ -1903,22 +1870,16 @@ declare function bun:get-politicalgroups(
 :   </document>
 :)
 declare function bun:get-reference($docitem as node()) {
-    <document>
-        <output> 
-        {
-            $docitem
-        }
-        </output>
-        <referenceInfo>
-            <ref>
+    <doc>
+        {$docitem}
+        <ref>
             {
                 let $doc-ref := data($docitem/bu:*/bu:group/@href)
                 return 
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/../bu:ministry
             }
-            </ref>
-        </referenceInfo>
-    </document>     
+         </ref>
+    </doc>     
 };
 
 
@@ -2180,18 +2141,12 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
     (: !+FIX_THIS , !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
-    let $doc := <parl-doc> 
-        {
-            (: return AN document as singleton :)
-            let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology,
-                $nullnode := <node/>
-            (: !+ACL_NEW_API, !+FIX_THIS - add acl filter for groups
-            [$acl-filter]
-           :)
-            return
-                bun:get-ref-assigned-grps($match, $nullnode)   
-        } 
-    </parl-doc>    
+    let $doc := document {
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology,
+                        $nullnode := <node/>
+                    return
+                        bun:get-ref-assigned-grps($match, $nullnode)   
+                }     
     return
         transform:transform($doc, $stylesheet, ())
 };
@@ -2208,17 +2163,9 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
 :   </document>
 :)
 declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as node()) {
-    <document>
-        <serverport>{request:get-server-name()}:{request:get-server-port()}</serverport>
-        <primary> 
-            <documentType>{$docitem/bu:legislature/bu:type}</documentType>
-        {
-        (:!+ACL_NEW_API 
-            $docitem/ancestor::bu:ontology :)
-            $docitem
-        }
-        </primary>
-        <secondary>
+    <doc>
+        {$docitem}
+        <ref>
             {
                 (:!+ACL_NEW_API - removed the ancestor axis reference here 
                 !+FIXED - why use a bu:* kind of reference why a * ?!
@@ -2228,7 +2175,7 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
                     (:!+FIX_THIS - ultimately this should be replaced by the acl based group access api :)
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
-        </secondary>
+        </ref>
         <exlude>
             {
                 if(not($docitem//bu:item_assignments)) then 
@@ -2236,8 +2183,7 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
                 else ()
             }
         </exlude>
-        <fringe>{$parsedbody}</fringe>
-    </document>     
+    </doc>     
 };
 
 (:~
@@ -2270,21 +2216,19 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                              :)
                             (:"/following-sibling::bu:permissions/bu:permission[",$acl-filter,"]",:)
                             "/ancestor::bu:ontology")
-    let $doc := <document>
-                    <primary>
-                        {
+    let $doc := <doc>
+                    document {
                             if($address-type eq 'group') then 
                                 collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal]/ancestor::bu:ontology
                             else
                                 collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$focal]/ancestor::bu:ontology
                         }
-                    </primary>
-                    <secondary>
+                    <ref>
                         {
                             util:eval($build-qry)
                         }
-                    </secondary>
-                </document>     
+                    </ref>
+                </doc>     
     return
         transform:transform($doc, $stylesheet, <parameters>
                                                  <param name="address_type" value="{$address-type}" />
@@ -2319,19 +2263,11 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl)
     
-    let $doc := <parl-doc>
-        <document>
-            <serverport>{request:get-server-name()}:{request:get-server-port()}</serverport>
-            <version>{$version-uri}</version>
-            <primary>         
-            {
-                bun:documentitem-versions-with-acl($acl-permissions, $match/node())
-            }
-            </primary>
-            <secondary>
-            </secondary>
-        </document>
-    </parl-doc>   
+    let $doc := <doc>
+                    {bun:documentitem-versions-with-acl($acl-permissions, $match/node())}
+                    <ref/>
+                    <version>{$version-uri}</version>
+                </doc>   
     
     return
         transform:transform($doc, 
@@ -2394,31 +2330,31 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)                
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
-                    <document>
+                    <doc>
                     {
                         $match      
                     }
-                    </document>
+                    </doc>
                 )
             else if ($sortby = 'fn') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
-                    <document>
+                    <doc>
                     {
                         $match      
                     }
-                    </document>         
+                    </doc>         
                 )                
             else  (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
-                    <document>
+                    <doc>
                     {
                         $match      
                     }
-                    </document>        
+                    </doc>        
                 )
 
         } 
@@ -2436,7 +2372,7 @@ declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as 
     let $stylesheet := cmn:get-xslt($_tmpl) 
 
     (: return AN Member document as singleton :)
-    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
+    let $doc := <doc>{collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology}</doc>
     
     return
         transform:transform($doc, $stylesheet, ())

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -14,14 +14,13 @@
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
     <xsl:param name="serverport"/>
-    <xsl:template match="document">
-        <xsl:variable name="server_port" select="serverport"/>
-        <xsl:variable name="doc-type" select="sitting/bu:ontology/@type"/>
-        <xsl:variable name="doc_uri" select="sitting/bu:ontology/bu:groupsitting/@uri"/>
-        <xsl:variable name="mover_uri" select="sitting/bu:ontology/bu:legislativeItem/bu:owner/@href"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/@type"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:groupsitting/@uri"/>
+        <xsl:variable name="mover_uri" select="bu:ontology/bu:legislativeItem/bu:owner/@href"/>
         <xsl:variable name="j-obj" select="json"/>
         <div id="main-wrapper">
-            <div id="uri" style="display:none;">
+            <div id="uri" class="hide">
                 <xsl:value-of select="$doc_uri"/>
             </div>
             <div id="title-holder" class="theme-lev-1-only">
@@ -32,7 +31,6 @@
             </div>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
-                <xsl:with-param name="server-port" select="$server_port"/>
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc_uri"/>
@@ -44,12 +42,12 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="sitting/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
                     </h4>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="sitting/bu:ontology/bu:legislativeItem/bu:body"/>
-                            <div id="calendar" style="width:700px;margin:0 auto !important;"/>
+                            <xsl:copy-of select="bu:ontology/bu:legislativeItem/bu:body"/>
+                            <div id="calendar"/>
                         </div>
                     </div>
                 </div>

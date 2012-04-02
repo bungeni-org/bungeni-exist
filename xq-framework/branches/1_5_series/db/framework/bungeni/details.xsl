@@ -16,16 +16,15 @@
          document as opposed to main document. -->
     <xsl:param name="serverport"/>
     <xsl:param name="version"/>
-    <xsl:template match="document">
-        <xsl:variable name="server_port" select="serverport"/>
+    <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <xsl:if test="$version eq 'true'">
                         <br/>
                         <span class="bu-red">
@@ -60,7 +59,6 @@
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
-                <xsl:with-param name="server-port" select="$server_port"/>
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc_uri"/>
@@ -71,25 +69,25 @@
                         <div class="block-label">
                             <i18n:text key="docid">Doc Id(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                     </div>
                     <div class="list-block">
                         <div class="block-label">
                             <i18n:text key="parliament">Parliament(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="primary/bu:ontology/bu:bungeni/bu:parliament/@href"/>
+                        <xsl:value-of select="bu:ontology/bu:bungeni/bu:parliament/@href"/>
                     </div>
                     <div class="list-block">
                         <div class="block-label">
                             <i18n:text key="session-yr">Session Year(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="substring-before(primary/bu:ontology/bu:bungeni/bu:parliament/@date,'-')"/>
+                        <xsl:value-of select="substring-before(bu:ontology/bu:bungeni/bu:parliament/@date,'-')"/>
                     </div>
                     <div class="list-block">
                         <div class="block-label">
                             <i18n:text key="session-no">Session Number(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:legislativeItemId"/>
+                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:legislativeItemId"/>
                     </div>
                     <ul class="ls-row" id="list-toggle-wide">
                         <li>
@@ -105,7 +103,7 @@
                                         <td class="labels">
                                             <i18n:text key="submit-date">submission date(nt)</i18n:text>:</td>
                                         <td>
-                                            <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -123,11 +121,11 @@
                                             <i18n:text key="ministry">ministry(nt)</i18n:text>:</td>
                                         <td>
                                             <xsl:choose>
-                                                <xsl:when test="primary/bu:ontology/bu:document[@type='question']">
-                                                    <xsl:value-of select="concat(primary/bu:ontology/bu:ministry/bu:shortName,' - ',primary/bu:ontology/bu:ministry/bu:fullName)"/>
+                                                <xsl:when test="bu:ontology/bu:document[@type='question']">
+                                                    <xsl:value-of select="concat(bu:ontology/bu:ministry/bu:shortName,' - ',primary/bu:ontology/bu:ministry/bu:fullName)"/>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="concat(secondary/bu:ontology//bu:ministry/bu:shortName,' - ',secondary/bu:ontology//bu:ministry/bu:fullName)"/>
+                                                    <xsl:value-of select="concat(ref/bu:ontology//bu:ministry/bu:shortName,' - ',secondary/bu:ontology//bu:ministry/bu:fullName)"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </td>
@@ -141,14 +139,14 @@
                                         <td class="labels">
                                             <i18n:text key="registry-no">registry number(nt)</i18n:text>:</td>
                                         <td>
-                                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                         </li>
                         <!-- if question type show ministry summary -->
-                        <xsl:if test="primary/bu:ontology/bu:document[@type='question']">
+                        <xsl:if test="bu:ontology/bu:document[@type='question']">
                             <li>
                                 <div>
                                     <span class="tgl tgl-wrap">-</span>
@@ -157,7 +155,7 @@
                                     </a>
                                 </div>
                                 <div class="doc-toggle open">
-                                    <xsl:copy-of select="primary/bu:ontology/bu:ministry/bu:field[@name='description']"/>
+                                    <xsl:copy-of select="bu:ontology/bu:ministry/bu:field[@name='description']"/>
                                 </div>
                             </li>
                         </xsl:if>

@@ -48,6 +48,18 @@
             <navigation>home</navigation>
             <title>Search</title>
         </route>
+        <route href="/advanced-search">
+            <navigation>home</navigation>
+            <title>Advanced Search</title>
+        </route>
+        <route href="/search-adv">
+            <navigation>home</navigation>
+            <title>Advanced Search Results</title>
+        </route>
+        <route href="/search-settings">
+            <navigation>home</navigation>
+            <title>Search Settings</title>
+        </route>
         <route href="/search">
             <navigation>business</navigation>
             <title>Search</title>
@@ -86,7 +98,7 @@
             <subnavigation>current</subnavigation>
         </route>
         <!-- #COMMITTEES -->
-        <route href="/committee/profile">
+        <route href="/committee/text">
             <title>Business | Committee's Profile</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
@@ -117,7 +129,7 @@
             <subnavigation>committees</subnavigation>
         </route> 
         <!-- #POLICAL-GROUPS -->
-        <route href="/political-group/profile">
+        <route href="/political-group/text">
             <title>Business | Political Group's Profile</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
@@ -153,11 +165,6 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/version/timeline">
-            <title>Business | Bill</title>
-            <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
-        </route>
         <route href="/bill/assigned-groups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
@@ -165,11 +172,6 @@
         </route>
         <route href="/bill/details">
             <title>Business | Bill</title>
-            <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
-        </route>
-        <route href="/bill/version/details">
-            <title>Business | Bill Version</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
@@ -214,17 +216,7 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/version/timeline">
-            <title>Business | Question Version Timeline</title>
-            <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
-        </route>
         <route href="/question/details">
-            <title>Business | Related Infomation</title>
-            <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
-        </route>
-        <route href="/question/version/details">
             <title>Business | Related Infomation</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
@@ -280,11 +272,6 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/version/assigned-groups">
-            <title>Business | Motion Version Assigned-groups</title>
-            <navigation>business</navigation>
-            <subnavigation>motions</subnavigation>
-        </route>
         <route href="/motion/documents">
             <title>Business | Motion</title>
             <navigation>business</navigation>
@@ -326,18 +313,8 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/version/details">
-            <title>Business | Tabled document Version Details</title>
-            <navigation>business</navigation>
-            <subnavigation>tableddocuments</subnavigation>
-        </route>
         <route href="/tableddocument/assigned-groups">
             <title>Business | Tabled document</title>
-            <navigation>business</navigation>
-            <subnavigation>tableddocuments</subnavigation>
-        </route>
-        <route href="/tableddocument/version/assigned-groups">
-            <title>Business | Tabled document Version Assigned-groups</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
@@ -382,18 +359,8 @@
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/version/details">
-            <title>Business | Agenda item Version Details</title>
-            <navigation>business</navigation>
-            <subnavigation>agendaitems</subnavigation>
-        </route>
         <route href="/agendaitem/assigned-groups">
             <title>Business | Agenda item</title>
-            <navigation>business</navigation>
-            <subnavigation>agendaitems</subnavigation>
-        </route>
-        <route href="/agendaitem/version/assigned-groups">
-            <title>Business | Agenda item Version Assigned-groups</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
@@ -605,68 +572,95 @@
         -->
     <tabgroups>
         <!-- 
+            !+NOTES (ao, 30 Mar 2012) To apply a more generic naming-scheme for this tabs.  
+                This allows contextual items like transformation stylesheets and 
+                template files to be embedded on config as well, removing them from 
+                the controller and bungeni modules e.g.
+                <viewgroups>
+                    <views name="question">
+                        <view path="question/text" tag="tab">
+                            <title>tabs title</title>
+                            <template>template.xml</template>
+                            <xsl>stylesheet.xsl</xsl>                        
+                        </view>
+                        ...
+                    </views>
+                    <views>
+                        <view path="/questions">
+                            parts of questions
+                        </view>
+                    </views>
+                    ...                
+                </viewgroups>
+                
             Tabgroups are like navigation but they describe navigation relative to content 
             The name is always that of a content type
         -->
         <tabs name="committee">
-            <tab path="committee/profile" id="profile">
+            <tab path="committee/text" id="profile">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>committee.xsl</xsl>
             </tab>
             <tab path="committee/members" id="members">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>comm-members.xsl</xsl>
             </tab>
             <tab path="committee/assigned-items" id="assigned">
                 <title>
                     <i18n:text key="tab-assigned">assigned items(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>comm-assigned.xsl</xsl>
             </tab>
             <tab path="committee/sittings" id="sittings">
                 <title>
                     <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>comm-sittings.xsl</xsl>
             </tab>
             <tab path="committee/staff" id="staff">
                 <title>
                     <i18n:text key="tab-staff">staff(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>comm-staff.xsl</xsl>
             </tab>
             <tab path="committee/contacts" id="contacts">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>comm-contacts.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="political-group">
-            <tab path="political-group/profile" id="profile">
+            <tab path="political-group/text" id="profile">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>political-group.xsl</xsl>
             </tab>
             <tab path="political-group/members" id="members">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
+                <template>committee.xml</template>
+                <xsl>poli-members.xsl</xsl>
             </tab>
             <tab path="political-group/contacts" id="contacts">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
-            </tab>
-        </tabs>
-        <tabs name="bill-ver">
-            <tab path="bill/version/text" id="text">
-                <title>
-                    <i18n:text key="tab-text">text(nt)</i18n:text>
-                </title>
-            </tab>
-            <tab path="bill/version/documents" id="attachments">
-                <title>
-                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
-                </title>
+                <template>committee.xml</template>
+                <xsl>contacts.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="bill">
@@ -674,38 +668,56 @@
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>bill.xml</template>
+                <xsl>bill.xsl</xsl>
             </tab>
             <tab path="bill/timeline" id="timeline">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
             </tab>
             <tab path="bill/details" id="related">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
             </tab>
             <tab path="bill/assigned-groups" id="assigned">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
             </tab>
             <tab path="bill/documents" id="attachments">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </tab>
+            <tab path="motion/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
             </tab>
         </tabs>
-        <tabs name="question-ver">
-            <tab path="question/version/text" id="text">
+        <tabs name="bill-ver">
+            <tab path="bill/version/text" id="text">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>bill.xml</template>
+                <xsl>bill.xsl</xsl>
             </tab>
-            <tab path="question/version/documents" id="attachments">
+            <tab path="bill/version/documents" id="attachments">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="question">
@@ -713,38 +725,56 @@
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>question.xml</template>
+                <xsl>question.xsl</xsl>
             </tab>
             <tab path="question/timeline" id="timeline">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
             </tab>
             <tab path="question/details" id="related">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
             </tab>
             <tab path="question/assigned-groups" id="assigned">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
             </tab>
             <tab path="question/documents" id="attachments">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </tab>
+            <tab path="question/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
             </tab>
         </tabs>
-        <tabs name="motion-ver">
-            <tab path="motion/version/text" id="text">
+        <tabs name="question-ver">
+            <tab path="question/version/text" id="text">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>question.xml</template>
+                <xsl>question.xsl</xsl>
             </tab>
-            <tab path="motion/version/documents" id="attachments">
+            <tab path="question/version/documents" id="attachments">
                 <title>
-                    <i18n:text key="tab-text">documents(nt)</i18n:text>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="motion">
@@ -752,33 +782,60 @@
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>motion.xml</template>
+                <xsl>motion.xsl</xsl>
             </tab>
             <tab path="motion/timeline" id="timeline">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
+            </tab>
+            <tab path="motion/version">
+                <template>version.xml</template>
+                <xsl>version.xsl</xsl>
             </tab>
             <tab path="motion/details" id="related">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
             </tab>
             <tab path="motion/assigned-groups" id="assigned">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
             </tab>
             <tab path="motion/documents" id="attachments">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </tab>
+            <tab path="motion/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
             </tab>
         </tabs>
-        <tabs name="tableddocument-ver">
-            <tab path="tableddocument/version/text" id="text">
+        <tabs name="motion-ver">
+            <tab path="motion/version/text" id="text">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>motion.xml</template>
+                <xsl>motion.xsl</xsl>
+            </tab>
+            <tab path="motion/version/documents" id="attachments">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="tableddocument">
@@ -786,33 +843,53 @@
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>tableddocument.xml</template>
+                <xsl>tableddocument.xsl</xsl>
             </tab>
             <tab path="tableddocument/timeline" id="timeline">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
             </tab>
             <tab path="tableddocument/details" id="related">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
             </tab>
             <tab path="tableddocument/assigned-groups" id="assigned">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
             </tab>
             <tab path="tableddocument/documents" id="attachments">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </tab>
+            <tab path="tableddocument/version">
+                <template>version.xml</template>
+                <xsl>version.xsl</xsl>
+            </tab>
+            <tab path="tableddocument/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
             </tab>
         </tabs>
-        <tabs name="agendaitem-ver">
-            <tab path="agendaitem/version/text" id="text">
+        <tabs name="tableddocument-ver">
+            <tab path="tableddocument/version/text" id="text">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>tableddocument.xml</template>
+                <xsl>tableddocument.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="agendaitem">
@@ -820,26 +897,53 @@
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
+                <template>agendaitem.xml</template>
+                <xsl>agendaitem.xsl</xsl>
             </tab>
             <tab path="agendaitem/timeline" id="timeline">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
             </tab>
             <tab path="agendaitem/details" id="related">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
             </tab>
             <tab path="agendaitem/assigned-groups" id="assigned">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
             </tab>
             <tab path="agendaitem/documents" id="attachments">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </tab>
+            <tab path="agendaitem/version">
+                <template>version.xml</template>
+                <xsl>version.xsl</xsl>
+            </tab>
+            <tab path="agendaitem/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
+            </tab>
+        </tabs>
+        <tabs name="agendaitem-ver">
+            <tab path="agendaitem/version/text" id="text">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>agendaitem.xml</template>
+                <xsl>agendaitem.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="membership">
@@ -847,26 +951,36 @@
                 <title>
                     <i18n:text key="tab-member">member(nt)</i18n:text>
                 </title>
+                <template>member.xml</template>
+                <xsl>member.xsl</xsl>
             </tab>
             <tab path="member/personal-info" id="info">
                 <title>
                     <i18n:text key="tab-info">information(nt)</i18n:text>
                 </title>
+                <template>member.xml</template>
+                <xsl>personal-info.xsl</xsl>
             </tab>
             <tab path="member/offices-held" id="offices">
                 <title>
                     <i18n:text key="tab-offices">offices held(nt)</i18n:text>
                 </title>
+                <template>member.xml</template>
+                <xsl>offices-held.xsl</xsl>
             </tab>
             <tab path="member/parl-activities" id="activities">
                 <title>
                     <i18n:text key="tab-parlacts">parliament activities(nt)</i18n:text>
                 </title>
+                <template>member.xml</template>
+                <xsl>parl-activities.xsl</xsl>
             </tab>
             <tab path="member/contacts" id="contacts">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
+                <template>member.xml</template>
+                <xsl>contacts.xsl</xsl>
             </tab>
         </tabs>
     </tabgroups>
@@ -893,51 +1007,7 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype name="membership">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fstname" field="bu:user/bu:firstName" default="true">First Name</searchin>
-                <searchin name="ln" value="lsname" field="bu:user/bu:lastName">Last Name</searchin>
-                <searchin name="ds" value="desc" field="bu:user/bu:description">Description</searchin>
-            </searchins>
-            <listingfilters>
-                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
-                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
-            </listingfilters>
-        </doctype>
-        <doctype name="committee">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
-            </searchins>
-        </doctype>
-        <doctype name="political-group">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
-            </searchins>
-            <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
-            </listingfilters>
-        </doctype>
-        <doctype name="bill">
+        <doctype category="document" name="bill">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -953,7 +1023,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="question">
+        <doctype category="document" name="question">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -971,7 +1041,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="motion">
+        <doctype category="document" name="motion">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -989,7 +1059,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="tableddocument">
+        <doctype category="document" name="tableddocument">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1007,7 +1077,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype name="agendaitem">
+        <doctype category="document" name="agendaitem">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1025,5 +1095,67 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
+        <doctype category="document" name="event"/>
+        <doctype category="group" name="committee">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+            </searchins>
+        </doctype>
+        <doctype category="group" name="political-group">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="group" name="office"/>
+        <doctype category="group" name="ministry"/>
+        <doctype category="group" name="government"/>
+        <doctype category="group" name="groupsitting"/>
+        <doctype category="membership" name="membership">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName" default="true">First Name</searchin>
+                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
+                <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
+                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="address" name="address"/>
+        <doctype category="report" name="report"/>
     </doctypes>
+    
+    <!-- Document status types -->
+    <statuses>
+        <status>attached</status>
+        <status>active</status>
+        <status>admissible</status>
+        <status>gazetted</status>
+        <status>response_completed</status>
+        <status>published_agenda</status>
+        <status>public</status>
+    </statuses>
 </ui>

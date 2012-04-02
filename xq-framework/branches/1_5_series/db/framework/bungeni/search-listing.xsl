@@ -34,15 +34,10 @@
         <limit>3</limit>
     </paginator>
     <alisting>
-        <document>
-         <output> 
+        <doc>
             <bu:ontology .../>
-    
-         </output>
-         <referenceInfo>
-            <ref>
-            </ref>
-         </referenceInfo>
+            <ref/>
+         </doc>
     </alisting>
     </docs>
     -->
@@ -139,11 +134,11 @@
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
-        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+    <xsl:template match="doc" mode="renderui">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
@@ -151,35 +146,35 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">primary sponsor:</td>
                         <td>
-                            <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                            <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
+                                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">last event:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:status"/>
                             &#160;&#160;<b>on:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">submission date:</td>
                         <td>
-                            <xsl:value-of select="format-date(output/bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
+                            <xsl:value-of select="format-date(bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">ministry:</td>
                         <td>
-                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
+                            <xsl:value-of select="ref/bu:ministry/bu:shortName"/>
                         </td>
                     </tr>
                 </table>

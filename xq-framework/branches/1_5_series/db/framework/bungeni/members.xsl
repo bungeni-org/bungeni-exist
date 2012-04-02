@@ -95,7 +95,7 @@
             </xsl:apply-templates>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
+    <xsl:template match="doc" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">

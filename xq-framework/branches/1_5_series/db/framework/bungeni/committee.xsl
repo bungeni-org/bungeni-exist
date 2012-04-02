@@ -11,20 +11,19 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="document">
+    <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
-        <xsl:variable name="doc-type" select="primary/bu:ontology/@type"/>
-        <xsl:variable name="doc-sub-type" select="primary/documentType"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:group/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:group/@type"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:group/bu:fullName"/>
+                    <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-sub-type"/>
+                    <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="uri">
                     <xsl:value-of select="$doc_uri"/>
@@ -67,11 +66,11 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="primary/bu:ontology/bu:group/bu:shortName"/>
+                        <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">Language: 
                         <i>
-                            <xsl:value-of select="primary/bu:ontology/bu:bungeni/bu:language"/>
+                            <xsl:value-of select="bu:ontology/bu:bungeni/bu:language"/>
                         </i>
                     </h4>
                     <div class="doc-status">
@@ -79,18 +78,18 @@
                             <b>Acronym:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="primary/bu:ontology/bu:group/bu:shortName"/>
+                            <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
                         </span>
                         <span>
                             <b>Start Date:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-date(primary/bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="primary/bu:ontology/bu:group/bu:description"/>
+                            <xsl:copy-of select="bu:ontology/bu:group/bu:description"/>
                         </div>
                     </div>
                 </div>

@@ -13,14 +13,13 @@
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="serverport"/>
-    <xsl:template match="document">
-        <xsl:variable name="server_port" select="serverport"/>
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -33,7 +32,6 @@
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
-                <xsl:with-param name="server-port" select="$server_port"/>
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc_uri"/>
@@ -53,7 +51,7 @@
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
                             </tr>
-                            <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
+                            <xsl:for-each select="bu:ontology/bu:legislativeItem/bu:changes/bu:change">
                                 <xsl:sort select="./bu:field[@name='date_active']" order="descending"/>
                                 <xsl:variable name="action" select="./bu:action"/>
                                 <xsl:variable name="content_id" select="./bu:changeId"/>
@@ -69,7 +67,7 @@
                                             <xsl:choose>
                                                 <xsl:when test="$action = 'new-version'">
                                                     <xsl:variable name="new_ver_id" select="bu:changeId"/>
-                                                    <a href="{//primary/bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}{//primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:field[@name=$new_ver_id]//@uri}">
+                                                    <a href="{bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}{//primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:field[@name=$new_ver_id]//@uri}">
                                                         <xsl:value-of select="bu:description"/>
                                                     </a>
                                                 </xsl:when>

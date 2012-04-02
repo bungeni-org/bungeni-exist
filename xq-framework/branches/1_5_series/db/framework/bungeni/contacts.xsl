@@ -12,25 +12,25 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:param name="address_type"/>
-    <xsl:template match="document">
-        <xsl:variable name="onto-type" select="primary/bu:ontology/@type"/>
+    <xsl:template match="doc">
+        <xsl:variable name="onto-type" select="bu:ontology/@type"/>
         <xsl:variable name="doc-type">
             <xsl:choose>
                 <xsl:when test="$address_type eq 'membership'">
                     <xsl:value-of select="$address_type"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="primary/bu:ontology/bu:group/@type"/>
+                    <xsl:value-of select="bu:ontology/bu:group/@type"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="doc_uri">
             <xsl:choose>
                 <xsl:when test="$address_type eq 'membership'">
-                    <xsl:value-of select="primary/bu:ontology/bu:membership/@uri"/>
+                    <xsl:value-of select="bu:ontology/bu:membership/@uri"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="primary/bu:ontology/bu:group/@uri"/>
+                    <xsl:value-of select="bu:ontology/bu:group/@uri"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -39,13 +39,13 @@
                 <h1 id="doc-title-blue">
                     <xsl:choose>
                         <xsl:when test="$address_type eq 'membership'">
-                            <xsl:value-of select="concat(primary/bu:ontology/bu:membership/bu:firstName,' ', primary/bu:ontology/bu:membership/bu:lastName)"/>
+                            <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                         </xsl:when>
                         <xsl:when test="$onto-type eq 'group'">
-                            <xsl:value-of select="primary/bu:ontology/bu:group/bu:fullName"/>
+                            <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="primary/bu:ontology/bu:legislature/bu:fullName"/>
+                            <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </h1>
@@ -76,7 +76,7 @@
                 <div id="doc-main-section">
                     <div class="mem-profile">
                         <xsl:choose>
-                            <xsl:when test="secondary/bu:ontology">
+                            <xsl:when test="ref/bu:ontology">
                                 <table class="tbl-tgl">
                                     <tr>
                                         <td class="fbtd">
@@ -104,7 +104,7 @@
                                             <i18n:text key="addr-email">email(nt)</i18n:text>
                                         </td>
                                     </tr>
-                                    <xsl:for-each select="secondary/bu:ontology">
+                                    <xsl:for-each select="ref/bu:ontology">
                                         <xsl:sort select="bu:descriptors/bu:statusDate" order="descending"/>
                                         <tr class="items">
                                             <td class="fbt bclr">

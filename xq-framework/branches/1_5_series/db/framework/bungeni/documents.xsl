@@ -16,20 +16,19 @@
         document as opposed to main document. -->
     <xsl:param name="serverport"/>
     <xsl:param name="version"/>
-    <xsl:template match="document">
-        <xsl:variable name="server_port" select="serverport"/>
+    <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
                         <br/>
-                        <span class="bu-red">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        <span class="bu-red">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
                 </h1>
@@ -60,7 +59,6 @@
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
-                <xsl:with-param name="server-port" select="$server_port"/>
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc_uri"/>
@@ -71,7 +69,7 @@
                         <div class="list-block">
                             <b>
                                 <i18n:text key="docid">Doc Id(nt)</i18n:text>
-                            </b> : <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            </b> : <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
                         </div>
                         <xsl:if test="$version ne 'true'">
                             <div id="block1" class="list-block">
@@ -94,7 +92,7 @@
                                                 <i18n:text key="tab-date">date(nt)</i18n:text>
                                             </th>
                                         </tr>
-                                        <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version">
+                                        <xsl:for-each select="bu:ontology/bu:legislativeItem/bu:versions/bu:version">
                                             <xsl:sort select="bu:statusDate" order="descending"/>
                                             <xsl:variable name="action" select="bu:status"/>
                                             <xsl:variable name="content_id" select="bu:field[@name='change_id']"/>
@@ -107,7 +105,7 @@
                                                 </td>
                                                 <td>
                                                     <span>
-                                                        <a href="{//primary/bu:ontology/bu:document/@type}/version/text?uri={@uri}">
+                                                        <a href="{$doc-type}/version/text?uri={@uri}">
                                                             <xsl:value-of select="bu:shortName"/>
                                                         </a>
                                                     </span>
@@ -123,7 +121,7 @@
                                 </div>
                             </div>
                         </xsl:if>
-                        <xsl:if test="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
+                        <xsl:if test="bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
                             <div id="block2" class="list-block">
                                 <div>
                                     <span class="tgl tgl-wrap">-</span>
@@ -133,13 +131,13 @@
                                 </div>
                                 <div class="doc-toggle opened">
                                     <ul class="ls-row">
-                                        <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
+                                        <xsl:for-each select="bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
                                             <xsl:sort select="@date" order="descending"/>
                                             <li>
-                                                <a href="{//primary/bu:ontology/bu:document/@type}/event?uri={@href}">
+                                                <a href="{$doc-type}/event?uri={@href}">
                                                     <xsl:value-of select="@showAs"/>
                                                 </a>
-                                                <div style="display:inline-block;"> / <xsl:value-of select="format-dateTime(@date,$datetime-format,'en',(),())"/>
+                                                <div class="struct-ib"> / <xsl:value-of select="format-dateTime(@date,$datetime-format,'en',(),())"/>
                                                 </div>
                                             </li>
                                         </xsl:for-each>
@@ -167,7 +165,7 @@
                                             <i18n:text key="tab-date">date(nt)</i18n:text>
                                         </th>
                                     </tr>
-                                    <xsl:for-each select="primary/bu:ontology/bu:attached_files/bu:attached_file">
+                                    <xsl:for-each select="bu:ontology/bu:attached_files/bu:attached_file">
                                         <xsl:sort select="bu:statusDate" order="descending"/>
                                         <tr>
                                             <td>

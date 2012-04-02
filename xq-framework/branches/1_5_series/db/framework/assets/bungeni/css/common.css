@@ -240,6 +240,12 @@ div#doc-downloads {
     right:10px;
 }
 
+/* Calendar */
+#calendar {
+    width:700px;
+    margin:0 auto !important;
+}
+
 /* Stuctures / Layout */
 .struct-ib {
     display:inline-block;

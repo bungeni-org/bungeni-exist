@@ -49,15 +49,17 @@
                     <xsl:choose>
                         <xsl:when test="not(contains($exclude-lot,@id))">
                             <li>
-                                <xsl:if test="@id eq $tab">
-                                    <xsl:attribute name="class">active</xsl:attribute>
+                                <xsl:if test="@tag eq 'tab'">
+                                    <xsl:if test="@id eq $tab">
+                                        <xsl:attribute name="class">active</xsl:attribute>
+                                    </xsl:if>
+                                    <a href="{@path}?uri={$uri}">
+                                        <xsl:element name="i18n:text">
+                                            <xsl:attribute name="key" select="./title/i18n:text/@key"/>
+                                            <xsl:value-of select="./title/i18n:text/text()"/>
+                                        </xsl:element>
+                                    </a>
                                 </xsl:if>
-                                <a href="{@path}?uri={$uri}">
-                                    <xsl:element name="i18n:text">
-                                        <xsl:attribute name="key" select="./title/i18n:text/@key"/>
-                                        <xsl:value-of select="./title/i18n:text/text()"/>
-                                    </xsl:element>
-                                </a>
                             </li>
                         </xsl:when>
                         <xsl:otherwise/>

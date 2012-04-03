@@ -115,7 +115,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        (cmn:build-nav-node($EXIST-PATH,
     								                    (template:merge($EXIST-PATH, 
     								                    $act-entries-repl, 
-    								                    bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'userdata')
+    								                    bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'membership')
     								                   ))))
     								    )                  
                

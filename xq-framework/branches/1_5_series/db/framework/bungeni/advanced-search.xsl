@@ -90,7 +90,7 @@
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
-    <xsl:template match="nodes" mode="renderui">
+    <xsl:template match="doc" mode="renderui">
         <xsl:variable name="doc-type" select="bu:ontology/@type"/>
         <xsl:variable name="doc-sub-type" select="bu:ontology/child::*/@type"/>
         <xsl:variable name="docIdentifier" select="bu:ontology/child::*/@uri"/>

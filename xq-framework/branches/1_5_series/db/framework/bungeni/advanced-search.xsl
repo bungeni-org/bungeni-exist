@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -118,7 +118,19 @@
                     <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status"/>
                 </div>
                 <div class="search-snippet">
-                    <xsl:apply-templates select="kwic"/>
+                    <xsl:choose>
+                        <xsl:when test="kwic">
+                            <xsl:apply-templates select="kwic"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <!-- for parl docs -->
+                            <xsl:value-of select="substring(bu:ontology/child::*/bu:body,0,320)"/>
+                            <!-- for groups -->
+                            <xsl:value-of select="substring(bu:ontology/bu:legislature/bu:description,0,320)"/>
+                            <!-- for groups -->
+                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,320)"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </div>
             </div>
         </li>

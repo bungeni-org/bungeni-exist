@@ -63,7 +63,7 @@
             </xsl:if>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui1">
+    <xsl:template match="doc" mode="renderui1">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="{bu:ontology/bu:document/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
@@ -120,7 +120,7 @@
             </xsl:if>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui2">
+    <xsl:template match="doc" mode="renderui2">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="{bu:ontology/bu:group/@type}/profile?uri={$docIdentifier}" id="{$docIdentifier}">
@@ -156,7 +156,7 @@
             </xsl:if>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui3">
+    <xsl:template match="doc" mode="renderui3">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">

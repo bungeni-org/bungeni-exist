@@ -54,10 +54,10 @@
             </a>
         </div>
         <ul class="ls-row global-preview-summary">
-            <xsl:apply-templates select="document" mode="renderui1"/>
+            <xsl:apply-templates select="doc" mode="renderui1"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui1" priority="3">
+    <xsl:template match="doc" mode="renderui1" priority="3">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
         <li>
             <a href="{bu:ontology/bu:document/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
@@ -73,10 +73,10 @@
             </a>
         </div>
         <ul class="ls-row global-preview-summary">
-            <xsl:apply-templates select="document" mode="renderui2"/>
+            <xsl:apply-templates select="doc" mode="renderui2"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui2">
+    <xsl:template match="doc" mode="renderui2">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
             <a href="{bu:ontology/bu:group/@type}/profile?uri={$docIdentifier}" id="{$docIdentifier}">
@@ -92,10 +92,10 @@
             </a>
         </div>
         <ul class="ls-row global-preview-summary">
-            <xsl:apply-templates select="document" mode="renderui3"/>
+            <xsl:apply-templates select="doc" mode="renderui3"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui3">
+    <xsl:template match="doc" mode="renderui3">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">

@@ -4,7 +4,7 @@
     <xsl:include href="config.xsl"/>
     <xsl:import href="xhtml2fo.xsl"/>
     <!--xsl:include href="xhtml2fo.xsl" /-->
-    <xsl:template match="document">
+    <xsl:template match="doc">
         <xsl:variable name="doc-name" select="bu:ontology/bu:legislativeItem/bu:shortName"/>
         <xsl:variable name="doc-subject" select="concat('Parliamentary ',bu:ontology/bu:document/@type,' from Bungeni')"/>
         <xsl:variable name="doc-keywords" select="concat('Parliamentary ',bu:ontology/bu:document/@type,',',bu:ontology/bu:bungeni/bu:country)"/>
@@ -33,7 +33,7 @@
                               not working properly at the moment. Current guide
                               http://xmlgraphics.apache.org/fop/0.95/metadata.html
                         -->
-                        <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+                        <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
                             <!-- XMP properties go here -->
                             <xmp:CreatorTool>eXist XML Database with xsl-fo module.</xmp:CreatorTool>
                             <pdf:Keywords>
@@ -74,7 +74,7 @@
     <xsl:template match="bu:ontology">
         <xsl:apply-templates mode="profile"/>
     </xsl:template>
-    <xsl:template mode="profile" match="bu:user">
+    <xsl:template mode="profile" match="bu:membership">
         <fo:table table-layout="fixed" border-width="0mm" border-style="solid">
             <fo:table-column column-width="2in"/>
             <fo:table-column column-width="4.4in"/>

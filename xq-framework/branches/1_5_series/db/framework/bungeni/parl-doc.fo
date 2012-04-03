@@ -4,7 +4,7 @@
     <xsl:include href="config.xsl"/>
     <xsl:import href="xhtml2fo.xsl"/>
     <!--xsl:include href="xhtml2fo.xsl" /-->
-    <xsl:template match="document">
+    <xsl:template match="doc">
         <xsl:variable name="doc-name" select="bu:ontology/bu:legislativeItem/bu:shortName"/>
         <xsl:variable name="doc-subject" select="concat('Parliamentary ',bu:ontology/bu:document/@type,' from Bungeni')"/>
         <xsl:variable name="doc-keywords" select="concat('Parliamentary ',bu:ontology/bu:document/@type,',',bu:ontology/bu:bungeni/bu:country)"/>

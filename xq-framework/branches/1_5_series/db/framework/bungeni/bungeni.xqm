@@ -107,11 +107,11 @@ declare function bun:gen-pdf-output($docid as xs:string)
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt('parl-doc.fo') 
     
-    let $doc := <document>        
+    let $doc := <doc>        
             {
                 collection(cmn:get-lex-db())/bu:ontology[@type='document'][child::bu:legislativeItem[@uri eq $docid]]
             }
-        </document>      
+        </doc>      
         
     let $transformed := transform:transform($doc,$stylesheet,())
      
@@ -175,11 +175,11 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt('member-info.fo') 
     
-    let $doc := <document>        
+    let $doc := <doc>        
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
             }
-        </document>
+        </doc>
         
     let $transformed := transform:transform($doc,$stylesheet,())
      
@@ -255,7 +255,7 @@ declare function bun:xqy-search-group() {
     fn:concat("collection('",cmn:get-lex-db() ,"')","/bu:ontology[@type='group']")
 };
 
-declare function bun:xqy-list-userdata($type as xs:string) {
+declare function bun:xqy-list-membership($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@type='",$type,"']")
@@ -498,9 +498,9 @@ declare function bun:search-criteria(
         $typeofdoc as xs:string) as element() {
         
         if ($typeofdoc eq "committee" or $typeofdoc eq "political-group") then
-            bun:search-groupitems($acl, $typeofdoc, "bill/text", "committees.xsl", $offset, $limit, $querystr, $sortby)
-        else if ($typeofdoc eq "userdata") then
-            bun:search-userdata($acl, $typeofdoc, "bill/text", "members.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-groupitems($acl, $typeofdoc, "committee/text", "committees.xsl", $offset, $limit, $querystr, $sortby)
+        else if ($typeofdoc eq "membership") then
+            bun:search-membership($acl, $typeofdoc, "member/text", "members.xsl", $offset, $limit, $querystr, $sortby)
         else
             bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
@@ -790,7 +790,7 @@ declare function bun:advanced-search($qryall as xs:string,
 : @param qryexact
 : @param qryhas
 : @return
-:   search results in a <nodes/> document
+:   search results in a <doc/> document
 :)
 declare function bun:adv-ft-search(
             $coll-subset as node()*, 
@@ -823,15 +823,15 @@ declare function bun:adv-ft-search(
         $config := <config xmlns="" width="160"/>
         order by ft:score($search-rs) descending
         return
-            (: <nodes>
-                <bu:ontology/>
-                <kwic/>
-               </nodes>
+            (:  <doc>
+                    <bu:ontology/>
+                    <kwic/>
+                </doc>
             :)
-            <nodes>
+            <doc>
                 {$search-rs}
                 <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
-            </nodes>
+            </doc>
 };
 
 (:~
@@ -885,13 +885,13 @@ declare function bun:search-groupitems(
                 for $match in subsequence($coll,$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate ascending
                 return 
-                    <document>{$match}</document>      
+                    <doc>{$match}</doc>      
                 )             
             else  (
                 for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <document>{$match}</document>        
+                    <doc>{$match}</doc>        
                 )
                 (:ft:score($m):)
         } 
@@ -911,7 +911,7 @@ declare function bun:search-groupitems(
 (:~
 :   Similar to bun:search-documentitems()
 :)
-declare function bun:search-userdata(
+declare function bun:search-membership(
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -923,7 +923,7 @@ declare function bun:search-userdata(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:xqy-list-userdata($type)
+    let $coll_rs := bun:xqy-list-membership($type)
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
@@ -1050,7 +1050,7 @@ declare function bun:search-global(
                             cmn:get-xslt("global-search-summary.xsl") 
                        else cmn:get-xslt("global-search-results.xsl")
     
-    (:let $coll_rs := bun:xqy-list-groupitem("userdata"):)
+    (:let $coll_rs := bun:xqy-list-groupitem("membership"):)
     let $getqrystr := xs:string(request:get-query-string())
 
     (: toggle summary and categorized :)
@@ -1099,7 +1099,7 @@ declare function bun:search-global(
                     for $search-rs in util:eval($eval-query)
                     order by ft:score($search-rs) descending
                     return 
-                        <document>{$search-rs}</document>
+                        <doc>{$search-rs}</doc>
                      )
                  else (<none>{$querystr}</none>)                
             } 
@@ -1116,7 +1116,7 @@ declare function bun:search-global(
                     for $search-rs in util:eval($eval-query)
                     order by ft:score($search-rs) descending
                     return 
-                        <document>{$search-rs}</document>
+                        <doc>{$search-rs}</doc>
                      )
                  else (<none>{$querystr}</none>)                
             } 
@@ -1132,7 +1132,7 @@ declare function bun:search-global(
                     for $search-rs in util:eval($eval-query)
                     order by ft:score($search-rs) descending
                     return 
-                        <document>{$search-rs}</document>
+                        <doc>{$search-rs}</doc>
                      )
                  else (<none>{$querystr}</none>)                
             } 
@@ -1864,10 +1864,10 @@ declare function bun:get-politicalgroups(
 :   A document-node
 : @return
 :   docitem together with any reference group documents found... simplistic structure below
-:   <document>
-:       <output />          Main document
-:       <referenceInfo/>    Referenced Documents
-:   </document>
+:   <doc>
+:       <bu:ontology/> Main document
+:       <ref/> Referenced Documents
+:   </doc>
 :)
 declare function bun:get-reference($docitem as node()) {
     <doc>
@@ -2101,24 +2101,15 @@ declare function bun:get-parl-doc($acl as xs:string,
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
     
-    let $doc := <parl-doc> 
-        {
+    let $doc := document {
             (:Returs a AN Document :)
             (:  !+ACL_NEW_API - changed call to use new ACL API , 
             :   the root is an ontology document now not a legislativeItem
             :)
-            let $match := bun:documentitem-with-acl($acl, $doc-uri),
-                (: !+FIX_THIS (ao, Dec 19 2011)
-                :   Decoding escaped html markup was painfully futile in XSLT, this is temporary fix since a better
-                :   solution must eXist out there. This converts the markup and returns a node that is sneaked into the 
-                :   presentation layer as <fringe/> node. See bun:get-ref-assigned-grps()
-                :)
-                $encodedbody := util:parse(fn:replace(fn:replace(util:serialize($match//bu:legislativeItem/bu:body/node(),"method=xhtml,media-type=text/xhtml"),'&amp;gt;','>'),'&amp;lt;','<'))
-            
+            let $match := bun:documentitem-with-acl($acl, $doc-uri)
             return
-                bun:get-ref-assigned-grps($match, $encodedbody)
-        } 
-    </parl-doc>    
+                bun:get-ref-assigned-grps($match)
+        }
     return
         transform:transform($doc, $stylesheet, ())
 };
@@ -2142,10 +2133,9 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
     let $doc := document {
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology,
-                        $nullnode := <node/>
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
                     return
-                        bun:get-ref-assigned-grps($match, $nullnode)   
+                        bun:get-ref-assigned-grps($match)   
                 }     
     return
         transform:transform($doc, $stylesheet, ())
@@ -2157,12 +2147,12 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
 : @param docitem
 : @return 
 :   Document node with main document as primary and any group documents assigned to that MP as secondary
-:   <document>
-:       <primary/>
-:       <secondary/>
-:   </document>
+:   <doc>
+:       <bu:ontology/>
+:       <ref/>
+:   </doc>
 :)
-declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as node()) {
+declare function bun:get-ref-assigned-grps($docitem as node()) {
     <doc>
         {$docitem}
         <ref>
@@ -2193,10 +2183,10 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $parsedbody as no
 : @param acl - access control list
 : @return 
 :   Document node with main document as primary and any group documents assigned to that MP as secondary
-:   <document>
-:       <primary/>
-:       <secondary/>
-:   </document>
+:   <doc>
+:       <bu:ontology/>
+:       <ref/>
+:   </doc>
 :)
 declare function bun:get-contacts-by-uri($acl as xs:string, 
                     $address-type as xs:string, 
@@ -2239,10 +2229,10 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
 :   Get parliamentary document based on a version URI
 :   +NOTES
 :   Follows the same structure as get-parl-doc() in that it returns 
-:   <document>
+:   <doc>
+:       <bu:ontology/>
+:       <ref/>
 :       <version>id</version>
-:       <primary/>
-:       <secondary/>
 :   </document>
 :
 : @param versionid
@@ -2284,21 +2274,15 @@ declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) a
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
     
-    let $doc := <parl-doc>
-        <document>
-            <event>{$eventid}</event>
-            <primary>         
-            {
-                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:wfevents/bu:wfevent[@href = $eventid]/ancestor::bu:ontology
-            }
-            </primary>
-            <secondary>
+    let $doc := <doc>       
+            { collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:wfevents/bu:wfevent[@href = $eventid]/ancestor::bu:ontology }
+            <ref>
             {
                 collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='event']/following-sibling::bu:legislativeItem[@uri eq $eventid]/ancestor::bu:ontology
             }            
-            </secondary>
-        </document>
-    </parl-doc>   
+            </ref>
+            <event>{$eventid}</event>
+        </doc>  
     
     return
         transform:transform($doc, 
@@ -2383,25 +2367,19 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
     let $stylesheet := cmn:get-xslt($_tmpl)
    
     (: return AN Member document with his/her activities :)
-    let $doc := <activities>
-    <member>
-    {
-        collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
-    }
-    </member>
-    {
-    (: Get all parliamentary documents the user is either owner or signatory :)
-    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']
-    where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
-          bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
-    return
-        <docs>
+    let $doc := <doc>
+        { collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology }
+        <ref>    
             {
-                $match
+            (: Get all parliamentary documents the user is either owner or signatory :)
+            for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']
+            where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
+                  bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
+            return
+                    $match
             }
-        </docs>
-    }
-    </activities> 
+        </ref>
+    </doc> 
     
     return
         transform:transform($doc, $stylesheet, ())    
@@ -2420,7 +2398,7 @@ declare function bun:get-assigned-items($committeeid as xs:string, $_tmpl as xs:
     }
     </group>
     {
-    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:*/bu:group[@href=$committeeid]
+    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/child::*/bu:group[@href=$committeeid]
     return
         <items>
             {

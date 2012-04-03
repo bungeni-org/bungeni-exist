@@ -63,7 +63,7 @@
                                     <i18n:text key="date-start">start date(nt)</i18n:text>
                                     <div>
                                         <input id="startdate" name="sd" type="text" placeholder="YYYY-MM-DD"/>
-                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="display:none;">Pick a date</button>
+                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside hide">Pick a date</button>
                                     </div>
                                 </label>
                                 <br/>
@@ -71,7 +71,7 @@
                                     <i18n:text key="date-end">end date(nt)</i18n:text>
                                     <div>
                                         <input id="enddate" name="ed" type="text" placeholder="YYYY-MM-DD"/>
-                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside" style="display:none;">Pick a date</button>
+                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside hide">Pick a date</button>
                                     </div>
                                 </label>
                                 <br/>
@@ -91,7 +91,7 @@
                                 </label>
                                 <br/>
                                 <div class="b-right">
-                                    <input class="button" id="adv-search-btn" value="i18n(btn-adv-search,search)" type="submit"/>
+                                    <input class="button" id="adv-search-btn" value="i18n(btn-search,search)" type="submit"/>
                                 </div>
                             </div>
                         </div>

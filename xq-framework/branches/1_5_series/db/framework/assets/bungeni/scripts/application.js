@@ -1,10 +1,12 @@
 $(document).ready(function () {
 
     $('#startdate').Zebra_DatePicker({
+        direction: -1, //past only calendar, the negative integer
         readonly_element: false,
         inside: false
     });
     $('#enddate').Zebra_DatePicker({
+        direction: 0, // unrestricted calendar dates
         readonly_element: false,
         inside: false
     });
@@ -194,12 +196,22 @@ $(document).ready(function () {
     var $adv = $('#adv-search-wrapper');
 	$adv.find('.b-left').find('input[name="types"]').bind('click',function(){
 	   if(this.checked == false) {
-	       $(this).parent().siblings().find(":checkbox").attr('checked',true).attr('disabled',this.checked);
+	       $(this).parent().siblings().find(":checkbox").attr('checked',false).attr('disabled',this.checked);
 	   }
 	   else {
 	       $(this).parent().siblings().find(":checkbox").attr('checked',true).attr('disabled',this.checked).attr('disabled',this.checked);
 	   }
-	});	    
+	});
+	
+    var select_all = function(id) {
+        document.getElementById(id).focus();
+        document.getElementById(id).select();
+    };
+    
+	$('#startdate, #enddate').click(function() {
+        $(this).focus();
+        $(this).select();		
+	});    
     
     /*
 	$(".tab_content").hide(); //Hide all content

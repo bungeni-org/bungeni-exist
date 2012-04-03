@@ -735,8 +735,11 @@ declare function bun:advanced-search($qryall as xs:string,
     (: check if search is there are search terms so as to proceed to search or not :)    
     let $subset_rs := if ($qryall ne "" or $qryexact ne "" or $qryhas ne "") then 
                         bun:adv-ft-search($subset_w_st_date, $qryall, $qryexact, $qryhas) 
-                    else 
-                        ()
+                    else ( 
+                        for $doc in $subset_w_st_date
+                        return 
+                            <doc>{$doc}</doc>
+                    )
     
     (: document node to be returned to transforming stylesheet :)
     let $doc := <docs> 
@@ -2092,10 +2095,10 @@ declare function bun:documentitem-attachments-with-acl($acl-permissions as node(
 :)
 declare function bun:get-parl-doc($acl as xs:string, 
             $doc-uri as xs:string, 
-            $_tmpl as xs:string) as element()* {
+            $parts as node()) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
     
     (: !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
@@ -2108,7 +2111,8 @@ declare function bun:get-parl-doc($acl as xs:string,
             :)
             let $match := bun:documentitem-with-acl($acl, $doc-uri)
             return
-                bun:get-ref-assigned-grps($match)
+                (: $parts/parent::node() returns all tabs of this doctype :)
+                bun:get-ref-assigned-grps($match, $parts/parent::node())
         }
     return
         transform:transform($doc, $stylesheet, ())
@@ -2125,17 +2129,18 @@ declare function bun:get-parl-doc($acl as xs:string,
 : @stylesheet 
 :   committee.xsl, comm-*.xsl
 :)
-declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $parts as node()) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
     (: !+FIX_THIS , !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
     let $doc := document {
                     let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
                     return
-                        bun:get-ref-assigned-grps($match)   
+                        (: $parts/parent::node() returns all tabs of this doctype :)
+                        bun:get-ref-assigned-grps($match, $parts/parent::node())   
                 }     
     return
         transform:transform($doc, $stylesheet, ())
@@ -2152,7 +2157,7 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $_tm
 :       <ref/>
 :   </doc>
 :)
-declare function bun:get-ref-assigned-grps($docitem as node()) {
+declare function bun:get-ref-assigned-grps($docitem as node(), $doctabs as node()) {
     <doc>
         {$docitem}
         <ref>
@@ -2166,13 +2171,16 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
         </ref>
-        <exlude>
+        <exclude>
             {
-                if(not($docitem//bu:item_assignments)) then 
-                    <tab>assigned</tab>
-                else ()
+                for $tab in $doctabs/tab
+                return 
+                    (: putting a evaluate condition to @hide-when... :)
+                    if($tab/@hide-when) then 
+                        <tab>{data($tab/@id)}</tab>
+                    else ()
             }
-        </exlude>
+        </exclude>
     </doc>     
 };
 
@@ -2191,8 +2199,8 @@ declare function bun:get-ref-assigned-grps($docitem as node()) {
 declare function bun:get-contacts-by-uri($acl as xs:string, 
                     $address-type as xs:string, 
                     $focal as xs:string,
-                    $_tmpl as xs:string) {
-    let $stylesheet := cmn:get-xslt($_tmpl), 
+                    $parts as node()) {
+    let $stylesheet := cmn:get-xslt($parts/xsl), 
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
         $user-uri := if ($address-type eq 'group') then 
                         $focal 
@@ -2244,14 +2252,14 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
 :
 : @stylesheet [document-type]/version/text e.g question/version/text
 :)
-declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $parts as node()) as element()* {
     
     let $doc-uri := xps:substring-before($version-uri, "@")
     let $match := document { util:eval(bun:xqy-docitem-acl-uri($acl, $doc-uri)) }
     let $acl-permissions := cmn:get-acl-permissions($acl)
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl)
+    let $stylesheet := cmn:get-xslt($parts/xsl)
     
     let $doc := <doc>
                     {bun:documentitem-versions-with-acl($acl-permissions, $match/node())}
@@ -2269,10 +2277,10 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
 
 
 
-declare function bun:get-doc-event($eventid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
     
     let $doc := <doc>       
             { collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:wfevents/bu:wfevent[@href = $eventid]/ancestor::bu:ontology }
@@ -2350,10 +2358,10 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
        
 };
 
-declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-member($memberid as xs:string, $parts as node()) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl) 
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
 
     (: return AN Member document as singleton :)
     let $doc := <doc>{collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology}</doc>
@@ -2362,9 +2370,9 @@ declare function bun:get-member($memberid as xs:string, $_tmpl as xs:string) as 
         transform:transform($doc, $stylesheet, ())
 };
 
-declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:string, $parts as node()) as element()* {
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl)
+    let $stylesheet := cmn:get-xslt($parts/xsl)
    
     (: return AN Member document with his/her activities :)
     let $doc := <doc>
@@ -2385,10 +2393,10 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
         transform:transform($doc, $stylesheet, ())    
 };
 
-declare function bun:get-assigned-items($committeeid as xs:string, $_tmpl as xs:string) as element()* {
+declare function bun:get-assigned-items($committeeid as xs:string, $parts as node()) as element()* {
 
      (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($_tmpl)
+    let $stylesheet := cmn:get-xslt($parts/xsl)
 
     (: return AN Committee document with all items assigned to it :)
     let $doc := <assigned-items>

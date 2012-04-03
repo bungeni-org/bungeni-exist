@@ -29,7 +29,7 @@
                     <xsl:value-of select="$doc_uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">profile</xsl:with-param>
-                <xsl:with-param name="excludes" select="exlude/tab"/>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">

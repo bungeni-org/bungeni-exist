@@ -55,7 +55,7 @@
                     </xsl:choose>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">text</xsl:with-param>
-                <xsl:with-param name="excludes" select="exlude/tab"/>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">

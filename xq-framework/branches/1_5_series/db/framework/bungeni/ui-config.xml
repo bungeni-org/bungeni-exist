@@ -671,7 +671,7 @@
                 <template>bill.xml</template>
                 <xsl>bill.xsl</xsl>
             </tab>
-            <tab path="bill/timeline" id="timeline" tag="tab">
+            <tab path="bill/timeline" id="timeline" tag="tab" hide-when="//bu:item_assignments">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -685,7 +685,7 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </tab>
-            <tab path="bill/assigned-groups" id="assigned" tag="tab" show-when=".//bu:item_assignments">
+            <tab path="bill/assigned-groups" id="assigned" tag="tab" hide-when="//bu:item_assignments">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>

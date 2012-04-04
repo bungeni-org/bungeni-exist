@@ -35,6 +35,7 @@ ul.doc-versions > li a {
 }
 ul.doc-versions li span {
     color:#b22b14;
+    text-transform:capitalize;
 }
 ul.doc-versions li a:hover {
     color:#b22b14;

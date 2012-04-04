@@ -597,42 +597,42 @@
             The name is always that of a content type
         -->
         <tabs name="committee">
-            <tab path="committee/text" id="profile">
+            <tab path="committee/text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>committee.xsl</xsl>
             </tab>
-            <tab path="committee/members" id="members">
+            <tab path="committee/members" id="members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-members.xsl</xsl>
             </tab>
-            <tab path="committee/assigned-items" id="assigned">
+            <tab path="committee/assigned-items" id="assigned" tag="tab">
                 <title>
                     <i18n:text key="tab-assigned">assigned items(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-assigned.xsl</xsl>
             </tab>
-            <tab path="committee/sittings" id="sittings">
+            <tab path="committee/sittings" id="sittings" tag="tab">
                 <title>
                     <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-sittings.xsl</xsl>
             </tab>
-            <tab path="committee/staff" id="staff">
+            <tab path="committee/staff" id="staff" tag="tab">
                 <title>
                     <i18n:text key="tab-staff">staff(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-staff.xsl</xsl>
             </tab>
-            <tab path="committee/contacts" id="contacts">
+            <tab path="committee/contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
@@ -641,21 +641,21 @@
             </tab>
         </tabs>
         <tabs name="political-group">
-            <tab path="political-group/text" id="profile">
+            <tab path="political-group/text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>political-group.xsl</xsl>
             </tab>
-            <tab path="political-group/members" id="members">
+            <tab path="political-group/members" id="members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>poli-members.xsl</xsl>
             </tab>
-            <tab path="political-group/contacts" id="contacts">
+            <tab path="political-group/contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
@@ -664,55 +664,55 @@
             </tab>
         </tabs>
         <tabs name="bill">
-            <tab path="bill/text" id="text">
+            <tab path="bill/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>bill.xml</template>
                 <xsl>bill.xsl</xsl>
             </tab>
-            <tab path="bill/timeline" id="timeline">
+            <tab path="bill/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </tab>
-            <tab path="bill/details" id="related">
+            <tab path="bill/details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </tab>
-            <tab path="bill/assigned-groups" id="assigned">
+            <tab path="bill/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </tab>
-            <tab path="bill/documents" id="attachments">
+            <tab path="bill/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </tab>
-            <tab path="motion/event">
+            <tab path="bill/event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </tab>
         </tabs>
         <tabs name="bill-ver">
-            <tab path="bill/version/text" id="text">
+            <tab path="bill/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>bill.xml</template>
                 <xsl>bill.xsl</xsl>
             </tab>
-            <tab path="bill/version/documents" id="attachments">
+            <tab path="bill/version/documents" id="attachments" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -721,35 +721,35 @@
             </tab>
         </tabs>
         <tabs name="question">
-            <tab path="question/text" id="text">
+            <tab path="question/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>question.xml</template>
                 <xsl>question.xsl</xsl>
             </tab>
-            <tab path="question/timeline" id="timeline">
+            <tab path="question/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </tab>
-            <tab path="question/details" id="related">
+            <tab path="question/details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </tab>
-            <tab path="question/assigned-groups" id="assigned">
+            <tab path="question/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </tab>
-            <tab path="question/documents" id="attachments">
+            <tab path="question/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -762,14 +762,14 @@
             </tab>
         </tabs>
         <tabs name="question-ver">
-            <tab path="question/version/text" id="text">
+            <tab path="question/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>question.xml</template>
                 <xsl>question.xsl</xsl>
             </tab>
-            <tab path="question/version/documents" id="attachments">
+            <tab path="question/version/documents" id="attachments" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -778,14 +778,14 @@
             </tab>
         </tabs>
         <tabs name="motion">
-            <tab path="motion/text" id="text">
+            <tab path="motion/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>motion.xml</template>
                 <xsl>motion.xsl</xsl>
             </tab>
-            <tab path="motion/timeline" id="timeline">
+            <tab path="motion/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -796,21 +796,21 @@
                 <template>version.xml</template>
                 <xsl>version.xsl</xsl>
             </tab>
-            <tab path="motion/details" id="related">
+            <tab path="motion/details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </tab>
-            <tab path="motion/assigned-groups" id="assigned">
+            <tab path="motion/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </tab>
-            <tab path="motion/documents" id="attachments">
+            <tab path="motion/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -823,14 +823,14 @@
             </tab>
         </tabs>
         <tabs name="motion-ver">
-            <tab path="motion/version/text" id="text">
+            <tab path="motion/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>motion.xml</template>
                 <xsl>motion.xsl</xsl>
             </tab>
-            <tab path="motion/version/documents" id="attachments">
+            <tab path="motion/version/documents" id="attachments" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -839,35 +839,35 @@
             </tab>
         </tabs>
         <tabs name="tableddocument">
-            <tab path="tableddocument/text" id="text">
+            <tab path="tableddocument/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>tableddocument.xml</template>
                 <xsl>tableddocument.xsl</xsl>
             </tab>
-            <tab path="tableddocument/timeline" id="timeline">
+            <tab path="tableddocument/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </tab>
-            <tab path="tableddocument/details" id="related">
+            <tab path="tableddocument/details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </tab>
-            <tab path="tableddocument/assigned-groups" id="assigned">
+            <tab path="tableddocument/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </tab>
-            <tab path="tableddocument/documents" id="attachments">
+            <tab path="tableddocument/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -884,7 +884,7 @@
             </tab>
         </tabs>
         <tabs name="tableddocument-ver">
-            <tab path="tableddocument/version/text" id="text">
+            <tab path="tableddocument/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
@@ -893,35 +893,35 @@
             </tab>
         </tabs>
         <tabs name="agendaitem">
-            <tab path="agendaitem/text" id="text">
+            <tab path="agendaitem/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>agendaitem.xml</template>
                 <xsl>agendaitem.xsl</xsl>
             </tab>
-            <tab path="agendaitem/timeline" id="timeline">
+            <tab path="agendaitem/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </tab>
-            <tab path="agendaitem/details" id="related">
+            <tab path="agendaitem/details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </tab>
-            <tab path="agendaitem/assigned-groups" id="assigned">
+            <tab path="agendaitem/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </tab>
-            <tab path="agendaitem/documents" id="attachments">
+            <tab path="agendaitem/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -938,7 +938,7 @@
             </tab>
         </tabs>
         <tabs name="agendaitem-ver">
-            <tab path="agendaitem/version/text" id="text">
+            <tab path="agendaitem/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
@@ -947,35 +947,35 @@
             </tab>
         </tabs>
         <tabs name="membership">
-            <tab path="member" id="member">
+            <tab path="member" id="member" tag="tab">
                 <title>
                     <i18n:text key="tab-member">member(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>member.xsl</xsl>
             </tab>
-            <tab path="member/personal-info" id="info">
+            <tab path="member/personal-info" id="info" tag="tab">
                 <title>
                     <i18n:text key="tab-info">information(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>personal-info.xsl</xsl>
             </tab>
-            <tab path="member/offices-held" id="offices">
+            <tab path="member/offices-held" id="offices" tag="tab">
                 <title>
                     <i18n:text key="tab-offices">offices held(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>offices-held.xsl</xsl>
             </tab>
-            <tab path="member/parl-activities" id="activities">
+            <tab path="member/parl-activities" id="activities" tag="tab" check-for="(bu:signatories/child::node(), bu:legislativeItem/bu:owner/node())">
                 <title>
                     <i18n:text key="tab-parlacts">parliament activities(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>parl-activities.xsl</xsl>
             </tab>
-            <tab path="member/contacts" id="contacts">
+            <tab path="member/contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
@@ -1001,7 +1001,9 @@
     </acl-groups>  
 
     <!-- Document Types
-        <doctype name="group">  Defines the configuration parameter for the named document type 
+        <doctype category="document">   The generic type of a document. Used in advanced search to group types, its 
+                                        derived from document type themselves itself.
+        <doctype name="group"> Defines the configuration parameter for the named document type 
         <orderby/>      Defines the order by options that are available for that document types
         <searchins/>    Defines the search filter options that are available for the type of document speficied
         searchin/@field parameter must be a node path relative to bu:ontology.
@@ -1115,9 +1117,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+                <searchin name="fn" value="fname" field="bu:group/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:group/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>

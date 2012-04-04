@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    XForm for editing View-group configurations    
+    This is loaded by admin-viewgroup.xql
+-->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="mtabgroup" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="default">
+            <tabs/>
+        </xf:instance>
+        <!-- tabs listed here -->
+        <xf:instance xmlns="" id="tagtabs">
+            <tagtabs>
+                <tag label="yes">tab</tag>
+                <tag label="no"/>
+            </tagtabs>
+        </xf:instance>
+        <xf:bind id="b-viewgroup-path" nodeset="@path" type="xs:string"/>
+        <xf:bind id="b-viewgroup-id" nodeset="@id" type="xs:string"/>
+        <xf:bind id="b-viewgroup-tag" nodeset="@tag" type="xs:string"/>
+        <xf:bind id="b-viewgroup-checkfor" nodeset="@check-for" type="xs:string"/>
+        <xf:bind id="b-viewgroup-title" nodeset="title" type="xs:string"/>
+        <xf:bind id="b-viewgroup-tmpl" nodeset="template" type="xs:string"/>
+        <xf:bind id="b-viewgroup-xsl" nodeset="xsl" type="xs:string"/>
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/viewgroups/views[index('viewgroups')]" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group editor loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/viewgroups/views[index('viewgroups')]" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group saved</xf:message>
+            <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to edit loaded route -->
+    <xf:group appearance="full" class="subform-pane">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
+        <xf:repeat id="tabgroups-id" nodeset="view">
+            <xf:label id="editing-subform">View-group Subform</xf:label>
+            <xf:input bind="b-viewgroup-path">
+                <xf:hint>form name field</xf:hint>
+                <xf:help>This is what will be name field on the HTML form.</xf:help>
+                <xf:label>URL Path</xf:label>
+            </xf:input>
+            <xf:input bind="b-viewgroup-id">
+                <xf:hint>Internal ID</xf:hint>
+                <xf:help>Mainly used by function that creates the tabs at runtime.</xf:help>
+                <xf:label>Unique ID</xf:label>
+            </xf:input>
+            <xf:select1 bind="b-viewgroup-tag" appearance="full" incremental="true">
+                <xf:label>Is this a tab?</xf:label>
+                <xf:hint>Tag denotes if its for tab view</xf:hint>
+                <xf:help>Leave empty if unless you want this view to be shown as tab</xf:help>
+                <xf:itemset nodeset="instance('tagtabs')/tag">
+                    <xf:label ref="@label"/>
+                    <xf:value ref="."/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input bind="b-viewgroup-checkfor">
+                <xf:hint>Condition to be met before tab is rendered</xf:hint>
+                <xf:help>Used to hide tabs on document items that don't meet a criteria</xf:help>
+                <xf:label>Check for</xf:label>
+            </xf:input>
+            <xf:input ref="b-viewgroup-title">
+                <xf:hint>Field label</xf:hint>
+                <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
+                <xf:label>Tab Label</xf:label>
+            </xf:input>
+            <xf:input bind="b-viewgroup-tmpl">
+                <xf:hint>Field label</xf:hint>
+                <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
+                <xf:label>View tab template</xf:label>
+            </xf:input>
+            <xf:input bind="b-viewgroup-xsl">
+                <xf:hint>Field label</xf:hint>
+                <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
+                <xf:label>View tab stylesheet</xf:label>
+            </xf:input>
+        </xf:repeat>
+        <xf:trigger appearance="triggerMiddleColumn">
+            <xf:label>update routes</xf:label>
+            <xf:hint>Click apply to update the document configuration</xf:hint>
+            <xf:send submission="s-update-master"/>
+        </xf:trigger>
+    </xf:group>
+</div>

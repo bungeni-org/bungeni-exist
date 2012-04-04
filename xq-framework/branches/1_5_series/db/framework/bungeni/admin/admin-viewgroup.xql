@@ -19,8 +19,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <head>
-        <title>Tab-group Preferences</title>
-        <meta name="author" content="anthony at googlemail.com"/>
+        <title>View-group Preferences</title>
+        <meta name="author" content="aowino at googlemail.com"/>
         <meta name="author" content="ashok at parliaments.info"/>
         <meta name="description" content="XForms with config options"/>
         <link rel="stylesheet" href="../../assets/admin/style.css"/>
@@ -43,7 +43,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </xf:model>
     </div>
     <!-- MAIN MENU -->
-    <div class="section" id="mainnav">{adm:main-menu('tabgroup')}</div>
+    <div class="section" id="mainnav">{adm:main-menu('viewgroup')}</div>
     <div class="section" dojotype="dijit.layout.ContentPane">
         <!-- 
             unload the subform, we may have to call this explicitly
@@ -52,15 +52,15 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             <xf:load show="none" targetid="orderby"/>
         </xf:action>
         
-        <div class="headline">Tab-group Configurations</div>
+        <div class="headline">View-group Configurations</div>
         <div class="description">
-            <p>Edit the Tab-group configurations</p>
+            <p>Edit the View-group configurations</p>
         </div>
 
         <div class="section" dojotype="dijit.layout.ContentPane">
             <xf:group appearance="compact" id="ui-config" class="uiConfigGroup" >
                 <!--
-                List all the tab-groups
+                List all the view-groups
                 -->
                 <div class="itemgroups">
                     <xf:group appearance="minimal" class="configsTriggerGroup">
@@ -68,15 +68,15 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                             <xf:label>load selected</xf:label>
                             <xf:hint>Edit the Selected row in a form.</xf:hint>
                             <xf:action>
-                                <xf:message level="ephemeral">Loading Tab-group In Editor...</xf:message>
-                                <xf:load show="embed" targetid="tabgroup">
-                                    <xf:resource value="'./admin-tabgroup-subform.xml'"/>
+                                <xf:message level="ephemeral">Loading View-group In Editor...</xf:message>
+                                <xf:load show="embed" targetid="viewgroup">
+                                    <xf:resource value="'./admin-viewgroup-subform.xml'"/>
                                 </xf:load>
                             </xf:action>
                         </xf:trigger>
                     </xf:group>                
                 
-                    <xf:repeat id="tabgroups" nodeset="/ui/tabgroups/tabs" appearance="full" class="itemgroups">
+                    <xf:repeat id="viewgroups" nodeset="/ui/viewgroups/views" appearance="full" class="itemgroups">
                         <xf:output ref="@name"/>
                     </xf:repeat>
                     
@@ -98,7 +98,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             -->
             <xf:group appearance="full" class="configsFullGroup">
                 <div class="configsSubForm">
-                    <div id="tabgroup" class="editpane"/>
+                    <div id="viewgroup" class="editpane"/>
                 </div>
             </xf:group>             
         </div>

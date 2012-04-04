@@ -60,20 +60,20 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
 };
 
 (:~
-Get a tabgroubs configuration from the --------.
+Get a viewgroubs configuration from the --------.
 :)
 declare function cmn:get-tabgroups($exist-path as xs:string) as node() {
-    let $doc := cmn:get-ui-config()/ui/tabgroups/tabs[@name eq $exist-path]
+    let $doc := cmn:get-ui-config()/ui/viewgroups/views[@name eq $exist-path]
         return $doc
 };
 
 (:~
-    Get a tabs/tab path configuration as per context. Currently 
+    Get a tabs/view path configuration as per context. Currently 
     returns a template and stylesheet for document transformations
 :)
-declare function cmn:get-tab-parts($exist-path as xs:string) as node()* {
+declare function cmn:get-view-parts($exist-path as xs:string) as node()* {
     let $rel-path := substring-after($exist-path,'/'),
-        $doc := cmn:get-ui-config()/ui/tabgroups/tabs/tab[@path eq $rel-path]
+        $doc := cmn:get-ui-config()/ui/viewgroups/views/view[@path eq $rel-path]
         return $doc
 };
 

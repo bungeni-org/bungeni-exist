@@ -2157,28 +2157,30 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $par
 :       <ref/>
 :   </doc>
 :)
-declare function bun:get-ref-assigned-grps($docitem as node(), $doctabs as node()) {
+declare function bun:get-ref-assigned-grps($docitem as node(), $docviews as node()) {
     <doc>
         {$docitem}
         <ref>
             {
-                (:!+ACL_NEW_API - removed the ancestor axis reference here 
-                !+FIXED - why use a bu:* kind of reference why a * ?!
-                :)
                 let $doc-ref := data($docitem/child::bu:group/@href)
                 return 
-                    (:!+FIX_THIS - ultimately this should be replaced by the acl based group access api :)
+                    (: !+FIX_THIS - ultimately this should be replaced by the acl based group access api :)
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
         </ref>
         <exclude>
             {
-                for $tab in $doctabs/tab
-                return 
-                    (: putting a evaluate condition to @hide-when... :)
-                    if($tab/@hide-when) then 
-                        <tab>{data($tab/@id)}</tab>
-                    else ()
+                for $view in $docviews/view
+                return
+                    (: must have @check-for attribute first! :)
+                    if($view/@check-for) then (
+                        (: putting a evaluate condition to @check-for... :)
+                        if(not(empty(util:eval(concat("$docitem","//",$view/@check-for))))) then 
+                            ()
+                        else 
+                            <tab>{data($view/@id)}</tab>   
+                     )
+                     else ()
             }
         </exclude>
     </doc>     
@@ -2384,9 +2386,9 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
             where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
                   bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
             return
-                    $match
+                  $match
             }
-        </ref>
+        </ref>         
     </doc> 
     
     return

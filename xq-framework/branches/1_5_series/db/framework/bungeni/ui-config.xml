@@ -664,6 +664,10 @@
             </view>
         </views>
         <views name="bill">
+            <view path="bills" id="listing" tag="listing">
+                <template>bills.xml</template>
+                <xsl>legislativeitem-listing.xsl</xsl>
+            </view>
             <view path="bill/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>

@@ -2118,6 +2118,26 @@ declare function bun:get-parl-doc($acl as xs:string,
         transform:transform($doc, $stylesheet, ())
 };
 
+declare function bun:get-parl-doc-timeline($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    
+    let $doc := document {
+        (:for $everef in collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri = $doc-uri]/bu:wfevents/bu:wfevent
+        let $wala := ($everef/@href),
+            $boo := ($everef/@href)
+        return 
+            <changecontext foruri="{$wala}" type="{$boo}">
+                {collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri eq $wala]/bu:changes}
+            </changecontext>:)<doc/>
+        }
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
 (:~ 
 :   Used to retrieve a group document with a given URI
 :

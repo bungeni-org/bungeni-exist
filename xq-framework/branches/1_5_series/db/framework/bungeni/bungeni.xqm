@@ -2118,6 +2118,13 @@ declare function bun:get-parl-doc($acl as xs:string,
         transform:transform($doc, $stylesheet, ())
 };
 
+(:~
+:   Used to retrieve a legislative-document timeline page
+:
+: @param acl
+: @param docid
+: @param parts
+:)
 declare function bun:get-parl-doc-timeline($acl as xs:string, 
             $doc-uri as xs:string, 
             $parts as node()) as element()* {
@@ -2125,15 +2132,20 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
-    let $doc := document {
-        (:for $everef in collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri = $doc-uri]/bu:wfevents/bu:wfevent
-        let $wala := ($everef/@href),
-            $boo := ($everef/@href)
-        return 
-            <changecontext foruri="{$wala}" type="{$boo}">
-                {collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri eq $wala]/bu:changes}
-            </changecontext>:)<doc/>
-        }
+    let $doc := <doc> {
+            for $parentdoc in bun:documentitem-with-acl($acl, $doc-uri)
+            let $ln := ($parentdoc/bu:legislativeItem/bu:wfevents/bu:wfevent/@href),
+                $foruri := ($parentdoc/bu:legislativeItem/@uri),
+                $type := ($parentdoc/bu:document/@type),
+                $merged := ($parentdoc,
+                            collection(cmn:get-lex-db())/bu:ontology/child::*[@uri eq $ln]/parent::node())
+            (: !+FIX_THIS (ao, 10 Apr 2012) sort does not take effect at the moment due to merging above and
+                also the fact that dateActive may not be present in all documents :)
+            order by $merged/bu:ontology/child::*/bu:changes/bu:change/bu:dateActive ascending
+            return
+                ($parentdoc,
+                <ref>{$merged}</ref>)
+        } </doc>
     return
         transform:transform($doc, $stylesheet, ())
 };

@@ -51,7 +51,7 @@
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
                             </tr>
-                            <xsl:for-each select="bu:ontology/bu:legislativeItem/bu:changes/bu:change">
+                            <xsl:for-each select="ref/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
                                 <xsl:sort select="./bu:dateActive" order="descending"/>
                                 <xsl:variable name="action" select="./bu:action"/>
                                 <xsl:variable name="content_id" select="./bu:changeId"/>
@@ -67,12 +67,12 @@
                                             <xsl:choose>
                                                 <xsl:when test="$action = 'add'">
                                                     <xsl:variable name="new_ver_id" select="bu:changeId"/>
-                                                    <a href="{//bu:ontology/bu:document/@type}/text?uri={//bu:ontology/bu:legislativeItem/@uri}{bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:changeId//@uri}">
-                                                        <xsl:value-of select="bu:description"/>
+                                                    <a href="{$doc-type}/text?uri={./ancestor::bu:ontology/bu:legislativeItem/@uri}{./ancestor::bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:changeId//@uri}">
+                                                        <xsl:value-of select="substring(bu:description,0,100)"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="bu:description"/>
+                                                    <xsl:value-of select="substring(bu:description,0,100)"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </span>

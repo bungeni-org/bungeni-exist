@@ -161,8 +161,7 @@ Various download and document view formats available such as PDF, RSS Feed, XML,
 The rendergroups currently defined for listings, parliamentary document and member pages.
 
 The defined `<rendergroup>` nodes must provide the following :
- * format/@type - the actual format type. NB: Also class name used in CSS sprite on mouse-over
- * format/@href - Used if a link deviates or link path not statically generated like in the case of parliamentary documents 
+ * format/@type - the actual format type. NB: Also class name used in CSS sprite on mouse-over 
  * `format/text()` - Title description of the format as shown when on mouse-over.
 
 The download groups are defined in xml format:
@@ -170,77 +169,94 @@ The download groups are defined in xml format:
 {{{
 <downloadgroups>
         <rendergroup name="listings">
-            <format type="rss" href="null">Subscribe to Atom RSS feed</format>   
-            <format type="print" href="null">Print this listing</format>   
+            <format type="rss">Subscribe to Atom RSS feed</format>   
+            <format type="print">Print this listing</format>   
         </rendergroup>
         <rendergroup name="parl-doc">
-            <format type="edit" href="http://localhost:8080/exist/rest/db/framework/bungeni/updater.xql">Edit document. Will need to login to eXist</format>
-            <format type="pdf" href="null">Download PDF format</format>   
-            <format type="xml" href="null">Download XML format</format>            
+            <format type="edit">Edit document. Will need to login to eXist</format>
+            <format type="pdf">Download PDF format</format>   
+            <format type="xml">Download XML format</format>            
         </rendergroup> 
         ...       
 </downloadgroups>
 }}}
 
-== Content Tabs ==
+== Content Views ==
 
 The menus link to listings - and the listings resolve to a view of the document.
 
-The framework allows segregating the view of a document across "tabs" - for .e.g. the text of the document may be shown on one tab and links to different versions of the document may be shown on a different tab. "Tabs" are essentially a subsidiary navigation within either a "navigation" or a "subnavigation"
+The framework allows segregating the view of a document across "views" - for example, the text of the document may be shown on one tab and links to different versions of the document may be shown on a different tab. "Views" are essentially a subsidiary navigation within either a "navigation" or a "subnavigation"
 
-The "tabs" are mapped to routes.
+The "views" are mapped to routes.
 
-The "tabs" are defined with the following rules : 
- * "tabs" are used to group individual "tab" definitions
- * "tabgroups" is a container for multiple "tabs" configuration.
- * "tabs" support a @name attribute - this must correspond to the type of the document. For e.g. if you are defining the tabs for the "bill" document type, the @name attribute for the "tabs" element should be *bills*
+The "views" are defined with the following rules : 
+ * "views" are used to group individual "view" definitions
+ * "viewgroups" is a container for multiple "views" configuration.
+ * "views" support a @name attribute - this must correspond to the type of the document. For examples, if you are defining the views for the "bill" document type, the @name attribute for the "views" element should be *bills*
+ * A "view" can have a @tag attribute to denote that is displayed as a "tab" view in the User-Interface(UI).
  
 
-The individual "tab" is configured as follows :
- * path - specified in @path attribute - this specifies a url route for the tab i.e. a route/@href configuration
- * id - a unique identifier for the tab (within the context of a "tabs" element)
- * title - specified in the title element - the title of the tab
+The individual "view" is configured as follows :
+ * view/@path - this attribute specifies a url route for the tab i.e. a route/@href configuration
+ * view/@id - a unique identifier for the tab (within the context of a "tabs" element)
+ * view/@tag - an attribute with value "tab" that marks that view as a tab
+ * view/@check-for - By default all view's marked with tab-tag will be rendered. Though if check-for has a value,it will be evaluated as a predicate that must be satisfied for that tab to be visible
+ * view/title - the title of the view if it is tagged as a tab view
+ * view/template - name of template file which content will be rendered on
+ * view/xsl - name of the xsl file that transforms content + templates for UI.
 
 
 {{{
-   <tabgroups>
+   <viewgroups>
         <!-- 
-            Tabgroups are like navigation but they describe navigation relative to content 
+            Viewgroups are like navigation but they describe navigation relative to content 
             The name is always that of a content type
         -->
 
-        <tabs name="bill">
-            <tab path="bill/text" id="text">
+        <views name="bill">
+            <view path="bill/text" id="text" tag="tab">
                 <title>text</title>
-            </tab>
-            <tab path="bill/timeline" id="timeline">
+                <template>bill.xml</template>
+                <xsl>bill.xsl</xsl>
+            </view>
+            <view path="bill/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
                 <title>history</title>
-            </tab>
-            <tab path="bill/details" id="related">
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
+            </view>
+            <view path="bill/details" id="related" tag="tab">
                 <title>details</title>
-            </tab>
-            <tab path="bill/assigned-groups" id="assigned">
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
+            </view>
+            <view path="bill/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
                 <title>assigned groups</title>
-            </tab>
-            <tab path="bill/documents" id="attachments">
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
+            </view>
+            <view path="bill/documents" id="attachments" tag="tab">
                 <title>documents</title>
-            </tab>
-        </tabs>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </view>
+            <view path="bill/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
+            </view>
+        </views>
 
-        <tabs name="bill-ver">
-            <tab path="bill/version/text" id="text">
+        <views name="bill-ver">
+            <view path="bill/version/text" id="text" tag="tab">
                 <title>text</title>
-            </tab>
-            <tab path="bill/version/details" id="related">
-                <title>details</title>
-            </tab>
-            <tab path="bill/version/assigned-groups" id="assigned">
-                <title>assigned groups</title>
-            </tab>
-            <tab path="bill/version/documents" id="attachments">
+                <template>bill.xml</template>
+                <xsl>bill.xsl</xsl>
+            </view>
+            <view path="bill/version/documents" id="attachments" tag="tab">
                 <title>documents</title>
-            </tab>
-        </tabs>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </view>
+        </views>
 }}}
 
 == ACL Groups == 
@@ -261,25 +277,32 @@ The permissions are defined in xml format:
 </acl-groups>
 }}}
 
-== Order-by & Search-in Filters == 
+== Order-by, Search-in & Listings Filters == 
 
-These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies no search or order options for the particular listing.
+These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies no search options, order options or tabbed-view filters for the particular listing.
+
+The `<doctype>` must provide the following attributes :
+ * `doctype/@category` - pre-defined type in reposited document that defines that generic group type of each document. For example, bills, questions, events belong to a generic type `document` while political-groups, and committes belong to `group`
+ * `doctype/@name` - has the specific name of the document type. For example, `bill` or `committee`.
 
 Each defined `<doctype>` optionally provides the following :
  * `<orderbys/>` - contains parameters for sort field
- * `<searchins/>` - contains parameters for all the search options that can be used to filter.
+ * `<searchins/>` - contains parameters for all the search options that can be used to filter
+ * `<listingfilters/>` - contains titles and a predicate to be evaluated to group listing documents based on predefined tags in the reposited documents.
 
 The filters and options are defined in xml format:
 
 {{{
 <doctypes>
-   <doctype name="bill">
+   <doctype category="document" name="bill">
      <orderbys/>
      <searchins/>
+     <listingfilters/>
    </doctypes>
-   <doctype name="group">
+   <doctype category="group" name="political-group">
      <orderbys/>
      <searchins/>
+     <listingfilters/>
    </doctypes>
    ...
 </doctypes>
@@ -318,6 +341,23 @@ The filters are defined in xml format:
    <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
 </searchins>
 }}}
+
+=== Listing-filter ===
+
+These are rendered as tabs on a documents-listing.
+ * listingfilter/@id - a unique name for applying filter
+ * listingfilter/@name - will appear as title of the tabs
+ * listingfilter - contains the predicates to be evaluated on listing documents and create the different tabbed-listings.
+
+The options are defined in xml format:
+
+{{{
+<listingfilters>
+   <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+   <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+</listingfilters>
+}}}
+
 
 = Application structure = 
 

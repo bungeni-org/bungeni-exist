@@ -2132,20 +2132,10 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
-    let $doc := <doc> {
-            for $parentdoc in bun:documentitem-with-acl($acl, $doc-uri)
-            let $ln := ($parentdoc/bu:legislativeItem/bu:wfevents/bu:wfevent/@href),
-                $foruri := ($parentdoc/bu:legislativeItem/@uri),
-                $type := ($parentdoc/bu:document/@type),
-                $merged := ($parentdoc,
-                            collection(cmn:get-lex-db())/bu:ontology/child::*[@uri eq $ln]/parent::node())
-            (: !+FIX_THIS (ao, 10 Apr 2012) sort does not take effect at the moment due to merging above and
-                also the fact that dateActive may not be present in all documents :)
-            order by $merged/bu:ontology/child::*/bu:changes/bu:change/bu:dateActive ascending
-            return
-                ($parentdoc,
-                <ref>{$merged}</ref>)
-        } </doc>
+    let $doc := let $match := bun:documentitem-with-acl($acl, $doc-uri)
+                return
+                    (: $parts/parent::node() returns all tabs of this doctype :)
+                    bun:get-ref-timeline-activities($match, $parts/parent::node())
     return
         transform:transform($doc, $stylesheet, ())
 };
@@ -2179,14 +2169,18 @@ declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $par
 };
 
 (:~
-:   Retrives all the groups assigned to the MP in the input document-node.
+:   Retrives all the groups assigned to the membership or referenced documents from the 
+:   input document-node.
 :
 : @param docitem
 : @return 
-:   Document node with main document as primary and any group documents assigned to that MP as secondary
+:   Document node with main document as a <bu:ontology/> and any referenced documents within 
+:   <ref/> node
 :   <doc>
 :       <bu:ontology/>
-:       <ref/>
+:       <ref>
+:           <bu:ontology/>
+:       </ref>
 :   </doc>
 :)
 declare function bun:get-ref-assigned-grps($docitem as node(), $docviews as node()) {
@@ -2200,22 +2194,74 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $docviews as node
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology
             }
         </ref>
-        <exclude>
-            {
-                for $view in $docviews/view
-                return
-                    (: must have @check-for attribute first! :)
-                    if($view/@check-for) then (
-                        (: putting a evaluate condition to @check-for... :)
-                        if(not(empty(util:eval(concat("$docitem","//",$view/@check-for))))) then 
-                            ()
-                        else 
-                            <tab>{data($view/@id)}</tab>   
-                     )
-                     else ()
-            }
-        </exclude>
+        {bun:get-excludes($docitem, $docviews)}
     </doc>     
+};
+
+(:~
+:   Retrives all the items to be display on timeline from work-flow in the input document-node.
+:
+: @param docitem
+: @return 
+:   Document node with main document as <bu:ontology/> and any referenced documents that will be part 
+:   part of timeline activities
+:   <doc>
+:       <bu:ontology/>
+:       <ref>
+:           <bu:ontology/>
+:       </ref>
+:   </doc>
+:)
+declare function bun:get-ref-timeline-activities($docitem as node(), $docviews as node()) {
+    <doc>
+        {$docitem}
+        <ref>
+            {$docitem},
+            {
+                for $per-event in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
+                let $docitem := $per-event/ancestor::bu:ontology,
+                    $ln := ($per-event/@href),
+                    $foruri := ($docitem/bu:legislativeItem/@uri),
+                    $type := ($docitem/bu:document/@type),
+                    $merged := (collection(cmn:get-lex-db())/bu:ontology/child::*[@uri eq $ln]/parent::node())
+                (: !+FIX_THIS (ao, 10 Apr 2012) sort does not take effect at the moment due to merging above and
+                    also the fact that dateActive may not be present in all documents :)
+                order by $merged/bu:ontology/child::*/bu:changes/bu:change/bu:dateActive ascending
+                return
+                    $merged
+            }
+        </ref>
+        {bun:get-excludes($docitem, $docviews)}
+    </doc>     
+};
+
+(:~
+:   Adds an <exclude/> node in the returning document to exclude certain tab views.
+:
+: @param docitem
+: @param docviews
+: @return 
+:   exclude node with tabs that will node be rendered on the ui.
+:   <exclude>
+:       <tab/> ++
+:   </exclude>
+:)
+declare function bun:get-excludes($docitem as node(), $docviews as node()) {
+    <exclude>
+        {
+            for $view in $docviews/view
+            return
+                (: must have @check-for attribute first! :)
+                if($view/@check-for) then (
+                    (: putting a evaluate condition to @check-for... :)
+                    if(not(empty(util:eval(concat("$docitem","//",$view/@check-for))))) then 
+                        ()
+                    else 
+                        <tab>{data($view/@id)}</tab>   
+                 )
+                 else ()
+        }
+    </exclude>    
 };
 
 (:~

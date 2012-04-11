@@ -98,8 +98,22 @@
             <span>-</span>
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:legislativeItem/bu:owner/@showAs">
-                    <a href="{bu:ontology/child::*/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
-                        <xsl:value-of select="bu:ontology/child::*/bu:shortName"/>
+                    <xsl:variable name="base-path">
+                        <xsl:choose>
+                            <xsl:when test="$doc-sub-type eq 'event'">
+                                <!-- an event of some document -->
+                                <xsl:value-of select="concat(bu:ontology/bu:legislativeItem/bu:head/bu:eventOf,'/event')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat($doc-sub-type,'/text')"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <a href="{$base-path}?uri={$docIdentifier}" id="{$docIdentifier}">
+                        <!--!+FIX_THIS (ao, 11-Apr-2012) shortName / shortTitle since there is ongoing 
+                            transition to use shortTitle but not yet applied to all document types currently 
+                            only on document type event -->
+                        <xsl:value-of select="(bu:ontology/child::*/bu:shortName,bu:ontology/child::*/bu:shortTitle)"/>
                     </a> sponsored by <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
                 </xsl:when>
                 <xsl:otherwise>

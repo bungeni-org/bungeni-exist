@@ -193,17 +193,17 @@ The "views" are defined with the following rules :
  * "views" are used to group individual "view" definitions
  * "viewgroups" is a container for multiple "views" configuration.
  * "views" support a @name attribute - this must correspond to the type of the document. For examples, if you are defining the views for the "bill" document type, the @name attribute for the "views" element should be *bills*
- * A "view" can have a @tag attribute to denote that is displayed as a "tab" view in the User-Interface(UI).
+ * A "view" can have a @tag attribute to denote that it is displayed only as a "tab" view in the User-Interface(UI).
  
 
 The individual "view" is configured as follows :
- * view/@path - this attribute specifies a url route for the tab i.e. a route/@href configuration
- * view/@id - a unique identifier for the tab (within the context of a "tabs" element)
- * view/@tag - an attribute with value "tab" that marks that view as a tab
- * view/@check-for - By default all view's marked with tab-tag will be rendered. Though if check-for has a value,it will be evaluated as a predicate that must be satisfied for that tab to be visible
- * view/title - the title of the view if it is tagged as a tab view
- * view/template - name of template file which content will be rendered on
- * view/xsl - name of the xsl file that transforms content + templates for UI.
+ * `view/@path` - this attribute specifies a url route for the tab i.e. a route/@href configuration
+ * `view/@id` - a unique identifier for the view (within the context of a "views" element)
+ * `view/@tag` - an attribute with value "tab" that marks that view as a tab for UI display
+ * `view/@check-for` - By default all view's marked with tag wil value "tab" will be rendered. Though if `@check-for` has a value,it will be evaluated as a predicate that must be satisfied for that tab to be visible
+ * `view/title` - the title of the view if it is tagged as a tab view
+ * `view/template` - name of template file which content will be rendered on
+ * `view/xsl` - name of the xsl file that transforms content + templates for UI.
 
 
 {{{
@@ -257,6 +257,9 @@ The individual "view" is configured as follows :
                 <xsl>documents.xsl</xsl>
             </view>
         </views>
+
+        ...
+   </viewgroups>
 }}}
 
 == ACL Groups == 
@@ -279,16 +282,16 @@ The permissions are defined in xml format:
 
 == Order-by, Search-in & Listings Filters == 
 
-These filters contain configuration used by the document types and all options that are made available on legilsative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies no search options, order options or tabbed-view filters for the particular listing.
+These filters contain configuration used by the document types and all options that are made available on legislative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies no search options, order options or tabbed-view filters for the particular listing.
 
 The `<doctype>` must provide the following attributes :
- * `doctype/@category` - pre-defined type in reposited document that defines that generic group type of each document. For example, bills, questions, events belong to a generic type `document` while political-groups, and committes belong to `group`
+ * `doctype/@category` - pre-defined type in reposited documents that defines a generic group-type of each document. For example, bills, questions, events belong to a generic type `document` while political-groups, and committes belong to generic type `group`
  * `doctype/@name` - has the specific name of the document type. For example, `bill` or `committee`.
 
 Each defined `<doctype>` optionally provides the following :
  * `<orderbys/>` - contains parameters for sort field
  * `<searchins/>` - contains parameters for all the search options that can be used to filter
- * `<listingfilters/>` - contains titles and a predicate to be evaluated to group listing documents based on predefined tags in the reposited documents.
+ * `<listingfilters/>` - contains titles and a predicate to be evaluated to group listed documents based on predefined tags.
 
 The filters and options are defined in xml format:
 

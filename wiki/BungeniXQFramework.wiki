@@ -73,13 +73,13 @@ To :
 
 The framework supports internationalization by adding translation messages in the language catalogues.
 
-The catalogues are found in a directory withing the framework named i18n. All the translation must be provided within the `/db/framework/i18n` directory.
+The catalogues are stored in the i18n directory within the root framework directory.
 
-== Structure of a translation catalogues == 
+== Structure of translation catalogues == 
 
 A translation catalogue contains `msg` nodes with an attribute `key` for rendering the translation message. A `lang` attribute must be specified with 2-character ISO language codes as seen in the examples below.
 
-translation catalogue for english: `collection_en.xml`
+a translation catalogue for english: `/db/framework/i18n/collection_en.xml`
 {{{
 <catalogue xml:lang="en">
     <msg key="welcome">Welcome</msg>
@@ -88,7 +88,7 @@ translation catalogue for english: `collection_en.xml`
 </catalogue>
 }}}
 
-translation catalogue for italian: `collection_it.xml`
+a translation catalogue for italian: `/db/framework/i18n/collection_it.xml`
 {{{
 <catalogue xml:lang="it">
     <msg key="welcome">Benvenuto</msg>
@@ -99,13 +99,13 @@ translation catalogue for italian: `collection_it.xml`
 
 == i18n Usage == 
 
-The framework's template files with translatable messages will contain a node in the structure below:
+All template and transformation stylesheets with translatable messages will contain a node in the structure below:
 
 {{{
 <i18n:text key="welcome">Welcome(nt)</i18n:text>
 }}}
 
-The text `Welcome(nt)` is the default, rendered in-case no corresponding message is found in the active language with the `key` provided.
+The `Welcome(nt)` is the default text, rendered in-case no corresponding message is found in the active catalogue with the `key` provided.
 
 For more on i18n module and other usage scenarios. Please check the eXist-db example pages and module documentation (see [http://demo.exist-db.org/exist/extensions.xml#i18n] ).
 

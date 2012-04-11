@@ -1,6 +1,0 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/lexapp/yui/tabview" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" version="1">
-    <resource type="BinaryResource" name="tabview-debug.js" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="tabview-debug.js" mimetype="application/x-javascript"/>
-    <resource type="BinaryResource" name="tabview-min.js" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="tabview-min.js" mimetype="application/x-javascript"/>
-    <resource type="BinaryResource" name="tabview.js" owner="admin" group="dba" mode="755" created="2011-11-23T10:48:10+03:00" modified="2011-11-23T10:48:10+03:00" filename="tabview.js" mimetype="application/x-javascript"/>
-    <subcollection name="assets" filename="assets"/>
-</collection>

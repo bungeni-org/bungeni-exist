@@ -1,6 +1,0 @@
-<collection xmlns="http://exist.sourceforge.net/NS/exist" name="/db/framework/assets/admin" owner="admin" group="biblio.users" mode="644" created="2012-01-17T12:42:06+03:00" version="1">
-    <acl entries="0" version="1"/>
-    <resource type="BinaryResource" name="style.css" owner="admin" group="biblio.users" mode="644" created="2012-01-17T12:42:06+03:00" modified="2012-01-17T12:42:06+03:00" filename="style.css" mimetype="text/css">
-        <acl entries="0" version="1"/>
-    </resource>
-</collection>

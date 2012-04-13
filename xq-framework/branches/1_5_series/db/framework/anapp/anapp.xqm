@@ -1,4 +1,4 @@
-module namespace bun = "http://exist.bungeni.org/bun";
+module namespace akn = "http://exist.bungeni.org/akn";
 (:import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";:)
 import module namespace i18n = "http://exist-db.org/xquery/i18n" at "../i18n.xql";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
@@ -28,50 +28,27 @@ uses bungenicommon
 (:~
 Default Variables
 :)
-declare variable $bun:SORT-BY := 'bu:statusDate';
+declare variable $akn:SORT-BY := '//an:docDate';
 
-declare variable $bun:OFF-SET := 0;
-declare variable $bun:LIMIT := cmn:get-listings-config-limit();
-declare variable $bun:VISIBLEPAGES := cmn:get-listings-config-visiblepages();
-declare variable $bun:DOCNO := 1;
+declare variable $akn:OFF-SET := 0;
+declare variable $akn:LIMIT := cmn:get-listings-config-limit();
+declare variable $akn:VISIBLEPAGES := cmn:get-listings-config-visiblepages();
+declare variable $akn:DOCNO := 1;
 
-(:~
-    Service for checking status of file before update eXist repository
-    @param uri
-        Document URI
-    @param statusdate
-        The status date in the document
-        
-    @return <response>
-                <status>overwrite|new|ignore</status>
-            </response>
-:)
-declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
-    util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
+declare function akn:xqry-build-listing-by-type($type as xs:string) {
 
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]/ancestor::bu:ontology
-    let $doc := <response>        
-        {
-            if($docitem) then (
-                if($statusdate eq "") then 
-                    (:  Means no `bu:statusDate` node in the external document, default is to overwrite  
-                        repository version 
-                    :)
-                    <status>overwrite</status>
-                else if(xs:dateTime($docitem/child::*/bu:statusDate) lt $statusdate cast as xs:dateTime) then 
-                    (: Means eXist version of the doc is old... do replace by all means :)
-                    <status>overwrite</status>
-                else
-                    (: Ambiguous scenario, ignore :)
-                    <status>ignore</status>
-            )
-            else
-                (: Not found on eXist :)
-                <status>new</status>
-        }
-        </response>   
-        
-    return $doc
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/an:akomaNtoso",
+                "/an:",$type,"",
+                "/ancestor::an:akomaNtoso")
+};
+
+declare function akn:xqry-build-listing-by-name($name as xs:string) {
+
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/an:akomaNtoso",
+                "/child::*[@name eq '",$name,"']",
+                "/ancestor::an:akomaNtoso")
 };
 
 (:~
@@ -93,7 +70,7 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 : @return
 :   Evaluates xquery to return document(s) matching permission that was given
 :)
-declare function bun:get-documentitems(
+declare function akn:get-documentitems(
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -106,7 +83,7 @@ declare function bun:get-documentitems(
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
     let $tab := xs:string(request:get-parameter("tab",'uc'))    
-    let $coll := collection(cmn:get-lex-db())/an:akomaNtoso/an:bill/ancestor::an:akomaNtoso
+    let $coll := util:eval(akn:xqry-build-listing-by-type($type))
     let $listings-filter := cmn:get-listings-config($type)
     let $getqrystr := xs:string(request:get-query-string())    
     
@@ -122,13 +99,13 @@ declare function bun:get-documentitems(
         <paginator>
         (: Count the total number of documents | active-tab count if the view is tabbed :)
         <count>{
-                count(collection(cmn:get-lex-db())/an:akomaNtoso/an:bill/ancestor::an:akomaNtoso)
+                count($coll)
          }</count>
         <tags>
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(collection(cmn:get-lex-db())/an:akomaNtoso/an:bill/ancestor::an:akomaNtoso) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count($coll) }">{data($listing/@name)}</tag>
          }
          </tags>         
         <documentType>{$type}</documentType>
@@ -137,13 +114,13 @@ declare function bun:get-documentitems(
         <i18nlabel>{$type}</i18nlabel>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
-        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+        <visiblePages>{$akn:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {
                 for $match in subsequence($coll,$query-offset,$limit) 
                 return 
-                    bun:get-reference($match)          
+                    akn:get-reference($match)          
         } 
         </alisting>
     </docs>
@@ -160,7 +137,7 @@ declare function bun:get-documentitems(
        
 };
 
-declare function bun:get-reference($docitem as node()) {
+declare function akn:get-reference($docitem as node()) {
     <doc>
         {$docitem}
         <ref>
@@ -183,23 +160,84 @@ declare function bun:get-reference($docitem as node()) {
 : @return
 :   Documents based on filter parameters passed in.
 :)
-declare function bun:get-bills(
+declare function akn:get-acts(
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
         
-        bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+        akn:get-documentitems($acl, "act", "act/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
 };
 
-declare function bun:get-questions(
+declare function akn:get-bills(
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+        
+        akn:get-documentitems($acl, "bill", "bill/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
+};
+
+declare function akn:get-debates(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+        
+        akn:get-documentitems($acl, "debate", "debate/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
+};
+
+declare function akn:get-reports(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+        
+        akn:get-documentitems($acl, "debateReport", "report/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
+};
+
+declare function akn:get-amendments(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+        
+  akn:get-documentitems($acl, "amendment", "amendment/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
+};
+
+declare function akn:get-judgements(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+        
+        akn:get-documentitems($acl, "judgement", "judgement/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
+};
+
+declare function akn:get-gazettes(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+        
+        akn:get-documentitems($acl, "officialGazette", "gazette/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
+};
+
+declare function akn:get-misc(
+        $acl as xs:string, 
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string) as element() {
+        
+        akn:get-documentitems($acl, "doc", "misc/text", "listings.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 (:~
@@ -210,23 +248,13 @@ declare function bun:get-questions(
 : @return
     Returns the fetched document as a XML document
 :)
-declare function bun:get-raw-xml($docid as xs:string) as element() {
+declare function akn:get-raw-xml($docid as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
     functx:remove-elements-deep(
         collection(cmn:get-lex-db())/bu:ontology[@type='document'][child::bu:legislativeItem[@uri eq $docid]],
         ('bu:versions', 'bu:permissions', 'bu:changes')
     )
-};
- 
-declare function bun:strip-namespace($e as node()) {
-  element {QName((), local-name($e))} {
-    for $child in $e/(@*,*)
-    return
-      if ($child instance of element())
-      then bun:strip-namespace($child)
-      else $child
-  }
 };
 
 (:~
@@ -238,7 +266,7 @@ declare function bun:strip-namespace($e as node()) {
 : @param tab
 :   The corresponding transform template passed by the calling funcction
 :)
-declare function bun:get-parl-doc($acl as xs:string, 
+declare function akn:get-akn-doc($acl as xs:string, 
             $doc-uri as xs:string, 
             $parts as node()) as element()* {
 

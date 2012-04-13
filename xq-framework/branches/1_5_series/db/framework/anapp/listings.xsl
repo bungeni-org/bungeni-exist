@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/2.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -32,10 +32,7 @@
         </paginator>
         <alisting>
             <doc>
-                <bu:ontology .../>
-                 <ref>
-                    <bu:ontology/>
-                 </ref>
+                <an:akomaNtoso .../>
             </doc>
         </alisting>
     </docs>
@@ -139,7 +136,7 @@
         <xsl:variable name="docIdentifier" select="an:akomaNtoso/child::*/an:meta/an:identification/an:FRBRWork/an:FRBRuri/@value"/>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="an:akomaNtoso/child::*/an:preface//an:docTitle"/>
+                <xsl:value-of select="(an:akomaNtoso/child::*/an:preface/an:p/an:docTitle,                                         an:akomaNtoso/child::*/an:preface/an:p/an:docProponent,                                         an:akomaNtoso/child::*/an:debateContent/an:questions/an:heading,                                         an:akomaNtoso/child::*/an:debateContent/an:questions/an:heading/child::*/an:heading,                                         an:akomaNtoso/child::*/an:header//an:neutralCitation,                                         an:akomaNtoso/child::*/an:coverPage//an:p)"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
@@ -152,11 +149,18 @@
                     </tr>
                     <tr>
                         <td class="labels">
-                            <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>:</td>
+                            <i18n:text key="authors">authors(nt)</i18n:text>:</td>
                         <td>
-                            <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="an:akomaNtoso/child::*/an:meta/an:references/an:TLCPerson/@showAs"/>
-                            </a>
+                            <xsl:for-each select="an:akomaNtoso/child::*/an:meta/an:references/child::*[name(.) eq 'TLCPerson' or                                                                                                          name(.) eq 'TLCRole']">
+                                <xsl:sort select="name(.)" order="descending"/>
+                                <a href="tlc?uri={@href}" id="{@id}">
+                                    <xsl:value-of select="@showAs"/>
+                                </a>
+                                <xsl:if test="@id eq 'author'">
+                                        (<xsl:value-of>work author</xsl:value-of>)                                            
+                                    </xsl:if>
+                                <xsl:if test="position() &lt; last()">,&#160;</xsl:if>
+                            </xsl:for-each>
                         </td>
                     </tr>
                     <tr>

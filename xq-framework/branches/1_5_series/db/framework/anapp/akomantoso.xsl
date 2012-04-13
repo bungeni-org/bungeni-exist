@@ -18,7 +18,7 @@
                 <xsl:with-param name="uri" select="docIdentifier"/>
             </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
-                <div id="doc-main-section" style="padding:15px;">
+                <div id="doc-main-section" class="akn-doc">
                     <xsl:apply-templates/>
                 </div>
             </div>
@@ -33,119 +33,71 @@
     </xsl:template>
     <xsl:template match="*[@class='sup']">
         <sup>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:apply-templates/>
         </sup>
     </xsl:template>
     <xsl:template match="an:akomaNtoso">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">main_container akomantoso</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:act">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">act_container act</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:bill">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">bill_container bill</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:doc">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">doc_container doc</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:report">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">report_container report</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:debateRecord">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">debaterecord_container debaterecord</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:judgement">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">judgment_container judgment</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:preface">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">preface_container preface</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:preamble">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">preamble_container preamble</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:conclusions">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">conclusion_container conclusions</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:header">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">header_container header</xsl:attribute>
             <xsl:apply-templates/>
         </div>
@@ -156,14 +108,7 @@
                 <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
         </xsl:variable>
         <div class="attachments">
-            <xsl:attribute name="xp">
-                <xsl:value-of select="$xpval"/>
-                <!--	<xsl:for-each select="ancestor-or-self::node()"><xsl:value-of select="concat(name(),count(preceding::*))" />/</xsl:for-each>-->
-            </xsl:attribute> ATTACHMENTS: <ul>
-                <xsl:attribute name="xp">
-                    <xsl:value-of select="$xpval"/>
-                    <!--	<xsl:for-each select="ancestor-or-self::node()"><xsl:value-of select="concat(name(),count(preceding::*))" />/</xsl:for-each>-->
-                </xsl:attribute>
+            ATTACHMENTS: <ul>
                 <xsl:attribute name="class">attachments_container attachments</xsl:attribute>
                 <xsl:apply-templates/>
             </ul>
@@ -175,15 +120,7 @@
                 <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
         </xsl:variable>
         <li>
-            <xsl:attribute name="xp">
-                <xsl:value-of select="$xpvalo"/>
-                <!--	<xsl:for-each select="ancestor-or-self::node()"><xsl:value-of select="concat(name(),count(preceding::*))" />/</xsl:for-each>-->
-            </xsl:attribute>
             <a>
-                <xsl:attribute name="xp">
-                    <xsl:value-of select="$xpvalo"/>
-                    <!--	<xsl:for-each select="ancestor-or-self::node()"><xsl:value-of select="concat(name(),count(preceding::*))" />/</xsl:for-each>-->
-                </xsl:attribute>
                 <xsl:attribute name="class">attachment attachment</xsl:attribute>
                 <xsl:attribute name="target">_blank</xsl:attribute>
                 <xsl:if test="@href">
@@ -198,59 +135,35 @@
     <xsl:template match="an:body">
         <xsl:if test="count(//an:sidenote) = 0">
             <div class="bodyWithoutSidenotes">
-                <xsl:attribute name="xp">
-                    <xsl:for-each select="ancestor-or-self::node()">
-                        <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                </xsl:attribute>
                 <xsl:apply-templates/>
             </div>
         </xsl:if>
         <xsl:if test="count(//an:sidenote) &gt; 0">
             <div class="bodyWithSidenotes">
-                <xsl:attribute name="xp">
-                    <xsl:for-each select="ancestor-or-self::node()">
-                        <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                </xsl:attribute>
                 <xsl:apply-templates/>
             </div>
         </xsl:if>
     </xsl:template>
     <xsl:template match="an:debate">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">debate_container debate</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:mainContent">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">maincontent_container maincontent</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:judgementBody">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">judgmentBody_container judgmentBody</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:section">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy section</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -262,10 +175,6 @@
     </xsl:template>
     <xsl:template match="an:part">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy part</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -287,10 +196,6 @@
                     <xsl:for-each select="node()">
                         <xsl:if test="node()">
                             <li>
-                                <xsl:attribute name="xp">
-                                    <xsl:for-each select="ancestor-or-self::node()">
-                                        <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                                </xsl:attribute>
                                 <xsl:attribute name="class">hierarchy paragraph</xsl:attribute>
                                 <xsl:if test="@id">
                                     <xsl:attribute name="id">
@@ -305,33 +210,14 @@
             </xsl:when>
             <xsl:otherwise>
                 <div>
-                    <xsl:attribute name="xp">
-                        <xsl:for-each select="ancestor-or-self::node()">
-                            <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                    </xsl:attribute>
                     <xsl:attribute name="class">heirarchy_content</xsl:attribute>
                     <xsl:apply-templates/>
                 </div>
             </xsl:otherwise>
         </xsl:choose>
-        <!--div>
-			<xsl:attribute name="xp">
-				<xsl:for-each select="ancestor-or-self::node()"><xsl:value-of select="concat(name(),count(preceding::*))" />/</xsl:for-each>
-			</xsl:attribute>			
-            <xsl:attribute name="class">hierarchy paragraph</xsl:attribute>
-			<xsl:if test="@id">
-				<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
-			</xsl:if>
-
-            <xsl:apply-templates/>
-        </div-->
     </xsl:template>
     <xsl:template match="an:chapter">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy chapter</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -343,10 +229,6 @@
     </xsl:template>
     <xsl:template match="an:title">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy title</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -358,10 +240,6 @@
     </xsl:template>
     <xsl:template match="an:book">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy book</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -373,10 +251,6 @@
     </xsl:template>
     <xsl:template match="an:tome">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy tome</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -388,10 +262,6 @@
     </xsl:template>
     <xsl:template match="an:article">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy article</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -403,10 +273,6 @@
     </xsl:template>
     <xsl:template match="an:clause">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy clause</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -418,10 +284,6 @@
     </xsl:template>
     <xsl:template match="an:subsection">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy subsection</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -433,10 +295,6 @@
     </xsl:template>
     <xsl:template match="an:subpart">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy subpart</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -453,10 +311,6 @@
                 <xsl:for-each select="node()">
                     <xsl:if test="node()">
                         <li>
-                            <xsl:attribute name="xp">
-                                <xsl:for-each select="ancestor-or-self::node()">
-                                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                            </xsl:attribute>
                             <xsl:attribute name="class">hierarchy subparagraph</xsl:attribute>
                             <xsl:if test="@id">
                                 <xsl:attribute name="id">
@@ -472,10 +326,6 @@
     </xsl:template>
     <xsl:template match="an:subchapter">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy subchapter</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -487,10 +337,6 @@
     </xsl:template>
     <xsl:template match="an:subtitle">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy subtitle</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -502,10 +348,6 @@
     </xsl:template>
     <xsl:template match="an:subclause">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy subclause</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -517,180 +359,109 @@
     </xsl:template>
     <xsl:template match="an:content">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:entity">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:listIntroduction">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:blockList">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:affectedDocument">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:amendmentBody">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:amendmentHeading">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:amendmentContent">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:amendmentJustification">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:amendmentReference">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:point">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:interstitial">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:collectionContent">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:documentCollection">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <!--xsl:template match="an:paragraph">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
+
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template-->
     <xsl:template match="an:caption">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">heirarchy_content</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:num">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy_num num</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:heading">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy_heading heading <xsl:value-of select="@class"/>
             </xsl:attribute>
             <xsl:apply-templates/>
@@ -698,40 +469,24 @@
     </xsl:template>
     <xsl:template match="an:subheading">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy_subheading subheading</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:sidenote">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy_sidenote sidenote</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:from">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speec_from from</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:administrationOfOath">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy AdministrationOfOath</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -743,10 +498,6 @@
     </xsl:template>
     <xsl:template match="an:declarationOfVote">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy DeclarationOfVote</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -758,10 +509,6 @@
     </xsl:template>
     <xsl:template match="an:communication">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy Communication</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -773,10 +520,6 @@
     </xsl:template>
     <xsl:template match="an:petitions">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy Petitions</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -788,10 +531,6 @@
     </xsl:template>
     <xsl:template match="an:papers">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy Papers</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -803,10 +542,6 @@
     </xsl:template>
     <xsl:template match="an:noticesOfMotion">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy NoticesOfMotion</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -818,10 +553,6 @@
     </xsl:template>
     <xsl:template match="an:questions">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy Questions</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -833,10 +564,6 @@
     </xsl:template>
     <xsl:template match="an:address">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy Address</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -848,10 +575,6 @@
     </xsl:template>
     <xsl:template match="an:proceduralMotions">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy ProceduralMotions</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -863,10 +586,6 @@
     </xsl:template>
     <xsl:template match="an:pointOfOrder">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy PointOfOrder</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -878,10 +597,6 @@
     </xsl:template>
     <xsl:template match="an:subdivision">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech_hierarchy subdivision</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -893,70 +608,42 @@
     </xsl:template>
     <xsl:template match="an:speech">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech speech</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:question">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech question</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:answer">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech answer</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:other">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech other</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:scene">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">speech comment</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:list">
         <ol>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">hierarchy list</xsl:attribute>
             <xsl:apply-templates/>
         </ol>
     </xsl:template>
     <xsl:template match="an:introduction">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">judgment_part introduction</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -968,10 +655,6 @@
     </xsl:template>
     <xsl:template match="an:background">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">judgment_part background</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -983,10 +666,6 @@
     </xsl:template>
     <xsl:template match="an:motivation">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">judgment_part motivation</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -998,10 +677,6 @@
     </xsl:template>
     <xsl:template match="an:decision">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">judgment_part decision</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -1013,10 +688,6 @@
     </xsl:template>
     <xsl:template match="an:tblock">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">generic_block tblock</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -1026,37 +697,15 @@
             <xsl:apply-templates/>
         </div>
     </xsl:template>
-
-    <!--xsl:template match="an:item">
-		<li>
-			<xsl:attribute name="xp">
-				<xsl:for-each select="ancestor-or-self::node()"><xsl:value-of select="concat(name(),count(preceding::*))" />/</xsl:for-each>
-			</xsl:attribute>			
-            <xsl:attribute name="class">hierarchy item</xsl:attribute>
-			<xsl:if test="@id">
-				<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
-			</xsl:if>
-
-            <xsl:apply-templates/>
-        </li>
-		
-	</xsl:template-->
     <xsl:template match="an:item">
         <xsl:choose>
             <xsl:when test="contains(an:num/text(), '1.')">
                 <ol class="numeration">
-                    <xsl:attribute name="xp">
-                        <xsl:for-each select="ancestor-or-self::node()">
-                            <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                    </xsl:attribute>
+
                     <!--find the members of the list, assuming one item per member-->
                     <xsl:for-each select="node()">
                         <xsl:if test="node()">
                             <li>
-                                <xsl:attribute name="xp">
-                                    <xsl:for-each select="ancestor-or-self::node()">
-                                        <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                                </xsl:attribute>
                                 <xsl:attribute name="class">hierarchy item</xsl:attribute>
                                 <xsl:if test="@id">
                                     <xsl:attribute name="id">
@@ -1071,18 +720,11 @@
             </xsl:when>
             <xsl:otherwise>
                 <ul class="unordereds">
-                    <xsl:attribute name="xp">
-                        <xsl:for-each select="ancestor-or-self::node()">
-                            <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                    </xsl:attribute>
+
                     <!--find the members of the list, assuming one item per member-->
                     <xsl:for-each select="node()">
                         <xsl:if test="node()">
                             <li>
-                                <xsl:attribute name="xp">
-                                    <xsl:for-each select="ancestor-or-self::node()">
-                                        <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-                                </xsl:attribute>
                                 <xsl:attribute name="class">hierarchy item</xsl:attribute>
                                 <xsl:if test="@id">
                                     <xsl:attribute name="id">
@@ -1109,20 +751,12 @@
     </xsl:template>
     <xsl:template match="an:toc">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">toc</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:tocItem">
         <p>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">tocitem</xsl:attribute>
             <xsl:if test="@href">
                 <xsl:attribute name="href">
@@ -1135,10 +769,6 @@
     <xsl:template match="an:docType">
         <xsl:text> </xsl:text>
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta ActType</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1147,10 +777,6 @@
     <xsl:template match="an:docTitle">
         <xsl:text> </xsl:text>
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta ActTitle</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1159,10 +785,6 @@
     <xsl:template match="an:docNumber">
         <xsl:text> </xsl:text>
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta ActNumber</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1171,10 +793,6 @@
     <xsl:template match="an:docProponent">
         <xsl:text> </xsl:text>
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta ActProponent</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1183,10 +801,6 @@
     <xsl:template match="an:docDate">
         <xsl:text> </xsl:text>
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta ActDate</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1195,10 +809,6 @@
     <xsl:template match="an:docPurpose">
         <xsl:text> </xsl:text>
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta ActPurpose</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1206,90 +816,54 @@
     </xsl:template>
     <xsl:template match="an:judgementType">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta judgmentType</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:judgementTitle">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta judgmentTitle</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:judgementNumber">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta judgmentNumber</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:courtType">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta courtType</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:neutralCitation">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta neutralCitation</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:party">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta party</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:judge">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta judge</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:judgementDate">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">inline_meta judgmentDate</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:mref">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">reference_container mref</xsl:attribute>
             <xsl:apply-templates/>
         </div>
@@ -1297,126 +871,67 @@
     <xsl:template match="an:ref">
         <xsl:text> </xsl:text>
         <a>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">ref</xsl:attribute>
-            <xsl:attribute name="ondblclick">
-                <!--		<xsl:if test="@href">
-						<xsl:if test="substring(@href,1,1) = '#'">
-							<xsl:attribute name="href">
-								<xsl:value-of select="@href"/>
-							</xsl:attribute>
-						</xsl:if>
-						<xsl:if test="substring(@href,1,1) != '#'">
-							<xsl:attribute name="href">
-								<xsl:value-of select="concat('http://an.web.cs.unibo.it',@href)"/>
-							</xsl:attribute>
-							<xsl:attribute name="target">_blank</xsl:attribute>
-						</xsl:if>
-						</xsl:if> -->
-                    goTo('<xsl:value-of select="@href"/>'); </xsl:attribute>
             <xsl:apply-templates/>
         </a>
         <xsl:text> </xsl:text>
     </xsl:template>
     <xsl:template match="an:rref">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">reference_container rref</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:mod">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">modification</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:mmod">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">modification_container mmod</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:rmod">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">modification_container rmod</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:quotedText">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">quoted quotedText</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:quotedStructure">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">quoted quotedStructure</xsl:attribute>
             <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="an:def">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">def</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:ins">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">ins</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:del">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">del</xsl:attribute>
             <xsl:apply-templates/>
         </span>
     </xsl:template>
     <xsl:template match="an:omissis">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">omissis</xsl:attribute> (...) </span>
     </xsl:template>
     <xsl:template match="an:noteRef">
@@ -1434,10 +949,6 @@
     </xsl:template>
     <xsl:template match="an:recordedTime">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">recorderedTime</xsl:attribute>
             <xsl:apply-templates/>
         </span>
@@ -1453,10 +964,6 @@
     </xsl:template>
     <xsl:template match="an:hcontainer">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">generic_hierarchy hcontainer</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -1468,10 +975,6 @@
     </xsl:template>
     <xsl:template match="an:container">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">generic_container container</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -1483,10 +986,6 @@
     </xsl:template>
     <xsl:template match="an:block">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">generic_block block</xsl:attribute>
             <xsl:if test="@name">
                 <xsl:attribute name="name">
@@ -1498,10 +997,6 @@
     </xsl:template>
     <xsl:template match="an:inline">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">generic_inline inline </xsl:attribute>
             <xsl:if test="@name">
                 <xsl:attribute name="name">
@@ -1513,10 +1008,6 @@
     </xsl:template>
     <xsl:template match="an:marker">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">generic_marker marker</xsl:attribute>
             <xsl:if test="@name">
                 <xsl:attribute name="name">
@@ -1528,10 +1019,6 @@
     </xsl:template>
     <xsl:template match="an:foreign">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">foreign_elements foreign</xsl:attribute>
             <xsl:if test="@name">
                 <xsl:attribute name="name">
@@ -1543,10 +1030,6 @@
     </xsl:template>
     <xsl:template match="an:div">
         <div>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_container div</xsl:attribute>
             <xsl:if test="@id">
                 <xsl:attribute name="id">
@@ -1557,32 +1040,39 @@
         </div>
     </xsl:template>
     <xsl:template match="an:p">
-        <p>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
-            <xsl:attribute name="class">html_paragraph p <xsl:value-of select="@class"/>
-            </xsl:attribute>
-            <xsl:apply-templates/>
-        </p>
+        <xsl:variable name="prefaced1" select="name(./parent::*) eq 'coverPage'"/>
+        <xsl:variable name="prefaced2" select="name(./parent::*) eq 'preface'"/>
+        <xsl:variable name="prefaced3" select="name(./parent::*) eq 'subdivision'"/>
+        <xsl:variable name="prefaced4" select="name(./parent::*) eq 'header'"/>
+        <xsl:choose>
+            <xsl:when test="$prefaced1 or $prefaced2 or $prefaced3 or $prefaced4">
+                <!-- centering the headers -->
+                <p>
+                    <xsl:attribute name="style">
+                        <xsl:value-of>text-align:center</xsl:value-of>
+                    </xsl:attribute>
+                    <xsl:attribute name="class">html_paragraph p <xsl:value-of select="@class"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates/>
+                </p>
+            </xsl:when>
+            <xsl:otherwise>
+                <p>
+                    <xsl:attribute name="class">html_paragraph p <xsl:value-of select="@class"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates/>
+                </p>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     <xsl:template match="an:li">
         <li>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_list_item li</xsl:attribute>
             <xsl:apply-templates/>
         </li>
     </xsl:template>
     <xsl:template match="an:span">
         <span>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_inline span <xsl:value-of select="@class"/>
             </xsl:attribute>
             <xsl:if test="@name">
@@ -1595,29 +1085,17 @@
     </xsl:template>
     <xsl:template match="an:b">
         <b>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_bold b</xsl:attribute>
             <xsl:apply-templates/>
         </b>&#160; </xsl:template>
     <xsl:template match="an:i">
         <i>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_italic i</xsl:attribute>
             <xsl:apply-templates/>
         </i>
     </xsl:template>
     <xsl:template match="an:a">
         <a>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_anchor a</xsl:attribute>
             <xsl:if test="@href">
                 <xsl:attribute name="href">
@@ -1629,10 +1107,6 @@
     </xsl:template>
     <xsl:template match="an:img">
         <img>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_img img</xsl:attribute>
             <xsl:if test="@src">
                 <xsl:attribute name="src">
@@ -1644,30 +1118,18 @@
     </xsl:template>
     <xsl:template match="an:ul">
         <ul>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_unordered_list ul</xsl:attribute>
             <xsl:apply-templates/>
         </ul>
     </xsl:template>
     <xsl:template match="an:ol">
         <ol>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_ordered_list ol</xsl:attribute>
             <xsl:apply-templates/>
         </ol>
     </xsl:template>
     <xsl:template match="an:table">
         <table>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_table table</xsl:attribute>
             <xsl:if test="@border">
                 <xsl:attribute name="border">
@@ -1689,20 +1151,12 @@
     </xsl:template>
     <xsl:template match="an:tr">
         <tr>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_table_row tr</xsl:attribute>
             <xsl:apply-templates/>
         </tr>
     </xsl:template>
     <xsl:template match="an:th">
         <th>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_table_heading_column th</xsl:attribute>
             <xsl:if test="@colspan">
                 <xsl:attribute name="colspan">
@@ -1719,10 +1173,6 @@
     </xsl:template>
     <xsl:template match="an:td">
         <td>
-            <xsl:attribute name="xp">
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:value-of select="concat(name(),count(preceding::*))"/>/</xsl:for-each>
-            </xsl:attribute>
             <xsl:attribute name="class">html_table_column td</xsl:attribute>
             <xsl:if test="@colspan">
                 <xsl:attribute name="colspan">

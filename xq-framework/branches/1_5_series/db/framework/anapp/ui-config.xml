@@ -55,7 +55,18 @@
         <route href="/business">
             <title>Business</title>
             <navigation>business</navigation>
-        </route>       
+        </route>     
+        <!-- #ACTS -->
+        <route href="/acts">
+            <title>Business | Acts</title>
+            <navigation>business</navigation>
+            <subnavigation>acts</subnavigation>
+        </route>
+        <route href="/act/text">
+            <title>Business | Act</title>
+            <navigation>business</navigation>
+            <subnavigation>acts</subnavigation>
+        </route>        
         <!-- #BILLS -->
         <route href="/bills">
             <title>Business | Bills</title>
@@ -77,26 +88,71 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <!-- #QUESTIONS -->
-        <route href="/questions">
+        <!-- #AMENDMENTS -->
+        <route href="/amendments">
+            <title>Business | Amendments </title>
+            <navigation>business</navigation>
+            <subnavigation>amendments</subnavigation>
+        </route>
+        <route href="/amendment/text">
+            <title>Business | Debate Text</title>
+            <navigation>business</navigation>
+            <subnavigation>debates</subnavigation>
+        </route>        
+        <!-- #DEBATES -->
+        <route href="/debates">
             <title>Business | Questions </title>
             <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
+            <subnavigation>debates</subnavigation>
         </route>
-        <route href="/question/text">
-            <title>Business | Question Text</title>
+        <route href="/debate/text">
+            <title>Business | Debate Text</title>
             <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
+            <subnavigation>debates</subnavigation>
         </route>
-        <route href="/question/timeline">
-            <title>Business | Question Timeline</title>
+        <!-- #DEBATE-REPORTS -->
+        <route href="/reports">
+            <title>Business | Debate Reports </title>
             <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
+            <subnavigation>reports</subnavigation>
         </route>
-        <route href="/question/details">
-            <title>Business | Related Infomation</title>
+        <route href="/report/text">
+            <title>Business | Debate Report Text</title>
             <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
+            <subnavigation>reports</subnavigation>
+        </route>     
+        <!-- #JUDGEMENTS -->
+        <route href="/judgements">
+            <title>Business | Judgements </title>
+            <navigation>business</navigation>
+            <subnavigation>judgements</subnavigation>
+        </route>
+        <route href="/judgement/text">
+            <title>Business | Judgement Text</title>
+            <navigation>business</navigation>
+            <subnavigation>judgements</subnavigation>
+        </route>  
+        <!-- #OFFICIAL_GAZETTE -->
+        <route href="/gazettes">
+            <title>Business | Official Gazettes </title>
+            <navigation>business</navigation>
+            <subnavigation>gazettes</subnavigation>
+        </route>
+        <route href="/gazette/text">
+            <title>Business | Official Gazette Text</title>
+            <navigation>business</navigation>
+            <subnavigation>gazettes</subnavigation>
+        </route>
+        <!-- #MISCELLANEOUS -->
+        <route href="/misc">
+            <title>Business | Miscellaneous AKN Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>misc</subnavigation>
+        </route>
+        <route href="/misc/text">
+            <title>Business | Miscellaneous Text</title>
+            <navigation>business</navigation>
+            <subnavigation>misc</subnavigation>
         </route>
     </routes>
     
@@ -139,23 +195,28 @@
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
                 <ul class="theme-lev-1" id="portal-personaltools">
                     <li>
+                        <a name="acts" href="acts">
+                            <i18n:text key="acts">acts(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
                         <a name="bills" href="bills">
                             <i18n:text key="bills">bills(nt)</i18n:text>
                         </a>
                     </li>
                     <li>
-                        <a name="questions" href="questions">
-                            <i18n:text key="questions">questions(nt)</i18n:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a name="reports" href="reports">
-                            <i18n:text key="reports">reports(nt)</i18n:text>
+                        <a name="amendments" href="amendments">
+                            <i18n:text key="amendments">amendments(nt)</i18n:text>
                         </a>
                     </li>
                     <li>
                         <a name="debates" href="debates">
                             <i18n:text key="debates">debates(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="reports" href="reports">
+                            <i18n:text key="reports">reports(nt)</i18n:text>
                         </a>
                     </li>
                     <li>
@@ -166,6 +227,11 @@
                     <li>
                         <a name="gazettes" href="gazettes">
                             <i18n:text key="gazettes">gazettes(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="misc" href="misc">
+                            <i18n:text key="misc">miscellaneous(nt)</i18n:text>
                         </a>
                     </li>
                 </ul>
@@ -190,53 +256,83 @@
         Tab Groups
         -->
     <viewgroups>
+        <views name="act">
+            <view path="bills" id="listing" tag="listing">
+                <template>listings.xml</template>
+                <xsl>listings.xsl</xsl>
+            </view>
+            <view path="act/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
         <views name="bill">
             <view path="bills" id="listing" tag="listing">
-                <template>bills.xml</template>
-                <xsl>legislativeitem-listing.xsl</xsl>
+                <template>listings.xml</template>
+                <xsl>listings.xsl</xsl>
             </view>
             <view path="bill/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
-                <template>bill.xml</template>
-                <xsl>akomantoso.xsl</xsl>
-            </view>
-            <view path="bill/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
-                <title>
-                    <i18n:text key="tab-history">history(nt)</i18n:text>
-                </title>
-                <template>changes.xml</template>
-                <xsl>akomantoso.xsl</xsl>
-            </view>
-            <view path="bill/details" id="related" tag="tab">
-                <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
-                </title>
-                <template>details.xml</template>
+                <template>akomantoso.xml</template>
                 <xsl>akomantoso.xsl</xsl>
             </view>
         </views>
-        <views name="question">
-            <view path="question/text" id="text" tag="tab">
+        <views name="amendment">
+            <view path="amendment/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
-                <template>question.xml</template>
+                <template>akomantoso.xml</template>
                 <xsl>akomantoso.xsl</xsl>
             </view>
-            <view path="question/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+        </views>
+        <views name="debate">
+            <view path="debate/text" id="text" tag="tab">
                 <title>
-                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
-                <template>changes.xml</template>
+                <template>akomantoso.xml</template>
                 <xsl>akomantoso.xsl</xsl>
             </view>
-            <view path="question/details" id="related" tag="tab">
+        </views>
+        <views name="report">
+            <view path="report/text" id="text" tag="tab">
                 <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
-                <template>details.xml</template>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="judgement">
+            <view path="judgement/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="gazette">
+            <view path="gazette/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="misc">
+            <view path="misc/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
                 <xsl>akomantoso.xsl</xsl>
             </view>
         </views>
@@ -251,155 +347,53 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype category="document" name="bill">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
-            </searchins>
+        <doctype category="document" name="act">
             <listingfilters>
                 <listingfilter id="uc" name="current">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="question">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
-            </searchins>
+        <doctype category="document" name="bill">
+            <listingfilters>
+                <listingfilter id="uc" name="current">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="amendment">
+            <listingfilters>
+                <listingfilter id="uc" name="current">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="debate">
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="motion">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">All</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
-            </searchins>
+        <doctype category="document" name="report">
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="tableddocument">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
-            </searchins>
+        <doctype category="document" name="judgement">
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="agendaitem">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
-            </searchins>
+        <doctype category="document" name="gazette">
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="event"/>
-        <doctype category="group" name="committee">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
-            </searchins>
-        </doctype>
-        <doctype category="group" name="political-group">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:group/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:group/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
-            </searchins>
+        <doctype category="document" name="misc">
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="group" name="office"/>
-        <doctype category="group" name="ministry"/>
-        <doctype category="group" name="government"/>
-        <doctype category="group" name="groupsitting"/>
-        <doctype category="membership" name="membership">
-            <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-            </orderbys>
-            <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName" default="true">First Name</searchin>
-                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
-                <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
-            </searchins>
-            <listingfilters>
-                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
-                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
-            </listingfilters>
-        </doctype>
-        <doctype category="address" name="address"/>
-        <doctype category="report" name="report"/>
     </doctypes>
-    
-    <!-- Document status types -->
-    <statuses>
-        <status>attached</status>
-        <status>active</status>
-        <status>admissible</status>
-        <status>gazetted</status>
-        <status>response_completed</status>
-        <status>published_agenda</status>
-        <status>public</status>
-    </statuses>
 </ui>

@@ -20,24 +20,10 @@ import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 (:~
 Application imports
 :)
-import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni.xqm";
+import module namespace akn = "http://exist.bungeni.org/akn" at "anapp.xqm";
 import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm"; 
 
-(:~
-The functions here are called from the app-controller.
-
-The functions here must follow the app-controller signature / pattern
-
-declare function rou:func-name(
-        $EXIST-PATH as xs:string, 
-        $EXIST-ROOT as xs:string, 
-        $EXIST-CONTROLLER as xs:string, 
-        $EXIST-RESOURCE as xs:string, 
-        $REL-PATH as xs:string
-)
-
-:)
 
 declare function rou:get-home($EXIST-PATH as xs:string, 
                              $EXIST-ROOT as xs:string, 
@@ -69,11 +55,11 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
                     $tab := xs:string(request:get-parameter("tab",'uc')),
-                    $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $sortby := xs:string(request:get-parameter("s",$akn:SORT-BY)),
+                    $offset := xs:integer(request:get-parameter("offset",$akn:OFF-SET)),
+                    $limit := xs:integer(request:get-parameter("limit",$akn:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $sortby),
+                    $act-entries-tmpl := akn:get-documentitems($acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $sortby),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($use-tmpl)/xh:div, $act-entries-tmpl)
     								 } 
@@ -88,6 +74,24 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
     								    )                             
 };
 
+declare function rou:get-acts(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+      rou:listing-documentitem($EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "listings.xml",
+                             "act",
+                             "act/text",
+                             "listings.xsl")
+};
+
 declare function rou:get-bills(
                         $EXIST-PATH as xs:string, 
                         $EXIST-ROOT as xs:string, 
@@ -100,13 +104,31 @@ declare function rou:get-bills(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "bills.xml",
+                             "listings.xml",
                              "bill",
                              "bill/text",
-                             "legislativeitem-listing.xsl")
+                             "listings.xsl")
 };
 
-declare function rou:get-questions(
+declare function rou:get-debates(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+      rou:listing-documentitem($EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "listings.xml",
+                             "debate",
+                             "debate/text",
+                             "listings.xsl")
+};
+
+declare function rou:get-amendments(
                         $EXIST-PATH as xs:string, 
                         $EXIST-ROOT as xs:string, 
                         $EXIST-CONTROLLER as xs:string, 
@@ -118,31 +140,13 @@ declare function rou:get-questions(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "questions.xml",
-                             "question",
-                             "question/text",
-                             "legislativeitem-listing.xsl")
+                             "listings.xml",
+                             "amendment",
+                             "amendment/text",
+                             "listings.xsl")
 };
 
-declare function rou:get-motions(
-                        $EXIST-PATH as xs:string, 
-                        $EXIST-ROOT as xs:string, 
-                        $EXIST-CONTROLLER as xs:string, 
-                        $EXIST-RESOURCE as xs:string, 
-                        $REL-PATH as xs:string
-                        ) {
-     rou:listing-documentitem($EXIST-PATH, 
-                             $EXIST-ROOT, 
-                             $EXIST-CONTROLLER, 
-                             $EXIST-RESOURCE, 
-                             $REL-PATH,
-                             "motions.xml",
-                             "motion",
-                             "motion/text",
-                             "legislativeitem-listing.xsl")
-};
-
-declare function rou:get-tableddocuments(
+declare function rou:get-reports(
                         $EXIST-PATH as xs:string, 
                         $EXIST-ROOT as xs:string, 
                         $EXIST-CONTROLLER as xs:string, 
@@ -155,14 +159,14 @@ declare function rou:get-tableddocuments(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "tableddocuments.xml",
-                             "tableddocument",
-                             "tableddocument/text",
-                             "legislativeitem-listing.xsl"
+                             "listings.xml",
+                             "debateReport",
+                             "report/text",
+                             "listings.xsl"
                              )
 };
 
-declare function rou:get-agendaitems(
+declare function rou:get-judgements(
                         $EXIST-PATH as xs:string, 
                         $EXIST-ROOT as xs:string, 
                         $EXIST-CONTROLLER as xs:string, 
@@ -175,11 +179,51 @@ declare function rou:get-agendaitems(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "agendaitems.xml",
-                             "agendaitem",
-                             "agendaitem/text",
-                             "legislativeitem-listing.xsl"
+                             "listings.xml",
+                             "judgement",
+                             "judgement/text",
+                             "listings.xsl"
                              )
+};
+
+declare function rou:get-gazettes(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+                    rou:listing-documentitem(
+                             $EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "listings.xml",
+                             "officialGazette",
+                             "gazette/text",
+                             "listings.xsl"
+                             )
+};
+
+declare function rou:get-misc-docs(
+                        $EXIST-PATH as xs:string, 
+                        $EXIST-ROOT as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-RESOURCE as xs:string, 
+                        $REL-PATH as xs:string
+                        ) {
+                    rou:listing-documentitem(
+                             $EXIST-PATH, 
+                             $EXIST-ROOT, 
+                             $EXIST-CONTROLLER, 
+                             $EXIST-RESOURCE, 
+                             $REL-PATH,
+                             "listings.xml",
+                             "doc",
+                             "misc/text",
+                             "listings.xsl"
+                             )                             
 };
 
 declare function rou:get-xml($EXIST-PATH as xs:string, 
@@ -187,7 +231,7 @@ declare function rou:get-xml($EXIST-PATH as xs:string,
                              $EXIST-CONTROLLER as xs:string, 
                              $EXIST-RESOURCE as xs:string, 
                              $REL-PATH as xs:string) {
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-        $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
+    let $docnumber := xs:string(request:get-parameter("uri",$akn:DOCNO)),
+        $act-entries-tmpl :=  akn:get-raw-xml($docnumber)
     return $act-entries-tmpl   
 };

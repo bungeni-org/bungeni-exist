@@ -33,7 +33,7 @@ table.doc-tbl-details tr td.labels {
     font-weight:bold;
     text-align:left;
     width:100px;
-    vertical-align:bottom;
+    vertical-align:top;
     white-space:nowrap;
 }
 table.doc-tbl-details tr td {

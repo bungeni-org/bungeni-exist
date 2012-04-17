@@ -21,7 +21,10 @@
         <xsl:call-template name="doc-item"/>
     </xsl:template>   
     
-    <!-- N/A -->
+    <!-- N/A - Empty/Customize the default the below render template(s) -->
+    <xsl:template name="doc-item-number">
+        <xsl:param name="doc-type"/>
+    </xsl:template>
     <xsl:template name="doc-item-sponsor"/>
     <xsl:template name="doc-item-sponsors"/>
 </xsl:stylesheet>

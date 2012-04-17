@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -17,7 +17,6 @@
         
         Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
-    <xsl:param name="serverport"/>
     <xsl:param name="version"/>
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
@@ -80,7 +79,7 @@
         </div>
     </xsl:template>
 
-    <!-- DOC_ITEM-TITLE -->
+    <!-- DOC-ITEM-TITLE -->
     <xsl:template name="doc-item-title">
         <xsl:param name="ver-uri"/>
         <div id="title-holder" class="theme-lev-1-only">
@@ -132,7 +131,7 @@
     </xsl:template>
     
     
-    <!-- DOC-ITEM_PREFACE -->
+    <!-- DOC-ITEM-PREFACE -->
     <xsl:template name="doc-item-preface">
         <xsl:param name="doc-type"/>
         <h3 id="doc-heading" class="doc-headers">
@@ -142,15 +141,24 @@
         <h4 id="doc-item-desc" class="doc-headers">
             <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
         </h4>
-        <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
-            <i18n:text key="doc-{$doc-type}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
-            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:itemNumber"/>
-        </h4>
+        <!-- Call document item number -->
+        <xsl:call-template name="doc-item-number">
+            <xsl:with-param name="doc-type" select="$doc-type"/>
+        </xsl:call-template>
         <!-- Call sponsor where applicable -->
         <xsl:call-template name="doc-item-sponsor"/>
         
         <!-- Call secondary sponsors where applicable -->
         <xsl:call-template name="doc-item-sponsors"/>
+    </xsl:template>
+    
+    <!-- DOC-ITEM-NUMBER -->
+    <xsl:template name="doc-item-number">
+        <xsl:param name="doc-type"/>
+        <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
+            <i18n:text key="doc-{$doc-type}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
+            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:itemNumber"/>
+        </h4>
     </xsl:template>
     
     <!-- DOC-ITEM-SPONSOR -->

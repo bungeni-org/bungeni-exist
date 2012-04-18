@@ -58,6 +58,8 @@ class Config(object):
     def get(self, section, key):
         return self.cfg.get(section, key)
 
+    def items(self, section):
+        return self.cfg.items(section)
 
 class TransformerConfig(Config):
     """
@@ -358,6 +360,22 @@ class GenericDirWalkerATTS(GenericDirWalker):
             LOG.debug("returning FALSE GenericDirWalker XML callback" + nfile )
             return (False,None)
 
+class GenericDirWalkerPO(GenericDirWalker):
+    """
+    Walks a directory tree, but the callback filters on for 
+    PO files
+    """
+
+    def fn_callback(self, nfile):
+        import fnmatch
+        LOG.debug("in GenericDirWalker PO callback" + nfile)
+        if fnmatch.fnmatch(nfile, "*.po"):
+            self.counter = self.counter + 1
+            LOG.debug("returning TRUE GenericDirWalker PO callback" + nfile )
+            return (True, None)
+        else:
+            LOG.debug("returning FALSE GenericDirWalker PO callback" + nfile )
+            return (False,None)
 
 
 class GenericDirWalkerUNZIP(GenericDirWalker):
@@ -622,6 +640,7 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         else:
             return (False,None)
 
+
 class WebDavConfig(Config):
     """
     Configuration information for eXist WebDav
@@ -636,6 +655,9 @@ class WebDavConfig(Config):
 
     def get_bungeni_atts_folder(self):
         return self.get("webdav", "bungeni_atts_folder")
+
+    def get_fw_i18n_folder(self):
+        return self.get("webdav", "framework_i18n_folder")
 
     def get_username(self):
         return self.get("webdav", "username")
@@ -697,6 +719,156 @@ class WebDavClient(object):
             print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
             sys.exit()
 
+class PoTranslationsConfig(Config):
+    """
+    Configuration information for .po translation files
+    """
+    
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_pipes = {}
+
+    def get_po_files_folder(self):
+        return self.get("translations", "po_files_folder")
+
+    def get_po_listing(self):
+        return self.items("messages")
+
+    def get_i18n_catalogues_folder(self):
+        return self.get("translations", "i18n_catalogues_folder")
+
+
+class POFilesWalker(GenericDirWalkerPO):
+    """
+    
+    Translates the PO files one-by-one into xml catalogue format 
+    palatable for i18n module in eXist-db
+    
+    pescape_key() & pescape_value() are based on this nifty script
+    https://raw.github.com/fileformat/lptools/master/po2prop.py
+    """ 
+    def __init__(self, input_params = None):
+        super(GenericDirWalkerPO, self).__init__()
+        self.main_cfg = input_params["main_config"]
+        self.po_cfg = input_params["po_config"]
+        self.webdav_cfg = input_params["webdav_config"]
+        self.download_po_files()
+
+    def download_po_files(self):
+        """
+        Retrieves the .po files from a remote location and stores them in a local folder
+        for translation to xml i18n catalogue
+        """
+        socket.setdefaulttimeout(20)
+        from urllib2 import Request, urlopen, URLError, HTTPError
+        print _COLOR.OKGREEN + "Downloading .po files..." + _COLOR.ENDC
+        #return list of po link in the messages configuration
+        msgs_list = self.po_cfg.get_po_listing()
+        for iso_name, uri in msgs_list:
+            try:
+                f = urlopen(uri)
+                print iso_name + "-downloading from " + uri
+                local_file = open(self.po_cfg.get_po_files_folder()+iso_name+".po", "wb")
+                local_file.write(f.read())
+                local_file.close()
+            except HTTPError, e:
+                print _COLOR.FAIL, "HTTP Error: ", e.code , uri, _COLOR.ENDC
+            except URLError, e:
+                print _COLOR.FAIL, "URL Error: ", e.reason, uri, _COLOR.ENDC
+        print _COLOR.OKGREEN + "Download finished... Now translating" + _COLOR.ENDC
+
+    def pescape_key(self, orig):
+        import string
+        result = ""
+        if orig[0] == '#' or orig[0] == '!':
+            result = result + "\\"
+        
+        for ch in orig:
+            if ch == ':':
+                result = result + "\\:"
+            elif ch == '=':
+                result = result + "\\="
+            elif ch == '\r':
+                result = result + "\\r"
+            elif ch == '\n':
+                result = result + "\\n"
+            else:
+                result = result + ch
+            
+        return result
+
+    def pescape_value(self, orig):
+        result = ""
+        for ch in orig:
+            if ch == ':':
+                result = result + "\\:"
+            elif ch == '=':
+                result = result + "\\="
+            elif ch == '\r':
+                result = result + "\\r"
+            elif ch == '\n':
+                result = result + "\\n"
+            else:
+                result = result + ch
+        return result
+
+    def create_catalogue_file(self, iso):
+        OutputFormat.createPrettyPrint()
+        self.format = OutputFormat.createCompactFormat()
+        self.document = DocumentFactory.getInstance().createDocument()
+        self.root = self.document.addElement("catalogue")
+        self.root.addAttribute("xml:lang", iso)
+        return self.root
+
+    def add_msgs_to_catalogue(self,po_file):
+        """
+        ~/jython2.5.2/bin/easy_install polib
+        """
+        import polib
+        import optparse
+        import re
+        import codecs
+        po = polib.pofile(po_file, autodetect_encoding=False, encoding="utf-8", wrapwidth=-1)
+        for entry in po:
+            if entry.obsolete or entry.msgstr == '' or entry.msgstr == entry.msgid:
+                continue
+            name = self.root.addElement("msg")
+            name.addAttribute("key",self.pescape_key(entry.msgid))
+            name.addText(self.pescape_value(entry.msgstr))
+
+    def close_catalogue_file(self, lang):
+        self.format = OutputFormat.createPrettyPrint()
+        self.writer = XMLWriter(FileWriter(self.po_cfg.get_i18n_catalogues_folder()+"po_collection_"+lang+".xml"), self.format)
+        self.writer.write(self.document)
+        self.writer.flush()
+        self.writer.close()
+
+    def fn_callback(self, input_file_path):
+        """
+        
+        In an iteration, creates new xml catalogue files based on the .po files 
+        found.
+        """
+        if GenericDirWalkerPO.fn_callback(self, input_file_path)[0] == True:
+            #return only the name of the file without extension
+            file_name = os.path.splitext(os.path.basename(input_file_path))[0]
+            self.create_catalogue_file(file_name)
+            self.add_msgs_to_catalogue(input_file_path)
+            self.close_catalogue_file(file_name)
+            print "translated " + os.path.basename(input_file_path)
+            return (False, None)
+        else:
+            return (False,None)
+
+    def upload_catalogues(self):
+        po_listing = os.listdir(os.path.join(self.po_cfg.get_i18n_catalogues_folder()))
+        for po_file in po_listing:
+            self.username = self.webdav_cfg.get_username()
+            self.password = self.webdav_cfg.get_password()
+            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_fw_i18n_folder()
+            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+            webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder()+po_file)
+
 def __empty_output_dir__(folder):
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
@@ -705,15 +877,23 @@ def __empty_output_dir__(folder):
         except Exception, e:
             print e
 
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except os.error : # Python >2.5
+        if os.error.errno == errno.EEXIST:
+            pass
+        else: raise
+
+def __setup_tmp_dirs__(cfg):
+
+    if not os.path.isdir(cfg.get_po_files_folder()):
+        mkdir_p(cfg.get_po_files_folder())
+
+    if not os.path.isdir(cfg.get_i18n_catalogues_folder()):
+        mkdir_p(cfg.get_i18n_catalogues_folder())
+
 def __setup_output_dirs__(cfg):
- 
-    def mkdir_p(path):
-        try:
-            os.makedirs(path)
-        except os.error : # Python >2.5
-            if os.error.errno == errno.EEXIST:
-                pass
-            else: raise
 
     if not os.path.isdir(cfg.get_akomantoso_output_folder()):
         mkdir_p(cfg.get_akomantoso_output_folder())
@@ -756,6 +936,16 @@ def do_bind_attachments(cfg):
     else:
         return sba.object_info
 
+def do_po_translations(cfg, po_cfg, wd_cfg):
+    """ translating .po files """
+    print _COLOR.OKGREEN + "Translating .po files to i18n xml <catalogue/> format..." + _COLOR.ENDC
+    pofw = POFilesWalker({"main_config":cfg, "po_config" : po_cfg, "webdav_config" : wd_cfg})
+    pofw.walk(po_cfg.get_po_files_folder())
+    print _COLOR.OKGREEN + "Completed translations from po to xml !" + _COLOR.ENDC
+    print _COLOR.OKGREEN + "Commencing i18n catalogues upload to eXist-db via WebDav..." + _COLOR.ENDC
+    pofw.upload_catalogues()
+    print _COLOR.OKGREEN + "Completed uploading catalogues to eXist-db !" + _COLOR.ENDC
+
 def do_transform(cfg, parl_info):
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
@@ -768,6 +958,10 @@ def do_sync(cfg, wd_cfg):
     print _COLOR.OKGREEN + "Syncing with eXist repository..." + _COLOR.ENDC
     """ synchronizing xml documents """
     sxw = SyncXmlFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
+
+    if not os.path.isdir(cfg.get_temp_files_folder()):
+        mkdir_p(cfg.get_temp_files_folder())
+
     sxw.create_sync_file()
     sxw.walk(cfg.get_ontoxml_output_folder())
     sxw.close_sync_file()
@@ -790,6 +984,17 @@ def webdav_upload(cfg, wd_cfg):
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pafw.walk(cfg.get_attachments_output_folder())
     print _COLOR.OKGREEN + "Completed uploads to eXist !" + _COLOR.ENDC
+
+def main_po_translate(config_file):
+    """
+    accepts the --po2xml option to translate .po files to i18n catalogue scheme
+    used in the eXist-db
+    """
+    po_cfg = PoTranslationsConfig(config_file)
+    wd_cfg = WebDavConfig(config_file)
+    #ensure the tmp folder and its children are there or create them
+    __setup_tmp_dirs__(po_cfg)
+    do_po_translations(TransformerConfig(config_file), po_cfg, wd_cfg)
 
 
 def main_transform(config_file):
@@ -838,7 +1043,6 @@ def __md5_file(f, block_size=2**20):
     return md5.digest()
 
 
-
 def main(options):
     # parse command line options if any
     try:
@@ -846,6 +1050,10 @@ def main(options):
         config_file = __parse_options(options, ("-c", "--config"))
         # transform and upload are independent options and can be called individually
         if config_file is not None and len(str(config_file)) > 0 :
+
+            translate = __parse_options(options, ("-p", "--po2xml"))
+            if translate is not None:
+                main_po_translate(config_file)
 
             transform = __parse_options(options, ("-t", "--transform"))
             if transform is not None:
@@ -878,9 +1086,10 @@ def __parse_options(options, look_for=()):
 
 if __name__ == "__main__":
     """
-    Three command line parameters are supported
+    Five command line parameters are supported
     
-      --config=config_file_name - specifies the config file name 
+      --config=config_file_name - specifies the config file name
+      --po2xml - translates po files to xml for i18n in eXisd-db
       --transform - runs a transform
       --synchronize - synchronizes with a xml db
       --upload - uploades to a xml db
@@ -892,8 +1101,8 @@ if __name__ == "__main__":
         PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
         # process input command line options
         options, remainder = getopt.getopt(sys.argv[1:], 
-          "c:tsu",
-          ["config=", "transform","synchronize","upload"]
+          "c:ptsu",
+          ["config=", "po2xml","transform","synchronize","upload"]
         )
         # call main
         main(options)

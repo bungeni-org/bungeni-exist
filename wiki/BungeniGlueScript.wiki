@@ -67,7 +67,7 @@ All the options have a short-hand, single-character option switch instead of the
 
 == po2xml ==
 
-Bungeni portal uses .po files for storing internationalization messages. Meanwhile in eXist-db, the i18n module uses a XML catalogues with key-message structure. The `--po2xml` option performs this translation.
+The main Bungeni application uses .po files for storing internationalization messages. Meanwhile in eXist-db, the i18n module uses a XML catalogues with key-message structure. The `--po2xml` option performs this translation.
 
 {{{
 ./exec.sh -c src/config.ini --po2xml
@@ -113,7 +113,7 @@ To run all the above options simultaneously:
 ./exec.sh -c src/config.ini -tsu
 }}}
 
-The above command will first do a transformation out the raw XML output including extracting archived files. Thereafter, synchronize with eXist-db repository to find out which files need to be uploaded based on status-date of the document. Finally, upload the files that need to be uploaded based on the synchronization file that has been generated in the project's `tmp` folder.
+The above command will first do a transformation out the raw XML output including extracting archived files. Thereafter, synchronize with eXist-db repository to find out which files need to be uploaded based on status-date of the document. Finally, upload the files based on the synchronization file that has been generated in the project's `tmp` folder.
 
 = Configuration file =
 

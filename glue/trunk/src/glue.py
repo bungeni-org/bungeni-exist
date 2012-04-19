@@ -1,12 +1,17 @@
 """ 
-    Does XSLT transformations on Bungeni documents and outputs ontological documents 
-    that are fed into an XML DB.
+    Performs XSLT transformations on Bungeni documents and outputs ontological documents;
+    synchronizes with eXist-db; translates .po files to .xml catalogues
 
-    steps involved:
-        -getting parliment information
-        -looks for documents with attachments and binds them
-        -transforms Bungeni documents adding namespaces
+    transformation process:
+        -get parliament's information
+        -look for documents with attachments and bind them
+        -transform Bungeni documents and add the bu: namespace
+        -synchronize with collection in eXist-db to create upload list
         -upload XML documents + attachments to eXist database
+    other actions:
+        -translate .po files to .xml catalogues
+        !+NOTE: Use of polib requires one to install it to Jython as follows:
+        /path/to/jython2.5.2/bin/easy_install polib
 """
 
 import httplib, socket #used in sync check
@@ -358,23 +363,6 @@ class GenericDirWalkerATTS(GenericDirWalker):
             return (True, None)
         else:
             LOG.debug("returning FALSE GenericDirWalker XML callback" + nfile )
-            return (False,None)
-
-class GenericDirWalkerPO(GenericDirWalker):
-    """
-    Walks a directory tree, but the callback filters on for 
-    PO files
-    """
-
-    def fn_callback(self, nfile):
-        import fnmatch
-        LOG.debug("in GenericDirWalker PO callback" + nfile)
-        if fnmatch.fnmatch(nfile, "*.po"):
-            self.counter = self.counter + 1
-            LOG.debug("returning TRUE GenericDirWalker PO callback" + nfile )
-            return (True, None)
-        else:
-            LOG.debug("returning FALSE GenericDirWalker PO callback" + nfile )
             return (False,None)
 
 
@@ -738,17 +726,16 @@ class PoTranslationsConfig(Config):
         return self.get("translations", "i18n_catalogues_folder")
 
 
-class POFilesWalker(GenericDirWalkerPO):
+class POFilesTranslator(object):
     """
     
-    Translates the PO files one-by-one into xml catalogue format 
+    Translates the PO files one-by-one into XML catalogue format 
     palatable for i18n module in eXist-db
     
     pescape_key() & pescape_value() are based on this nifty script
     https://raw.github.com/fileformat/lptools/master/po2prop.py
     """ 
     def __init__(self, input_params = None):
-        super(GenericDirWalkerPO, self).__init__()
         self.main_cfg = input_params["main_config"]
         self.po_cfg = input_params["po_config"]
         self.webdav_cfg = input_params["webdav_config"]
@@ -775,7 +762,7 @@ class POFilesWalker(GenericDirWalkerPO):
                 print _COLOR.FAIL, "HTTP Error: ", e.code , uri, _COLOR.ENDC
             except URLError, e:
                 print _COLOR.FAIL, "URL Error: ", e.reason, uri, _COLOR.ENDC
-        print _COLOR.OKGREEN + "Download finished... Now translating" + _COLOR.ENDC
+        print _COLOR.OKGREEN + "Downloads finished... Now translating" + _COLOR.ENDC
 
     def pescape_key(self, orig):
         import string
@@ -821,13 +808,7 @@ class POFilesWalker(GenericDirWalkerPO):
         return self.root
 
     def add_msgs_to_catalogue(self,po_file):
-        """
-        ~/jython2.5.2/bin/easy_install polib
-        """
         import polib
-        import optparse
-        import re
-        import codecs
         po = polib.pofile(po_file, autodetect_encoding=False, encoding="utf-8", wrapwidth=-1)
         for entry in po:
             if entry.obsolete or entry.msgstr == '' or entry.msgstr == entry.msgid:
@@ -843,31 +824,23 @@ class POFilesWalker(GenericDirWalkerPO):
         self.writer.flush()
         self.writer.close()
 
-    def fn_callback(self, input_file_path):
-        """
-        
-        In an iteration, creates new xml catalogue files based on the .po files 
-        found.
-        """
-        if GenericDirWalkerPO.fn_callback(self, input_file_path)[0] == True:
-            #return only the name of the file without extension
-            file_name = os.path.splitext(os.path.basename(input_file_path))[0]
-            self.create_catalogue_file(file_name)
-            self.add_msgs_to_catalogue(input_file_path)
-            self.close_catalogue_file(file_name)
-            print "translated " + os.path.basename(input_file_path)
-            return (False, None)
-        else:
-            return (False,None)
+    def po_to_xml_catalogue(self):
+        po_files = os.listdir(os.path.join(self.po_cfg.get_po_files_folder()))
+        for po_file in po_files:
+            file_x_ext = os.path.splitext(po_file)[0] #remove extension
+            self.create_catalogue_file(file_x_ext)
+            self.add_msgs_to_catalogue(self.po_cfg.get_po_files_folder()+po_file)
+            self.close_catalogue_file(file_x_ext)
+            print "translated " + po_file
 
     def upload_catalogues(self):
-        po_listing = os.listdir(os.path.join(self.po_cfg.get_i18n_catalogues_folder()))
-        for po_file in po_listing:
+        catalogues = os.listdir(os.path.join(self.po_cfg.get_i18n_catalogues_folder()))
+        for catalogue in catalogues:
             self.username = self.webdav_cfg.get_username()
             self.password = self.webdav_cfg.get_password()
             self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_fw_i18n_folder()
             webdaver = WebDavClient(self.username, self.password, self.xml_folder)
-            webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder()+po_file)
+            webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder()+catalogue)
 
 def __empty_output_dir__(folder):
     for the_file in os.listdir(folder):
@@ -939,12 +912,12 @@ def do_bind_attachments(cfg):
 def do_po_translations(cfg, po_cfg, wd_cfg):
     """ translating .po files """
     print _COLOR.OKGREEN + "Translating .po files to i18n xml <catalogue/> format..." + _COLOR.ENDC
-    pofw = POFilesWalker({"main_config":cfg, "po_config" : po_cfg, "webdav_config" : wd_cfg})
-    pofw.walk(po_cfg.get_po_files_folder())
+    pofw = POFilesTranslator({"main_config":cfg, "po_config" : po_cfg, "webdav_config" : wd_cfg})
+    pofw.po_to_xml_catalogue()
     print _COLOR.OKGREEN + "Completed translations from po to xml !" + _COLOR.ENDC
     print _COLOR.OKGREEN + "Commencing i18n catalogues upload to eXist-db via WebDav..." + _COLOR.ENDC
     pofw.upload_catalogues()
-    print _COLOR.OKGREEN + "Completed uploading catalogues to eXist-db !" + _COLOR.ENDC
+    print _COLOR.OKGREEN + "Catalogues uploaded to eXist-db !" + _COLOR.ENDC
 
 def do_transform(cfg, parl_info):
     transformer = Transformer(cfg)

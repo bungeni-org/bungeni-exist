@@ -1,1 +1,0 @@
-resources http://bungeni-editor.googlecode.com/svn/apps/BungeniTransformer/trunk/resources/

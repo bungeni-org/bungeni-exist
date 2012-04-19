@@ -46,6 +46,16 @@ The structure of the project should resemble the tree below:
 
 The `tmp` and `output` folders are run-time folders that will be generated during execution depending on the task. 
 
+In order to execute your first command, you will have to edit the JYTHON_PATH in the `exec.sh` executable to where you have installed Jython.
+
+{{{
+export JYTHON_PATH=~/apps/jython2.5.2/jython.jar
+}}}
+
+Once done. Proceed to usage below.
+
+NB: To immediately run XML transformations, you need to set the path where the XML documents can be found in the *`[general]`* section of the configuration file.
+
 = Usage =
 
 The script depends on several Java libraries which are required to execute the various tasks provided as options. All the dependencies are part of the glue repository project and will be available when you checkout the project as shown above. [BungeniGlueScript#Setup].

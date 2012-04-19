@@ -5,7 +5,7 @@
 
 = Introduction =
 
-The BungeniGlueScript is a Jython script that provides various options to synchronizes outputs from Bungeni Portal with the eXist-db XML repository, Mainly the raw xml output files that generated in various workflow steps.
+The BungeniGlueScript is a Jython script that provides various options to synchronizes outputs from Bungeni Portal with the eXist-db XML repository, Mainly the raw xml output that is generated in workflow steps.
 
 = Pre-requisites =
 
@@ -67,7 +67,7 @@ All the options have a short-hand, single-character option switch instead of the
 
 == po2xml ==
 
-Bungeni portal uses .po files for storing internationalization messages. Meanwhile in eXist-db, the i18n module uses a XML catalogues with key->message structure. The `--po2xml` option performs this translation.
+Bungeni portal uses .po files for storing internationalization messages. Meanwhile in eXist-db, the i18n module uses a XML catalogues with key-message structure. The `--po2xml` option performs this translation.
 
 {{{
 ./exec.sh -c src/config.ini --po2xml

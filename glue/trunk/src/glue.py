@@ -129,6 +129,10 @@ class Transformer(object):
         #returns a documents URI
         return self.__global_path__ + "bu:ontology/child::*/@uri"
 
+    def xpath_get_doc_internal_uri(self):
+        #returns a documents internal-URI. This is a fallback for document URI
+        return self.__global_path__ + "bu:ontology/child::*/@internal-uri"
+
     def xpath_get_status_date(self):
         #returns a documents URI
         return self.__global_path__ + "bu:ontology/child::*/bu:statusDate"
@@ -142,8 +146,12 @@ class Transformer(object):
         sreader = SAXReader()
         self.xmldoc = sreader.read(input_file)
         on_sync_params = {}
-        on_sync_params['uri'] = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri()).getValue()
+        doc_uri = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri())
         status_date = self.xmldoc.selectSingleNode(self.xpath_get_status_date())
+        if doc_uri is None:
+            on_sync_params['uri'] = self.xmldoc.selectSingleNode(self.xpath_get_doc_internal_uri()).getValue()
+        else:
+            on_sync_params['uri'] = doc_uri.getValue()
         if status_date is None:
             on_sync_params['status_date'] = ""
         else:
@@ -153,7 +161,11 @@ class Transformer(object):
     def get_doc_uri(self,input_file):
         sreader = SAXReader()
         self.xmldoc = sreader.read(input_file)
-        return self.xmldoc.selectSingleNode(self.xpath_get_doc_uri()).getValue()
+        doc_uri = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri())
+        if doc_uri is None:
+            return self.xmldoc.selectSingleNode(self.xpath_get_doc_internal_uri()).getValue()
+        else:
+            return doc_uri.getValue()
 
     def replace_all(self, uri, dic):
         #multiple replace characters
@@ -882,8 +894,6 @@ def __setup_output_dirs__(cfg):
         __empty_output_dir__(cfg.get_attachments_output_folder())
     if not os.path.isdir(cfg.get_temp_files_folder()):
         mkdir_p(cfg.get_temp_files_folder())
-    else:
-        __empty_output_dir__(cfg.get_temp_files_folder())
 
 def get_parl_info(cfg):
     piw = ParliamentInfoWalker()

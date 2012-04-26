@@ -282,6 +282,37 @@ class ParseBungeniXML(object):
         writer.close()
 
 
+class ParseOntologyXML(object):
+    """
+    Parses Transformed Ontology XML using Xerces
+    """
+
+    __global_path__ = "//"
+
+    def __init__(self, xml_path):
+        """
+        Load the xml document from the path
+        """
+        self.xmlfile = xml_path
+        sreader = SAXReader()
+        self.an_xml = File(xml_path)
+        self.xmldoc = sreader.read(self.an_xml)
+
+    def get_ontology_name(self):
+        root_element = self.xmldoc.getRootElement()
+        if root_element.attributeValue("for") == "document":
+            return root_element
+        else:
+            return None
+
+    def write_to_disk(self):
+        format = OutputFormat.createPrettyPrint()
+        writer = XMLWriter(FileWriter(self.xmlfile), format)
+        writer.write(self.xmldoc)
+        writer.flush()
+        writer.close()
+
+
 class _COLOR(object):
     """
     Color definitions used for color-coding significant runtime events 
@@ -738,6 +769,78 @@ class PoTranslationsConfig(Config):
         return self.get("translations", "i18n_catalogues_folder")
 
 
+class PostTransform(object):
+    """
+    
+    ReWrites Events URIs with source URI of 'parent' document
+    """
+    def __init__(self, input_params = None):
+        self.main_cfg = input_params["main_config"]
+        self.transformer = input_params["transformer"]
+
+    def update_events_hrefs(self):
+        ontoxmls = os.listdir(os.path.join(self.main_cfg.get_ontoxml_output_folder()))
+        # looping through all transformed documents
+        wfevents = False
+        for ontoxml in ontoxmls:
+            # the parser return takes a file path and regurgitates the root node
+            parse_on = ParseOntologyXML(self.main_cfg.get_ontoxml_output_folder()+ontoxml)
+            on_doc = parse_on.get_ontology_name()
+            if on_doc is not None:
+                # we are interested in non-event documents
+                if on_doc.selectSingleNode("bu:document/bu:docType/bu:value").getText() != "Event":
+                    bu_doc = on_doc.selectSingleNode("bu:document")
+                    parent = bu_doc.selectSingleNode("bu:docType/bu:value").getText()
+                    wf_container = bu_doc.selectSingleNode("bu:workflowEvents")
+                    dict_events = {}
+                    if wf_container is not None:
+                        if wf_container.selectNodes("bu:workflowEvent"):
+                            wfevents = True
+                            # some docs may get an internal-uri, we handle that here
+                            if bu_doc.attribute("uri") is None:
+                                parent_uri = bu_doc.attribute("internal-uri").getValue()
+                            else:
+                                parent_uri = bu_doc.attribute("uri").getValue()
+                            
+                            parent_doc_id = bu_doc.selectSingleNode("bu:docId").getText()
+                            print "[",_COLOR.WARNING + parent_doc_id + " - " + parent + _COLOR.ENDC,"]", parent_uri
+                            # returns workFlowEvent nodes for iteration
+                            wf_events = wf_container.selectNodes("bu:workflowEvent")
+                            for wf_event in wf_events:
+                                eve_doc_id = wf_event.selectSingleNode("bu:docId").getText()
+                                dict_events[eve_doc_id] = wf_event.attribute("href").getValue()
+                            # things start to get more interesting...
+                            self.set_event_href(dict_events)
+        if wfevents is False:
+            print "There are not workflowEvents to process."
+
+    def set_event_href(self, events_dict):
+        """
+        Receives a dictionary with found event's docId and @uri which will be written
+        on the event documents as refersTo href attribute overwriting the place-holder.
+        """
+        ontoxmls = os.listdir(os.path.join(self.main_cfg.get_ontoxml_output_folder()))
+        for doc_id, source_uri in events_dict.iteritems():
+            print " [", doc_id, "]", source_uri
+            # loop through all transformed docs but...
+            for ontoxml in ontoxmls:
+                parse_on = ParseOntologyXML(self.main_cfg.get_ontoxml_output_folder()+ontoxml)
+                on_event_doc = parse_on.get_ontology_name()
+                if on_event_doc is not None:
+                    # ...this time were are interested in event documents only...
+                    bu_eve_doc = on_event_doc.selectSingleNode("bu:document")
+                    if bu_eve_doc.selectSingleNode("bu:docType/bu:value").getText() == "Event":
+                        eve_doc_id = bu_eve_doc.selectSingleNode("bu:docId").getText()
+                        """
+                        update when bu:refersTo@href that matches bu:workflowEvent's bu:docId 
+                        with bu:docId of this event document
+                        """
+                        if doc_id == eve_doc_id:
+                            bu_refers = bu_eve_doc.selectSingleNode("bu:eventOf/bu:refersTo")
+                            bu_refers.addAttribute("href",source_uri)
+                            # ...finally, write back the changes on this document
+                            parse_on.write_to_disk()
+
 class POFilesTranslator(object):
     """
     
@@ -937,6 +1040,14 @@ def do_transform(cfg, parl_info):
     pxf.walk(cfg.get_input_folder())
     print _COLOR.OKGREEN + "Completed transformations !" + _COLOR.ENDC
 
+def do_update_events(cfg, parl_info):
+    transformer = Transformer(cfg)
+    transformer.set_params(parl_info)
+    print _COLOR.OKGREEN + "Commencing Events HREFs update..." + _COLOR.ENDC
+    pt = PostTransform({"main_config":cfg, "transformer":transformer})
+    pt.update_events_hrefs()
+    print _COLOR.OKGREEN + "Completed Events HREFs update !" + _COLOR.ENDC
+
 def do_sync(cfg, wd_cfg):
     print _COLOR.OKGREEN + "Syncing with eXist repository..." + _COLOR.ENDC
     """ synchronizing xml documents """
@@ -997,6 +1108,7 @@ def main_transform(config_file):
     print _COLOR.OKGREEN + "Done with attachments..." + _COLOR.ENDC
     print _COLOR.HEADER + "Transforming ...." + _COLOR.ENDC      
     do_transform(cfg, parl_info)
+    do_update_events(cfg, parl_info)
 
 
 def main_sync(config_file):

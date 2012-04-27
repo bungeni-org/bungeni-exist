@@ -198,22 +198,8 @@ class Transformer(object):
         FileUtility.getInstance().copyFile(fis, outFile)
         FileUtility.getInstance().copyFile(fisMlx, outMlx)
 
-class ParseDOMXML(object):
-    """
-    Parses an XML document using Xerces
-    """
 
-    def __init__(self):
-        """
-        Load the xml document from the path
-        """
-        self.sreader = SAXReader()
-
-    def doc_dom(self, xml_doc):
-        self.xmldoc = self.sreader.read(xml_doc)
-        return self.xmldoc
-
-class ParseBungeniXML(object):
+class ParseXML(object):
     """
     Parses XML output from Bungeni using Xerces
     """
@@ -226,10 +212,28 @@ class ParseBungeniXML(object):
         """
 
         self.xmlfile = xml_path
-        sreader = SAXReader()
+        self.sreader = SAXReader()
         self.an_xml = File(xml_path)
-        self.xmldoc = sreader.read(self.an_xml)
+        self.xmldoc = self.sreader.read(self.an_xml)
 
+    def doc_dom(self):
+        """
+        Used by RepoSyncUploader to read a reposync.xml file generated 
+        before uploading to eXist-db
+        """
+        return self.xmldoc
+
+    def write_to_disk(self):
+        format = OutputFormat.createPrettyPrint()
+        writer = XMLWriter(FileWriter(self.xmlfile), format)
+        writer.write(self.xmldoc)
+        writer.flush()
+        writer.close()
+
+class ParseBungeniXML(ParseXML):
+    """
+    Parsing contenttype documents from Bungeni.
+    """
     def xpath_parl_item(self,name):
 
         return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
@@ -274,30 +278,11 @@ class ParseBungeniXML(object):
         """
         return self.xmldoc.selectSingleNode(self.xpath_get_attachments())
 
-    def write_to_disk(self):
-        format = OutputFormat.createPrettyPrint()
-        writer = XMLWriter(FileWriter(self.xmlfile), format)
-        writer.write(self.xmldoc)
-        writer.flush()
-        writer.close()
 
-
-class ParseOntologyXML(object):
+class ParseOntologyXML(ParseXML):
     """
-    Parses Transformed Ontology XML using Xerces
+    Parsing ontology documents from Transformation process.
     """
-
-    __global_path__ = "//"
-
-    def __init__(self, xml_path):
-        """
-        Load the xml document from the path
-        """
-        self.xmlfile = xml_path
-        sreader = SAXReader()
-        self.an_xml = File(xml_path)
-        self.xmldoc = sreader.read(self.an_xml)
-
     def get_ontology_name(self):
         root_element = self.xmldoc.getRootElement()
         if root_element.attributeValue("for") == "document":
@@ -306,11 +291,7 @@ class ParseOntologyXML(object):
             return None
 
     def write_to_disk(self):
-        format = OutputFormat.createPrettyPrint()
-        writer = XMLWriter(FileWriter(self.xmlfile), format)
-        writer.write(self.xmldoc)
-        writer.flush()
-        writer.close()
+        super(ParseOntologyXML, self).write_to_disk()
 
 
 class _COLOR(object):
@@ -552,11 +533,11 @@ class RepoSyncUploader(object):
     """
     def __init__(self, input_params):
         self.input_params = input_params
-        self.bunparse = ParseDOMXML()
         self.main_cfg = input_params["main_config"]
         self.webdav_cfg = input_params["webdav_config"]
+        self.bunparse = ParseXML(self.main_cfg.get_temp_files_folder()+"reposync.xml")
         try:
-            self.dom = self.bunparse.doc_dom(self.main_cfg.get_temp_files_folder()+"reposync.xml")
+            self.dom = self.bunparse.doc_dom()
         except DocumentException, e:
             print _COLOR.FAIL, e, '\nERROR: reposync.xml is not generated. Run with `-s` switch to sync with repository first.', _COLOR.ENDC
             sys.exit()
@@ -780,10 +761,10 @@ class PostTransform(object):
 
     def update_events_hrefs(self):
         ontoxmls = os.listdir(os.path.join(self.main_cfg.get_ontoxml_output_folder()))
-        # looping through all transformed documents
         wfevents = False
+        # looping through all transformed documents
         for ontoxml in ontoxmls:
-            # the parser return takes a file path and regurgitates the root node
+            # the parser takes in the file path and regurgitates the root node
             parse_on = ParseOntologyXML(self.main_cfg.get_ontoxml_output_folder()+ontoxml)
             on_doc = parse_on.get_ontology_name()
             if on_doc is not None:
@@ -812,7 +793,7 @@ class PostTransform(object):
                             # things start to get more interesting...
                             self.set_event_href(dict_events)
         if wfevents is False:
-            print "There are not workflowEvents to process."
+            print "There are no workflowEvents to process."
 
     def set_event_href(self, events_dict):
         """

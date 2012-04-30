@@ -136,65 +136,36 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:document/@uri"/>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+            </a>
+            &#160;›&#160;
+            <a style="color:#2b92be" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
+                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">id:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">
-                            <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>:</td>
-                        <td>
-                            <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">
-                            <i18n:text key="last-event">last event(nt)</i18n:text>:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:status"/>
-                            &#160;&#160;<b>
-                                <i18n:text key="date-on">on(nt)</i18n:text>:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">
-                            <i18n:text key="submit-date">submission date(nt)</i18n:text>:</td>
-                        <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">
-                            <i18n:text key="ministry">ministry(nt)</i18n:text>:</td>
-                        <td>
-                            <xsl:value-of select="ref/bu:ministry/bu:shortName"/>
-                        </td>
-                    </tr>
-                    <xsl:if test="bu:ontology/bu:question/bu:item_assignments">
-                        <tr>
-                            <td class="labels">
-                                <i18n:text key="assignedto">assigned to(nt)</i18n:text>:</td>
-                            <td>
-                                <a href="#" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                    <xsl:value-of select="bu:ontology/bu:question/bu:group/@isA"/>
-                                </a>
-                            </td>
-                        </tr>
-                    </xsl:if>
-                </table>
+                <div class="black-full">
+                    <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...               
+                </div>
+                <div class="grey-full">
+                    <span>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:status/bu:value"/>
+                    </span>
+                    <span>
+                        on                         
+                        <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                    </span>
+                    &#160;
+                    <span style="vertical-align:0;line-height:1em !important;padding:0;margin:0px;">·</span>
+                    &#160;  
+                    <span>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:docSubType/bu:value"/> document
+                    </span>
+                </div>
             </div>
         </li>
     </xsl:template>

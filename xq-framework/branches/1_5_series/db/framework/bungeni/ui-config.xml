@@ -1013,7 +1013,7 @@
         searchin/@field parameter must be a node path relative to bu:ontology.
         -->
     <doctypes>
-        <doctype category="document" name="bill">
+        <doctype category="document" name="Bill">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1025,11 +1025,11 @@
                 <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="question">
+        <doctype category="document" name="Question">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1043,11 +1043,11 @@
                 <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="motion">
+        <doctype category="document" name="Motion">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1061,11 +1061,11 @@
                 <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="tableddocument">
+        <doctype category="document" name="TabledDocument">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1079,11 +1079,11 @@
                 <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="agendaitem">
+        <doctype category="document" name="AgendaItem">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1097,11 +1097,11 @@
                 <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="document" name="event"/>
+        <doctype category="document" name="Event"/>
         <doctype category="group" name="committee">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
@@ -1126,8 +1126,8 @@
                 <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
-                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
         <doctype category="group" name="office"/>
@@ -1146,8 +1146,8 @@
                 <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag,'terminal'))]</listingfilter>
-                <listingfilter name="archived">bu:tags[contains(bu:tag,'terminal')]</listingfilter>
+                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag/bu:value,'terminal'))]</listingfilter>
+                <listingfilter name="archived">bu:tags[contains(bu:tag/bu:value,'terminal')]</listingfilter>
             </listingfilters>
         </doctype>
         <doctype category="address" name="address"/>

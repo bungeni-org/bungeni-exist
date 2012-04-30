@@ -106,7 +106,7 @@ declare function rou:get-bills(
                              $EXIST-RESOURCE, 
                              $REL-PATH,
                              "bills.xml",
-                             "bill",
+                             "Bill",
                              "bill/text",
                              "legislativeitem-listing.xsl")
 };
@@ -124,7 +124,7 @@ declare function rou:get-questions(
                              $EXIST-RESOURCE, 
                              $REL-PATH,
                              "questions.xml",
-                             "question",
+                             "Question",
                              "question/text",
                              "legislativeitem-listing.xsl")
 };
@@ -142,7 +142,7 @@ declare function rou:get-motions(
                              $EXIST-RESOURCE, 
                              $REL-PATH,
                              "motions.xml",
-                             "motion",
+                             "Motion",
                              "motion/text",
                              "legislativeitem-listing.xsl")
 };
@@ -161,7 +161,7 @@ declare function rou:get-tableddocuments(
                              $EXIST-RESOURCE, 
                              $REL-PATH,
                              "tableddocuments.xml",
-                             "tableddocument",
+                             "TabledDocument",
                              "tableddocument/text",
                              "legislativeitem-listing.xsl"
                              )
@@ -181,7 +181,7 @@ declare function rou:get-agendaitems(
                              $EXIST-RESOURCE, 
                              $REL-PATH,
                              "agendaitems.xml",
-                             "agendaitem",
+                             "AgendaItem",
                              "agendaitem/text",
                              "legislativeitem-listing.xsl"
                              )

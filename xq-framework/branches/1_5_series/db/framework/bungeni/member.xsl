@@ -47,7 +47,7 @@
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
                             <p class="imgonlywrap">
-                                <img src="assets/bungeni/images/mp.jpg" alt="The Speaker"/>
+                                <img src="assets/bungeni/images/presidente.jpg" alt="The Speaker"/>
                             </p>
                         </div>
                         <div class="mem-top-right">

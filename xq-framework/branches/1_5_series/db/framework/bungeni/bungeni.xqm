@@ -209,7 +209,7 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
     make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@type='document']",
+                "/bu:ontology[@for='document']",
                 "/bu:document[@type='",$type,"']",
                 "/following-sibling::bu:legislativeItem",
                 "/(bu:permissions except bu:versions)",
@@ -223,10 +223,10 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $
     
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@type='document']",
+                "/bu:ontology[@for='document']",
                 "/bu:bungeni[",$list-tabs,"]",
-                "/preceding-sibling::bu:document[@type='",$type,"']",
-                "/following-sibling::bu:legislativeItem",
+                "/preceding-sibling::bu:document/bu:docType[bu:value eq '",$type,"']",
+                "/ancestor::bu:document",
                 "/(bu:permissions except bu:versions)",
                 "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
@@ -236,7 +236,7 @@ declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@type='document']",
+                "/bu:ontology[@for='document']",
                 "/bu:legislativeItem",
                 "/(bu:permissions except bu:versions)",
                 "/bu:permission[",$acl-filter,"]",
@@ -246,7 +246,7 @@ declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
 declare function bun:xqy-list-groupitem($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@type='group']",
+                "/bu:ontology[@for='group']",
                 "/bu:group[@type='",$type,"']",
                 "/ancestor::bu:ontology")
 };
@@ -258,7 +258,7 @@ declare function bun:xqy-search-group() {
 declare function bun:xqy-list-membership($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@type='",$type,"']")
+                "/bu:ontology[@for='",$type,"']")
 };
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
@@ -388,13 +388,13 @@ declare function bun:get-documentitems(
         {
             if ($sortby = 'st_date_oldest') then (
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate ascending
+                order by $match/bu:document/bu:statusDate ascending
                 return 
                     bun:get-reference($match)       
                 )  
             else if ($sortby eq 'st_date_newest') then (
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate descending
+                order by $match/bu:document/bu:statusDate descending
                 return 
                     bun:get-reference($match)       
                 )
@@ -413,7 +413,7 @@ declare function bun:get-documentitems(
             else  (
                 for $match in subsequence($coll,$query-offset,$limit) 
                 (:where $coll/bu:bungeni/bu:tags[contains(bu:tag,'terminal')]:)
-                order by $match/bu:legislativeItem/bu:statusDate descending
+                order by $match/bu:documents/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
                 )
@@ -1894,7 +1894,7 @@ declare function bun:get-reference($docitem as node()) {
 :)
 declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
     fn:concat(
-        "collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri='", 
+        "collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri='", 
         $uri, 
         "']")
 };        

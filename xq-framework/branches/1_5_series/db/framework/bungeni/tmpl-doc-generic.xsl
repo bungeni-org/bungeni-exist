@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -20,9 +20,9 @@
     <xsl:param name="version"/>
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
-        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
-        <xsl:variable name="doc-uri" select="bu:ontology/bu:legislativeItem/@uri"/>
-        <xsl:variable name="mover-uri" select="bu:ontology/bu:legislativeItem/bu:owner/@href"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:document/@uri"/>
+        <xsl:variable name="mover-uri" select="bu:ontology/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <!-- Document Title -->
             <xsl:call-template name="doc-item-title">
@@ -84,11 +84,11 @@
         <xsl:param name="ver-uri"/>
         <div id="title-holder" class="theme-lev-1-only">
             <h1 id="doc-title-blue">
-                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                 <!-- If its a version and not a main document... add version title below main title -->
                 <xsl:if test="$version eq 'true'">
                     <br/>
-                    <span class="doc-sub-title-red">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver-uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                    <span class="doc-sub-title-red">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                     </span>
                 </xsl:if>
             </h1>
@@ -104,10 +104,10 @@
             <div class="rounded-eigh tab_container hanging-menu">
                 <ul class="doc-versions">
                     <li>
-                        <a href="{bu:ontology/bu:document/@type}/text?uri={bu:ontology/bu:legislativeItem/@uri}">current</a>
+                        <a href="{bu:ontology/bu:document/@for}/text?uri={bu:ontology/bu:document/@uri}">current</a>
                     </li>
-                    <xsl:variable name="total_versions" select="count(bu:ontology/bu:legislativeItem/bu:versions/bu:version)"/>
-                    <xsl:for-each select="bu:ontology/bu:legislativeItem/bu:versions/bu:version">
+                    <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
+                    <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
                         <xsl:sort select="bu:statusDate" order="descending"/>
                         <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
                         <li>
@@ -139,7 +139,7 @@
             KENYA PARLIAMENT
         </h3>
         <h4 id="doc-item-desc" class="doc-headers">
-            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+            <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
         </h4>
         <!-- Call document item number -->
         <xsl:call-template name="doc-item-number">
@@ -157,7 +157,7 @@
         <xsl:param name="doc-type"/>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
             <i18n:text key="doc-{$doc-type}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
-            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:itemNumber"/>
+            <xsl:value-of select="bu:ontology/bu:document/bu:itemNumber"/>
         </h4>
     </xsl:template>
     
@@ -165,8 +165,8 @@
     <xsl:template name="doc-item-sponsor">
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                <a href="member?uri={bu:ontology/bu:document/bu:owner/@href}">
+                    <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </a>
             </i>
         </h4>
@@ -200,7 +200,7 @@
     <!-- DOC-ITEM-BODY -->
     <xsl:template name="doc-item-body">
         <xsl:param name="ver-uri"/>
-        <xsl:variable name="render-doc" select="if ($version eq 'true') then                         bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver-uri]                          else                         bu:ontology/bu:legislativeItem                         "/>
+        <xsl:variable name="render-doc" select="if ($version eq 'true') then                         bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]                          else                         bu:ontology/bu:document                         "/>
         <h4 class="doc-status">
             <span>
                 <b class="camel-txt">

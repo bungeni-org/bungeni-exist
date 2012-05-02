@@ -17,7 +17,7 @@
     <!-- LISTING CONFIG PREFERNCES -->
     <listings>
         <!-- limits the number of items shown on a listing page -->
-        <limit>5</limit>
+        <limit>15</limit>
         <!-- number of pages linked on the paginator before showing next -->
         <visiblePages>3</visiblePages>
     </listings>
@@ -950,7 +950,7 @@
                 <xsl>agendaitem.xsl</xsl>
             </view>
         </views>
-        <views name="membership">
+        <views name="Membership">
             <view path="member" id="member" tag="tab">
                 <title>
                     <i18n:text key="tab-member">member(nt)</i18n:text>

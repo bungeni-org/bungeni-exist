@@ -589,6 +589,16 @@ ul#portal-personaltools {
     padding-right:5px;
 }
 
+.black-full {
+    width:100%;
+    color:#000000;
+}
+
+.grey-full {
+    width:100%;
+    color:#aaaaa9
+}
+
 li.bcolor { border-color:#000; }
 li.fleft	{ border-left-width: 1pt; border-left-style: solid; }
 li.fright	{ border-right-width: 1pt; border-right-style: solid; }

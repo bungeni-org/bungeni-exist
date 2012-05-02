@@ -68,7 +68,9 @@ declare function bun:translate($node as node(), $params as element(parameters)?,
 declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri]/ancestor::bu:ontology
+    (: !+TODO (ao, 2-May-2012) Currently some documents have @internal-uri this, has to be factored into 
+    this checker :)
+    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri or @internal-uri=$uri]/ancestor::bu:ontology
     let $doc := <response>        
         {
             if($docitem) then (
@@ -210,8 +212,8 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@for='document']",
-                "/bu:document[@type='",$type,"']",
-                "/following-sibling::bu:legislativeItem",
+                "/bu:document/bu:docType[bu:value eq '",$type,"']",
+                "/ancestor::bu:document",
                 "/(bu:permissions except bu:versions)",
                 "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
@@ -1894,8 +1896,8 @@ declare function bun:get-reference($docitem as node()) {
 :)
 declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
     fn:concat(
-        "collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri='", 
-        $uri, 
+        "collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri='", $uri, 
+        "' or @internal-uri='", $uri, 
         "']")
 };        
 
@@ -2282,12 +2284,9 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                     $parts as node()) {
     let $stylesheet := cmn:get-xslt($parts/xsl), 
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
-        $user-uri := if ($address-type eq 'group') then 
-                        $focal 
-                     else 
-                        data(collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$focal]/bu:referenceToUser/@uri),
+        $user-uri := $focal,
         $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
-                            "/bu:ontology[@type='address']",
+                            "/bu:ontology[@for='address']",
                             "/bu:address/bu:assignedTo[@uri eq '",$user-uri,"']",
                             (: !+NOTE (ao, 16 Mar 2012) Commented permissions check below since currently
                              : we only have public permissions which dont apply in this case 
@@ -2299,7 +2298,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                             if($address-type eq 'group') then 
                                 collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal]/ancestor::bu:ontology
                             else
-                                collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$focal]/ancestor::bu:ontology
+                                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$focal]/ancestor::bu:ontology
                         }
                     <ref>
                         {
@@ -2310,7 +2309,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
     return
         transform:transform($doc, $stylesheet, <parameters>
                                                  <param name="address_type" value="{$address-type}" />
-                                               </parameters>)        
+                                               </parameters>)       
 };
 
 (:~
@@ -2389,7 +2388,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
     let $doc := <docs> 
         <paginator>
         (: Count the total number of members :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='membership'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='membership'])}</count>
         <documentType>membership</documentType>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
@@ -2399,7 +2398,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
         {
             if ($sortby = 'ln') then (
             
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)                
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership'],$offset,$limit)                
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
@@ -2409,7 +2408,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
                     </doc>
                 )
             else if ($sortby = 'fn') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
                     <doc>
@@ -2419,7 +2418,7 @@ declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $q
                     </doc>         
                 )                
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='membership'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
@@ -2444,7 +2443,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
     let $stylesheet := cmn:get-xslt($parts/xsl) 
 
     (: return AN Member document as singleton :)
-    let $doc := <doc>{collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology}</doc>
+    let $doc := <doc>{collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology}</doc>
     
     return
         transform:transform($doc, $stylesheet, ())
@@ -2456,13 +2455,13 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
    
     (: return AN Member document with his/her activities :)
     let $doc := <doc>
-        { collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology }
+        { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology }
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)
             for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']
             where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
-                  bu:legislativeItem/bu:owner[@href=$memberid]/ancestor::bu:ontology
+                  bu:legislativeItem/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
             return
                   $match
             }

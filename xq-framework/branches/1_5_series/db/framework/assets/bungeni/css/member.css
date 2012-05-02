@@ -19,6 +19,10 @@
     height:200px;
     margin:0 auto auto 20px;
 }
+.photo-listing img {
+    width:80px !important;
+    height:100px !important;
+}
 .mem-inline-content {
     padding:10px 40px;
     text-align:left;
@@ -33,8 +37,8 @@ p.imgonlywrap {
   }
   
 p.imgonlywrap img {
-    width:150px;
-    height:200px;
+    width:auto;
+    height:auto;
     display: block;
     position: relative;
     background-color: #fff;
@@ -52,6 +56,11 @@ table.mem-tbl-details tr td.labels {
     vertical-align:top;
     width:160px;
     height:25px;
+    font-weight:bold;
+    text-align:right;
+}
+.labels {
+    padding-right:10px;
     font-weight:bold;
     text-align:right;
 }

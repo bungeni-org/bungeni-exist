@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -13,21 +13,21 @@
     <xsl:include href="context_tabs.xsl"/>
     <xsl:param name="address_type"/>
     <xsl:template match="doc">
-        <xsl:variable name="onto-type" select="bu:ontology/@type"/>
+        <xsl:variable name="onto-type" select="bu:ontology/bu:membership/bu:docType/bu:value"/>
         <xsl:variable name="doc-type">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'membership'">
+                <xsl:when test="$address_type eq 'Membership'">
                     <xsl:value-of select="$address_type"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="bu:ontology/bu:group/@type"/>
+                    <xsl:value-of select="bu:ontology/bu:group/bu:docType/bu:value"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="doc_uri">
+        <xsl:variable name="doc-uri">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'membership'">
-                    <xsl:value-of select="bu:ontology/bu:membership/@uri"/>
+                <xsl:when test="$address_type eq 'Membership'">
+                    <xsl:value-of select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="bu:ontology/bu:group/@uri"/>
@@ -41,7 +41,7 @@
                         <xsl:when test="$address_type eq 'membership'">
                             <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                         </xsl:when>
-                        <xsl:when test="$onto-type eq 'group'">
+                        <xsl:when test="$onto-type eq 'Group'">
                             <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -55,7 +55,7 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">contacts</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads">
@@ -105,7 +105,7 @@
                                         </td>
                                     </tr>
                                     <xsl:for-each select="ref/bu:ontology">
-                                        <xsl:sort select="bu:descriptors/bu:statusDate" order="descending"/>
+                                        <xsl:sort select="bu:address/bu:statusDate" order="descending"/>
                                         <tr class="items">
                                             <td class="fbt bclr">
                                                 <xsl:value-of select="bu:address/@type"/>

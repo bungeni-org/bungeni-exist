@@ -12,8 +12,8 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="@type"/>
-        <xsl:variable name="doc_uri" select="bu:membership/@uri"/>
+        <xsl:variable name="doc-type" select="bu:membership/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:membership/bu:referenceToUser/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
@@ -25,7 +25,7 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">offices</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads">

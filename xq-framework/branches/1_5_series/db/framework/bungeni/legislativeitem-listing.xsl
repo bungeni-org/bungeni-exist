@@ -60,7 +60,7 @@
                 <h1 id="doc-title-blue-center">
                     <i18n:text key="listing">List of&#160;</i18n:text>
                     <!-- Capitalize the first letter -->
-                    <i18n:text key="list-t-{$label}">legis-items(nt)</i18n:text>
+                    <i18n:text key="list-t-{lower-case($label)}">legis-items(nt)</i18n:text>
                 </h1>
             </div>
             <!-- Renders listings tabs -->
@@ -136,7 +136,17 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:document/@uri"/>
+        <xsl:variable name="docIdentifier">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!--div border="0" style="border-style:none !important;height:18px;width:18px;background:transparent url(assets/bungeni/images/breadcrumbs.png) no-repeat left -197px"/-->
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>

@@ -508,7 +508,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl := bun:get-contacts-by-uri("public-view","group",$docnumber,$parts),
+                    $act-entries-tmpl := bun:get-contacts-by-uri("public-view","Group",$docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -1602,7 +1602,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),           
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","membership",$docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","Membership",$docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

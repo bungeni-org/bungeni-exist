@@ -21,7 +21,16 @@
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
-        <xsl:variable name="doc-uri" select="bu:ontology/bu:document/@uri"/>
+        <xsl:variable name="doc-uri">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="mover-uri" select="bu:ontology/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <!-- Document Title -->
@@ -156,7 +165,7 @@
     <xsl:template name="doc-item-number">
         <xsl:param name="doc-type"/>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
-            <i18n:text key="doc-{$doc-type}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
+            <i18n:text key="doc-{lower-case($doc-type)}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
             <xsl:value-of select="bu:ontology/bu:document/bu:itemNumber"/>
         </h4>
     </xsl:template>
@@ -165,7 +174,7 @@
     <xsl:template name="doc-item-sponsor">
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="member?uri={bu:ontology/bu:document/bu:owner/@href}">
+                <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
                     <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </a>
             </i>

@@ -375,6 +375,11 @@ div#doc-downloads {
     float:none;
 }
 
+.block {
+    display:block;
+    padding-right:0px;    
+}
+
 .inline {
     display:inline !important;
     padding-right:0px;

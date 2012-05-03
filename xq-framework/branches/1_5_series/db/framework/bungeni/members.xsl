@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -96,12 +96,13 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
-            <div class="struct-ib">/ Constitutency / Party</div>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
+            </div>
             <span>-</span>
             <div class="doc-toggle">
                 <div>
@@ -131,14 +132,23 @@
                         <span class="labels">
                             <i18n:text key="status">status(nt)</i18n:text>:</span>
                         <span>
-                            <xsl:value-of select="bu:ontology/bu:bungeni/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:status/bu:value"/>
                         </span>
                     </div>
-                    <table class="doc-tbl-details">
-                        <tr>
-                            <td class="labels"/>
-                        </tr>
-                    </table>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="email">email(nt)</i18n:text>:</span>
+                        <a href="mailto:{bu:ontology/bu:membership/bu:email}">
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:email"/>
+                        </a>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="email">short bio(nt)</i18n:text>:</span>
+                        <span>
+                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,320)"/>
+                        </span>
+                    </div>
                 </div>
             </div>
         </li>

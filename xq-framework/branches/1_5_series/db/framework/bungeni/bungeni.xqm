@@ -2220,17 +2220,28 @@ declare function bun:get-ref-timeline-activities($docitem as node(), $docviews a
         <ref>
             {$docitem},
             {
-                for $per-event in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
+                let $uri := data($docitem/bu:document/@uri)
+                let $allitems := for $match in collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq $uri]/parent::node()
+                    let $wfevents := for $event in $match/bu:document/bu:workflowEvents/child::* return element timeline {$event/child::*}
+                    let $audits := for $audit in $match/bu:document/bu:audits/child::* return element timeline {$audit/child::*} 
+                    order by $match/child::*/bu:statusDate descending 
+                    return ($wfevents, $audits)
+                
+                for $eachitem in $allitems 
+                order by $eachitem/bu:statusDate descending
+                return $eachitem   
+
+                (:for $per-event in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
                 let $docitem := $per-event/ancestor::bu:ontology,
                     $ln := ($per-event/@href),
                     $foruri := ($docitem/bu:legislativeItem/@uri),
                     $type := ($docitem/bu:document/@type),
-                    $merged := (collection(cmn:get-lex-db())/bu:ontology/child::*[@uri eq $ln]/parent::node())
+                    $merged := (collection(cmn:get-lex-db())/bu:ontology/child::*[@uri eq $ln]/parent::node()):)
                 (: !+FIX_THIS (ao, 10 Apr 2012) sort does not take effect at the moment due to merging above and
                     also the fact that dateActive may not be present in all documents :)
-                order by $merged/bu:ontology/child::*/bu:changes/bu:change/bu:dateActive ascending
+                (:order by $merged/bu:ontology/child::*/bu:changes/bu:change/bu:dateActive ascending
                 return
-                    $merged
+                    $merged:)
             }
         </ref>
         {bun:get-excludes($docitem, $docviews)}
@@ -2256,7 +2267,7 @@ declare function bun:get-excludes($docitem as node(), $docviews as node()) {
                 (: must have @check-for attribute first! :)
                 if($view/@check-for) then (
                     (: putting a evaluate condition to @check-for... :)
-                    if(not(empty(util:eval(concat("$docitem","//",$view/@check-for))))) then 
+                    if(not(empty(util:eval(concat("$docitem","//*",$view/@check-for))))) then 
                         ()
                     else 
                         <tab>{data($view/@id)}</tab>   

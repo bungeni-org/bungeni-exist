@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -14,12 +14,21 @@
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="serverport"/>
     <xsl:template match="doc">
-        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -27,14 +36,14 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">timeline</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
             </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
@@ -51,7 +60,7 @@
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
                             </tr>
-                            <xsl:for-each select="ref/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
+                            <xsl:for-each select="ref/bu:ontology/bu:document/bu:changes/bu:change">
                                 <xsl:sort select="./bu:dateActive" order="descending"/>
                                 <xsl:variable name="action" select="./bu:action"/>
                                 <xsl:variable name="content_id" select="./bu:changeId"/>
@@ -67,8 +76,8 @@
                                             <xsl:choose>
                                                 <xsl:when test="$action = 'add'">
                                                     <xsl:variable name="new_ver_id" select="bu:changeId"/>
-                                                    <a href="{$doc-type}/{./ancestor::bu:ontology/bu:document/@type}?uri={./ancestor::bu:ontology/bu:legislativeItem/@uri}">
-                                                        <xsl:value-of select="substring(./ancestor::bu:legislativeItem/preceding-sibling::bu:event/bu:description,0,100)"/>
+                                                    <a href="{$doc-type}/{./ancestor::bu:ontology/bu:document/@type}?uri={./ancestor::bu:ontology/bu:document/@uri}">
+                                                        <xsl:value-of select="substring(./ancestor::bu:document/preceding-sibling::bu:event/bu:description,0,100)"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>

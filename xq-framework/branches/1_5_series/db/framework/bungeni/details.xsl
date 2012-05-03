@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -17,18 +17,27 @@
     <xsl:param name="serverport"/>
     <xsl:param name="version"/>
     <xsl:template match="doc">
-        <xsl:variable name="ver_id" select="version"/>
-        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
-        <xsl:variable name="ver_uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
-        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="ver-id" select="version"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="ver-uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver-id]/@uri"/>
+        <xsl:variable name="doc-uri">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                     <xsl:if test="$version eq 'true'">
                         <br/>
                         <span class="bu-red">
-                            <i18n:text key="tab-t-version">Version(nt)</i18n:text> - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <i18n:text key="tab-t-version">Version(nt)</i18n:text> - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver-uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
                 </h1>
@@ -47,10 +56,10 @@
                 <xsl:with-param name="uri">
                     <xsl:choose>
                         <xsl:when test="$version eq 'true'">
-                            <xsl:value-of select="$ver_uri"/>
+                            <xsl:value-of select="$ver-uri"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="$doc_uri"/>
+                            <xsl:value-of select="$doc-uri"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:with-param>
@@ -61,7 +70,7 @@
             <xsl:call-template name="doc-formats">
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
             </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
@@ -69,25 +78,25 @@
                         <div class="block-label">
                             <i18n:text key="docid">Doc Id(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
                     </div>
                     <div class="list-block">
                         <div class="block-label">
                             <i18n:text key="parliament">Parliament(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="bu:ontology/bu:bungeni/bu:parliament/@href"/>
+                        <xsl:value-of select="bu:ontology/bu:legislature/@href"/>
                     </div>
                     <div class="list-block">
                         <div class="block-label">
                             <i18n:text key="session-yr">Session Year(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="substring-before(bu:ontology/bu:bungeni/bu:parliament/@date,'-')"/>
+                        <xsl:value-of select="substring-before(bu:ontology/bu:legislature/bu:electionDate/@select,'-')"/>
                     </div>
                     <div class="list-block">
                         <div class="block-label">
                             <i18n:text key="session-no">Session Number(nt)</i18n:text>
                         </div>
-                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:legislativeItemId"/>
+                        <xsl:value-of select="bu:ontology/bu:legislature/bu:parliamentId/@select"/>
                     </div>
                     <ul class="ls-row" id="list-toggle-wide">
                         <li>

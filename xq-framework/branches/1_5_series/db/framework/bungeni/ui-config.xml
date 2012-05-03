@@ -596,7 +596,7 @@
             Tabgroups are like navigation but they describe navigation relative to content 
             The name is always that of a content type
         -->
-        <views name="committee">
+        <views name="Committee">
             <view path="committee/text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
@@ -640,7 +640,7 @@
                 <xsl>comm-contacts.xsl</xsl>
             </view>
         </views>
-        <views name="political-group">
+        <views name="PoliticalGroup">
             <view path="political-group/text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
@@ -663,7 +663,7 @@
                 <xsl>contacts.xsl</xsl>
             </view>
         </views>
-        <views name="bill">
+        <views name="Bill">
             <view path="bills" id="listing" tag="listing">
                 <template>bills.xml</template>
                 <xsl>legislativeitem-listing.xsl</xsl>
@@ -675,7 +675,7 @@
                 <template>bill.xml</template>
                 <xsl>bill.xsl</xsl>
             </view>
-            <view path="bill/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+            <view path="bill/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -689,14 +689,14 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="bill/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
+            <view path="bill/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="bill/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
+            <view path="bill/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -708,7 +708,7 @@
                 <xsl>event.xsl</xsl>
             </view>
         </views>
-        <views name="bill-ver">
+        <views name="Bill-ver">
             <view path="bill/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -724,7 +724,7 @@
                 <xsl>documents.xsl</xsl>
             </view>
         </views>
-        <views name="question">
+        <views name="Question">
             <view path="question/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -732,7 +732,7 @@
                 <template>question.xml</template>
                 <xsl>question.xsl</xsl>
             </view>
-            <view path="question/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+            <view path="question/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -746,14 +746,14 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="question/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
+            <view path="question/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="question/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
+            <view path="question/documents" id="attachments" tag="tab" check-for="[bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -765,7 +765,7 @@
                 <xsl>event.xsl</xsl>
             </view>
         </views>
-        <views name="question-ver">
+        <views name="Question-ver">
             <view path="question/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -781,7 +781,7 @@
                 <xsl>documents.xsl</xsl>
             </view>
         </views>
-        <views name="motion">
+        <views name="Motion">
             <view path="motion/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -789,7 +789,7 @@
                 <template>motion.xml</template>
                 <xsl>motion.xsl</xsl>
             </view>
-            <view path="motion/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+            <view path="motion/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -807,14 +807,14 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="motion/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
+            <view path="motion/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="motion/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
+            <view path="motion/documents" id="attachments" tag="tab" check-for="[bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -826,7 +826,7 @@
                 <xsl>event.xsl</xsl>
             </tab>
         </views>
-        <views name="motion-ver">
+        <views name="Motion-ver">
             <view path="motion/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -842,7 +842,7 @@
                 <xsl>documents.xsl</xsl>
             </view>
         </views>
-        <views name="tableddocument">
+        <views name="TabledDocument">
             <view path="tableddocument/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -850,7 +850,7 @@
                 <template>tableddocument.xml</template>
                 <xsl>tableddocument.xsl</xsl>
             </view>
-            <view path="tableddocument/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+            <view path="tableddocument/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -864,14 +864,14 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="tableddocument/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
+            <view path="tableddocument/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="tableddocument/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
+            <view path="tableddocument/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -887,7 +887,7 @@
                 <xsl>event.xsl</xsl>
             </view>
         </views>
-        <views name="tableddocument-ver">
+        <views name="TabledDocument-ver">
             <view path="tableddocument/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -896,7 +896,7 @@
                 <xsl>tableddocument.xsl</xsl>
             </view>
         </views>
-        <views name="agendaitem">
+        <views name="AgendaItem">
             <view path="agendaitem/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -941,7 +941,7 @@
                 <xsl>event.xsl</xsl>
             </view>
         </views>
-        <views name="agendaitem-ver">
+        <views name="AgendaItem-ver">
             <view path="agendaitem/version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>

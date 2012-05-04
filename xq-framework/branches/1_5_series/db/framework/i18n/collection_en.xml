@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="en">
-    <msg key="welcome">Welcome</msg>
+    <msg key="welcome">Welcome Home</msg>
     <msg key="adv-search">Advanced Search</msg>
     <msg key="search-settings">Search Settings</msg>
     <msg key="search-results">search results</msg>
@@ -147,6 +147,7 @@
     <msg key="ph-searchall">Search all Bungeni documents...</msg>
     <msg key="ph-searchlisting">search this listing</msg>
     <!-- MISC -->
+    <msg key="download">download</msg>
     <msg key="language">language</msg>
     <msg key="acronym">acronym</msg>
     <msg key="none">none</msg>

@@ -904,7 +904,7 @@
                 <template>agendaitem.xml</template>
                 <xsl>agendaitem.xsl</xsl>
             </view>
-            <view path="agendaitem/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+            <view path="agendaitem/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
@@ -918,14 +918,14 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="agendaitem/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
+            <view path="agendaitem/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="agendaitem/documents" id="attachments" tag="tab" check-for="(bu:versions/child::node(), bu:wfevents/child::node(), bu:attached_files/child::node())">
+            <view path="agendaitem/documents" id="attachments" tag="tab" check-for="[bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>

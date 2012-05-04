@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -12,17 +12,26 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="doc">
-        <xsl:variable name="event_uri" select="event"/>
-        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
-        <xsl:variable name="moevent_uri" select="bu:ontology/bu:legislativeItem/bu:owner/@href"/>
+        <xsl:variable name="event-uri" select="event"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="moevent-uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue" style="text-align:right">
-                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                     <br/>
                     <span style="color:#b22b14">
-                        <xsl:value-of select="ref/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="ref/bu:ontology/bu:document/bu:shortTitle"/>
                     </span>
                 </h1>
             </div>
@@ -60,27 +69,27 @@
                 <div id="doc-main-section">
                     <div class="rounded-eigh tab_container hanging-menu">
                         <ul class="doc-versions">
-                            <xsl:if test="bu:ontology/bu:legislativeItem/@uri">
+                            <xsl:if test="bu:ontology/bu:document/@uri">
                                 <li>
-                                    <a href="{bu:ontology/bu:document/@type}/text?uri={bu:ontology/bu:legislativeItem/@uri}">
+                                    <a href="{bu:ontology/bu:document/@type}/text?uri={bu:ontology/bu:document/@uri}">
                                         <i18n:text key="list-tab-cur">current(nt)</i18n:text>
                                     </a>
                                 </li>
                             </xsl:if>
-                            <xsl:variable name="total_versions" select="count(bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent)"/>
-                            <xsl:for-each select="bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent">
+                            <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent)"/>
+                            <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
                                 <xsl:sort select="bu:statusDate" order="descending"/>
                                 <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
                                 <li>
                                     <xsl:choose>
                                         <!-- if current URI is equal to this versions URI -->
-                                        <xsl:when test="$event_uri eq @href">
+                                        <xsl:when test="$event-uri eq @href">
                                             <span>
                                                 <i18n:text key="doc-event">event(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </span>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <a href="{$doc-type}/event?uri={@href}">
+                                            <a href="{lower-case($doc-type)}/event?uri={@href}">
                                                 <i18n:text key="doc-event">event(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </a>
                                         </xsl:otherwise>
@@ -93,7 +102,7 @@
                         <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> KENYA
                         PARLIAMENT </h3>
                     <h4 id="doc-item-desc" class="doc-headers hang-left-titles">
-                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:wfevents/bu:wfevent[@href=$event_uri]/bu:shortName"/>
+                        <xsl:value-of select="bu:ontology/bu:documents/bu:workflowEvents/bu:workflowEvent[@href=$event-uri]/bu:shortTitle"/>
                     </h4>
                     <div class="doc-status">
                         <span>
@@ -101,7 +110,7 @@
                                 <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="ref/bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="ref/bu:ontology/bu:document/bu:status/bu:value"/>
                         </span>
                         <span>
                             <b>
@@ -109,12 +118,12 @@
                                 &#160;<i18n:text key="date-on">Date(nt)</i18n:text>:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-dateTime(ref/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(ref/bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="ref/bu:ontology/bu:legislativeItem/bu:body"/>
+                            <xsl:copy-of select="ref/bu:ontology/bu:document/bu:body"/>
                         </div>
                         <!-- TO_BE_REVIEWED -->
                     </div>

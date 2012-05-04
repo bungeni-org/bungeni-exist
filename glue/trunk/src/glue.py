@@ -270,7 +270,7 @@ class ParseBungeniXML(ParseXML):
 
     def xpath_get_attachments(self):
         
-        return self.__global_path__ + "attached_files"
+        return self.__global_path__ + "attachments"
             
     def get_attached_files(self):
         """
@@ -460,7 +460,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
         if (attachments is not None):
             LOG.debug("In attachments_seek_rename " + inputdoc.xmlfile + " HAS attachments ")
             # get the attached_file nodes within attached_files
-            nodes = attachments.elements("attached_file")
+            nodes = attachments.elements("attachment")
             document_updated = False
             for node in nodes:
                 # for each attached_file

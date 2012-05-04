@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -59,36 +59,46 @@
                                 <th>
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
+                                <th>
+                                    <i18n:text key="tab-user">user(nt)</i18n:text>
+                                </th>
                             </tr>
-                            <xsl:for-each select="ref/bu:ontology/bu:document/bu:changes/bu:change">
-                                <xsl:sort select="./bu:dateActive" order="descending"/>
-                                <xsl:variable name="action" select="./bu:action"/>
-                                <xsl:variable name="content_id" select="./bu:changeId"/>
-                                <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
+                            <xsl:for-each select="ref/timeline">
+                                <xsl:sort select="bu:statusDate" order="descending"/>
                                 <tr>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="$action"/>
+                                            <xsl:value-of select="bu:type/bu:value"/>
                                         </span>
                                     </td>
                                     <td>
                                         <span>
                                             <xsl:choose>
-                                                <xsl:when test="$action = 'add'">
-                                                    <xsl:variable name="new_ver_id" select="bu:changeId"/>
-                                                    <a href="{$doc-type}/{./ancestor::bu:ontology/bu:document/@type}?uri={./ancestor::bu:ontology/bu:document/@uri}">
-                                                        <xsl:value-of select="substring(./ancestor::bu:document/preceding-sibling::bu:event/bu:description,0,100)"/>
+                                                <xsl:when test="bu:type/bu:value eq 'event'">
+                                                    <a href="{lower-case($doc-type)}/event?uri={@href}">
+                                                        <xsl:value-of select="(bu:shortTitle, bu:title)"/>
+                                                    </a>
+                                                </xsl:when>
+                                                <xsl:when test="bu:type/bu:value eq 'annex'">
+                                                    <xsl:value-of select="(bu:shortTitle, bu:title)"/>:
+                                                    <i18n:text key="download">download(nt)</i18n:text>&#160;<a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
+                                                        <xsl:value-of select="bu:name"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="substring(bu:description,0,100)"/>
+                                                    <xsl:value-of select="(bu:shortTitle, bu:title)"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </span>
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="format-dateTime(bu:dateActive,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <xsl:value-of select="bu:auditId"/>
                                         </span>
                                     </td>
                                 </tr>

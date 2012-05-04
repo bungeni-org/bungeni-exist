@@ -70,7 +70,7 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 
     (: !+TODO (ao, 2-May-2012) Currently some documents have @internal-uri this, has to be factored into 
     this checker :)
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri or @internal-uri=$uri]/ancestor::bu:ontology
+    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri, @internal-uri=$uri]/ancestor::bu:ontology
     let $doc := <response>        
         {
             if($docitem) then (
@@ -152,14 +152,14 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
     let $att-acl := bun:documentitem-attachments-with-acl($acl-permissions, $doc-acl/node())   
 
     (: get the attachment with the given file id :)
-    for $attachedfile in $att-acl/bu:attached_files/bu:attached_file
+    for $attachedfile in $att-acl/bu:attachments/bu:attachment
     return
-        if($attachedfile/bu:attachedFileId cast as xs:integer eq $attid) then (
+        if($attachedfile/bu:attachmentId cast as xs:integer eq $attid) then (
             response:stream-binary(
-                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:attachedFileUuid)) cast as xs:base64Binary,
-                $attachedfile/bu:fileMimetype,
-                $attachedfile/bu:fileName),
-            response:set-header("Content-Disposition" , concat("attachment; filename=",  $attachedfile/bu:fileName)),
+                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:fileUuid)) cast as xs:base64Binary,
+                $attachedfile/bu:mimetype/bu:value,
+                $attachedfile/bu:name),
+            response:set-header("Content-Disposition" , concat("attachment; filename=",  $attachedfile/bu:name)),
             <xml/>
         )
         else () 
@@ -1997,7 +1997,7 @@ declare function bun:documentitem-eventdocs-with-acl($acl-permissions as node(),
     else
           <ola>{data($anevent/@href)}</ola>:)
           
-    for $thisone in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent 
+    for $thisone in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent 
     
         return <test/>
 };
@@ -2220,14 +2220,10 @@ declare function bun:get-ref-timeline-activities($docitem as node(), $docviews a
         <ref>
             {$docitem},
             {
-                let $uri := data($docitem/bu:document/@uri)
-                let $allitems := for $match in collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq $uri]/parent::node()
-                    let $wfevents := for $event in $match/bu:document/bu:workflowEvents/child::* return element timeline {$event/child::*}
-                    let $audits := for $audit in $match/bu:document/bu:audits/child::* return element timeline {$audit/child::*} 
-                    order by $match/child::*/bu:statusDate descending 
-                    return ($wfevents, $audits)
+                let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/child::* return element timeline { attribute href { $event/@href }, $event/child::*}
+                let $audits := for $audit in $docitem//bu:audits/child::* return element timeline { attribute id {$audit/@id }, $audit/child::*} 
                 
-                for $eachitem in $allitems 
+                for $eachitem in ($wfevents, $audits) 
                 order by $eachitem/bu:statusDate descending
                 return $eachitem   
 
@@ -2373,10 +2369,10 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
     let $doc := <doc>       
-            { collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem/bu:wfevents/bu:wfevent[@href = $eventid]/ancestor::bu:ontology }
+            { collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid]/ancestor::bu:ontology }
             <ref>
             {
-                collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type='event']/following-sibling::bu:legislativeItem[@uri eq $eventid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document/bu:eventOf/bu:refersTo[@href eq $eventid]/ancestor::bu:ontology
             }            
             </ref>
             <event>{$eventid}</event>

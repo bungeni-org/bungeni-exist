@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="it">
-    <msg key="welcome">Benvenuto</msg>
+    <msg key="welcome">Benvenuto Casa</msg>
     <msg key="adv-search">Ricerca Avanzata</msg>
     <msg key="search-settings">Impostazioni di Ricerca</msg>
     <msg key="search-results">risultati della ricerca</msg>
@@ -147,6 +147,7 @@
     <msg key="ph-searchall">Cerca tutti i documenti Bungeni...</msg>
     <msg key="ph-searchlisting">ricerca questo annuncio</msg>
     <!-- MISC -->
+    <msg key="download">scaricare</msg>
     <msg key="language">lingua</msg>
     <msg key="acronym">acronimo</msg>
     <msg key="none">nessuno</msg>

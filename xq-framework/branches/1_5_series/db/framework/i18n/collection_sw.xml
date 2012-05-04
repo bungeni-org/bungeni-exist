@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="sw">
-    <msg key="welcome">Karibu</msg>
+    <msg key="welcome">Karibu Nyumbani</msg>
     <msg key="adv-search">Tafuta kwa Hali ya juu</msg>
     <msg key="search-settings">Mazingira ya Kutafuta</msg>
     <msg key="search-results">matokeo ya utafutaji</msg>
@@ -147,6 +147,7 @@
     <msg key="ph-searchall">Tafuta kwenye hati zote Bungeni...</msg>
     <msg key="ph-searchlisting">tafuta katika orodha hii</msg>
     <!-- MISC -->
+    <msg key="download">pakua</msg>
     <msg key="language">lugha</msg>
     <msg key="acronym">kifupi</msg>
     <msg key="none">bila</msg>

@@ -35,7 +35,16 @@
                     </span>
                 </h1>
             </div>
-            <ul class="ls-doc-tabs"/>
+            <!-- 
+               !+FIX_THIS (ao, 7th-May-2012) This can be enabled if we decide to have events on 
+               their own tab.
+            -->
+            <!--xsl:call-template name="doc-tabs">
+                <xsl:with-param name="tab-group" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="tab-path">attachments</xsl:with-param>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
+            </xsl:call-template-->
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
@@ -71,7 +80,7 @@
                         <ul class="doc-versions">
                             <xsl:if test="bu:ontology/bu:document/@uri">
                                 <li>
-                                    <a href="{bu:ontology/bu:document/@type}/text?uri={bu:ontology/bu:document/@uri}">
+                                    <a href="{lower-case($doc-type)}/text?uri={$doc-uri}">
                                         <i18n:text key="list-tab-cur">current(nt)</i18n:text>
                                     </a>
                                 </li>

@@ -1,3 +1,5 @@
+xquery version "3.0";
+
 module namespace bun = "http://exist.bungeni.org/bun";
 (:import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";:)
 import module namespace i18n = "http://exist-db.org/xquery/i18n" at "../i18n.xql";
@@ -147,9 +149,8 @@ declare function bun:gen-pdf-output($docid as xs:string)
 declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid as xs:integer) {
     
     (: get the document through acl as validation :)
-    let $doc-acl := document { util:eval(bun:xqy-docitem-acl-uri($acl, $uri)) } 
     let $acl-permissions := cmn:get-acl-permissions($acl)
-    let $att-acl := bun:documentitem-attachments-with-acl($acl-permissions, $doc-acl/node())   
+    let $att-acl := bun:documentitem-full-acl($acl, $uri)   
 
     (: get the attachment with the given file id :)
     for $attachedfile in $att-acl/bu:attachments/bu:attachment
@@ -1673,7 +1674,7 @@ declare function bun:get-sittings(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'])}</count>
         <documentType>groupsitting</documentType>
         <listingUrlPrefix>sittings/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
@@ -1682,7 +1683,7 @@ declare function bun:get-sittings(
         </paginator>
         <alisting>
         {
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='groupsitting'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     local:get-sitting-items($match)
@@ -1719,7 +1720,7 @@ declare function bun:get-sitting($acl as xs:string,
     let $doc := 
             (:Returs a Sittings Document :)
             let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology[@type='groupsitting']/",
+                                            "bu:ontology[@for='groupsitting']/",
                                             "bu:groupsitting[@uri eq '",$doc-uri,"']/",
                                             bun:xqy-docitem-perms($acl)))
             
@@ -1771,9 +1772,9 @@ declare function local:get-sitting-items($sittingdoc as node()) {
         {$sittingdoc}
         <ref>
             {
-                for $eachitem in $sittingdoc/bu:groupsitting/bu:item_schedule/bu:item_schedule
+                for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedule/bu:itemSchedule
                 return 
-                    collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem/bu:legislativeItemId[text() eq $eachitem/bu:itemId/text()]/ancestor::bu:ontology
+                    collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docId[text() eq $eachitem/bu:itemId/text()]/ancestor::bu:ontology
             }
         </ref>
     </doc>     
@@ -1807,7 +1808,7 @@ declare function bun:get-politicalgroups(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'])}</count>
         <documentType>political-group</documentType>
         <listingUrlPrefix>political-group/text</listingUrlPrefix>        
         <offset>{$offset}</offset>
@@ -1816,37 +1817,37 @@ declare function bun:get-politicalgroups(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'start_dt_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+            switch ($sortby)
+            
+            case 'start_dt_oldest' return 
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>  
-                )
                 
-            else if ($sortby eq 'start_dt_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+            case 'start_dt_newest' return 
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>     
-                )
-            else if ($sortby = 'fN_asc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+
+            case 'fN_asc' return
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>      
-                )    
-            else if ($sortby = 'fN_desc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+  
+            case 'fN_desc' return 
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>        
-                )                 
-            else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='political-group'],$offset,$limit)
+             
+             default return 
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>                  
-                )
+                    <doc>{$match/ancestor::bu:ontology}</doc>
         } 
         </alisting>
     </docs>
@@ -1942,100 +1943,67 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
         )
 };
 
+declare function bun:documentitem-full-acl($acl as xs:string, $uri as xs:string) {
+    let $acl-permissions := cmn:get-acl-permissions($acl)
 
-(:~
-Get document with ACL filter
-!+ACL_NEW_API - this is the new ACL API for retrieving documents
-:)
-declare function bun:documentitem-with-acl($acl as xs:string, $uri as xs:string) {
-    let $acl-permissions := cmn:get-acl-permissions($acl),
-        $tab-context := functx:substring-after-last(request:get-effective-uri(), '/')
-        (:$permit := <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>:)
-    
-    (: WARNING-- because of odd behavior in eXist 1.5 branch we have to wrap the return value of the 
-    eval in a document {} object otherwise things dont work. Search in the exist mailing list for 'xpath resolution
-    bug' :)
+    (: authenticate access to document itself first :)
     let $match := 
         document {
             util:eval(bun:xqy-docitem-acl-uri($acl, $uri))
         }
-    (:
-    let $match :=  collection(cmn:get-lex-db())/bu:ontology/bu:legislativeItem[@uri=$uri]/
-            (bu:permissions except bu:versions)/bu:permission[@name=$acl-permissions/@name and 
-                                                              @role=$acl-permissions/@role and 
-                                                              @setting=$acl-permissions/@setting]/ancestor::bu:ontology
-    :)
-    
-    (: WARNING -- we pass the node() of the document since the API expects a node, so we send the root node :)
+
     return 
-        if($tab-context eq 'timeline') then
-            bun:documentitem-changes-with-acl($acl-permissions,$match/node())
-        (:else if($tab-context eq 'documents') then 
-            bun:documentitem-eventdocs-with-acl($permit, $match/node()):)           
-        else if($tab-context eq 'documents') then 
-            bun:documentitem-versions-with-acl($acl-permissions, $match/node())
-        else
-            $match
-    
+        local:treewalker-acl($acl-permissions, $match)
 };
 
-(:~
-    Remove Events to which we dont have access. This API filters a document for ONLY the versions
-    the acl user has access to !+ACL_NEW_API
-:)
-declare function bun:documentitem-eventdocs-with-acl($acl-permissions as node(), $docitem as node() ) {
-
-    (:for $anevent in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
-    let $gotevent := collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:legislativeItem[@uri eq data($anevent/@href)]/ancestor::bu:ontology
+(:
+    Applys recursive ACL on the given document
     
-    return 
-    if ($gotevent/bu:legislativeItem/bu:permissions/bu:permission[
-          @name=data($acl-permissions/@name) and 
-          @role=data($acl-permissions/@role) and 
-          @setting=data($acl-permissions/@setting)]) then
-          <ola>{data($anevent/@href)}</ola>
-    else
-          <ola>{data($anevent/@href)}</ola>:)
-          
-    for $thisone in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent 
-    
-        return <test/>
-};
-
-(:~
-Remove Versions to which we dont have access. This API filters a document for ONLY the versions
-the acl user has access to
-!+ACL_NEW_API
+    @param acl-permissions
+        a node of permissions
+    @param doc
+        the document to be authenticated, node by node.
+    @return
+        the document without unauthorised nodes()
 :)
-declare function bun:documentitem-versions-with-acl($acl-permissions as node(), $docitem as node() ) {
-  if ($docitem/self::bu:version) then
-        if ($docitem/bu:permissions/bu:permission[
-                @name=data($acl-permissions/@name) and 
-                @role=data($acl-permissions/@role) and 
-                @setting=data($acl-permissions/@setting)
-                (: 
-                @name='zope.View' and 
-                @role='bungeni.Anonymous' and 
-                @setting='Allow'
-                :)
+declare function local:treewalker-acl ($acl-permissions as node(), $doc) {
+
+    let $children := $doc/*
+    return
+        if(empty($children)) then ()
+        else 
+        for $c in $children
+        return
+            (: passes authentication, add to tree :)
+            if ($c/bu:permissions/bu:permission[
+                    @name=data($acl-permissions/@name) and 
+                    @role=data($acl-permissions/@role) and 
+                    @setting=data($acl-permissions/@setting)
                 ]) then
-            $docitem
-        else
-            ()
-  else 
-    (:~
-     return the default 
-     :)
-  		element { node-name($docitem)}
-		  		 {$docitem/@*, 
-					for $child in $docitem/node()
-						return if ($child instance of element())
-							   then bun:documentitem-versions-with-acl($acl-permissions, $child)
-							   else $child
-				 }
+                    element {name($c)}{
+                         $c/@*,
+                         $c/text(),
+                         local:treewalker-acl($acl-permissions, $c)
+                      }
+            (: 'c' has no bu:permissions node, add to tree :)
+            else if (not($c/bu:permissions/bu:permission)) then
+                    element {name($c)}{
+                         $c/@*,
+                         $c/text(),
+                         local:treewalker-acl($acl-permissions, $c)
+                      }
+            (: fails above two checks, omit from tree :)
+            else   
+                 ()
 };
+
 (:~ 
-    Similar to Versions... removes changes that don't fit the permissions given.
+    Removes changes that don't fit the permissions given.
+    
+    !+NOTE (ao, 7th-May-2012) This and similar methods are deprecated in favour of 
+    local:treewalker-acl(). Reason being it complicated the views because they were called 
+    only on certain views and would disappear otherwise. This inconsistency had to be 
+    eliminated
 :)
 declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $docitem as node() ) {
   if ($docitem/self::bu:change) then
@@ -2059,32 +2027,6 @@ declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $
 							   else $child
 				 }
 };
-(:~ 
-    Similar to Versions... removes attached_files that don't fit the permissions given.
-:)
-declare function bun:documentitem-attachments-with-acl($acl-permissions as node(), $docitem as node() ) {
-  if ($docitem/self::bu:attached_file) then
-        if ($docitem/bu:permissions/bu:permission[
-                @name=data($acl-permissions/@name) and 
-                @role=data($acl-permissions/@role) and 
-                @setting=data($acl-permissions/@setting)
-                ]) then
-            $docitem
-        else
-            ()
-  else 
-    (:~
-     return the default 
-     :)
-  		element { node-name($docitem)}
-		  		 {$docitem/@*, 
-					for $child in $docitem/node()
-						return if ($child instance of element())
-							   then bun:documentitem-attachments-with-acl($acl-permissions, $child)
-							   else $child
-				 }
-};
-
 
 (:~
 :   Used to retrieve a legislative-document
@@ -2111,7 +2053,7 @@ declare function bun:get-parl-doc($acl as xs:string,
             (:  !+ACL_NEW_API - changed call to use new ACL API , 
             :   the root is an ontology document now not a legislativeItem
             :)
-            let $match := bun:documentitem-with-acl($acl, $doc-uri)
+            let $match := bun:documentitem-full-acl($acl, $doc-uri)
             return
                 (: $parts/parent::node() returns all tabs of this doctype :)
                 bun:get-ref-assigned-grps($match, $parts/parent::node())
@@ -2134,7 +2076,7 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
-    let $doc := let $match := bun:documentitem-with-acl($acl, $doc-uri)
+    let $doc := let $match := bun:documentitem-full-acl($acl, $doc-uri)
                 return
                     (: $parts/parent::node() returns all tabs of this doctype :)
                     bun:get-ref-timeline-activities($match, $parts/parent::node())
@@ -2341,14 +2283,13 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
 declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $parts as node()) as element()* {
     
     let $doc-uri := xps:substring-before($version-uri, "@")
-    let $match := document { util:eval(bun:xqy-docitem-acl-uri($acl, $doc-uri)) }
     let $acl-permissions := cmn:get-acl-permissions($acl)
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl)
     
     let $doc := <doc>
-                    {bun:documentitem-versions-with-acl($acl-permissions, $match/node())}
+                    {bun:documentitem-full-acl($acl, $doc-uri)}
                     <ref/>
                     <version>{$version-uri}</version>
                 </doc>   

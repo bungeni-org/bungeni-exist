@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -20,7 +20,7 @@
     <xsl:param name="version"/>
     <xsl:template name="grp-item" match="doc">
         <xsl:variable name="ver-id" select="version"/>
-        <xsl:variable name="doc-type" select="bu:ontology/bu:group/@type"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <!-- Group Document Title -->
@@ -75,7 +75,7 @@
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="language">language(nt)</i18n:text>: 
             <i>
-                <xsl:value-of select="bu:ontology/bu:bungeni/bu:language"/>
+                <xsl:value-of select="bu:ontology/bu:group/@xml:lang"/>
             </i>
         </h4>
     </xsl:template>
@@ -136,7 +136,7 @@
         </div>
         <div id="doc-content-area">
             <div>
-                <xsl:copy-of select="bu:ontology/bu:legislature/bu:description"/>
+                <xsl:copy-of select="bu:ontology/bu:group/bu:description"/>
             </div>
         </div>
     </xsl:template>

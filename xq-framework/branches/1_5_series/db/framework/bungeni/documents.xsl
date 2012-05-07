@@ -111,14 +111,14 @@
                                                 </td>
                                                 <td>
                                                     <span>
-                                                        <a href="{$doc-type}/version/text?uri={@uri}">
-                                                            new version
+                                                        <a href="{lower-case($doc-type)}/version/text?uri={@uri}">
+                                                            <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
                                                         </a>
                                                     </span>
                                                 </td>
                                                 <td>
                                                     <span>
-                                                        <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
+                                                        <xsl:value-of select="format-dateTime(bu:activeDate,$datetime-format,'en',(),())"/>
                                                     </span>
                                                 </td>
                                             </tr>

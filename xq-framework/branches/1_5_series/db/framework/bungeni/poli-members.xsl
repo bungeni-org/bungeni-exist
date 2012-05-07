@@ -13,7 +13,7 @@
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
-        <xsl:variable name="doc-type" select="bu:ontology/bu:group/@type"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
         <xsl:variable name="doc_uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">

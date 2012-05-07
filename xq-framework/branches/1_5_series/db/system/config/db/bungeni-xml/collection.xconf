@@ -15,12 +15,13 @@
                 <ignore qname="bu:changes"/>
             </text>
             <!-- Parliamentary Documents -->
-            <text match="//bu:legislativeItem"/>
-            <text match="//bu:legislativeItem/@uri"/>
-            <text match="//bu:legislativeItem/bu:shortName"/>
-            <text match="//bu:legislativeItem/bu:body"/>
-            <text match="//bu:legislativeItem/bu:registryNumber"/>
-            <text match="//bu:legislativeItem/bu:publicationDate"/>
+            <text match="//bu:document"/>
+            <text match="//bu:document/@uri"/>
+            <text match="//bu:document/@internal-uri"/>
+            <text match="//bu:document/bu:shortTitle"/>
+            <text match="//bu:document/bu:body"/>
+            <text match="//bu:document/bu:registryNumber"/>
+            <text match="//bu:document/bu:publicationDate"/>
             <!-- Group Documents -->
             <text match="//bu:group/bu:fullName"/>
             <text match="//bu:group/bu:shortName"/>
@@ -35,13 +36,13 @@
         <!-- Range Indexes by qname -->
         <create qname="@uri" type="xs:string"/>
         <create qname="@href" type="xs:string"/>
-        <create qname="bu:shortName" type="xs:string"/>
+        <create qname="bu:shortTitle" type="xs:string"/>
         <create qname="bu:body" type="xs:string"/>
         <create qname="bu:registryNumber" type="xs:string"/>
         <create qname="bu:statusDate" type="xs:dateTime"/>     
         <!-- Range Indexes by path -->
         <create path="//bu:document/@type" type="xs:string"/>
-        <create path="//bu:legislativeItem/bu:publicationDate/@date" type="xs:date"/>
+        <create path="//bu:document/bu:publicationDate/@date" type="xs:date"/>
         <create path="//bu:bungeni/bu:parliament/@date" type="xs:date"/>
     </index>
 </collection>

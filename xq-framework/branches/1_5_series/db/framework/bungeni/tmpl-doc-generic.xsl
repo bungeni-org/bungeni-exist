@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -74,6 +74,8 @@
                         rendered at this juncture -->
                     <xsl:call-template name="doc-item-versions">
                         <xsl:with-param name="ver-uri" select="$ver-uri"/>
+                        <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
+                        <xsl:with-param name="doc-uri" select="$doc-uri"/>
                     </xsl:call-template>
                     <!-- The header information on the documents -->
                     <xsl:call-template name="doc-item-preface">
@@ -108,12 +110,13 @@
     <!-- DOC-ITEM-VERSIONS -->
     <xsl:template name="doc-item-versions">
         <xsl:param name="ver-uri"/>
-        <xsl:param name="doc-type" select="$version"/>
+        <xsl:param name="doc-type"/>
+        <xsl:param name="doc-uri"/>
         <xsl:if test="$version eq 'true'">
             <div class="rounded-eigh tab_container hanging-menu">
                 <ul class="doc-versions">
                     <li>
-                        <a href="{bu:ontology/bu:document/@for}/text?uri={bu:ontology/bu:document/@uri}">current</a>
+                        <a href="{$doc-type}/text?uri={$doc-uri}">current</a>
                     </li>
                     <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
                     <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
@@ -127,7 +130,7 @@
                                     </span>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <a href="{$doc-type}/version/text?uri={@uri}">
+                                    <a href="{lower-case($doc-type)}/version/text?uri={@uri}">
                                                     Version-<xsl:value-of select="$cur_pos"/>
                                     </a>
                                 </xsl:otherwise>
@@ -209,7 +212,8 @@
     <!-- DOC-ITEM-BODY -->
     <xsl:template name="doc-item-body">
         <xsl:param name="ver-uri"/>
-        <xsl:variable name="render-doc" select="if ($version eq 'true') then                         bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]                          else                         bu:ontology/bu:document                         "/>
+        <xsl:variable name="ref-audit" select="substring-after(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:refersToAudit/@href,'#')"/>
+        <xsl:variable name="render-doc" select="if ($version eq 'true') then                         bu:ontology/bu:document/bu:audits/bu:audit[@id=$ref-audit]                          else                         bu:ontology/bu:document                         "/>
         <h4 class="doc-status">
             <span>
                 <b class="camel-txt">

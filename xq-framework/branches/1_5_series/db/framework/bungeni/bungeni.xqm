@@ -2233,10 +2233,9 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                     $parts as node()) {
     let $stylesheet := cmn:get-xslt($parts/xsl), 
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
-        $user-uri := $focal,
         $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
                             "/bu:ontology[@for='address']",
-                            "/bu:address/bu:assignedTo[@uri eq '",$user-uri,"']",
+                            "/bu:address/bu:assignedTo[@uri eq '",$focal,"']",
                             (: !+NOTE (ao, 16 Mar 2012) Commented permissions check below since currently
                              : we only have public permissions which dont apply in this case 
                              :)
@@ -2244,7 +2243,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                             "/ancestor::bu:ontology")
     let $doc := <doc>
                     document {
-                            if($address-type eq 'group') then 
+                            if($address-type eq 'Group') then 
                                 collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal]/ancestor::bu:ontology
                             else
                                 collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$focal]/ancestor::bu:ontology
@@ -2313,7 +2312,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
             { collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid]/ancestor::bu:ontology }
             <ref>
             {
-                collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document/bu:eventOf/bu:refersTo[@href eq $eventid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[@uri eq $eventid]/ancestor::bu:ontology
             }            
             </ref>
             <event>{$eventid}</event>
@@ -2407,9 +2406,9 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)
-            for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']
+            for $match in collection(cmn:get-lex-db())/bu:ontology[@for='document']
             where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
-                  bu:legislativeItem/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
+                  bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
             return
                   $match
             }
@@ -2429,11 +2428,11 @@ declare function bun:get-assigned-items($committeeid as xs:string, $parts as nod
     let $doc := <assigned-items>
     <group>
     {
-        collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@uri=$committeeid]/ancestor::bu:ontology
+        collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group[@uri=$committeeid]/ancestor::bu:ontology
     }
     </group>
     {
-    for $match in collection(cmn:get-lex-db())/bu:ontology[@type='document']/child::*/bu:group[@href=$committeeid]
+    for $match in collection(cmn:get-lex-db())/bu:ontology[@for='document']/child::*/bu:group[@href=$committeeid]
     return
         <items>
             {

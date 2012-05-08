@@ -14,6 +14,14 @@
     <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
     <format type="date">[D1o] [MNn,*-3], [Y]</format>
 
+
+    <!-- INFORMATION ABOUT CURRENT PARLIAMENT -->
+    <system-parameters>
+        <parliament id="2" election-date="2011-02-01">
+            PARLIAMENT XVMII
+        </parliament>
+    </system-parameters>
+
     <!-- LISTING CONFIG PREFERNCES -->
     <listings>
         <!-- limits the number of items shown on a listing page -->
@@ -821,10 +829,10 @@
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <tab path="motion/event">
+            <view path="motion/event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
-            </tab>
+            </view>
         </views>
         <views name="Motion-ver">
             <view path="motion/version/text" id="text" tag="tab">
@@ -878,10 +886,10 @@
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <taviewb path="tableddocument/version">
+            <view path="tableddocument/version">
                 <template>version.xml</template>
                 <xsl>version.xsl</xsl>
-            </taviewb>
+            </view>
             <view path="tableddocument/event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
@@ -1020,9 +1028,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1038,9 +1046,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1056,9 +1064,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">All</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1074,9 +1082,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1092,9 +1100,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:legislativeItem/bu:shortName" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:legislativeItem/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:legislativeItem/bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1109,9 +1117,9 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fname" field="bu:legislature/bu:fullName" default="true">Full Name</searchin>
-                <searchin name="sn" value="sname" field="bu:legislature/bu:shortName">Short Name</searchin>
-                <searchin name="ds" value="desc" field="bu:legislature/bu:description">Description</searchin>
+                <searchin name="fn" value="fname" field="bu:group/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:group/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
         </doctype>
         <doctype category="group" name="political-group">

@@ -33,7 +33,7 @@ from org.dom4j import DocumentException
 from org.dom4j.io import SAXReader
 from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
-from java.io import File, FileWriter
+from java.io import File, FileWriter, FileNotFoundException
 from java.io import FileInputStream
 from java.io import StringReader
 from java.util import HashMap
@@ -708,28 +708,31 @@ class WebDavClient(object):
 
     def pushFile(self, onto_file):
         a_file = File(onto_file)
-        inputStream = FileInputStream(a_file)
-        length = a_file.length()
-        bytes = jarray.zeros(length,'b')
-        #Read in the bytes
-        #http://www.flexonjava.net/2009/08/jython-convert-file-into-byte-array.html
-        offset = 0
-        numRead = 0
-        while offset<length:
-            if numRead>= 0:
-                #print numRead #For debugging
-                numRead=inputStream.read(bytes, offset, length-offset)
-                offset = offset + numRead
-                
         try:
-            self.sardine.put(self.put_folder+os.path.basename(onto_file), bytes)
-            print "PUT: "+self.put_folder+os.path.basename(onto_file)
-        except SardineException, e:
-            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , _COLOR.ENDC
-            sys.exit()
-        except HttpHostConnectException, e:
-            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
-            sys.exit()
+            inputStream = FileInputStream(a_file)
+            length = a_file.length()
+            bytes = jarray.zeros(length,'b')
+            #Read in the bytes
+            #http://www.flexonjava.net/2009/08/jython-convert-file-into-byte-array.html
+            offset = 0
+            numRead = 0
+            while offset<length:
+                if numRead>= 0:
+                    #print numRead #For debugging
+                    numRead=inputStream.read(bytes, offset, length-offset)
+                    offset = offset + numRead
+                    
+            try:
+                self.sardine.put(self.put_folder+os.path.basename(onto_file), bytes)
+                print "PUT: "+self.put_folder+os.path.basename(onto_file)
+            except SardineException, e:
+                print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , _COLOR.ENDC
+                sys.exit()
+            except HttpHostConnectException, e:
+                print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
+                sys.exit()
+        except FileNotFoundException, e:
+            print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last synchronization. Do a re-sync before uploading" , _COLOR.ENDC
 
 class PoTranslationsConfig(Config):
     """
@@ -791,11 +794,11 @@ class PostTransform(object):
                                 eve_doc_id = wf_event.selectSingleNode("bu:docId").getText()
                                 dict_events[eve_doc_id] = wf_event.attribute("href").getValue()
                             # things start to get more interesting...
-                            self.set_event_href(dict_events)
+                            self.set_event_href(dict_events, parent_uri, parse_on)
         if wfevents is False:
             print "There are no workflowEvents to process."
 
-    def set_event_href(self, events_dict):
+    def set_event_href(self, events_dict, parent_uri, parsed_parent):
         """
         Receives a dictionary with found event's docId and @uri which will be written
         on the event documents as refersTo href attribute overwriting the place-holder.
@@ -807,20 +810,33 @@ class PostTransform(object):
             for ontoxml in ontoxmls:
                 parse_on = ParseOntologyXML(self.main_cfg.get_ontoxml_output_folder()+ontoxml)
                 on_event_doc = parse_on.get_ontology_name()
+                on_parent_doc = parsed_parent.get_ontology_name()
                 if on_event_doc is not None:
-                    # ...this time were are interested in event documents only...
                     bu_eve_doc = on_event_doc.selectSingleNode("bu:document")
+                    bu_parent_doc = on_parent_doc.selectSingleNode("bu:document")
+                    # ...this time were are interested in event documents only...
                     if bu_eve_doc.selectSingleNode("bu:docType/bu:value").getText() == "Event":
+                        origi_event_uri = bu_eve_doc.attribute("uri").getValue()
                         eve_doc_id = bu_eve_doc.selectSingleNode("bu:docId").getText()
                         """
                         update when bu:refersTo@href that matches bu:workflowEvent's bu:docId 
                         with bu:docId of this event document
                         """
                         if doc_id == eve_doc_id:
+                            # RE-WRITE EVENT DOCUMENTS
                             bu_refers = bu_eve_doc.selectSingleNode("bu:eventOf/bu:refersTo")
-                            bu_refers.addAttribute("href",source_uri)
-                            # ...finally, write back the changes on this document
+                            bu_refers.addAttribute("href",parent_uri)
+                            # RE-WRITE PARENT DOCUMENT
+                            wf_container = bu_parent_doc.selectSingleNode("bu:workflowEvents")
+                            wf_events = wf_container.selectNodes("bu:workflowEvent")
+                            for wf_event in wf_events:
+                                wf_doc_id = wf_event.selectSingleNode("bu:docId").getText()
+                                if eve_doc_id == wf_doc_id:
+                                    wf_event.addAttribute("href",origi_event_uri)
+                            # ...finally, write back the changes on event and parent document 
+                            # respectively
                             parse_on.write_to_disk()
+                            parsed_parent.write_to_disk()
 
 class POFilesTranslator(object):
     """

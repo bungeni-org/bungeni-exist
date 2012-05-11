@@ -240,7 +240,7 @@ declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@for='document']",
-                "/bu:legislativeItem",
+                "/bu:document",
                 "/(bu:permissions except bu:versions)",
                 "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
@@ -255,7 +255,7 @@ declare function bun:xqy-list-groupitem($type as xs:string) {
 };
 declare function bun:xqy-search-group() {
 
-    fn:concat("collection('",cmn:get-lex-db() ,"')","/bu:ontology[@type='group']")
+    fn:concat("collection('",cmn:get-lex-db() ,"')","/bu:ontology[@for='group']")
 };
 
 declare function bun:xqy-list-membership($type as xs:string) {
@@ -265,7 +265,7 @@ declare function bun:xqy-list-membership($type as xs:string) {
 };
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-            "/bu:ontology[@type='membership']")
+            "/bu:ontology[@for='membership']")
 };
 
 (:~ !+FIXED(ah,05-01-2012) 
@@ -599,14 +599,14 @@ declare function bun:search-documentitems(
             if ($sortby = 'st_date_oldest') then (
                (:if (fn:ni$qrystr):)
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate ascending
+                order by $match/bu:document/bu:statusDate ascending
                 return 
                     bun:get-reference($match)       
                 )
                 
             else if ($sortby eq 'st_date_newest') then (
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate descending
+                order by $match/bu:document/bu:statusDate descending
                 return 
                     bun:get-reference($match)       
                 )
@@ -624,7 +624,7 @@ declare function bun:search-documentitems(
                 )                 
             else  (
                 for $match in subsequence($coll,$query-offset,$limit)
-                order by $match/bu:legislativeItem/bu:statusDate descending
+                order by $match/bu:document/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
                 )
@@ -682,7 +682,7 @@ declare function bun:advanced-search($qryall as xs:string,
                                             for $ptype in $parent-types
                                                 return
                                                     if($ptype eq $category) then 
-                                                        collection(cmn:get-lex-db())/bu:ontology[@type=$category]
+                                                        collection(cmn:get-lex-db())/bu:ontology[@for=$category]
                                                     else ()
                                     )
                                     else ()
@@ -698,12 +698,12 @@ declare function bun:advanced-search($qryall as xs:string,
                                                 a child node 
                                             :)
                                             if(($filter/@name eq $filter/@category) and $dtype eq $filter/@name) then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@type=$filter/@name]
+                                                collection(cmn:get-lex-db())/bu:ontology[@for=$filter/@name]
                                             (: check for ontology type only, which represents a category of a particular 
                                                 type of documents 
                                             :)
                                             else if($dtype eq $filter/@name) then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@type=$filter/@category]/bu:document[@type=$filter/@name]/ancestor::bu:ontology                                       
+                                                collection(cmn:get-lex-db())/bu:ontology[@for=$filter/@category]/bu:document[@for=$filter/@name]/ancestor::bu:ontology                                       
                                             else ()
                                     )
                                     else ()    
@@ -1744,7 +1744,7 @@ declare function bun:get-sittings-json($acl as xs:string) as element()* {
     util:declare-option("exist:serialize", "method=json media-type=text/javascript"),
 
     let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology[@type='groupsitting']/",
+                                            "bu:ontology[@for='groupsitting']/",
                                             bun:xqy-generic-perms($acl),"/",
                                             "ancestor::bu:ontology")),
         $json_ready := functx:remove-elements-deep($match,('bu:bungeni', 'bu:permissions'))
@@ -1772,7 +1772,7 @@ declare function local:get-sitting-items($sittingdoc as node()) {
         {$sittingdoc}
         <ref>
             {
-                for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedule/bu:itemSchedule
+                for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
                 return 
                     collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docId[text() eq $eachitem/bu:itemId/text()]/ancestor::bu:ontology
             }

@@ -64,49 +64,45 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui1">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <li>
-            <a href="{bu:ontology/bu:document/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+            <a href="{lower-case(bu:ontology/bu:document/bu:docType/bu:value)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+            </a>
+            &#160;›&#160;
+            <a style="color:#2b92be" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
+                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">id:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">primary sponsor:</td>
-                        <td>
-                            <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">last event:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:status"/>
-                            &#160;&#160;<b>on:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">submission date:</td>
-                        <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">ministry:</td>
-                        <td>
-                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
-                        </td>
-                    </tr>
-                </table>
+                <div class="black-full">
+                    <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...               
+                </div>
+                <div class="grey-full">
+                    <span>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:status/bu:value"/>
+                    </span>
+                    <span>
+                        on                         
+                        <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                    </span>
+                    &#160;
+                    <span style="vertical-align:0;line-height:1em !important;padding:0;margin:0px;">·</span>
+                    &#160;  
+                    <span>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:docSubType/bu:value"/> document
+                    </span>
+                </div>
             </div>
         </li>
     </xsl:template>
@@ -121,10 +117,10 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui2">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
-            <a href="{bu:ontology/bu:group/@type}/profile?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
+            <a href="{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
             </div>
@@ -140,7 +136,7 @@
                     <tr>
                         <td class="labels">election date:</td>
                         <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:parentGroup/bu:electionDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:electionDate/@select, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                         </td>
                     </tr>
                 </table>
@@ -157,7 +153,7 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui3">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:document/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>

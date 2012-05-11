@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -91,21 +91,30 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
-        <xsl:variable name="doc-type" select="bu:ontology/@type"/>
-        <xsl:variable name="doc-sub-type" select="bu:ontology/child::*/@type"/>
-        <xsl:variable name="docIdentifier" select="bu:ontology/child::*/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/@for"/>
+        <xsl:variable name="doc-sub-type" select="bu:ontology/child::*/bu:docType/bu:value"/>
+        <xsl:variable name="docIdentifier">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/child::*/@uri">
+                    <xsl:value-of select="bu:ontology/child::*/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/child::*/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <li>
             <span>-</span>
             <xsl:choose>
-                <xsl:when test="bu:ontology/bu:legislativeItem/bu:owner/@showAs">
+                <xsl:when test="bu:ontology/bu:document/bu:owner/bu:person/@showAs">
                     <xsl:variable name="base-path">
                         <xsl:choose>
-                            <xsl:when test="$doc-sub-type eq 'event'">
+                            <xsl:when test="$doc-sub-type eq 'Event'">
                                 <!-- an event of some document -->
-                                <xsl:value-of select="concat(bu:ontology/bu:legislativeItem/bu:head/bu:eventOf,'/event')"/>
+                                <xsl:value-of select="concat(lower-case(bu:ontology/bu:document/bu:eventOf/bu:type/bu:value),'/event')"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="concat($doc-sub-type,'/text')"/>
+                                <xsl:value-of select="concat(lower-case($doc-sub-type),'/text')"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
@@ -114,22 +123,30 @@
                             transition to use shortTitle but not yet applied to all document types currently 
                             only on document type event -->
                         <xsl:value-of select="(bu:ontology/child::*/bu:shortName,bu:ontology/child::*/bu:shortTitle)"/>
-                    </a> sponsored by <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                    </a> sponsored by <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
+                </xsl:when>
+                <xsl:when test="bu:ontology[@for eq 'membership']">
+                    <a href="member?uri={bu:ontology/bu:membership/bu:referenceToUser/@uri}" id="{$docIdentifier}">
+                        <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                    </a>
+                    <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                    &#160;-&#160;
+                    <i> group type</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:docType/bu:value"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a href="{bu:ontology/child::*/@type}/text?uri={$docIdentifier}" id="{$docIdentifier}">
-                        <xsl:value-of select="bu:ontology/bu:legislature/bu:fullName"/>
+                    <a href="{lower-case($doc-sub-type)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                        <xsl:value-of select="bu:ontology/child::*/bu:fullName"/>
                     </a>
-                    <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                    <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                     &#160;-&#160;
-                    <i> group type</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:type"/>
+                    <i> group type</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:docType/bu:value"/>
                 </xsl:otherwise>
             </xsl:choose>
             <div class="doc-toggle">
                 <div class="search-subh">
                     <xsl:value-of select="format-dateTime(bu:ontology/child::*/bu:statusDate,$datetime-format,'en',(),())"/>
                     &#160;-&#160;
-                    <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status"/>
+                    <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status/bu:value"/>
                 </div>
                 <div class="search-snippet">
                     <xsl:choose>
@@ -138,10 +155,10 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <!-- for parl docs -->
-                            <xsl:value-of select="substring(bu:ontology/child::*/bu:body,0,320)"/>
+                            <xsl:value-of select="substring(bu:ontology/document/bu:body,0,320)"/>
                             <!-- for groups -->
-                            <xsl:value-of select="substring(bu:ontology/bu:legislature/bu:description,0,320)"/>
-                            <!-- for groups -->
+                            <xsl:value-of select="substring(bu:ontology/bu:group/bu:description,0,320)"/>
+                            <!-- for membership -->
                             <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,320)"/>
                         </xsl:otherwise>
                     </xsl:choose>

@@ -461,9 +461,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "listing-search-form.xml",'political-group')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "listing-search-form.xml",'politicalgroup')))))
     								    )
-    	else if ($EXIST-PATH eq "/political-group/text" )
+    	else if ($EXIST-PATH eq "/politicalgroup/text" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -483,7 +483,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 ) 
-    	else if ($EXIST-PATH eq "/political-group/members" )
+    	else if ($EXIST-PATH eq "/ministry/text" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,$parts),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-PATH, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 )     									 
+    	else if ($EXIST-PATH eq "/politicalgroup/members" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -503,7 +523,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )
-    	else if ($EXIST-PATH eq "/political-group/contacts" )
+    	else if ($EXIST-PATH eq "/politicalgroup/contacts" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),

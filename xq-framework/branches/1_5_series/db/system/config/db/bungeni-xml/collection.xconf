@@ -16,6 +16,7 @@
             </text>
             <!-- Parliamentary Documents -->
             <text match="//bu:document"/>
+            <text match="//bu:document//bu:docId"/>
             <text match="//bu:document/@uri"/>
             <text match="//bu:document/@internal-uri"/>
             <text match="//bu:document/bu:shortTitle"/>
@@ -26,6 +27,7 @@
             <text match="//bu:group/bu:fullName"/>
             <text match="//bu:group/bu:shortName"/>
             <text match="//bu:group/bu:description"/>
+            <text match="//bu:legislature/bu:description"/>
             <!-- User / Members Documents -->
             <text match="//bu:membership/bu:firstName"/>
             <text match="//bu:membership/bu:lastName"/>

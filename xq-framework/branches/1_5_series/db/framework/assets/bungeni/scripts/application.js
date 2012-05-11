@@ -258,9 +258,9 @@ $(document).ready(function () {
                 },
                 success: function(data) {
                     var events = [];
-                    for (var i = 0; i < data.ontology.length; i++) {
+                    for (var i = 0; i < data.ontology.length; i++) {             
                         events.push({
-                            title: data.ontology[i].legislature.shortName+" at the "+data.ontology[i].groupsitting.venue.shortName,
+                            title: data.ontology[i].legislature.shortName["#text"]+" at the "+data.ontology[i].groupsitting.venue.shortName["#text"],
                             start: data.ontology[i].groupsitting.startDate["#text"],
                             end: data.ontology[i].groupsitting.endDate["#text"],
                             url: "sitting?uri="+data.ontology[i].groupsitting.uri,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -135,10 +135,19 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="docIdentifier">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
@@ -146,23 +155,23 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">primary sponsor:</td>
                         <td>
-                            <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                            <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">last event:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:document/bu:status"/>
                             &#160;&#160;<b>on:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>

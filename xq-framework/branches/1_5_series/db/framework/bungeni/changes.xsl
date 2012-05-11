@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -59,9 +59,10 @@
                                 <th>
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
+                                <!-- !+FIX_THIS not-implemented
                                 <th>
                                     <i18n:text key="tab-user">user(nt)</i18n:text>
-                                </th>
+                                </th-->
                             </tr>
                             <xsl:for-each select="ref/timeline">
                                 <xsl:sort select="bu:statusDate" order="descending"/>
@@ -96,11 +97,11 @@
                                             <xsl:value-of select="format-dateTime(bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </span>
                                     </td>
-                                    <td>
+                                    <!--td>
                                         <span>
                                             <xsl:value-of select="bu:auditId"/>
                                         </span>
-                                    </td>
+                                    </td-->
                                 </tr>
                             </xsl:for-each>
                         </table>

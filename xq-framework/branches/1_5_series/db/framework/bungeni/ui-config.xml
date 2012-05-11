@@ -137,21 +137,36 @@
             <subnavigation>committees</subnavigation>
         </route> 
         <!-- #POLICAL-GROUPS -->
-        <route href="/political-group/text">
+        <route href="/politicalgroup/text">
             <title>Business | Political Group's Profile</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/political-group/members">
+        <route href="/politicalgroup/members">
             <title>Business | Political Group's Members</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/political-group/contacts">
+        <route href="/politicalgroup/contacts">
             <title>Business | Political Group's Staff</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
-        </route>         
+        </route>     
+        <!-- #MINISTRY -->
+        <route href="/ministry/text">
+            <title>Business | Ministry's Profile</title>
+            <navigation>home</navigation>
+        </route>
+        <route href="/ministry/members">
+            <title>Business | Ministry's Members</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/ministry/contacts">
+            <title>Business | Ministry's Staff</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>          
         <!-- #BILLS -->
         <route href="/bills">
             <title>Business | Bills</title>
@@ -649,26 +664,35 @@
             </view>
         </views>
         <views name="PoliticalGroup">
-            <view path="political-group/text" id="profile" tag="tab">
+            <view path="politicalgroup/text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>political-group.xsl</xsl>
             </view>
-            <view path="political-group/members" id="members" tag="tab">
+            <view path="politicalgroup/members" id="members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>poli-members.xsl</xsl>
             </view>
-            <view path="political-group/contacts" id="contacts" tag="tab">
+            <view path="politicalgroup/contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>contacts.xsl</xsl>
+            </view>
+        </views>
+        <views name="Ministry">
+            <view path="ministry/text" id="profile" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>committee.xml</template>
+                <xsl>ministry.xsl</xsl>
             </view>
         </views>
         <views name="Bill">
@@ -1122,7 +1146,23 @@
                 <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
         </doctype>
-        <doctype category="group" name="political-group">
+        <doctype category="group" name="politicalgroup">
+            <orderbys>
+                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="fn" value="fname" field="bu:group/bu:fullName" default="true">Full Name</searchin>
+                <searchin name="sn" value="sname" field="bu:group/bu:shortName">Short Name</searchin>
+                <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="group" name="ministry">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
@@ -1139,7 +1179,6 @@
             </listingfilters>
         </doctype>
         <doctype category="group" name="office"/>
-        <doctype category="group" name="ministry"/>
         <doctype category="group" name="government"/>
         <doctype category="group" name="groupsitting"/>
         <doctype category="membership" name="membership">

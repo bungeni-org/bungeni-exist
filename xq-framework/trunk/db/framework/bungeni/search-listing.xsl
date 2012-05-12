@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -34,15 +34,10 @@
         <limit>3</limit>
     </paginator>
     <alisting>
-        <document>
-         <output> 
+        <doc>
             <bu:ontology .../>
-    
-         </output>
-         <referenceInfo>
-            <ref>
-            </ref>
-         </referenceInfo>
+            <ref/>
+         </doc>
     </alisting>
     </docs>
     -->
@@ -62,7 +57,8 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue-center">
-                    <xsl:text>Search results in&#160;</xsl:text>
+                    <i18n:text key="search-results">search results(nt)</i18n:text>&#160;
+                    <i18n:text key="for">for(nt)</i18n:text>&#160;
                     <!-- Capitalize the first letter -->
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
@@ -70,14 +66,10 @@
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            <xsl:text>search results (</xsl:text>
+                            <i18n:text key="search-results">search results(nt)</i18n:text>
+                            <xsl:text> (</xsl:text>
                             <xsl:value-of select="paginator/count"/>
                             <xsl:text>)</xsl:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <xsl:text>archived</xsl:text>
                         </a>
                     </li>
                 </ul>
@@ -96,13 +88,13 @@
                     </li>
                 </ul>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
                     <div class="list-header">
                         <!-- call the paginator -->
                         <xsl:apply-templates select="paginator"/>
-                        <div id="search-n-sort" class="search-bar" style="display:inline;">
+                        <div id="search-n-sort" class="search-bar struct-i">
                             <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
                             <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
                             <xsl:if test="$searchins and $orderbys">
@@ -111,7 +103,16 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
+                        <div id="toggle-i18n" class="hide">
+                            <span id="i-compress">
+                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
                     </div>                    
                     <!-- 
                     !+LISTING_GENERATOR
@@ -133,11 +134,20 @@
             <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
-    <xsl:template match="document" mode="renderui">
-        <xsl:variable name="docIdentifier" select="output/bu:ontology/bu:legislativeItem/@uri"/>
+    <xsl:template match="doc" mode="renderui">
+        <xsl:variable name="docIdentifier">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <li>
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
@@ -145,35 +155,35 @@
                     <tr>
                         <td class="labels">id:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                            <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">primary sponsor:</td>
                         <td>
-                            <a href="member?uri={output/bu:ontology/bu:legislativeItem/bu:owner/@href}" id="{output/bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                                <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                            <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">last event:</td>
                         <td>
-                            <xsl:value-of select="output/bu:ontology/bu:legislativeItem/bu:status"/>
+                            <xsl:value-of select="bu:ontology/bu:document/bu:status"/>
                             &#160;&#160;<b>on:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(output/bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">submission date:</td>
                         <td>
-                            <xsl:value-of select="format-date(output/bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
+                            <xsl:value-of select="format-date(bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">ministry:</td>
                         <td>
-                            <xsl:value-of select="referenceInfo/ref/bu:ministry/bu:shortName"/>
+                            <xsl:value-of select="ref/bu:ministry/bu:shortName"/>
                         </td>
                     </tr>
                 </table>

@@ -12,12 +12,12 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:metadata/@type"/>
-        <xsl:variable name="doc_uri" select="bu:user/@uri"/>
+        <xsl:variable name="doc-type" select="bu:membership/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:membership/bu:referenceToUser/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:user/bu:field[@name='first_name'],' ', bu:user/bu:field[@name='last_name'])"/>
+                    <xsl:value-of select="concat(bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -25,7 +25,8 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">offices</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads">
                 <ul class="ls-downloads">
@@ -56,59 +57,39 @@
                     </li>
                 </ul>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="mem-profile">
-                        <div class="mem-photo mem-top-left">
-                            <p class="imgonlywrap">
-                                <img width="150" height="200" src="assets/bungeni/images/mp.jpg" alt="The Speaker"/>
-                            </p>
-                        </div>
-                        <div class="mem-top-right">
-                            <table class="mem-tbl-details">
+                        <div class="mem-table-wrapper">
+                            (baked)
+                            <table class="tbl-tgl">
                                 <tr>
-                                    <td class="labels fbt">name:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="concat(bu:user/bu:field[@name='titles'],'. ',bu:user/bu:field[@name='first_name'],' ', .//bu:user/bu:field[@name='last_name'])"/>
-                                    </td>
+                                    <td class="fbtd">office</td>
+                                    <td class="fbtd">type</td>
+                                    <td class="fbtd">title</td>
+                                    <td class="fbtd">from</td>
+                                    <td class="fbtd">to</td>
                                 </tr>
-                                <tr>
-                                    <td class="labels fbottom">elected/nominated:</td>
-                                    <td class="fbt">unknown</td>
+                                <tr class="items">
+                                    <td class="fbt bclr">XIV-PARL - Bungeni Parliament</td>
+                                    <td class="fbt bclr">parliament</td>
+                                    <td class="fbt bclr">member</td>
+                                    <td class="fbt bclr">February 23, 2011</td>
+                                    <td class="fbt bclr">March 14, 2012</td>
                                 </tr>
-                                <tr>
-                                    <td class="labels fbottom">election/nomination date:</td>
-                                    <td class="fbt">unknown</td>
+                                <tr class="items">
+                                    <td class="fbt bclr">Com_02 - Parliamentary Committee P1_02</td>
+                                    <td class="fbt bclr">committee</td>
+                                    <td class="fbt bclr">chairperson</td>
+                                    <td class="fbt bclr">February 23, 2011</td>
+                                    <td class="fbt bclr">March 14, 2012</td>
                                 </tr>
-                                <tr>
-                                    <td class="labels fbottom">start date:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">language:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">constituency:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">province:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">region:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">political party:</td>
-                                    <td class="fbt">unknown</td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">notes:</td>
-                                    <td class="fbt">
-                                        <xsl:copy-of select="bu:user/bu:description"/>
-                                    </td>
+                                <tr class="items">
+                                    <td class="fbt bclr">PolGrup_02 - Political Group P1_02 </td>
+                                    <td class="fbt bclr">political-group</td>
+                                    <td class="fbt bclr">secretary</td>
+                                    <td class="fbt bclr">February 23, 2011</td>
+                                    <td class="fbt bclr">March 14, 2012</td>
                                 </tr>
                             </table>
                         </div>

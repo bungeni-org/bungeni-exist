@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -11,13 +11,24 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="document">
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+    <xsl:include href="context_downloads.xsl"/>
+    <xsl:param name="serverport"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -25,59 +36,72 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">timeline</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc_uri"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
-            <div style="float:right;width:400px;height:18px;">
-                <div id="doc-downloads">
-                    <ul class="ls-downloads">
-                        <li>
-                            <a href="#" title="get as RSS feed" class="rss">
-                                <em>RSS</em>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
+            </xsl:call-template>
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:80%;">
+                    <div class="doc-table-wrapper">
                         <table class="listing timeline tbl-tgl">
                             <tr>
-                                <th>type</th>
-                                <th>description</th>
-                                <th>date</th>
+                                <th>
+                                    <i18n:text key="tab-type">type(nt)</i18n:text>
+                                </th>
+                                <th>
+                                    <i18n:text key="tab-desc">description(nt)</i18n:text>
+                                </th>
+                                <th>
+                                    <i18n:text key="tab-date">date(nt)</i18n:text>
+                                </th>
+                                <!-- !+FIX_THIS not-implemented
+                                <th>
+                                    <i18n:text key="tab-user">user(nt)</i18n:text>
+                                </th-->
                             </tr>
-                            <xsl:for-each select="primary/bu:ontology/bu:legislativeItem/bu:changes/bu:change">
-                                <xsl:sort select="./bu:field[@name='date_active']" order="descending"/>
-                                <xsl:variable name="action" select="./bu:field[@name='action']"/>
-                                <xsl:variable name="content_id" select="./bu:field[@name='change_id']"/>
-                                <xsl:variable name="version_uri" select="concat('/ontology/bill/versions/',$content_id)"/>
+                            <xsl:for-each select="ref/timeline">
+                                <xsl:sort select="bu:statusDate" order="descending"/>
                                 <tr>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="$action"/>
+                                            <xsl:value-of select="bu:type/bu:value"/>
                                         </span>
                                     </td>
                                     <td>
                                         <span>
                                             <xsl:choose>
-                                                <xsl:when test="$action = 'new-version'">
-                                                    <xsl:variable name="new_ver_id" select="bu:field[@name='change_id']"/>
-                                                    <a href="{//primary/bu:ontology/bu:document/@type}/text?uri={//primary/bu:ontology/bu:legislativeItem/@uri}{//primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version/bu:field[@name=$new_ver_id]//@uri}">
-                                                        <xsl:value-of select="bu:field[@name='description']"/>
+                                                <xsl:when test="bu:type/bu:value eq 'event'">
+                                                    <a href="{lower-case($doc-type)}/event?uri={@href}">
+                                                        <xsl:value-of select="(bu:shortTitle, bu:title)"/>
+                                                    </a>
+                                                </xsl:when>
+                                                <xsl:when test="bu:type/bu:value eq 'annex'">
+                                                    <xsl:value-of select="(bu:shortTitle, bu:title)"/>:
+                                                    <i18n:text key="download">download(nt)</i18n:text>&#160;<a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
+                                                        <xsl:value-of select="bu:name"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="bu:field[@name='description']"/>
+                                                    <xsl:value-of select="(bu:shortTitle, bu:title)"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </span>
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="format-dateTime(bu:field[@name='date_active'],'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </span>
                                     </td>
+                                    <!--td>
+                                        <span>
+                                            <xsl:value-of select="bu:auditId"/>
+                                        </span>
+                                    </td-->
                                 </tr>
                             </xsl:for-each>
                         </table>

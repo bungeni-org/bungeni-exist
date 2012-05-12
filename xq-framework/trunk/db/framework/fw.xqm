@@ -24,15 +24,9 @@ declare function fw:get($param as xs:string) as xs:string {
     request:get-parameter($param, "")
 };
 
-
-
-
 declare function fw:app-tmpl($uri as xs:string) as document-node() {
    fn:doc(fn:concat($config:app-prefix, $uri))
 };
-
-
-
 
 (: do nothing ! :)
 declare function fw:ignore() as element(exist:ignore) {
@@ -69,9 +63,9 @@ Dynamically rewrite all the urls in the page based on the url that you access
 it from. This ensures that URL's dont break even when you have a complex virtual
 url hierarchy maintained via controller.xql.
 :)
-declare function fw:redirect-rel($uri as xs:string) as element(exist:dispatch) {
+declare function fw:redirect-rel($EXIST-PATH as xs:string, $uri as xs:string) as element(exist:dispatch) {
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="{template:make-relative-uri($exist:path, $uri)}"/>
+        <redirect url="{template:make-relative-uri($EXIST-PATH, $uri)}"/>
     </dispatch>
 };
 

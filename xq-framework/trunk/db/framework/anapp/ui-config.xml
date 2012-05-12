@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    
+    This file is the UI configuration file used by the System 
+    It describes date formats , route navigations and tab structures for the application
+-->
+<ui xmlns:i18n="http://exist-db.org/xquery/i18n">
+
+    <!-- GENERAL FORMAT PREFERNCES -->
+    <!-- "http://exist-db.org/xquery/i18n" 
+        specify date and datetime formats here , these formats are used by the XSLT scripts
+        We use the XSLT date formatting style to format dates
+    -->
+    <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
+    <format type="date">[D1o] [MNn,*-3], [Y]</format>
+
+    <!-- LISTING CONFIG PREFERNCES -->
+    <listings>
+        <!-- limits the number of items shown on a listing page -->
+        <limit>5</limit>
+        <!-- number of pages linked on the paginator before showing next -->
+        <visiblePages>3</visiblePages>
+    </listings>
+    
+    <!-- APPLICATION ROUTING -->
+    <!--
+        Route Map
+        This describes properties associated with every url supported by the application.
+        The route map describes what will be the default title used on the page resolving to the route,
+        also describes what the active navigation and subnavigation for the route. Eventually this can 
+        be used to render a breadcrumb
+        -->
+    <routes>
+        <!--
+            href - the incoming url, this is used to load the main menu
+            navigation - specifies the active navigation level 1"http://exist-db.org/xquery/i18n" 
+            subnavigation - specifies te active navigation level 2
+            -->
+        <route href="/">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        <route href="/home">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        <route href="/search-all">
+            <navigation>home</navigation>
+            <title>Search</title>
+        </route>
+        <route href="/search">
+            <navigation>business</navigation>
+            <title>Search</title>
+        </route>
+        <route href="/business">
+            <title>Business</title>
+            <navigation>business</navigation>
+        </route>     
+        <!-- #ACTS -->
+        <route href="/acts">
+            <title>Business | Acts</title>
+            <navigation>business</navigation>
+            <subnavigation>acts</subnavigation>
+        </route>
+        <route href="/act/text">
+            <title>Business | Act</title>
+            <navigation>business</navigation>
+            <subnavigation>acts</subnavigation>
+        </route>        
+        <!-- #BILLS -->
+        <route href="/bills">
+            <title>Business | Bills</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/text">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/timeline">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill/details">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <!-- #AMENDMENTS -->
+        <route href="/amendments">
+            <title>Business | Amendments </title>
+            <navigation>business</navigation>
+            <subnavigation>amendments</subnavigation>
+        </route>
+        <route href="/amendment/text">
+            <title>Business | Debate Text</title>
+            <navigation>business</navigation>
+            <subnavigation>debates</subnavigation>
+        </route>        
+        <!-- #DEBATES -->
+        <route href="/debates">
+            <title>Business | Questions </title>
+            <navigation>business</navigation>
+            <subnavigation>debates</subnavigation>
+        </route>
+        <route href="/debate/text">
+            <title>Business | Debate Text</title>
+            <navigation>business</navigation>
+            <subnavigation>debates</subnavigation>
+        </route>
+        <!-- #DEBATE-REPORTS -->
+        <route href="/reports">
+            <title>Business | Debate Reports </title>
+            <navigation>business</navigation>
+            <subnavigation>reports</subnavigation>
+        </route>
+        <route href="/report/text">
+            <title>Business | Debate Report Text</title>
+            <navigation>business</navigation>
+            <subnavigation>reports</subnavigation>
+        </route>     
+        <!-- #JUDGEMENTS -->
+        <route href="/judgements">
+            <title>Business | Judgements </title>
+            <navigation>business</navigation>
+            <subnavigation>judgements</subnavigation>
+        </route>
+        <route href="/judgement/text">
+            <title>Business | Judgement Text</title>
+            <navigation>business</navigation>
+            <subnavigation>judgements</subnavigation>
+        </route>  
+        <!-- #OFFICIAL_GAZETTE -->
+        <route href="/gazettes">
+            <title>Business | Official Gazettes </title>
+            <navigation>business</navigation>
+            <subnavigation>gazettes</subnavigation>
+        </route>
+        <route href="/gazette/text">
+            <title>Business | Official Gazette Text</title>
+            <navigation>business</navigation>
+            <subnavigation>gazettes</subnavigation>
+        </route>
+        <!-- #MISCELLANEOUS -->
+        <route href="/misc">
+            <title>Business | Miscellaneous AKN Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>misc</subnavigation>
+        </route>
+        <route href="/misc/text">
+            <title>Business | Miscellaneous Text</title>
+            <navigation>business</navigation>
+            <subnavigation>misc</subnavigation>
+        </route>
+    </routes>
+    
+    <!--
+       MENU GROUPS
+        -->
+    <menugroups>
+        
+        <!-- 
+            The menu navigation is defined here 
+            The menus themselves are defined in XHTML 
+                - the main navigation uses the id "mainnav"
+                - the sub navigation uses the id "subnav"
+                - the for attribute refers to a /route/navigation
+        -->
+        <menu name="mainnav" for="/">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
+                <ul class="theme-lev-1" id="portal-globalnav">
+                    <li>
+                        <a name="home" href="home">
+                            <i18n:text key="home">home</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="business" href="business">
+                            <i18n:text key="business">business</i18n:text>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+        <menu name="home" for="home">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
+                <ul id="portal-home">
+                    <li/>
+                </ul>
+            </div>
+        </menu>
+        <menu name="business" for="business">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
+                <ul class="theme-lev-1" id="portal-personaltools">
+                    <li>
+                        <a name="acts" href="acts">
+                            <i18n:text key="acts">acts(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="bills" href="bills">
+                            <i18n:text key="bills">bills(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="amendments" href="amendments">
+                            <i18n:text key="amendments">amendments(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="debates" href="debates">
+                            <i18n:text key="debates">debates(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="reports" href="reports">
+                            <i18n:text key="reports">reports(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="judgements" href="judgements">
+                            <i18n:text key="judgements">judgements(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="gazettes" href="gazettes">
+                            <i18n:text key="gazettes">gazettes(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a name="misc" href="misc">
+                            <i18n:text key="misc">miscellaneous(nt)</i18n:text>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+    </menugroups>
+    
+    <!-- 
+       DOWNLOAD FORMATS
+    -->
+    <downloadgroups>
+        <rendergroup name="listings">
+            <format type="rss" href="null">Subscribe to Atom RSS feed</format>
+            <format type="print" href="null">Print this listing</format>
+        </rendergroup>
+        <rendergroup name="parl-doc">
+            <format type="xml" href="null">Download XML format</format>
+        </rendergroup>
+    </downloadgroups>
+
+    <!--
+        Tab Groups
+        -->
+    <viewgroups>
+        <views name="act">
+            <view path="bills" id="listing" tag="listing">
+                <template>listings.xml</template>
+                <xsl>listings.xsl</xsl>
+            </view>
+            <view path="act/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="bill">
+            <view path="bills" id="listing" tag="listing">
+                <template>listings.xml</template>
+                <xsl>listings.xsl</xsl>
+            </view>
+            <view path="bill/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="amendment">
+            <view path="amendment/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="debate">
+            <view path="debate/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="report">
+            <view path="report/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="judgement">
+            <view path="judgement/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="gazette">
+            <view path="gazette/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+        <views name="misc">
+            <view path="misc/text" id="text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>akomantoso.xml</template>
+                <xsl>akomantoso.xsl</xsl>
+            </view>
+        </views>
+    </viewgroups> 
+
+    <!-- Document Types
+        <doctype category="document">   The generic type of a document. Used in advanced search to group types, its 
+                                        derived from document type themselves itself.
+        <doctype name="group"> Defines the configuration parameter for the named document type 
+        <orderby/>      Defines the order by options that are available for that document types
+        <searchins/>    Defines the search filter options that are available for the type of document speficied
+        searchin/@field parameter must be a node path relative to bu:ontology.
+        -->
+    <doctypes>
+        <doctype category="document" name="act">
+            <listingfilters>
+                <listingfilter id="uc" name="current">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="bill">
+            <listingfilters>
+                <listingfilter id="uc" name="current">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="amendment">
+            <listingfilters>
+                <listingfilter id="uc" name="current">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="debate">
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="report">
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="judgement">
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="gazette">
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="document" name="misc">
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+    </doctypes>
+</ui>

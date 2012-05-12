@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -11,22 +11,24 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>    
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
-        document as opposed to main document. -->
+    document as opposed to main document. -->
     <xsl:param name="version"/>
-    <xsl:template match="document">
+    <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
-        <xsl:variable name="doc-type" select="primary/bu:ontology/bu:document/@type"/>
-        <xsl:variable name="ver_uri" select="primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
-        <xsl:variable name="doc_uri" select="primary/bu:ontology/bu:legislativeItem/@uri"/>
+        <xsl:variable name="server_port" select="serverport"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:document/@type"/>
+        <xsl:variable name="ver_uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_id]/@uri"/>
+        <xsl:variable name="doc_uri" select="bu:ontology/bu:legislativeItem/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="primary/bu:ontology/bu:legislativeItem/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
                     <!-- If its a version and not a main document... add version title below main title -->
                     <xsl:if test="$version eq 'true'">
                         <br/>
-                        <span style="color:#b22b14">Version - <xsl:value-of select="format-dateTime(primary/bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                        <span class="bu-red">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver_uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </xsl:if>
                 </h1>
@@ -53,46 +55,51 @@
                     </xsl:choose>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">assigned</xsl:with-param>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
-            <div style="float:right;width:400px;height:18px;">
-                <div id="doc-downloads">
-                    <ul class="ls-downloads">
-                        <li>
-                            <a href="#" title="get as RSS feed" class="rss">
-                                <em>RSS</em>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <!-- Renders the document download types -->
+            <xsl:call-template name="doc-formats">
+                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="uri" select="$doc_uri"/>
+            </xsl:call-template>
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div style="width:700px;margin: 0 auto;text-align:center">
+                    <div class="doc-table-wrapper">
                         <xsl:choose>
-                            <xsl:when test="boolean(secondary/bu:committee/bu:fullName)">
-                                <table class="listing timeline tbl-tgl">
+                            <xsl:when test="//bu:item_assignments">
+                                <table class="tbl-tgl">
                                     <tr>
-                                        <th>name</th>
-                                        <th>start date</th>
-                                        <th>status date</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>
-                                                <xsl:value-of select="secondary/bu:committee/bu:fullName"/>
-                                            </span>
+                                        <td class="fbtd lower-txt">
+                                            <i18n:text key="doc-committee">committee(nt)</i18n:text>
                                         </td>
-                                        <td>
-                                            <span>
-                                                <xsl:value-of select="secondary/bu:legislature/bu:statusDate"/>
-                                            </span>
+                                        <td class="fbtd">
+                                            <i18n:text key="date-start">start date(nt)</i18n:text>
                                         </td>
-                                        <td>
-                                            <span>
-                                                <xsl:value-of select="secondary/bu:group/bu:startDate"/>
-                                            </span>
+                                        <td class="fbtd">
+                                            <i18n:text key="date-end">end date(nt)</i18n:text>
+                                        </td>
+                                        <td class="fbtd">
+                                            <i18n:text key="date-due">due date(nt)</i18n:text>
                                         </td>
                                     </tr>
+                                    <xsl:for-each select="//bu:item_assignments">
+                                        <xsl:sort select="bu:item_assignment/bu:startDate" order="descending"/>
+                                        <tr class="items">
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:item_assignment/bu:groupId"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="format-date(bu:item_assignment/bu:startDate,$date-format,'en',(),())"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="format-date(bu:item_assignment/bu:startDate,$date-format,'en',(),())"/>
+                                            </td>
+                                            <td class="fbt bclr">
+                                                <xsl:value-of select="bu:item_assignment/bu:groupId"/>
+                                            </td>
+                                        </tr>
+                                    </xsl:for-each>
                                 </table>
                             </xsl:when>
                             <xsl:otherwise>

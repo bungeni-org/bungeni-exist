@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+    <!-- IMPORTS -->
+    <xsl:import href="config.xsl"/>
+    <xsl:import href="paginator.xsl"/>
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -9,24 +12,33 @@
             <xd:p> Members of parliament from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
-    
-    <!-- load configuration info -->
-    <xsl:include href="config.xsl"/>
+    <!-- CONVENIENCE VARIABLES -->
+    <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">Members of Parliament</h1>
+                <h1 id="doc-title-blue-center">
+                    <i18n:text key="list-t-members">Members of Parliament(nt)</i18n:text>
+                </h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="ls-doc-tabs">
                     <li class="active">
                         <a href="#">
-                            current (<xsl:value-of select="paginator/count"/>)
+                            <i18n:text key="list-tab-cur">current(nt)</i18n:text>
+                            <xsl:text>&#160;(</xsl:text>
+                            <xsl:value-of select="paginator/count"/>
+                            <xsl:text>)</xsl:text>
                         </a>
                     </li>
                     <li>
                         <a href="#">
-                            archive
+                            <i18n:translate>
+                                <i18n:text key="archive">Text to translate with ({1})</i18n:text>
+                                <i18n:param>
+                                    <xsl:value-of select="@count"/>
+                                </i18n:param>
+                            </i18n:translate>
                         </a>
                     </li>
                 </ul>
@@ -40,37 +52,32 @@
                     </li>
                 </ul>
             </div>
-            <div id="main-doc" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
                     <!-- render the paginator -->
                     <div class="list-header">
+                        <!-- call the paginator -->
                         <xsl:apply-templates select="paginator"/>
                         <div id="search-n-sort" class="search-bar">
-                            <form method="get" action="" name="search_sort">
-                                <label for="search_for">Search text:</label>
-                                <input id="search_for" name="q" class="search_for" type="text" value=""/>
-                                <label for="search_in">in:</label>
-                                <select name="w" id="search_w">
-                                    <option value="doc" selected="">entire document</option>
-                                    <option value="name">short name</option>
-                                    <option value="text">body text</option>
-                                    <option value="desc">description</option>
-                                    <option value="changes">changes</option>
-                                    <option value="versions">versions</option>
-                                    <option value="owner">owner</option>
-                                </select>
-                                <label for="search_in">sort by:</label>
-                                <select name="s" id="sort_by">
-                                    <option value="ln" selected="">last name</option>
-                                    <option value="fn">first_name</option>
-                                </select>
-                                <input value="search" type="submit"/>
-                            </form>
+                            <xsl:variable name="searchins" select="xqcfg:get_searchin($input-document-type)"/>
+                            <xsl:variable name="orderbys" select="xqcfg:get_orderby($input-document-type)"/>
+                            <xsl:if test="$searchins and $orderbys">
+                                <div id="search-form"/>
+                            </xsl:if>
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
+                        <div id="toggle-i18n" class="hide">
+                            <span id="i-compress">
+                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="toggler-list" id="expand-all">- <i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
                     </div>                 
                     <!-- render the actual listing-->
                     <xsl:apply-templates select="alisting"/>
@@ -82,47 +89,60 @@
     <!-- Include the paginator generator -->
     <xsl:include href="paginator.xsl"/>
     <xsl:template match="alisting">
-        <ul id="list-toggle" class="ls-row" style="clear:both">
+        <ul id="list-toggle" class="ls-row clear">
             <xsl:apply-templates mode="renderui">
-                <xsl:sort select="bu:ontology/bu:user/bu:field[@name='first_name']" order="ascending"/>
+                <xsl:sort select="bu:ontology/bu:membership/bu:firstName" order="ascending"/>
             </xsl:apply-templates>
         </ul>
     </xsl:template>
-    <xsl:template match="output" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:user/@uri"/>
+    <xsl:template match="doc" mode="renderui">
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:user/bu:field[@name='titles'],'. ',bu:ontology/bu:user/bu:field[@name='first_name'],' ', bu:ontology/bu:user/bu:field[@name='last_name'])"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
-            <div style="display:inline-block;">/ Constitutency / Party</div>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
+            </div>
             <span>-</span>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">id:</td>
-                        <td>
+                <div>
+                    <p class="imgonlywrap photo-listing" style="float:left;">
+                        <img src="assets/bungeni/images/presidente.jpg" alt="Presidente" align="left"/>
+                    </p>
+                    <div class="block">
+                        <span class="labels">id:</span>
+                        <span>
                             <xsl:value-of select="$docIdentifier"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">gender:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:user/bu:gender"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">date of birth:</td>
-                        <td>
-                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:user/bu:field[@name='date_of_birth']),$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">status:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:user/bu:status"/>
-                        </td>
-                    </tr>
-                </table>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">gender:</span>
+                        <span>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:gender"/>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="dob">date of birth(nt)</i18n:text>:</span>
+                        <span>
+                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="status">status(nt)</i18n:text>:</span>
+                        <span>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:status/bu:value"/>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="email">short bio(nt)</i18n:text>:</span>
+                        <span>
+                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,360)"/>...
+                        </span>
+                    </div>
+                </div>
             </div>
         </li>
     </xsl:template>

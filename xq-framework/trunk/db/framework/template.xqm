@@ -43,7 +43,10 @@ declare namespace xh = "http://www.w3.org/1999/xhtml";
 declare namespace pg = "http://bungeni.org/page";
 
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
-
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
+import module namespace i18n = "http://exist-db.org/xquery/i18n" at "i18n.xql";
+declare namespace request = "http://exist-db.org/xquery/request";
+declare namespace response = "http://exist-db.org/xquery/response";
 
 (:~
 : Merges an XHTML template with XHTML content snippets
@@ -76,11 +79,12 @@ declare function template:process-tmpl(
         $content as node()+
         ) { 
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
-    $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] 
+       $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
     (: extracts top level content and content from within an id less container :)
-    let $processed-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
+     $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
-    return template:process-page-meta($route-map, $route-override, $processed-doc)
+      return 
+       template:process-page-meta($route-map, $route-override, $proc-doc)  
 };
 
 
@@ -206,7 +210,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     (:~
     Check set the title from the page-info attribute 
     :)
-
+   
 	if ($content/self::xh:title and $route/title) then (
 		   <title>{
 		   if ($override/xh:title) then 
@@ -221,10 +225,10 @@ declare function local:set-meta($route as element(), $override as element(), $co
     tab is slight more involved hence the nested if 
     :)
     
-    else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:a) then (
+    else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:li) then (
 			if ($route/navigation) then (
-				if ($content/self::xh:a[@name=$route/navigation/text()]) then (
-				    <xh:a class="current" href="{$content/@href}">{data($content)}</xh:a>
+				if ($content/self::xh:li[xh:a/@name=$route/navigation/text()]) then (
+				    <xh:li class="selected"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
 				) 
 				else  
 				 $content
@@ -233,13 +237,13 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			  $content
 	)
     (:~
-    Set the sub-navigation tab to the active one as spoecified in the route
+    Set the sub-navigation tab to the active one as specified in the route
     :)
 
-    else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:a) then (
+    else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:li) then (
 			if ($route/subnavigation) then (
-				if ($content/self::xh:a[@name=$route/subnavigation/text()]) then (
-				    <xh:a class="current" href="{$content/@href}">{data($content)}</xh:a>
+				if ($content/self::xh:li[xh:a/@name=$route/subnavigation/text()]) then (
+				    <xh:li class="selected"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
 				) 
 				else  
 				 $content
@@ -247,7 +251,26 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			else
 			  $content
 	)
+	
+	(:~ highlight active lang :)
+    else if ($content/ancestor::xh:ul[@id="portal-languageselector"] and $content/self::xh:li) then (
     
+            for $anchor in $content/self::xh:li
+            return 
+    			if ($anchor/xh:a[@id = template:set-lang()]) then (
+    			     element li {
+    			        attribute class { "active" }, 
+                        $anchor/xh:a
+                     }
+                )
+    			else ( 
+    			     element li {
+    			         $anchor/xh:a
+    			     }   
+    			)
+	)
+	
+
 	else 
     (:~
      return the default 
@@ -260,8 +283,6 @@ declare function local:set-meta($route as element(), $override as element(), $co
 							   else $child
 				 }
 };
-
-
 
 
 (:~
@@ -282,10 +303,23 @@ declare function template:filter-page-namespace(
            }
 };
 
+(:~
+:   Sets the UI language
+:)
+declare function template:set-lang() {
+        if(string-length(request:get-parameter("language","")) gt 0) then 
+            response:set-cookie('lang',request:get-parameter("language",""))
+            
+        else if(string-length(request:get-cookie-value('lang')) gt 0) then
+            request:get-cookie-value('lang')                
+            
+        else    
+            response:set-cookie('lang',$config:DEFAULT-LANG)         
+};
 
 (:~
 : Process the metadata for the page by querying the route map
-: 
+: Apply i18n translation process
 : @param route
 :   route map
 : @param override
@@ -294,5 +328,7 @@ declare function template:filter-page-namespace(
 :   The page content being processed by the template 
 :)
 declare function template:process-page-meta($route as element(), $override as element(), $doc as element()) as element() {
-	local:set-meta($route, $override, $doc)
+	let $metazed := local:set-meta($route, $override, $doc)
+	return
+	   i18n:process($metazed, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
 };

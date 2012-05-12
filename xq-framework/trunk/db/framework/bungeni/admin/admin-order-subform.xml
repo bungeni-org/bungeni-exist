@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+XForm for editing Order configurations    
+This is loaded by admin-order.xql
+-->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="orderby" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="default">
+            <data>
+                <orderbys>
+                    <orderby order="asc" value="start_dt_oldest">
+                        start date [oldest]
+                    </orderby>
+                </orderbys>
+            </data>
+        </xf:instance>
+        <xf:bind id="b-orderby-order" nodeset="@order" type="xs:string"/>
+        <xf:bind id="b-orderby-value" nodeset="@value" type="xs:string"/>
+        <xf:bind id="b-orderby" nodeset="." type="xs:string"/>
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/orderbys" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Order editor loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/orderbys" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Order saved</xf:message>
+            <xf:action ev:event="xforms-submit-error">
+                <xf:message level="ephemeral">Sorry - your update failed.</xf:message>
+            </xf:action>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to edit loaded route -->
+    <xf:group appearance="full" class="subform-pane">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
+        <xf:repeat id="orderbys" nodeset="orderby">
+            <xf:label id="editing-subform">Order Subform</xf:label>
+            <xf:select1 id="sortorder" ref="@order" appearance="full" class="toggle-sort" incremental="true">
+                <xf:label>Order</xf:label>
+                <xf:hint>sort order</xf:hint>
+                <xf:help>Toggle between asceding and descending</xf:help>
+                <xf:item>
+                    <xf:label>ascending</xf:label>
+                    <xf:value>asc</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>descending</xf:label>
+                    <xf:value>desc</xf:value>
+                </xf:item>
+            </xf:select1>
+            <xf:input ref="@value">
+                <xf:hint>sort value</xf:hint>
+                <xf:help>Warning: Editing this field requires updating the module with this new value.</xf:help>
+                <xf:label id="lbl-b-orderby">Value</xf:label>
+            </xf:input>
+            <xf:input ref=".">
+                <xf:label id="lbl-b-orderby">Title / Label</xf:label>
+            </xf:input>
+        </xf:repeat>
+        <xf:group appearance="minimal" class="configsTriggerGroup buttons-pane">
+            <xf:trigger class="configsSubTrigger buttons-inline">
+                <xf:label>add order-by filter</xf:label>
+                <xf:hint>Add a new order-by filter to above list.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Loading Order-by filters Add Form...</xf:message>
+                    <xf:insert nodeset="orderby[last()]" at="last()" origin="instance('default')/orderby[last()]" ev:event="DOMActivate"/>
+                    <!--xf:setvalue bind="b-nav-href" ref="xhtml:a/@href" model="mnavgroup" value="this"/>
+                    <xf:setvalue bind="b-nav-href" value="value XPath">value</xf:setvalue>
+                        <xf:setvalue bind="b-nav-href" ref="instance('tmpl-navigation')/xhtml:li/xhtml:a/@href"/-->
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>delete selected</xf:label>
+                <xf:hint>Delete the Selected row in a form.</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Deleting selected sub-navigation...</xf:message>
+                    <xf:delete nodeset="orderby" at="index('orderbys')" ev:event="DOMActivate"/>
+                </xf:action>
+            </xf:trigger>
+            →   
+            <xf:trigger appearance="triggerMiddleColumn">
+                <xf:label>apply changes</xf:label>
+                <xf:hint>Click apply to update the document with all changes made</xf:hint>
+                <xf:send submission="s-update-master"/>
+            </xf:trigger>
+        </xf:group>
+    </xf:group>
+</div>

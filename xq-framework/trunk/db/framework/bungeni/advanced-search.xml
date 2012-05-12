@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" id="content">
+    <div id="main-wrapper">
+        <div id="title-holder" class="theme-lev-1-only">
+            <h1 id="doc-title-blue">
+                <i18n:text key="adv-search">Advanced Search(nt)</i18n:text>
+            </h1>
+        </div>
+        <div id="region-content" class="rounded-eigh tab_container" role="main">
+            <div id="adv-search-wrapper">
+                <form method="GET" action="search-adv" id="ui_search" name="search_sort">
+                    <input type="hidden" id="exist_path" name="exist_path" value="/search-adv"/>
+                    <input name="st" type="hidden" value="adv"/>
+                    <fieldset>
+                        <legend>&#160;<i18n:text key="find-docs-with">Find documents with(nt)</i18n:text>&#160;</legend>
+                        <div class="row">
+                            <span class="label" for="all-words">
+                                <i18n:text key="words-all">all these words(nt)</i18n:text>:</span>
+                            <span class="formw">
+                                <input id="all-words" name="qa" class="search_for" type="text"/>
+                            </span>
+                            <span class="example">
+                                <i18n:text key="eg">E.g.(nt)</i18n:text>&#160;<i18n:text key="eg-keywords">Type the key words(nt)</i18n:text>&#160;<span class="mono">withdrawn public approved</span>
+                            </span>
+                        </div>
+                        <div class="row">
+                            <span class="label">
+                                <i18n:text key="words-exact">the exact words or phrase(nt)</i18n:text>:</span>
+                            <span class="formw">
+                                <input type="text" name="qe" class="search_for"/>
+                            </span>
+                            <span class="example">
+                                <i18n:text key="eg">E.g.(nt)</i18n:text>&#160;<span class="mono">"object of the Bill is to"</span>&#160;<i18n:text key="eg-w-quotes">with quotes(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="row">
+                            <span class="label">
+                                <i18n:text key="words-any">contains any of these words(nt)</i18n:text>:</span>
+                            <span class="formw">
+                                <input type="text" name="qh" class="search_for"/>
+                            </span>
+                            <span class="example">
+                                <i18n:text key="eg">E.g.(nt)</i18n:text>&#160;<span class="mono">withdrawn OR approved</span>&#160;<i18n:text key="eg-w-OR">with the OR(nt)</i18n:text>
+                            </span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>&#160;<i18n:text key="filter-results">Filter the returned results by(nt)</i18n:text>&#160;</legend>
+                        <div class="row">
+                            <div class="b-left" id="search-groups">
+                                <!-- categorized doctypes will be rendered here -->
+                            </div>
+                            <div class="b-right">
+                                <label for="status">
+                                    <i18n:text key="status-select">select status (nt)</i18n:text>
+                                    <div>
+                                        <select id="status" name="std"/>
+                                    </div>
+                                </label>
+                                <br/>
+                                <br/>
+                                <label for="startdate">
+                                    <i18n:text key="date-start">start date(nt)</i18n:text>
+                                    <div>
+                                        <input id="startdate" name="sd" type="text" placeholder="YYYY-MM-DD"/>
+                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside hide">Pick a date</button>
+                                    </div>
+                                </label>
+                                <br/>
+                                <label for="enddate">
+                                    <i18n:text key="date-end">end date(nt)</i18n:text>
+                                    <div>
+                                        <input id="enddate" name="ed" type="text" placeholder="YYYY-MM-DD"/>
+                                        <button type="button" class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside hide">Pick a date</button>
+                                    </div>
+                                </label>
+                                <br/>
+                                <br/>
+                                <label for="status">
+                                    <i18n:text key="status-date-sort">sort status date(nt)</i18n:text>
+                                    <div>
+                                        <select id="status_date" name="sort">
+                                            <option value="std_newest">
+                                                <i18n:text key="sort-date-new">status date newest(nt)</i18n:text>
+                                            </option>
+                                            <option value="std_oldest">
+                                                <i18n:text key="sort-date-old">status date oldest(nt)</i18n:text>
+                                            </option>
+                                        </select>
+                                    </div>
+                                </label>
+                                <br/>
+                                <div class="b-right">
+                                    <input class="button" id="adv-search-btn" value="i18n(btn-search,search)" type="submit"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="spacer">
+                            &#160;
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

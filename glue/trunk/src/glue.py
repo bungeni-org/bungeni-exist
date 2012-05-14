@@ -756,87 +756,33 @@ class PoTranslationsConfig(Config):
 class PostTransform(object):
     """
     
-    ReWrites Events URIs with source URI of 'parent' document
+    Updates signatories, workflowEvents and groupsitting items in the eXist repository
+    
+    http://www.voidspace.org.uk/python/articles/authentication.shtml
     """
     def __init__(self, input_params = None):
-        self.main_cfg = input_params["main_config"]
-        self.transformer = input_params["transformer"]
+        self.webdav_cfg = input_params["webdav_config"]
 
-    def update_events_hrefs(self):
-        ontoxmls = os.listdir(os.path.join(self.main_cfg.get_ontoxml_output_folder()))
-        wfevents = False
-        # looping through all transformed documents
-        for ontoxml in ontoxmls:
-            # the parser takes in the file path and regurgitates the root node
-            parse_on = ParseOntologyXML(self.main_cfg.get_ontoxml_output_folder()+ontoxml)
-            on_doc = parse_on.get_ontology_name()
-            if on_doc is not None:
-                # we are interested in non-event documents
-                if on_doc.selectSingleNode("bu:document/bu:docType/bu:value").getText() != "Event":
-                    bu_doc = on_doc.selectSingleNode("bu:document")
-                    parent = bu_doc.selectSingleNode("bu:docType/bu:value").getText()
-                    wf_container = bu_doc.selectSingleNode("bu:workflowEvents")
-                    dict_events = {}
-                    if wf_container is not None:
-                        if wf_container.selectNodes("bu:workflowEvent"):
-                            wfevents = True
-                            # some docs may get an internal-uri, we handle that here
-                            if bu_doc.attribute("uri") is None:
-                                parent_uri = bu_doc.attribute("internal-uri").getValue()
-                            else:
-                                parent_uri = bu_doc.attribute("uri").getValue()
-                            
-                            parent_doc_id = bu_doc.selectSingleNode("bu:docId").getText()
-                            print "[",_COLOR.WARNING + parent_doc_id + " - " + parent + _COLOR.ENDC,"]", parent_uri
-                            # returns workFlowEvent nodes for iteration
-                            wf_events = wf_container.selectNodes("bu:workflowEvent")
-                            for wf_event in wf_events:
-                                eve_doc_id = wf_event.selectSingleNode("bu:docId").getText()
-                                dict_events[eve_doc_id] = wf_event.attribute("href").getValue()
-                            # things start to get more interesting...
-                            self.set_event_href(dict_events, parent_uri, parse_on)
-        if wfevents is False:
-            print "There are no workflowEvents to process."
+    def update(self):
+        import urllib2
+        try:
+            xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql'
+            username = self.webdav_cfg.get_username()
+            password = self.webdav_cfg.get_password()
 
-    def set_event_href(self, events_dict, parent_uri, parsed_parent):
-        """
-        Receives a dictionary with found event's docId and @uri which will be written
-        on the event documents as refersTo href attribute overwriting the place-holder.
-        """
-        ontoxmls = os.listdir(os.path.join(self.main_cfg.get_ontoxml_output_folder()))
-        for doc_id, source_uri in events_dict.iteritems():
-            print " [", doc_id, "]", source_uri
-            # loop through all transformed docs but...
-            for ontoxml in ontoxmls:
-                parse_on = ParseOntologyXML(self.main_cfg.get_ontoxml_output_folder()+ontoxml)
-                on_event_doc = parse_on.get_ontology_name()
-                on_parent_doc = parsed_parent.get_ontology_name()
-                if on_event_doc is not None:
-                    bu_eve_doc = on_event_doc.selectSingleNode("bu:document")
-                    bu_parent_doc = on_parent_doc.selectSingleNode("bu:document")
-                    # ...this time were are interested in event documents only...
-                    if bu_eve_doc.selectSingleNode("bu:docType/bu:value").getText() == "Event":
-                        origi_event_uri = bu_eve_doc.attribute("uri").getValue()
-                        eve_doc_id = bu_eve_doc.selectSingleNode("bu:docId").getText()
-                        """
-                        update when bu:refersTo@href that matches bu:workflowEvent's bu:docId 
-                        with bu:docId of this event document
-                        """
-                        if doc_id == eve_doc_id:
-                            # RE-WRITE EVENT DOCUMENTS
-                            bu_refers = bu_eve_doc.selectSingleNode("bu:eventOf/bu:refersTo")
-                            bu_refers.addAttribute("href",parent_uri)
-                            # RE-WRITE PARENT DOCUMENT
-                            wf_container = bu_parent_doc.selectSingleNode("bu:workflowEvents")
-                            wf_events = wf_container.selectNodes("bu:workflowEvent")
-                            for wf_event in wf_events:
-                                wf_doc_id = wf_event.selectSingleNode("bu:docId").getText()
-                                if eve_doc_id == wf_doc_id:
-                                    wf_event.addAttribute("href",origi_event_uri)
-                            # ...finally, write back the changes on event and parent document 
-                            # respectively
-                            parse_on.write_to_disk()
-                            parsed_parent.write_to_disk()
+            #conjure a password manager
+            passmngr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            passmngr.add_password(None, xqyurl, username, password)
+            # create the AuthHandler
+            authhandler = urllib2.HTTPBasicAuthHandler(passmngr)
+            opener = urllib2.build_opener(authhandler)
+            urllib2.install_opener(opener)
+
+            response = urllib2.urlopen(xqyurl)
+            print _COLOR.OKGREEN + response.read() + _COLOR.ENDC
+        except urllib2.HTTPError, err:
+            print _COLOR.FAIL, err.code, err.msg, ': ERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
+            sys.exit()
 
 class POFilesTranslator(object):
     """
@@ -1037,14 +983,6 @@ def do_transform(cfg, parl_info):
     pxf.walk(cfg.get_input_folder())
     print _COLOR.OKGREEN + "Completed transformations !" + _COLOR.ENDC
 
-def do_update_events(cfg, parl_info):
-    transformer = Transformer(cfg)
-    transformer.set_params(parl_info)
-    print _COLOR.OKGREEN + "Commencing Events HREFs update..." + _COLOR.ENDC
-    pt = PostTransform({"main_config":cfg, "transformer":transformer})
-    pt.update_events_hrefs()
-    print _COLOR.OKGREEN + "Completed Events HREFs update !" + _COLOR.ENDC
-
 def do_sync(cfg, wd_cfg):
     print _COLOR.OKGREEN + "Syncing with eXist repository..." + _COLOR.ENDC
     """ synchronizing xml documents """
@@ -1105,7 +1043,6 @@ def main_transform(config_file):
     print _COLOR.OKGREEN + "Done with attachments..." + _COLOR.ENDC
     print _COLOR.HEADER + "Transforming ...." + _COLOR.ENDC      
     do_transform(cfg, parl_info)
-    do_update_events(cfg, parl_info)
 
 
 def main_sync(config_file):
@@ -1120,6 +1057,11 @@ def main_upload(config_file):
     wd_cfg = WebDavConfig(config_file)
     webdav_upload(TransformerConfig(config_file), wd_cfg)
 
+def update_refs(config_file):
+    wd_cfg = WebDavConfig(config_file)
+    print _COLOR.OKGREEN + "Commencing Repository updates..." + _COLOR.ENDC
+    pt = PostTransform({"webdav_config": wd_cfg})
+    pt.update()
 
 def __md5_file(f, block_size=2**20):
     """
@@ -1133,7 +1075,6 @@ def __md5_file(f, block_size=2**20):
             break
         md5.update(data)
     return md5.digest()
-
 
 def main(options):
     # parse command line options if any
@@ -1159,6 +1100,8 @@ def main(options):
             upload = __parse_options(options, ("-u", "--upload"))
             if upload is not None:
                 main_upload(config_file)
+                # perform post-transform URI reference fixes if any
+                update_refs(config_file)
             else:
                 print "upload not specified"
         else:

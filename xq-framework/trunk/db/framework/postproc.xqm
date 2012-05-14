@@ -2,7 +2,7 @@ xquery version "3.0";
 
 module namespace pproc = "http://exist.bungeni.org/pproc";
 import module namespace kwic="http://exist-db.org/xquery/kwic";
-import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
 
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace transform="http://exist-db.org/xquery/transform";
@@ -17,7 +17,7 @@ Library to do Post Process and validation of references especially on:
 :)
 
 (: Default Variables :)
-declare variable $xup:PARL-ID := 2;
+declare variable $pproc:PARL-ID := 2;
 
 (:~
     This method inserts <bu:person/> node in the bu:signatory based on bu:userId provided by each 
@@ -86,7 +86,7 @@ declare function pproc:update-events() {
     the itemId==docId condition to retrieve a URI which is injected to itemSchedule as bu:document node 
     with a TLCReference attribute.
 :)
-declare namespace pproc:update-groupsittings() {
+declare function pproc:update-groupsittings() {
 
     try {
         for $anItem in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule

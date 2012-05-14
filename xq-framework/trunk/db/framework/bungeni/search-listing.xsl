@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -149,44 +149,31 @@
             <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
             </a>
+            &#160;›&#160;
+            <a style="color:#2b92be" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
+                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
+            </a>
             <span>-</span>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">id:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">primary sponsor:</td>
-                        <td>
-                            <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
-                                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">last event:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:document/bu:status"/>
-                            &#160;&#160;<b>on:</b>&#160;&#160;
-                            <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">submission date:</td>
-                        <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:bungeni/bu:parliament/@date,$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">ministry:</td>
-                        <td>
-                            <xsl:value-of select="ref/bu:ministry/bu:shortName"/>
-                        </td>
-                    </tr>
-                </table>
+                <div class="black-full">
+                    <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...               
+                </div>
+                <div class="grey-full">
+                    <span>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:status/bu:value"/>
+                    </span>
+                    <span>
+                        on                         
+                        <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                    </span>
+                    &#160;
+                    <span style="vertical-align:0;line-height:1em !important;padding:0;margin:0px;">·</span>
+                    &#160;  
+                    <span>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:docSubType/bu:value"/> document
+                    </span>
+                </div>
             </div>
         </li>
     </xsl:template>

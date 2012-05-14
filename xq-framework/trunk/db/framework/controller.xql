@@ -1,4 +1,4 @@
-xquery version "1.0";
+xquery version "3.0";
 
 (:~
 
@@ -25,7 +25,7 @@ app controller module - switch between applications by switching  appcontroller 
 Change the path to the appcontroller to the appcontroller of your application  
 
 :)
-import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "anapp/appcontroller.xqm";
+import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "bungeni/appcontroller.xqm";
 
 (: xhtml 1.1 :)
 (:

@@ -1052,8 +1052,8 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1070,8 +1070,8 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1088,8 +1088,8 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">All</searchin>
-                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1106,8 +1106,8 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1124,8 +1124,8 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle" default="true">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
+                <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>

@@ -492,42 +492,42 @@
                             <i18n:text key="whatson">what's on(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="committees" href="committees">
                             <i18n:text key="committees">committees(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="bills" href="bills">
                             <i18n:text key="bills">bills(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="questions" href="questions">
                             <i18n:text key="questions">questions(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="motions" href="motions">
                             <i18n:text key="motions">motions(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="tableddocuments" href="tableddocuments">
                             <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="agendaitems" href="agendaitems">
                             <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="calendar" href="calendar">
                             <i18n:text key="sittings">calendar(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="publications" href="publications">
                             <i18n:text key="publications">publications(nt)</i18n:text>
                         </a>
@@ -537,13 +537,13 @@
         </menu>
         <menu name="members" for="members">
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
-                <ul class="theme-lev-1">
-                    <li>
+                <ul class="theme-lev-1" id="portal-personaltools">
+                    <li class="navigation">
                         <a name="current" href="members">
                             <i18n:text key="current">current(nt)</i18n:text>
                         </a>
                     </li>
-                    <li>
+                    <li class="navigation">
                         <a name="politicalgroups" href="politicalgroups">
                             <i18n:text key="politicalgroups">political groups(nt)</i18n:text>
                         </a>
@@ -579,7 +579,7 @@
             <format type="print" href="null">Print this listing</format>
         </rendergroup>
         <rendergroup name="parl-doc">
-            <format type="edit" href="build">Edit document. Will need to login to eXist</format>
+            <!--format type="edit" href="build">Edit document. Will need to login to eXist</format-->
             <format type="pdf" href="null">Download PDF format</format>
             <format type="xml" href="null">Download XML format</format>
         </rendergroup>

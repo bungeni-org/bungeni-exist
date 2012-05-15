@@ -79,14 +79,12 @@ declare function pproc:update-events() {
 
 
 (:
-    !+FIX_THIS (ao, 11-May-2012) currently some discrepancy exists with the groupsitting bungeni output.
-    
     This method updates itemSchedules with with item URI as reference to the 
     actual document. Iterates through all the groupsitting documents' itemSchedules, and then using 
     the itemId==docId condition to retrieve a URI which is injected to itemSchedule as bu:document node 
     with a TLCReference attribute.
 :)
-declare function pproc:update-groupsittings() {
+declare function pproc:update-sittings() {
 
     try {
         for $anItem in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
@@ -94,8 +92,10 @@ declare function pproc:update-groupsittings() {
         let $docId := $doc-node/bu:docId
         let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
         return 
-            concat($anItem/bu:itemId,'-',$doc-node/bu:docType/bu:value)
-           (:update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]:)
+            if ($anItem/bu:itemType/bu:value ne 'heading' and empty($anItem/bu:document)) then
+                update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]
+             else
+                 ()
     }
     catch * {
         <response type="error">

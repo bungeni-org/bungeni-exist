@@ -5,9 +5,9 @@
     <xsl:import href="xhtml2fo.xsl"/>
     <!--xsl:include href="xhtml2fo.xsl" /-->
     <xsl:template match="doc">
-        <xsl:variable name="doc-name" select="bu:ontology/bu:legislativeItem/bu:shortName"/>
-        <xsl:variable name="doc-subject" select="concat('Parliamentary ',bu:ontology/bu:document/@type,' from Bungeni')"/>
-        <xsl:variable name="doc-keywords" select="concat('Parliamentary ',bu:ontology/bu:document/@type,',',bu:ontology/bu:bungeni/bu:country)"/>
+        <xsl:variable name="doc-name" select="bu:ontology/bu:document/bu:shortTitle"/>
+        <xsl:variable name="doc-subject" select="concat('Parliamentary ',bu:ontology/bu:document/bu:docType/bu:value,' from Bungeni')"/>
+        <xsl:variable name="doc-keywords" select="concat('Parliamentary ',bu:ontology/bu:document/bu:docType/bu:value,',',bu:ontology/bu:legislature/bu:country/bu:value)"/>
         <fo:root>
             <fo:layout-master-set>
                 <fo:simple-page-master page-height="297mm" page-width="210mm" margin="5mm 25mm 10mm 25mm" master-name="parl-doc">
@@ -82,7 +82,7 @@
         <xsl:apply-templates mode="body"/>
         <xsl:apply-templates mode="profile"/>
     </xsl:template>
-    <xsl:template mode="title" match="bu:legislativeItem/bu:shortName">
+    <xsl:template mode="title" match="bu:document/bu:shortTitle">
         <fo:block space-before="10pt" font-size="10pt" text-align="center" text-transform="uppercase" font-family="'Times New Roman', san-serif">
             <xsl:value-of select="."/>
         </fo:block>
@@ -90,7 +90,7 @@
     <xsl:template mode="itemno" match="bu:legislativeItem/bu:itemNumber">
         <fo:block font-family="'Times New Roman', san-serif" space-before="10pt" font-size="10pt" text-align="center">
             <fo:inline>
-                <xsl:value-of select="concat(upper-case(substring(//bu:document/@type, 1, 1)), substring(//bu:document/@type, 2))"/>
+                <xsl:value-of select="concat(upper-case(substring(//bu:document/bu:docType/bu:value, 1, 1)), substring(//bu:document/bu:docType/bu:value, 2))"/>
             </fo:inline> Number: <xsl:value-of select="."/>
         </fo:block>
     </xsl:template>
@@ -126,12 +126,12 @@
             </xsl:choose>
         </fo:block>
     </xsl:template>
-    <xsl:template mode="status" match="bu:legislativeItem/bu:status">
+    <xsl:template mode="status" match="bu:document/bu:status/bu:value">
         <fo:block font-family="'Times New Roman', san-serif" space-before="8pt" font-size="10pt" text-align="center">
             Last Event: <fo:inline font-weight="bold" padding-right="15pt">
                 <xsl:value-of select="."/>
             </fo:inline> Date: <fo:inline font-weight="bold">
-                <xsl:value-of select="format-dateTime(//bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                <xsl:value-of select="format-dateTime(//bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
             </fo:inline>
         </fo:block>
     </xsl:template>     
@@ -141,7 +141,7 @@
         Currently <apply-templates> strips pre-existing xhtml tags and renders 
         text only. Ideally should preserve xhtml formatting as the portal displays
     -->
-    <xsl:template mode="body" match="bu:legislativeItem/bu:body">
+    <xsl:template mode="body" match="bu:document/bu:body">
         <!-- need fo:block-container? or normal fo:block -->
         <xsl:variable name="need-block-container">
             <xsl:call-template name="need-block-container"/>
@@ -172,7 +172,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template mode="profile" match="bu:legislativeItem">
+    <xsl:template mode="profile" match="bu:document">
         <fo:list-block font-family="'Times New Roman', san-serif" space-before="8pt" font-size="10pt">
             <fo:list-item>
                 <fo:list-item-label>
@@ -188,7 +188,7 @@
                     <fo:block>.</fo:block>
                 </fo:list-item-label>
                 <fo:list-item-body>
-                    <fo:block>Parliament: <xsl:value-of select="preceding-sibling::bu:bungeni/bu:parliament/@href"/>
+                    <fo:block>Parliament: <xsl:value-of select="following-sibling::bu:bungeni/bu:parliament/@showAs"/>
                     </fo:block>
                 </fo:list-item-body>
             </fo:list-item>
@@ -197,7 +197,7 @@
                     <fo:block>.</fo:block>
                 </fo:list-item-label>
                 <fo:list-item-body>
-                    <fo:block>Session Year: <xsl:value-of select="substring-before(preceding-sibling::bu:bungeni/bu:parliament/@date,'-')"/>
+                    <fo:block>Session Year: <xsl:value-of select="substring-before(preceding-sibling::bu:legislature/bu:electonDate/@select,'-')"/>
                     </fo:block>
                 </fo:list-item-body>
             </fo:list-item>

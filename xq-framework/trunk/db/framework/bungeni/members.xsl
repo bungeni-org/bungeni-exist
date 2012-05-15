@@ -105,7 +105,7 @@
             </div>
             <span>-</span>
             <div class="doc-toggle">
-                <div>
+                <div style="min-height:110px;">
                     <p class="imgonlywrap photo-listing" style="float:left;">
                         <img src="assets/bungeni/images/presidente.jpg" alt="Presidente" align="left"/>
                     </p>

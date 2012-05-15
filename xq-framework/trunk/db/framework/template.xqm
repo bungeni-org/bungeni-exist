@@ -243,7 +243,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:li) then (
 			if ($route/subnavigation) then (
 				if ($content/self::xh:li[xh:a/@name=$route/subnavigation/text()]) then (
-				    <xh:li class="selected"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
+				    <xh:li class="selected navigation"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
 				) 
 				else  
 				 $content

@@ -288,5 +288,47 @@ $(document).ready(function () {
 	}); 
 	console.log("Looks Good! "+Date());
 	
+	
+	/* QTIPS */
+    // Create the tooltips only on document load
+    // Use the each() method to gain access to each elements attributes
+    $('.has-popout a[rel]').each(function()
+    {
+      $(this).qtip(
+      {
+         content: {
+            // Set the text to an image HTML string with the correct src URL to the loading image you want to use
+            text: '<img class="throbber" src="../assets/bungeni/images/throbber.gif" alt="Loading..." />',
+            url: $(this).attr('href'), // Use the rel attribute of each element for the url to load
+            title: {
+               text: '<h1 id="doc-title-red-left">' + $(this).text() + '</h1>', // Give the tooltip a title using each elements text
+               button: 'Close' // Show a close link in the title
+            }
+         },
+         position: {
+            corner: {
+               target: 'bottomMiddle', // Position the tooltip above the link
+               tooltip: 'topMiddle'
+            },
+            adjust: {
+               screen: true // Keep the tooltip on-screen at all times
+            }
+         },
+         show: { 
+            when: 'click', 
+            solo: true // Only show one tooltip at a time
+         },
+         hide: 'unfocus',
+         style: {
+            tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
+            border: {
+               width: 0,
+               radius: 4
+            },
+            name: 'light', // Use the default light style
+            width: 720 // Set the tooltip width
+         }
+      })
+    });
 });   
 

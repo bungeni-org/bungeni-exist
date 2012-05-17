@@ -428,7 +428,7 @@ ul.ls-doc-tabs li.selected {
     font-size: 11px;
     list-style-type: none;
     color: white;
-    background-color:#eee;
+    background-color:transparent;
 }
 #portal-breadcrumbs li a.first {
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0.90, #8e8e8e), color-stop(1.0, #989898));

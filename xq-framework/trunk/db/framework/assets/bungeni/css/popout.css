@@ -1,0 +1,22 @@
+div#popout-wrapper {
+    width: 720px;
+    height: auto;
+    margin: 0 auto 0 auto;
+    margin-top: 20px;
+    background-color: tranparent;
+}
+    div#popout-content {
+        width: 720px;
+        height:auto;
+        min-height: 500px;
+        margin: 0px auto 20px auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: white;
+        border: 1px solid #C1C1C0;
+    }
+
+img.throbber {
+    display:block;
+    margin: 0 auto;
+}

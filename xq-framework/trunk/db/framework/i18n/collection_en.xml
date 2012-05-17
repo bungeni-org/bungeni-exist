@@ -32,7 +32,7 @@
     <msg key="motions">motions</msg>
     <msg key="tableddocuments">tabled documents</msg>
     <msg key="agendaitems">agenda items</msg>
-    <msg key="sittings">calendar</msg>
+    <msg key="calendar">calendar</msg>
     <msg key="publications">publications</msg>
     <msg key="current">members</msg>
     <msg key="politicalgroups">politicalgroups</msg>
@@ -152,4 +152,7 @@
     <msg key="acronym">acronym</msg>
     <msg key="none">none</msg>
     <msg key="number">Number</msg>
+    <!-- WHATSON/SITTINGS -->
+    <msg key="sittings">sittings</msg>
+    <msg key="schedule">scheduled documents</msg>
 </catalogue>

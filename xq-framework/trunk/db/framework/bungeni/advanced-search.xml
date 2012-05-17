@@ -2,7 +2,7 @@
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" id="portal-column-content">
     <div id="main-wrapper">
         <div id="title-holder" class="theme-lev-1-only">
-            <h1 id="doc-title-blue">
+            <h1 id="doc-title-blue-center">
                 <i18n:text key="adv-search">Advanced Search(nt)</i18n:text>
             </h1>
         </div>

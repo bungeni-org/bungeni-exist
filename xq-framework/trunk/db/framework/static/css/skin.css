@@ -1,0 +1,1675 @@
+/***** BUNGENERAL SKIN ^_^ *****/
+/*
+ * These are the general styles applied to both portal and workspace
+ * A.K.A "the globals" unless overwritten in the specific zone (read 
+ * portal or workspace) then editing this section should be enough
+ *
+ */
+ 
+/*
+ * top-layer
+ */
+#top-layer {
+    text-align:center;
+    border: 1px solid transparent;
+    background: #434343;
+}
+#top-layer div {
+    background: transparent;
+    border: 0 none;    
+}
+#top-layer ul#portal-personaltools {
+    background: transparent;
+    border: 0 none;
+    line-height: 0.7em;
+}
+#top-layer ul#portal-personaltools li {
+    border: 0 none;
+}
+#top-layer ul#portal-personaltools li a {
+    border: 0 none;
+    background: transparent !important;
+    text-decoration: underline;
+    color: #fff;
+}
+#top-layer ul#portal-personaltools li a:hover {
+    color: #fffd6e !important;
+}
+#top-layer ul#portal-languageselector {
+    font-size: 100%;
+}
+#top-layer ul#portal-languageselector li a {
+    color: #fff;
+}
+#top-layer ul#portal-languageselector li a:hover {
+    color: #fffd6e !important;
+    background:transparent !important;
+}
+#top-layer ul#portal-languageselector li.selected a {
+    color: #000000 !important;
+}
+/*#top-layer ul#portal-personaltools li a.link-overlay {
+    margin-right:-60px;
+    float:right;
+    clear:both;
+}
+*/
+
+/*
+ * Notes:
+ * - set text-decoration to 'none' to remove blinking effect.
+ *   support in browsers varies, with the browser having final say
+ *   in whether or not the element will be blinked. e.g. it doesn't
+ *   work in webkit browsers(chrome/safari)
+ */
+#top-layer #demoWarning {
+    color: #fff;
+    background: #900;
+    text-decoration: blink;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 0px -1px 1px #222;
+    border: 1px solid #a00;
+    border-bottom: 2px solid #d00;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: 0 none;
+}
+
+/*
+ * Breadcrumbs
+ */
+#portal-breadcrumbs {
+    font-size: 95%;
+    color: #555;
+    background: #fff;
+    text-align: left;
+}
+#portal-breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+/* portal-searchbox and portal-siteactions are empty tags,
+ * so they have been set to display: none because they make
+ * the layout break in IE.
+ */
+#portal-search {
+    text-align: right;
+    text-transform: none;
+}
+.section-bungeni-workspace #portal-search {
+    text-align: right;
+    text-transform: none;
+}
+
+/*
+ * main-columns
+ */
+div.main-column h1 {
+    font-size: 200%;
+    font-weight: bold;
+    line-height: 20px;
+    color: #C8631B !important;
+    text-shadow: 0 0 1px #fff;
+    text-align:center;
+}
+div.main-column h1.title {
+    border: 0 none;
+    font-size: 150%;
+    font-weight: bold;
+    line-height: 20px;
+    text-shadow: 0 0 1px #fff;
+    text-align: center;
+    color:#c8631b !important;
+}
+div.main-column h1.reportmaintitle,
+div.main-column h1.reportdoctype {
+    font-size: 180%;
+    color:#828282 !important;
+}
+div.main-column h2.reportdate {
+    font-size: 180%;
+    color:#828282 !important;
+    font-weight: bold !important;
+}
+
+div.main-column h1.reportheading {
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 130%;
+    font-weight: bold !important;
+    border:1px solid #ccc;
+    color:#828282 !important;
+}
+.documentContent div h2:first-child {
+    font-size:1.4em;
+    font-weight:normal !important;
+    color:#c8631b !important;
+}
+div.main-column h2.reporttitle {
+    text-align:left;
+    color:#f79f10 !important;
+    font-size:1.1em;    
+    font-weight:bold !important;
+}
+div.main-column h2 {
+    text-shadow: 0px 0px 1px #fff;
+    font-size: 120%;
+    font-weight: normal !important;
+    color: #C8631B !important;
+    text-align: center;
+}
+div.main-column h2 span {
+    font-size: 75%;
+    font-weight: normal;
+    color: #444;
+}
+div.main-column h3 {
+    text-shadow: 0px 0px 1px #fff;
+    font-size: 100%;
+    font-weight: normal !important;
+}
+/*
+ * portal-columns-* styles
+ */
+
+/* portal-column-content */
+#portal-column-content h1.title {
+    font-size: 135%;
+}
+.section-bungeni-\@\@index .newsImage {
+    border:1px solid #CCCCCC;
+}
+.section-bungeni-\@\@index #content h2 {
+    font-size:165%;
+    font-weight:bold;
+    line-height:20px;
+}
+/* portal-column-one */
+#portal-column-one {
+    border-color: #aaf;
+}
+.section-bungeni-workspace #portal-column-one {
+    border-color: #FB9C14;  
+}
+.section-bungeni-archive #portal-column-one {
+    border-color: #FB9C14;
+}
+
+/* footer  */
+#portal-footer {
+    color: #444;
+    text-align: center;
+    border: 0 none;
+    border-top: 1px solid #D4E2EF;
+    background: #fff;
+}
+
+#portal-footer div {
+    border-top: 1px solid #ccc;
+    background: #fff;
+}
+/*
+ * documentContent
+ */
+.documentContent {
+    border: 0 none;
+}
+input.inputLabelActive {
+    color: transparent;
+}
+/*
+ * whats-on styles are shared by both template-portal and template-workspace.
+ */
+#whats-on-overview h1 {
+    font-size:135%;
+    text-align: center;
+}
+#whats-on-overview h1 a {
+    text-decoration: none;
+    color: #C8631B !important;
+}
+#whats-on-overview p {
+    color: #222;
+    text-shadow: 0px 0px 1px #fff;
+    text-align:center;
+}
+#whats-on-overview p.documentDescription {
+    font-weight: normal;
+    text-align: center;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet {
+    border-bottom: 1px solid #ccc;
+    border-top: 0 none;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd {
+    border: 0 none;
+    border-top: 4px solid #f9ac32;
+    border-bottom: 1px solid #fcc373;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul {
+    background: #fff;
+    list-style: none;
+    list-style-type: none;
+    border: 1px solid #ccc;
+    border-bottom-color: #aaa;
+    border-top: 0 none;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li h2 {
+    font-weight: normal;
+    font-size: 100%;
+    color: #000 !important; /**/
+    font-weight:bold !important; /**/
+    background: #fff;
+    text-align: left;
+    text-shadow: 0px 1px 1px #fff;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul {
+    border: 0 none;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li a {
+    color: #434343; /**/
+    font-weight:bold !important; /**/
+    font-size: 94%; /**/
+    font-style: italic;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li ul li {
+    border: 0 none;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li dl {
+    border-bottom: 1px dotted #ccc;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li dl h3 {
+    font-weight: normal !important; /**/
+    color:#f79f10 !important; /**/
+    font-size: 100%;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li dl a {
+    color: #000; /**/
+    font-size:1.1em;
+    font-weight:normal !important;
+    font-style: normal;
+    border-bottom: 0 none;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd ul li ul li dd {
+    border: 0 none;
+    font-size: 95%;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul ul li ul li a {
+    background: #fff !important;
+    border: 0 none;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul li {
+    background: #eee;
+    color: #222;
+    text-shadow: 0 1px 1px #fff;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul ul li {
+    background: #fff;
+}
+#portal-column-content #whats-on-overview .whats-on-viewlet dd.formPanel ul ul ul {
+    list-style-type: square;
+    border: 0 none;
+}
+/*
+ * Portlets
+ */
+.portlet, .portletHeader, .portletFooter { border: 0 none; }
+.portletItem { border: 1px solid #FAAD5F; border-top: 0 none; }
+#portal-column-one .portletHeader,
+#portal-column-content .portletHeader,
+#portal-column-two .portletHeader,
+#portal-column-two .portlet dt,
+#whats-on-overview .portlet dt {
+    background: #E3E3E3;
+    text-align: justify;
+    text-shadow: 0px 1px 1px #fff;
+}
+#portal-column-content .portletHeader span.tile {
+    text-align: center;
+}
+#portal-column-one .portletItem,
+#portal-column-content .portletItem,
+#portal-column-content .portletNews .portletItem,
+#portal-column-two .portletItem {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+#portal-column-one .portletFooter,
+#portal-column-content .portletFooter,
+#whats-on-overview .portletFooter {
+    border: 1px solid #FAAD5F;
+}
+/* hides the portlet header. */
+#portal-column-one .portlet .portletItem.even,
+#portal-column-one .portlet .portletItem {
+    background: #fff;
+    border: 1px solid #FB9C14;
+}
+#portal-column-one .portlet .portletItem a {
+    background: #fff;
+    border: 0 none;
+}
+#portal-column-one .portlet .portletItem a.navTreeCurrentItem {
+    background: #fcc373;
+    border-bottom-color: #FB9C14 !important;
+    border-top: 0 none !important;
+    line-height: 20px;
+}
+#portal-column-one .portlet .portletItem a:hover {
+    background: #eee;
+}
+#portal-column-one .portlet .portletItem ul {
+    background: #fff;
+}
+#portal-column-one .portlet .portletItem ul li {
+    list-style-type: none;
+}
+#portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode a {
+    font-weight: bold;
+    background: #eee;
+}
+#portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul {
+    border-bottom: 1px solid #aaa;
+}
+#portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a {
+    font-weight: normal;
+    font-size: 95%;
+    background: #fff;
+    border: 0 none;
+}
+#portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a:hover,
+#portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul a.navTreeCurrentItem {
+    background: #eee;
+}
+#portal-column-one .portlet .portletItem ul li ul li.navTreeCurrentNode ul ul {
+    border: 0 none;
+}
+/* whats-on-overview portlets */
+#whats-on-overview .portlet dt {
+    background: transparent;
+    font-weight: normal;
+}
+#whats-on-overview .portlet dd {
+    border: 1px solid #FAAD5F;
+    border-top: 0 none;
+}
+/* portal-column-two portlets */
+#portal-column-two .portlet dd {
+    border: 1px solid #FAAD5F;
+    border-top: 0 none;
+}
+/*
+ * DocumentActions & contentActions
+ */
+.contentActions {
+    background: url(/static/images/content-actions-bg.png) repeat-x top left;
+    border: 0 none;
+}
+.contentActions a {
+    color: #000 !important;
+    text-decoration: none;
+}
+.contentActions li {
+    border: 0 none;
+}
+.contentActions ul {
+    border: 0 none;
+}
+.actionMenu .actionMenuContent ul {
+    border: 1px solid #000;
+    border-bottom: 0 none;
+    border-top: 0 none;
+    background:#f39e39;
+}
+.actionMenu .actionMenuContent ul li {
+    border: 0 none;
+    border-bottom: 1px solid #aaf;
+}
+.actionMenu .actionMenuContent ul li a {
+    background: none;
+    color: #000;
+}
+.actionMenu .actionMenuContent ul li a:hover {
+    background-color: #cceaf3 !important;
+    color: #000;
+}
+.actionmenu .actionMenuHeader ul#contentActionMenus li.context_translate a {
+	background-image:none !important;
+	background:none !important;
+}
+dl#context_actions.actionMenu .actionMenuContent ul {
+    border: 0 none;
+}
+dl#context_actions.actionMenu .actionMenuContent ul li {
+    border-bottom: 0 none;
+}
+/*
+ * portal-globalnav
+ */
+div#portal-globalnav {
+    background: #fff;
+}
+div#portal-globalnav ul.level0 {
+    border: 0 none;
+	list-style-type: none;
+    background: #fff;
+}
+div#portal-globalnav ul.level0 li {
+    border-radius: 0;
+}
+div#portal-globalnav ul.level0 li a { 
+    text-shadow: #fff 0 1px 0;
+    color: #222;
+    background: #eee;
+    border: 1px solid #aaa;
+    border-bottom: 1px solid #eee;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-family: tahoma,verdana,sans-serif;
+    font-size: 12px;
+}
+div#portal-globalnav ul.level0 li.selected a,
+div#portal-globalnav ul.level0 li a:hover {
+    text-shadow: #222 0 1px 0;
+    font-weight: normal;
+    color: #ffffff;
+    border-right: 1px solid #999;
+    border-left: 1px solid #999;
+    border-bottom: 1px solid #f9ac32;
+    background:#f9ac32 url(/static/images/globalnav-level0-a.png) top left repeat-x;
+}
+
+#portal-languageselector li {
+    display: inline;
+}
+/*
+ * Notes:
+ * - this has been positioned absolutely because of it's location in the
+ *   html structure, the current layout is:
+ *   <ul class="level0">
+ *       <ul class="level1">
+ *           <li>...</li>
+ *        </ul>
+ *        <li>...</li>
+ *   </ul>
+ *   a suggested structure would be to have the <ul> elements separately:
+ *   <ul class="level0">...</ul>
+ *   <ul class="level1">...</ul>
+ */
+ div#portal-globalnav-bottom {
+ 	border:0;
+}
+div#portal-globalnav-bottom ul.level1 {
+    border-top: 0 none;
+    background: #f79f0e;
+    border-top: 1px solid #f9ac32;
+}
+div#portal-globalnav-bottom ul.level1 a {
+    background: transparent;
+    border: 0 none;
+    text-shadow: none;
+    color:#ffffff;
+    font-family: Arial,"Times New Roman";
+}
+div#portal-globalnav-bottom ul.level1 li a:hover {
+    color: #d42022;
+    text-decoration: underline;
+    border: 0 none;
+}
+div#portal-globalnav-bottom ul.level1 li.selected a {
+    background: transparent;
+    border: 0 none;
+    font-weight: normal;
+    color: #d50005 !important;
+}
+.template-portal div#portal-globalnav-bottom ul.level1 li.selected a {
+	color:#d42022 !important;
+}
+
+/*
+ * Notes:
+ * this tag is not used for any data or structure.
+ * it is used to assist in the page layout. The element(and css) 
+ * could be removed from this use by fixing the <ul> element
+ * as mentioned in the previous Note.
+ *
+ *
+ * To remove the bar completely - remove the ".section-bungeni-business"
+ * part from below
+ *
+ * To restore it to every page, remove this next style and leave the last one.
+ *
+ */
+
+/*
+ * portletArchiveDates
+ */
+#portletArchiveDates .portletHeader {
+    text-align: right;
+    background: #fff;
+    color: #444;
+    border: 0 none;
+}
+#portletArchiveDates .portletHeader span.tile {
+    text-align: right;
+}
+#portletArchiveDates .portletItem {
+    border: 0 none;
+    background: none;
+}
+#portletArchiveDates .portletItem form {
+    border: 1px solid #ccc;
+    background: #eee;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    text-shadow: 0 0 0 #fff;
+    border-bottom: 1px solid #aaa;
+}
+#portletArchiveDates .portletItem form .field input {
+    border: 1px solid #aaa;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    font-size: 95%;
+    background: #fff;
+}
+#portletArchiveDates .portletItem form label {
+    font-size: 95%;
+}
+#portletArchiveDates .portletItem form #actionsView {
+    border-left: 1px solid #ccc;
+}
+#portletArchiveDates .portletItem form #actionsView .actionButtons input {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    text-align: left;
+    background-position: 5px center;
+    background-color: #fff;
+}
+#portletArchiveDates .portletItem form #actionsView .actionButtons input:hover {
+    background-color: #eef;
+}
+#portletArchiveDates .portletItem form #actionsView .actionButtons input:active {
+    background-color: #eef;
+}
+#portletArchiveDates .portletItem.dates-filtered {
+    background: #fff !important;
+    background: #FFF68F;
+    border-color: #EEE685;
+    border-bottom-color: #BDB76B;
+}
+#portletArchiveDates .portletItem.dates-filtered form {
+    background: #FFF68F;
+    border-color: #EEE685;
+    border-bottom-color: #BDB76B;
+}
+/*
+ * Table styles
+ */
+ 
+.template-workspace table.listing,
+.template-workspace table.listingdescription,
+.template-workspace .stx table,
+.template-workspace .yui-skin-sam .yui-dt table {
+    border: 1px solid #ccc;
+    border-bottom-color: #aaa;
+    font-size: 100%;
+}
+table.listing[name="attendance"] th,
+table.listing[name="attendance"] td {
+    text-align: center;
+}
+table.listing tr:hover,
+table.listingdescription tr:hover,
+.stx table tr:hover,
+.yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
+.yui-skin-sam .yui-dt table tr:hover {
+    background:#F5C276;
+}
+.yui-skin-sam .yui-dt table tr.yui-dt-odd {
+    background: #e6e6e6;
+}
+table.listing tr.past.odd {
+    background: transparent;
+}
+table.listing th,
+table.listingdescription th,
+.stx table th,
+.yui-skin-sam .yui-dt-first th {
+    background:#21a1ba !important;
+    border: 0 none;
+    border-left: 1px solid #bbf;
+    border-right: 1px solid #88f;
+    border-top: 0 none;
+    text-shadow: 0 0 0 #fff;
+    color: #000 !important;
+}
+.yui-skin-sam .yui-dt-last th {
+    background: #fff !important;
+}
+.yui-skin-sam .yui-dt-first th:active {
+    background:#d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left -2px !important;
+}
+.yui-skin-sam .yui-dt-last th input {
+    background: #fff;
+    border: 1px solid #aaa;
+    border-left: 0 none;
+    border-bottom: 0 none;
+    font-size: 95%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+}
+table.listing th a,
+table.listingdescription th a,
+.stx table th a,
+.yui-skin-sam .yui-dt-first th a {
+    color: #000;
+    border: 0 none;
+}
+table.listing td,
+table.listingdescription td,
+.stx table td,
+.yui-skin-sam .yui-dt table tr td {
+    color: #222;
+    text-shadow: 0 0 0 #fff;
+}
+/*
+ * formTabs
+ * Default styles.
+ */
+ dd#items-to-be-scheduled-dl ul.formTabs,
+ul.formTabs {
+    border: 0 none;
+    text-align: center;
+}
+dd#items-to-be-scheduled-dl ul.formTabs {
+    border: 0 none;
+}
+li.formTab a,
+dd#items-to-be-scheduled-dl ul.formTabs li.formTab a {
+    text-shadow: 0 0 0 #fff;
+    text-decoration: none;
+    color: #444;
+    background: #eee;
+    border: 1px solid #aaa;
+    border-bottom: 2px solid #eee;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+dd#items-to-be-scheduled-dl ul.formTabs li.formTab a {
+    font-size: 95%;
+}
+li.formTab a:hover,
+li.formTab a:active,
+li.formTab a.selected {
+    color: #222;
+    border-top: 2px solid #FAAD5F;
+    border-top-color: #FB9C14;
+    border-right: 1px solid #999;
+    border-left: 1px solid #999;
+    border-bottom: 2px solid #f9ac32;
+    text-decoration: none;
+    background:#f9ac32 url(/static/images/globalnav-level0-a.png) top left repeat-x;
+}
+dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:hover,
+dd#items-to-be-scheduled-dl ul.formTabs li.formTab a:active,
+dd#items-to-be-scheduled-dl ul.formTabs li.formTab a.selected {
+    text-align: left;
+    text-decoration: none;
+    background: #f9ac32 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    border: 1px solid #aaa;
+    border-bottom-color: #f9ac32;
+    border-top-color: #999;
+    color: #222;
+}
+/*
+ * formPanel styles
+ */
+ .formPanel,
+dd#items-to-be-scheduled-dl .formPanel {
+    text-align: center;
+    border: 1px solid #aaa;
+    border: 0 none;
+}
+.formPanel h2,
+.formPanel ul {
+    text-align:left;
+}
+.formPanel table.listing {
+    font-size: 100%;
+    text-shadow: 0 0 0 #fff;
+    color: #444;
+}
+.formPanel table.listing tr {
+    border-bottom: 1px dotted #aaa;
+}
+.formPanel form { 
+    text-align: center;
+}
+.formPanel .field,
+#version-history .diff {
+    text-align: left;
+    border-bottom: 1px dotted #ccc;
+    background: #eee;
+}
+#version-history .diff {
+    background: #fff;
+}
+dl.portalMessage dt {
+    font-size:1.1em;
+}
+dl.portalMessage dd {
+    border: 0 none;
+    color: #a00;
+    font-style: italic;
+    font-size:1.2em;
+    text-shadow: 0.1em #f79f10;
+}
+#display_form_spacer {
+    background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
+}
+.template-portal dd#fieldset-written-question-response div.documentDescription {
+    background: #f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x;
+    color:#000;
+    font-weight:normal;
+}
+.formPanel .field .content-left-column,
+#version-history .diff h4 {
+    text-align: right;
+    color: #111;
+    text-shadow: 0 0 0 #fff;
+    font-weight: bold;
+    border: 0 none;
+    background: #eee;
+}
+.formPanel .field .content-right-column {
+    text-shadow: 0 0 0 #fff;
+    color: #333;
+    border: 0 none;
+    background: #fff;
+}
+.formPanel .field .content-right-column strong {
+    font-weight: bold;
+}
+.formPanel .field .content-right-column em {
+    font-style: italic;
+}
+.formPanel .field .content-right-column sub {
+    font-size: xx-small;
+}
+.formPanel .field .content-right-column sup {
+    font-size: xx-small;
+}
+.formPanel .field .content-right-column ul,
+.formPanel .field .content-right-column ol {
+    list-style-position: outside;
+}
+.formPanel .field .content-right-column ul {
+    list-style-type:square;
+}
+.formPanel .field .content-right-column ol {
+    list-style-type:decimal;
+}
+.formPanel.Report4Sitting .field {
+    background: #fff;
+}
+.formPanel.Report4Sitting .field .content-right-column,
+.formPanel.Report4Sitting .field .content-right-column h1,
+.formPanel.Report4Sitting .field .content-right-column h2 {
+    text-align: left;
+}
+.formPanel, dd#items-to-be-scheduled-dl .formPanel div:last-child {
+    text-align: justify !important;
+}
+/*
+ * Calendar
+ */
+div.calendar th.description a,
+div.calendar span.sitting-type,
+div.calendar div.sitting {
+    color: #444;
+}
+/*
+ * YUI button styles
+ */
+span.yui-button.yui-link-button span a {
+    font-size: 90%;    
+}
+/*
+ * YUI paginator styles
+ */
+.yui-dt-paginator {
+    font-size: 90%;
+    text-align: left;
+}
+.yui-dt-paginator select {
+    font-size:95%;
+    color: #444;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+.yui-dt-paginator select:hover {
+    border: 1px solid #aaa;
+    color: #444;
+}
+/*
+ * random styles
+ */
+/*#content a[href^="http:"], #content a.link-external {
+    background:transparent;
+}*/
+.documentEditable .documentContent {
+    border: 0 none;
+}
+.contentViews {
+    border-color: transparent;
+}
+.odd {
+    background: transparent;
+}
+.even {
+    background: #F3F3F3;
+}
+.zc-table-batching-pager-next,
+.zc-table-batching-pager-prev {
+    font-weight: normal;
+    cursor: pointer;
+}
+.zc-table-batching-pager-next:hover,
+.zc-table-batching-pager-prev:hover {
+   
+    text-decoration:underline;
+}
+#field\.form\.item_types {
+    border-bottom: 1px dotted #ccc;
+}
+/*
+ * cynin customizations
+ */
+#portal-titlebar {
+    background:#fff !important;
+    border-bottom: 1px solid #ccc;
+}
+#col1_content {
+    background: #E5E5E5;
+    border-right: 1px solid #afafaf;
+}
+#col1_content #sidenavigationlogoholder {
+    border: 0 none;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+}
+#col1_content .verticalnavigationholder {
+    border-top: 1px solid #ccc !important;
+}
+#col1_content dd.portletItem {
+    border: 0 none;
+}
+#col1_content #portal-languageselector select {
+    font-size: 90%;
+    border: 1px solid #ccc;
+}
+div.navTreeCurrentNode, .portletNavigationTree div.navTreeCurrentNode.hover, .navTreeHome.navTreeCurrentNode, .navTreeHome.navTreeCurrentNode.hover {
+    border: 1px solid #fff;
+}
+#col3 {
+    border:0 none;
+    background: transparent;
+}
+/*
+ * frontpage
+ */
+div.main-column #collage h2 {
+    text-align: justify;
+    text-shadow: 0 0 0 #fff;
+    font-size: 120%;
+    font-weight: bold !important;
+    color: #C8631B !important;
+}
+#collage .three-columns-equal .block_1 ul {
+    list-style-type:none; 
+}
+#collage .three-columns-equal .block_1 ul {
+#    list-style-image:none;  
+#    list-style-type:square;
+}
+#collage .three-columns-equal .block_1 ul li.navigation,
+#collage .three-columns-equal .block_1 ul li.plain{
+    list-style-image:none;  
+    list-style-type:none;
+}
+#collage .three-columns-equal .block_1 ul li a{
+    border-bottom: 0px;
+    text-align: left;  
+}
+#collage .three-columns-equal .block_1 ul li a:visited {
+    color:#436976;
+}
+#collage .tileImage {
+    border:1px solid black;
+}
+.template-document_view #content h1.documentFirstHeading {
+    font-size:160% !important;
+}
+.template-document_view #content p.documentDescription {
+    font-size:115% !important;
+}
+.template-document_view #content h2 {
+    font-size: 125% !important;
+    font-weight: bold !important;  
+}
+.template-document_view #content h3,
+#bodyContent h3{
+   font-size:125% !important;
+   font-weight:bold !important;
+}
+#document-toc legend,
+#document-toc .portletItem li {
+   font-size:110% !important;
+}
+#document-toc .portletItem {
+    border-left: 1px solid #8CACBB;
+    border-right: 1px solid #8CACBB;
+    border-bottom: 0px solid #8CACBB;
+}
+.section-bungeni-\@\@index #content h1.documentFirstHeading {
+    font-size:140% !important;
+}
+#portal-languageselector li.selected a {
+    background:#FFFD6E none repeat scroll 0 0;
+    border:1px solid #CCCCCC;
+    text-decoration:none;
+}
+/* modifies the dhx_cal object */
+.section-bungeni-business .dhx_scale_holder .dhx_cal_event .dhx_body[style],
+.section-bungeni-business .dhx_scale_holder_now .dhx_cal_event .dhx_body[style] {
+    cursor: pointer !important;
+}
+/* SEARCh RESULT */
+.search-result-item div.title {
+    font-size:1.8em !important;
+}
+.search-result-item div.title a {
+    color:#f79f10 !important;
+    font-weight:bold;    
+}
+
+/*********************************************************************************************************/
+
+/***** BUNGENI-PORTAL *****/
+/* START: ALL CSS TO DO WITH PORTAL IS WITHIN THIS SECTION DON'T EDIT OTHERWISE */
+/* Contains bg-colors, bgs, borders font colours e.t.c */
+
+/*********************************************************************************************************/
+
+.template-portal {
+    background: #f79f10 !important;
+}
+
+.template-portal #header-wrapper {
+    background: #434343;
+    border-bottom: 10px solid #c1c1c0;
+}
+
+.template-portal #header-in-left {
+    background: #434343;
+}
+
+.template-portal #header-in-right {
+    background: #434343;
+}
+
+.template-portal #top-layer div {
+    background-color:#434343;
+}
+
+.template-portal #visual-table-wrapper {
+    background: url(/static/images/shadow_3.png) repeat-y top center;
+    border: 0 none;
+}
+.template-portal #portal-logo-wrapper {
+    background:#434343 url(/static/images/portal_img.png) no-repeat bottom right;
+}
+.template-portal #portal-logo {
+    background:#434343 url(/static/images/portal_banner.png) top left no-repeat;
+}
+/* 
+ * if display is set to block it will display the logo used on the workspace
+ */
+.template-portal #portal-logo img {
+    display: none;
+}
+.template-portal #top-layer div {
+    border-bottom: 1px solid transparent;
+}
+.template-portal #top-layer ul#portal-personaltools li a {
+    color: #fff;
+}
+.template-portal #top-layer ul#portal-languageselector li a {
+    color: #fff;
+}
+
+.template-portal #portal-breadcrumbs {
+    border-bottom:1px solid #FAAD5F;
+}
+/*
+ * main-columns
+ */
+.template-portal div.main-column {
+    background: #fff;
+}
+
+.template-portal #portal-footer {
+    border: 0 none;
+    background: url(/static/images/footer-bg.png) repeat-x bottom center;
+}
+
+/*
+ * DocumentActions & contentActions
+ */
+.template-portal .contentActions {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+/*
+ * portal-searchbox
+ */
+ 
+ /*
+ * main-columns
+ */
+ 
+ /*
+ * portal-columns-* styles
+ */
+ 
+ /*
+ * DocumentActions & contentActions
+ */
+ 
+ /*
+ * portal-globalnav
+ */
+
+
+/* Login */
+.template-login_form div#portal-globalnav {
+    display: none;
+}
+/*
+ * Table styles
+ */
+.template-portal table.listing th,
+.template-portal table.listingdescription th,
+.template-portal .stx table th,
+.template-portal.yui-skin-sam .yui-dt-first th {
+    border-left: 0 none;
+    border-top: 0 none;
+    border-right: 1px solid #aaa;
+    border-bottom:1px solid #f9ac32;
+    background: url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
+}
+/*
+ * formTabs
+ * Default styles.
+ */
+ 
+ /*
+ * formPanel styles
+ */
+.template-portal dl.portalMessage {
+    border: 1px solid #800;
+    color: #333;
+}
+.template-portal.section-bungeni-login .bungeniapp-form dl.portalMessage {
+	font-size:0.7em;
+    border: 1px solid #800;
+    color: #333;
+}
+.template-portal .actionMenuContent {
+    font-weight: normal;
+/*    text-align: center;*/
+}
+.section-bungeni-login form#alchemist-form.bungeniapp-form {
+    border-top: 1px solid #ddd;
+}
+
+/*********************************************************************************************************/
+
+/***** BUNGENI-WORKSPACE *****/
+/* START: ALL CSS TO DO WITH WORKSPACE IS WITHIN THIS SECTION DON'T EDIT OTHERWISE */
+
+/*********************************************************************************************************/
+
+.template-workspace #header-wrapper {
+    text-align:center;
+    background: #4d4d4d url(/static/images/workspace-border-right.png) top right repeat-y;
+}
+
+.template-workspace #top-layer {
+    border: 0 none;
+    border-bottom: 1px solid #4d4d4d;
+    background: #4d4d4d url(/static/images/workspace-border-top.png) top center repeat-x;
+}
+.template-workspace #portal-logo {
+    display: block;
+    background:#4d4d4d url(/static/images/empowered.png) center right no-repeat;
+}
+.template-workspace #portal-breadcrumbs {
+    border-bottom:1px solid #d4e2ef;
+}
+.template-workspace #portal-logo img {
+    border: 0 none;
+}
+.template-workspace #top-layer ul#portal-personaltools li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li a:hover {
+    color: #fffd6e !important;
+}
+.template-workspace #top-layer ul#portal-languageselector li.selected a:hover {
+    color: #000000;
+}
+
+/*
+ * Breadcrumbs
+ */
+.template-workspace #portal-breadcrumbs {
+    border-bottom:1px solid #d4e2ef;
+} 
+
+/*
+ * portal-searchbox
+ */
+
+.template-workspace #portal-search {
+    text-align: right;
+    text-transform: none;
+}
+/*
+ * main-columns
+ */
+ .section-bungeni-workspace div.main-column h1 {
+    color: #21a1ba !important;
+}
+.template-workspace.section-bungeni-admin div.main-column h1,
+.template-workspace.section-bungeni-workspace div.main-column h1 {
+    color: #222;
+}
+.template-workspace.section-bungeni-admin div.main-column h1.title,
+.template-workspace.section-bungeni-workspace div.main-column h1.title {
+    color: #222 !important;
+}
+.template-workspace.section-bungeni-workspace div.main-column h2 {
+    font-weight: bold !important;
+    color: #222 !important;
+}
+
+.template-workspace.section-bungeni-admin div.main-column h2,
+.template-workspace.section-bungeni-admin div.main-column h1 {
+    font-weight: bold !important;
+    color: #222 !important;
+}
+
+.template-workspace.section-bungeni-workspace div.main-column h3,
+.template-workspace.section-bungeni-admin div.main-column h3 {
+    font-weight: bold !important;
+    color: #222 !important;
+    text-align: left;
+}
+.template-workspace div.main-column p {
+    text-shadow: 0 0 0 #fff;
+}
+/*
+ * portal-columns-* styles
+ */
+
+/* footer  */
+
+/*
+ * documentContent
+ */
+
+/*
+ * Calendar Styles for logged out view
+ */
+.template-workspace.section-bungeni-archive .dhx_cal_container,
+.template-workspace.section-bungeni-archive .dhx_scale_bar,
+.template-workspace.section-bungeni-archive .dhx_scale_hour,
+.template-workspace.section-bungeni-business .dhx_cal_container,
+.template-workspace.section-bungeni-business .dhx_scale_bar,
+.template-workspace.section-bungeni-business .dhx_scale_hour,
+.template-workspace.section-bungeni-members .dhx_cal_container,
+.template-workspace.section-bungeni-members .dhx_scale_bar,
+.template-workspace.section-bungeni-members .dhx_scale_hour,
+.template-portal .dhx_cal_container,
+.template-portal .dhx_scale_bar,
+.template-portal .dhx_scale_hour {
+    background: #F8BA61;
+    border-color: #FB9C14;
+}
+.template-workspace.section-bungeni-archive .dhx_cal_header,
+.template-workspace.section-bungeni-archive .dhx_cal_data,
+.template-workspace.section-bungeni-business .dhx_cal_header,
+.template-workspace.section-bungeni-business .dhx_cal_data,
+.template-workspace.section-bungeni-members .dhx_cal_header,
+.template-workspace.section-bungeni-members .dhx_cal_data,
+.template-portal .dhx_cal_header,
+.template-portal .dhx_cal_data{
+    border-color: #FB9C14;
+}
+.template-workspace.section-bungeni-archive .dhx_cal_tab,
+.template-workspace.section-bungeni-business .dhx_cal_tab,
+.template-workspace.section-bungeni-members .dhx_cal_tab,
+.template-portal .dhx_cal_tab {
+    background-image:url(../images/white_tab2.png);
+}
+.template-workspace.section-bungeni-archive .dhx_cal_prev_button,
+.template-workspace.section-bungeni-archive .dhx_cal_next_button,
+.template-workspace.section-bungeni-archive .dhx_cal_today_button,
+.template-workspace.section-bungeni-business .dhx_cal_prev_button,
+.template-workspace.section-bungeni-business .dhx_cal_next_button,
+.template-workspace.section-bungeni-business .dhx_cal_today_button,
+.template-workspace.section-bungeni-members .dhx_cal_prev_button,
+.template-workspace.section-bungeni-members .dhx_cal_next_button,
+.template-workspace.section-bungeni-members .dhx_cal_today_button,
+.template-portal .dhx_cal_prev_button,
+.template-portal .dhx_cal_next_button,
+.template-portal .dhx_cal_today_button {
+    background-image:url(../images/orange_buttons.png);
+}
+.template-workspace.section-bungeni-archive .dhx_cal_tab.active,
+.template-workspace.section-bungeni-business .dhx_cal_tab.active,
+.template-workspace.section-bungeni-members .dhx_cal_tab.active,
+.template-portal .dhx_cal_tab.active {
+    background-image:url(../images/orange_tab.png);
+}
+.template-workspace.section-bungeni-archive .dhx_scale_holder_now,
+.template-workspace.section-bungeni-business .dhx_scale_holder_now,
+.template-workspace.section-bungeni-members .dhx_scale_holder_now,
+.template-portal .dhx_scale_holder_now {
+    background-image:url(../images/databg_now3.png);
+}
+.template-workspace.section-bungeni-archive .dhx_now .dhx_month_head,
+.template-workspace.section-bungeni-business .dhx_now .dhx_month_head,
+.template-workspace.section-bungeni-members .dhx_now .dhx_month_head,
+.template-portal .dhx_now .dhx_month_head {
+    background:#f5c276;
+}
+.template-workspace.section-bungeni-archive .dhx_now .dhx_month_body,
+.template-workspace.section-bungeni-business .dhx_now .dhx_month_body,
+.template-workspace.section-bungeni-members .dhx_now .dhx_month_body,
+.template-portal .dhx_now .dhx_month_body {
+    background:#f6d6a6;
+}
+
+/* portlet-column-cone portlets */
+/* styles specific to section-bungeni-workspace */
+.section-bungeni-workspace #portal-column-one dl.portlet,
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem,
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li,
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected,
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a {
+    background: transparent;
+    border: 0 none;
+    color: #222;
+}
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a {
+    border-right: 1px solid #aaa;
+}
+.template-workspace.section-bungeni-archive #portal-column-one .portlet .portletItem ul li a,
+.template-workspace.section-bungeni-business #portal-column-one .portlet .portletItem ul li a,
+.template-workspace.section-bungeni-members #portal-column-one .portlet .portletItem ul li a {
+    border: 0 none !important;
+}
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li.selected a,
+.section-bungeni-workspace #portal-column-one dl.portlet dd.portletItem ul li a:hover {
+    background: #6CA6CD;
+    color: #fff;
+}
+/* hides the portlet header. */
+.section-bungeni-admin #portal-column-one .portlet .portletItem.even,
+.section-bungeni-admin #portal-column-one .portlet .portletItem {
+    border-color: #aaa;
+}
+.template-workspace.section-bungeni-admin #portal-column-one .portletItem a.navTreeCurrentItem,
+.template-workspace.section-bungeni-workspace #portal-column-one .portletItem a.navTreeCurrentItem {
+    background: #eee;
+    border: 0 none !important;
+}
+/*
+ * DocumentActions & contentActions
+ */
+.template-workspace.section-bungeni-admin .contentActions {
+    border: 1px solid #86a26a !important;
+    background: #888888 url(wrong/static/images/w-bg-admin.png) repeat-x top center;
+}  
+.template-workspace.section-bungeni-archive .contentActions,
+.template-workspace.section-bungeni-business .contentActions,
+.template-workspace.section-bungeni-members .contentActions {
+    border: 1px solid #fb9c14 !important;
+    background: #fff;
+}
+.section-bungeni-workspace .actionMenu .actionMenuContent ul,
+.section-bungeni-admin .actionMenu .actionMenuContent ul {
+    background: #bdd1d7;
+    border: 1px solid #aaf;
+    border-bottom: 0 none;
+    border-top: 0 none;
+}
+.template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected,
+.template-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #aaf;
+    background-color: #6CA6CD !important;
+}
+.template-workspace div.contentActions dt.label-state-active a {
+    color:#000 !important;
+}
+.template-workspace div.contentActions dd.actionMenuContent ul li > a:hover span {
+    color:#000 !important;
+}
+/*
+ * portal-globalnav
+ */
+ .template-workspace div#portal-globalnav {
+    background: #4d4d4d;
+}
+.template-workspace div#portal-globalnav ul.level0 {
+    background: transparent;
+}
+.template-workspace div#portal-globalnav ul.level0 li.selected a {
+    border-bottom-color: #d8d8d9;
+    border-bottom-color: #222;
+    background:#d8d8d9  url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+}
+.template-workspace div#portal-globalnav ul.level0 li.selected a,
+.template-workspace div#portal-globalnav ul.level0 li a:hover {
+    border-top: 2px solid #c8631b;
+    border-bottom: 1px solid #d8d8d9;
+    background: #d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+}
+.template-workspace.section-bungeni-business div#portal-globalnav ul.level0 li#portaltab-business-whats-on a {
+    border-top: 2px solid #c8631b;
+    border-bottom: 1px solid #d8d8d9;
+    background: #f9ac32 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+}
+.template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a,
+.template-workspace div#portal-globalnav ul.level0 li#portaltab-:first-child a:hover {
+	border-top:2px solid #1763aa;
+    background: url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x !important;
+	color:#fff !important;
+	text-shadow:0 0 0 #fff;
+}
+
+.template-workspace div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover,
+.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a,
+.section-bungeni-admin div#portal-globalnav ul.level0 li#portaltab-admin-content a:hover {
+	border-top:2px solid #666;
+    background: url(/static/images/w-globalnav-level0-a-last.png) top left repeat-x !important;
+	color:#fff !important;
+	text-shadow:0 0 0 #fff;
+}
+.template-workspace div#portal-globalnav ul.level0 ul.level1 a:hover {
+    background:transparent;
+    border:0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+.template-workspace div#portal-globalnav ul.level0 ul.level1 {
+    border: 1px solid #aaf;
+    border-right: 0 !important;
+    border-top: 0 none !important;
+    border-bottom:1px solid #d8d8d9;
+    background:#f9ac32 !important;
+    display: block;
+}
+.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 {
+    border: 1px solid #aaf;
+    border-right: 0 none;
+    border-top: 0 none !important;
+    border-bottom:1px solid #1763aa;
+    background:#21a1ba url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x !important;
+    display: block;
+}
+.section-bungeni-admin div#portal-globalnav ul.level0 ul.level1 {
+    border: 1px solid #aaf;
+    border-right: 0 none;
+    border-top: 0 none !important;
+    border-bottom:1px solid #1763aa;
+    background:#888888 url(/static/images/w-globalnav-level1-bg-last.png) bottom left repeat-x !important;
+    display: block;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a {
+    color: #000 !important;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #c8631b !important;
+    color: white !important;
+}
+.template-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
+    color: #1763aa !important;
+}
+.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 a {
+    color:#fff !important;
+}
+.section-bungeni-workspace div#portal-globalnav ul.level0 ul.level1 li.selected a {
+    color:#3f3f3f !important;
+}
+/*
+ * Table styles
+ */
+.section-bungeni-workspace.template-workspace table.listing tr:hover,
+.section-bungeni-workspace.template-workspace table.listingdescription tr:hover,
+.section-bungeni-workspace.template-workspace.stx table tr:hover,
+.section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr.yui-dt-odd:hover,
+.section-bungeni-workspace.template-workspace.yui-skin-sam .yui-dt table tr:hover {
+    background:#C2D5FC;
+}
+.template-workspace.section-bungeni-archive table.listing th,
+.template-workspace.section-bungeni-archive table.listingdescription th,
+.template-workspace.section-bungeni-archive .stx table th,
+.template-workspace.section-bungeni-archive.yui-skin-sam .yui-dt-first th,
+.template-workspace.section-bungeni-business table.listing th,
+.template-workspace.section-bungeni-business table.listingdescription th,
+.template-workspace.section-bungeni-business .stx table th,
+.template-workspace.section-bungeni-business.yui-skin-sam .yui-dt-first th,
+.template-workspace.section-bungeni-members table.listing th,
+.template-workspace.section-bungeni-members table.listingdescription th,
+.template-workspace.section-bungeni-members .stx table th,
+.template-workspace.section-bungeni-members.yui-skin-sam .yui-dt-first th {
+    border-left: 0 none;
+    border-top: 0 none;
+    border-right: 1px solid #aaa;
+    border-bottom:1px solid #f9ac32;
+    background: url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
+}
+/*
+ * formTabs
+ * Default styles.
+ */
+.template-workspace.section-bungeni-workspace ul.formTabs {
+    border-bottom: 0px;
+    text-align:center !important;
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab {
+    display:inline-block;
+    text-align:center !important;
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a {
+    text-align: left;
+    border: 1px solid #ccc;
+    border-top-color: #ddd;
+    border-bottom-color: #aaa;
+    display: block;
+    background: #f9f9f9;
+}
+.template-workspace.section-bungeni-workspace li.formTab a.selected {
+    background: url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    border-bottom-color: #6ca6cd;
+    text-decoration: none;
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
+    text-align: left;
+    text-decoration: none;
+    background: #d8d8d9 url(/static/images/w-globalnav-level0-a.png) top left repeat-x;
+    border: 1px solid #aaa;
+    border-bottom-color: #bbb;
+    border-top-color: #999;
+    color: #222;
+}
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:hover,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a:active,
+.template-workspace.section-bungeni-workspace ul.formTabs li.formTab a.selected {
+    background: #21a1ba url(/static/images/w-globalnav-level0-a-first.png) top left repeat-x;
+    color: #fff;
+	text-shadow:0 0 0 #fff;
+}
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a.selected,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:hover,
+.template-workspace.section-bungeni-workspace #content ul.formTabs li a:target {
+    background:#aaa !important;
+    color:#000 !important;
+}
+
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#21a1ba !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000;
+}
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a.selected, 
+.section-bungeni-workspace dl#context_actions.actionMenu .actionMenuContent ul li a:hover {
+    border-right: 1px solid #090;
+    background-color: #e4702d !important;
+    color: #fff !important;
+}
+.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:hover,
+.template-workspace.section-bungeni-admin ul.formTabs li.formTab a:active,
+.template-workspace.section-bungeni-admin ul.formTabs li.formTab a.selected {
+    border: 1px solid #b19766;
+    margin-left:3px;
+    margin-right:3px;
+    border-bottom: 0 none;
+}
+/*
+ * formPanel styles
+ */
+.template-workspace dl.portalMessage {
+    border: 1px solid #800;
+    color: #333;
+}
+.template-workspace dd#fieldset-written-question-response div.documentDescription {
+    background:#f9ac32 url(/static/images/globalnav-level1-bg.png) bottom left repeat-x !important;
+}
+.template-workspace.section-bungeni-admin .formPanel #display_form_spacer {
+    background: url(/static/images/w-globalnav-level1-bg.png) bottom left repeat-x;
+}
+.template-workspace.section-bungeni-workspace .formPanel #display_form_spacer {
+    background: url(/static/images/w-globalnav-level1-bg-first.png) bottom left repeat-x;
+}
+.template-workspace {
+    background: #4d4d4d url(/static/images/workspace-border-left.png) repeat-y top left;
+}
+.template-workspace #visual-table-wrapper {
+    text-align: left;
+    background: #fff url(/static/images/workspace-border-right.png) top right repeat-y;
+}
+.template-workspace span#corner-a,
+.template-workspace span#corner-b {
+    display: block;
+}
+.template-workspace span#corner-a {
+    background: #4d4d4d url(/static/images/workspace-border-left-corner.png) top left no-repeat;
+}
+.template-workspace span#corner-b {
+    background: #4d4d4d url(/static/images/workspace-border-right-corner.png) top right no-repeat;
+}
+.template-workspace #main-body-table {
+    background: #fff;
+}
+/* modifies the dhx_cal object */
+.template-workspace.section-bungeni-business .dhx_cal_event[style] {
+    display: none;
+}
+.template-workspace.section-bungeni-business .dhx_scale_holder .dhx_cal_event[style],
+.template-workspace.section-bungeni-business .dhx_scale_holder_now .dhx_cal_event[style] {
+    display: block;
+}
+/* footer  */
+.template-workspace #portal-footer div {
+
+    border: 0 none;
+}
+.template-workspace div {
+    border: 0 none;
+}
+.template-portal div#content div dl.enableFormTabbing form div.widget {
+    text-align:justify;
+    color:#000;
+}
+.template-portal div#content div dl.enableFormTabbing form div.widget h3.reportmover:first-child span {
+    font-weight:bold;
+}
+
+/*Workspace overrides*/
+.template-workspace.section-bungeni-workspace table.listing th,
+.template-workspace.section-bungeni-workspace table.listingdescription th,
+.template-workspace.section-bungeni-workspace .stx table th,
+.template-workspace.section-bungeni-workspace .yui-skin-sam .yui-dt-first th,
+.section-bungeni-workspace tr.yui-dt-first th {
+    background:#aaa !important;
+    text-shadow: 0 0 0  #fff;
+    color: #000 !important;
+}
+.template-workspace.section-bungeni-workspace #display_form_spacer {
+    background:#aaa !important;
+}
+
+/*MailBox*/
+.template-workspace .portlet ul.contentViewsLeftPort {
+    z-index:99 !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li {
+    border:0 none !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li a {
+    border:1px solid #888 !important;
+    -moz-border-radius: 3px; 
+    -webkit-border-radius: 3px; 
+    border-radius: 3px;
+    background-color:#f9f9f9 !important;
+}
+.template-workspace .portlet ul.contentViewsLeftPort li.selected,
+.template-workspace .portlet ul.contentViewsLeftPort li a:hover {
+    background-color:#21a1ba !important;
+    color:#fff !important;
+}

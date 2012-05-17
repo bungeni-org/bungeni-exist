@@ -196,14 +196,15 @@
     
     
     <rule class="primary">
+        
         <append theme="//head" content="//head/meta" nocontent="ignore" />
         <!-- menu -->
         <prepend content="#portal-globalnav > li"
             theme="children:#portal-globalnav > ul"
             if-content="not:base[href*='plone']"
         />
-        <prepend content="ul#portal-personaltools li.navigation"
-            theme="children:#portal-globalnav ul.level1"
+        <prepend content="ul#portal-personaltools li"
+            theme="children:#portal-globalnav-bottom ul.level1"
             if-content=".navigation"
         />
         

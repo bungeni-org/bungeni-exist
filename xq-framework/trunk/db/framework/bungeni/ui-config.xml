@@ -524,7 +524,7 @@
                     </li>
                     <li class="navigation">
                         <a name="calendar" href="calendar">
-                            <i18n:text key="sittings">calendar(nt)</i18n:text>
+                            <i18n:text key="calendar">calendar(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
@@ -1019,6 +1019,18 @@
                 <xsl>contacts.xsl</xsl>
             </view>
         </views>
+        <views name="Popout">
+            <view path="whatson" id="n/a">
+                <template>whatson.xml</template>
+                <xsl>whatson.xsl</xsl>
+            </view>
+        </views>
+        <views name="Popout">
+            <view path="popout" id="n/a">
+                <template>popout.xml</template>
+                <xsl>popout.xsl</xsl>
+            </view>
+        </views>
     </viewgroups>
     
     <!--
@@ -1180,7 +1192,12 @@
         </doctype>
         <doctype category="group" name="office"/>
         <doctype category="group" name="government"/>
-        <doctype category="group" name="groupsitting"/>
+        <doctype category="document" name="Groupsitting">
+            <listingfilters>
+                <listingfilter id="sittings" name="sittings">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="schedule" name="scheduled items">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
         <doctype category="membership" name="membership">
             <orderbys>
                 <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
@@ -1200,6 +1217,13 @@
         <doctype category="address" name="address"/>
         <doctype category="report" name="report"/>
     </doctypes>
+    
+    <!-- Sitting type -->
+    <sittings>
+        <sitting>plenary</sitting>
+        <sitting>committee</sitting>
+        <sitting>joint committee</sitting>
+    </sittings>    
     
     <!-- Document status types -->
     <statuses>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" id="search-form-global">
+<div xmlns="http://www.w3.org/1999/xhtml" id="portal-search">
     <form class="section-form" id="alchemist-form" name="search_form" method="GET" action="search">
         <input type="text" value="" name="q" id="global-search" class="text search_for" placeholder="Search all Bungeni documents..."/>
         <input type="submit" value="Search" id="global-srch-btn"/>

@@ -703,7 +703,7 @@ declare function bun:advanced-search($qryall as xs:string,
                                                 type of documents 
                                             :)
                                             else if($dtype eq $filter/@name) then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@for=$filter/@category]/bu:document[@for=$filter/@name]/ancestor::bu:ontology                                       
+                                                collection(cmn:get-lex-db())/bu:ontology[@for=$filter/@category]/bu:document/bu:docType[bu:value=$filter/@name]/ancestor::bu:ontology                                       
                                             else ()
                                     )
                                     else ()    
@@ -1704,6 +1704,73 @@ declare function bun:get-sittings(
 
 (:~
 :   Retieves all group documents of type sittings
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return 
+:   A listing of documents of group type sittings
+:)
+declare function bun:get-whatson(
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $querystr as xs:string, 
+        $sortby as xs:string,
+        $parts as node()
+        ) as element() {
+    
+    (: stylesheet to transform :)  
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $tab := xs:string(request:get-parameter("tab",'sittings')) 
+    let $listings-filter := cmn:get-listings-config('Groupsitting')
+    
+    (: 
+        The line below is documented in bun:get-documentitems()
+    :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset    
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of groups :)
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'])}</count>
+        <documentType>groupsitting</documentType>
+        <tags>
+        {
+            for $listing in $listings-filter
+                return 
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="20">{data($listing/@name)}</tag>
+         }
+         </tags>         
+        <listingUrlPrefix>sittings/profile</listingUrlPrefix>        
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>        
+        </paginator>
+        <alisting>
+        {
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'],$offset,$limit)
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    local:get-sitting-items($match)
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc,
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+                <param name="listing-tab" value="{$tab}" />
+            </parameters>
+           ) 
+       
+};
+
+(:~
+:   Retieves all group documents of type sittings
 : @param acl
 : @param doc-uri
 : @param _tmpl
@@ -2315,6 +2382,26 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
                 collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[@uri eq $eventid]/ancestor::bu:ontology
             }            
             </ref>
+            <event>{$eventid}</event>
+        </doc>  
+    
+    return
+        transform:transform($doc, 
+                            $stylesheet, 
+                            <parameters>
+                                <param name="version" value="true" />
+                            </parameters>)
+};
+
+declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    
+    let $doc := <doc>       
+            {
+                collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[@uri eq $eventid]/ancestor::bu:ontology
+            }            
             <event>{$eventid}</event>
         </doc>  
     

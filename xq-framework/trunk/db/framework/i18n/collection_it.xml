@@ -32,7 +32,7 @@
     <msg key="motions">mozioni</msg>
     <msg key="tableddocuments">documenti depositali</msg>
     <msg key="agendaitems">punti dell'ordine</msg>
-    <msg key="sittings">calendario</msg>
+    <msg key="calendar">calendario</msg>
     <msg key="publications">publicazzioni</msg>
     <msg key="current">corrente</msg>
     <msg key="politicalgroups">gruppi politici</msg>    
@@ -152,4 +152,7 @@
     <msg key="acronym">acronimo</msg>
     <msg key="none">nessuno</msg>
     <msg key="number">Numero</msg>
+    <!-- WHATSON/SITTINGS -->
+    <msg key="sittings">sedute</msg>
+    <msg key="schedule">previsto documentazione</msg>
 </catalogue>

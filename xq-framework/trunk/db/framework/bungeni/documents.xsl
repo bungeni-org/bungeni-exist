@@ -72,7 +72,7 @@
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
             </xsl:call-template>
-            <div id="region-content" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="blocks">
                         <div class="list-block">
@@ -140,7 +140,7 @@
                                         <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
                                             <xsl:sort select="bu:statusDate" order="descending"/>
                                             <li>
-                                                <a href="{lower-case($doc-type)}/event?uri={@href}">
+                                                <a href="popout?uri={@href}" rel="{lower-case($doc-type)}/event?uri={@href}" onclick="return false;">
                                                     <xsl:value-of select="bu:shortTitle"/>
                                                 </a>
                                                 <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>

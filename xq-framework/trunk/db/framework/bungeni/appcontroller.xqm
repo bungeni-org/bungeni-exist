@@ -20,6 +20,7 @@ Framework Imports
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
+import module namespace i18n = "http://exist-db.org/xquery/i18n" at "../i18n.xql";
 
 (:~
 Application imports
@@ -1528,6 +1529,16 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  
+        (: Utilities - Called from root path and meant to be generic calls :)
+    	else if ($EXIST-PATH eq "/popout" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-doc-event-popout($docnumber,$parts)
+                    return
+                        i18n:process($act-entries-tmpl, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
+                    
     	else if ($EXIST-PATH eq "/get-sittings-json" )
     		 then 
                 let $act-entries-tmpl :=  bun:get-sittings-json("public-view")
@@ -1639,14 +1650,15 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									)	
     	else if ($EXIST-PATH eq "/whatson")
     		 then 
-                let 
+                let
+                    $parts := cmn:get-view-parts($EXIST-PATH),
                     $qry := xs:string(request:get-parameter("q",'')),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-sittings($offset,$limit,$qry,$sty),
+                    $act-entries-tmpl :=  bun:get-whatson($offset,$limit,$qry,$sty,$parts),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("whatson.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(

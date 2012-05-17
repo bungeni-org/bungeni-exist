@@ -32,7 +32,7 @@
     <msg key="motions">misukumo</msg>
     <msg key="tableddocuments">hati ziliziopendekezwa</msg>
     <msg key="agendaitems">pointi za ajenda</msg>
-    <msg key="sittings">kalenda</msg>
+    <msg key="calendar">kalenda</msg>
     <msg key="publications">machapisho</msg>
     <msg key="current">sasa</msg>
     <msg key="politicalgroups">makundi ya kisiasa</msg>
@@ -152,4 +152,7 @@
     <msg key="acronym">kifupi</msg>
     <msg key="none">bila</msg>
     <msg key="number">Nambari</msg>
+    <!-- WHATSON/SITTINGS -->
+    <msg key="sittings">vikao</msg>
+    <msg key="schedule">ratiba ya vyeti</msg>
 </catalogue>

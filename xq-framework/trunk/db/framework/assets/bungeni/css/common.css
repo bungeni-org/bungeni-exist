@@ -257,6 +257,10 @@ div#doc-downloads {
 }
 
 /* Stuctures / Layout */
+.full-width {
+    width:100%;
+}
+
 .struct-ib {
     display:inline-block;
 }
@@ -265,6 +269,14 @@ div#doc-downloads {
 }
 .txt-center {
     text-align:center;
+}
+
+.txt-left {
+    text-align:left;
+}
+
+.txt-right {
+    text-align:right;
 }
 
 /* APPLY COLOR ONLY */

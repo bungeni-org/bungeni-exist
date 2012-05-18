@@ -22,9 +22,12 @@ $(document).ready(function () {
                 $("#global-search").val($.urlParam('q'));
         }
     }
-    /* stores locally the literals for toggling compress/expand... */
+    /* stores locally the literals for toggling compress/expand...
+       Useful for i18n labels embedded in jscript files or dynamically
+       generated */
     $('body').data('compress',$("#i-compress").html());
     $('body').data('expand',$("#i-expand").html());
+    $('body').data('close',$("#popout-close").html());
     
     /*** TOGGLE FEATURES **/
     
@@ -243,7 +246,7 @@ $(document).ready(function () {
 			center: 'title',
 			right: 'agendaDay,basicWeek,month'
 		},
-        defaultView: 'month',
+        defaultView: 'basicWeek',
 		editable: true,
 		disableDragging: true,
         events: function(start, end, callback) {
@@ -302,7 +305,7 @@ $(document).ready(function () {
             url: $(this).attr('href'), // Use the rel attribute of each element for the url to load
             title: {
                text: '<h1 id="doc-title-red-left">' + $(this).text() + '</h1>', // Give the tooltip a title using each elements text
-               button: 'Close' // Show a close link in the title
+               button: $("body").data("close") // Show a close link in the title
             }
          },
          position: {

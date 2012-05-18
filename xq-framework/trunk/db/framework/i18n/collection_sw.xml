@@ -152,7 +152,9 @@
     <msg key="acronym">kifupi</msg>
     <msg key="none">bila</msg>
     <msg key="number">Nambari</msg>
+    <msg key="from-popout">angalia kama cheti</msg>
+    <msg key="close">funga</msg>
     <!-- WHATSON/SITTINGS -->
     <msg key="sittings">vikao</msg>
-    <msg key="schedule">ratiba ya vyeti</msg>
+    <msg key="schedule">vyeti kwenye ratiba</msg>
 </catalogue>

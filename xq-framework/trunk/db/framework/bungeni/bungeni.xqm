@@ -1710,6 +1710,7 @@ declare function bun:get-sittings(
 : @param sortby
 : @return 
 :   A listing of documents of group type sittings
+:   NOTE: Return deviates from standard
 :)
 declare function bun:get-whatson(
         $offset as xs:integer, 
@@ -1742,14 +1743,11 @@ declare function bun:get-whatson(
                     <tag id="{$listing/@id}" name="{$listing/@name}" count="20">{data($listing/@name)}</tag>
          }
          </tags>         
-        <listingUrlPrefix>sittings/profile</listingUrlPrefix>        
-        <offset>{$offset}</offset>
-        <limit>{$limit}</limit>
-        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>        
+        <listingUrlPrefix>sittings/profile</listingUrlPrefix>
         </paginator>
         <alisting>
         {
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'],$offset,$limit)
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq xs:date("2012-05-21")]/ancestor::bu:ontology
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     local:get-sitting-items($match)

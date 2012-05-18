@@ -26,6 +26,9 @@
             </xsl:choose>
         </xsl:variable>
         <div id="main-wrapper">
+            <span id="popout-close" class="hide">
+                <i18n:text key="close">close(nt)</i18n:text>
+            </span>
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
                     <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>

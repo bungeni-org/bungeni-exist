@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Nov 18, 2011</xd:p>
+                <xd:b>Created on:</xd:b> May 18, 2012</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Event for Parliamentary Document from Bungeni</xd:p>
+            <xd:p> Popout for Event Document from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -28,10 +28,10 @@
         <div id="popout-wrapper">
             <div id="popout-content" role="main">
                 <div id="doc-main-section">
-                    <h3 id="doc-heading" class="doc-headers hang-left-titles">
+                    <h3 id="doc-heading" class="doc-headers">
                         <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> KENYA
                         PARLIAMENT </h3>
-                    <h4 id="doc-item-desc" class="doc-headers hang-left-titles">
+                    <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="bu:ontology/bu:documents/bu:shortTitle"/>
                     </h4>
                     <div class="doc-status">
@@ -53,6 +53,11 @@
                     </div>
                     <div id="doc-content-area">
                         <xsl:copy-of select="bu:ontology/bu:document/bu:body/child::node()"/>
+                    </div>
+                    <div class="full-width txt-right">
+                        <a class="link-external" href="{lower-case($doc-type)}?uri={$doc-uri}">
+                            <i18n:text key="from-popout">view as document(nt)</i18n:text>
+                        </a>
                     </div>
                 </div>
             </div>

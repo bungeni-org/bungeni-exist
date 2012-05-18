@@ -1,22 +1,25 @@
 div#popout-wrapper {
-    width: 720px;
+    width: 100%;
     height: auto;
     margin: 0 auto 0 auto;
     margin-top: 20px;
     background-color: tranparent;
 }
     div#popout-content {
-        width: 720px;
+        width: 100%;
         height:auto;
-        min-height: 500px;
-        margin: 0px auto 20px auto;
+        margin: 0px auto 0px auto;
         padding-top: 10px;
         padding-bottom: 10px;
         background-color: white;
-        border: 1px solid #C1C1C0;
     }
 
-img.throbber {
-    display:block;
-    margin: 0 auto;
-}
+    img.throbber {
+        display:block;
+        margin: 0 auto;
+    }
+    
+    .link-external {
+        padding-right: 12px;
+        background: transparent url(../images/ext-link.png) no-repeat top right;
+    }

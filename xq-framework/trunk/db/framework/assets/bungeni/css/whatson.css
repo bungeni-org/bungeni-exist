@@ -1,0 +1,62 @@
+
+ul.scheduling {
+    display: block;
+    padding: 0;
+    margin:0;
+}
+ul.scheduling li {
+    display: block;
+    margin: 0;
+}
+
+.schedule-block {
+    width:99%;
+    height:auto;
+    clear:both;
+}
+
+.schedule-block .left {
+    display:inline-block;
+    width:10%;
+    float:left
+}
+
+.schedule-block .right {
+    display:inline-block;
+    width:85%;
+    float:right
+}
+
+.sitting-block {
+    width:100%;
+    height:auto;   
+    clear: both;
+}
+
+#nav
+{
+    text-align:center;
+    padding:0;
+    clear:both;
+}
+#nav li 
+{
+    display:inline;
+}
+#nav li a 
+{   
+   font-size:1.3em;
+   text-decoration: none;
+   padding:5px 10px 5px 10px;
+   border-bottom:1px;
+   border-bottom-style:solid;
+   text-shadow: 0px 2px 3px #dddddd;
+}
+#nav li a.selected ,
+#nav li a:hover 
+{
+   background-color:#dddddd;
+   border-bottom-color:#7e7e7e;
+   border-bottom-style:solid;
+   text-shadow: 0px 2px 3px #d0d0d0;
+}

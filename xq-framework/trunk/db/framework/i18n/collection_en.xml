@@ -152,7 +152,10 @@
     <msg key="acronym">acronym</msg>
     <msg key="none">none</msg>
     <msg key="number">Number</msg>
+    <msg key="from-popout">view as document</msg>
+    <msg key="close">close</msg> 
     <!-- WHATSON/SITTINGS -->
     <msg key="sittings">sittings</msg>
     <msg key="schedule">scheduled documents</msg>
+    <msg key="today">today</msg>
 </catalogue>

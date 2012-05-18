@@ -152,6 +152,8 @@
     <msg key="acronym">acronimo</msg>
     <msg key="none">nessuno</msg>
     <msg key="number">Numero</msg>
+    <msg key="from-popout">visualizzare come documento</msg>
+    <msg key="close">chiudere</msg>
     <!-- WHATSON/SITTINGS -->
     <msg key="sittings">sedute</msg>
     <msg key="schedule">previsto documentazione</msg>

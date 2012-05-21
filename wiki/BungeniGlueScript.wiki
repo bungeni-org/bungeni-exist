@@ -14,6 +14,14 @@ The BungeniGlueScript is a Jython script that provides various options to synchr
      * Run ez_setup.py using the Jython interpreter (from http://peak.telecommunity.com/dist/ez_setup.py ) to install setuptools on Jython
      * Run easy_install polib from the Jython installation to setup polib in jython
 
+The steps are described below :
+{{{
+JYTHON_HOME=~/apps/jython2.5.2
+wget http://peak.telecommunity.com/dist/ez_setup.py
+$JYTHON_HOME/bin/jython ez_setup.py
+$JYTHON_HOME/bin/easy_install polib
+}}}
+
 = Setup =
 
 Checkout the framework from svn :

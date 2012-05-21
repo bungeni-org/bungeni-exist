@@ -10,7 +10,9 @@ The BungeniGlueScript is a Jython script that provides various options to synchr
 = Pre-requisites =
 
  * Jython (2.5 or greater) - Can be found on the Jython Project website (see [http://www.jython.org/] )
- * Python (2.6.5 or greater) - Comes pre-installed on linux distributions or can be installed via a package manager. For non-linux machines (see [http://www.python.org/download/] )
+ * Install polib in the jython:
+     * Run ez_setup.py using the Jython interpreter (from http://peak.telecommunity.com/dist/ez_setup.py ) to install setuptools on Jython
+     * Run easy_install polib from the Jython installation to setup polib in jython
 
 = Setup =
 

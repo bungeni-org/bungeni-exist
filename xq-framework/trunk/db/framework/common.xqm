@@ -192,6 +192,13 @@ declare function cmn:get-doctype-config($doctype as xs:string) {
 };
 
 (:
+ : return <whatsonview/> nodes
+ :)
+declare function cmn:get-whatsonviews() {
+    cmn:get-ui-config()/ui/whatsonviews
+};
+
+(:
  : return <doctype/> nodes
  :)
 declare function cmn:get-doctypes() {

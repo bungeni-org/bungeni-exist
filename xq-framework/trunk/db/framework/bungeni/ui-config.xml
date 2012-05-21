@@ -1218,6 +1218,16 @@
         <doctype category="report" name="report"/>
     </doctypes>
     
+    <!-- Whatson pre-defined sitting views -->
+    <whatsonviews>
+        <whatsonview id="old">past sittings</whatsonview>
+        <whatsonview id="pwk">previous week</whatsonview>
+        <whatsonview id="tdy">today</whatsonview>
+        <whatsonview id="twk">this week</whatsonview>
+        <whatsonview id="nwk">next week</whatsonview>
+        <whatsonview id="fut">future sittings</whatsonview>
+    </whatsonviews>
+    
     <!-- Sitting type -->
     <sittings>
         <sitting>plenary</sitting>

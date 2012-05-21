@@ -1702,6 +1702,79 @@ declare function bun:get-sittings(
        
 };
 
+(:
+    Given a date, it return start and end dates for the week that 
+    date lies in
+:)
+declare function local:start-end-of-week($adate as xs:date) {
+
+    let $abbr-day := functx:day-of-week-abbrev-en($adate)
+    
+    return
+        switch($abbr-day)
+
+        case 'Sun' return
+            <week>
+                <start>{($adate - xs:dayTimeDuration('P6D')) || "T00:00:00"}</start>
+                <end>{$adate || "T23:59:59"}</end>
+            </week>
+        case 'Mon' return
+            <week>
+                <start>{$adate || "T00:00:00"}</start>
+                <end>{($adate + xs:dayTimeDuration('P6D')) || "T23:59:59"}</end>
+            </week>
+        case 'Tues' return 
+            <week>
+                <start>{($adate - xs:dayTimeDuration('P1D')) || "T00:00:00"}</start>
+                <end>{($adate + xs:dayTimeDuration('P5D')) || "T23:59:59"}</end>
+            </week>          
+        case 'Wed' return 
+            <week>
+                <start>{($adate - xs:dayTimeDuration('P2D')) || "T00:00:00"}</start>
+                <end>{($adate + xs:dayTimeDuration('P4D')) || "T23:59:59"}</end>
+            </week>             
+        case 'Thurs' return
+            <week>
+                <start>{($adate - xs:dayTimeDuration('P3D')) || "T00:00:00"}</start>
+                <end>{($adate + xs:dayTimeDuration('P3D')) || "T23:59:59"}</end>
+            </week>             
+        case 'Fri' return
+            <week>
+                <start>{($adate - xs:dayTimeDuration('P4D')) || "T00:00:00"}</start>
+                <end>{($adate + xs:dayTimeDuration('P2D')) || "T23:59:59"}</end>
+            </week>      
+        case 'Sat' return
+            <week>
+                <start>{($adate - xs:dayTimeDuration('P5D')) || "T00:00:00"}</start>
+                <end>{($adate + xs:dayTimeDuration('P1D')) || "T23:59:59"}</end>
+            </week>
+        default return
+            ()
+};
+
+declare function local:old-future-sittings($range as xs:string) {
+
+    let $pwk := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
+    let $nwk := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
+    
+    return
+        switch($range)
+
+        (: For old and fut sittings, we get 30 days before and after previous and next week sittings :)
+        case 'old' return
+            <range>
+                <start>{(xs:date(substring-before($pwk/start,"T")) - xs:dayTimeDuration('P30D')) || "T00:00:00"}</start>
+                <end>{substring-before($pwk/start,"T") || "T23:59:59"}</end>
+            </range>
+        case 'fut' return
+            <range>
+                <start>{substring-before($nwk/end,"T") || "T00:00:00"}</start>
+                <end>{(xs:date(substring-before($nwk/end,"T")) + xs:dayTimeDuration('P30D')) || "T23:59:59"}</end>
+            </range>
+        default return
+            ()
+};
+
 (:~
 :   Retieves all group documents of type sittings
 : @param offset
@@ -1722,6 +1795,7 @@ declare function bun:get-whatson(
     
     (: stylesheet to transform :)  
     let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $whatsonview := xs:string(request:get-parameter("showing",'tdy'))     
     let $tab := xs:string(request:get-parameter("tab",'sittings')) 
     let $listings-filter := cmn:get-listings-config('Groupsitting')
     
@@ -1742,16 +1816,61 @@ declare function bun:get-whatson(
                 return 
                     <tag id="{$listing/@id}" name="{$listing/@name}" count="20">{data($listing/@name)}</tag>
          }
-         </tags>         
+         </tags>   
+        { cmn:get-whatsonviews() }       
         <listingUrlPrefix>sittings/profile</listingUrlPrefix>
         </paginator>
         <alisting>
         {
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq xs:date("2012-05-21")]/ancestor::bu:ontology
+            switch ($whatsonview)
+            
+            case 'old' return 
+                let $dates-range := local:old-future-sittings($whatsonview)
+                return             
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    local:get-sitting-items($match) 
+                
+            case 'pwk' return 
+                let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
+                return 
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    local:get-sitting-items($match)   
+
+            case 'twk' return
+                (: !+FIX_THIS (ao, 21-May-2012) Somehow current-date() returns like this 2012-05-21+03:00, we remove the timezone :)
+                let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
+                return             
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
+                order by $match/bu:legislature/bu:statusDate ascending
+                return 
+                    local:get-sitting-items($match)     
+  
+            case 'nwk' return 
+                let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
+                return             
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
+                order by $match/bu:legislature/bu:statusDate ascending
+                return 
+                    local:get-sitting-items($match)         
+             
+            case 'fut' return 
+                let $dates-range := local:old-future-sittings($whatsonview)
+                return             
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    local:get-sitting-items($match)                    
+             
+            default return           
+                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     local:get-sitting-items($match)
-        } 
+        }
         </alisting>
     </docs>
     (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
@@ -1762,8 +1881,9 @@ declare function bun:get-whatson(
             <parameters>
                 <param name="sortby" value="{$sortby}" />
                 <param name="listing-tab" value="{$tab}" />
+                <param name="whatson-view" value="{$whatsonview}" />
             </parameters>
-           ) 
+           )
        
 };
 
@@ -1908,7 +2028,7 @@ declare function bun:get-politicalgroups(
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>        
              
-             default return 
+            default return 
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 

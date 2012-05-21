@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -45,6 +45,7 @@
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
     <xsl:param name="sortby"/>
     <xsl:param name="listing-tab"/>
+    <xsl:param name="whatson-view"/>
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -58,28 +59,17 @@
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <ul id="nav">
-                    <li>
-                        <a href="#">past sittings</a>
-                    </li>
-                    <li>
-                        <a href="#">previous week</a>
-                    </li>
-                    <li>
-                        <a href="#" class="selected">today</a>
-                    </li>
-                    <li>
-                        <a href="#">this week</a>
-                    </li>
-                    <li>
-                        <a href="#">next week</a>
-                    </li>
-                    <li>
-                        <a href="#">future sittings</a>
-                    </li>
-                </ul>                
-                <!--h1 id="doc-title-blue-center">
-                    <i18n:text key="today">today(nt)</i18n:text>
-                </h1-->
+                    <xsl:for-each select="/docs/paginator/whatsonviews/whatsonview">
+                        <li>
+                            <xsl:if test="@id eq $whatson-view">
+                                <xsl:attribute name="class">selected</xsl:attribute>
+                            </xsl:if>
+                            <a href="?tab={$listing-tab}&amp;showing={@id}">
+                                <i18n:text key="{@id}">whatsonview(nt)</i18n:text>
+                            </a>
+                        </li>
+                    </xsl:for-each>
+                </ul>
             </div>
             <!-- Renders tabs -->
             <div id="tab-menu" class="ls-tabs">
@@ -149,29 +139,31 @@
             <li>
                 <xsl:variable name="docIdentifier">
                     <xsl:choose>
-                        <xsl:when test="bu:ontology/bu:document/@uri">
-                            <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                        <xsl:when test="doc/bu:ontology/bu:document/@uri">
+                            <xsl:value-of select="doc/bu:ontology/bu:document/@uri"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                            <xsl:value-of select="doc/bu:ontology/bu:document/@internal-uri"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <a href="sitting?uri={$docIdentifier}" id="{$docIdentifier}">
-                    21st May, 2012 - 5:05:00 pm
-                </a>
-                <span>-</span>
-                <div class="doc-toggle">
-                    <div class="sitting-block">
-                        <div class="schedule-block">
-                            <div class="left">time</div>
-                            <div class="right">business</div>
+                <xsl:for-each select="doc/bu:ontology">
+                    <a href="sitting?uri={bu:groupsitting/@uri}">
+                        <xsl:value-of select="format-dateTime(bu:groupsitting/bu:startDate,'[D1o] [MNn,*-3], [Y]','en',(),())"/>
+                    </a>
+                    <span>-</span>
+                    <div class="doc-toggle">
+                        <div class="sitting-block">
+                            <div class="schedule-block">
+                                <div class="left">time</div>
+                                <div class="right">business</div>
+                            </div>
+                            <xsl:apply-templates select="parent::node()" mode="renderui"/>
                         </div>
-                        <xsl:apply-templates mode="renderui"/>
+                        <table class="doc-tbl-details"/>
                     </div>
-                    <table class="doc-tbl-details"/>
-                </div>
-                <div style="clear:none;height:20px;"/>
+                    <div style="clear:none;height:10px;"/>
+                </xsl:for-each>
             </li>
         </ul>
     </xsl:template>

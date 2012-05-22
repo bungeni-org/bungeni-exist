@@ -235,6 +235,10 @@ div#doc-downloads {
 .clear {
     clear:both;
 }
+.clear-after {
+    clear:none;
+    height:10px;
+}
 .hide {
     display:none;
 }

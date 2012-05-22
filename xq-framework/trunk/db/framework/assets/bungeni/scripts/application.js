@@ -1,11 +1,13 @@
 $(document).ready(function () {
 
     $('#startdate').Zebra_DatePicker({
+        always_show_clear: true,
         direction: -1, //past only calendar, the negative integer
         readonly_element: false,
         inside: false
     });
     $('#enddate').Zebra_DatePicker({
+        always_show_clear: true,
         direction: 0, // unrestricted calendar dates
         readonly_element: false,
         inside: false
@@ -333,5 +335,26 @@ $(document).ready(function () {
          }
       })
     });
+    
+    var fullDate = new Date();
+    var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+    var currentDate = fullDate.getFullYear() + "/" + twoDigitMonth + "-" + fullDate.getDate();
+    
+    
+    /* Whatson calendar */
+    $('#range-cal').DatePicker({
+    	flat: true,
+    	date: ["2012-05-21", "2012-05-27"],
+    	current: currentDate,
+    	calendars: 1,
+    	mode: 'range',
+    	onRender: function(date) {
+    		return {
+    			disabled: (date.valueOf() < currentDate),
+    			className: date.valueOf() == currentDate ? 'datepickerSpecial' : false
+    		}
+    	},    	
+    	starts: 1   	
+    });    
 });   
 

@@ -157,4 +157,10 @@
     <!-- WHATSON/SITTINGS -->
     <msg key="sittings">sedute</msg>
     <msg key="schedule">previsto documentazione</msg>
+    <msg key="tdy">oggi</msg>
+    <msg key="old">sedute precedenti</msg>
+    <msg key="pwk">settimana precedente</msg>
+    <msg key="nwk">la prossima settimana</msg>
+    <msg key="twk">questa settimana</msg>
+    <msg key="fut">sedute futuro</msg>
 </catalogue>

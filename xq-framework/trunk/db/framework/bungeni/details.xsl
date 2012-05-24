@@ -164,7 +164,7 @@
                                     </a>
                                 </div>
                                 <div class="doc-toggle open">
-                                    <xsl:copy-of select="bu:ontology/bu:ministry/bu:field[@name='description']"/>
+                                    <xsl:copy-of select="bu:ontology/bu:ministry/bu:description"/>
                                 </div>
                             </li>
                         </xsl:if>

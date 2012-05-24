@@ -142,47 +142,94 @@
     <xsl:template match="alisting">
         <ul id="list-toggle" class="ls-row clear">
             <li>
-                <xsl:variable name="docIdentifier">
-                    <xsl:choose>
-                        <xsl:when test="doc/bu:ontology/bu:document/@uri">
-                            <xsl:value-of select="doc/bu:ontology/bu:document/@uri"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="doc/bu:ontology/bu:document/@internal-uri"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:for-each select="doc/bu:ontology">
-                    <a href="sitting?uri={bu:groupsitting/@uri}">
-                        <xsl:value-of select="format-dateTime(bu:groupsitting/bu:startDate,'[D1o] [MNn,*-3], [Y]','en',(),())"/>
-                    </a>
-                    <span>-</span>
-                    <div class="doc-toggle">
-                        <div class="sitting-block">
-                            <div class="schedule-block">
-                                <div class="left">time</div>
-                                <div class="right">business</div>
-                            </div>
-                            <xsl:apply-templates select="parent::node()" mode="renderui"/>
-                        </div>
-                        <table class="doc-tbl-details"/>
-                    </div>
-                    <div class="clear-after"/>
-                </xsl:for-each>
+                <xsl:apply-templates select="doc" mode="groupings"/>
             </li>
         </ul>
     </xsl:template>
-    <xsl:template match="doc" mode="renderui">
+    <xsl:template match="doc" mode="groupings">
+        <xsl:choose>
+            <xsl:when test="$listing-tab eq 'sittings'">
+                <xsl:value-of select="format-date(@title,'[D1o] [MNn,*-3], [Y]','en',(),())"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@title"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <span>-</span>
+        <div class="doc-toggle">
+            <div class="sitting-block">
+                <xsl:choose>
+                    <xsl:when test="$listing-tab eq 'sittings'">
+                        <div class="schedule-block">
+                            <div class="left">time</div>
+                            <div class="right">business</div>
+                        </div>
+                        <xsl:apply-templates mode="render-by-date"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates mode="render-by-itemtype"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+            <table class="doc-tbl-details"/>
+        </div>
+        <div class="clear-after"/>
+    </xsl:template>
+    <xsl:template match="ref" mode="render-by-itemtype">
         <div class="schedule-block">
             <div class="left">
-                <xsl:value-of select="format-dateTime(bu:ontology/bu:groupsitting/bu:startDate,'[h]:[m]:[s] [P,2-2]','en',(),())"/>
+                <a href="sitting?uri={@sitting}">
+                    <xsl:value-of select="format-dateTime(bu:startDate,'[F] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                </a>
+            </div>
+            <div class="right">
+                <xsl:variable name="subDocIdentifier">
+                    <xsl:choose>
+                        <xsl:when test="bu:ontology/bu:document/@uri">
+                            <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+                <xsl:variable name="eventOf" select="bu:ontology/bu:document/bu:eventOf/bu:type/bu:value"/>
+                <xsl:choose>
+                    <xsl:when test="$doc-type eq 'Heading'">
+                        <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+                    </xsl:when>
+                    <xsl:when test="$doc-type = 'Event'">
+                        <xsl:variable name="event-href" select="bu:document/@uri"/>
+                        <a href="{lower-case($eventOf)}/event?uri={$event-href}">
+                            <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <a href="{lower-case($doc-type)}/text?uri={$subDocIdentifier}">
+                            <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+                        </a>
+                    </xsl:otherwise>
+                </xsl:choose>  
+                (<xsl:value-of select="bu:shortName"/>)
+            </div>
+            <div class="clear"/>
+            <br/>
+        </div>
+    </xsl:template>
+    <xsl:template match="ref" mode="render-by-date">
+        <div class="schedule-block">
+            <div class="left">
+                <a href="sitting?uri={@sitting}">
+                    <xsl:value-of select="format-dateTime(bu:startDate,'[h]:[m]:[s] [P,2-2]','en',(),())"/>
+                </a>
             </div>
             <div class="right">
                 <ul class="scheduling">
                     <li>
                         <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
                     </li>
-                    <xsl:for-each select="ref/bu:ontology">
+                    <xsl:for-each select="bu:ontology">
                         <xsl:variable name="subDocIdentifier">
                             <xsl:choose>
                                 <xsl:when test="bu:document/@uri">

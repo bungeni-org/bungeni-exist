@@ -1775,6 +1775,37 @@ declare function local:old-future-sittings($range as xs:string) {
             ()
 };
 
+declare function local:get-sitting-subset($sittings) {
+    for $sitting in $sittings
+        for $eachitem in $sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
+        let $uri := <uri>{data($sitting/bu:groupsitting/@uri)}</uri>
+        let $startdate := $sitting/bu:groupsitting/bu:startDate
+        let $venue := $sitting/bu:groupsitting/bu:venue/bu:shortName
+        return 
+            <ref sitting="{$uri}">
+                { $startdate, $eachitem, $venue, collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq $eachitem/bu:document/@href, @internal-uri eq $eachitem/bu:document/@href]/parent::node() }
+            </ref>
+};
+
+declare function local:grouped-sitting-items-by-itemtype($sittings) {
+    for $item in local:get-sitting-subset($sittings)
+    group $item as $partition by $item/bu:itemSchedule/bu:itemType/bu:value as $key
+    return 
+        <doc title="{$key}">
+            {$partition}
+        </doc>
+};
+
+declare function local:grouped-sitting-items-by-date($sittings) {
+    for $item in local:get-sitting-subset($sittings)
+    group $item as $partition by <date>{substring-before($item/bu:startDate,"T")}</date> as $key
+    order by $key ascending
+    return 
+        <doc title="{$key}">
+            {$partition}
+        </doc>
+};
+
 (:~
 :   Retieves all group documents of type sittings
 : @param offset
@@ -1827,49 +1858,57 @@ declare function bun:get-whatson(
             case 'old' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
                 return             
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
-                order by $match/bu:legislature/bu:statusDate descending
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
-                    local:get-sitting-items($match) 
+                    if ($tab eq 'sittings') then
+                        local:grouped-sitting-items-by-date($sittings)  
+                    else
+                        local:grouped-sitting-items-by-itemtype($sittings)  
                 
             case 'pwk' return 
                 let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
                 return 
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
-                order by $match/bu:legislature/bu:statusDate descending
-                return 
-                    local:get-sitting-items($match)   
+                    if ($tab eq 'sittings') then
+                        local:grouped-sitting-items-by-date($sittings)  
+                    else
+                        local:grouped-sitting-items-by-itemtype($sittings)  
 
             case 'twk' return
                 (: !+FIX_THIS (ao, 21-May-2012) Somehow current-date() returns like this 2012-05-21+03:00, we remove the timezone :)
                 let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
-                return             
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
-                order by $match/bu:legislature/bu:statusDate ascending
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology
                 return 
-                    local:get-sitting-items($match)     
+                    if ($tab eq 'sittings') then
+                        local:grouped-sitting-items-by-date($sittings)  
+                    else
+                        local:grouped-sitting-items-by-itemtype($sittings)  
   
             case 'nwk' return 
                 let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
-                return             
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
-                order by $match/bu:legislature/bu:statusDate ascending
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
                 return 
-                    local:get-sitting-items($match)         
+                    if ($tab eq 'sittings') then
+                        local:grouped-sitting-items-by-date($sittings)  
+                    else
+                        local:grouped-sitting-items-by-itemtype($sittings)       
              
             case 'fut' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
-                return             
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
-                order by $match/bu:legislature/bu:statusDate descending
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
-                    local:get-sitting-items($match)                    
+                    if ($tab eq 'sittings') then
+                        local:grouped-sitting-items-by-date($sittings)  
+                    else
+                        local:grouped-sitting-items-by-itemtype($sittings)                    
              
             default return           
-                for $match in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
-                order by $match/bu:legislature/bu:statusDate descending
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
                 return 
-                    local:get-sitting-items($match)
+                    if ($tab eq 'sittings') then
+                        local:grouped-sitting-items-by-date($sittings)  
+                    else
+                        local:grouped-sitting-items-by-itemtype($sittings)  
         }
         </alisting>
     </docs>
@@ -1884,7 +1923,6 @@ declare function bun:get-whatson(
                 <param name="whatson-view" value="{$whatsonview}" />
             </parameters>
            )
-       
 };
 
 (:~
@@ -1959,7 +1997,7 @@ declare function local:get-sitting-items($sittingdoc as node()) {
             {
                 for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
                 return 
-                    collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docId[text() eq $eachitem/bu:itemId/text()]/ancestor::bu:ontology
+                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq data($eachitem/bu:document/@href)]/ancestor::bu:ontology
             }
         </ref>
     </doc>     

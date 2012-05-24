@@ -17,17 +17,18 @@ ul.scheduling li {
         
         .schedule-block {
             width:99%;
-            height:auto;
+            height:15px;
             clear:both; }
         
         .schedule-block .left {
             display:inline-block;
-            width:15%;
+            width:25%;
+            white-space:nowrap;
             float:left }
         
         .schedule-block .right {
             display:inline-block;
-            width:85%;
+            width:75%;
             float:right
         }
         
@@ -58,15 +59,16 @@ ul.scheduling li {
    border-bottom:1px;
    border-bottom-style:solid;
    text-shadow: 0px 2px 3px #dddddd;
+   color:#b22b14;
 }
 #nav li.selected a ,
 #nav li a:hover 
 {
    background-color:#dddddd;
-   border-bottom-color:#21a1ba;
+   border-bottom-color:#dd3519;
    border-bottom-style:solid;
    text-shadow: 0px 2px 3px #d0d0d0;
-   color:#00b3ff;
+   color:#dd3519;
 }
 
 /*DATE PICKER CSS */

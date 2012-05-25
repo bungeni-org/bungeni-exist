@@ -77,6 +77,7 @@
     <msg key="resp-type">response type</msg>
     <msg key="listing-search">search text</msg>
     <msg key="sort-by">sort by</msg>
+    <msg key="filter-by">filter by</msg>
     <msg key="btn-search">search</msg>
     <msg key="btn-adv-search">advanced search »</msg>
     <msg key="doc-question">question</msg>
@@ -163,4 +164,7 @@
     <msg key="nwk">next week</msg>
     <msg key="twk">this week</msg>
     <msg key="fut">future sittings</msg>
+    <msg key="sittinglink">go to sitting</msg>
+    <msg key="whatson-time">time</msg>
+    <msg key="whatson-business">business</msg>
 </catalogue>

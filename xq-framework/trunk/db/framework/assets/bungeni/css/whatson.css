@@ -12,7 +12,7 @@ ul.scheduling li {
     clear:both }
     
     .whatson-wrapper > .left {
-        width:70%;
+        width:72%;
         float:left; }
         
         .schedule-block {
@@ -20,21 +20,34 @@ ul.scheduling li {
             height:15px;
             clear:both; }
         
+        .schedule-block .header {
+            font-style:italic; }   
+            
         .schedule-block .left {
             display:inline-block;
             width:25%;
             white-space:nowrap;
             float:left }
+            .schedule-block .left a {
+                color:#DD3519 }            
         
         .schedule-block .right {
             display:inline-block;
             width:75%;
-            float:right
-        }
+            float:right } 
         
     .whatson-wrapper > .right {
-        width:30%;
+        width:27%;
         float:right; }
+        
+        .whatson-form .indent {
+            margin-left:10px !important;
+            }
+        .whatson-form input.search_for {
+            width: auto;
+            border: 1px solid #ffffff; }
+        .whatson-form .note {
+            width: 90%; }            
     
     .sitting-block {
         width:100%;
@@ -206,7 +219,7 @@ td.datepickerNotInMonth a {
 	color: #666;
 }
 tbody.datepickerDays td.datepickerSelected{
-	background: #136A9F;
+	background: #136A9F;	
 }
 tbody.datepickerDays td.datepickerNotInMonth.datepickerSelected {
 	background: #17384d;

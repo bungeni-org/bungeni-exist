@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -90,11 +90,11 @@
                 <xsl:with-param name="doc-type" select="$input-document-type"/>
                 <xsl:with-param name="uri">null</xsl:with-param>
             </xsl:call-template>
-            <div id="region-content" class="rounded-eigh tab_container" role="main">
+            <div id="region-content" class="rounded-eigh tab_container" role="main">             
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
                     <div class="list-header">
-                        filter by: 
+                        <i18n:text key="filter-by">filter by(nt)</i18n:text>: 
                         <!-- call the filters -->
                         <select>
                             <option value="plenary">plenary</option>
@@ -127,6 +127,31 @@
                         </div>
                         <div class="right">
                             <p id="range-cal"/>
+                            <form class="whatson-form" id="whatson-filter-form" name="whatson_filter_form" method="GET" action="whatson">
+                                <input type="hidden" value="{$listing-tab}" name="tab"/>
+                                <input type="hidden" value="none" name="showing"/>
+                                <input type="hidden" value="none" name="f" id="hidden-start"/>
+                                <input type="hidden" value="none" name="t" id="hidden-end"/>
+                                <div class="indent schedule-block note">
+                                    Click twice: The beginning and end date or your range selection
+                                </div>
+                                <br/>
+                                <br/>
+                                <div class="indent schedule-block">
+                                    <div class="left">from: </div>
+                                    <div class="right">
+                                        <input type="text" value="none" disabled="disabled" name="q" id="range-cal-start" class="indent text search_for"/>
+                                    </div>
+                                </div>
+                                <div class="indent schedule-block">
+                                    <div class="left">to: </div>
+                                    <div class="right">
+                                        <input type="text" value="none" disabled="disabled" name="q" id="range-cal-end" class="indent text search_for"/>
+                                    </div>
+                                </div>
+                                <br/>
+                                <input type="submit" value="Filter" class="indent" id="whatson-filter-btn"/>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -140,45 +165,56 @@
         Listing generator template 
     -->
     <xsl:template match="alisting">
+        <div class="hide">
+            <span id="range-start">
+                <xsl:value-of select="substring-before(range/start,'T')"/>
+            </span>
+            <span id="range-end">
+                <xsl:value-of select="substring-before(range/end,'T')"/>
+            </span>
+        </div>
         <ul id="list-toggle" class="ls-row clear">
-            <li>
-                <xsl:apply-templates select="doc" mode="groupings"/>
-            </li>
+            <xsl:apply-templates select="doc" mode="groupings"/>
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="groupings">
-        <xsl:choose>
-            <xsl:when test="$listing-tab eq 'sittings'">
-                <xsl:value-of select="format-date(@title,'[D1o] [MNn,*-3], [Y]','en',(),())"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="@title"/>
-            </xsl:otherwise>
-        </xsl:choose>
-        <span>-</span>
-        <div class="doc-toggle">
-            <div class="sitting-block">
-                <xsl:choose>
-                    <xsl:when test="$listing-tab eq 'sittings'">
-                        <div class="schedule-block">
-                            <div class="left">time</div>
-                            <div class="right">business</div>
-                        </div>
-                        <xsl:apply-templates mode="render-by-date"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates mode="render-by-itemtype"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+        <li>
+            <xsl:choose>
+                <xsl:when test="$listing-tab eq 'sittings'">
+                    <xsl:value-of select="format-date(@title,'[F], [D1o] [MNn,*-3], [Y]','en',(),())"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="@title"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <span>-</span>
+            <div class="doc-toggle">
+                <div class="sitting-block">
+                    <xsl:choose>
+                        <xsl:when test="$listing-tab eq 'sittings'">
+                            <div class="schedule-block">
+                                <div class="left header">
+                                    <i18n:text key="whatson-time">time(nt)</i18n:text>
+                                </div>
+                                <div class="right header">
+                                    <i18n:text key="whatson-business">business(nt)</i18n:text>
+                                </div>
+                            </div>
+                            <xsl:apply-templates mode="render-by-date"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates mode="render-by-itemtype"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </div>
+                <table class="doc-tbl-details"/>
             </div>
-            <table class="doc-tbl-details"/>
-        </div>
-        <div class="clear-after"/>
+        </li>
     </xsl:template>
     <xsl:template match="ref" mode="render-by-itemtype">
         <div class="schedule-block">
             <div class="left">
-                <a href="sitting?uri={@sitting}">
+                <a href="sitting?uri={@sitting}" title="i18n(sittinglink,go to sitting-nt)">
                     <xsl:value-of select="format-dateTime(bu:startDate,'[F] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                 </a>
             </div>
@@ -220,7 +256,7 @@
     <xsl:template match="ref" mode="render-by-date">
         <div class="schedule-block">
             <div class="left">
-                <a href="sitting?uri={@sitting}">
+                <a href="sitting?uri={@sitting}" title="i18n(sittinglink,go to sitting-nt)">
                     <xsl:value-of select="format-dateTime(bu:startDate,'[h]:[m]:[s] [P,2-2]','en',(),())"/>
                 </a>
             </div>

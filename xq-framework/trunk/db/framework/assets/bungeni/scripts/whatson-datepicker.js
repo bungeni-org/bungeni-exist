@@ -557,7 +557,7 @@
 										if (!options.lastSel) {
 											options.date[0] = (tmp.setHours(0,0,0,0)).valueOf();
 										}
-										val = (tmp.setHours(23,59,59,0)).valueOf();
+										val = (tmp.setHours(23,59,59,0)).valueOf();								
 										if (val < options.date[0]) {
 											options.date[1] = options.date[0] + 86399000;
 											options.date[0] = val - 86399000;
@@ -565,6 +565,12 @@
 											options.date[1] = val;
 										}
 										options.lastSel = !options.lastSel;
+										//for eXist-db
+										$("#hidden-start").val(exist_facing_date(options.date[0]));
+										$("#hidden-end").val(exist_facing_date(options.date[1]));											
+										//user-facing
+										$("#range-cal-start").val(user_facing_date(options.date[0]));
+										$("#range-cal-end").val(user_facing_date(options.date[1]));												
 										break;
 									default:
 										options.date = tmp.valueOf();
@@ -753,7 +759,7 @@
 									day7: options.locale.daysMin[(cnt++)%7]
 								});							
 						}
-						
+
 						cal.find('tr:first').append(html)
 						//cal.find('tr:last').after(html)
 								.find('table').addClass(views[options.view]);
@@ -890,3 +896,18 @@
     return data ? fn( data ) : fn;
   };
 })();
+
+var exist_facing_date = function(unix_timestamp) {
+
+    var datum = new Date(unix_timestamp);
+    var year = datum.getFullYear();
+    var month = ('0' + (datum.getMonth()+1)).slice(-2);
+    var day = ('0' + datum.getDate()).slice(-2);
+    return year + "-" + month + "-" + day;    
+};
+
+var user_facing_date = function(unix_timestamp) {
+
+    var datum = new Date(unix_timestamp);
+    return datum.toLocaleDateString();    
+};

@@ -77,6 +77,7 @@
     <msg key="resp-type">aina ya jibu</msg>
     <msg key="listing-search">tafuta maandiko</msg>
     <msg key="sort-by">namna hii</msg>
+    <msg key="filter-by">chuja kwa</msg>
     <msg key="btn-search">tafuta</msg>
     <msg key="btn-adv-search">tafuta kwa hali ya juu »</msg>
     <msg key="doc-question">swali</msg>
@@ -163,4 +164,7 @@
     <msg key="nwk">wiki ijayo</msg>
     <msg key="twk">wiki hii</msg>
     <msg key="fut">vikao vya usoni</msg>
+    <msg key="sittinglink">fungua kikao hiki</msg>
+    <msg key="whatson-time">saa</msg>
+    <msg key="whatson-business">shughuli</msg>
 </catalogue>

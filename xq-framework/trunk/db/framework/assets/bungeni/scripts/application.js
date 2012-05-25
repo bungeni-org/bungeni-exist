@@ -30,6 +30,9 @@ $(document).ready(function () {
     $('body').data('compress',$("#i-compress").html());
     $('body').data('expand',$("#i-expand").html());
     $('body').data('close',$("#popout-close").html());
+    //Whatson page
+    $('body').data('start',$("#range-start").html());
+    $('body').data('end',$("#range-end").html());
     
     /*** TOGGLE FEATURES **/
     
@@ -340,11 +343,10 @@ $(document).ready(function () {
     var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
     var currentDate = fullDate.getFullYear() + "/" + twoDigitMonth + "-" + fullDate.getDate();
     
-    
     /* Whatson calendar */
     $('#range-cal').DatePicker({
     	flat: true,
-    	date: ["2012-05-21", "2012-05-27"],
+    	date: [$("body").data("start"), $("body").data("end")],
     	current: currentDate,
     	calendars: 1,
     	mode: 'range',

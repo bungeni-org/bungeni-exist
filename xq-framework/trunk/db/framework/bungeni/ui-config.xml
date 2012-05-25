@@ -1218,6 +1218,11 @@
         <doctype category="report" name="report"/>
     </doctypes>
     
+    <!-- Whatson default configs -->
+    <whatson>
+        <max-range message="maximum range fetchable in days">30</max-range>
+    </whatson>
+    
     <!-- Whatson pre-defined sitting views -->
     <whatsonviews>
         <whatsonview id="old">past sittings</whatsonview>

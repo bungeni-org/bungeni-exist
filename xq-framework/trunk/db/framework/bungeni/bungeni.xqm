@@ -1714,40 +1714,40 @@ declare function local:start-end-of-week($adate as xs:date) {
         switch($abbr-day)
 
         case 'Sun' return
-            <week>
+            <range>
                 <start>{($adate - xs:dayTimeDuration('P6D')) || "T00:00:00"}</start>
                 <end>{$adate || "T23:59:59"}</end>
-            </week>
+            </range>
         case 'Mon' return
-            <week>
+            <range>
                 <start>{$adate || "T00:00:00"}</start>
                 <end>{($adate + xs:dayTimeDuration('P6D')) || "T23:59:59"}</end>
-            </week>
+            </range>
         case 'Tues' return 
-            <week>
+            <range>
                 <start>{($adate - xs:dayTimeDuration('P1D')) || "T00:00:00"}</start>
                 <end>{($adate + xs:dayTimeDuration('P5D')) || "T23:59:59"}</end>
-            </week>          
+            </range>          
         case 'Wed' return 
-            <week>
+            <range>
                 <start>{($adate - xs:dayTimeDuration('P2D')) || "T00:00:00"}</start>
                 <end>{($adate + xs:dayTimeDuration('P4D')) || "T23:59:59"}</end>
-            </week>             
+            </range>             
         case 'Thurs' return
-            <week>
+            <range>
                 <start>{($adate - xs:dayTimeDuration('P3D')) || "T00:00:00"}</start>
                 <end>{($adate + xs:dayTimeDuration('P3D')) || "T23:59:59"}</end>
-            </week>             
+            </range>             
         case 'Fri' return
-            <week>
+            <range>
                 <start>{($adate - xs:dayTimeDuration('P4D')) || "T00:00:00"}</start>
                 <end>{($adate + xs:dayTimeDuration('P2D')) || "T23:59:59"}</end>
-            </week>      
+            </range>      
         case 'Sat' return
-            <week>
+            <range>
                 <start>{($adate - xs:dayTimeDuration('P5D')) || "T00:00:00"}</start>
                 <end>{($adate + xs:dayTimeDuration('P1D')) || "T23:59:59"}</end>
-            </week>
+            </range>
         default return
             ()
 };
@@ -1860,55 +1860,85 @@ declare function bun:get-whatson(
                 return             
                 let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
-                    if ($tab eq 'sittings') then
+                    if ($tab eq 'sittings') then (
+                        $dates-range,
                         local:grouped-sitting-items-by-date($sittings)  
-                    else
+                    )
+                    else (
+                        $dates-range,
                         local:grouped-sitting-items-by-itemtype($sittings)  
+                    )
                 
             case 'pwk' return 
-                let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
+                let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
-                    if ($tab eq 'sittings') then
+                    if ($tab eq 'sittings') then (
+                        $dates-range,
                         local:grouped-sitting-items-by-date($sittings)  
-                    else
+                    )
+                    else (
+                        $dates-range,
                         local:grouped-sitting-items-by-itemtype($sittings)  
+                    ) 
 
             case 'twk' return
                 (: !+FIX_THIS (ao, 21-May-2012) Somehow current-date() returns like this 2012-05-21+03:00, we remove the timezone :)
-                let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology
+                let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
                 return 
-                    if ($tab eq 'sittings') then
+                    if ($tab eq 'sittings') then (
+                        $dates-range,
                         local:grouped-sitting-items-by-date($sittings)  
-                    else
+                    )
+                    else (
+                        $dates-range,
                         local:grouped-sitting-items-by-itemtype($sittings)  
+                    )
   
             case 'nwk' return 
-                let $dates-week := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-week/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-week/end)]/ancestor::bu:ontology 
+                let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
-                    if ($tab eq 'sittings') then
+                    if ($tab eq 'sittings') then (
+                        $dates-range,
                         local:grouped-sitting-items-by-date($sittings)  
-                    else
-                        local:grouped-sitting-items-by-itemtype($sittings)       
+                    )
+                    else (
+                        $dates-range,
+                        local:grouped-sitting-items-by-itemtype($sittings)  
+                    )      
              
             case 'fut' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
                 let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
-                    if ($tab eq 'sittings') then
+                    if ($tab eq 'sittings') then (
+                        $dates-range,
                         local:grouped-sitting-items-by-date($sittings)  
-                    else
-                        local:grouped-sitting-items-by-itemtype($sittings)                    
+                    )
+                    else (
+                        $dates-range,
+                        local:grouped-sitting-items-by-itemtype($sittings)  
+                    )                  
              
             default return           
                 let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
                 return 
-                    if ($tab eq 'sittings') then
+                    if ($tab eq 'sittings') then (
+                        <range>
+                            <start>{current-dateTime()}</start>
+                            <end>{current-dateTime()}</end>
+                        </range>,
                         local:grouped-sitting-items-by-date($sittings)  
-                    else
+                    )
+                    else (
+                        <range>
+                            <start>{current-dateTime()}</start>
+                            <end>{current-dateTime()}</end>
+                        </range>,
                         local:grouped-sitting-items-by-itemtype($sittings)  
+                    )
         }
         </alisting>
     </docs>

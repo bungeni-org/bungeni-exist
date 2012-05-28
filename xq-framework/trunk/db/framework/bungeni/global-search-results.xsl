@@ -79,29 +79,20 @@
                 <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
             </a>
             &#160;›&#160;
-            <a style="color:#2b92be" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+            <a class="van-light" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
                 <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
                 <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>
             <span>-</span>
             <div class="doc-toggle">
+                <div class="search-subh">
+                    <xsl:value-of select="format-dateTime(bu:ontology/child::*/bu:statusDate,$datetime-format,'en',(),())"/>
+                    &#160;-&#160;
+                    <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status/bu:value"/>
+                </div>
+                <br/>
                 <div class="black-full">
                     <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...               
-                </div>
-                <div class="grey-full">
-                    <span>
-                        <xsl:value-of select="bu:ontology/bu:document/bu:status/bu:value"/>
-                    </span>
-                    <span>
-                        on                         
-                        <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
-                    </span>
-                    &#160;
-                    <span style="vertical-align:0;line-height:1em !important;padding:0;margin:0px;">·</span>
-                    &#160;  
-                    <span>
-                        <xsl:value-of select="bu:ontology/bu:document/bu:docSubType/bu:value"/> document
-                    </span>
                 </div>
             </div>
         </li>
@@ -126,20 +117,15 @@
             </div>
             <span>-</span>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">start date:</td>
-                        <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">election date:</td>
-                        <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:electionDate/@select, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
-                        </td>
-                    </tr>
-                </table>
+                <div class="search-subh">
+                    <i>start date</i>&#160;<xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                    &#160;-&#160;
+                    <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status/bu:value"/>
+                </div>
+                <br/>
+                <div class="black-full">
+                    <xsl:value-of select="substring(bu:ontology/bu:group/bu:description,0,320)"/> ...               
+                </div>
             </div>
         </li>
     </xsl:template> 

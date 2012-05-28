@@ -45,7 +45,12 @@ div.header-nav {
 }
 #search-form-global .header-links {
     margin-right:2px;
-    color:#36b9f1;
+    color:#36b9f1 !important;
+}
+#portal-search a.header-links:visited, 
+#portal-search a.header-links {
+    margin-right:2px;
+    color:#ffffff;
 }
 
 div#main-wrapper {
@@ -551,4 +556,9 @@ span.hi {
 .r-prompts {
     color:#36b9f1;
     font-size:1.5em;
+}
+
+/*VANILLA THEME*/
+a.van-light {
+    color:#1f34fd;
 }

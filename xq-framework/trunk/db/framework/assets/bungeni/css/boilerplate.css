@@ -38,11 +38,11 @@ body,button,input,select,textarea {
     text-shadow:none
 }
 a, a:visited {
-    color:#05b0f8;
+    color:#1122cc;
     text-decoration:none;
 }
 a:hover {
-    color:#05b0f8;
+    color:#0000ff;
     text-decoration:underline;
 }
 a:focus {

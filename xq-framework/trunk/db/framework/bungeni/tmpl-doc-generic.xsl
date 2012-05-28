@@ -94,13 +94,13 @@
     <xsl:template name="doc-item-title">
         <xsl:param name="ver-uri"/>
         <div id="title-holder" class="theme-lev-1-only">
-            <h1 id="doc-title-blue">
+            <h1 id="doc-title-red-left">
                 <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
             </h1>
-            <h1 id="doc-title-red-left">
+            <h1 id="doc-title-blue">
                 <!-- If its a version and not a main document... add version title below main title -->
                 <xsl:if test="$version eq 'true'">
-                    <span class="doc-sub-title-red">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:activeDate,$datetime-format,'en',(),())"/>
+                    <span class="doc-sub-blue">Version <xsl:value-of select="bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:sequence"/> | <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:activeDate,$datetime-format,'en',(),())"/>
                     </span>
                 </xsl:if>
             </h1>
@@ -194,7 +194,7 @@
                 <xsl:when test="bu:ontology/bu:signatories">
                     <xsl:for-each select="bu:ontology/bu:signatories/bu:signatory">
                         <i>
-                            <a href="member?uri={bu:person/@href}">
+                            <a href="member?uri={bu:person/@href}" title="{bu:status/bu:value}">
                                 <xsl:value-of select="bu:person/@showAs"/>
                             </a>
                         </i>

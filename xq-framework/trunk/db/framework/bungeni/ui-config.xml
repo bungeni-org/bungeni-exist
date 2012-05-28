@@ -1063,9 +1063,9 @@
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1081,9 +1081,9 @@
                 <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1099,9 +1099,9 @@
                 <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="all" value="all" field=".">All</searchin>
+                <searchin name="all" value="all" field="." default="true">All</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1117,9 +1117,9 @@
                 <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
@@ -1135,9 +1135,9 @@
                 <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
+                <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
-                <searchin name="f_b" value="body" field="bu:document/bu:body" default="true">Body</searchin>
+                <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
                 <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>

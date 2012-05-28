@@ -347,7 +347,7 @@ $(document).ready(function () {
     $('#range-cal').DatePicker({
     	flat: true,
     	date: [$("body").data("start"), $("body").data("end")],
-    	current: currentDate,
+    	current: $("body").data("start"),
     	calendars: 1,
     	mode: 'range',
     	onRender: function(date) {

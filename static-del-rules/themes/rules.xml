@@ -206,7 +206,7 @@
    
         <replace content="#portal-personaltools" theme="#portal-personaltools" />
         <append href="/bungeni"
-            content="ul#portal-personaltools li.navigation"
+            content="ul#portal-personaltools li"
             theme="children:#portal-globalnav ul.level1"
         />
 

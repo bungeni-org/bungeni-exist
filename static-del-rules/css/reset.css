@@ -69,11 +69,12 @@
  * Breadcrumbs
  */
 #portal-breadcrumbs {
-    padding: 0;
-    margin:0;
+    line-height: 20px;
+    padding: 0 .25em;
     width: auto;
     clear: both;
     position: relative;
+    margin: 0 0 .5em;
 }
 /* portal-searchbox and portal-siteactions are empty tags,
  * so they have been set to display: none because they make
@@ -142,32 +143,45 @@ div.main-column h3 {
 /*
  * portal-globalnav
  */
+ #portal-globalnav {
+    padding:0;
+}
 div#portal-globalnav {
     width: 100%;
-    height: 20px;
+    position: relative;
     padding:0; 
-    margin:0 auto !important;
+    height: 25px;
 }
 div#portal-globalnav ul.level0 {
+    position: relative;
     margin: 0;
     padding: 0;
     width: auto;
-    height:24px;
-    line-height:24px;
+    white-space: nowrap;
+    height: 20px;
+    line-height: 20px;
 }
 div#portal-globalnav ul.level0 li {
-    display:inline;
-    height: 24px;
-    line-height:24px;
+    position: relative;
+    display: block !important;    
+    float: left;
+    height: 25px;
 }
 div#portal-globalnav ul.level0 li a { 
-    padding: 0 1em 0 1em;
+    padding: 0 1em;
     margin: 0 .25em 0 0;
-    height: 24px;
-    line-height:24px;
+    height: 22px;
 }
 div#portal-globalnav ul.level0 li.selected a {
+    position: relative;
     top:0px;
+}
+div#portal-globalnav ul.level0 li.selected a,
+div#portal-globalnav ul.level0 li a:hover {
+    position: relative;
+}
+#portal-languageselector li {
+    display: inline;
 }
 /*
  * Notes:
@@ -183,29 +197,27 @@ div#portal-globalnav ul.level0 li.selected a {
  *   <ul class="level0">...</ul>
  *   <ul class="level1">...</ul>
  */
- div#portal-globalnav-bottom {
+div#portal-globalnav ul.level0 ul.level1 {
+    position: absolute;
+    left: 0;
+    top:2.7em;
+    height: 18px;
+    margin: 0 0 0 0;
     width: 100%;
-    height: 20px;
-    padding: 0;
-    margin:0 auto !important;
+    display: block;
 }
-
-div#portal-globalnav-bottom ul.level1 {
-    margin:0;
-    padding:0;
-    height: 20px;
-    line-height: 20px;
-    width: 100%;
-}
-div#portal-globalnav-bottom ul.level1 li {
+div#portal-globalnav ul.level0 ul.level1 li {
     width: auto;
-    height: 20px;
-    display: inline;
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    display: block;
 }
 
-div#portal-globalnav-bottom ul.level1 li a {
-    padding: 0 1em 0 1em;
-    margin: 0 .25em 0 0;
+div#portal-globalnav ul.level0 ul.level1 li a {
+	padding-top:0 !important;
+	padding-bottom:0 !important;
 }
 /*
  * whats-on styles are shared by both template-portal and template-workspace.
@@ -230,7 +242,13 @@ div#portal-globalnav-bottom ul.level1 li a {
 /*.section-bungeni-business div#portal-globalnav-bottom {
     display: none;
 }*/
-
+div#portal-globalnav-bottom {
+    display: block;
+    height: 18px;
+    padding: 0;
+    margin-top:0px !important;
+    padding-top:0px;
+}
 /* portal-columns-* styles */
 #portal-column-two .visualPadding {
     padding: 0;
@@ -678,6 +696,7 @@ table.listingdescription th,
 .stx table th,
 .yui-skin-sam .yui-dt-first th {
     padding: 0 .5em;
+    line-height: 20px !important;
 }
 .yui-skin-sam .yui-dt-first th {
     height: 20px;
@@ -1177,12 +1196,18 @@ div.main-column #collage h2 {
     margin-right:auto;    
 }
 .template-portal #top-layer #demoWarning {
-    width: 150px;
     height: 18px;
     line-height: 18px;
+    z-index:99888;
+    margin-top:20px;
     margin-left:auto;
     margin-right:auto;
     position:relative;
+}
+.template-portal #top-layer #demoWarning blink {
+    margin-left:0px;
+    text-align:center;
+    white-space: nowrap;
 }
 .template-portal #top-layer ul#portal-personaltools li {
     padding: 0 0 0 .5em;
@@ -1439,6 +1464,7 @@ div.main-column #collage h2 {
  .template-workspace.section-bungeni-admin #portal-columns {
     clear:both;
     margin-top:0px !important;
+
     position:relative;
 }
  .template-workspace.section-bungeni-admin #portal-column-content .documentContent div {
@@ -1822,6 +1848,24 @@ div.overlay #createGroup fieldset { border: none; }
 }
 
 /* CHanges with eXist */
+.eXist-portal #search-form-global .header-links {
+    margin-right:2px;
+    color:#36b9f1 !important;
+}
+.eXist-portal #portal-search a.header-links:visited, 
+.eXist-portal #portal-search a.header-links {
+    margin-right:2px;
+    color:#C8631B;
+}
+.eXist-portal #portal-breadcrumbs {
+    padding: 0;
+    margin:0;
+    margin-top:-5px;
+    width: auto;
+    clear: both;
+    position: relative;
+    line-height: 14px;
+}
 .eXist-portal div#title-holder {
     width: 97%;
 }
@@ -1846,4 +1890,3 @@ div.overlay #createGroup fieldset { border: none; }
 #processing_indicatron {
     display:none;
 }
-

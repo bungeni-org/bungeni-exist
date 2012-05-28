@@ -220,11 +220,6 @@
             "bungeni.portal.static.themes.rules:add_menu_items"
         />
         <drop content="#portal-column-content" />
-
-        <append href="/exist"
-            content="ul#portal-personaltools li.navigation"
-            theme="children:#portal-globalnav ul.level1"
-        />
  
     </rule>  
 

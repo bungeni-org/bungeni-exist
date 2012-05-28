@@ -464,7 +464,7 @@ div#portal-globalnav ul.level0 li {
     border-radius: 0;
 }
 div#portal-globalnav ul.level0 li a { 
-    text-shadow: #fff 0 1px 0;
+    text-shadow: 0px 1px 1px #fff;
     color: #222;
     background: #eee;
     border: 1px solid #aaa;
@@ -480,17 +480,13 @@ div#portal-globalnav ul.level0 li a {
 }
 div#portal-globalnav ul.level0 li.selected a,
 div#portal-globalnav ul.level0 li a:hover {
-    text-shadow: #222 0 1px 0;
     font-weight: normal;
-    color: #ffffff;
+    color: #222;
     border-right: 1px solid #999;
     border-left: 1px solid #999;
+    border-top: 2px solid #fb9c14;
     border-bottom: 1px solid #f9ac32;
     background:#f9ac32 url(/static/images/globalnav-level0-a.png) top left repeat-x;
-}
-
-#portal-languageselector li {
-    display: inline;
 }
 /*
  * Notes:
@@ -509,30 +505,27 @@ div#portal-globalnav ul.level0 li a:hover {
  div#portal-globalnav-bottom {
  	border:0;
 }
-div#portal-globalnav-bottom ul.level1 {
+div#portal-globalnav ul.level0 ul.level1 {
     border-top: 0 none;
-    background: #f79f0e;
-    border-top: 1px solid #f9ac32;
+    background: #f9ac32;
 }
-div#portal-globalnav-bottom ul.level1 a {
+div#portal-globalnav ul.level0 ul.level1 a {
     background: transparent;
     border: 0 none;
     text-shadow: none;
-    color:#ffffff;
-    font-family: Arial,"Times New Roman";
 }
-div#portal-globalnav-bottom ul.level1 li a:hover {
-    color: #d42022;
+div#portal-globalnav ul.level0 ul.level1 li a:hover {
+    color: #000;
     text-decoration: underline;
     border: 0 none;
 }
-div#portal-globalnav-bottom ul.level1 li.selected a {
+div#portal-globalnav ul.level0 ul.level1 li.selected a {
     background: transparent;
     border: 0 none;
     font-weight: normal;
     color: #d50005 !important;
 }
-.template-portal div#portal-globalnav-bottom ul.level1 li.selected a {
+.template-portal div#portal-globalnav ul.level0 ul.level1 li.selected a {
 	color:#d42022 !important;
 }
 
@@ -619,12 +612,14 @@ div#portal-globalnav-bottom ul.level1 li.selected a {
  * Table styles
  */
  
-.template-workspace table.listing,
-.template-workspace table.listingdescription,
-.template-workspace .stx table,
-.template-workspace .yui-skin-sam .yui-dt table {
+table.listing,
+table.listingdescription,
+.stx table,
+.yui-skin-sam .yui-dt table {
     border: 1px solid #ccc;
     border-bottom-color: #aaa;
+    border-right: 0 none;
+    border-top: 0 none;
     font-size: 100%;
 }
 table.listing[name="attendance"] th,
@@ -682,6 +677,7 @@ table.listing td,
 table.listingdescription td,
 .stx table td,
 .yui-skin-sam .yui-dt table tr td {
+    border-right: 1px solid #aaf;
     color: #222;
     text-shadow: 0 0 0 #fff;
 }

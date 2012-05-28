@@ -13,6 +13,7 @@
         abort="1" />
     <match path="/plone/" class="load-plone-navigation" />
     <match path="/exist/" class="load-exist-navigation" />
+    <!-- <match path="regex:^/exist/business" class="load-exist-subnavigation" /> -->
     <match path="regex:^/(workspace|business|members|archive|admin)/?"
         class="load-bungeni-navigation" />
     <match path="regex:^/(workspace)/?"
@@ -54,6 +55,11 @@
             content="#portal-globalnav > li:first-child"/>             
         <prepend content="ul#portal-subnavbar li"
             theme="children:#portal-globalnav ul.level1" /> 
+
+        <append href="/exist" content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />         
+    
+
         <drop theme="#processing_indicatron" />          
     </rule>
 
@@ -73,13 +79,41 @@
         <prepend content="ul#portal-subnavbar li"
             theme="children:#portal-globalnav ul.level1" /> 
         <!-- add plone navigation -->
+
         <append href="/bungeni"
             content="ul#portal-personaltools li.navigation"
             theme="children:#portal-globalnav ul.level1"
-        />
+         />
 
+   
         <append href="/plone" content="#portal-globalnav > li:not(:first-child)"
             theme="children:#portal-globalnav > ul" />         
+
+
+    </rule>
+
+    <rule class="load-exist-subnavigation">        
+        <append theme="//head"
+                content="//head"
+                nocontent="ignore" />        
+
+        <!-- navigation -->
+        <prepend href="/"
+            content="#portal-globalnav > li"
+            theme="children:#portal-globalnav > ul" />
+        <append content="#portal-globalnav > li:not(:first-child)"
+            theme="children:#portal-globalnav > ul" />
+        <drop href="/exist"
+            content="#portal-globalnav > li:first-child"/>             
+
+        <!--     <prepend content="ul#portal-subnavbar li"
+            theme="children:#portal-globalnav ul.level1" />  -->
+        <prepend content="ul#portal-personaltools li.navigation"
+            theme="children:#portal-globalnav ul.level1" /> 
+
+  <!-- add plone navigation -->
+      
+
 
     </rule>
 
@@ -185,7 +219,13 @@
         <pyquery pyref=
             "bungeni.portal.static.themes.rules:add_menu_items"
         />
-        <drop content="#portal-column-content" /> 
+        <drop content="#portal-column-content" />
+
+        <append href="/exist"
+            content="ul#portal-personaltools li.navigation"
+            theme="children:#portal-globalnav ul.level1"
+        />
+ 
     </rule>  
 
     

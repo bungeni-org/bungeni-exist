@@ -1806,6 +1806,7 @@ declare function local:grouped-sitting-items-by-date($sittings) {
         </doc>
 };
 
+
 (:~
 :   Retieves all group documents of type sittings
 : @param offset
@@ -1817,23 +1818,22 @@ declare function local:grouped-sitting-items-by-date($sittings) {
 :   NOTE: Return deviates from standard
 :)
 declare function bun:get-whatson(
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string,
+        $whatsonview as xs:string, 
+        $tab as xs:string,
         $parts as node()
         ) as element() {
     
     (: stylesheet to transform :)  
-    let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $whatsonview := xs:string(request:get-parameter("showing",'tdy'))     
-    let $tab := xs:string(request:get-parameter("tab",'sittings')) 
+    let $stylesheet := cmn:get-xslt($parts/xsl)
+    let $f := request:get-parameter("f",substring-before(current-date() cast as xs:string,"+") cast as xs:date)
+    let $t := request:get-parameter("t",substring-before(current-date() cast as xs:string,"+") cast as xs:date)
     let $listings-filter := cmn:get-listings-config('Groupsitting')
     
-    (: 
-        The line below is documented in bun:get-documentitems()
-    :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset    
+    let $view := if ($whatsonview ne 'none') 
+        then 
+            $whatsonview   
+        else
+            'custom'
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -1853,7 +1853,7 @@ declare function bun:get-whatson(
         </paginator>
         <alisting>
         {
-            switch ($whatsonview)
+            switch ($view)
             
             case 'old' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
@@ -1920,7 +1920,23 @@ declare function bun:get-whatson(
                     else (
                         $dates-range,
                         local:grouped-sitting-items-by-itemtype($sittings)  
-                    )                  
+                    )     
+                    
+            case 'custom' return 
+                let $dates-range := <range>
+                                        <start>{($f || "T00:00:00")}</start>
+                                        <end>{($t || "T23:59:59")}</end>
+                                    </range>
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                return 
+                    if ($tab eq 'sittings') then (
+                        $dates-range,
+                        local:grouped-sitting-items-by-date($sittings)  
+                    )
+                    else (
+                        $dates-range,
+                        local:grouped-sitting-items-by-itemtype($sittings)  
+                    )                     
              
             default return           
                 let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
@@ -1948,7 +1964,7 @@ declare function bun:get-whatson(
         transform:transform($doc,
             $stylesheet, 
             <parameters>
-                <param name="sortby" value="{$sortby}" />
+                <param name="filter" value="{$listings-filter}" />
                 <param name="listing-tab" value="{$tab}" />
                 <param name="whatson-view" value="{$whatsonview}" />
             </parameters>

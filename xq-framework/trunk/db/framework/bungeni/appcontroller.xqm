@@ -39,8 +39,15 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                 $EXIST-RESOURCE as xs:string, 
                                 $REL-PATH as xs:string) {
         if ($EXIST-PATH eq "" ) then
-        	fw:redirect(fn:concat(request:get-uri(), "/"))
-        else if($EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
+        	   rou:get-home(
+        		  "/", 
+                  $EXIST-ROOT , 
+                  "/", 
+                  $EXIST-RESOURCE, 
+                  $REL-PATH
+                  ) 
+
+        else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
              then
         	   rou:get-home(
         		  $EXIST-PATH , 
@@ -48,7 +55,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                   $EXIST-CONTROLLER, 
                   $EXIST-RESOURCE, 
                   $REL-PATH
-                  )
+                  ) 
                   
     	(: GLUE-SERVICE :)
     	else if ($EXIST-PATH eq "/check-update" )
@@ -1652,11 +1659,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-whatson($offset,$limit,$qry,$sty,$parts),
+                    $woview := xs:string(request:get-parameter("showing",'tdy')),   
+                    $tab := xs:string(request:get-parameter("tab",'sittings')),  
+                    $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

@@ -51,7 +51,7 @@ ul.ls-row {
 ul.ls-row li {
     display:block;
     color:#494949;
-    margin-bottom:10px;
+    margin-bottom:20px;
 }
 ul.ls-row li > span {
     width:5px;
@@ -590,13 +590,16 @@ ul#portal-personaltools {
 }
 
 .black-full {
+    margin-left:10px;
     width:100%;
     color:#000000;
 }
 
 .grey-full {
+    margin-left:10px;
+
     width:100%;
-    color:#aaaaa9
+    color:#908a89;
 }
 
 li.bcolor { border-color:#000; }

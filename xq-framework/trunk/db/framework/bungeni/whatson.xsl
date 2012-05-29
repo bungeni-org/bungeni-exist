@@ -133,24 +133,26 @@
                                 <input type="hidden" value="{substring-before(//range/start,'T')}" name="f" id="hidden-start"/>
                                 <input type="hidden" value="{substring-before(//range/end,'T')}" name="t" id="hidden-end"/>
                                 <div class="indent schedule-block note">
-                                    Click twice: The beginning and end date to filter within
+                                    <i18n:text key="range-cal-tip">Click twice: The beginning and end date to filter within(nt)</i18n:text>
                                 </div>
                                 <br/>
                                 <br/>
                                 <div class="indent schedule-block">
-                                    <div class="left">from: </div>
+                                    <div class="left">
+                                        <i18n:text key="date-from">from(nt)</i18n:text>: </div>
                                     <div class="right">
                                         <input type="text" value="{format-date(xs:date(substring-before(//range/start,'T')),'[F], [MNn,*-3] [D1o], [Y]','en',(),())}" disabled="disabled" name="q" id="range-cal-start" class="indent text search_for"/>
                                     </div>
                                 </div>
                                 <div class="indent schedule-block">
-                                    <div class="left">to: </div>
+                                    <div class="left">
+                                        <i18n:text key="date-to">to(nt)</i18n:text>: </div>
                                     <div class="right">
                                         <input type="text" value="{format-date(xs:date(substring-before(//range/end,'T')),'[F], [MNn,*-3] [D1o], [Y]','en',(),())}" disabled="disabled" name="q" id="range-cal-end" class="indent text search_for"/>
                                     </div>
                                 </div>
                                 <br/>
-                                <input type="submit" value="Filter" class="indent" id="whatson-filter-btn"/>
+                                <input type="submit" value="i18n(btn-filter, filter[nt])" class="indent" id="whatson-filter-btn"/>
                             </form>
                         </div>
                     </div>
@@ -179,7 +181,9 @@
                     <xsl:apply-templates select="doc" mode="groupings"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <div class="center-txt">No sittings</div>
+                    <div class="center-txt">
+                        <i18n:text key="nosittings">no sittings(nt)</i18n:text>
+                    </div>
                 </xsl:otherwise>
             </xsl:choose>
         </ul>

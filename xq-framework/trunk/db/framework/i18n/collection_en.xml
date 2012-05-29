@@ -167,4 +167,9 @@
     <msg key="sittinglink">go to sitting</msg>
     <msg key="whatson-time">time</msg>
     <msg key="whatson-business">business</msg>
+    <msg key="nosittings">no sittings</msg>
+    <msg key="range-cal-tip">Click twice: The beginning and end date to filter within</msg>
+    <msg key="date-from">from</msg>
+    <msg key="date-to">to</msg>
+    <msg key="btn-filter">filter</msg>
 </catalogue>

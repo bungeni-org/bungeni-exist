@@ -1775,6 +1775,18 @@ declare function local:old-future-sittings($range as xs:string) {
             ()
 };
 
+declare function local:validate-custom-date($from as xs:date, $to as xs:date) {
+    let $calc-max := cmn:whatson-range-limit()
+    let $max-date := $from + xs:dayTimeDuration('P' || xs:integer($calc-max/text()) || 'D')
+    (: if `$to` date is set greater than config limit, override with max-limit calculated :)
+    let $set-to := if($max-date gt $to) then $to else $max-date
+    return 
+        <range>
+            <start>{($from || "T00:00:00")}</start>
+            <end>{($set-to || "T23:59:59")}</end>
+        </range>
+};
+
 declare function local:get-sitting-subset($sittings) {
     for $sitting in $sittings
         for $eachitem in $sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
@@ -1923,10 +1935,7 @@ declare function bun:get-whatson(
                     )     
                     
             case 'custom' return 
-                let $dates-range := <range>
-                                        <start>{($f || "T00:00:00")}</start>
-                                        <end>{($t || "T23:59:59")}</end>
-                                    </range>
+                let $dates-range := local:validate-custom-date($f, $t)
                 let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
                 return 
                     if ($tab eq 'sittings') then (

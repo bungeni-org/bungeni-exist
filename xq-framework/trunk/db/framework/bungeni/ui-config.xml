@@ -28,6 +28,8 @@
         <limit>15</limit>
         <!-- number of pages linked on the paginator before showing next -->
         <visiblePages>3</visiblePages>
+        <!-- whatson on custom calenar range filter -->
+        <max-range message="maximum range fetchable in days exceeeded">30</max-range>
     </listings>
     
     <!-- APPLICATION ROUTING -->
@@ -1217,11 +1219,6 @@
         <doctype category="address" name="address"/>
         <doctype category="report" name="report"/>
     </doctypes>
-    
-    <!-- Whatson default configs -->
-    <whatson>
-        <max-range message="maximum range fetchable in days">30</max-range>
-    </whatson>
     
     <!-- Whatson pre-defined sitting views -->
     <whatsonviews>

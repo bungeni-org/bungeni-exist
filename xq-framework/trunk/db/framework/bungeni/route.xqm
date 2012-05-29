@@ -46,7 +46,7 @@ declare function rou:get-home($EXIST-PATH as xs:string,
                              $REL-PATH as xs:string) {
         template:process-tmpl(
            $REL-PATH, 
-           $EXIST-PATH, 
+           $EXIST-CONTROLLER, 
            $config:DEFAULT-TEMPLATE,
            cmn:get-route($EXIST-PATH),
             (),         		   
@@ -74,22 +74,29 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $sortby),
+                    $act-entries-tmpl := bun:get-documentitems($EXIST-RESOURCE, $acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $sortby),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($use-tmpl)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($use-tmpl)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
     								        $REL-PATH, 
-    								        $EXIST-PATH, 
+    								        $EXIST-CONTROLLER, 
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
     									    (cmn:build-nav-node(
     									       $EXIST-PATH,
-    									       (template:merge($EXIST-PATH, $act-entries-repl,bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",
-    									       $doc-type))
-    									       )))
+    									       (template:merge($EXIST-PATH, $act-entries-repl, 
+    									           bun:get-listing-search-context(
+    									               $EXIST-CONTROLLER,
+    									               "listing-search-form.xml",
+    									               $doc-type
+    									               )
+    									           )
+    									       )
+    									       )
+    									     )
     								    )                             
 };
 

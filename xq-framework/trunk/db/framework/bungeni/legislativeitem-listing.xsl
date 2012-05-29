@@ -45,6 +45,7 @@
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
     <xsl:param name="sortby"/>
     <xsl:param name="listing-tab"/>
+    <xsl:param name="item-listing-rel-base"/>
 
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -71,7 +72,7 @@
                             <xsl:if test="@id eq $listing-tab">
                                 <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                            <a href="?tab={@id}">
+                            <a href="{$item-listing-rel-base}?tab={@id}">
                                 <i18n:translate>
                                     <i18n:text key="{@id}">Text to translate with ({1})</i18n:text>
                                     <i18n:param>

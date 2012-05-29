@@ -339,6 +339,7 @@ declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, $type
 :   Evaluates xquery to return document(s) matching permission that was given
 :)
 declare function bun:get-documentitems(
+            $view-rel-path as xs:string,
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -431,6 +432,7 @@ declare function bun:get-documentitems(
             <parameters>
                 <param name="sortby" value="{$sortby}" />
                 <param name="listing-tab" value="{$tab}" />
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />
             </parameters>
            ) 
        
@@ -447,49 +449,54 @@ declare function bun:get-documentitems(
 :   Documents based on filter parameters passed in.
 :)
 declare function bun:get-bills(
+        $view-rel-path as xs:string,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
         
-        bun:get-documentitems($acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+        bun:get-documentitems($view-rel-path, $acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-questions(
+        $view-rel-path as xs:string,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+  bun:get-documentitems($view-rel-path, $acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-motions(
+        $view-rel-path as xs:string,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+  bun:get-documentitems($view-rel-path, $acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-tableddocuments(
+        $view-rel-path as xs:string,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+  bun:get-documentitems($view-rel-path, $acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:get-agendaitems(
+        $view-rel-path as xs:string,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
         $querystr as xs:string, 
         $sortby as xs:string) as element() {
-  bun:get-documentitems($acl, "agendaitem", "agendaitem/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
+  bun:get-documentitems($view-rel-path, $acl, "agendaitem", "agendaitem/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:search-criteria(
@@ -1359,7 +1366,7 @@ declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmp
 :   A Re-written search-form with relevant sort-by field and filter-options
 :)
 declare function bun:get-listing-search-context(
-                        $EXIST-PATH as xs:string, 
+                        $EXIST-CONTROLLER as xs:string, 
                         $embed_tmpl as xs:string,
                         $doctype as xs:string) {
 
@@ -1368,7 +1375,7 @@ declare function bun:get-listing-search-context(
     
     return
         document {
-                local:rewrite-listing-search-form($EXIST-PATH, $tmpl/xh:div, $doctype)
+                local:rewrite-listing-search-form($EXIST-CONTROLLER, $tmpl/xh:div, $doctype)
         }
 };
 declare function bun:get-global-search-context(

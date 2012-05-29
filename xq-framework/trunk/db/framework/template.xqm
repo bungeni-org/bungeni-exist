@@ -48,6 +48,10 @@ import module namespace i18n = "http://exist-db.org/xquery/i18n" at "i18n.xql";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace response = "http://exist-db.org/xquery/response";
 
+
+declare variable $template:SERVER-NAME := request:get-server-name();
+declare variable $template:SERVER-PORT := request:get-server-port();
+
 (:~
 : Merges an XHTML template with XHTML content snippets
 : 07-11-2011 - Renamed API to process-tmpl, added support for processing routes
@@ -79,12 +83,12 @@ declare function template:process-tmpl(
         $content as node()+
         ) { 
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
-       $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
+    $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
     (: extracts top level content and content from within an id less container :)
      $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
       return 
-       template:process-page-meta($route-map, $route-override, $proc-doc)  
+       template:process-page-meta($route-map, $route-override, $proc-doc) 
 };
 
 
@@ -134,7 +138,7 @@ declare function template:merge($request-rel-path as xs:string, $template1 as do
 declare function template:copy-and-replace($request-rel-path as xs:string, $element as element(), $content as element()*) {
   element {node-name($element)} {
      for $attr in $element/@* return
-        template:adjust-relative-paths($request-rel-path, $attr)
+        template:adjust-absolute-paths($request-rel-path, $attr)
      ,
      for $child in $element/node() return
         if($child instance of element()) then
@@ -191,6 +195,33 @@ declare function template:make-relative-uri($request-rel-path as xs:string, $uri
         $uri
     )
 };
+
+
+declare function template:adjust-absolute-paths($exist-controller as xs:string, $attr as attribute()) as attribute() {
+    if(fn:local-name($attr) = ("src", "href", "action") and not(starts-with($attr, "/") or starts-with($attr, "http://") or starts-with($attr, "https://") or starts-with($attr, "../") or starts-with($attr, "#")))then (: starts-with($attr, "../") stops paths being processed more than once :)
+            attribute {node-name($attr)} { 
+                template:make-absolute-uri($exist-controller, $attr)
+            }
+        else 
+            $attr
+};
+
+
+(:~
+: Adjusts a URI to be relative to the $request-rel-path
+:
+: @param request-rel-path
+:   Relative path of this request URI
+: @param uri
+:   The URI to make relative
+:
+: @return
+:   The relative uri
+:)
+declare function template:make-absolute-uri($exist-controller as xs:string, $uri as xs:string) as xs:string {
+fn:concat("http://", $template:SERVER-NAME, ":", $template:SERVER-PORT, "/exist/apps", $exist-controller, "/", $uri) 
+};
+
 
 (:~
 Extended API added by Ashok

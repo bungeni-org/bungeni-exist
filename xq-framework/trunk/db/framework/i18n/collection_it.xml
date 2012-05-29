@@ -167,4 +167,9 @@
     <msg key="sittinglink">andare a seduta</msg>
     <msg key="whatson-time">tempo</msg>
     <msg key="whatson-business">lavori</msg>
+    <msg key="nosittings">non sedute</msg>
+    <msg key="range-cal-tip">Clicca due volte: La data di inizio e la fine di filtrare all'interno</msg>
+    <msg key="date-from">da</msg>
+    <msg key="date-to">al</msg>
+    <msg key="btn-filter">filtrare</msg>
 </catalogue>

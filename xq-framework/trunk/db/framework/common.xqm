@@ -172,6 +172,13 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
 };
 
 (:~ 
+:   Get the config for maximum range retrievable
+:)
+declare function cmn:whatson-range-limit() {
+    cmn:get-ui-config()//listings/max-range
+};
+
+(:~ 
 :   Retrieves the corresponding title for the route from <menugroups/>
 :)
 declare function local:route-title($navroute as element()) {

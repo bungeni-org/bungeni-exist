@@ -167,4 +167,9 @@
     <msg key="sittinglink">fungua kikao hiki</msg>
     <msg key="whatson-time">saa</msg>
     <msg key="whatson-business">shughuli</msg>
+    <msg key="nosittings">hamna vikao</msg>
+    <msg key="range-cal-tip">Bofya maradufu: Tarehe ya mwanzo na ya mwisho ili kuchuja vikao</msg>
+    <msg key="date-from">kutoka</msg>
+    <msg key="date-to">hadi</msg>
+    <msg key="btn-filter">chuja</msg>
 </catalogue>

@@ -449,7 +449,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                             $EXIST-ROOT, 
                             $EXIST-CONTROLLER, 
                             $EXIST-RESOURCE, 
-                            $REL-PATH)                             
+                            $REL-PATH) 
+    	else if ($EXIST-PATH eq "/member/xml")   
+    		 then 
+                rou:get-xml($EXIST-PATH, 
+                            $EXIST-ROOT, 
+                            $EXIST-CONTROLLER, 
+                            $EXIST-RESOURCE, 
+                            $REL-PATH)                                
 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 

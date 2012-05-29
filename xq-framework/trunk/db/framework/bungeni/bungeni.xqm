@@ -180,7 +180,7 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     
     let $doc := <doc>        
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology
             }
         </doc>
         
@@ -1556,7 +1556,7 @@ declare function bun:get-raw-xml($docid as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
     functx:remove-elements-deep(
-        collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]],
+        collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]],
         ('bu:versions', 'bu:permissions', 'bu:changes')
     )
 };

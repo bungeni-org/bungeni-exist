@@ -54,6 +54,10 @@ ul.scheduling li {
         height:auto;   
         clear: both; }
 
+#list-toggle .center-txt {
+    text-align:center;
+}
+
 #nav
 {
     text-align:center;
@@ -97,9 +101,7 @@ div.datepicker {
 	cursor: default;
 	top: 0;
 	left: 0;
-	display: none;
-
-    	
+	display: none; 	
 }
 .datepickerContainer {
 	background: #434343;

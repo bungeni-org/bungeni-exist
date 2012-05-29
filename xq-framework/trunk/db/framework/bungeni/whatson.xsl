@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -130,8 +130,8 @@
                             <form class="whatson-form" id="whatson-filter-form" name="whatson_filter_form" method="GET" action="whatson">
                                 <input type="hidden" value="{$listing-tab}" name="tab"/>
                                 <input type="hidden" value="none" name="showing"/>
-                                <input type="hidden" value="" name="f" id="hidden-start"/>
-                                <input type="hidden" value="" name="t" id="hidden-end"/>
+                                <input type="hidden" value="{substring-before(//range/start,'T')}" name="f" id="hidden-start"/>
+                                <input type="hidden" value="{substring-before(//range/end,'T')}" name="t" id="hidden-end"/>
                                 <div class="indent schedule-block note">
                                     Click twice: The beginning and end date to filter within
                                 </div>
@@ -140,13 +140,13 @@
                                 <div class="indent schedule-block">
                                     <div class="left">from: </div>
                                     <div class="right">
-                                        <input type="text" value="none" disabled="disabled" name="q" id="range-cal-start" class="indent text search_for"/>
+                                        <input type="text" value="{format-date(xs:date(substring-before(//range/start,'T')),'[F], [MNn,*-3] [D1o], [Y]','en',(),())}" disabled="disabled" name="q" id="range-cal-start" class="indent text search_for"/>
                                     </div>
                                 </div>
                                 <div class="indent schedule-block">
                                     <div class="left">to: </div>
                                     <div class="right">
-                                        <input type="text" value="none" disabled="disabled" name="q" id="range-cal-end" class="indent text search_for"/>
+                                        <input type="text" value="{format-date(xs:date(substring-before(//range/end,'T')),'[F], [MNn,*-3] [D1o], [Y]','en',(),())}" disabled="disabled" name="q" id="range-cal-end" class="indent text search_for"/>
                                     </div>
                                 </div>
                                 <br/>
@@ -174,7 +174,14 @@
             </span>
         </div>
         <ul id="list-toggle" class="ls-row clear">
-            <xsl:apply-templates select="doc" mode="groupings"/>
+            <xsl:choose>
+                <xsl:when test="doc/ref">
+                    <xsl:apply-templates select="doc" mode="groupings"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <div class="center-txt">No sittings</div>
+                </xsl:otherwise>
+            </xsl:choose>
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="groupings">

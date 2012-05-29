@@ -31,28 +31,13 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
+                        <a href="member/pdf?uri={$doc-uri}" title="get PDF document" class="pdf">
                             <em>PDF</em>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="member/xml?uri={$doc-uri}" title="get raw xml output" class="xml">
+                            <em>XML</em>
                         </a>
                     </li>
                 </ul>

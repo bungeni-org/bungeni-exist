@@ -465,7 +465,7 @@
                         </a>
                     </li>
                     <li>
-                        <a name="business" href="business">
+                        <a name="business" href="whatson">
                             <i18n:text key="business">business</i18n:text>
                         </a>
                     </li>

@@ -175,7 +175,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/text">
+        <route href="/bill-text">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -185,7 +185,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/timeline">
+        <route href="/bill-timeline">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -195,12 +195,12 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/details">
+        <route href="/bill-details">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/documents">
+        <route href="/bill-documents">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -210,7 +210,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/event">
+        <route href="/bill-event">
             <title>Business | Bill Event</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -702,42 +702,42 @@
                 <template>bills.xml</template>
                 <xsl>legislativeitem-listing.xsl</xsl>
             </view>
-            <view path="bill/text" id="text" tag="tab">
+            <view path="bill-text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>bill.xml</template>
                 <xsl>bill.xsl</xsl>
             </view>
-            <view path="bill/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
+            <view path="bill-timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </view>
-            <view path="bill/details" id="related" tag="tab">
+            <view path="bill-details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="bill/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
+            <view path="bill-assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="bill/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
+            <view path="bill-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <view path="bill/event">
+            <view path="bill-event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </view>

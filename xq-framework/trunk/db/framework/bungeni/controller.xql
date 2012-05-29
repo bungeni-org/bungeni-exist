@@ -14,7 +14,7 @@ declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 (:~
 config module - this may need to be customized per module
 :)
-import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
+import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 (:~
 app controller module - switch between applications by switching  appcontroller modules 
 :)
@@ -25,7 +25,7 @@ app controller module - switch between applications by switching  appcontroller 
 Change the path to the appcontroller to the appcontroller of your application  
 
 :)
-import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "bungeni/appcontroller.xqm";
+import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "appcontroller.xqm";
 
 (: xhtml 1.1 :)
 (:

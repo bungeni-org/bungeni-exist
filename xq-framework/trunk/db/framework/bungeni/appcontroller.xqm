@@ -39,14 +39,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                 $EXIST-RESOURCE as xs:string, 
                                 $REL-PATH as xs:string) {
         if ($EXIST-PATH eq "" ) then
-        	   rou:get-home(
-        		  "/", 
-                  $EXIST-ROOT , 
-                  "/", 
-                  $EXIST-RESOURCE, 
-                  $REL-PATH
-                  ) 
-
+            fw:redirect(fn:concat(request:get-uri(), "/"))  
         else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
              then
         	   rou:get-home(
@@ -56,7 +49,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                   $EXIST-RESOURCE, 
                   $REL-PATH
                   ) 
-                  
     	(: GLUE-SERVICE :)
     	else if ($EXIST-PATH eq "/check-update" )
     		 then 
@@ -83,25 +75,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	(: Now we process application requests :)
     	else if ($EXIST-PATH eq "/business")
     		 then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-sittings($offset,$limit,$qry,$sty),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("business.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-PATH, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
-    								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'whatson')))))
-    								    ) 
-               
+                  fw:redirect(fn:concat(request:get-uri(), "/","../whatson"))  
         else if ($EXIST-PATH eq "/members")
     		 then 
                 let 
@@ -111,20 +85,29 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $act-entries-tmpl :=  bun:get-members($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("members.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("members.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
     								        $REL-PATH, 
-    								        $EXIST-PATH, 
+    								        $EXIST-CONTROLLER, 
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
     								        (cmn:build-nav-node($EXIST-PATH,
-    								                    (template:merge($EXIST-PATH, 
-    								                    $act-entries-repl, 
-    								                    bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'membership')
-    								                   ))))
+    								                    (
+    								                        template:merge(
+    								                          $EXIST-PATH, 
+    								                          $act-entries-repl, 
+    								                          bun:get-listing-search-context(
+    								                            $EXIST-PATH,
+    								                            "listing-search-form.xml",
+    								                            'membership'
+    								                            )
+    								                        )
+    								                   )
+    								            )
+    								         )
     								    )                  
                
         (:~ Handlers for business submenu :)
@@ -142,7 +125,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     								    template:process-tmpl(
     								        $REL-PATH, 
-    								        $EXIST-PATH, 
+    								        $EXIST-CONTROLLER, 
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
@@ -286,7 +269,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                         return 
                                         template:process-tmpl(
                                                $REL-PATH, 
-                                               $EXIST-PATH, 
+                                               $EXIST-CONTROLLER, 
                                                $config:DEFAULT-TEMPLATE,
                                                cmn:get-route($override_path),
                                                (),
@@ -329,7 +312,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     								    template:process-tmpl(
     									       $REL-PATH, 
-    									       $EXIST-PATH, 
+    									       $EXIST-CONTROLLER,
     									       $config:DEFAULT-TEMPLATE,
     									       cmn:get-route($override_path),
     									       (),
@@ -443,20 +426,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                             $EXIST-CONTROLLER, 
                             $EXIST-RESOURCE, 
                             $REL-PATH)
-    	else if ($EXIST-PATH eq "/agendaitem/xml")   
+    	else if ($EXIST-PATH eq "/agendaitem/xml" or $EXIST-PATH eq "/member/xml")   
     		 then 
                 rou:get-xml($EXIST-PATH, 
                             $EXIST-ROOT, 
                             $EXIST-CONTROLLER, 
                             $EXIST-RESOURCE, 
-                            $REL-PATH) 
-    	else if ($EXIST-PATH eq "/member/xml")   
-    		 then 
-                rou:get-xml($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)                                
+                            $REL-PATH)                             
 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
@@ -472,7 +448,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     								    template:process-tmpl(
     								        $REL-PATH, 
-    								        $EXIST-PATH, 
+    								        $EXIST-CONTROLLER, 
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
@@ -510,7 +486,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -550,7 +526,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -570,7 +546,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -590,7 +566,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -610,7 +586,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -630,7 +606,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -650,7 +626,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -670,7 +646,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -679,19 +655,19 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									 
     								    
-    	else if ($EXIST-PATH eq "/bill/text" )
+    	else if ($EXIST-PATH eq "/bill-text" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
                     $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -711,7 +687,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -720,19 +696,19 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    									 
     									 
-    	else if ($EXIST-PATH eq "/bill/timeline" )
+    	else if ($EXIST-PATH eq "/bill-timeline" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),      
                     $parts := cmn:get-view-parts($EXIST-PATH),
                     $act-entries-tmpl := bun:get-parl-doc-timeline("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -741,7 +717,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  									 
     									 
-    	else if ($EXIST-PATH eq "/bill/assigned-groups" )
+    	else if ($EXIST-PATH eq "/bill-assigned-groups" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),     
@@ -753,7 +729,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -762,7 +738,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    									 
     									 
-    	else if ($EXIST-PATH eq "/bill/details" )
+    	else if ($EXIST-PATH eq "/bill-details" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -774,7 +750,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -783,7 +759,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)  									
     									
-    	else if ($EXIST-PATH eq "/bill/documents" )
+    	else if ($EXIST-PATH eq "/bill-documents" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),      
@@ -795,7 +771,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -815,7 +791,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -823,7 +799,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)     	
-    	else if ($EXIST-PATH eq "/bill/event" )
+    	else if ($EXIST-PATH eq "/bill-event" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
@@ -835,7 +811,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                     return
                                         template:process-tmpl(
                                             $REL-PATH,
-                                            $EXIST-PATH,
+                                            $EXIST-CONTROLLER,
                                             $config:DEFAULT-TEMPLATE,
                                             cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -855,7 +831,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -875,7 +851,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -896,7 +872,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -916,7 +892,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -936,7 +912,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -956,7 +932,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -976,7 +952,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -996,7 +972,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1018,7 +994,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1038,7 +1014,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1059,7 +1035,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1080,7 +1056,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1101,7 +1077,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1122,7 +1098,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1143,7 +1119,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1163,7 +1139,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1183,7 +1159,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1204,7 +1180,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1245,7 +1221,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1266,7 +1242,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1287,7 +1263,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1308,7 +1284,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1329,7 +1305,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1349,7 +1325,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1370,7 +1346,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1390,7 +1366,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1411,7 +1387,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1432,7 +1408,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1453,7 +1429,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1474,7 +1450,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1495,7 +1471,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1515,7 +1491,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1535,7 +1511,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1572,7 +1548,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1592,7 +1568,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1612,7 +1588,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1633,7 +1609,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1654,7 +1630,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1670,16 +1646,28 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $tab := xs:string(request:get-parameter("tab",'sittings')),  
                     $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$parts),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
     								        $REL-PATH, 
-    								        $EXIST-PATH, 
+    								        $EXIST-CONTROLLER, 
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'whatson')))))
+    								        (cmn:build-nav-node(
+    								            $EXIST-PATH,
+    								            (
+    								                template:merge($EXIST-PATH, 
+    								                        $act-entries-repl, 
+    								                        bun:get-listing-search-context(
+    								                            $EXIST-PATH,
+    								                            "listing-search-form.xml",'whatson'
+    								                            )
+    								                      )
+    								             )
+    								            )
+    								        )
     								    )     									
     	else if ($EXIST-PATH eq "/calendar")
     		 then 
@@ -1692,7 +1680,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE, 
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
@@ -1706,7 +1694,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                template:process-tmpl(
                 $REL-PATH, 
-                $EXIST-PATH, 
+                $EXIST-CONTROLLER, 
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),(),
                 cmn:build-nav-tmpl($EXIST-PATH, "politicalgroups.xml")
@@ -1715,7 +1703,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                template:process-tmpl(
                 $REL-PATH, 
-                $EXIST-PATH, 
+                $EXIST-CONTROLLER, 
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),
                 (),
@@ -1725,7 +1713,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
             then
                template:process-tmpl(
                    $REL-PATH,
-                   $EXIST-PATH,
+                   $EXIST-CONTROLLER,
                    $config:DEFAULT-TEMPLATE,
                    cmn:get-route($EXIST-PATH),
                    (),
@@ -1736,29 +1724,22 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")
        else if ($EXIST-PATH eq "/testing/blue/color") 
               then
-                <xml>{request:get-effective-uri()}</xml>
-              (:cmn:get-tabgroups("question"):)
-               (:
-                <xml>
-                    <exist-path>{$EXIST-PATH}</exist-path>
-                    <exist-controller>{$EXIST-CONTROLLER}</exist-controller>
-                    <exist-resource>{$EXIST-RESOURCE}</exist-resource>
-                    <exist-root>{$EXIST-ROOT}</exist-root>
-                    <exist-relpath>{$REL-PATH}</exist-relpath>                
-                </xml>
-                :)
-    	(:else if ($EXIST-PATH eq "/by-capno")
-    		 then 
-               let $act-entries-tmpl := bun:get-bills(0,0),
-    		       $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("acts-list.xml")/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    									template:process-template($REL-PATH, $EXIST-PATH, $config:DEFAULT-TEMPLATE, (
-    										fw:app-tmpl("menu.xml"), 
-    										template:merge($EXIST-PATH, fw:app-tmpl("act-list-page.xml"), $act-entries-repl)
-    										)
-    									) :)                
+    		 <doc>
+    		 <req>
+    		 {request:get-effective-uri()}
+    		 </req>
+    		 <ep> {
+    		 $EXIST-PATH}</ep>
+    		 <root>{
+                                $EXIST-ROOT}
+                                </root>
+                                <cont>{
+                                $EXIST-CONTROLLER}</cont>
+                                <res>{
+                                $EXIST-RESOURCE}</res>
+                                <relpath>{
+                                $REL-PATH}</relpath>
+    		 </doc>
     	else
             fw:ignore()
 };

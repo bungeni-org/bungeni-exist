@@ -117,7 +117,7 @@
             <div class="rounded-eigh tab_container hanging-menu">
                 <ul class="doc-versions">
                     <li>
-                        <a href="{$doc-type}/text?uri={$doc-uri}">current</a>
+                        <a href="{$doc-type}-text?uri={$doc-uri}">current</a>
                     </li>
                     <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
                     <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
@@ -131,7 +131,7 @@
                                     </span>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <a href="{lower-case($doc-type)}/version/text?uri={@uri}">
+                                    <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
                                                     Version-<xsl:value-of select="$cur_pos"/>
                                     </a>
                                 </xsl:otherwise>

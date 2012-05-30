@@ -30,7 +30,7 @@
                 <i18n:text key="close">close(nt)</i18n:text>
             </span>
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
+                <h1 id="doc-title-red-left">
                     <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                 </h1>
             </div>

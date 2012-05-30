@@ -15,6 +15,14 @@
         <!-- The paginator expects a document with the following -->
         
         <!-- 
+            with into' of absolute links, there is need to pass contextual page i.e. 
+            the current pages being paginated. Abide 
+        -->
+        <xsl:variable name="currentView">
+            <xsl:value-of select="./currentView"/>
+        </xsl:variable>         
+        
+        <!-- 
             search by title by of page (for search) 
         -->
         <xsl:variable name="qry_vars">
@@ -97,6 +105,7 @@
                     <xsl:otherwise>
                         <a title="Beginning">
                             <xsl:attribute name="href">
+                                <xsl:value-of select="$currentView"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -120,6 +129,7 @@
                     <xsl:otherwise>
                         <a title="Previous Page">
                             <xsl:attribute name="href">
+                                <xsl:value-of select="$currentView"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -157,6 +167,7 @@
                             <xsl:with-param name="offset" select="$offset"/>
                             <xsl:with-param name="limit" select="$limit"/>
                             <xsl:with-param name="qry_vars" select="$qry_vars"/>
+                            <xsl:with-param name="currentView" select="$currentView"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
@@ -167,6 +178,7 @@
                             <xsl:with-param name="offset" select="$offset"/>
                             <xsl:with-param name="limit" select="$limit"/>
                             <xsl:with-param name="qry_vars" select="$qry_vars"/>
+                            <xsl:with-param name="currentView" select="$currentView"/>
                         </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -184,6 +196,7 @@
                     <xsl:otherwise>
                         <a title="Next Page">
                             <xsl:attribute name="href">
+                                <xsl:value-of select="$currentView"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -206,6 +219,7 @@
                     <xsl:otherwise>
                         <a title="Last Page">
                             <xsl:attribute name="href">
+                                <xsl:value-of select="$currentView"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -237,6 +251,7 @@
         <xsl:param name="offset"/>
         <xsl:param name="limit"/>
         <xsl:param name="qry_vars"/>
+        <xsl:param name="currentView"/>
         <!-- DEBUG
         <span>i=<xsl:value-of select="$i" />,</span>
         <span>limi=<xsl:value-of select="$limit" />,</span>
@@ -256,6 +271,7 @@
                 <xsl:otherwise>
                     <a title="Page {$i}" accesskey="{$i}">
                         <xsl:attribute name="href">
+                            <xsl:value-of select="$currentView"/>
                             <xsl:text>?</xsl:text>
                             <xsl:value-of select="$qry_vars"/>
                             <xsl:text>&amp;offset=</xsl:text>
@@ -280,6 +296,7 @@
                 <xsl:with-param name="offset" select="$offset"/>
                 <xsl:with-param name="limit" select="$limit"/>
                 <xsl:with-param name="qry_vars" select="$qry_vars"/>
+                <xsl:with-param name="currentView" select="$currentView"/>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>

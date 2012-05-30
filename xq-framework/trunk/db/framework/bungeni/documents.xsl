@@ -114,7 +114,7 @@
                                                 </td>
                                                 <td>
                                                     <span>
-                                                        <a href="{lower-case($doc-type)}/version/text?uri={@uri}">
+                                                        <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
                                                             <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
                                                         </a>
                                                     </span>
@@ -143,7 +143,7 @@
                                         <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
                                             <xsl:sort select="bu:statusDate" order="descending"/>
                                             <li>
-                                                <a href="popout?uri={@href}" rel="{lower-case($doc-type)}/event?uri={@href}" onclick="return false;">
+                                                <a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
                                                     <xsl:value-of select="bu:shortTitle"/>
                                                 </a>
                                                 <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>

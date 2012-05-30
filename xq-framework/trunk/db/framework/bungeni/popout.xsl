@@ -14,6 +14,7 @@
     <xsl:template match="doc">
         <xsl:variable name="event-uri" select="event"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="eventof" select="bu:ontology/bu:document/bu:eventOf/bu:type/bu:value"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">
@@ -55,7 +56,7 @@
                         <xsl:copy-of select="bu:ontology/bu:document/bu:body/child::node()"/>
                     </div>
                     <div class="full-width txt-right">
-                        <a class="link-external" href="{lower-case($doc-type)}?uri={$doc-uri}">
+                        <a class="link-external" href="{$eventof}-{lower-case($doc-type)}?uri={$doc-uri}">
                             <i18n:text key="from-popout">view as document(nt)</i18n:text>
                         </a>
                     </div>

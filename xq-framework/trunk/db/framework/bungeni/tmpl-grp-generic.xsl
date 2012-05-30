@@ -84,8 +84,8 @@
     <xsl:template name="doc-item-sponsor">
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="member?uri={bu:ontology/bu:legislativeItem/bu:owner/@href}">
-                    <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:owner/@showAs"/>
+                <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                    <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </a>
             </i>
         </h4>

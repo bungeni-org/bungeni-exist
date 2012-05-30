@@ -63,20 +63,18 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                              $EXIST-CONTROLLER as xs:string, 
                              $EXIST-RESOURCE as xs:string, 
                              $REL-PATH as xs:string, 
-                             $use-tmpl as xs:string, 
-                             $doc-type as xs:string, 
-                             $page-route as xs:string,
-                             $stylesheet as xs:string) {
+                             $doc-type as xs:string) {
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
                     $tab := xs:string(request:get-parameter("tab",'uc')),
                     $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                    $parts := cmn:get-view-listing-parts($doc-type, 'text'),
                     $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($EXIST-RESOURCE, $acl, $doc-type, $page-route, $stylesheet, $offset, $limit, $qry, $sortby),
+                    $act-entries-tmpl := bun:get-documentitems($EXIST-RESOURCE, $acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($use-tmpl)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -112,10 +110,7 @@ declare function rou:get-bills(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "bills.xml",
-                             "Bill",
-                             "bill/text",
-                             "legislativeitem-listing.xsl")
+                             "Bill")
 };
 
 declare function rou:get-questions(
@@ -130,10 +125,7 @@ declare function rou:get-questions(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "questions.xml",
-                             "Question",
-                             "question/text",
-                             "legislativeitem-listing.xsl")
+                             "Question")
 };
 
 declare function rou:get-motions(
@@ -148,10 +140,7 @@ declare function rou:get-motions(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "motions.xml",
-                             "Motion",
-                             "motion/text",
-                             "legislativeitem-listing.xsl")
+                             "Motion")
 };
 
 declare function rou:get-tableddocuments(
@@ -167,11 +156,7 @@ declare function rou:get-tableddocuments(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "tableddocuments.xml",
-                             "TabledDocument",
-                             "tableddocument/text",
-                             "legislativeitem-listing.xsl"
-                             )
+                             "TabledDocument")
 };
 
 declare function rou:get-agendaitems(
@@ -187,11 +172,7 @@ declare function rou:get-agendaitems(
                              $EXIST-CONTROLLER, 
                              $EXIST-RESOURCE, 
                              $REL-PATH,
-                             "agendaitems.xml",
-                             "AgendaItem",
-                             "agendaitem/text",
-                             "legislativeitem-listing.xsl"
-                             )
+                             "AgendaItem")
 };
 
 declare function rou:get-pdf($EXIST-PATH as xs:string, 

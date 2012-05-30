@@ -87,79 +87,84 @@
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/member/personal-info">
+        <route href="/member-personalinfo">
             <title>Business | Member of Parliament</title>
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/member/offices-held">
+        <route href="/member-officesheld">
             <title>Business | Member of Parliament</title>
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/member/parl-activities">
+        <route href="/member-parlactivities">
             <title>Business | Member of Parliament</title>
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/member/contacts">
+        <route href="/member-contacts">
             <title>Business | Member of Parliament</title>
             <navigation>members</navigation>
             <subnavigation>current</subnavigation>
         </route>
         <!-- #COMMITTEES -->
-        <route href="/committee/text">
+        <route href="/committee-text">
             <title>Business | Committee's Profile</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/committee/members">
+        <route href="/committee-members">
             <title>Business | Committee's Members</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/committee/assigned-items">
+        <route href="/committee-assigneditems">
             <title>Business | Committee's Assigned Items</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/committee/sittings">
+        <route href="/committee-sittings">
             <title>Business | Committee's Sittings</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/committee/staff">
+        <route href="/committee-staff">
             <title>Business | Committee's Staff</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/committee/contacts">
+        <route href="/committee-contacts">
             <title>Business | Committee's Staff</title>
             <navigation>business</navigation>
             <subnavigation>committees</subnavigation>
         </route> 
-        <!-- #POLICAL-GROUPS -->
-        <route href="/politicalgroup/text">
+        <!-- #POLITICAL-GROUPS -->
+        <route href="/politicalgroup-text">
             <title>Business | Political Group's Profile</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/politicalgroup/members">
+        <route href="/politicalgroup-members">
             <title>Business | Political Group's Members</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/politicalgroup/contacts">
+        <route href="/politicalgroup-contacts">
             <title>Business | Political Group's Staff</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>     
+        <!-- #GOVERNMENT -->
+        <route href="/government-text">
+            <title>Business | Government's Profile</title>
+            <navigation>home</navigation>
+        </route>      
         <!-- #MINISTRY -->
-        <route href="/ministry/text">
+        <route href="/ministry-text">
             <title>Business | Ministry's Profile</title>
             <navigation>home</navigation>
         </route>
-        <route href="/ministry/members">
+        <route href="/ministry-members">
             <title>Business | Ministry's Members</title>
             <navigation>members</navigation>
             <subnavigation>politicalgroups</subnavigation>
@@ -180,7 +185,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/version/text">
+        <route href="/bill-version/text">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -190,7 +195,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/assigned-groups">
+        <route href="/bill/assignedgroups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -226,42 +231,42 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/text">
+        <route href="/question-text">
             <title>Business | Question Text</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/version/text">
+        <route href="/question-version/text">
             <title>Business | Question Version Text</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/timeline">
+        <route href="/question-timeline">
             <title>Business | Question Timeline</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/details">
+        <route href="/question-details">
             <title>Business | Related Infomation</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/assigned-groups">
+        <route href="/question-assignedgroups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/documents">
+        <route href="/question-documents">
             <title>Business | Attachments</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/version/documents">
+        <route href="/question-version/documents">
             <title>Business | Question Version Attachments</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question/event">
+        <route href="/question-event">
             <title>Business | Question Event</title>
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
@@ -272,42 +277,42 @@
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/text">
+        <route href="/motion-text">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/version/text">
+        <route href="/motion-version/text">
             <title>Business | Motion Version Text</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/timeline">
+        <route href="/motion-timeline">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/details">
+        <route href="/motion-details">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/assigned-groups">
+        <route href="/motion-assignedgroups">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/documents">
+        <route href="/motion-documents">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/version/documents">
+        <route href="/motion-version/documents">
             <title>Business | Motion Version Documents</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/motion/event">
+        <route href="/motion-event">
             <title>Business | Motion Event</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
@@ -318,42 +323,42 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/text">
+        <route href="/tableddocument-text">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/version/text">
+        <route href="/tableddocument-version/text">
             <title>Business | Tabled document Version Document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/timeline">
+        <route href="/tableddocument-timeline">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/details">
+        <route href="/tableddocument-details">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/assigned-groups">
+        <route href="/tableddocument-assignedgroups">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/documents">
+        <route href="/tableddocument-documents">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/version/documents">
+        <route href="/tableddocument-version/documents">
             <title>Business | Tabled document Version Documents</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument/event">
+        <route href="/tableddocument-event">
             <title>Business | Tabled document Event</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
@@ -364,42 +369,42 @@
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/text">
+        <route href="/agendaitem-text">
             <title>Business | Agenda item</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/version/text">
+        <route href="/agendaitem-version/text">
             <title>Business | Agenda item Version Document</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/timeline">
+        <route href="/agendaitem-timeline">
             <title>Business | Agenda item</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/details">
+        <route href="/agendaitem-details">
             <title>Business | Agenda item</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/assigned-groups">
+        <route href="/agendaitem-assignedgroups">
             <title>Business | Agenda item</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/documents">
+        <route href="/agendaitem-documents">
             <title>Business | Agenda item</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/agendaitem/version/documents">
+        <route href="/agendaitem-version/documents">
             <title>Business | Agenda item Version Documents</title>
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/agendaitem/event">
+        <route href="/agendaitem-event">
             <title>Business | Agenda item Event</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
@@ -622,42 +627,42 @@
             The name is always that of a content type
         -->
         <views name="Committee">
-            <view path="committee/text" id="profile" tag="tab">
+            <view path="committee-text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>committee.xsl</xsl>
             </view>
-            <view path="committee/members" id="members" tag="tab">
+            <view path="committee-members" id="members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-members.xsl</xsl>
             </view>
-            <view path="committee/assigned-items" id="assigned" tag="tab">
+            <view path="committee-assigneditems" id="assigned" tag="tab">
                 <title>
                     <i18n:text key="tab-assigned">assigned items(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-assigned.xsl</xsl>
             </view>
-            <view path="committee/sittings" id="sittings" tag="tab">
+            <view path="committee-sittings" id="sittings" tag="tab">
                 <title>
                     <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-sittings.xsl</xsl>
             </view>
-            <view path="committee/staff" id="staff" tag="tab">
+            <view path="committee-staff" id="staff" tag="tab">
                 <title>
                     <i18n:text key="tab-staff">staff(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>comm-staff.xsl</xsl>
             </view>
-            <view path="committee/contacts" id="contacts" tag="tab">
+            <view path="committee-contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
@@ -666,21 +671,25 @@
             </view>
         </views>
         <views name="PoliticalGroup">
-            <view path="politicalgroup/text" id="profile" tag="tab">
+            <view path="politicalgroups" id="listing" tag="listing">
+                <template>committees.xml</template>
+                <xsl>politicalgroups.xsl</xsl>
+            </view>
+            <view path="politicalgroup-text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>political-group.xsl</xsl>
             </view>
-            <view path="politicalgroup/members" id="members" tag="tab">
+            <view path="politicalgroup-members" id="members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>poli-members.xsl</xsl>
             </view>
-            <view path="politicalgroup/contacts" id="contacts" tag="tab">
+            <view path="politicalgroup-contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
@@ -689,12 +698,21 @@
             </view>
         </views>
         <views name="Ministry">
-            <view path="ministry/text" id="profile" tag="tab">
+            <view path="ministry-text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>committee.xml</template>
                 <xsl>ministry.xsl</xsl>
+            </view>
+        </views>
+        <views name="government">
+            <view path="government-text" id="profile" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>committee.xml</template>
+                <xsl>government.xsl</xsl>
             </view>
         </views>
         <views name="Bill">
@@ -723,7 +741,7 @@
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="bill-assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
+            <view path="bill-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
@@ -743,14 +761,14 @@
             </view>
         </views>
         <views name="Bill-ver">
-            <view path="bill/version/text" id="text" tag="tab">
+            <view path="bill-version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>bill.xml</template>
                 <xsl>bill.xsl</xsl>
             </view>
-            <view path="bill/version/documents" id="attachments" tag="tab">
+            <view path="bill-version/documents" id="attachments" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -759,35 +777,39 @@
             </view>
         </views>
         <views name="Question">
-            <view path="question/text" id="text" tag="tab">
+            <view path="questions" id="listing" tag="listing">
+                <template>questions.xml</template>
+                <xsl>legislativeitem-listing.xsl</xsl>
+            </view>
+            <view path="question-text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>question.xml</template>
                 <xsl>question.xsl</xsl>
             </view>
-            <view path="question/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
+            <view path="question-timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </view>
-            <view path="question/details" id="related" tag="tab">
+            <view path="question-details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="question/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
+            <view path="question-assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="question/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
+            <view path="question-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -800,14 +822,14 @@
             </view>
         </views>
         <views name="Question-ver">
-            <view path="question/version/text" id="text" tag="tab">
+            <view path="question-version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>question.xml</template>
                 <xsl>question.xsl</xsl>
             </view>
-            <view path="question/version/documents" id="attachments" tag="tab">
+            <view path="question-version/documents" id="attachments" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -816,59 +838,63 @@
             </view>
         </views>
         <views name="Motion">
-            <view path="motion/text" id="text" tag="tab">
+            <view path="motions" id="listing" tag="listing">
+                <template>motions.xml</template>
+                <xsl>legislativeitem-listing.xsl</xsl>
+            </view>
+            <view path="motion-text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>motion.xml</template>
                 <xsl>motion.xsl</xsl>
             </view>
-            <view path="motion/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
+            <view path="motion-timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </view>
-            <view path="motion/version">
+            <view path="motion-version">
                 <template>version.xml</template>
                 <xsl>version.xsl</xsl>
             </view>
-            <view path="motion/details" id="related" tag="tab">
+            <view path="motion-details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="motion/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
+            <view path="motion-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="motion/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
+            <view path="motion-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <view path="motion/event">
+            <view path="motion-event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </view>
         </views>
         <views name="Motion-ver">
-            <view path="motion/version/text" id="text" tag="tab">
+            <view path="motion-version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>motion.xml</template>
                 <xsl>motion.xsl</xsl>
             </view>
-            <view path="motion/version/documents" id="attachments" tag="tab">
+            <view path="motion-version/documents" id="attachments" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -877,52 +903,56 @@
             </view>
         </views>
         <views name="TabledDocument">
-            <view path="tableddocument/text" id="text" tag="tab">
+            <view path="tabledocuments" id="listing" tag="listing">
+                <template>tableddocuments.xml</template>
+                <xsl>legislativeitem-listing.xsl</xsl>
+            </view>
+            <view path="tableddocument-text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>tableddocument.xml</template>
                 <xsl>tableddocument.xsl</xsl>
             </view>
-            <view path="tableddocument/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
+            <view path="tableddocument-timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </view>
-            <view path="tableddocument/details" id="related" tag="tab">
+            <view path="tableddocument-details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="tableddocument/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
+            <view path="tableddocument-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="tableddocument/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
+            <view path="tableddocument-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <view path="tableddocument/version">
+            <view path="tableddocument-version">
                 <template>version.xml</template>
                 <xsl>version.xsl</xsl>
             </view>
-            <view path="tableddocument/event">
+            <view path="tableddocument-event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </view>
         </views>
         <views name="TabledDocument-ver">
-            <view path="tableddocument/version/text" id="text" tag="tab">
+            <view path="tableddocument-version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
@@ -931,52 +961,56 @@
             </view>
         </views>
         <views name="AgendaItem">
-            <view path="agendaitem/text" id="text" tag="tab">
+            <view path="agendaitems" id="listing" tag="listing">
+                <template>agendaitems.xml</template>
+                <xsl>legislativeitem-listing.xsl</xsl>
+            </view>
+            <view path="agendaitem-text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
                 <template>agendaitem.xml</template>
                 <xsl>agendaitem.xsl</xsl>
             </view>
-            <view path="agendaitem/timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
+            <view path="agendaitem-timeline" id="timeline" tag="tab" check-for="[bu:changes/child::node()]">
                 <title>
                     <i18n:text key="tab-history">history(nt)</i18n:text>
                 </title>
                 <template>changes.xml</template>
                 <xsl>changes.xsl</xsl>
             </view>
-            <view path="agendaitem/details" id="related" tag="tab">
+            <view path="agendaitem-details" id="related" tag="tab">
                 <title>
                     <i18n:text key="tab-details">details(nt)</i18n:text>
                 </title>
                 <template>details.xml</template>
                 <xsl>details.xsl</xsl>
             </view>
-            <view path="agendaitem/assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
+            <view path="agendaitem-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
                 <title>
                     <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
                 </title>
                 <template>assigned-groups.xml</template>
                 <xsl>assigned-groups.xsl</xsl>
             </view>
-            <view path="agendaitem/documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
+            <view path="agendaitem-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <view path="agendaitem/version">
+            <view path="agendaitem-version">
                 <template>version.xml</template>
                 <xsl>version.xsl</xsl>
             </view>
-            <view path="agendaitem/event">
+            <view path="agendaitem-event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </view>
         </views>
         <views name="AgendaItem-ver">
-            <view path="agendaitem/version/text" id="text" tag="tab">
+            <view path="agendaitem-version/text" id="text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
                 </title>
@@ -985,6 +1019,10 @@
             </view>
         </views>
         <views name="Membership">
+            <view path="members" id="listing" tag="listing">
+                <template>members.xml</template>
+                <xsl>members.xsl</xsl>
+            </view>
             <view path="member" id="member" tag="tab">
                 <title>
                     <i18n:text key="tab-member">member(nt)</i18n:text>
@@ -992,28 +1030,28 @@
                 <template>member.xml</template>
                 <xsl>member.xsl</xsl>
             </view>
-            <view path="member/personal-info" id="info" tag="tab">
+            <view path="member-personalinfo" id="info" tag="tab">
                 <title>
                     <i18n:text key="tab-info">information(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>personal-info.xsl</xsl>
             </view>
-            <view path="member/offices-held" id="offices" tag="tab">
+            <view path="member-officesheld" id="offices" tag="tab">
                 <title>
                     <i18n:text key="tab-offices">offices held(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>offices-held.xsl</xsl>
             </view>
-            <view path="member/parl-activities" id="activities" tag="tab">
+            <view path="member-parlactivities" id="activities" tag="tab">
                 <title>
                     <i18n:text key="tab-parlacts">parliament activities(nt)</i18n:text>
                 </title>
                 <template>member.xml</template>
                 <xsl>parl-activities.xsl</xsl>
             </view>
-            <view path="member/contacts" id="contacts" tag="tab">
+            <view path="member-contacts" id="contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
@@ -1031,6 +1069,12 @@
             <view path="popout" id="n/a">
                 <template>popout.xml</template>
                 <xsl>popout.xsl</xsl>
+            </view>
+        </views>
+        <views name="AdvancedSearch">
+            <view path="search-adv" id="searchadv">
+                <template>questions.xml</template>
+                <xsl>advanced-search.xsl</xsl>
             </view>
         </views>
     </viewgroups>

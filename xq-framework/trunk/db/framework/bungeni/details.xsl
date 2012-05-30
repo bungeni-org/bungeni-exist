@@ -32,7 +32,7 @@
         </xsl:variable>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
+                <h1 id="doc-title-red-left">
                     <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                     <xsl:if test="$version eq 'true'">
                         <br/>

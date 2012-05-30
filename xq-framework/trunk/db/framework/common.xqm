@@ -60,11 +60,26 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
 };
 
 (:~
-Get a viewgroubs configuration from the --------.
+Get a viewgroups configuration from the --------.
 :)
 declare function cmn:get-tabgroups($exist-path as xs:string) as node() {
     let $doc := cmn:get-ui-config()/ui/viewgroups/views[@name eq $exist-path]
         return $doc
+};
+
+(:~
+Get a viewgroups listing parameters from the --------.
+:)
+declare function cmn:get-view-listing-parts($doctype as xs:string, $default-view as xs:string) as node() {
+    let $views := cmn:get-ui-config()/ui/viewgroups/views[@name eq $doctype]
+    let $listing-view := $views/view[@id eq 'listing']
+    let $current-path := data($listing-view/@path)
+    let $default-path := data($views/view[@id eq $default-view]/@path)
+        return  <listing>
+                    {$listing-view}
+                    <current-view>{$current-path}</current-view>
+                    <default-view>{$default-path}</default-view>
+                </listing>
 };
 
 (:~

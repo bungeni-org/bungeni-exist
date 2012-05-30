@@ -342,15 +342,14 @@ declare function bun:get-documentitems(
             $view-rel-path as xs:string,
             $acl as xs:string,
             $type as xs:string,
-            $url-prefix as xs:string,
-            $stylesheet as xs:string,
+            $parts as node(),
             $offset as xs:integer, 
             $limit as xs:integer, 
             $querystr as xs:string, 
             $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($stylesheet)    
+    let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     let $tab := xs:string(request:get-parameter("tab",'uc'))    
     let $coll := bun:list-documentitems-with-acl-n-tabs($acl, $type, $tab)
     let $listings-filter := cmn:get-listings-config($type)
@@ -379,9 +378,10 @@ declare function bun:get-documentitems(
                 return 
                     <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
          }
-         </tags>         
+         </tags>    
+         <currentView>{$parts/current-view}</currentView>
         <documentType>{$type}</documentType>
-        <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
+        <listingUrlPrefix>{$parts/default-view}</listingUrlPrefix>
         <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
         <i18nlabel>{$type}</i18nlabel>
         <offset>{$offset}</offset>
@@ -436,67 +436,6 @@ declare function bun:get-documentitems(
             </parameters>
            ) 
        
-};
-
-(:~
-:   This and similar functions implement get-documentitems() to request for parliamentary documents
-: @param acl
-: @param offset
-: @param limit
-: @param querystr
-: @param sortby
-: @return
-:   Documents based on filter parameters passed in.
-:)
-declare function bun:get-bills(
-        $view-rel-path as xs:string,
-        $acl as xs:string, 
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string) as element() {
-        
-        bun:get-documentitems($view-rel-path, $acl, "bill", "bill/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
-};
-
-declare function bun:get-questions(
-        $view-rel-path as xs:string,
-        $acl as xs:string, 
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string) as element() {
-  bun:get-documentitems($view-rel-path, $acl, "question", "question/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
-};
-
-declare function bun:get-motions(
-        $view-rel-path as xs:string,
-        $acl as xs:string, 
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string) as element() {
-  bun:get-documentitems($view-rel-path, $acl, "motion", "motion/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
-};
-
-declare function bun:get-tableddocuments(
-        $view-rel-path as xs:string,
-        $acl as xs:string, 
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string) as element() {
-  bun:get-documentitems($view-rel-path, $acl, "tableddocument", "tableddocument/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
-};
-
-declare function bun:get-agendaitems(
-        $view-rel-path as xs:string,
-        $acl as xs:string, 
-        $offset as xs:integer, 
-        $limit as xs:integer, 
-        $querystr as xs:string, 
-        $sortby as xs:string) as element() {
-  bun:get-documentitems($view-rel-path, $acl, "agendaitem", "agendaitem/text", "legislativeitem-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 declare function bun:search-criteria(
@@ -670,6 +609,7 @@ declare function bun:advanced-search($qryall as xs:string,
             $qryhas as xs:string, 
             $parent-types as xs:string,
             $doc-types as xs:string,
+            $parts as node(),
             $offset as xs:integer, 
             $limit as xs:integer, 
             $status as xs:string,
@@ -677,7 +617,7 @@ declare function bun:advanced-search($qryall as xs:string,
             $enddate as xs:string,            
             $sortby as xs:string) as element()* {
       
-    let $stylesheet := "advanced-search.xsl"      
+    let $stylesheet := xs:string($parts/xsl)  
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
     let $getqrystr := xs:string(request:get-query-string())    
     let $search-filter := cmn:get-doctypes()
@@ -760,6 +700,7 @@ declare function bun:advanced-search($qryall as xs:string,
                     $subset_rs
                   )
              }</count>
+             <currentView>search-adv</currentView>
             <documentType>question</documentType>
             <qryAll>{$qryall}</qryAll>
             <qryExact>{$qryexact}</qryExact>
@@ -2077,12 +2018,13 @@ declare function local:get-sitting-items($sittingdoc as node()) {
 declare function bun:get-politicalgroups(
         $offset as xs:integer, 
         $limit as xs:integer, 
+        $parts as node(),
         $querystr as xs:string, 
         $sortby as xs:string
         ) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("politicalgroups.xsl")    
+    let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     
     (: 
         The line below is documented in bun:get-documentitems()
@@ -2094,6 +2036,7 @@ declare function bun:get-politicalgroups(
         <paginator>
         (: Count the total number of groups :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'])}</count>
+        <currentView>{$parts/current-view}</currentView>
         <documentType>political-group</documentType>
         <listingUrlPrefix>political-group/text</listingUrlPrefix>        
         <offset>{$offset}</offset>
@@ -2380,7 +2323,10 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
 : @stylesheet 
 :   committee.xsl, comm-*.xsl
 :)
-declare function bun:get-parl-group($acl as xs:string, $docid as xs:string, $parts as node()) as element()* {
+declare function bun:get-parl-group(
+            $acl as xs:string, 
+            $docid as xs:string, 
+            $parts as node()) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2631,16 +2577,22 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
                             </parameters>)
 };
 
-declare function bun:get-members($offset as xs:integer, $limit as xs:integer, $querystr as xs:string, $sortby as xs:string) as element() {
+declare function bun:get-members(
+            $offset as xs:integer, 
+            $limit as xs:integer, 
+            $parts as node(),
+            $querystr as xs:string, 
+            $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("members.xsl")    
+    let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of members :)
         <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='membership'])}</count>
+        <currentView>{$parts/current-view}</currentView>
         <documentType>membership</documentType>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>

@@ -101,7 +101,7 @@
     <xsl:template match="doc" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
-            <a href="politicalgroup/text?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="politicalgroup-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>

@@ -114,7 +114,7 @@
                                 <xsl:value-of select="concat(lower-case(bu:ontology/bu:document/bu:eventOf/bu:type/bu:value),'/event')"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="concat(lower-case($doc-sub-type),'/text')"/>
+                                <xsl:value-of select="concat(lower-case($doc-sub-type),'-text')"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
@@ -134,7 +134,7 @@
                     <i> group type</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:docType/bu:value"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a href="{lower-case($doc-sub-type)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                    <a href="{lower-case($doc-sub-type)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                         <xsl:value-of select="bu:ontology/child::*/bu:fullName"/>
                     </a>
                     <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>

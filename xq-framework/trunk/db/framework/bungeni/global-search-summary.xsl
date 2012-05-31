@@ -18,6 +18,7 @@
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
+    <xsl:variable name="current-view" select="/docs/paginator/currentView"/>
     <xsl:variable name="input-fullqrystr" select="/docs/paginator/fullQryStr"/>
     <xsl:variable name="input-qrystr" select="/docs/paginator/qryStr"/>
     <xsl:template match="docs">
@@ -50,7 +51,7 @@
     <!-- legislative items -->
     <xsl:template match="legis">
         <div class="global-preview-head">
-            <a href="?scope=legis&amp;{$input-fullqrystr}">See all results from legislative items (found <xsl:value-of select="count"/>) <big class="r-prompts">»</big>
+            <a href="{$current-view}?scope=legis&amp;{$input-fullqrystr}">See all results from legislative items (found <xsl:value-of select="count"/>) <big class="r-prompts">»</big>
             </a>
         </div>
         <ul class="ls-row global-preview-summary">
@@ -90,7 +91,7 @@
     <!-- group items -->
     <xsl:template match="groups">
         <div class="global-preview-head">
-            <a href="?scope=groups&amp;{$input-fullqrystr}">See all results from group documents (found <xsl:value-of select="count"/>) <big class="r-prompts">»</big>
+            <a href="{$current-view}?scope=groups&amp;{$input-fullqrystr}">See all results from group documents (found <xsl:value-of select="count"/>) <big class="r-prompts">»</big>
             </a>
         </div>
         <ul class="ls-row global-preview-summary">
@@ -109,7 +110,7 @@
     <!-- members items -->
     <xsl:template match="members">
         <div class="global-preview-head">
-            <a href="?scope=members&amp;{$input-fullqrystr}">See all results from members profiles (found <xsl:value-of select="count"/>) <big class="r-promts">»</big>
+            <a href="{$current-view}?scope=members&amp;{$input-fullqrystr}">See all results from members profiles (found <xsl:value-of select="count"/>) <big class="r-promts">»</big>
             </a>
         </div>
         <ul class="ls-row global-preview-summary">

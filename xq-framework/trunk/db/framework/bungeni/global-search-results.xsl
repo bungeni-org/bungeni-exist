@@ -75,7 +75,7 @@
             </xsl:choose>
         </xsl:variable>
         <li>
-            <a href="{lower-case(bu:ontology/bu:document/bu:docType/bu:value)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{lower-case(bu:ontology/bu:document/bu:docType/bu:value)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
             </a>
             &#160;›&#160;
@@ -110,7 +110,7 @@
     <xsl:template match="doc" mode="renderui2">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
-            <a href="{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
@@ -139,7 +139,7 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui3">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:document/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>

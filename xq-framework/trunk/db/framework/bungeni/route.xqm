@@ -1,4 +1,4 @@
-xquery version "1.0";
+xquery version "3.0";
 
 module namespace rou = "http://exist.bungeni.org/rou";
 
@@ -39,18 +39,15 @@ declare function rou:func-name(
 
 :)
 
-declare function rou:get-home($EXIST-PATH as xs:string, 
-                             $EXIST-ROOT as xs:string, 
-                             $EXIST-CONTROLLER as xs:string, 
-                             $EXIST-RESOURCE as xs:string, 
-                             $REL-PATH as xs:string) {
+declare function rou:get-home($CONTROLLER-DOC as node()) {
+
         template:process-tmpl(
-           $REL-PATH, 
-           $EXIST-CONTROLLER, 
+           $CONTROLLER-DOC/rel-path, 
+           $CONTROLLER-DOC/exist-cont, 
            $config:DEFAULT-TEMPLATE,
-           cmn:get-route($EXIST-PATH),
+           cmn:get-route($CONTROLLER-DOC/exist-path),
             (),         		   
-           cmn:build-nav-tmpl($EXIST-PATH, "index.xml")
+           cmn:build-nav-tmpl($CONTROLLER-DOC/exist-path, "index.xml")
         )
 };
 
@@ -58,11 +55,7 @@ declare function rou:get-home($EXIST-PATH as xs:string,
 (:
 Generic Listing API
 :)
-declare function rou:listing-documentitem($EXIST-PATH as xs:string, 
-                             $EXIST-ROOT as xs:string, 
-                             $EXIST-CONTROLLER as xs:string, 
-                             $EXIST-RESOURCE as xs:string, 
-                             $REL-PATH as xs:string, 
+declare function rou:listing-documentitem($CONTROLLER-DOC as node(), 
                              $doc-type as xs:string) {
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
@@ -72,22 +65,22 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $parts := cmn:get-view-listing-parts($doc-type, 'text'),
                     $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($EXIST-RESOURCE, $acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
+                    $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC/exist-res, $acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
-    								        $REL-PATH, 
-    								        $EXIST-CONTROLLER, 
+    								        $CONTROLLER-DOC/rel-path, 
+    								        $CONTROLLER-DOC/exist-cont, 
     								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($EXIST-PATH),
+    								        cmn:get-route($CONTROLLER-DOC/exist-path),
     								        (),
     									    (cmn:build-nav-node(
-    									       $EXIST-PATH,
-    									       (template:merge($EXIST-PATH, $act-entries-repl, 
+    									       $CONTROLLER-DOC/exist-path,
+    									       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 
     									           bun:get-listing-search-context(
-    									               $EXIST-CONTROLLER,
+    									               concat("/",  $parts/current-view),
     									               "listing-search-form.xml",
     									               $doc-type
     									               )
@@ -98,99 +91,34 @@ declare function rou:listing-documentitem($EXIST-PATH as xs:string,
     								    )                             
 };
 
-declare function rou:get-bills(
-                        $EXIST-PATH as xs:string, 
-                        $EXIST-ROOT as xs:string, 
-                        $EXIST-CONTROLLER as xs:string, 
-                        $EXIST-RESOURCE as xs:string, 
-                        $REL-PATH as xs:string
-                        ) {
-      rou:listing-documentitem($EXIST-PATH, 
-                             $EXIST-ROOT, 
-                             $EXIST-CONTROLLER, 
-                             $EXIST-RESOURCE, 
-                             $REL-PATH,
-                             "Bill")
+declare function rou:get-bills($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "Bill")
 };
 
-declare function rou:get-questions(
-                        $EXIST-PATH as xs:string, 
-                        $EXIST-ROOT as xs:string, 
-                        $EXIST-CONTROLLER as xs:string, 
-                        $EXIST-RESOURCE as xs:string, 
-                        $REL-PATH as xs:string
-                        ) {
-     rou:listing-documentitem($EXIST-PATH, 
-                             $EXIST-ROOT, 
-                             $EXIST-CONTROLLER, 
-                             $EXIST-RESOURCE, 
-                             $REL-PATH,
-                             "Question")
+declare function rou:get-questions($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "Question")
 };
 
-declare function rou:get-motions(
-                        $EXIST-PATH as xs:string, 
-                        $EXIST-ROOT as xs:string, 
-                        $EXIST-CONTROLLER as xs:string, 
-                        $EXIST-RESOURCE as xs:string, 
-                        $REL-PATH as xs:string
-                        ) {
-     rou:listing-documentitem($EXIST-PATH, 
-                             $EXIST-ROOT, 
-                             $EXIST-CONTROLLER, 
-                             $EXIST-RESOURCE, 
-                             $REL-PATH,
-                             "Motion")
+declare function rou:get-motions($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "Motion")
 };
 
-declare function rou:get-tableddocuments(
-                        $EXIST-PATH as xs:string, 
-                        $EXIST-ROOT as xs:string, 
-                        $EXIST-CONTROLLER as xs:string, 
-                        $EXIST-RESOURCE as xs:string, 
-                        $REL-PATH as xs:string
-                        ) {
-                    rou:listing-documentitem(
-                             $EXIST-PATH, 
-                             $EXIST-ROOT, 
-                             $EXIST-CONTROLLER, 
-                             $EXIST-RESOURCE, 
-                             $REL-PATH,
-                             "TabledDocument")
+declare function rou:get-tableddocuments($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "TabledDocument")
 };
 
-declare function rou:get-agendaitems(
-                        $EXIST-PATH as xs:string, 
-                        $EXIST-ROOT as xs:string, 
-                        $EXIST-CONTROLLER as xs:string, 
-                        $EXIST-RESOURCE as xs:string, 
-                        $REL-PATH as xs:string
-                        ) {
-                    rou:listing-documentitem(
-                             $EXIST-PATH, 
-                             $EXIST-ROOT, 
-                             $EXIST-CONTROLLER, 
-                             $EXIST-RESOURCE, 
-                             $REL-PATH,
-                             "AgendaItem")
+declare function rou:get-agendaitems($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "AgendaItem")
 };
 
-declare function rou:get-pdf($EXIST-PATH as xs:string, 
-                             $EXIST-ROOT as xs:string, 
-                             $EXIST-CONTROLLER as xs:string, 
-                             $EXIST-RESOURCE as xs:string, 
-                             $REL-PATH as xs:string) {
+declare function rou:get-pdf($CONTROLLER-DOC as node()) {
                             
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
         $act-entries-tmpl :=  bun:gen-pdf-output($docnumber)
     return $act-entries-tmpl                                  
 };
 
-declare function rou:get-xml($EXIST-PATH as xs:string, 
-                             $EXIST-ROOT as xs:string, 
-                             $EXIST-CONTROLLER as xs:string, 
-                             $EXIST-RESOURCE as xs:string, 
-                             $REL-PATH as xs:string) {
+declare function rou:get-xml($CONTROLLER-DOC as node()) {
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
         $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
     return $act-entries-tmpl   

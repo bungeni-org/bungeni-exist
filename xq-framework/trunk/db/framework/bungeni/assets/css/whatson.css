@@ -270,10 +270,18 @@ table.datepickerViewMonths tbody.datepickerYears,
 table.datepickerViewMonths tr.datepickerDoW {
 	display: none;
 }
+table.datepickerViewMonths {
+    width:232px;
+    height:215px;
+}
 table.datepickerViewYears tbody.datepickerDays,
 table.datepickerViewYears tbody.datepickerMonths,
 table.datepickerViewYears tr.datepickerDoW {
 	display: none;
+}
+table.datepickerViewYears {
+    width:232px;
+    height:215px;
 }
 td.datepickerDisabled a,
 td.datepickerDisabled.datepickerNotInMonth a{

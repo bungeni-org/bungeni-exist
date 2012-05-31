@@ -447,11 +447,11 @@ declare function bun:search-criteria(
         $typeofdoc as xs:string) as element() {
         
         if ($typeofdoc eq "committee" or $typeofdoc eq "political-group") then
-            bun:search-groupitems($acl, $typeofdoc, "committee/text", "committees.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-groupitems($acl, $typeofdoc, "committee-text", "committees.xsl", $offset, $limit, $querystr, $sortby)
         else if ($typeofdoc eq "membership") then
-            bun:search-membership($acl, $typeofdoc, "member/text", "members.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-membership($acl, $typeofdoc, "member-text", "members.xsl", $offset, $limit, $querystr, $sortby)
         else
-            bun:search-documentitems($acl, $typeofdoc, "bill/text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-documentitems($acl, $typeofdoc, "bill-text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 (:~
@@ -533,6 +533,7 @@ declare function bun:search-documentitems(
                     $coll
                   )
              }</count>
+             <currentView>search</currentView>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
@@ -825,6 +826,7 @@ declare function bun:search-groupitems(
                     $coll
                   )
              }</count>
+            <currentView>search</currentView>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
@@ -899,6 +901,7 @@ declare function bun:search-membership(
                     $coll
                   )
              }</count>
+             <currentView>search</currentView>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
@@ -1034,6 +1037,7 @@ declare function bun:search-global(
         <paginator>
             (: Count the total number of documents :)
             <count>{ $count }</count>
+            <currentView>search-all</currentView>
             <documentType>global</documentType>
             <qryStr>{$querystr}</qryStr>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
@@ -1449,7 +1453,7 @@ declare function bun:get-atom-feed(
             ) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
     
-    let $server-path := "http://localhost:8180/exist/apps/framework"
+    let $server-path := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps/framework/bungeni"
     
     let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
         <title>{concat(upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>
@@ -1464,25 +1468,25 @@ declare function bun:get-atom-feed(
             (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
             return 
             (   <entry>
-                    <id>{data($i/bu:legislativeItem/@uri)}</id>
-                    <title>{$i/bu:legislativeItem/bu:shortName/node()}</title>
+                    <id>{data($i/bu:document/@uri)}</id>
+                    <title>{$i/bu:document/bu:shortName/node()}</title>
                     {
                        <summary> 
                        {
                            $i/bu:document/@type,
-                           $i/bu:legislativeItem/bu:shortName/node()
+                           $i/bu:document/bu:shortName/node()
                        }
                        </summary>,
                        if ($outputtype = 'user')  then (
-                            <link rel="alternate" type="application/xhtml" href="{$server-path}/bill/text?uri={$i/bu:legislativeItem/@uri}"/>
+                            <link rel="alternate" type="application/xhtml" href="{$server-path}/{lower-case($doctype)}-text?uri={$i/bu:document/@uri}"/>
                         )  (: "service" output :)
                         else (
-                            <link rel="alternate" type="application/xml" href="{$server-path}/bill/xml?uri={$i/bu:legislativeItem/@uri}"/>
+                            <link rel="alternate" type="application/xml" href="{$server-path}/{lower-case($doctype)}-xml?uri={$i/bu:document/@uri}"/>
                         )  
                     }
                     <content type='html'>{$i/bu:legislativeItem/bu:body/node()}</content>
-                    <published>{$i/bu:legislativeItem/bu:publicationDate/node()}</published>
-                    <updated>{$i/bu:legislativeItem/bu:statusDate/node()}</updated>                           
+                    <published>{$i/bu:document/bu:publicationDate/node()}</published>
+                    <updated>{$i/bu:document/bu:statusDate/node()}</updated>                           
                 </entry>
             )
        }

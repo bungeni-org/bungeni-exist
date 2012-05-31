@@ -816,7 +816,7 @@
                 <template>documents.xml</template>
                 <xsl>documents.xsl</xsl>
             </view>
-            <view path="question/event">
+            <view path="question-event">
                 <template>documents.xml</template>
                 <xsl>event.xsl</xsl>
             </view>
@@ -1250,8 +1250,8 @@
                 <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
             </orderbys>
             <searchins>
-                <searchin name="all" value="all" field=".">Entire Document</searchin>
-                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName" default="true">First Name</searchin>
+                <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
+                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName">First Name</searchin>
                 <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
                 <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
             </searchins>

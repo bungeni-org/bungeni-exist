@@ -38,17 +38,22 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                 $EXIST-CONTROLLER as xs:string, 
                                 $EXIST-RESOURCE as xs:string, 
                                 $REL-PATH as xs:string) {
+                                
+        let $CONTROLLER-DOC :=  <controller>
+                                    <exist-path>{$EXIST-PATH}</exist-path>
+                                    <exist-root>{$EXIST-ROOT}</exist-root>
+                                    <exist-cont>{$EXIST-CONTROLLER}</exist-cont>
+                                    <exist-res>{$EXIST-RESOURCE}</exist-res>
+                                    <rel-path>{$REL-PATH}</rel-path>
+                                </controller>
+        return 
+        
         if ($EXIST-PATH eq "" ) then
             fw:redirect(fn:concat(request:get-uri(), "/"))  
         else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
              then
-        	   rou:get-home(
-        		  $EXIST-PATH , 
-                  $EXIST-ROOT , 
-                  $EXIST-CONTROLLER, 
-                  $EXIST-RESOURCE, 
-                  $REL-PATH
-                  ) 
+        	   rou:get-home($CONTROLLER-DOC) 
+        	   
     	(: GLUE-SERVICE :)
     	else if ($EXIST-PATH eq "/check-update" )
     		 then 
@@ -98,7 +103,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        (cmn:build-nav-node($EXIST-PATH,
     								                    (
     								                        template:merge(
-    								                          $EXIST-PATH, 
+    								                          $EXIST-CONTROLLER, 
     								                          $act-entries-repl, 
     								                          bun:get-listing-search-context(
     								                            $EXIST-PATH,
@@ -136,51 +141,23 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
     		 then 
-    		 rou:get-bills($EXIST-PATH, 
-                    $EXIST-ROOT, 
-                    $EXIST-CONTROLLER, 
-                    $EXIST-RESOURCE, 
-                    $REL-PATH)
+    		 rou:get-bills($CONTROLLER-DOC)
 
     	else if ($EXIST-PATH eq "/questions")
     		 then 
-                 rou:get-questions(
-                    $EXIST-PATH, 
-                    $EXIST-ROOT, 
-                    $EXIST-CONTROLLER, 
-                    $EXIST-RESOURCE, 
-                    $REL-PATH
-                    )
+                 rou:get-questions($CONTROLLER-DOC)
                     
     	else if ($EXIST-PATH eq "/motions")
     		 then 
-                 rou:get-motions(
-                    $EXIST-PATH, 
-                    $EXIST-ROOT, 
-                    $EXIST-CONTROLLER, 
-                    $EXIST-RESOURCE, 
-                    $REL-PATH
-                    )
+                 rou:get-motions($CONTROLLER-DOC)
                     
     	else if ($EXIST-PATH eq "/tableddocuments")
     		 then 
-                 rou:get-tableddocuments(
-                    $EXIST-PATH, 
-                    $EXIST-ROOT, 
-                    $EXIST-CONTROLLER, 
-                    $EXIST-RESOURCE, 
-                    $REL-PATH
-                    ) 
+                 rou:get-tableddocuments($CONTROLLER-DOC) 
                     
     	else if ($EXIST-PATH eq "/agendaitems")
     		 then 
-                 rou:get-agendaitems(
-                    $EXIST-PATH, 
-                    $EXIST-ROOT, 
-                    $EXIST-CONTROLLER, 
-                    $EXIST-RESOURCE, 
-                    $REL-PATH
-                    )                     
+                 rou:get-agendaitems($CONTROLLER-DOC)                     
     				
         (:~ ITEMS SEARCH :)     
  	    else if ($EXIST-PATH eq "/search-all")
@@ -204,7 +181,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       cmn:get-route($EXIST-PATH),
     									       (),
     									       (cmn:build-nav-node($EXIST-PATH,
-    									           (template:merge($EXIST-PATH, 
+    									           (template:merge($EXIST-CONTROLLER, 
     									               $act-entries-repl, 
     									               bun:get-global-search-context($EXIST-PATH, 
     									                   "global-search-form.xml",
@@ -320,7 +297,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       cmn:get-route($override_path),
     									       (),
     									       (cmn:build-nav-node($override_path,
-    									           (template:merge($EXIST-PATH, 
+    									           (template:merge($EXIST-CONTROLLER, 
     									               $act-entries-repl, 
     									               bun:get-listing-search-context($override_path, 
     									                   "listing-search-form.xml",
@@ -335,65 +312,45 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/bills/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "bill","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "Bill","user")
                     return $act-entries-tmpl
     	else if ($EXIST-PATH eq "/questions/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view","question","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view","Question","user")
                     return $act-entries-tmpl    
     	else if ($EXIST-PATH eq "/motions/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "motion","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "Motion","user")
                     return $act-entries-tmpl                     
     	else if ($EXIST-PATH eq "/tableddocuments/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "tableddocument","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "TabledDocument","user")
                     return $act-entries-tmpl  
     	else if ($EXIST-PATH eq "/agendaitems/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "agendaitem","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "AgendaItem","user")
                     return $act-entries-tmpl                    
             
         (: PDF FO GENERATORS :)
     	else if ($EXIST-PATH eq "/bill/pdf")   
     		 then 
-                rou:get-pdf($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)
+                rou:get-pdf($CONTROLLER-DOC)
     	else if ($EXIST-PATH eq "/question/pdf")   
     		 then 
-                rou:get-pdf($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)    
+                rou:get-pdf($CONTROLLER-DOC)    
     	else if ($EXIST-PATH eq "/motion/pdf")   
     		 then 
-                rou:get-pdf($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)  
+                rou:get-pdf($CONTROLLER-DOC)  
     	else if ($EXIST-PATH eq "/tableddocument/pdf")   
     		 then 
-                rou:get-pdf($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)  
+                rou:get-pdf($CONTROLLER-DOC)  
     	else if ($EXIST-PATH eq "/agendaitem/pdf")   
     		 then 
-                rou:get-pdf($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)                             
+                rou:get-pdf($CONTROLLER-DOC)                             
     	else if ($EXIST-PATH eq "/member/pdf")   
     		 then 
                 let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -403,39 +360,19 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         (:Get AkomaNtoso XML:)
     	else if ($EXIST-PATH eq "/bill/xml")   
     		 then 
-                rou:get-xml($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)    
+                rou:get-xml($CONTROLLER-DOC)    
     	else if ($EXIST-PATH eq "/question/xml")   
     		 then 
-                rou:get-xml($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)
+                rou:get-xml($CONTROLLER-DOC)
     	else if ($EXIST-PATH eq "/motion/xml")   
     		 then 
-                rou:get-xml($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH) 
+                rou:get-xml($CONTROLLER-DOC) 
     	else if ($EXIST-PATH eq "/tableddocument/xml")   
     		 then 
-                rou:get-xml($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)
+                rou:get-xml($CONTROLLER-DOC)
     	else if ($EXIST-PATH eq "/agendaitem/xml" or $EXIST-PATH eq "/member/xml")   
     		 then 
-                rou:get-xml($EXIST-PATH, 
-                            $EXIST-ROOT, 
-                            $EXIST-CONTROLLER, 
-                            $EXIST-RESOURCE, 
-                            $REL-PATH)                             
+                rou:get-xml($CONTROLLER-DOC)                             
 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
@@ -984,7 +921,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    
-    	else if ($EXIST-PATH eq "/question/event" )
+    	else if ($EXIST-PATH eq "/question-event" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  

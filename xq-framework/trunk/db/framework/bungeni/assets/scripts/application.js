@@ -307,7 +307,7 @@ $(document).ready(function () {
          content: {
             // Set the text to an image HTML string with the correct src URL to the loading image you want to use
             text: '<img class="throbber" src="../assets/bungeni/images/throbber.gif" alt="Loading..." />',
-            url: $(this).attr('href'), // Use the rel attribute of each element for the url to load
+            url: $(this).attr('href'), // Use the href attribute of each element for the url to load
             title: {
                text: '<h1 id="doc-title-red-left">' + $(this).text() + '</h1>', // Give the tooltip a title using each elements text
                button: $("body").data("close") // Show a close link in the title

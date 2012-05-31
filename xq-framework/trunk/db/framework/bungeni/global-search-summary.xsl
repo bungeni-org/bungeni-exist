@@ -80,7 +80,7 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a href="{lower-case($doc-type)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+                    <a href="{lower-case($doc-type)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                         <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
                     </a>
                 </xsl:otherwise>
@@ -101,7 +101,7 @@
     <xsl:template match="doc" mode="renderui2">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
-            <a href="{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}/text?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
         </li>

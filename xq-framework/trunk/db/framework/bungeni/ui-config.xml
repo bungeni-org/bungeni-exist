@@ -903,7 +903,7 @@
             </view>
         </views>
         <views name="TabledDocument">
-            <view path="tabledocuments" id="listing" tag="listing">
+            <view path="tableddocuments" id="listing" tag="listing">
                 <template>tableddocuments.xml</template>
                 <xsl>legislativeitem-listing.xsl</xsl>
             </view>

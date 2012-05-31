@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -147,32 +147,44 @@
             <div class="struct-ib">/ Constitutency / Party</div>
             <span>-</span>
             <div class="doc-toggle">
-                <table class="doc-tbl-details">
-                    <tr>
-                        <td class="labels">id:</td>
-                        <td>
+                <div style="min-height:110px;">
+                    <p class="imgonlywrap photo-listing" style="float:left;">
+                        <img src="assets/images/presidente.jpg" alt="Presidente" align="left"/>
+                    </p>
+                    <div class="block">
+                        <span class="labels">id:</span>
+                        <span>
                             <xsl:value-of select="$docIdentifier"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">gender:</td>
-                        <td>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">gender:</span>
+                        <span>
                             <xsl:value-of select="bu:ontology/bu:membership/bu:gender"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">date of birth:</td>
-                        <td>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="dob">date of birth(nt)</i18n:text>:</span>
+                        <span>
                             <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="labels">status:</td>
-                        <td>
-                            <xsl:value-of select="bu:ontology/bu:membership/bu:status"/>
-                        </td>
-                    </tr>
-                </table>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="status">status(nt)</i18n:text>:</span>
+                        <span>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:status/bu:value"/>
+                        </span>
+                    </div>
+                    <div class="block">
+                        <span class="labels">
+                            <i18n:text key="email">short bio(nt)</i18n:text>:</span>
+                        <span>
+                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,360)"/>...
+                        </span>
+                    </div>
+                </div>
             </div>
         </li>
     </xsl:template>

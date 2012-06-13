@@ -112,7 +112,7 @@ div.doc-toggle.opened {
     color: #fff;
     background-color:#21a1ba;}    
     
- /*** mainnav ***/
+/*** mainnav ***/
  #mainnav {
      margin-top:-26px; /* group4 */
  }
@@ -567,7 +567,7 @@ ul#portal-personaltools {
     margin:0;
     padding:0;
 }
-#portal-languageselector li.active {
+#portal-languageselector li.selected {
   background-color: #434343;
   background-repeat: repeat-x;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#434343), to(#7e7e74));
@@ -576,7 +576,7 @@ ul#portal-personaltools {
   background: -ms-linear-gradient(top, #7e7e74, #434343);
   background: -o-linear-gradient(top, #7e7e74, #434343);
 }
-#portal-languageselector li.active a {
+#portal-languageselector li.selected a {
    color:#eeeeee !important;
    text-decoration:underline;
 }

@@ -290,7 +290,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
             return 
     			if ($anchor/xh:a[@id = template:set-lang()]) then (
     			     element li {
-    			        attribute class { "active" }, 
+    			        attribute class { "selected" }, 
                         $anchor/xh:a
                      }
                 )

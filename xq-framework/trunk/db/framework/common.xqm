@@ -149,6 +149,7 @@ declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) a
      let $sub-nav := cmn:get-menu-from-route($exist-path)
      let $crumb := <crumb>
                         <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">
+                        <span id="breadcrumbs-you-are-here">You are here: </span>
                         {local:build-breadcrumbs($exist-path)}
                         </div>
                     </crumb>
@@ -163,27 +164,20 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
     let $route := cmn:get-route($exist-path)
     
     return
-        element ul {
         	if ($route/navigation and not($route/subnavigation)) then (
-                    element li {
-                      <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
-                    },
-                    element li {    				
+                        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
+                    ,  				
             	        <xh:a class="last" href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
-            	    }
+            	    
         	)
         	else (
-                    element li {    				
             	        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
-            	    },    			
-                    element li {    				
+            	    ,    			  				
             	        <xh:a href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
-            	    },
-                    element li {    				
+            	    ,   				
             	        <xh:a class="last" href="{$route/subnavigation}">{local:route-title($route/subnavigation)}</xh:a>
-            	    }      
+            	          
            )
-        }
 };
 
 (:~ 

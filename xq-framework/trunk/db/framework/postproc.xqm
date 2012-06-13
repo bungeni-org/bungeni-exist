@@ -66,7 +66,7 @@ declare function pproc:update-events() {
         let $event := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[bu:docId eq $wfe/bu:docId]
         return (
                 update replace $event/bu:eventOf/bu:refersTo/@href with $docuri,
-                update replace $doc-node/bu:workflowEvents/bu:workflowEvent[bu:docId=$wfe/bu:docId]/@href with $event/@uri
+                update replace $doc-node/bu:workflowEvents/bu:workflowEvent[bu:docId=$wfe/bu:docId]/@href with if($event/@uri) then $event/@uri else "E_DOC_NOT_FOUND"
                )
     } catch * {
         <response type="error">

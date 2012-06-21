@@ -21,7 +21,7 @@ import ConfigParser, jarray
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "1.0.1"
+__version__ = "1.2.6"
 __maintainer__ = "Anthony Oduor"
 __created__ = "18th Oct 2011"
 __status__ = "Development"
@@ -74,7 +74,10 @@ class TransformerConfig(Config):
     def __init__(self, config_file):
         Config.__init__(self, config_file)
         self.dict_pipes = {}
-    
+
+    def using_queue(self):
+        return self.get("general", "message_queue")
+
     def get_input_folder(self):
         return self.get("general", "bungeni_docs_folder")
 
@@ -630,7 +633,7 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
             #headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/xml"}
             try:
                 conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),50)
-                conn.request("GET", "/exist/apps/framework/check-update?uri=" + file_uri+"&t=" + file_stat_date)
+                conn.request("GET", "/exist/apps/framework/bungeni/check-update?uri=" + file_uri+"&t=" + file_stat_date)
                 response = conn.getresponse()
                 if(response.status == 200):
                     data = response.read()
@@ -1075,6 +1078,67 @@ def __md5_file(f, block_size=2**20):
             break
         md5.update(data)
     return md5.digest()
+
+def list_uniqifier(seq):
+    #http://www.peterbe.com/plog/uniqifiers-benchmark
+    # wary or RabbitMQ producer giving us duplicates in cases of overwriting a file 
+    # pyinotify would register two events of the same thing. So uncool! :@
+    seen = set()
+    seen_add = seen.add
+    return [ x for x in seq if x not in seen and not seen_add(x)]
+
+def main_queue(config_file, file_list):
+    script_path = os.path.dirname(os.path.realpath(__file__))
+    PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
+    # uncomment above lines to run in emotional mode
+    cfg = TransformerConfig(config_file)
+    __setup_output_dirs__(cfg)
+    wd_cfg = WebDavConfig(config_file)
+    """
+    Get parliament information
+    """
+    parl_info = get_parl_info(cfg)
+    transformer = Transformer(cfg)
+    transformer.set_params(parl_info)
+    cfgs = {"main_config":cfg, "transformer":transformer, "webdav_config" : wd_cfg}
+    pxf = ProcessXmlFilesWalker(cfgs)
+    """
+    Do Unzipping and Transformations
+    """
+    import fnmatch
+    for afile in list_uniqifier(file_list):
+        print afile
+        if os.path.isdir(afile) == True:
+            print "jus a directory"
+        elif fnmatch.fnmatch(afile, "*.zip"):
+            unzip = GenericDirWalkerUNZIP()
+            unzip.extractor(afile)
+            zip_dir = os.path.splitext(afile)[0] # after extraction is named origi name of zip \o/
+            xml_basename = os.path.basename(afile)
+            xml_name = os.path.splitext(xml_basename)[0]
+            new_afile = zip_dir + "/" + xml_name + ".xml"
+            # descending upon the extracted folder
+            bunparse = ParseBungeniXML(new_afile)
+            sba = SeekBindAttachmentsWalker(cfgs)
+            sba.attachments_seek_rename(bunparse)
+            pxf.fn_callback(new_afile)
+        elif fnmatch.fnmatch(afile, "*.xml"):
+            pxf.fn_callback(afile)
+    """
+    Do sync step
+    """
+    sxw = SyncXmlFilesWalker(cfgs)
+    if not os.path.isdir(cfg.get_temp_files_folder()):
+        mkdir_p(cfg.get_temp_files_folder())
+    sxw.create_sync_file()
+    sxw.walk(cfg.get_ontoxml_output_folder())
+    sxw.close_sync_file()
+    """
+    Do uploading to eXist
+    """
+    webdav_upload(cfg, wd_cfg)
+    #pt = PostTransform({"webdav_config": wd_cfg})
+    #pt.update()
 
 def main(options):
     # parse command line options if any

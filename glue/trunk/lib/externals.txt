@@ -10,3 +10,4 @@ xerces http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/xerc
 transformer http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/transformer
 zip4j http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/zip4j
 sardine http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/sardine
+rabbitmq http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/rabbitmq

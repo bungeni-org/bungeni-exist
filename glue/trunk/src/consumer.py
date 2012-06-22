@@ -12,7 +12,7 @@ from java.lang import String
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "0.1"
+__version__ = "0.4"
 __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
@@ -37,7 +37,6 @@ class RabbitMQClient:
 
     def consume_msgs(self):
         declareOk = self.channel.queueDeclare(self.queueName, True, False, False, None)
-        declareOk.messageCount
         self.channel.queueBind(self.queueName, self.exchangeName, self.queueName)
         self.consumer = QueueingConsumer(self.channel)
         self.channel.basicConsume(self.queueName, True, self.consumer)
@@ -51,6 +50,7 @@ class RabbitMQClient:
             count = count + 1
         #self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
         if declareOk.messageCount > 0:
+            print "WE GOT " , declareOk.messageCount , " NEW MESSAGES!"
             main_queue("src/config.ini", new_files)
         else:
             print "No messages"

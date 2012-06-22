@@ -21,10 +21,12 @@ import ConfigParser, jarray
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "1.2.6"
+__version__ = "1.2.8"
 __maintainer__ = "Anthony Oduor"
 __created__ = "18th Oct 2011"
 __status__ = "Development"
+
+__parl_info__ = "parliament_info.xml"
 
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
@@ -429,12 +431,22 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     """
     Walker that retrieves the info about the parliament
     """
-    
+    def get_from_cache(self, input_file_path):
+        bunparse = ParseBungeniXML(input_file_path)
+        the_parl_doc = bunparse.get_parliament_info()
+        return the_parl_doc
+
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseBungeniXML(input_file_path)
             the_parl_doc = bunparse.get_parliament_info()
             if the_parl_doc is not None:
+                """
+                Create a cached copy in tmp folder defined in config.ini for quick access 
+                in the current parliament's future transformation processes
+                """
+                tmp_folder = self.input_params["main_config"].get_temp_files_folder()
+                shutil.copyfile(input_file_path, tmp_folder + __parl_info__)
                 return (True, the_parl_doc)
             else :
                 return (False, None)
@@ -945,13 +957,19 @@ def __setup_output_dirs__(cfg):
         mkdir_p(cfg.get_temp_files_folder())
 
 def get_parl_info(cfg):
-    piw = ParliamentInfoWalker()
-    piw.walk(cfg.get_input_folder())
-    if piw.object_info is None:
-        print _COLOR.FAIL,"ERROR: Could not find Parliament info :(", _COLOR.ENDC
-        return sys.exit()
+    piw = ParliamentInfoWalker({"main_config":cfg})
+    """
+    Check first if we have a cached copy
+    """
+    if os.path.isfile(cfg.get_temp_files_folder() + __parl_info__):
+        return piw.get_from_cache(cfg.get_temp_files_folder() + __parl_info__)
     else:
-        return piw.object_info
+        piw.walk(cfg.get_input_folder())
+        if piw.object_info is None:
+            print _COLOR.FAIL,"ERROR: Could not find Parliament info :(", _COLOR.ENDC
+            return sys.exit()
+        else:
+            return piw.object_info
 
 def do_bind_attachments(cfg):
     # first we unzip the attachments using the GenericDirWalkerUNZIP 
@@ -1090,8 +1108,9 @@ def list_uniqifier(seq):
 def main_queue(config_file, file_list):
     script_path = os.path.dirname(os.path.realpath(__file__))
     PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
-    # uncomment above lines to run in emotional mode
+    # comment above lines to run in emotional mode
     cfg = TransformerConfig(config_file)
+    # create the output folders
     __setup_output_dirs__(cfg)
     wd_cfg = WebDavConfig(config_file)
     """
@@ -1107,7 +1126,6 @@ def main_queue(config_file, file_list):
     """
     import fnmatch
     for afile in list_uniqifier(file_list):
-        print afile
         if os.path.isdir(afile) == True:
             print "jus a directory"
         elif fnmatch.fnmatch(afile, "*.zip"):
@@ -1137,8 +1155,8 @@ def main_queue(config_file, file_list):
     Do uploading to eXist
     """
     webdav_upload(cfg, wd_cfg)
-    #pt = PostTransform({"webdav_config": wd_cfg})
-    #pt.update()
+    pt = PostTransform({"webdav_config": wd_cfg})
+    pt.update()
 
 def main(options):
     # parse command line options if any

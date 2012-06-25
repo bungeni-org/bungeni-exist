@@ -1,4 +1,5 @@
 import sys
+import time
 from glue import *
 
 from com.rabbitmq.client import *
@@ -17,9 +18,19 @@ __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
 
+class Logger(object):
+    def __init__(self):
+        self.terminal = sys.stdout
+        self.log = open("log.txt", "a")
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message) 
+
 class RabbitMQClient:
 
     def __init__(self):
+        self.stdout = Logger()
         self.exchangeName = "bu_outputs"
         self.queueName = "glue_script"
         self.factory = ConnectionFactory()
@@ -28,18 +39,11 @@ class RabbitMQClient:
         self.channel = self.conn.createChannel()
         self.channel.exchangeDeclare(self.exchangeName,"direct",False)
 
-    def publish_msgs(self, msg_file):
-        """
-        This is not in use.
-        """
-        string_msg = msg_file
-        self.channel.basicPublish(self.exchangeName, "", AMQP.BasicProperties.Builder().contentType("text/plain").build(), string_msg)
-
     def consume_msgs(self):
         declareOk = self.channel.queueDeclare(self.queueName, True, False, False, None)
         self.channel.queueBind(self.queueName, self.exchangeName, self.queueName)
         self.consumer = QueueingConsumer(self.channel)
-        self.channel.basicConsume(self.queueName, True, self.consumer)
+        self.channel.basicConsume(self.queueName, False, self.consumer)
         count = 0
         new_files = []
         while (count < declareOk.messageCount):
@@ -48,13 +52,19 @@ class RabbitMQClient:
             message = String(delivery.getBody())
             new_files.append(str(message))
             count = count + 1
-        #self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
+            self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
         if declareOk.messageCount > 0:
-            print "WE GOT " , declareOk.messageCount , " NEW MESSAGES!"
+            self.stdout.write("WE GOT " + str(declareOk.messageCount) + " NEW MESSAGES! \n")
             main_queue("src/config.ini", new_files)
         else:
-            print "No messages"
-        sys.exit()
+            self.stdout.write("No messages \n")
+        self.channel.close()
+        self.conn.close()
 
-rmq = RabbitMQClient();
-rmq.consume_msgs()
+while True:
+    time.sleep( 10 ) # every 10 seconds.
+    try:
+        rmq = RabbitMQClient()
+        rmq.consume_msgs()
+    except:
+        pass

@@ -27,7 +27,11 @@ class EventHandler(pyinotify.ProcessEvent):
     def process_IN_CREATE(self, event):
         print "Created:", event.pathname
         pikad = PikaDilly()
-        pikad.publisher(event.pathname)
+        basename = os.path.basename(event.pathname)
+        if basename.startswith(".goutputstream"):
+            pass
+        else:
+            pikad.publisher(event.pathname)
 
 class PikaDilly:
 
@@ -43,10 +47,12 @@ class PikaDilly:
 
     def publisher(self, _file):
         # Send a message
-        m = magic.Magic(mime=True)
-        mtype = str(m.from_file(_file))
-        self.channel.basic_publish(exchange=self.exchange_name, routing_key=self.queue, body=_file, properties=BasicProperties(content_type=mtype,delivery_mode=1))
-
+        try:
+            m = magic.Magic(mime=True)
+            mtype = str(m.from_file(_file))
+            self.channel.basic_publish(exchange=self.exchange_name, routing_key=self.queue, body=_file, properties=BasicProperties(content_type=mtype,delivery_mode=2))
+        except IOError, err:
+            pass
     def consumer(self):
         # Receive a message
         self.channel.basic_consume(self.handle_delivery, self.queue)
@@ -59,7 +65,7 @@ class PikaDilly:
 handler = EventHandler()
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch('/home/undesa/bungeni_apps/bungeni/parts/xml_db', mask, rec=True, auto_add=True)
-
+#notifier.loop()
 
 # Notifier instance spawns a new process when daemonize is set to True. This
 # child process' PID is written to /tmp/pyinotify.pid (it also automatically

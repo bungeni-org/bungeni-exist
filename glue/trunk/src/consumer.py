@@ -1,4 +1,5 @@
 import sys
+import getopt
 import time
 from glue import *
 
@@ -44,25 +45,34 @@ class RabbitMQClient:
         self.channel.queueBind(self.queueName, self.exchangeName, self.queueName)
         self.consumer = QueueingConsumer(self.channel)
         self.channel.basicConsume(self.queueName, False, self.consumer)
-        count = 0
-        new_files = []
+        self.stdout.write(time.asctime(time.localtime(time.time())) + ", " + str(declareOk.messageCount) + " NEW MESSAGES! \n")
+        count  = 0
         while (count < declareOk.messageCount):
             delivery = QueueingConsumer.Delivery
             delivery = self.consumer.nextDelivery()
             message = String(delivery.getBody())
-            new_files.append(str(message))
+            file_status = main_queue(__config_file__, str(message))
+            if file_status is True:
+                # Acknowledgements to RabbitMQ the successfully, processed files
+                self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
             count = count + 1
-            self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
-        if declareOk.messageCount > 0:
-            self.stdout.write("WE GOT " + str(declareOk.messageCount) + " NEW MESSAGES! \n")
-            main_queue("src/config.ini", new_files)
-        else:
-            self.stdout.write("No messages \n")
+        
+        if declareOk.messageCount < 0:
+            self.stdout.write(time.asctime(time.localtime(time.time())) + " NO MESSAGES \n")
         self.channel.close()
         self.conn.close()
 
+if (len(sys.argv) >= 2):
+    # process input command line options
+    options, params = getopt.getopt(sys.argv[1:], "c:i:")
+    __config_file__ = options[0][1]
+    __time_int__ = options[1][1]
+else:
+    print " config.ini and time interval file must be an input parameters "
+    sys.exit()
+
 while True:
-    time.sleep( 10 ) # every 10 seconds.
+    time.sleep(int(__time_int__)) # every # seconds to run the consumer methods.
     try:
         rmq = RabbitMQClient()
         rmq.consume_msgs()

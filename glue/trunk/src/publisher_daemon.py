@@ -77,6 +77,7 @@ wdd = wm.add_watch('/home/undesa/bungeni_apps/bungeni/parts/xml_db', mask, rec=T
 # function and will be called after each event loop.
 try:
     # http://seb-m.github.com/pyinotify/pyinotify.Notifier-class.html
-    notifier.loop(daemonize=True, callback=None, pid_file='/tmp/pyinotify.pid', stdout='/tmp/stdout.txt')
+    #notifier.loop(daemonize=True, callback=None, pid_file='/tmp/pyinotify.pid', stdout='/tmp/stdout.txt')
+    notifier.loop()
 except pyinotify.NotifierError, err:
     print >> sys.stderr, err

@@ -202,6 +202,7 @@ class Transformer(object):
         #copy transformed files to disk
         FileUtility.getInstance().copyFile(fis, outFile)
         FileUtility.getInstance().copyFile(fisMlx, outMlx)
+        return [outFile, outMlx]
 
 
 class ParseXML(object):
@@ -397,7 +398,7 @@ class GenericDirWalkerATTS(GenericDirWalker):
 
 class GenericDirWalkerUNZIP(GenericDirWalker):
 
-    def extractor(self, zip_file):
+    def extractor(self, zip_file, dest_path = None):
         """
         extracts any .zip files in folder matching original name file.
         http://www.lingala.net/zip4j/
@@ -405,8 +406,12 @@ class GenericDirWalkerUNZIP(GenericDirWalker):
         try:
             #Initiate ZipFile object with the path/name of the zip file.
             unzipper = ZipFile(zip_file)
+            if dest_path is not None:
+                extract_to = dest_path
+            else:
+                extract_to = os.path.splitext(zip_file)[0]
             #Extracts all files to the path specified
-            unzipper.extractAll(os.path.splitext(zip_file)[0])
+            unzipper.extractAll(extract_to)
             print _COLOR.WARNING + "Extracted zip file... " + zip_file+_COLOR.ENDC
         except ZipException, e:
             LOG.error("Error while processing zip "+ zip_file + e)
@@ -512,7 +517,35 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
     """
     Walker that is used to transform XML Files
     """
-    
+
+    def process_file(self, input_file_path):
+        """
+        Used by main_queue for individual processing mode
+        """
+        bunparse = ParseBungeniXML(input_file_path)
+        pipe_type = bunparse.get_contenttype_name()
+        if pipe_type is not None:
+            if pipe_type in self.input_params["main_config"].get_pipelines():
+                pipe_path = self.input_params["main_config"].get_pipelines()[pipe_type]
+                output_file_name_wo_prefix  =   pipe_type + "_"
+                #truncate to first-3 characters only
+                truncated_prefix = output_file_name_wo_prefix[:3]
+                an_xml_file = "an_" + truncated_prefix
+                on_xml_file = "on_" + truncated_prefix
+                out_files = self.input_params["transformer"].run(
+                     input_file_path,
+                     self.input_params["main_config"].get_akomantoso_output_folder() + an_xml_file ,
+                     self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
+                     pipe_path
+                     )
+                return out_files
+            else:
+                print _COLOR.WARNING, "No pipeline defined for content type %s " % pipe_type, _COLOR.ENDC
+            return None
+        else:
+            print "Ignoring %s" % input_file_path
+            return None
+
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseBungeniXML(input_file_path)
@@ -525,7 +558,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     truncated_prefix = output_file_name_wo_prefix[:3]
                     an_xml_file = "an_" + truncated_prefix
                     on_xml_file = "on_" + truncated_prefix
-                    self.input_params["transformer"].run(
+                    out_files = self.input_params["transformer"].run(
                          input_file_path,
                          self.input_params["main_config"].get_akomantoso_output_folder() + an_xml_file ,
                          self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
@@ -631,6 +664,38 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
 
     def get_sync(self, input_file):
         return self.transformer.get_sync_status(input_file)
+
+    def sync_file(self, input_file_path):
+        """
+        Calls a service on the eXist repository requesting status of file with 
+        the given URI + status_date. Depending on response, adds it to a list of 
+        documents that need to be uploaded to repository.
+        """
+        file_uri = self.get_params(input_file_path)['uri']
+        file_stat_date = self.get_params(input_file_path)['status_date']
+        try:
+            conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),50)
+            conn.request("GET", "/exist/apps/framework/bungeni/check-update?uri=" + file_uri+"&t=" + file_stat_date)
+            response = conn.getresponse()
+            if(response.status == 200):
+                data = response.read()
+                if(self.get_sync(data) != 'ignore'):
+                    # !+NOTE without adding str in str(input_file_path), the compiler just stopped execution and went silent!
+                    print _COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), _COLOR.ENDC
+                    # 'ignore' means that its in the repository so we add anything that that is not `ignore` to the reposync list
+                    self.add_item_to_repo(str(input_file_path))
+                    LOG.debug( data )
+                else:
+                    print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), _COLOR.ENDC
+                return True
+            else:
+                print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
+                return False
+            conn.close()
+        except socket.error, (code, message):
+            print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
+            return False
+
 
     def fn_callback(self, input_file_path):
         """
@@ -1105,7 +1170,7 @@ def list_uniqifier(seq):
     seen_add = seen.add
     return [ x for x in seq if x not in seen and not seen_add(x)]
 
-def main_queue(config_file, file_list):
+def main_queue(config_file, afile):
     script_path = os.path.dirname(os.path.realpath(__file__))
     PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
     # comment above lines to run in emotional mode
@@ -1113,6 +1178,7 @@ def main_queue(config_file, file_list):
     # create the output folders
     __setup_output_dirs__(cfg)
     wd_cfg = WebDavConfig(config_file)
+    in_queue = False
     """
     Get parliament information
     """
@@ -1125,23 +1191,34 @@ def main_queue(config_file, file_list):
     Do Unzipping and Transformations
     """
     import fnmatch
-    for afile in list_uniqifier(file_list):
-        if os.path.isdir(afile) == True:
-            print "jus a directory"
-        elif fnmatch.fnmatch(afile, "*.zip"):
-            unzip = GenericDirWalkerUNZIP()
-            unzip.extractor(afile)
-            zip_dir = os.path.splitext(afile)[0] # after extraction is named origi name of zip \o/
-            xml_basename = os.path.basename(afile)
-            xml_name = os.path.splitext(xml_basename)[0]
-            new_afile = zip_dir + "/" + xml_name + ".xml"
-            # descending upon the extracted folder
-            bunparse = ParseBungeniXML(new_afile)
-            sba = SeekBindAttachmentsWalker(cfgs)
-            sba.attachments_seek_rename(bunparse)
-            pxf.fn_callback(new_afile)
-        elif fnmatch.fnmatch(afile, "*.xml"):
-            pxf.fn_callback(afile)
+    if os.path.isdir(afile) == True:
+        print "just a directory"
+        in_queue = True
+        return in_queue
+    elif fnmatch.fnmatch(afile, "*.zip"):
+        unzip = GenericDirWalkerUNZIP()
+        temp_dir = cfg.get_temp_files_folder()
+        unzip.extractor(afile, temp_dir)
+        xml_basename = os.path.basename(afile)
+        xml_name = os.path.splitext(xml_basename)[0]
+        new_afile = temp_dir + "/" + xml_name + ".xml"
+        # descending upon the extracted folder
+        bunparse = ParseBungeniXML(new_afile)
+        sba = SeekBindAttachmentsWalker(cfgs)
+        sba.attachments_seek_rename(bunparse)
+        ont_file = pxf.process_file(new_afile)[1] # we dont need the metalex jus ontology one
+        if len(str(ont_file)) > 1:
+            in_queue = True
+        os.remove(new_afile)
+    elif fnmatch.fnmatch(afile, "*.xml"):
+        ont_file = pxf.process_file(afile)[1] # we dont need the metalex jus ontology one
+        if len(str(ont_file)) > 1:
+            in_queue = True
+    else:
+        # ignore any other file type, not interested with them currently...
+        in_queue = True
+        return in_queue
+
     """
     Do sync step
     """
@@ -1149,14 +1226,21 @@ def main_queue(config_file, file_list):
     if not os.path.isdir(cfg.get_temp_files_folder()):
         mkdir_p(cfg.get_temp_files_folder())
     sxw.create_sync_file()
-    sxw.walk(cfg.get_ontoxml_output_folder())
+    sync_stat = sxw.sync_file(ont_file)
     sxw.close_sync_file()
+    if sync_stat is True:
+        in_queue = True
+    else:
+        print "ERROR: Failed at Sync-Step"
+        sys.exit()
     """
     Do uploading to eXist
     """
     webdav_upload(cfg, wd_cfg)
     pt = PostTransform({"webdav_config": wd_cfg})
     pt.update()
+    
+    return in_queue
 
 def main(options):
     # parse command line options if any

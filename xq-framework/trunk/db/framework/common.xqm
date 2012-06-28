@@ -211,7 +211,7 @@ declare function cmn:get-doctype-config($doctype as xs:string) {
  : return <whatsonview/> nodes
  :)
 declare function cmn:get-whatsonviews() {
-    cmn:get-ui-config()/ui/whatsonviews
+    cmn:get-ui-config()/ui/custom/whatsonviews
 };
 
 (:
@@ -219,13 +219,6 @@ declare function cmn:get-whatsonviews() {
  :)
 declare function cmn:get-doctypes() {
    cmn:get-ui-config()/ui/doctypes/doctype
-};
-
-(:
- : return <statuses/> nodes
- :)
-declare function cmn:get-statuses() {
-   cmn:get-ui-config()/ui/statuses/status
 };
 
 declare function cmn:get-orderby-config($doctype as xs:string)  {

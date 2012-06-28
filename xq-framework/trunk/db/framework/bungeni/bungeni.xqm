@@ -1360,9 +1360,10 @@ declare function bun:get-advanced-search-context($EXIST-PATH as xs:string, $embe
 :   A Re-written advanced search form
 :)
 declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $tmpl as element())  {
-   
-    let $search-filter := cmn:get-doctypes(),
-        $statuses := cmn:get-statuses()
+
+    let $search-filter := cmn:get-doctypes()
+    (: queries the xml repository for available doctypes so as to show only those present :)
+    let $current-types := string-join(distinct-values(collection(cmn:get-lex-db())/bu:ontology/child::*/bu:docType[@isA='TLCTerm']/bu:value)," ")
     
     return
     (: writing the search categories and doctypes :)    
@@ -1392,16 +1393,16 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
                     element ul {
                         for $doctype in $search-filter
                             return  
-                                if($doctype/@category eq $category) then (
+                                if($doctype/@category eq $category and contains($current-types,$doctype/@name)) then (
                                     element li {
-                                        <i18n:text key="{concat('doc-',$doctype/@name)}">{lower-case($doctype/@name)}(nt)</i18n:text>,
+                                        <i18n:text key="{concat('doc-',lower-case($doctype/@name))}">{lower-case($doctype/@name)}(nt)</i18n:text>,
                                         element input {
                                             attribute type {"checkbox"},
                                             attribute name {"docs"},
                                             attribute value {$doctype/@name}
                                         }
                                     }
-                                )
+                                )                             
                                 else ()
                     }
                 }
@@ -1416,7 +1417,7 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
             attribute selected {"selected"},
             <i18n:text key="status-default">select one(nt)</i18n:text>
         },
-        for $status in $statuses
+        for $status in distinct-values(collection(cmn:get-lex-db())/bu:ontology/child::*/bu:status[@isA='TLCTerm']/bu:value)
             return 
             element option {
                 attribute value {$status},

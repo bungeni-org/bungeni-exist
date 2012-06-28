@@ -5,6 +5,7 @@ import os
 import pika
 import time
 import sys
+import getopt
 import magic
 import pyinotify
 
@@ -62,9 +63,17 @@ class PikaDilly:
         pika.log.info("Basic.Deliver %s delivery-tag %i: %s", header_frame.content_type, method_frame.delivery_tag, body)
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
+if (len(sys.argv) >= 1):
+    # process input command line option for a directory to be monitored
+    options, params = getopt.getopt(sys.argv[1:], "d:")
+    __bungeni_output_folder__ = options[0][1]
+else:
+    print " bungeni_output_folder to watch must be an input parameter "
+    sys.exit()
+
 handler = EventHandler()
 notifier = pyinotify.Notifier(wm, handler)
-wdd = wm.add_watch('/home/undesa/bungeni_apps/bungeni/parts/xml_db', mask, rec=True, auto_add=True)
+wdd = wm.add_watch(__bungeni_output_folder__, mask, rec=True, auto_add=True)
 #notifier.loop()
 
 # Notifier instance spawns a new process when daemonize is set to True. This

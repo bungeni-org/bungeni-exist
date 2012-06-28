@@ -1231,8 +1231,7 @@ def main_queue(config_file, afile):
     if sync_stat is True:
         in_queue = True
     else:
-        print "ERROR: Failed at Sync-Step"
-        sys.exit()
+        in_queue = False
     """
     Do uploading to eXist
     """

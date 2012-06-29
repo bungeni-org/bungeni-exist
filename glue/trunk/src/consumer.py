@@ -52,10 +52,13 @@ class RabbitMQClient:
             delivery = self.consumer.nextDelivery()
             message = String(delivery.getBody())
             file_status = main_queue(__config_file__, str(message))
+            count = count + 1
             if file_status is True:
                 # Acknowledgements to RabbitMQ the successfully, processed files
                 self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
-            count = count + 1
+            else:
+                pass
+
         
         if declareOk.messageCount < 0:
             self.stdout.write(time.asctime(time.localtime(time.time())) + " NO MESSAGES \n")

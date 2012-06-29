@@ -1031,8 +1031,7 @@ def get_parl_info(cfg):
     else:
         piw.walk(cfg.get_input_folder())
         if piw.object_info is None:
-            print _COLOR.FAIL,"ERROR: Could not find Parliament info :(", _COLOR.ENDC
-            return sys.exit()
+            return False
         else:
             return piw.object_info
 
@@ -1123,6 +1122,9 @@ def main_transform(config_file):
     # look for the parliament document - and get the info which is used in the
     # following transformations
     parl_info = get_parl_info(cfg)
+    if parl_info == False:
+        print _COLOR.FAIL,"ERROR: Could not find Parliament info :(", _COLOR.ENDC
+        sys.exit()
     print _COLOR.OKGREEN,"Retrieved Parliament info...", parl_info, _COLOR.ENDC
     print _COLOR.OKGREEN + "Seeking attachments..." + _COLOR.ENDC
     do_bind_attachments(cfg)
@@ -1183,6 +1185,8 @@ def main_queue(config_file, afile):
     Get parliament information
     """
     parl_info = get_parl_info(cfg)
+    if parl_info == False:
+        return in_queue
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
     cfgs = {"main_config":cfg, "transformer":transformer, "webdav_config" : wd_cfg}

@@ -538,13 +538,12 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                      self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                      pipe_path
                      )
-                return out_files
+                return (out_files[1], True)
             else:
-                print _COLOR.WARNING, "No pipeline defined for content type %s " % pipe_type, _COLOR.ENDC
-            return None
+                return (True, False)
         else:
             print "Ignoring %s" % input_file_path
-            return None
+            return (False, False)
 
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
@@ -1199,25 +1198,33 @@ def main_queue(config_file, afile):
         print "just a directory"
         in_queue = True
         return in_queue
-    elif fnmatch.fnmatch(afile, "*.zip"):
+    elif fnmatch.fnmatch(afile, "*.zip") and os.path.isfile(afile):
         unzip = GenericDirWalkerUNZIP()
         temp_dir = cfg.get_temp_files_folder()
         unzip.extractor(afile, temp_dir)
         xml_basename = os.path.basename(afile)
         xml_name = os.path.splitext(xml_basename)[0]
-        new_afile = temp_dir + "/" + xml_name + ".xml"
+        new_afile = temp_dir + xml_name + ".xml"
         # descending upon the extracted folder
         bunparse = ParseBungeniXML(new_afile)
         sba = SeekBindAttachmentsWalker(cfgs)
         sba.attachments_seek_rename(bunparse)
-        ont_file = pxf.process_file(new_afile)[1] # we dont need the metalex jus ontology one
-        if len(str(ont_file)) > 1:
+        info_object = pxf.process_file(new_afile)
+        if info_object[1] == True:
             in_queue = True
         os.remove(new_afile)
-    elif fnmatch.fnmatch(afile, "*.xml"):
-        ont_file = pxf.process_file(afile)[1] # we dont need the metalex jus ontology one
-        if len(str(ont_file)) > 1:
+
+    elif fnmatch.fnmatch(afile, "*.xml") and os.path.isfile(afile):
+        info_object = pxf.process_file(afile)
+        if info_object[1] == True:
             in_queue = True
+        elif info_object[1] == False:
+            in_queue = False
+            return in_queue
+        else:
+            print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+            in_queue = False
+            return in_queue
     else:
         # ignore any other file type, not interested with them currently...
         in_queue = True
@@ -1230,12 +1237,14 @@ def main_queue(config_file, afile):
     if not os.path.isdir(cfg.get_temp_files_folder()):
         mkdir_p(cfg.get_temp_files_folder())
     sxw.create_sync_file()
-    sync_stat = sxw.sync_file(ont_file)
+    # reaching here means there is a successfull file
+    sync_stat = sxw.sync_file(info_object[0])
     sxw.close_sync_file()
-    if sync_stat is True:
+    if sync_stat == True:
         in_queue = True
     else:
         in_queue = False
+
     """
     Do uploading to eXist
     """

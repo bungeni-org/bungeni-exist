@@ -43,10 +43,11 @@ ul.doc-versions li a:hover {
 
 /* Listing of items */
 ul.ls-row {
+    margin:0 auto;
     display:block;
     list-style-type:none;
     padding:0 0 0 15px;
-    width:96% !important;
+    width:90% !important;
 }
 ul.ls-row li {
     display:block;
@@ -414,44 +415,15 @@ ul.ls-doc-tabs li.selected {
     margin: 0 auto;
     width:960px;
 }
-#portal-breadcrumbs ul {
-    margin:0;
-    padding:0;
-    padding-left:0;
-    background: #82A91C url(../images/breadcrumbs.png) no-repeat right -119px;
-    padding-right: 7px;
-    width:auto;
+#portal-breadcrumbs > span:first-child { }
+div#content-wrapper {
+    height: auto;
+    margin: 0 auto 0 auto;
+    margin-top: 20px;
+    background-color: tranparent;
 }
-#portal-breadcrumbs ul, #portal-breadcrumbs li {
-    float: left;
-    height: 19px;
-    font-size: 11px;
-    list-style-type: none;
-    color: white;
-    background-color:transparent;
-}
-#portal-breadcrumbs li a.first {
-    background: -webkit-gradient(linear, left bottom, left top, color-stop(0.90, #8e8e8e), color-stop(1.0, #989898));
-    padding-left: 12px;
-    border-bottom-left-radius: 8px;
-    -moz-border-radius-bottomleft: 8px;
-    -webkit-border-bottom-left-radius: 8px;    
-}
-#portal-breadcrumbs li a.last {
-    background: #f79f0e url(../images/breadcrumbs.png) no-repeat left -1px;
-    color:#fff !important;
-}
-#portal-breadcrumbs li a:link, #portal-breadcrumbs li a:visited {
-    color: white;
-    text-decoration: none;
-}
-#portal-breadcrumbs li a {
-    background: #8E8E8E url(../images/breadcrumbs.png) no-repeat left -60px;
-    display: block;
-    padding: 3px 10px 3px 19px;
-}
-#portal-breadcrumbs li a:hover {
-    text-decoration:underline;
+#portal-breadcrumbs a {
+    color: #7E7E7E;
 }
 
 /* Same for workspace */
@@ -591,7 +563,7 @@ ul#portal-personaltools {
 
 .black-full {
     margin-left:10px;
-    width:100%;
+    width:94%;
     color:#000000;
 }
 

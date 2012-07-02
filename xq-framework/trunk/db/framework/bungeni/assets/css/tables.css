@@ -44,14 +44,14 @@ table.doc-tbl-details tr td {
     vertical-align:bottom;
 }
 
-table.tbl-tgl {
+table.listing {
     padding:2px 5px 2px 5px;
     width:90%;
     float:none;
     margin:20px auto 0 auto;
     text-align:left;    
 }
-table.tbl-tgl tr td {
+table.listing tr td {
     padding:2px 5px 2px 2px;
 }
 

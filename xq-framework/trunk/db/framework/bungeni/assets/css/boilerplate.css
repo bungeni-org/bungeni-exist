@@ -295,3 +295,25 @@ h2,h3 {
     page-break-after:avoid
 }
 }
+
+
+/* breadcrumbs */
+#portal-breadcrumbs #breadcrumbs-home {
+    padding-left:5px;
+}
+#portal-breadcrumbs .breadcrumbSeparator {
+    display:none;
+    font-size: 120%;
+    padding:0 5px 0 3px;
+}
+#portal-breadcrumbs a:after { 
+    content: "  \2192  "; /* &rarr; -- here must be in HEX */
+    font-size: 120%;
+}
+#portal-breadcrumbs a:last-child:after {
+    content: "";
+}
+.inline {
+    display: inline !important;
+    padding-right: 0px;
+}

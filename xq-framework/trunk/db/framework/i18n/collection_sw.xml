@@ -53,7 +53,9 @@
     <msg key="uc">kwenye mashauri ({1})</msg>
     <msg key="list-tab-cur">sasa</msg>
     <msg key="list-tab-gaz">kwenye jarida</msg>
+    <msg key="past">kale ({1})</msg>
     <msg key="archive">nyaraka ({1})</msg>
+    <msg key="former">zamani ({1})</msg>
     <msg key="pri-sponsor">mdhamini mkuu</msg>
     <msg key="sponsors">wadhamini</msg>
     <msg key="last-event">tukio la mwisho</msg>

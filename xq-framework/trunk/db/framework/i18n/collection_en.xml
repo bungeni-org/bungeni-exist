@@ -53,7 +53,9 @@
     <msg key="uc">under consideration ({1})</msg>
     <msg key="list-tab-cur">current</msg>
     <msg key="list-tab-gaz">gazette</msg>
+    <msg key="past">past ({1})</msg>
     <msg key="archive">archived ({1})</msg>
+    <msg key="former">former ({1})</msg>
     <msg key="pri-sponsor">primary sponsor</msg>
     <msg key="sponsors">sponsors</msg>
     <msg key="last-event">last event</msg>

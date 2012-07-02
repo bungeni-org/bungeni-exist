@@ -313,10 +313,18 @@ declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:
         (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
 };
 
-declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, $type as xs:string, $tag as xs:string) {
+declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, 
+                                                        $type as xs:string, 
+                                                        $tag as xs:string) as node()+ {
     let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tag)
-    return
-        util:eval($eval-query)
+    let $coll :=  util:eval($eval-query)
+    let $sortord := xs:string(request:get-parameter("s",''))
+    let $orderby := cmn:get-orderby-config-name($type, $sortord)
+    
+    return 
+        util:eval(fn:concat("for $match in $coll ",
+                            "order by xs:dateTime($match/child::*/bu:statusDate) descending ",
+                            "return $match"))
 };
 
 (:~
@@ -417,13 +425,14 @@ declare function bun:get-documentitems(
             else  (
                 for $match in subsequence($coll,$query-offset,$limit) 
                 (:where $coll/bu:bungeni/bu:tags[contains(bu:tag,'terminal')]:)
-                order by $match/bu:documents/bu:statusDate descending
+                order by $match/bu:document/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
                 )
         } 
         </alisting>
     </docs>
+
     (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
     the correct sort combo in the transformed output. See corresponding comment in XSLT :)
     return

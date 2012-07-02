@@ -219,8 +219,9 @@ div#doc-downloads {
 }
  
  .toggle-wrapper {
-     width:97%;
-     height:10px;
+    margin:0 auto;
+    width:94%;
+    height:10px;
  }
  .toggler-list {
     margin-left:10px;

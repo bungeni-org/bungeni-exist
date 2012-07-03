@@ -1105,8 +1105,8 @@
     <doctypes>
         <doctype category="document" name="Bill">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
@@ -1121,10 +1121,10 @@
         </doctype>
         <doctype category="document" name="Question">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="ascending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="descending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
@@ -1139,10 +1139,10 @@
         </doctype>
         <doctype category="document" name="Motion">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="ascending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="descending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">All</searchin>
@@ -1157,10 +1157,10 @@
         </doctype>
         <doctype category="document" name="TabledDocument">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="ascending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="descending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
@@ -1175,10 +1175,10 @@
         </doctype>
         <doctype category="document" name="AgendaItem">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
-                <orderby value="sub_date_oldest" order="asc">submission date [oldest]</orderby>
-                <orderby value="sub_date_newest" order="desc">submission date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
+                <orderby value="sub_date_oldest" order="ascending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [oldest]</orderby>
+                <orderby value="sub_date_newest" order="descending" field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate">submission date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
@@ -1194,8 +1194,8 @@
         <doctype category="document" name="Event"/>
         <doctype category="group" name="committee">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
@@ -1206,8 +1206,8 @@
         </doctype>
         <doctype category="group" name="politicalgroup">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:legislature/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:legislature/bu:statusDate" default="true">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
@@ -1222,8 +1222,8 @@
         </doctype>
         <doctype category="group" name="ministry">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field=".">Entire Document</searchin>
@@ -1246,8 +1246,8 @@
         </doctype>
         <doctype category="membership" name="membership">
             <orderbys>
-                <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+                <orderby value="st_date_oldest" order="ascending" field="bu:legislature/bu:statusDate">status date [oldest]</orderby>
+                <orderby value="st_date_newest" order="descending" field="bu:legislature/bu:statusDate" default="true">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
@@ -1272,7 +1272,6 @@
             <whatsonview id="twk">this week</whatsonview>
             <whatsonview id="nwk">next week</whatsonview>
             <whatsonview id="fut">future sittings</whatsonview>
-            <whatsonview id="aft">afternoons</whatsonview>
         </whatsonviews>
     </custom>
 </ui>

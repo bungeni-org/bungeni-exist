@@ -308,9 +308,13 @@ declare function bun:xqy-list-documentitems-with-acl-tmp($acl as xs:string, $typ
 :)
 declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
     let $eval-query := bun:xqy-list-documentitems-with-acl($acl, $type)
-    return
-        util:eval($eval-query)
-        (: collection(cmn:get-lex-db())/bu:ontology[@type='document']/bu:document[@type=$type]/following-sibling::bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission[$acl-filter] :)
+    let $coll :=  util:eval($eval-query)
+    let $sortord := xs:string(request:get-parameter("s","none"))
+    let $orderby := cmn:get-orderby-config-name($type, $sortord)
+    return 
+        util:eval(fn:concat("for $match in $coll ",
+                            "order by xs:dateTime($match/",data($orderby/@field),") ",data($orderby/@order)," ",
+                            "return $match"))    
 };
 
 declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, 
@@ -318,12 +322,11 @@ declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string,
                                                         $tag as xs:string) as node()+ {
     let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tag)
     let $coll :=  util:eval($eval-query)
-    let $sortord := xs:string(request:get-parameter("s",''))
+    let $sortord := xs:string(request:get-parameter("s","none"))
     let $orderby := cmn:get-orderby-config-name($type, $sortord)
-    
     return 
         util:eval(fn:concat("for $match in $coll ",
-                            "order by xs:dateTime($match/child::*/bu:statusDate) descending ",
+                            "order by xs:dateTime($match/",data($orderby/@field),") ",data($orderby/@order)," ",
                             "return $match"))
 };
 
@@ -375,9 +378,6 @@ declare function bun:get-documentitems(
         <paginator>
         (: Count the total number of documents | active-tab count if the view is tabbed :)
         <count>{
-            if($tab) then 
-                count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tab)))
-            else
                 count($coll)
          }</count>
         <tags>
@@ -398,37 +398,10 @@ declare function bun:get-documentitems(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'st_date_oldest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:document/bu:statusDate ascending
-                return 
-                    bun:get-reference($match)       
-                )  
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:document/bu:statusDate descending
-                return 
-                    bun:get-reference($match)       
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:bungeni/bu:parliament/@date ascending
-                return 
-                    bun:get-reference($match)         
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:bungeni/bu:parliament/@date descending
-                return 
-                    bun:get-reference($match)         
-                )                 
-            else  (
-                for $match in subsequence($coll,$query-offset,$limit) 
-                (:where $coll/bu:bungeni/bu:tags[contains(bu:tag,'terminal')]:)
-                order by $match/bu:document/bu:statusDate descending
-                return 
-                    bun:get-reference($match)         
-                )
+            for $match in subsequence($coll,$query-offset,$limit) 
+            (:where $coll/bu:bungeni/bu:tags[contains(bu:tag,'terminal')]:)
+            return 
+                bun:get-reference($match)         
         } 
         </alisting>
     </docs>
@@ -520,11 +493,11 @@ declare function bun:search-documentitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:xqy-list-documentitems-with-acl($acl, $type)
+    let $coll_rs := bun:list-documentitems-with-acl($acl, $type)
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else util:eval($coll_rs)
+    let $coll := if ($querystr ne "") then bun:ft-search(bun:xqy-list-documentitems-with-acl($acl, $type), $querystr, $type) else $coll_rs
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -552,38 +525,9 @@ declare function bun:search-documentitems(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'st_date_oldest') then (
-               (:if (fn:ni$qrystr):)
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:document/bu:statusDate ascending
-                return 
-                    bun:get-reference($match)       
-                )
-                
-            else if ($sortby eq 'st_date_newest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:document/bu:statusDate descending
-                return 
-                    bun:get-reference($match)       
-                )
-            else if ($sortby = 'sub_date_oldest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:bungeni/bu:parliament/@date ascending
-                return 
-                    bun:get-reference($match)         
-                )    
-            else if ($sortby = 'sub_date_newest') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:bungeni/bu:parliament/@date descending
-                return 
-                    bun:get-reference($match)         
-                )                 
-            else  (
                 for $match in subsequence($coll,$query-offset,$limit)
-                order by $match/bu:document/bu:statusDate descending
                 return 
                     bun:get-reference($match)         
-                )
                 (:ft:score($m):)
         } 
         </alisting>
@@ -977,12 +921,22 @@ declare function bun:ft-search(
             $ultimate-path := local:build-search-objects($type),
             $eval-query := concat($coll-query,"[ft:query((",$ultimate-path,"), '",$escaped,"')]")
             
+        let $coll :=  util:eval($eval-query)
+        let $sortord := xs:string(request:get-parameter("s","none"))
+        let $orderby := cmn:get-orderby-config-name($type, $sortord)
+        return 
+            util:eval(fn:concat("for $match in $coll ",
+                                "order by xs:dateTime($match/",data($orderby/@field),") ",data($orderby/@order)," ",
+                                "return $match"))
+        (: We want to use user's sort order instead of ft:score engine :)
+        (:     
         for $search-rs in util:eval($eval-query)
         order by ft:score($search-rs) descending      
             
         return
             (:<params>{$ultimate-path}</params> !+DEBUG_WITH_test.xql:)
-            $search-rs        
+            $search-rs   
+        :)
 };
 
 (:~
@@ -1247,10 +1201,20 @@ declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tm
             
             for $orderbys in $search-orderby
             return
-                element option {
-                    attribute value { $orderbys/@value },
-                    $orderbys/text()
-                }
+                if ($orderbys/@default eq "true") then (
+                    element option {
+                        attribute value { $orderbys/@value },
+                        attribute selected { "selected"},
+                        $orderbys/text()
+                    }
+                )
+                else (
+                    element option {
+                        attribute value { $orderbys/@value },
+                        $orderbys/text()
+                    }
+               )
+                
           }        
         else
   		element { node-name($tmpl)}

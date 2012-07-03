@@ -47,7 +47,7 @@
                     <div class="mem-table-wrapper">
                         <xsl:choose>
                             <xsl:when test="ref/bu:ontology">
-                                <table class="tbl-tgl">
+                                <table class="listing">
                                     <tr>
                                         <td class="fbtd">
                                             <i18n:text key="tab-type">type(nt)</i18n:text>

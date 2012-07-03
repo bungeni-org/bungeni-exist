@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:membership/bu:docType/bu:value"/>
-        <xsl:variable name="doc-uri" select="bu:membership/bu:referenceToUser/@uri"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/bu:membership/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -47,7 +47,7 @@
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
                             <p class="imgonlywrap">
-                                <img src="../bungeni/assets/images/presidente.jpg" alt="The Speaker"/>
+                                <img src="../bungeni/assets/images/placeholder.jpg" alt="The Placeholder"/>
                             </p>
                         </div>
                         <div class="mem-top-right">
@@ -55,51 +55,61 @@
                                 <tr>
                                     <td class="labels fbt">name:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="concat(bu:membership/bu:titles,' ',bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
+                                        <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,' ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">elected/nominated:</td>
-                                    <td class="fbt">unknown</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">election/nomination date:</td>
-                                    <td class="fbt">unknown</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:electionNominationDate),$date-format,'en',(),())"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">start date:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="bu:legislature/bu:startDate"/>
+                                        <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:startDate),$date-format,'en',(),())"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">language:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="bu:membership/bu:language"/>
+                                        <xsl:value-of select="bu:ontology/bu:membership/@xml:lang"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">constituency:</td>
-                                    <td class="fbt">unknown</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:constituency/@name"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">province:</td>
-                                    <td class="fbt">unknown</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:province/@name"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">region:</td>
-                                    <td class="fbt">unknown</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:region/@name"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">political party:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="bu:legislature/bu:fullName"/>
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:party/bu:fullName"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">notes:</td>
                                     <td class="fbt">
-                                        <xsl:copy-of select="bu:membership/bu:description"/>
+                                        <xsl:copy-of select="bu:ontology/bu:membership/bu:description"/>
                                     </td>
                                 </tr>
                             </table>

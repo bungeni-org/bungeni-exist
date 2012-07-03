@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:membership/bu:docType/bu:value"/>
-        <xsl:variable name="doc-uri" select="bu:membership/bu:referenceToUser/@uri"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/bu:membership/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -44,12 +44,33 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <h2 id="doc-item-desc2" class="doc-headers-darkgrey">
-                        <xsl:value-of select="concat(bu:membership/bu:titles,'. ',bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
-                    </h2>
                     <div class="mem-profile">
-                        <div class="mem-inline-content">
-                            <xsl:copy-of select="bu:membership/bu:description"/>
+                        <div class="mem-photo mem-top-left">
+                            <p class="imgonlywrap">
+                                <img src="../bungeni/assets/images/placeholder.jpg" alt="The Placeholder"/>
+                            </p>
+                        </div>
+                        <div class="mem-top-right">
+                            <table class="mem-tbl-details">
+                                <tr>
+                                    <td class="labels fbt">birth country:</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthCountry"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="labels fbottom">date of birth:</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="labels fbottom">description:</td>
+                                    <td class="fbt">
+                                        <xsl:copy-of select="ref/bu:ontology/bu:user/bu:description"/>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>

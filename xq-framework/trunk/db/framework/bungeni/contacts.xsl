@@ -83,7 +83,7 @@
                     <div class="mem-profile">
                         <xsl:choose>
                             <xsl:when test="ref/bu:ontology">
-                                <table class="tbl-tgl">
+                                <table class="listing">
                                     <tr>
                                         <td class="fbtd">
                                             <i18n:text key="addr-type">addr type(nt)</i18n:text>

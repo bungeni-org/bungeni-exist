@@ -34,7 +34,7 @@
                     <li>
                         <a href="#">
                             <i18n:translate>
-                                <i18n:text key="archive">Text to translate with ({1})</i18n:text>
+                                <i18n:text key="former">former ({1})</i18n:text>
                                 <i18n:param>
                                     <xsl:value-of select="@count"/>
                                 </i18n:param>
@@ -107,7 +107,7 @@
             <div class="doc-toggle">
                 <div style="min-height:110px;">
                     <p class="imgonlywrap photo-listing" style="float:left;">
-                        <img src="assets/images/presidente.jpg" alt="Presidente" align="left"/>
+                        <img src="assets/images/placeholder.jpg" alt="Place Holder for M.P Photo" align="left"/>
                     </p>
                     <div class="block">
                         <span class="labels">id:</span>

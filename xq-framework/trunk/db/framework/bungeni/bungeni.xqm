@@ -319,7 +319,7 @@ declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:
 
 declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, 
                                                         $type as xs:string, 
-                                                        $tag as xs:string) as node()+ {
+                                                        $tag as xs:string) {
     let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tag)
     let $coll :=  util:eval($eval-query)
     let $sortord := xs:string(request:get-parameter("s","none"))

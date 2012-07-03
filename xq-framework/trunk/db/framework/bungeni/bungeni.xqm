@@ -2626,7 +2626,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
-                    {collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/following-sibling::bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology}
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology}
                     <ref>
                     {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology}
                     </ref>

@@ -53,11 +53,15 @@ class RabbitMQClient:
             message = String(delivery.getBody())
             file_status = main_queue(__config_file__, str(message))
             count = count + 1
-            if file_status is True:
+            if file_status is None:
+                print "No Parliament Information could be gathered"
+                sys.exit(0)
+            elif file_status is True:
                 # Acknowledgements to RabbitMQ the successfully, processed files
-                self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), True)
+                self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
             else:
-                pass
+                # Reject file, requeue for investigation
+                self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
 
         
         if declareOk.messageCount < 0:

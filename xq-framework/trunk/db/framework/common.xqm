@@ -234,12 +234,12 @@ declare function cmn:get-orderby-config($doctype as xs:string)  {
 declare function cmn:get-orderby-config-name($doctype as xs:string, $orderby_name as xs:string)  {
     let $dc-config := cmn:get-doctype-config($doctype)
     return
-    if ($dc-config and not(empty($orderby_name))) then (
+    if ($dc-config and ($orderby_name eq "none")) then (
+        $dc-config/orderbys/orderby[@default eq "true"]
+    )    
+    else if ($dc-config and not(empty($orderby_name))) then (
        $dc-config/orderbys/orderby[@value eq $orderby_name]
        )
-    else if ($dc-config and empty($orderby_name)) then (
-        $dc-config/orderbys/orderby[@default eq true()]
-    )
     else
         ()
 };

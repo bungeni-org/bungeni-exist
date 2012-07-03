@@ -539,6 +539,9 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                      pipe_path
                      )
                 return (out_files[1], True)
+            elif pipe_type == "parliament":
+                # Handle unique case parliament
+                return (None, None)
             else:
                 return (True, False)
         else:
@@ -1220,6 +1223,10 @@ def main_queue(config_file, afile):
             in_queue = True
         elif info_object[1] == False:
             in_queue = False
+            return in_queue
+        elif info_object[1] == None:
+            # mark parl-information document for removal from message-queue
+            in_queue = True
             return in_queue
         else:
             print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC

@@ -38,7 +38,12 @@
                     </li>
                     <li>
                         <a href="#">
-                            <i18n:text key="list-tab-gaz">gazette(nt)</i18n:text>
+                            <i18n:translate>
+                                <i18n:text key="past">past ({1})</i18n:text>
+                                <i18n:param>
+                                    <xsl:value-of select="@count"/>
+                                </i18n:param>
+                            </i18n:translate>
                         </a>
                     </li>
                 </ul>

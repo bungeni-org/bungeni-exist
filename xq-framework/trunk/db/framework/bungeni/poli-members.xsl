@@ -64,7 +64,7 @@
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">
                         (baked)
-                        <table class="tbl-tgl">
+                        <table class="listing">
                             <tr>
                                 <td class="fbtd">
                                     <a>name</a>

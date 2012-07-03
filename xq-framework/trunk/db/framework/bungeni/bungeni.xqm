@@ -2569,7 +2569,7 @@ declare function bun:get-members(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of members :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='membership'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology)}</count>
         <currentView>{$parts/current-view}</currentView>
         <documentType>membership</documentType>
         <offset>{$offset}</offset>
@@ -2580,7 +2580,7 @@ declare function bun:get-members(
         {
             if ($sortby = 'ln') then (
             
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership'],$offset,$limit)                
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)                
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
@@ -2590,7 +2590,7 @@ declare function bun:get-members(
                     </doc>
                 )
             else if ($sortby = 'fn') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
                     <doc>
@@ -2600,7 +2600,7 @@ declare function bun:get-members(
                     </doc>         
                 )                
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
@@ -2625,7 +2625,12 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
     let $stylesheet := cmn:get-xslt($parts/xsl) 
 
     (: return AN Member document as singleton :)
-    let $doc := <doc>{collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology}</doc>
+    let $doc := <doc>
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/following-sibling::bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology}
+                    <ref>
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology}
+                    </ref>
+                </doc>
     
     return
         transform:transform($doc, $stylesheet, ())

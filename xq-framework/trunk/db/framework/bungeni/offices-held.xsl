@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="bu:ontology">
-        <xsl:variable name="doc-type" select="bu:membership/bu:docType/bu:value"/>
-        <xsl:variable name="doc-uri" select="bu:membership/bu:referenceToUser/@uri"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/bu:membership/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
-                    <xsl:value-of select="concat(bu:membership/bu:firstName,' ', bu:membership/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -47,7 +47,7 @@
                     <div class="mem-profile">
                         <div class="mem-table-wrapper">
                             (baked)
-                            <table class="tbl-tgl">
+                            <table class="listing">
                                 <tr>
                                     <td class="fbtd">office</td>
                                     <td class="fbtd">type</td>

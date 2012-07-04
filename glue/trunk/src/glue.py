@@ -35,7 +35,7 @@ from org.dom4j import DocumentException
 from org.dom4j.io import SAXReader
 from org.dom4j.io import OutputFormat
 from org.dom4j.io import XMLWriter
-from java.io import File, FileWriter, FileNotFoundException
+from java.io import File, FileWriter, FileNotFoundException, IOException
 from java.io import FileInputStream
 from java.io import StringReader
 from java.util import HashMap
@@ -45,6 +45,8 @@ from com.googlecode.sardine.impl import SardineException
 from org.apache.http.conn import HttpHostConnectException
 from com.googlecode.sardine import SardineFactory
 
+from net.sf.saxon.trans import *
+from org.xml.sax import *
 from org.bungeni.translators.translator import OATranslator
 from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
 from org.bungeni.translators.utility.files import FileUtility
@@ -183,25 +185,35 @@ class Transformer(object):
         Run the transformer on the input file
         """
         print "Executing Transformer with: ", input_file, output, metalex, config_file
-        translatedFiles = self.transformer.translate(
-            input_file, 
-            config_file,  
-            self.get_params()
-            )
+        try:
+            translatedFiles = self.transformer.translate(
+                input_file, 
+                config_file,  
+                self.get_params()
+                )
+            #input stream
+            fis  = FileInputStream(translatedFiles["anxml"])
+            fisMlx  = FileInputStream(translatedFiles["metalex"])
+            #get the document's URI
+            uri = self.get_doc_uri(translatedFiles["metalex"])
+            rep_dict = {'/':'_', ':':','}
+            uri_name = self.replace_all(uri, rep_dict)
+            
+            outFile = File(output + uri_name + ".xml")
+            outMlx = File(metalex + uri_name + ".xml")
+            #copy transformed files to disk
+            FileUtility.getInstance().copyFile(fis, outFile)
+            FileUtility.getInstance().copyFile(fisMlx, outMlx)
+        except SAXParseException, saE:
+            print _COLOR.FAIL, saE, '\nERROR: While processing xml ', input_file, _COLOR.ENDC
+            return [None, None]
+        except XPathException, xpE:
+            print _COLOR.FAIL, xpE, '\nERROR: While processing xml ', input_file, _COLOR.ENDC
+            return [None, None]
+        except IOException, ioE:
+            print _COLOR.FAIL, ioE, '\nERROR: While processing xml ', input_file, _COLOR.ENDC
+            return [None, None]
 
-        #input stream
-        fis  = FileInputStream(translatedFiles["anxml"])
-        fisMlx  = FileInputStream(translatedFiles["metalex"])
-        #get the document's URI
-        uri = self.get_doc_uri(translatedFiles["metalex"])
-        rep_dict = {'/':'_', ':':','}
-        uri_name = self.replace_all(uri, rep_dict)
-        
-        outFile = File(output + uri_name + ".xml")
-        outMlx = File(metalex + uri_name + ".xml")
-        #copy transformed files to disk
-        FileUtility.getInstance().copyFile(fis, outFile)
-        FileUtility.getInstance().copyFile(fisMlx, outMlx)
         return [outFile, outMlx]
 
 
@@ -538,7 +550,13 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                      self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                      pipe_path
                      )
-                return (out_files[1], True)
+                # Any error in transfromer return a None object which we want to leave 
+                # the doc in queue e.g. premature end of file encountered
+                if out_files[0] == None:
+                    print "NOT TRANSFORMED: Back to queue"
+                    return (True, False)
+                else:
+                    return (out_files[1], True)
             elif pipe_type == "parliament":
                 # Handle unique case parliament
                 return (None, None)
@@ -862,9 +880,10 @@ class PostTransform(object):
 
             response = urllib2.urlopen(xqyurl)
             print _COLOR.OKGREEN + response.read() + _COLOR.ENDC
+            return True
         except urllib2.HTTPError, err:
-            print _COLOR.FAIL, err.code, err.msg, ': ERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
-            sys.exit()
+            print _COLOR.FAIL, err.code, err.msg, ': ERROR: While running PostTransform', _COLOR.ENDC
+            return False
 
 class POFilesTranslator(object):
     """
@@ -1257,7 +1276,12 @@ def main_queue(config_file, afile):
     """
     webdav_upload(cfg, wd_cfg)
     pt = PostTransform({"webdav_config": wd_cfg})
-    pt.update()
+    info_object = pt.update()
+    
+    if info_object == True:
+        in_queue = True
+    else:
+        in_queue = False
     
     return in_queue
 

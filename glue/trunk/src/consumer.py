@@ -45,27 +45,26 @@ class RabbitMQClient:
         self.channel.queueBind(self.queueName, self.exchangeName, self.queueName)
         self.consumer = QueueingConsumer(self.channel)
         self.channel.basicConsume(self.queueName, False, self.consumer)
-        self.stdout.write(time.asctime(time.localtime(time.time())) + ", " + str(declareOk.messageCount) + " NEW MESSAGES! \n")
-        count  = 0
-        while (count < declareOk.messageCount):
-            delivery = QueueingConsumer.Delivery
-            delivery = self.consumer.nextDelivery()
-            message = String(delivery.getBody())
-            file_status = main_queue(__config_file__, str(message))
-            count = count + 1
-            if file_status is None:
-                print "No Parliament Information could be gathered"
-                sys.exit(0)
-            elif file_status is True:
-                # Acknowledgements to RabbitMQ the successfully, processed files
-                self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
-            else:
-                # Reject file, requeue for investigation
-                self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
-
-        
-        if declareOk.messageCount < 0:
+        count = 0
+        if declareOk.messageCount <= 0:
             self.stdout.write(time.asctime(time.localtime(time.time())) + " NO MESSAGES \n")
+        else:
+            self.stdout.write(time.asctime(time.localtime(time.time())) + " " + str(declareOk.messageCount) + " MESSAGES! \n")
+            while (count < declareOk.messageCount):
+                delivery = QueueingConsumer.Delivery
+                delivery = self.consumer.nextDelivery()
+                message = String(delivery.getBody())
+                file_status = main_queue(__config_file__, str(message))
+                count = count + 1
+                if file_status is None:
+                    print "No Parliament Information could be gathered"
+                    sys.exit(0)
+                elif file_status is True:
+                    # Acknowledgements to RabbitMQ the successfully, processed files
+                    self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
+                else:
+                    # Reject file, requeue for investigation
+                    self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
         self.channel.close()
         self.conn.close()
 

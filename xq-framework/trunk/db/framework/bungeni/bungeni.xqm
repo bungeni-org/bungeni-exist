@@ -72,7 +72,8 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 
     (: !+TODO (ao, 2-May-2012) Currently some documents have @internal-uri this, has to be factored into 
     this checker :)
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri, @internal-uri=$uri]/ancestor::bu:ontology
+    (: let $docitem := collection(cmn:get-lex-db())/bu:ontology/child::*[@uri=$uri, @internal-uri=$uri]/ancestor::bu:ontology :)
+    let $docitem := (for $i in collection(cmn:get-lex-db())/bu:ontology/child::*[if (@uri) then (@uri=$uri) else (@internal-uri=$uri)]/ancestor::bu:ontology return $i)[1]
     let $doc := <response>        
         {
             if($docitem) then (
@@ -2103,9 +2104,9 @@ declare function bun:get-reference($docitem as node()) {
 :)
 declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
     fn:concat(
-        "collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri='", $uri, 
-        "' or @internal-uri='", $uri, 
-        "']")
+        "(for $i in collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri='", $uri,
+        "') else (@internal-uri='", $uri,
+        "')] return $i)[1]")
 };        
 
 declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{

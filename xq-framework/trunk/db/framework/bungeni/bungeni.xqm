@@ -228,11 +228,10 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@for='document']",
-                "/bu:bungeni[",$list-tabs,"]",
-                "/preceding-sibling::bu:document/bu:docType[bu:value eq '",$type,"']",
-                "/ancestor::bu:document",
-                "/(bu:permissions except bu:versions)",
+                "/bu:document/bu:docType[bu:value eq '",$type,"']",
+                "/ancestor::bu:document/(bu:permissions except bu:versions)",
                 "/bu:permission[",$acl-filter,"]",
+                "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
                 "/ancestor::bu:ontology")
 };
 

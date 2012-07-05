@@ -33,7 +33,7 @@ declare function pproc:update-signatories() {
     try {
         (: iterate through all documents with bu:signatory nodes and update with retrived Person's URI :)
         for $signatory in collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:signatories/bu:signatory
-        let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $signatory/bu:userId]
+        let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $signatory/bu:userId][1]
         let $user-uri := $user/@uri
         let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
         return 

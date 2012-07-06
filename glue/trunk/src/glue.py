@@ -204,17 +204,23 @@ class Transformer(object):
             #copy transformed files to disk
             FileUtility.getInstance().copyFile(fis, outFile)
             FileUtility.getInstance().copyFile(fisMlx, outMlx)
+            
+            return [outFile, outMlx]
         except SAXParseException, saE:
-            print _COLOR.FAIL, saE, '\nERROR: While processing xml ', input_file, _COLOR.ENDC
+            print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
         except XPathException, xpE:
-            print _COLOR.FAIL, xpE, '\nERROR: While processing xml ', input_file, _COLOR.ENDC
+            print _COLOR.FAIL, xpE, '\nERROR: xpE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
         except IOException, ioE:
-            print _COLOR.FAIL, ioE, '\nERROR: While processing xml ', input_file, _COLOR.ENDC
+            print _COLOR.FAIL, ioE, '\nERROR: ioE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
-
-        return [outFile, outMlx]
+        except RuntimeException, ruE:
+            print _COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, _COLOR.ENDC
+            return [None, None]
+        except Exception, E:
+            print _COLOR.FAIL, E, '\nERROR: E While processing xml ', input_file, _COLOR.ENDC
+            return [None, None]
 
 
 class ParseXML(object):

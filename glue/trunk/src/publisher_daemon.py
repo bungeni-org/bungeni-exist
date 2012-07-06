@@ -13,10 +13,8 @@ from time import gmtime, strftime
 from pika.adapters import BlockingConnection
 from pika import BasicProperties
 
-pika.log.setup(color=True) # Setup a coloured logger
 wm = pyinotify.WatchManager()  # Watch Manager
 mask = pyinotify.IN_CLOSE_WRITE | pyinotify.IN_CREATE # watched events
-messages = 0 # Start our counter at 0
 started = int(time.time())
 
 class EventHandler(pyinotify.ProcessEvent):
@@ -27,12 +25,14 @@ class EventHandler(pyinotify.ProcessEvent):
 
     def process_IN_CREATE(self, event):
         print "Created:", event.pathname
+        """
         pikad = PikaDilly()
         basename = os.path.basename(event.pathname)
         if basename.startswith(".goutputstream"):
             pass
         else:
             pikad.publisher(event.pathname)
+        """
 
 class PikaDilly:
 
@@ -54,14 +54,6 @@ class PikaDilly:
             self.channel.basic_publish(exchange=self.exchange_name, routing_key=self.queue, body=_file, properties=BasicProperties(content_type=mtype,delivery_mode=2))
         except IOError, err:
             pass
-    def consumer(self):
-        # Receive a message
-        self.channel.basic_consume(self.handle_delivery, self.queue)
-
-    def handle_delivery(self, channel, method_frame, header_frame, body):
-        # Receive the data in 3 frames from RabbitMQ
-        pika.log.info("Basic.Deliver %s delivery-tag %i: %s", header_frame.content_type, method_frame.delivery_tag, body)
-        channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
 if (len(sys.argv) >= 1):
     # process input command line option for a directory to be monitored
@@ -74,7 +66,6 @@ else:
 handler = EventHandler()
 notifier = pyinotify.Notifier(wm, handler)
 wdd = wm.add_watch(__bungeni_output_folder__, mask, rec=True, auto_add=True)
-#notifier.loop()
 
 # Notifier instance spawns a new process when daemonize is set to True. This
 # child process' PID is written to /tmp/pyinotify.pid (it also automatically

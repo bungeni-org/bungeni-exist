@@ -14,7 +14,7 @@ from java.lang import String
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "0.4"
+__version__ = "0.5"
 __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
@@ -31,6 +31,9 @@ class Logger(object):
 class RabbitMQClient:
 
     def __init__(self):
+        """
+        Connections and other settings here should match those set in publisher script
+        """
         self.stdout = Logger()
         self.exchangeName = "bu_outputs"
         self.queueName = "glue_script"
@@ -63,7 +66,7 @@ class RabbitMQClient:
                     # Acknowledgements to RabbitMQ the successfully, processed files
                     self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
                 else:
-                    # Reject file, requeue for investigation
+                    # Reject file, requeue for investigation or future attempts
                     self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
         self.channel.close()
         self.conn.close()
@@ -74,11 +77,11 @@ if (len(sys.argv) >= 2):
     __config_file__ = options[0][1]
     __time_int__ = options[1][1]
 else:
-    print " config.ini and time interval file must be an input parameters "
+    print " config.ini and time interval file must be input parameters."
     sys.exit()
 
 while True:
-    time.sleep(int(__time_int__)) # every # seconds to run the consumer methods.
+    time.sleep(int(__time_int__)) # of seconds to wait till next consumption of messages is done.
     try:
         rmq = RabbitMQClient()
         rmq.consume_msgs()

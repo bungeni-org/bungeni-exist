@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -122,7 +122,7 @@
                         <!--!+FIX_THIS (ao, 11-Apr-2012) shortName / shortTitle since there is ongoing 
                             transition to use shortTitle but not yet applied to all document types currently 
                             only on document type event -->
-                        <xsl:value-of select="(bu:ontology/child::*/bu:shortName,bu:ontology/child::*/bu:shortTitle)"/>
+                        <xsl:value-of select="(bu:ontology/child::*/bu:shortName,bu:ontology/child::*/bu:title)"/>
                     </a> sponsored by <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </xsl:when>
                 <xsl:when test="bu:ontology[@for eq 'membership']">

@@ -76,12 +76,12 @@
                 <xsl:when test="$doc-type = 'Event'">
                     <xsl:variable name="event-href" select="bu:ontology/bu:document/@uri"/>
                     <a href="{lower-case($eventOf)}/event?uri={$event-href}" id="{$docIdentifier}">
-                        <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
                     <a href="{lower-case($doc-type)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
-                        <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                     </a>
                 </xsl:otherwise>
             </xsl:choose>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -31,7 +31,7 @@
             </span>
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-red-left">
-                    <xsl:value-of select="bu:ontology/bu:document/bu:shortTitle"/>
+                    <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -80,17 +80,17 @@
                                             <xsl:choose>
                                                 <xsl:when test="bu:type/bu:value eq 'event'">
                                                     <a href="popout?uri={@href}" rel="{lower-case($doc-type)}/event?uri={@href}" onclick="return false;">
-                                                        <xsl:value-of select="(bu:shortTitle, bu:title)"/>
+                                                        <xsl:value-of select="bu:title"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:when test="bu:type/bu:value eq 'annex'">
-                                                    <xsl:value-of select="(bu:shortTitle, bu:title)"/>:
+                                                    <xsl:value-of select="bu:title"/>:
                                                     <i18n:text key="download">download(nt)</i18n:text>&#160;<a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
                                                         <xsl:value-of select="bu:name"/>
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="(bu:shortTitle, bu:title)"/>
+                                                    <xsl:value-of select="bu:title"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </span>

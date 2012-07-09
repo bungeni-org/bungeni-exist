@@ -215,11 +215,11 @@ class Transformer(object):
         except IOException, ioE:
             print _COLOR.FAIL, ioE, '\nERROR: ioE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
-        except RuntimeException, ruE:
-            print _COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, _COLOR.ENDC
-            return [None, None]
         except Exception, E:
             print _COLOR.FAIL, E, '\nERROR: E While processing xml ', input_file, _COLOR.ENDC
+            return [None, None]
+        except RuntimeException, ruE:
+            print _COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
 
 
@@ -295,6 +295,10 @@ class ParseBungeniXML(ParseXML):
     def xpath_get_attachments(self):
         
         return self.__global_path__ + "attachments"
+
+    def xpath_get_image(self):
+        
+        return self.__global_path__ + "image"
             
     def get_attached_files(self):
         """
@@ -302,6 +306,11 @@ class ParseBungeniXML(ParseXML):
         """
         return self.xmldoc.selectSingleNode(self.xpath_get_attachments())
 
+    def get_image_file(self):
+        """
+        Gets the image node for a user document
+        """
+        return self.xmldoc.selectSingleNode(self.xpath_get_image())
 
 class ParseOntologyXML(ParseXML):
     """
@@ -485,6 +494,9 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
     def xpath_get_saved_file(self):
         return "field[@name='saved_file']"
 
+    def xpath_get_img_file(self):
+        return "field[@name='img_uuid']"
+
     def attachments_seek_rename(self, inputdoc):
         """
         Attachments arrive from bungeni in zip files and use a non-random filename,
@@ -521,13 +533,57 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
         else:
             LOG.debug("In attachments_seek_rename " + inputdoc.xmlfile + " NO attachments")
 
+    def image_seek_rename(self, inputdoc, dir_name, abs_path = False):
+        """
+        User images arrive from bungeni in zip files and use a non-random filename,
+        we randomize this file name by renaming it to a unique id, and then repoint
+        the XML file to the new image name
+        """
+        # get the folder where the attachments are written to
+        self.atts_folder = self.input_params["main_config"].get_attachments_output_folder()
+        # get the attached_files node in the document
+        image_node = inputdoc.get_image_file()
+        if (image_node is not None):
+            LOG.debug("In image_seek_rename " + inputdoc.xmlfile + " HAS an image ")
+            # get the attached_file nodes within attached_files
+            document_updated = False
+            saved_file_node = image_node.selectSingleNode(self.xpath_get_saved_file())
+            saved_img_node = image_node.selectSingleNode(self.xpath_get_img_file())
+            if saved_img_node is not None:
+                saved_img_node.detach()
+            if saved_file_node is not None:
+                # get the name of the saved file node
+                original_name = saved_file_node.getText()
+                # rename file with uuid
+                new_name = str(uuid.uuid4())
+                # first get the current directory name 
+                if abs_path == False:
+                    current_dir = os.path.dirname(inputdoc.xmlfile)
+                    full_path = current_dir + "/"  + dir_name + "/"
+                else:
+                    full_path = dir_name
+                # move file to attachments folder and use derived uuid as new name for the file
+                shutil.move(full_path + original_name, self.atts_folder + new_name)
+                # add new node on document with uuid
+                image_node.addElement("field").addText(new_name).addAttribute("name","img_uuid")
+                document_updated = True
+            if document_updated:
+                inputdoc.write_to_disk()
+                return original_name
+        else:
+            LOG.debug("In attachments_seek_rename " + inputdoc.xmlfile + " NO attachments")
+            return None
+
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             # get the DOM of the input document
             bunparse = ParseBungeniXML(input_file_path)
             # now we process the attachment
-            LOG.debug("Calling attachment_seek_rename for " + input_file_path )
+            LOG.debug("Calling image/attachment_seek_rename for " + input_file_path )
             self.attachments_seek_rename(bunparse)
+            xml_basename = os.path.basename(input_file_path)
+            xml_name = os.path.splitext(xml_basename)[0]
+            self.image_seek_rename(bunparse, xml_name, False)
         return (False,None)
 
 
@@ -1200,6 +1256,7 @@ def list_uniqifier(seq):
     return [ x for x in seq if x not in seen and not seen_add(x)]
 
 def main_queue(config_file, afile):
+    print "Now working on file " + afile
     script_path = os.path.dirname(os.path.realpath(__file__))
     PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
     # comment above lines to run in emotional mode
@@ -1233,30 +1290,51 @@ def main_queue(config_file, afile):
         xml_basename = os.path.basename(afile)
         xml_name = os.path.splitext(xml_basename)[0]
         new_afile = temp_dir + xml_name + ".xml"
-        # descending upon the extracted folder
-        bunparse = ParseBungeniXML(new_afile)
-        sba = SeekBindAttachmentsWalker(cfgs)
-        sba.attachments_seek_rename(bunparse)
-        info_object = pxf.process_file(new_afile)
-        if info_object[1] == True:
-            in_queue = True
-        os.remove(new_afile)
+        if os.path.isfile(new_afile):
+            # if there is an XML file inside then we have process its atts
+            # descending upon the extracted folder
+            bunparse = ParseBungeniXML(new_afile)
+            sba = SeekBindAttachmentsWalker(cfgs)
+            sba.attachments_seek_rename(bunparse)
+            info_object = pxf.process_file(new_afile)
+            if info_object[1] == True:
+                in_queue = True
+            os.remove(new_afile)
+        else:
+            # image att for users are zipped independently
+            local_dir = os.path.dirname(afile)
+            new_afile = local_dir + "/" + xml_name + ".xml"
+            bunparse = ParseBungeniXML(new_afile)
+            sba = SeekBindAttachmentsWalker(cfgs)
+            origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
+            info_object = pxf.process_file(new_afile)
+            if info_object[1] == True:
+                in_queue = True
 
     elif fnmatch.fnmatch(afile, "*.xml") and os.path.isfile(afile):
-        info_object = pxf.process_file(afile)
-        if info_object[1] == True:
-            in_queue = True
-        elif info_object[1] == False:
-            in_queue = False
-            return in_queue
-        elif info_object[1] == None:
-            # mark parl-information document for removal from message-queue
-            in_queue = True
-            return in_queue
+        """
+        Check if file has image and ignore because this will be process by the 
+        .zip file with the image attachment
+        """
+        bunparse = ParseBungeniXML(afile)
+        image_node = bunparse.get_image_file()
+        if (image_node is not None):
+            return True
         else:
-            print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
-            in_queue = False
-            return in_queue
+            info_object = pxf.process_file(afile)
+            if info_object[1] == True:
+                in_queue = True
+            elif info_object[1] == False:
+                in_queue = False
+                return in_queue
+            elif info_object[1] == None:
+                # mark parl-information document for removal from message-queue
+                in_queue = True
+                return in_queue
+            else:
+                print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+                in_queue = False
+                return in_queue
     else:
         # ignore any other file type, not interested with them currently...
         in_queue = True

@@ -20,8 +20,7 @@
     margin:0 auto auto 20px;
 }
 .photo-listing img {
-    width:80px !important;
-    height:100px !important;
+    max-width:140px !important;
 }
 .mem-inline-content {
     padding:10px 40px;

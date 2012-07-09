@@ -47,7 +47,14 @@
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
                             <p class="imgonlywrap">
-                                <img src="../bungeni/assets/images/placeholder.jpg" alt="The Placeholder"/>
+                                <xsl:choose>
+                                    <xsl:when test="ref/bu:ontology/bu:image">
+                                        <img src="../../bungeni-atts/{ref/bu:ontology/bu:image/bu:imageUuid}" alt="Place Holder for M.P Photo" align="left"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <img src="assets/images/placeholder.jpg" alt="Place Holder for M.P Photo" align="left"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </p>
                         </div>
                         <div class="mem-top-right">

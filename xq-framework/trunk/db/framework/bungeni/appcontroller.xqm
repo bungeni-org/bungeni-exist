@@ -1161,7 +1161,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								 return 
     									template:process-tmpl(
     									   $REL-PATH, 
-    									   $EXIST-PATH, 
+    									   $EXIST-CONTROLLER, 
     									   $config:DEFAULT-TEMPLATE,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>

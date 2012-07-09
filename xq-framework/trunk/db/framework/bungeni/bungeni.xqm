@@ -2584,29 +2584,32 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
-                    {
-                        $match      
-                    }
-                    </doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>  
                 )
             else if ($sortby = 'fn') then (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
                     <doc>
-                    {
-                        $match      
-                    }
-                    </doc>         
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>       
                 )                
             else  (
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
-                    {
-                        $match      
-                    }
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
                     </doc>        
                 )
 

@@ -21,8 +21,8 @@
     <xsl:variable name="listing-url-prefix" select="/docs/paginator/listingUrlPrefix"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">
+            <div id="title-holder">
+                <h1 class="title">
                     <i18n:text key="list-t-whatson">What's on(s)</i18n:text>
                 </h1>
             </div>

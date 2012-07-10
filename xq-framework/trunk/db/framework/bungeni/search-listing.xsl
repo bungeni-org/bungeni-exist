@@ -63,7 +63,7 @@
                     <xsl:value-of select="concat(upper-case(substring($input-document-type, 1, 1)), substring($input-document-type, 2))"/>s</h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
-                <ul class="ls-doc-tabs">
+                <ul class="tabbernav">
                     <li class="active">
                         <a href="#">
                             <i18n:text key="search-results">search results(nt)</i18n:text>

@@ -34,7 +34,7 @@
                 </h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
-                <ul class="ls-doc-tabs">
+                <ul class="tabbernav">
                     <li class="active">
                         <a href="#">
                             <i18n:text key="search-results">search results(nt)</i18n:text>

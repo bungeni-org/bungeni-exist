@@ -9,22 +9,6 @@ label {
     margin-left:10px;
 }
 
-select, input.search_for {
-    display: inline-block;
-    height: 20px;
-    padding: 0;
-    font-size: 1em;
-    line-height: 20px;
-    background-image: none;
-    background-color: #ffffff;
-    border: 1px solid #8e8e8e;
-    margin: 0;
-    vertical-align: baseline;    
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
 label.search_for {
     float:left;
     padding-top:4px;

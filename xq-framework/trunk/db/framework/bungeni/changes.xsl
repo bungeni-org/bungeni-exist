@@ -30,7 +30,7 @@
                 <i18n:text key="close">close(nt)</i18n:text>
             </span>
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-red-left">
+                <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
             </div>
@@ -79,9 +79,14 @@
                                         <span>
                                             <xsl:choose>
                                                 <xsl:when test="bu:type/bu:value eq 'event'">
-                                                    <a href="popout?uri={@href}" rel="{lower-case($doc-type)}/event?uri={@href}" onclick="return false;">
+                                                    <a href="{lower-case($doc-type)}-event?uri={@href}">
                                                         <xsl:value-of select="bu:title"/>
-                                                    </a>
+                                                    </a> 
+                                                    <!-- !+NOTE (ao, 10 July 2012) This does not work on integrated Bungeni UI. The path 
+                                                        seems to get lost -->
+                                                    <!--a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
+                                                        <xsl:value-of select="bu:title"/>
+                                                    </a-->
                                                 </xsl:when>
                                                 <xsl:when test="bu:type/bu:value eq 'annex'">
                                                     <xsl:value-of select="bu:title"/>:

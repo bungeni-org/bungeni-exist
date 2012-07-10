@@ -24,7 +24,6 @@ body {
     line-height:1.231
 }
 body,button,input,select,textarea {
-    font-family:"Times New Roman",sans-serif;
     color:#222
 }
 ::-moz-selection {

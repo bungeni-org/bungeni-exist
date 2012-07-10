@@ -41,7 +41,7 @@
         <xsl:param name="uri"/>
         <xsl:param name="exc"/>
         <div id="tab-menu" class="ls-tabs">
-            <ul class="ls-doc-tabs">
+            <ul class="tabbernav">
                 <xsl:for-each select="xqcfg:get_view($group)/view[@tag eq 'tab']">
                         <!-- conjures a string from a node-set with names of excluded tabs -->
                     <xsl:variable name="exclude-lot" select="string-join($exc/text(),' ')"/>

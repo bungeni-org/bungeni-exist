@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -26,15 +26,13 @@
         </xsl:variable>
         <xsl:variable name="moevent-uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-red-left">
+            <div id="title-holder">
+                <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
-                <h1 id="doc-title-blue">
-                    <span class="doc-sub-blue">
-                        <xsl:value-of select="ref/bu:ontology/bu:document/bu:title"/>
-                    </span>
-                </h1>
+                <h2 class="sub-title">
+                    <xsl:value-of select="ref/bu:ontology/bu:document/bu:title"/>
+                </h2>
             </div>
             <!-- 
                !+FIX_THIS (ao, 7th-May-2012) This can be enabled if we decide to have events on 
@@ -46,35 +44,7 @@
                 <xsl:with-param name="tab-path">attachments</xsl:with-param>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template-->
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="rounded-eigh tab_container hanging-menu">
@@ -114,7 +84,7 @@
                     <h4 id="doc-item-desc" class="doc-headers hang-left-titles">
                         <xsl:value-of select="bu:ontology/bu:documents/bu:workflowEvents/bu:workflowEvent[@href=$event-uri]/bu:title"/>
                     </h4>
-                    <div class="doc-status">
+                    <h4 class="doc-status">
                         <span>
                             <b>
                                 <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
@@ -130,7 +100,7 @@
                         <span>
                             <xsl:value-of select="format-dateTime(ref/bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
-                    </div>
+                    </h4>
                     <div id="doc-content-area">
                         <div>
                             <xsl:copy-of select="ref/bu:ontology/bu:document/bu:body"/>

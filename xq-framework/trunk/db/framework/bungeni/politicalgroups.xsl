@@ -27,7 +27,7 @@
                 </h1>
             </div>
             <div id="tab-menu" class="ls-tabs">
-                <ul class="ls-doc-tabs">
+                <ul class="tabbernav">
                     <li class="active">
                         <a href="#">
                             <i18n:text key="list-tab-cur">current(nt)</i18n:text>

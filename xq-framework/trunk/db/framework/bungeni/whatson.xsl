@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -71,7 +71,7 @@
             </div>
             <!-- Renders tabs -->
             <div id="tab-menu" class="ls-tabs">
-                <ul class="ls-doc-tabs">
+                <ul class="tabbernav">
                     <xsl:for-each select="/docs/paginator/tags/tag">
                         <li>
                             <xsl:if test="@id eq $listing-tab">
@@ -132,6 +132,7 @@
                                 <input type="hidden" value="none" name="showing"/>
                                 <input type="hidden" value="{substring-before(//range/start,'T')}" name="f" id="hidden-start"/>
                                 <input type="hidden" value="{substring-before(//range/end,'T')}" name="t" id="hidden-end"/>
+                                <br/>
                                 <div class="indent schedule-block note">
                                     <i18n:text key="range-cal-tip">Click twice: The beginning and end date to filter within(nt)</i18n:text>
                                 </div>

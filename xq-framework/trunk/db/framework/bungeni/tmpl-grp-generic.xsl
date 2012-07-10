@@ -57,7 +57,7 @@
     <!-- DOC_ITEM-TITLE -->
     <xsl:template name="doc-item-title">
         <div id="title-holder" class="theme-lev-1-only">
-            <h1 id="doc-title-blue">
+            <h1 class="title">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </h1>
         </div>
@@ -118,7 +118,7 @@
     
     <!-- DOC-ITEM-BODY -->
     <xsl:template name="doc-item-body">
-        <div class="doc-status">
+        <h4 class="doc-status">
             <span>
                 <b>
                     <i18n:text key="acronym">acronym(nt)</i18n:text>:</b>
@@ -133,7 +133,7 @@
             <span>
                 <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
             </span>
-        </div>
+        </h4>
         <div id="doc-content-area">
             <div>
                 <xsl:copy-of select="bu:ontology/bu:group/bu:description"/>

@@ -31,19 +31,21 @@
             </xsl:choose>
         </xsl:variable>
         <div id="main-wrapper">
-            <span id="popout-close" class="hide">
+            <!--
+                !+NOTES see popout.xsl why this is disabled for now
+            -->
+            <!--span id="popout-close" class="hide">
                 <i18n:text key="close">close(nt)</i18n:text>
-            </span>
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-red-left">
+            </span-->
+            <div id="title-holder">
+                <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
-                <h1 id="doc-title-blue">
+                <h2 class="sub-title">
                     <xsl:if test="$version eq 'true'">
-                        <span class="doc-sub-blue">Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:activeDate,$datetime-format,'en',(),())"/>
-                        </span>
+                        Version - <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:activeDate,$datetime-format,'en',(),())"/>
                     </xsl:if>
-                </h1>
+                </h2>
             </div>
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group">
@@ -143,9 +145,12 @@
                                         <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
                                             <xsl:sort select="bu:statusDate" order="descending"/>
                                             <li>
-                                                <a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
+                                                <a href="{lower-case($doc-type)}-event?uri={@href}">
                                                     <xsl:value-of select="bu:title"/>
-                                                </a>
+                                                </a> 
+                                                <!--a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
+                                                    <xsl:value-of select="bu:title"/>
+                                                </a-->
                                                 <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
                                                 </div>
                                             </li>

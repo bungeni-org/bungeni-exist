@@ -32,9 +32,9 @@
                     <h3 id="doc-heading" class="doc-headers">
                         <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> KENYA
                         PARLIAMENT </h3>
-                    <h4 id="doc-item-desc" class="doc-headers">
+                    <h1 class="title">
                         <xsl:value-of select="bu:ontology/bu:documents/bu:shortTitle"/>
-                    </h4>
+                    </h1>
                     <div class="doc-status">
                         <span>
                             <b>

@@ -31,8 +31,8 @@
             </xsl:choose>
         </xsl:variable>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-red-left">
+            <div id="title-holder">
+                <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                     <xsl:if test="$version eq 'true'">
                         <br/>

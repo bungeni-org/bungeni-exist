@@ -58,7 +58,7 @@
     <xsl:template match="docs">
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">
+                <h1 class="title">
                     <i18n:text key="listing">List of&#160;</i18n:text>
                     <!-- Capitalize the first letter -->
                     <i18n:text key="list-t-{lower-case($label)}">legis-items(nt)</i18n:text>
@@ -66,7 +66,7 @@
             </div>
             <!-- Renders listings tabs -->
             <div id="tab-menu" class="ls-tabs">
-                <ul class="ls-doc-tabs">
+                <ul class="tabbernav">
                     <xsl:for-each select="/docs/paginator/tags/tag">
                         <li>
                             <xsl:if test="@id eq $listing-tab">
@@ -153,7 +153,7 @@
                 <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </a>
             &#160;›&#160;
-            <a style="color:#1f34fd" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+            <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
                 <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
                 <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>

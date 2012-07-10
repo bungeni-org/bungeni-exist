@@ -72,7 +72,7 @@
             <!-- Renders the document download types -->
             <xsl:call-template name="doc-formats">
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
-                <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
             </xsl:call-template>
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">

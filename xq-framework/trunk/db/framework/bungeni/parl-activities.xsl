@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -49,21 +49,21 @@
                             <xsl:when test="ref/bu:ontology">
                                 <table class="listing">
                                     <tr>
-                                        <td class="fbtd">
+                                        <th class="fbtd">
                                             <i18n:text key="tab-type">type(nt)</i18n:text>
-                                        </td>
-                                        <td class="fbtd">
+                                        </th>
+                                        <th class="fbtd">
                                             <i18n:text key="relation">relation(nt)</i18n:text>
-                                        </td>
-                                        <td class="fbtd">
+                                        </th>
+                                        <th class="fbtd">
                                             <i18n:text key="title">title(nt)</i18n:text>
-                                        </td>
-                                        <td class="fbtd">
+                                        </th>
+                                        <th class="fbtd">
                                             <i18n:text key="status">status(nt)</i18n:text>
-                                        </td>
-                                        <td class="fbtd">
+                                        </th>
+                                        <th class="fbtd">
                                             <i18n:text key="submit-date">submission date(nt)</i18n:text>
-                                        </td>
+                                        </th>
                                     </tr>
                                     <xsl:for-each select="ref/bu:ontology">
                                         <xsl:sort select="bu:document/bu:statusDate" order="descending"/>

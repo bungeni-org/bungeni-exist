@@ -49,11 +49,11 @@
                             (baked)
                             <table class="listing">
                                 <tr>
-                                    <td class="fbtd">office</td>
-                                    <td class="fbtd">type</td>
-                                    <td class="fbtd">title</td>
-                                    <td class="fbtd">from</td>
-                                    <td class="fbtd">to</td>
+                                    <th class="fbtd">office</th>
+                                    <th class="fbtd">type</th>
+                                    <th class="fbtd">title</th>
+                                    <th class="fbtd">from</th>
+                                    <th class="fbtd">to</th>
                                 </tr>
                                 <tr class="items">
                                     <td class="fbt bclr">XIV-PARL - Bungeni Parliament</td>

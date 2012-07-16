@@ -54,7 +54,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                     appearance="bf:verticalTable">
 
                 <div class="description">
-                    <p>Edit the Pagination Preferencs</p>
+                    <p>Edit the Pagination Preferences</p>
                 </div>
 
                 <xf:input bind="bind-limit">
@@ -81,6 +81,14 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         </div>
        
        </div>
-        
+        <script type="text/javascript" defer="defer">
+            <![CDATA[
+            dojo.addOnLoad(function(){
+                dojo.subscribe("/xf/ready", function() {
+                    fluxProcessor.skipshutdown=true;
+                });
+            });
+           ]]>
+        </script>         
      </body>
 </html>

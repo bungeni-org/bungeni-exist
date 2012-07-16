@@ -4,6 +4,10 @@ body {
     margin-top:8px;
 }
 
+.xfRepeatIndex {
+    background-color: #f9ac32;
+}
+
 #xforms {
     background: none repeat scroll 0 0 white;
     border: thin solid #BBBBBB;
@@ -13,7 +17,7 @@ body {
     text-align: left;
     margin-left:auto;
     margin-right:auto;
-    width: 750px;
+    width: 960px;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
     border-radius: 8px;    
@@ -135,6 +139,9 @@ div.sortorders table tr td {
 }
 .dijitToasterContainer {
     width:100% !important;
+}
+.dijitToasterContent {
+    background: #abdae4;
 }
 
 /*** NAVIGATION - mainnav ***/

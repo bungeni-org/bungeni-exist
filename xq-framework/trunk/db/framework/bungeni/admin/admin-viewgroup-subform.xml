@@ -9,24 +9,24 @@
             <tabs/>
         </xf:instance>
         <!-- tabs listed here -->
-        <xf:instance xmlns="" id="tagtabs">
-            <tagtabs>
-                <tag label="yes">tab</tag>
-                <tag label="no"/>
-            </tagtabs>
+        <xf:instance xmlns="" id="viewtag">
+            <viewtags>
+                <tag label="tab view">tab</tag>
+                <tag label="doc listing">listing</tag>
+            </viewtags>
         </xf:instance>
         <xf:bind id="b-viewgroup-path" nodeset="@path" type="xs:string"/>
         <xf:bind id="b-viewgroup-id" nodeset="@id" type="xs:string"/>
         <xf:bind id="b-viewgroup-tag" nodeset="@tag" type="xs:string"/>
         <xf:bind id="b-viewgroup-checkfor" nodeset="@check-for" type="xs:string"/>
-        <xf:bind id="b-viewgroup-title" nodeset="title" type="xs:string"/>
+        <xf:bind id="b-viewgroup-title" nodeset="title/i18n:text" type="xs:string"/>
         <xf:bind id="b-viewgroup-tmpl" nodeset="template" type="xs:string"/>
         <xf:bind id="b-viewgroup-xsl" nodeset="xsl" type="xs:string"/>
         <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/viewgroups/views[index('viewgroups')]" replace="instance" method="get">
-            <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group editor loaded</xf:message>
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">View-group editor loaded</xf:message>
         </xf:submission>
         <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/viewgroups/views[index('viewgroups')]" replace="none" method="post">
-            <xf:message ev:event="xforms-submit-done" level="ephemeral">Tab-group saved</xf:message>
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">View-group saved</xf:message>
             <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
         </xf:submission>
         <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
@@ -46,21 +46,21 @@
                 <xf:help>Mainly used by function that creates the tabs at runtime.</xf:help>
                 <xf:label>Unique ID</xf:label>
             </xf:input>
-            <xf:select1 bind="b-viewgroup-tag" appearance="full" incremental="true">
-                <xf:label>Is this a tab?</xf:label>
+            <xf:select1 bind="b-viewgroup-tag" appearance="minimal" incremental="true">
+                <xf:label>Tagged for</xf:label>
                 <xf:hint>Tag denotes if its for tab view</xf:hint>
                 <xf:help>Leave empty if unless you want this view to be shown as tab</xf:help>
-                <xf:itemset nodeset="instance('tagtabs')/tag">
+                <xf:itemset nodeset="instance('viewtag')/tag">
                     <xf:label ref="@label"/>
                     <xf:value ref="."/>
                 </xf:itemset>
             </xf:select1>
             <xf:input bind="b-viewgroup-checkfor">
-                <xf:hint>Condition to be met before tab is rendered</xf:hint>
+                <xf:hint>Condition to be met before tab is rendered. It is run on bu:document node</xf:hint>
                 <xf:help>Used to hide tabs on document items that don't meet a criteria</xf:help>
                 <xf:label>Check for</xf:label>
             </xf:input>
-            <xf:input ref="b-viewgroup-title">
+            <xf:input bind="b-viewgroup-title">
                 <xf:hint>Field label</xf:hint>
                 <xf:help>This is shown as label of search filter option on the listings dropdown.</xf:help>
                 <xf:label>Tab Label</xf:label>
@@ -77,7 +77,7 @@
             </xf:input>
         </xf:repeat>
         <xf:trigger appearance="triggerMiddleColumn">
-            <xf:label>update routes</xf:label>
+            <xf:label>update viewgroups</xf:label>
             <xf:hint>Click apply to update the document configuration</xf:hint>
             <xf:send submission="s-update-master"/>
         </xf:trigger>

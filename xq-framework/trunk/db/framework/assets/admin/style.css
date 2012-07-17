@@ -23,6 +23,10 @@ body {
     border-radius: 8px;    
 }
 
+.xfOutput {
+    margin-top:-4px !important;
+}
+
 .configsFullGroup .xfLabel {
     width: 7em;
 }

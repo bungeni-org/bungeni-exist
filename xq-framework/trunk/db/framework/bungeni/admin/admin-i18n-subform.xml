@@ -5,105 +5,79 @@
 -->
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
     <xf:model id="catalogue" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="en" src="../../i18n/collection_en.xml"/>
+        <xf:instance xmlns="" id="sw" src="../../i18n/collection_sw.xml"/>
+        <xf:instance xmlns="" id="it" src="../../i18n/collection_it.xml"/>
         <xf:instance xmlns="" id="default">
-            <data>
-                <orderbys>
-                    <orderby order="asc" value="start_dt_oldest">
-                        start date [oldest]
-                    </orderby>
-                </orderbys>
-            </data>
+            <catalogue>
+                <msg key="">new msg string</msg>
+            </catalogue>
         </xf:instance>
-        <xf:bind id="b-orderby-order" nodeset="@order" type="xs:string"/>
-        <xf:bind id="b-orderby-value" nodeset="@value" type="xs:string"/>
-        <xf:bind id="b-orderby-default" nodeset="@default" type="xs:boolean"/>
-        <xf:bind id="b-orderby" nodeset="." type="xs:string"/>
-        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/orderbys" replace="instance" method="get">
-            <xf:message ev:event="xforms-submit-done" level="ephemeral">Order editor loaded</xf:message>
+        <xf:bind id="b-msg-key" nodeset="@key" type="xs:string"/>
+        <xf:bind id="b-msg" nodeset="." type="xs:string"/>
+        <xf:submission id="s-load-self" resource="model:catalogue#instance('it')/catalogue" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Catalogues editor loaded</xf:message>
+            <xf:action ev:event="xforms-submit-error">
+                <xf:message level="ephemeral">Error - Loading catalogue</xf:message>
+            </xf:action>
         </xf:submission>
-        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/doctypes/doctype[index('doctypes')]/orderbys" replace="none" method="post">
-            <xf:message ev:event="xforms-submit-done" level="ephemeral">Order saved</xf:message>
+        <xf:submission id="s-save-catalogue" resource="model:catalogue#instance('it')/catalogue" replace="none" method="put">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Catalogue saved</xf:message>
             <xf:action ev:event="xforms-submit-error">
                 <xf:message level="ephemeral">Sorry - your update failed.</xf:message>
             </xf:action>
         </xf:submission>
-        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+        <xf:send ev:event="xforms-ready" submission="s-load-self"/>
     </xf:model>
     <!-- subform to edit loaded route -->
     <xf:group appearance="full" class="subform-pane">
         <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
-        <xf:repeat id="orderbys" nodeset="orderby">
-            <xf:label id="editing-subform">Order Subform</xf:label>
+        <xf:repeat id="messages" nodeset="msg">
             <xf:input ref=".">
-                <xf:label id="lbl-b-orderby">Title / Label</xf:label>
+                <xf:label id="lbl-b-key">
+                    <xf:output id="lbl-b-msgstrg" ref="@key" incremental="true">
+                        <xf:hint>a Hint for this control</xf:hint>
+                        <xf:help>help for output1</xf:help>
+                        <xf:alert>invalid</xf:alert>
+                    </xf:output>
+                </xf:label>
             </xf:input>
-            <xf:input ref="@value">
-                <xf:hint>sort value</xf:hint>
-                <xf:help>Warning: Editing this field requires updating the module with this new value.</xf:help>
-                <xf:label id="lbl-b-orderby">Value</xf:label>
-            </xf:input>
-            <xf:select1 id="sortorder" ref="@order" appearance="full" class="toggle-sort" incremental="true">
-                <xf:label>Order</xf:label>
-                <xf:hint>sort order</xf:hint>
-                <xf:help>Toggle between ascending and descending</xf:help>
-                <xf:item>
-                    <xf:label>ascending</xf:label>
-                    <xf:value>ascending</xf:value>
-                </xf:item>
-                <xf:item>
-                    <xf:label>descending</xf:label>
-                    <xf:value>descending</xf:value>
-                </xf:item>
-            </xf:select1>
-            <xf:output id="lbl-b-orderby-default" ref="@default" incremental="true">
-                <xf:label>default:</xf:label>
-                <xf:hint>a Hint for this control</xf:hint>
-                <xf:help>help for output1</xf:help>
-                <xf:alert>invalid</xf:alert>
-            </xf:output>
         </xf:repeat>
-        <xf:select1 id="choosedefault" appearance="minimal">
-            <xf:label>The default order of sorting</xf:label>
-            <xf:hint>on loading a listing, this will be the default order</xf:hint>
-            <xf:help>This are Title / Label above</xf:help>
-            <xf:itemset nodeset="orderby">
-                <xf:label ref="."/>
-                <xf:value ref="@value"/>
-            </xf:itemset>
-            <!-- As soon as this is changed. Updated the relevant row -->
-            <xf:action ev:event="betterform-value-changed">
-                <xf:message level="ephemeral">Changed default order field ...</xf:message>
-                <!--xf:setvalue ref="orderby[@value='st_date_newest']" value="''"/-->
-            </xf:action>
-        </xf:select1>
         <xf:group appearance="minimal" class="configsTriggerGroup buttons-pane">
             <xf:trigger class="configsSubTrigger buttons-inline">
-                <xf:label>add order-by filter</xf:label>
-                <xf:hint>Add a new order-by filter to above list.</xf:hint>
+                <xf:label>add a message string</xf:label>
+                <xf:hint>Add a new message string to above list.</xf:hint>
                 <xf:action>
-                    <xf:message level="ephemeral">Loading Order-by filters Add Form...</xf:message>
-                    <xf:insert nodeset="orderby[last()]" at="last()" origin="instance('default')/orderby[last()]" ev:event="DOMActivate"/>
-                    <!--xf:setvalue bind="b-nav-href" ref="xhtml:a/@href" model="mnavgroup" value="this"/>
-                        <xf:setvalue bind="b-nav-href" value="value XPath">value</xf:setvalue>
-                        <xf:setvalue bind="b-nav-href" ref="instance('tmpl-navigation')/xhtml:li/xhtml:a/@href"/-->
+                    <xf:message level="ephemeral">New Message String Form Added...</xf:message>
+                    <xf:insert nodeset="msg[last()]" at="last()" origin="instance('default')/msg[last()]" ev:event="DOMActivate"/>
                 </xf:action>
             </xf:trigger>
             <xf:trigger class="configsSubTrigger">
                 <xf:label>delete selected</xf:label>
                 <xf:hint>Delete the Selected row in a form.</xf:hint>
                 <xf:action>
-                    <xf:message level="ephemeral">Deleting selected sub-navigation...</xf:message>
-                    <xf:delete nodeset="orderby" at="index('orderbys')" ev:event="DOMActivate"/>
+                    <xf:message level="ephemeral">Deleting selected message string...</xf:message>
+                    <xf:delete nodeset="msg" at="index('messages')" ev:event="DOMActivate"/>
                 </xf:action>
             </xf:trigger>
             →   
-            <xf:trigger appearance="triggerMiddleColumn">
+            <!--xf:trigger appearance="triggerMiddleColumn">
                 <xf:label>apply changes</xf:label>
                 <xf:hint>Click apply to update the document with all changes made</xf:hint>
                 <xf:delete nodeset="orderby/@default"/>
                 <xf:insert nodeset="orderby[last()]" ev:event="DOMActivate"/>
-                <xf:send submission="s-update-master"/>
+                <xf:send submission="s-update-catalogue"/>
+            </xf:trigger-->
+            <xf:trigger class="configsSubTrigger">
+                <xf:label>save catalogue changes</xf:label>
+                <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
+                <xf:action>
+                    <xf:message level="ephemeral">Saving Document...</xf:message>
+                    <xf:send submission="s-save-catalogue"/>
+                </xf:action>
             </xf:trigger>
         </xf:group>
     </xf:group>
+    <br/>
+    <br/>
 </div>

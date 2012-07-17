@@ -18,7 +18,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <head>
-    <title>Ordering Preferences</title>
+    <title>i18n Catalogues</title>
     <meta name="author" content="anthony at googlemail.com"/>
     <meta name="author" content="ashok at parliaments.info"/>
     <meta name="description" content="XForms with config options"/>
@@ -36,9 +36,9 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             <!-- catalogues listed here -->
             <xf:instance xmlns="" id="messages">
                 <catalogues>
-                    <lang label="English" catalogue="../i18n/collection_en.xml">en</lang>
-                    <lang label="Swahili" catalogue="../i18n/collection_sw.xml">sw</lang>
-                    <lang label="Italian" catalogue="../i18n/collection_it.xml">it</lang>
+                    <lang label="English">en</lang>
+                    <lang label="Swahili">sw</lang>
+                    <lang label="Italian">it</lang>
                 </catalogues>
             </xf:instance>            
             
@@ -77,7 +77,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                               <xf:hint>Edit the Selected row in a form.</xf:hint>
                               <xf:action>
                                   <xf:message level="ephemeral">Loading Language catalogue...</xf:message>
-                                  <xf:load show="embed" targetid="doctype">
+                                  <xf:load show="embed" targetid="docwrapper">
                                       <xf:resource value="'./admin-i18n-subform.xml'"/>
                                   </xf:load>
                               </xf:action>
@@ -107,7 +107,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             -->
             <xf:group appearance="full" class="configsFullGroup">
                 <div class="configsSubForm">
-                    <div id="doctype" class="editpane"/>
+                    <div id="docwrapper" class="editpane"/>
                 </div>
             </xf:group>             
          </div> 

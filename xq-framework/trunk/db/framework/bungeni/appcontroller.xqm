@@ -50,7 +50,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         
         if ($EXIST-PATH eq "" ) then
             fw:redirect(fn:concat(request:get-uri(), "/"))  
-        else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/index.xml") 
+        else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/home" or $EXIST-PATH eq "/xml/index.xml") 
              then
         	   rou:get-home($CONTROLLER-DOC) 
         	   
@@ -107,7 +107,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								                          $act-entries-repl, 
     								                          bun:get-listing-search-context(
     								                            $EXIST-PATH,
-    								                            "listing-search-form.xml",
+    								                            "xml/listing-search-form.xml",
     								                            'membership'
     								                            )
     								                        )
@@ -126,7 +126,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $act-entries-tmpl :=  bun:get-committees($offset,$limit,$qry,$sty),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("committees.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/committees.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -135,7 +135,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"listing-search-form.xml",'committee')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"xml/listing-search-form.xml",'committee')))))
     								    )  
                     
         (:~ ITEM LISTINGS :)        
@@ -171,7 +171,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $acl := "public-view",
                     $act-entries-tmpl :=  bun:search-global($acl,$offset,$limit,$qry,$scope,$sty),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -184,7 +184,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									           (template:merge($EXIST-CONTROLLER, 
     									               $act-entries-repl, 
     									               bun:get-global-search-context($EXIST-PATH, 
-    									                   "global-search-form.xml",
+    									                   "xml/global-search-form.xml",
     									                   $scope))))
     									     )
     								    )    
@@ -196,7 +196,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),
                 (),
-                cmn:build-nav-tmpl($EXIST-PATH, "search-settings.xml")
+                cmn:build-nav-tmpl($EXIST-PATH, "xml/search-settings.xml")
                )     								    
     	else if ($EXIST-PATH eq "/advanced-search")
     		 then 
@@ -206,7 +206,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),
                 (),
-                cmn:rewrite-tmpl($EXIST-PATH, bun:get-advanced-search-context($EXIST-CONTROLLER,"advanced-search.xml"))
+                cmn:rewrite-tmpl($EXIST-PATH, bun:get-advanced-search-context($EXIST-CONTROLLER,"xml/advanced-search.xml"))
                ) 
         else if ($EXIST-PATH eq "/search-adv")
     		 then 
@@ -287,7 +287,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $acl := "public-view",
                     $act-entries-tmpl :=  bun:search-criteria($acl,$offset,$limit,$qry,$sty,$type),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("questions.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -300,7 +300,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									           (template:merge($EXIST-CONTROLLER, 
     									               $act-entries-repl, 
     									               bun:get-listing-search-context($override_path, 
-    									                   "listing-search-form.xml",
+    									                   "xml/listing-search-form.xml",
     									                   $type))))
     									     )
     								    )
@@ -393,7 +393,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        (),
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "listing-search-form.xml",'politicalgroup')))))
+    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "xml/listing-search-form.xml",'politicalgroup')))))
     								    )
     	else if ($EXIST-PATH eq "/politicalgroup-text" )
     		 then 
@@ -1465,9 +1465,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"sitting.xsl"),
+                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/sitting.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("sitting.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/sitting.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -1623,7 +1623,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								                        $act-entries-repl, 
     								                        bun:get-listing-search-context(
     								                            $EXIST-PATH,
-    								                            "listing-search-form.xml",'whatson'
+    								                            "xml/listing-search-form.xml",'whatson'
     								                            )
     								                      )
     								             )
@@ -1634,9 +1634,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"calendar.xsl"),
+                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/calendar.xsl"),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("calendar.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/calendar.xml")/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -1658,7 +1658,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 $EXIST-CONTROLLER, 
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),(),
-                cmn:build-nav-tmpl($EXIST-PATH, "politicalgroups.xml")
+                cmn:build-nav-tmpl($EXIST-PATH, "xml/politicalgroups.xml")
                )	     	
     	else if ($EXIST-PATH eq "/publications")
     		 then 
@@ -1668,7 +1668,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 $config:DEFAULT-TEMPLATE, 
                 cmn:get-route($EXIST-PATH),
                 (),
-                cmn:build-nav-tmpl($EXIST-PATH, "publications.xml")
+                cmn:build-nav-tmpl($EXIST-PATH, "xml/publications.xml")
                )  
        else if ($EXIST-PATH eq "/admin") 
             then

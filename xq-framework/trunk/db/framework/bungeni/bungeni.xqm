@@ -1438,17 +1438,17 @@ declare function bun:get-atom-feed(
         <link rel="self" href="/bills/rss" />
        {
             for $i in subsequence(bun:list-documentitems-with-acl($acl, $doctype),0,10)
-            order by $i/bu:legislativeItem/bu:statusDate descending
+            order by $i/bu:document/bu:statusDate descending
             (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
             return 
             (   <entry>
                     <id>{data($i/bu:document/@uri)}</id>
-                    <title>{$i/bu:document/bu:shortName/node()}</title>
+                    <title>{$i/bu:document/bu:title/node()}</title>
                     {
                        <summary> 
                        {
                            $i/bu:document/@type,
-                           $i/bu:document/bu:shortName/node()
+                           $i/bu:document/bu:title/node()
                        }
                        </summary>,
                        if ($outputtype = 'user')  then (
@@ -1458,7 +1458,7 @@ declare function bun:get-atom-feed(
                             <link rel="alternate" type="application/xml" href="{$server-path}/{lower-case($doctype)}-xml?uri={$i/bu:document/@uri}"/>
                         )  
                     }
-                    <content type='html'>{$i/bu:legislativeItem/bu:body/node()}</content>
+                    <content type='html'>{$i/bu:document/bu:body/node()}</content>
                     <published>{$i/bu:document/bu:publicationDate/node()}</published>
                     <updated>{$i/bu:document/bu:statusDate/node()}</updated>                           
                 </entry>

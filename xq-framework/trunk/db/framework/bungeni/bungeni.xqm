@@ -110,7 +110,7 @@ declare function bun:gen-pdf-output($docid as xs:string)
 {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt('parl-doc.fo') 
+    let $stylesheet := cmn:get-xslt('fo/parl-doc.fo') 
     
     let $doc := <doc>        
             {
@@ -177,7 +177,7 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
 declare function bun:gen-member-pdf($memberid as xs:string) {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt('member-info.fo') 
+    let $stylesheet := cmn:get-xslt('fo/member-info.fo') 
     
     let $doc := <doc>        
             {
@@ -429,11 +429,11 @@ declare function bun:search-criteria(
         $typeofdoc as xs:string) as element() {
         
         if ($typeofdoc eq "committee" or $typeofdoc eq "political-group") then
-            bun:search-groupitems($acl, $typeofdoc, "committee-text", "committees.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-groupitems($acl, $typeofdoc, "committee-text", "xsl/committees.xsl", $offset, $limit, $querystr, $sortby)
         else if ($typeofdoc eq "membership") then
-            bun:search-membership($acl, $typeofdoc, "member-text", "members.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-membership($acl, $typeofdoc, "member-text", "xsl/members.xsl", $offset, $limit, $querystr, $sortby)
         else
-            bun:search-documentitems($acl, $typeofdoc, "bill-text", "search-listing.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-documentitems($acl, $typeofdoc, "bill-text", "xsl/search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 (:~
@@ -967,8 +967,8 @@ declare function bun:search-global(
     
     (: stylesheet to transform: ephemeral or paginated :)
     let $stylesheet := if ($scope eq "global" ) then 
-                            cmn:get-xslt("global-search-summary.xsl") 
-                       else cmn:get-xslt("global-search-results.xsl")
+                            cmn:get-xslt("xsl/global-search-summary.xsl") 
+                       else cmn:get-xslt("xsl/global-search-results.xsl")
     
     (:let $coll_rs := bun:xqy-list-groupitem("membership"):)
     let $getqrystr := xs:string(request:get-query-string())
@@ -1504,7 +1504,7 @@ declare function bun:get-committees(
         ) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("committees.xsl")    
+    let $stylesheet := cmn:get-xslt("xsl/committees.xsl")    
     
     (: 
         The line below is documented in bun:get-documentitems()
@@ -1589,7 +1589,7 @@ declare function bun:get-sittings(
         ) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("sittings.xsl")    
+    let $stylesheet := cmn:get-xslt("xsl/sittings.xsl")    
     
     (: 
         The line below is documented in bun:get-documentitems()

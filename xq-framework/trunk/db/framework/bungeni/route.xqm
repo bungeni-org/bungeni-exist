@@ -47,7 +47,7 @@ declare function rou:get-home($CONTROLLER-DOC as node()) {
            $config:DEFAULT-TEMPLATE,
            cmn:get-route($CONTROLLER-DOC/exist-path),
             (),         		   
-           cmn:build-nav-tmpl($CONTROLLER-DOC/exist-path, "index.xml")
+           cmn:build-nav-tmpl($CONTROLLER-DOC/exist-path, "xml/index.xml")
         )
 };
 
@@ -81,7 +81,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
     									       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 
     									           bun:get-listing-search-context(
     									               concat("/",  $parts/current-view),
-    									               "listing-search-form.xml",
+    									               "xml/listing-search-form.xml",
     									               $doc-type
     									               )
     									           )

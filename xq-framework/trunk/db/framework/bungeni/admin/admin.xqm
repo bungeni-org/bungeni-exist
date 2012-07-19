@@ -22,3 +22,20 @@ declare function adm:main-menu($active as xs:string) {
         <xhtml:li><xhtml:a href="help.xql" title="Help notes on using admin panel">Help&#160;<xhtml:span class="help"/></xhtml:a></xhtml:li>
     </xhtml:ul>              
 };
+
+
+(:~
+:  Renders the list of language catalogues available
+:
+: @return
+:   document with ISO codes of all availbale catalogues
+:)
+declare function adm:catalogues() {
+    <catalogues>
+    {
+        for $lang in data(collection('/db/framework/i18n')/catalogue/@xml:lang)
+        return 
+            <lang label="{$lang}">{$lang}</lang>
+    }
+    </catalogues>            
+};

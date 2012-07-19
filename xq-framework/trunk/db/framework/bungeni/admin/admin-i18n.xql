@@ -17,13 +17,13 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     xmlns:bf="http://betterform.sourceforge.net/xforms" 
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<head>
-    <title>i18n Catalogues</title>
-    <meta name="author" content="anthony at googlemail.com"/>
-    <meta name="author" content="ashok at parliaments.info"/>
-    <meta name="description" content="XForms with config options"/>
-    <link rel="stylesheet" href="../../assets/admin/style.css"/>
-</head>
+    <head>
+        <title>i18n Catalogues</title>
+        <meta name="author" content="anthony at googlemail.com"/>
+        <meta name="author" content="ashok at parliaments.info"/>
+        <meta name="description" content="XForms with config options"/>
+        <link rel="stylesheet" href="../../assets/admin/style.css"/>
+    </head>
 <body>
  <div id="xforms">
     <div style="display:none">
@@ -35,18 +35,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             
             <!-- catalogues listed here -->
             <xf:instance xmlns="" id="messages">
-                <catalogues>
-                    <lang label="English">en</lang>
-                    <lang label="Swahili">sw</lang>
-                    <lang label="Italian">it</lang>
-                </catalogues>
-            </xf:instance>            
-            
-             <xf:submission id="save-form" 
-                replace="none" 
-                resource="../ui-config.xml" 
-                method="put">
-             </xf:submission>
+                {adm:catalogues()}
+            </xf:instance>
              
         </xf:model>
     </div>
@@ -78,24 +68,26 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                               <xf:action>
                                   <xf:message level="ephemeral">Loading Language catalogue...</xf:message>
                                   <xf:load show="embed" targetid="docwrapper">
-                                      <xf:resource value="'./admin-i18n-subform.xml'"/>
+                                      <xf:resource value="concat('./admin-i18n-subform.xql?cat=',instance('messages')/lang[index('catalogues')]/text())"/>
                                   </xf:load>
                               </xf:action>
                           </xf:trigger>
                     </xf:group>                 
                 
-                    <xf:repeat id="doctypes" nodeset="instance('messages')/lang" appearance="full" class="itemgroups">
+                    <xf:repeat id="catalogues" nodeset="instance('messages')/lang" appearance="full" class="itemgroups">
                         <xf:output ref="@label"/>
                     </xf:repeat>
                     
                     <xf:group appearance="minimal" class="configsTriggerGroup">            
                         <xf:trigger class="configsSubTrigger">
-                            <xf:label>save catalogue changes</xf:label>
-                            <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
-                            <xf:action>
-                                <xf:message level="ephemeral">Saving Document...</xf:message>
-                                <xf:send submission="save-form" />
-                            </xf:action>
+                            <xf:label>add new catalogue</xf:label>
+                            <xf:hint>Add a blank catalogue</xf:hint>
+                              <xf:action>
+                                  <xf:message level="ephemeral">Loading catalogue template...</xf:message>
+                                  <xf:load show="embed" targetid="docwrapper">
+                                      <xf:resource value="'./admin-i18n-subform.xql'"/>
+                                  </xf:load>
+                              </xf:action>
                         </xf:trigger>
                         
                     </xf:group>

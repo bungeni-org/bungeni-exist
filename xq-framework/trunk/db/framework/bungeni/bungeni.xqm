@@ -261,7 +261,9 @@ declare function bun:xqy-search-group() {
 declare function bun:xqy-list-membership($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='",$type,"']")
+                "/bu:ontology[@for='",$type,"']",
+                "/bu:membership/bu:membershipType[bu:value eq 'member_of_parliament']",
+                "/ancestor::bu:ontology")
 };
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
@@ -869,13 +871,23 @@ declare function bun:search-membership(
                 for $match in subsequence($coll,$offset,$limit)
                 order by $match/child::*/bu:statusDate ascending
                 return 
-                    bun:get-reference($match)   
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>  
                 )             
             else  (
                 for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/child::*/bu:statusDate descending
                 return 
-                    bun:get-reference($match)          
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>         
                 )
                 (:ft:score($m):)
         } 

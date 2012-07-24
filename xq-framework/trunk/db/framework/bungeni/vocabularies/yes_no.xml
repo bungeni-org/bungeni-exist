@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">yes_no</langstring>
+        <langstring language="es">sí_no</langstring>
+        <langstring language="fr">oui_non</langstring>
+        <langstring language="pt">sim_não</langstring>
+        <langstring language="sw">ndio_la</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.yes_no</vocabIdentifier>
+    <term>
+        <termIdentifier>True</termIdentifier>
+        <caption>
+            <langstring language="en">yes</langstring>
+            <langstring language="es">sí</langstring>
+            <langstring language="fr">oui</langstring>
+            <langstring language="pt">sim</langstring>
+            <langstring language="sw">ndio</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>False</termIdentifier>
+        <caption>
+            <langstring language="en">no</langstring>
+            <langstring language="es">no</langstring>
+            <langstring language="fr">non</langstring>
+            <langstring language="pt">não</langstring>
+            <langstring language="sw">la</langstring>
+        </caption>
+    </term>
+</vdex>

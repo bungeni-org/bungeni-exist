@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">committee_continuity</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.committee_continuity</vocabIdentifier>
+    <term>
+        <termIdentifier>permanent</termIdentifier>
+        <caption>
+            <langstring language="en">Permanent</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>temporary</termIdentifier>
+        <caption>
+            <langstring language="en">Temporary</langstring>
+        </caption>
+    </term>
+</vdex>

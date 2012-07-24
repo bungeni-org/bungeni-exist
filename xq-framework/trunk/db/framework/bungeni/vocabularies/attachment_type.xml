@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">attachment_type</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.attachment_type</vocabIdentifier>
+    <term>
+        <termIdentifier>image</termIdentifier>
+        <caption>
+            <langstring language="en">Image</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>annex</termIdentifier>
+        <caption>
+            <langstring language="en">Annex</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>document</termIdentifier>
+        <caption>
+            <langstring language="en">Document</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>bill</termIdentifier>
+        <caption>
+            <langstring language="en">Bill</langstring>
+        </caption>
+    </term>
+    <!--
+     !+ATTACHED_FILE_TYPE_SYSTEM(mr, oct-2011) ui/downloaddocument and 
+     ui/forms/files.py expects this, but should NOT be presented as an 
+     option in the UI?
+    
+    vocabulary.SimpleTerm("system", title="System"),
+    -->
+</vdex>

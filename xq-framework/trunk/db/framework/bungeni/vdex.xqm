@@ -1,5 +1,6 @@
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 module namespace vdex = 'http://www.imsglobal.org/xsd/imsvdex_v1p0';
+declare default element namespace "http://www.imsglobal.org/xsd/imsvdex_v1p0";
 (:~
     : Module for integration Vdex files exported from Bungeni
     
@@ -22,8 +23,8 @@ declare function vdex:getVdexCollection($vocabId as xs:string, $collPath as xs:s
         <error>
            <code>{$err:code}</code>
            <desc>{$err:description}</desc>
-        </erro>
-    }    
+        </error>
+    }     
 };
 
 (:~
@@ -41,7 +42,7 @@ declare function vdex:process($selectedLang as xs:string,
     for $node in $nodes              
         let $selectedVocab := i18n:getVdexCollection($vocabularyId, $vocabularyCollPath)  
         return        
-            vdex:getLocalizedTerm($termId, $selectedLang, $selectedVocab)
+            vdex:getLocalizedTerm($termId, $selectedLang, $defaultLang, $selectedVocab)
 };
 
 
@@ -52,10 +53,12 @@ declare function vdex:process($selectedLang as xs:string,
  : @param $termId the term identifier in the vdex file
  : @param $selectedVocab the vocab file returned from VocabId in vdex:getVdexCollection()
 :)
-declare function vdex:getLocalizedTerm($termId as xs:string, $selectedLang as xs:string, $selectedVocab as node()){
+declare function vdex:getLocalizedTerm($termId as xs:string, 
+                                        $selectedLang as xs:string, 
+                                        $defaultLang as xs:string, 
+                                        $selectedVocab as node()) {
     if(exists($selectedVocab//termIdentifier[text() eq $termId])) then 
-        $selectedVocab//termIdentifier[text() eq $termId]/following-sibling::caption/langstring[@language eq $selectedLang]/text() 
+        $selectedVocab//termIdentifier[text() eq $termId]/following-sibling::caption/langstring[if (@language eq $selectedLang) then (@language eq $selectedLang) else (@language eq $defaultLang)][1]/text() 
     else 
-        ()
-    
+        $termId
 };

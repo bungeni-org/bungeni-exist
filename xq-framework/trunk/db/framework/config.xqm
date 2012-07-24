@@ -44,6 +44,7 @@ declare variable $config:DEFAULT-TEMPLATE := data($config:__ACTIVE_APP__/default
 declare variable $config:fw-app-root := fn:concat($config:fw-root, "/", $config:app-prefix);
 
 declare variable $config:I18N-MESSAGES := fn:concat($config:fw-root, "/", data($config:__ACTIVE_APP__/i18n-messages));
+declare variable $config:VDEX := fn:concat($config:fw-root, "/", data($config:__ACTIVE_APP__/vdex));
 
 declare variable $config:DEFAULT-LANG := data($config:__ACTIVE_APP__/default-lang);
 

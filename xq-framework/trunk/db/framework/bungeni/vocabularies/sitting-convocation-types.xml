@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">Convocation Types</langstring>
+        <langstring language="es">Tipos de Convocatoria</langstring>
+        <langstring language="fr">Types de Convocation</langstring>
+        <langstring language="pt">Tipos de Convocação</langstring>
+        <langstring language="sw">Aina za Baraza</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.sittingconvocationtypes</vocabIdentifier>
+    <term>
+        <termIdentifier>ordinary</termIdentifier>
+        <caption>
+            <langstring language="en">ordinary</langstring>
+            <langstring language="es">ordinario</langstring>
+            <langstring language="fr">ordinaires</langstring>
+            <langstring language="pt">ordinário</langstring>
+            <langstring language="sw">kawaida</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>urgent</termIdentifier>
+        <caption>
+            <langstring language="en">urgent</langstring>
+            <langstring language="es">urgente</langstring>
+            <langstring language="fr">urgentes</langstring>
+            <langstring language="pt">urgente</langstring>
+            <langstring language="sw">dharura</langstring>
+        </caption>
+    </term>
+</vdex>

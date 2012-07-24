@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">Meeting Types</langstring>
+        <langstring language="es">Tipos de Reuniones</langstring>
+        <langstring language="fr">Types de Réunion</langstring>
+        <langstring language="pt">Tipos de Reunião</langstring>
+        <langstring language="sw">Aina za Mikutano</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.sittingmeetingtypes</vocabIdentifier>
+    <term>
+        <termIdentifier>plenary</termIdentifier>
+        <caption>
+            <langstring language="en">plenary</langstring>
+            <langstring language="es">plenario</langstring>
+            <langstring language="fr">plénière</langstring>
+            <langstring language="pt">plenário</langstring>
+            <langstring language="sw">kikao</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>committee</termIdentifier>
+        <caption>
+            <langstring language="en">committee</langstring>
+            <langstring language="es">comité</langstring>
+            <langstring language="fr">comité</langstring>
+            <langstring language="pt">comissão</langstring>
+            <langstring language="sw">kamati</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>joint_committee</termIdentifier>
+        <caption>
+            <langstring language="en">joint committee</langstring>
+            <langstring language="es">comité conjunto</langstring>
+            <langstring language="fr">comité mixte</langstring>
+            <langstring language="pt">comissão conjunta</langstring>
+            <langstring language="sw">kamati ya muungano</langstring>
+        </caption>
+    </term>
+</vdex>

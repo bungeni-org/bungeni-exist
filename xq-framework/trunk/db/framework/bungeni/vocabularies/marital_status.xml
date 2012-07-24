@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">marital_status</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.marital_status</vocabIdentifier>
+    <term>
+        <termIdentifier>single</termIdentifier>
+        <caption>
+            <langstring language="en">Single</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>married</termIdentifier>
+        <caption>
+            <langstring language="en">Married</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>civil_union</termIdentifier>
+        <caption>
+            <langstring language="en">Civil Union</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>divorced</termIdentifier>
+        <caption>
+            <langstring language="en">Divorced</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>widowed</termIdentifier>
+        <caption>
+            <langstring language="en">Widow</langstring>
+        </caption>
+    </term>
+</vdex>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">Activity Types</langstring>
+        <langstring language="es">Tipos de Actividad</langstring>
+        <langstring language="fr">Types d'Activité</langstring>
+        <langstring language="pt">Tipos de Atividade</langstring>
+        <langstring language="sw">Aina za Shughuli</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.sittingactivitytypes</vocabIdentifier>
+    <term>
+        <termIdentifier>morning_sitting</termIdentifier>
+        <caption>
+            <langstring language="en">morning sitting</langstring>
+            <langstring language="es">sesiones por la mañana</langstring>
+            <langstring language="fr">séance du matin</langstring>
+            <langstring language="pt">sessõe da manhã</langstring>
+            <langstring language="sw">kikao cha asubuhi</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>afternoon_sitting</termIdentifier>
+        <caption>
+            <langstring language="en">afternoon sitting</langstring>
+            <langstring language="es">sesiones por la tarde</langstring>
+            <langstring language="fr">séances d'après-midi</langstring>
+            <langstring language="pt">sessões da tarde</langstring>
+            <langstring language="sw">kikao cha alasiri</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>public_hearing</termIdentifier>
+        <caption>
+            <langstring language="en">public hearing</langstring>
+            <langstring language="es">audiencia pública</langstring>
+            <langstring language="fr">audience publique</langstring>
+            <langstring language="pt">audiência pública</langstring>
+            <langstring language="sw">kikao hadharani</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>public_debate</termIdentifier>
+        <caption>
+            <langstring language="en">public debate</langstring>
+            <langstring language="es">el debate público</langstring>
+            <langstring language="fr">débat public</langstring>
+            <langstring language="pt">debate público</langstring>
+            <langstring language="sw">mjadala hadharani</langstring>
+        </caption>
+    </term>
+</vdex>

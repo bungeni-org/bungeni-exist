@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">committee_type</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.committee_type</vocabIdentifier>
+    <term>
+        <termIdentifier>housekeeping</termIdentifier>
+        <caption>
+            <langstring language="en">House Keeping</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>departmental</termIdentifier>
+        <caption>
+            <langstring language="en">Departmental</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>adhoc</termIdentifier>
+        <caption>
+            <langstring language="en">Ad Hoc</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>watchdog</termIdentifier>
+        <caption>
+            <langstring language="en">Watch Dog</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>liaison</termIdentifier>
+        <caption>
+            <langstring language="en">Liaison</langstring>
+        </caption>
+    </term>
+</vdex>

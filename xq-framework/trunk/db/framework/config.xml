@@ -15,6 +15,7 @@
             <att-collection>/db/bungeni-atts</att-collection>
             <!-- relative path from framework root -->
             <i18n-messages>i18n</i18n-messages>
+            <vdex>bungeni/vocabularies</vdex>
             <default-lang>en</default-lang>
         </app>
         <app name="anapp">

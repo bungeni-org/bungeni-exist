@@ -1,0 +1,2581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true">
+    <vocabName>
+        <langstring language="en">APKN Subject Vocabulary</langstring>
+    </vocabName>
+    <vocabIdentifier>org.apkn.metadata.vocabularies.subjectterms</vocabIdentifier>
+    <term>
+        <termIdentifier>Africa</termIdentifier>
+        <caption>
+            <langstring language="en">Africa</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Africa::Regions and sub-regions</termIdentifier>
+            <caption>
+                <langstring language="en">Regions and sub-regions</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Africa::Regions and sub-regions::Eastern Africa</termIdentifier>
+                <caption>
+                    <langstring language="en">Eastern Africa</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Regions and sub-regions::Middle Africa</termIdentifier>
+                <caption>
+                    <langstring language="en">Middle Africa</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Regions and sub-regions::Northern Africa</termIdentifier>
+                <caption>
+                    <langstring language="en">Northern Africa</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Regions and sub-regions::Southern Africa</termIdentifier>
+                <caption>
+                    <langstring language="en">Southern Africa</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Regions and sub-regions::Western Africa</termIdentifier>
+                <caption>
+                    <langstring language="en">Western Africa</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Africa::Intergovernmental organisations</termIdentifier>
+            <caption>
+                <langstring language="en">Intergovernmental organisations</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Africa::Intergovernmental organisations::Southern African Development Community (SADC)</termIdentifier>
+                <caption>
+                    <langstring language="en">Southern African Development Community (SADC)</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Intergovernmental organisations::Economic Community of West African States (ECOWAS)</termIdentifier>
+                <caption>
+                    <langstring language="en">Economic Community of West African States (ECOWAS)</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Intergovernmental organisations::Intergovernmental Authority on Development (IGAD)</termIdentifier>
+                <caption>
+                    <langstring language="en">Intergovernmental Authority on Development (IGAD)</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Intergovernmental organisations::Economic Community of Central African States (ECCAS)</termIdentifier>
+                <caption>
+                    <langstring language="en">Economic Community of Central African States (ECCAS)</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Intergovernmental organisations::Arab Maghreb Union (AMU)</termIdentifier>
+                <caption>
+                    <langstring language="en">Arab Maghreb Union (AMU)</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Africa::Countries</termIdentifier>
+            <caption>
+                <langstring language="en">Countries</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Africa::Countries::Algeria</termIdentifier>
+                <caption>
+                    <langstring language="en">Algeria</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Angola</termIdentifier>
+                <caption>
+                    <langstring language="en">Angola</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Benin</termIdentifier>
+                <caption>
+                    <langstring language="en">Benin</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Botswana</termIdentifier>
+                <caption>
+                    <langstring language="en">Botswana</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Burkina Faso</termIdentifier>
+                <caption>
+                    <langstring language="en">Burkina Faso</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Burundi</termIdentifier>
+                <caption>
+                    <langstring language="en">Burundi</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Cameroon</termIdentifier>
+                <caption>
+                    <langstring language="en">Cameroon</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Cape Verde</termIdentifier>
+                <caption>
+                    <langstring language="en">Cape Verde</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Central African Republic</termIdentifier>
+                <caption>
+                    <langstring language="en">Central African Republic</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Chad</termIdentifier>
+                <caption>
+                    <langstring language="en">Chad</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Comoros</termIdentifier>
+                <caption>
+                    <langstring language="en">Comoros</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Djibouti</termIdentifier>
+                <caption>
+                    <langstring language="en">Djibouti</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Democratic Republic of Congo</termIdentifier>
+                <caption>
+                    <langstring language="en">Democratic Republic of Congo</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Egypt</termIdentifier>
+                <caption>
+                    <langstring language="en">Egypt</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Equatorial Guinea</termIdentifier>
+                <caption>
+                    <langstring language="en">Equatorial Guinea</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Eritrea</termIdentifier>
+                <caption>
+                    <langstring language="en">Eritrea</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Ethiopia</termIdentifier>
+                <caption>
+                    <langstring language="en">Ethiopia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Gabon</termIdentifier>
+                <caption>
+                    <langstring language="en">Gabon</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Gambia</termIdentifier>
+                <caption>
+                    <langstring language="en">Gambia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Ghana</termIdentifier>
+                <caption>
+                    <langstring language="en">Ghana</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Guinea-Bissau</termIdentifier>
+                <caption>
+                    <langstring language="en">Guinea-Bissau</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Guinea</termIdentifier>
+                <caption>
+                    <langstring language="en">Guinea</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::ivory coast</termIdentifier>
+                <caption>
+                    <langstring language="en">ivory coast</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Kenya</termIdentifier>
+                <caption>
+                    <langstring language="en">Kenya</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Lesotho</termIdentifier>
+                <caption>
+                    <langstring language="en">Lesotho</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Liberia</termIdentifier>
+                <caption>
+                    <langstring language="en">Liberia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Libya</termIdentifier>
+                <caption>
+                    <langstring language="en">Libya</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Madagascar</termIdentifier>
+                <caption>
+                    <langstring language="en">Madagascar</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Malawi</termIdentifier>
+                <caption>
+                    <langstring language="en">Malawi</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Mali</termIdentifier>
+                <caption>
+                    <langstring language="en">Mali</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Mauritania</termIdentifier>
+                <caption>
+                    <langstring language="en">Mauritania</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Mauritius</termIdentifier>
+                <caption>
+                    <langstring language="en">Mauritius</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Morocco</termIdentifier>
+                <caption>
+                    <langstring language="en">Morocco</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Mozambique</termIdentifier>
+                <caption>
+                    <langstring language="en">Mozambique</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Namibia</termIdentifier>
+                <caption>
+                    <langstring language="en">Namibia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Niger</termIdentifier>
+                <caption>
+                    <langstring language="en">Niger</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Nigeria</termIdentifier>
+                <caption>
+                    <langstring language="en">Nigeria</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Republic of the Congo</termIdentifier>
+                <caption>
+                    <langstring language="en">Republic of the Congo</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Rwanda</termIdentifier>
+                <caption>
+                    <langstring language="en">Rwanda</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Sao Tome and Principe</termIdentifier>
+                <caption>
+                    <langstring language="en">Sao Tome and Principe</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Senegal</termIdentifier>
+                <caption>
+                    <langstring language="en">Senegal</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Seychelles</termIdentifier>
+                <caption>
+                    <langstring language="en">Seychelles</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Sierra Leone</termIdentifier>
+                <caption>
+                    <langstring language="en">Sierra Leone</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Somalia</termIdentifier>
+                <caption>
+                    <langstring language="en">Somalia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::South Africa</termIdentifier>
+                <caption>
+                    <langstring language="en">South Africa</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Sudan</termIdentifier>
+                <caption>
+                    <langstring language="en">Sudan</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Swaziland</termIdentifier>
+                <caption>
+                    <langstring language="en">Swaziland</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Tanzania</termIdentifier>
+                <caption>
+                    <langstring language="en">Tanzania</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Togo</termIdentifier>
+                <caption>
+                    <langstring language="en">Togo</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Tunisia</termIdentifier>
+                <caption>
+                    <langstring language="en">Tunisia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Uganda</termIdentifier>
+                <caption>
+                    <langstring language="en">Uganda</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Western Sahara</termIdentifier>
+                <caption>
+                    <langstring language="en">Western Sahara</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Zambia</termIdentifier>
+                <caption>
+                    <langstring language="en">Zambia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Africa::Countries::Zimbabwe</termIdentifier>
+                <caption>
+                    <langstring language="en">Zimbabwe</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Rest of the world</termIdentifier>
+        <caption>
+            <langstring language="en">Rest of the world</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Rest of the world::Americas</termIdentifier>
+            <caption>
+                <langstring language="en">Americas</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Rest of the world::Americas::Caribbean</termIdentifier>
+                <caption>
+                    <langstring language="en">Caribbean</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Americas::Central America</termIdentifier>
+                <caption>
+                    <langstring language="en">Central America</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Americas::South America</termIdentifier>
+                <caption>
+                    <langstring language="en">South America</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Americas::North America</termIdentifier>
+                <caption>
+                    <langstring language="en">North America</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Rest of the world::Asia</termIdentifier>
+            <caption>
+                <langstring language="en">Asia</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Rest of the world::Asia::Central Asia</termIdentifier>
+                <caption>
+                    <langstring language="en">Central Asia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Asia::Eastern Asia</termIdentifier>
+                <caption>
+                    <langstring language="en">Eastern Asia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Asia::Southern Asia</termIdentifier>
+                <caption>
+                    <langstring language="en">Southern Asia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Asia::South-Eastern Asia</termIdentifier>
+                <caption>
+                    <langstring language="en">South-Eastern Asia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Asia::Western Asia</termIdentifier>
+                <caption>
+                    <langstring language="en">Western Asia</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Rest of the world::Europe</termIdentifier>
+            <caption>
+                <langstring language="en">Europe</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Rest of the world::Europe::Eastern Europe</termIdentifier>
+                <caption>
+                    <langstring language="en">Eastern Europe</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Europe::Northern Europe</termIdentifier>
+                <caption>
+                    <langstring language="en">Northern Europe</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Europe::Southern Europe</termIdentifier>
+                <caption>
+                    <langstring language="en">Southern Europe</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Europe::Western Europe</termIdentifier>
+                <caption>
+                    <langstring language="en">Western Europe</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Rest of the world::Oceania</termIdentifier>
+            <caption>
+                <langstring language="en">Oceania</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Rest of the world::Oceania::Australia and New Zealand</termIdentifier>
+                <caption>
+                    <langstring language="en">Australia and New Zealand</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Oceania::Melanesia</termIdentifier>
+                <caption>
+                    <langstring language="en">Melanesia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Oceania::Micronesia</termIdentifier>
+                <caption>
+                    <langstring language="en">Micronesia</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Rest of the world::Oceania::Polynesia</termIdentifier>
+                <caption>
+                    <langstring language="en">Polynesia</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>African Union</termIdentifier>
+        <caption>
+            <langstring language="en">African Union</langstring>
+        </caption>
+        <term>
+            <termIdentifier>African Union::Africa Union Organs</termIdentifier>
+            <caption>
+                <langstring language="en">Africa Union Organs</langstring>
+            </caption>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Assenbly</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Assenbly</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Executive Council</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Executive Council</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::Pan-African Parliament</termIdentifier>
+                <caption>
+                    <langstring language="en">Pan-African Parliament</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::African Court of Justice</termIdentifier>
+                <caption>
+                    <langstring language="en">African Court of Justice</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Commission</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Commission</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Permanent Representatives' Committee</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Permanent Representatives' Committee</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Specialized Technical Committees</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Specialized Technical Committees</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Economic, Social and Cultural Council</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Economic, Social and Cultural Council</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Organs::AU Peace and Security Council</termIdentifier>
+                <caption>
+                    <langstring language="en">AU Peace and Security Council</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>African Union::Africa Union Financial Institutions</termIdentifier>
+            <caption>
+                <langstring language="en">Africa Union Financial Institutions</langstring>
+            </caption>
+            <term>
+                <termIdentifier>African Union::Africa Union Financial Institutions::AU African Investment Bank</termIdentifier>
+                <caption>
+                    <langstring language="en">AU African Investment Bank</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Financial Institutions::AU African Monetary Fund</termIdentifier>
+                <caption>
+                    <langstring language="en">AU African Monetary Fund</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>African Union::Africa Union Financial Institutions::AU African Central Bank</termIdentifier>
+                <caption>
+                    <langstring language="en">AU African Central Bank</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>African Union::AU law and treaties</termIdentifier>
+            <caption>
+                <langstring language="en">AU law and treaties</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>African Union::AU economic integration</termIdentifier>
+            <caption>
+                <langstring language="en">AU economic integration</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>African Union::AU political integration</termIdentifier>
+            <caption>
+                <langstring language="en">AU political integration</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Agriculture, animals, food and rural affairs</termIdentifier>
+        <caption>
+            <langstring language="en">Agriculture, animals, food and rural affairs</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Agriculture, animals, food and rural affairs::Agriculture</termIdentifier>
+            <caption>
+                <langstring language="en">Agriculture</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Agriculture, animals, food and rural affairs::Agriculture::Agriculture and environment</termIdentifier>
+                <caption>
+                    <langstring language="en">Agriculture and environment</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Agriculture, animals, food and rural affairs::Agriculture::Common Agricultural Policy</termIdentifier>
+                <caption>
+                    <langstring language="en">Common Agricultural Policy</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Agriculture, animals, food and rural affairs::Agriculture::Farmers</termIdentifier>
+                <caption>
+                    <langstring language="en">Farmers</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Agriculture, animals, food and rural affairs::Agriculture::Organic farming</termIdentifier>
+                <caption>
+                    <langstring language="en">Organic farming</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Agriculture, animals, food and rural affairs::Animals</termIdentifier>
+            <caption>
+                <langstring language="en">Animals</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Agriculture, animals, food and rural affairs::Animals::Animal diseases</termIdentifier>
+                <caption>
+                    <langstring language="en">Animal diseases</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Agriculture, animals, food and rural affairs::Animals::Animal welfare</termIdentifier>
+                <caption>
+                    <langstring language="en">Animal welfare</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Agriculture, animals, food and rural affairs::Countryside</termIdentifier>
+            <caption>
+                <langstring language="en">Countryside</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Agriculture, animals, food and rural affairs::Fisheries</termIdentifier>
+            <caption>
+                <langstring language="en">Fisheries</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Agriculture, animals, food and rural affairs::Food</termIdentifier>
+            <caption>
+                <langstring language="en">Food</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Agriculture, animals, food and rural affairs::Forestry</termIdentifier>
+            <caption>
+                <langstring language="en">Forestry</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Asylum, immigration and nationality</termIdentifier>
+        <caption>
+            <langstring language="en">Asylum, immigration and nationality</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Asylum, immigration and nationality::Asylum</termIdentifier>
+            <caption>
+                <langstring language="en">Asylum</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Asylum, immigration and nationality::Immigration</termIdentifier>
+            <caption>
+                <langstring language="en">Immigration</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Asylum, immigration and nationality::Nationality</termIdentifier>
+            <caption>
+                <langstring language="en">Nationality</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Business, industry and consumers</termIdentifier>
+        <caption>
+            <langstring language="en">Business, industry and consumers</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Business, industry and consumers::Business support</termIdentifier>
+            <caption>
+                <langstring language="en">Business support</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Business, industry and consumers::Business support::Regional development agencies</termIdentifier>
+                <caption>
+                    <langstring language="en">Regional development agencies</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Companies</termIdentifier>
+            <caption>
+                <langstring language="en">Companies</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Competition</termIdentifier>
+            <caption>
+                <langstring language="en">Competition</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Consumers</termIdentifier>
+            <caption>
+                <langstring language="en">Consumers</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Industrial health and safety</termIdentifier>
+            <caption>
+                <langstring language="en">Industrial health and safety</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Industrial relations</termIdentifier>
+            <caption>
+                <langstring language="en">Industrial relations</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Industry</termIdentifier>
+            <caption>
+                <langstring language="en">Industry</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Business, industry and consumers::Industry::Construction industry</termIdentifier>
+                <caption>
+                    <langstring language="en">Construction industry</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Business, industry and consumers::Industry::Manufacturing industries</termIdentifier>
+                <caption>
+                    <langstring language="en">Manufacturing industries</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Business, industry and consumers::Industry::Service industries</termIdentifier>
+                <caption>
+                    <langstring language="en">Service industries</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Business, industry and consumers::Industry::Tourism</termIdentifier>
+                <caption>
+                    <langstring language="en">Tourism</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Insolvency</termIdentifier>
+            <caption>
+                <langstring language="en">Insolvency</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Intellectual property</termIdentifier>
+            <caption>
+                <langstring language="en">Intellectual property</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::International trade</termIdentifier>
+            <caption>
+                <langstring language="en">International trade</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Postal services</termIdentifier>
+            <caption>
+                <langstring language="en">Postal services</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Regulation</termIdentifier>
+            <caption>
+                <langstring language="en">Regulation</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Small businesses</termIdentifier>
+            <caption>
+                <langstring language="en">Small businesses</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Standards</termIdentifier>
+            <caption>
+                <langstring language="en">Standards</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Business, industry and consumers::Utilities</termIdentifier>
+            <caption>
+                <langstring language="en">Utilities</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Communities and families</termIdentifier>
+        <caption>
+            <langstring language="en">Communities and families</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Communities and families::Charities</termIdentifier>
+            <caption>
+                <langstring language="en">Charities</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Children and families</termIdentifier>
+            <caption>
+                <langstring language="en">Children and families</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Communities and families::Children and families::Child care</termIdentifier>
+                <caption>
+                    <langstring language="en">Child care</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Children and families::Child support</termIdentifier>
+                <caption>
+                    <langstring language="en">Child support</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Children and families::Children's social services</termIdentifier>
+                <caption>
+                    <langstring language="en">Children's social services</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Children and families::Divorce</termIdentifier>
+                <caption>
+                    <langstring language="en">Divorce</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Children and families::Marriage</termIdentifier>
+                <caption>
+                    <langstring language="en">Marriage</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Children and families::Registration of births, deaths and marriages</termIdentifier>
+                <caption>
+                    <langstring language="en">Registration of births, deaths and marriages</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Death</termIdentifier>
+            <caption>
+                <langstring language="en">Death</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Communities and families::Death::Burial and cremation</termIdentifier>
+                <caption>
+                    <langstring language="en">Burial and cremation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Death::Coroners</termIdentifier>
+                <caption>
+                    <langstring language="en">Coroners</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Death::Funerals</termIdentifier>
+                <caption>
+                    <langstring language="en">Funerals</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Death::Wills and intestacy</termIdentifier>
+                <caption>
+                    <langstring language="en">Wills and intestacy</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Ethnic groups</termIdentifier>
+            <caption>
+                <langstring language="en">Ethnic groups</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Family law</termIdentifier>
+            <caption>
+                <langstring language="en">Family law</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Communities and families::Family law::Civil partnerships</termIdentifier>
+                <caption>
+                    <langstring language="en">Civil partnerships</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Family law::Cohabitation</termIdentifier>
+                <caption>
+                    <langstring language="en">Cohabitation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Family law::Divorce</termIdentifier>
+                <caption>
+                    <langstring language="en">Divorce</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Communities and families::Family law::Marriage</termIdentifier>
+                <caption>
+                    <langstring language="en">Marriage</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Incomes and poverty</termIdentifier>
+            <caption>
+                <langstring language="en">Incomes and poverty</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Communities and families::Incomes and poverty::Fuel poverty</termIdentifier>
+                <caption>
+                    <langstring language="en">Fuel poverty</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Older people</termIdentifier>
+            <caption>
+                <langstring language="en">Older people</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Population</termIdentifier>
+            <caption>
+                <langstring language="en">Population</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Communities and families::Population::Census</termIdentifier>
+                <caption>
+                    <langstring language="en">Census</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Religion and faith communities</termIdentifier>
+            <caption>
+                <langstring language="en">Religion and faith communities</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Communities and families::Voluntary organisations</termIdentifier>
+            <caption>
+                <langstring language="en">Voluntary organisations</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Crime, civil law, justice and rights</termIdentifier>
+        <caption>
+            <langstring language="en">Crime, civil law, justice and rights</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Administration of justice</termIdentifier>
+            <caption>
+                <langstring language="en">Administration of justice</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Administration of justice::Courts</termIdentifier>
+                <caption>
+                    <langstring language="en">Courts</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Administration of justice::Legal profession</termIdentifier>
+                <caption>
+                    <langstring language="en">Legal profession</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Alternatives to prison</termIdentifier>
+            <caption>
+                <langstring language="en">Alternatives to prison</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Anti-social behaviour</termIdentifier>
+            <caption>
+                <langstring language="en">Anti-social behaviour</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Civil law</termIdentifier>
+            <caption>
+                <langstring language="en">Civil law</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Coroners</termIdentifier>
+                <caption>
+                    <langstring language="en">Coroners</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Gender recognition</termIdentifier>
+                <caption>
+                    <langstring language="en">Gender recognition</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Legal aid</termIdentifier>
+                <caption>
+                    <langstring language="en">Legal aid</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Limitation of actions</termIdentifier>
+                <caption>
+                    <langstring language="en">Limitation of actions</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Personal injury</termIdentifier>
+                <caption>
+                    <langstring language="en">Personal injury</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Powers of attorney</termIdentifier>
+                <caption>
+                    <langstring language="en">Powers of attorney</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Civil law::Small claims</termIdentifier>
+                <caption>
+                    <langstring language="en">Small claims</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Crime</termIdentifier>
+            <caption>
+                <langstring language="en">Crime</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Crime::Crimes of violence</termIdentifier>
+                <caption>
+                    <langstring language="en">Crimes of violence</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Crime::Drugs crimes</termIdentifier>
+                <caption>
+                    <langstring language="en">Drugs crimes</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Crime::Internet and cybercrime</termIdentifier>
+                <caption>
+                    <langstring language="en">Internet and cybercrime</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Crime::Offensive weapons</termIdentifier>
+                <caption>
+                    <langstring language="en">Offensive weapons</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Crime::Public order offences</termIdentifier>
+                <caption>
+                    <langstring language="en">Public order offences</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Crime::Sexual offences</termIdentifier>
+                <caption>
+                    <langstring language="en">Sexual offences</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Criminal law</termIdentifier>
+            <caption>
+                <langstring language="en">Criminal law</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Death</termIdentifier>
+            <caption>
+                <langstring language="en">Death</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Death::Burial and cremation</termIdentifier>
+                <caption>
+                    <langstring language="en">Burial and cremation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Death::Coroners</termIdentifier>
+                <caption>
+                    <langstring language="en">Coroners</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Death::Funerals</termIdentifier>
+                <caption>
+                    <langstring language="en">Funerals</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Death::Wills and intestacy</termIdentifier>
+                <caption>
+                    <langstring language="en">Wills and intestacy</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Emergencies and disaster management</termIdentifier>
+            <caption>
+                <langstring language="en">Emergencies and disaster management</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Emergency services</termIdentifier>
+            <caption>
+                <langstring language="en">Emergency services</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Emergency services::Ambulance services</termIdentifier>
+                <caption>
+                    <langstring language="en">Ambulance services</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Emergency services::Fire services</termIdentifier>
+                <caption>
+                    <langstring language="en">Fire services</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Emergency services::Police</termIdentifier>
+                <caption>
+                    <langstring language="en">Police</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Equality</termIdentifier>
+            <caption>
+                <langstring language="en">Equality</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Equality::Age discrimination</termIdentifier>
+                <caption>
+                    <langstring language="en">Age discrimination</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Equality::Disability discrimination</termIdentifier>
+                <caption>
+                    <langstring language="en">Disability discrimination</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Equality::Gender recognition</termIdentifier>
+                <caption>
+                    <langstring language="en">Gender recognition</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Equality::Racial discrimination</termIdentifier>
+                <caption>
+                    <langstring language="en">Racial discrimination</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Equality::Religious discrimination</termIdentifier>
+                <caption>
+                    <langstring language="en">Religious discrimination</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Equality::Sex discrimination</termIdentifier>
+                <caption>
+                    <langstring language="en">Sex discrimination</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Family law</termIdentifier>
+            <caption>
+                <langstring language="en">Family law</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Family law::Civil partnerships</termIdentifier>
+                <caption>
+                    <langstring language="en">Civil partnerships</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Family law::Cohabitation</termIdentifier>
+                <caption>
+                    <langstring language="en">Cohabitation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Family law::Divorce</termIdentifier>
+                <caption>
+                    <langstring language="en">Divorce</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Family law::Marriage</termIdentifier>
+                <caption>
+                    <langstring language="en">Marriage</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Firearms</termIdentifier>
+            <caption>
+                <langstring language="en">Firearms</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Freedom of information</termIdentifier>
+            <caption>
+                <langstring language="en">Freedom of information</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Human rights</termIdentifier>
+            <caption>
+                <langstring language="en">Human rights</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Intelligence services</termIdentifier>
+            <caption>
+                <langstring language="en">Intelligence services</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::International law</termIdentifier>
+            <caption>
+                <langstring language="en">International law</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::International law::AU treaties</termIdentifier>
+                <caption>
+                    <langstring language="en">AU treaties</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::International law::International treaties</termIdentifier>
+                <caption>
+                    <langstring language="en">International treaties</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Land law</termIdentifier>
+            <caption>
+                <langstring language="en">Land law</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Prisons</termIdentifier>
+            <caption>
+                <langstring language="en">Prisons</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Privacy</termIdentifier>
+            <caption>
+                <langstring language="en">Privacy</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Crime, civil law, justice and rights::Privacy::Data protection</termIdentifier>
+                <caption>
+                    <langstring language="en">Data protection</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Security industry</termIdentifier>
+            <caption>
+                <langstring language="en">Security industry</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Crime, civil law, justice and rights::Terrorism</termIdentifier>
+            <caption>
+                <langstring language="en">Terrorism</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Culture, media and sport</termIdentifier>
+        <caption>
+            <langstring language="en">Culture, media and sport</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Culture, media and sport::Arts</termIdentifier>
+            <caption>
+                <langstring language="en">Arts</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Culture, media and sport::Arts::Art works</termIdentifier>
+                <caption>
+                    <langstring language="en">Art works</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Culture, media and sport::Arts::Museums and galleries</termIdentifier>
+                <caption>
+                    <langstring language="en">Museums and galleries</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Culture, media and sport::Arts::Performing arts</termIdentifier>
+                <caption>
+                    <langstring language="en">Performing arts</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Cultural heritage</termIdentifier>
+            <caption>
+                <langstring language="en">Cultural heritage</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Gambling</termIdentifier>
+            <caption>
+                <langstring language="en">Gambling</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Leisure</termIdentifier>
+            <caption>
+                <langstring language="en">Leisure</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Libraries</termIdentifier>
+            <caption>
+                <langstring language="en">Libraries</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Licensing</termIdentifier>
+            <caption>
+                <langstring language="en">Licensing</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Media</termIdentifier>
+            <caption>
+                <langstring language="en">Media</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Culture, media and sport::Media::Broadcasting</termIdentifier>
+                <caption>
+                    <langstring language="en">Broadcasting</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Culture, media and sport::Media::Press</termIdentifier>
+                <caption>
+                    <langstring language="en">Press</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::National Lottery</termIdentifier>
+            <caption>
+                <langstring language="en">National Lottery</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Sports and Olympic Games</termIdentifier>
+            <caption>
+                <langstring language="en">Sports and Olympic Games</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Culture, media and sport::Tourism</termIdentifier>
+            <caption>
+                <langstring language="en">Tourism</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Defence</termIdentifier>
+        <caption>
+            <langstring language="en">Defence</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Defence::Armed forces</termIdentifier>
+            <caption>
+                <langstring language="en">Armed forces</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Defence::Armed forces::Armed forces welfare</termIdentifier>
+                <caption>
+                    <langstring language="en">Armed forces welfare</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Defence::Armed forces::Veterans</termIdentifier>
+                <caption>
+                    <langstring language="en">Veterans</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Defence::Defence equipment and procurement</termIdentifier>
+            <caption>
+                <langstring language="en">Defence equipment and procurement</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Defence::Defence policy</termIdentifier>
+            <caption>
+                <langstring language="en">Defence policy</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Defence::Defence policy::Arms control</termIdentifier>
+                <caption>
+                    <langstring language="en">Arms control</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Defence::Defence policy::Defence expenditure</termIdentifier>
+                <caption>
+                    <langstring language="en">Defence expenditure</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Defence::Defence policy::Defence policy</termIdentifier>
+                <caption>
+                    <langstring language="en">Defence policy</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Defence::Military operations</termIdentifier>
+            <caption>
+                <langstring language="en">Military operations</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Economy and finance</termIdentifier>
+        <caption>
+            <langstring language="en">Economy and finance</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Economy and finance::Economic policy</termIdentifier>
+            <caption>
+                <langstring language="en">Economic policy</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::Economic situation</termIdentifier>
+            <caption>
+                <langstring language="en">Economic situation</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Economy and finance::Economic situation::World economy</termIdentifier>
+                <caption>
+                    <langstring language="en">World economy</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::AU budget</termIdentifier>
+            <caption>
+                <langstring language="en">AU budget</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::Financial institutions</termIdentifier>
+            <caption>
+                <langstring language="en">Financial institutions</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::Financial services</termIdentifier>
+            <caption>
+                <langstring language="en">Financial services</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Economy and finance::Financial services::Insolvency</termIdentifier>
+                <caption>
+                    <langstring language="en">Insolvency</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Economy and finance::Financial services::Loans</termIdentifier>
+                <caption>
+                    <langstring language="en">Loans</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Economy and finance::Financial services::Mortgages</termIdentifier>
+                <caption>
+                    <langstring language="en">Mortgages</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Economy and finance::Financial services::Pensions</termIdentifier>
+                <caption>
+                    <langstring language="en">Pensions</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::Incomes and poverty</termIdentifier>
+            <caption>
+                <langstring language="en">Incomes and poverty</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Economy and finance::Incomes and poverty::Fuel poverty</termIdentifier>
+                <caption>
+                    <langstring language="en">Fuel poverty</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::International development</termIdentifier>
+            <caption>
+                <langstring language="en">International development</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::International economic relations</termIdentifier>
+            <caption>
+                <langstring language="en">International economic relations</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Economy and finance::International economic relations::Economic and monetary union</termIdentifier>
+                <caption>
+                    <langstring language="en">Economic and monetary union</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::International trade</termIdentifier>
+            <caption>
+                <langstring language="en">International trade</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::Public expenditure</termIdentifier>
+            <caption>
+                <langstring language="en">Public expenditure</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Economy and finance::Taxation</termIdentifier>
+            <caption>
+                <langstring language="en">Taxation</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Economy and finance::Taxation::National insurance</termIdentifier>
+                <caption>
+                    <langstring language="en">National insurance</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Education</termIdentifier>
+        <caption>
+            <langstring language="en">Education</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Education::Adult education</termIdentifier>
+            <caption>
+                <langstring language="en">Adult education</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Further education</termIdentifier>
+            <caption>
+                <langstring language="en">Further education</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Higher education</termIdentifier>
+            <caption>
+                <langstring language="en">Higher education</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Vocational education</termIdentifier>
+            <caption>
+                <langstring language="en">Vocational education</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Pre-school education</termIdentifier>
+            <caption>
+                <langstring language="en">Pre-school education</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Schools</termIdentifier>
+            <caption>
+                <langstring language="en">Schools</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Special educational needs</termIdentifier>
+            <caption>
+                <langstring language="en">Special educational needs</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Students</termIdentifier>
+            <caption>
+                <langstring language="en">Students</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Education::Teachers</termIdentifier>
+            <caption>
+                <langstring language="en">Teachers</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Employment and training</termIdentifier>
+        <caption>
+            <langstring language="en">Employment and training</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Employment and training::Adult education</termIdentifier>
+            <caption>
+                <langstring language="en">Adult education</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::Employment</termIdentifier>
+            <caption>
+                <langstring language="en">Employment</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::Employment schemes</termIdentifier>
+            <caption>
+                <langstring language="en">Employment schemes</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::National insurance</termIdentifier>
+            <caption>
+                <langstring language="en">National insurance</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::Pay</termIdentifier>
+            <caption>
+                <langstring language="en">Pay</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::Pensions</termIdentifier>
+            <caption>
+                <langstring language="en">Pensions</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::Training</termIdentifier>
+            <caption>
+                <langstring language="en">Training</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Employment and training::Unemployment</termIdentifier>
+            <caption>
+                <langstring language="en">Unemployment</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Energy and environment</termIdentifier>
+        <caption>
+            <langstring language="en">Energy and environment</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Energy and environment::Climate change</termIdentifier>
+            <caption>
+                <langstring language="en">Climate change</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Energy and environment::Energy</termIdentifier>
+            <caption>
+                <langstring language="en">Energy</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Coal</termIdentifier>
+                <caption>
+                    <langstring language="en">Coal</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Electricity</termIdentifier>
+                <caption>
+                    <langstring language="en">Electricity</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Energy conservation</termIdentifier>
+                <caption>
+                    <langstring language="en">Energy conservation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Fuel poverty</termIdentifier>
+                <caption>
+                    <langstring language="en">Fuel poverty</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Nuclear power</termIdentifier>
+                <caption>
+                    <langstring language="en">Nuclear power</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Oil, petrol and natural gas</termIdentifier>
+                <caption>
+                    <langstring language="en">Oil, petrol and natural gas</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Energy::Renewable energy</termIdentifier>
+                <caption>
+                    <langstring language="en">Renewable energy</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Energy and environment::Environmental protection</termIdentifier>
+            <caption>
+                <langstring language="en">Environmental protection</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Energy and environment::Environmental protection::Biodiversity</termIdentifier>
+                <caption>
+                    <langstring language="en">Biodiversity</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Environmental protection::Countryside</termIdentifier>
+                <caption>
+                    <langstring language="en">Countryside</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Environmental protection::Marine environment</termIdentifier>
+                <caption>
+                    <langstring language="en">Marine environment</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Environmental protection::Nature conservation</termIdentifier>
+                <caption>
+                    <langstring language="en">Nature conservation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Environmental protection::Wildlife</termIdentifier>
+                <caption>
+                    <langstring language="en">Wildlife</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Energy and environment::Pollution</termIdentifier>
+            <caption>
+                <langstring language="en">Pollution</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Energy and environment::Utilities</termIdentifier>
+            <caption>
+                <langstring language="en">Utilities</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Energy and environment::Waste management</termIdentifier>
+            <caption>
+                <langstring language="en">Waste management</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Energy and environment::Water</termIdentifier>
+            <caption>
+                <langstring language="en">Water</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Energy and environment::Water::Flooding</termIdentifier>
+                <caption>
+                    <langstring language="en">Flooding</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Energy and environment::Water::Water industry</termIdentifier>
+                <caption>
+                    <langstring language="en">Water industry</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Health services and medicine</termIdentifier>
+        <caption>
+            <langstring language="en">Health services and medicine</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Health services and medicine::Diseases</termIdentifier>
+            <caption>
+                <langstring language="en">Diseases</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Health education and preventive medicine</termIdentifier>
+            <caption>
+                <langstring language="en">Health education and preventive medicine</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Health services and medicine::Health education and preventive medicine::Alcoholism</termIdentifier>
+                <caption>
+                    <langstring language="en">Alcoholism</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Health services and medicine::Health education and preventive medicine::Communicable diseases</termIdentifier>
+                <caption>
+                    <langstring language="en">Communicable diseases</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Health services and medicine::Health education and preventive medicine::Drugs misuse</termIdentifier>
+                <caption>
+                    <langstring language="en">Drugs misuse</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Health services and medicine::Health education and preventive medicine::Obesity</termIdentifier>
+                <caption>
+                    <langstring language="en">Obesity</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Health services and medicine::Health education and preventive medicine::Smoking</termIdentifier>
+                <caption>
+                    <langstring language="en">Smoking</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Health services and medicine::Health education and preventive medicine::Vaccination</termIdentifier>
+                <caption>
+                    <langstring language="en">Vaccination</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Health finance</termIdentifier>
+            <caption>
+                <langstring language="en">Health finance</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Health services</termIdentifier>
+            <caption>
+                <langstring language="en">Health services</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Health services and medicine::Health services::Mental health</termIdentifier>
+                <caption>
+                    <langstring language="en">Mental health</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Health staff and professions</termIdentifier>
+            <caption>
+                <langstring language="en">Health staff and professions</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Medical ethics</termIdentifier>
+            <caption>
+                <langstring language="en">Medical ethics</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Medicine</termIdentifier>
+            <caption>
+                <langstring language="en">Medicine</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Health services and medicine::Medicine::Animal experiments</termIdentifier>
+                <caption>
+                    <langstring language="en">Animal experiments</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Health services and medicine::Medicine::Genetics</termIdentifier>
+                <caption>
+                    <langstring language="en">Genetics</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Health services and medicine::Patient rights and complaints</termIdentifier>
+            <caption>
+                <langstring language="en">Patient rights and complaints</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Housing and planning</termIdentifier>
+        <caption>
+            <langstring language="en">Housing and planning</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Housing and planning::Housing</termIdentifier>
+            <caption>
+                <langstring language="en">Housing</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Empty property</termIdentifier>
+                <caption>
+                    <langstring language="en">Empty property</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Homelessness</termIdentifier>
+                <caption>
+                    <langstring language="en">Homelessness</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Housing adaptations</termIdentifier>
+                <caption>
+                    <langstring language="en">Housing adaptations</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Housing standards</termIdentifier>
+                <caption>
+                    <langstring language="en">Housing standards</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Housing supply</termIdentifier>
+                <caption>
+                    <langstring language="en">Housing supply</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Overcrowding</termIdentifier>
+                <caption>
+                    <langstring language="en">Overcrowding</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Owner occupation</termIdentifier>
+                <caption>
+                    <langstring language="en">Owner occupation</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Private rented housing</termIdentifier>
+                <caption>
+                    <langstring language="en">Private rented housing</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Social rented housing</termIdentifier>
+                <caption>
+                    <langstring language="en">Social rented housing</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Housing::Supported housing</termIdentifier>
+                <caption>
+                    <langstring language="en">Supported housing</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Housing and planning::Housing benefits</termIdentifier>
+            <caption>
+                <langstring language="en">Housing benefits</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Housing and planning::Planning</termIdentifier>
+            <caption>
+                <langstring language="en">Planning</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Housing and planning::Planning::Regeneration</termIdentifier>
+                <caption>
+                    <langstring language="en">Regeneration</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Housing and planning::Planning::Sustainable development</termIdentifier>
+                <caption>
+                    <langstring language="en">Sustainable development</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>International affairs</termIdentifier>
+        <caption>
+            <langstring language="en">International affairs</langstring>
+        </caption>
+        <term>
+            <termIdentifier>International affairs::Arms control</termIdentifier>
+            <caption>
+                <langstring language="en">Arms control</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>International affairs::Human rights</termIdentifier>
+            <caption>
+                <langstring language="en">Human rights</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>International affairs::International development</termIdentifier>
+            <caption>
+                <langstring language="en">International development</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>International affairs::International economic relations</termIdentifier>
+            <caption>
+                <langstring language="en">International economic relations</langstring>
+            </caption>
+            <term>
+                <termIdentifier>International affairs::International economic relations::Economic and monetary union</termIdentifier>
+                <caption>
+                    <langstring language="en">Economic and monetary union</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>International affairs::International law</termIdentifier>
+            <caption>
+                <langstring language="en">International law</langstring>
+            </caption>
+            <term>
+                <termIdentifier>International affairs::International law::AU law and treaties</termIdentifier>
+                <caption>
+                    <langstring language="en">AU law and treaties</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>International affairs::International law::International treaties</termIdentifier>
+                <caption>
+                    <langstring language="en">International treaties</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>International affairs::International organisations</termIdentifier>
+            <caption>
+                <langstring language="en">International organisations</langstring>
+            </caption>
+            <term>
+                <termIdentifier>International affairs::International organisations::NATO</termIdentifier>
+                <caption>
+                    <langstring language="en">NATO</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>International affairs::International organisations::Organisation for Security and Cooperation in Europe</termIdentifier>
+                <caption>
+                    <langstring language="en">Organisation for Security and Cooperation in Europe</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>International affairs::International organisations::United Nations</termIdentifier>
+                <caption>
+                    <langstring language="en">United Nations</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>International affairs::International organisations::European Union</termIdentifier>
+                <caption>
+                    <langstring language="en">European Union</langstring>
+                </caption>
+                <term>
+                    <termIdentifier>International affairs::International organisations::European Union::EU Council of Ministers</termIdentifier>
+                    <caption>
+                        <langstring language="en">EU Council of Ministers</langstring>
+                    </caption>
+                </term>
+                <term>
+                    <termIdentifier>International affairs::International organisations::European Union::European Commission</termIdentifier>
+                    <caption>
+                        <langstring language="en">European Commission</langstring>
+                    </caption>
+                </term>
+                <term>
+                    <termIdentifier>International affairs::International organisations::European Union::European Council</termIdentifier>
+                    <caption>
+                        <langstring language="en">European Council</langstring>
+                    </caption>
+                </term>
+                <term>
+                    <termIdentifier>International affairs::International organisations::European Union::European Parliament</termIdentifier>
+                    <caption>
+                        <langstring language="en">European Parliament</langstring>
+                    </caption>
+                </term>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>International affairs::International politics and government</termIdentifier>
+            <caption>
+                <langstring language="en">International politics and government</langstring>
+            </caption>
+            <term>
+                <termIdentifier>International affairs::International politics and government::Election results : international</termIdentifier>
+                <caption>
+                    <langstring language="en">Election results : international</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>International affairs::Terrorism</termIdentifier>
+            <caption>
+                <langstring language="en">Terrorism</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Parliament, government and politics</termIdentifier>
+        <caption>
+            <langstring language="en">Parliament, government and politics</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Parliament, government and politics::Central government</termIdentifier>
+            <caption>
+                <langstring language="en">Central government</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Parliament, government and politics::Central government::Civil Service</termIdentifier>
+                <caption>
+                    <langstring language="en">Civil Service</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Central government::Ministers</termIdentifier>
+                <caption>
+                    <langstring language="en">Ministers</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Central government::Non-departmental public bodies</termIdentifier>
+                <caption>
+                    <langstring language="en">Non-departmental public bodies</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Church and state</termIdentifier>
+            <caption>
+                <langstring language="en">Church and state</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Constitution</termIdentifier>
+            <caption>
+                <langstring language="en">Constitution</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Devolution</termIdentifier>
+            <caption>
+                <langstring language="en">Devolution</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Elections</termIdentifier>
+            <caption>
+                <langstring language="en">Elections</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::By-elections</termIdentifier>
+                <caption>
+                    <langstring language="en">By-elections</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::Election expenditure</termIdentifier>
+                <caption>
+                    <langstring language="en">Election expenditure</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::Election results</termIdentifier>
+                <caption>
+                    <langstring language="en">Election results</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::Electoral franchise</termIdentifier>
+                <caption>
+                    <langstring language="en">Electoral franchise</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::Electoral register</termIdentifier>
+                <caption>
+                    <langstring language="en">Electoral register</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::Electoral systems</termIdentifier>
+                <caption>
+                    <langstring language="en">Electoral systems</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Elections::General elections</termIdentifier>
+                <caption>
+                    <langstring language="en">General elections</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Freedom of information</termIdentifier>
+            <caption>
+                <langstring language="en">Freedom of information</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Legislative process</termIdentifier>
+            <caption>
+                <langstring language="en">Legislative process</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Local government</termIdentifier>
+            <caption>
+                <langstring language="en">Local government</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Parliament</termIdentifier>
+            <caption>
+                <langstring language="en">Parliament</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Parliament, government and politics::Parliament::Members of Parliament</termIdentifier>
+                <caption>
+                    <langstring language="en">Members of Parliament</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Parliament::Parliamentary procedure</termIdentifier>
+                <caption>
+                    <langstring language="en">Parliamentary procedure</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Parliament, government and politics::Parliament::Speaker/President</termIdentifier>
+                <caption>
+                    <langstring language="en">Speaker/President</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Political parties</termIdentifier>
+            <caption>
+                <langstring language="en">Political parties</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Public administration</termIdentifier>
+            <caption>
+                <langstring language="en">Public administration</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Public inquiries</termIdentifier>
+            <caption>
+                <langstring language="en">Public inquiries</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Parliament, government and politics::Statistics policy</termIdentifier>
+            <caption>
+                <langstring language="en">Statistics policy</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Science and technology</termIdentifier>
+        <caption>
+            <langstring language="en">Science and technology</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Science and technology::Information technology</termIdentifier>
+            <caption>
+                <langstring language="en">Information technology</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Science and technology::Information technology::Broadcasting</termIdentifier>
+                <caption>
+                    <langstring language="en">Broadcasting</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Science and technology::Information technology::Internet and cybercrime</termIdentifier>
+                <caption>
+                    <langstring language="en">Internet and cybercrime</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Science and technology::Information technology::Telecommunications</termIdentifier>
+                <caption>
+                    <langstring language="en">Telecommunications</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Science and technology::Research and innovation</termIdentifier>
+            <caption>
+                <langstring language="en">Research and innovation</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Science and technology::Science</termIdentifier>
+            <caption>
+                <langstring language="en">Science</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Science and technology::Science::Animal experiments</termIdentifier>
+                <caption>
+                    <langstring language="en">Animal experiments</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Science and technology::Science::Climate change</termIdentifier>
+                <caption>
+                    <langstring language="en">Climate change</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Science and technology::Science::Genetics</termIdentifier>
+                <caption>
+                    <langstring language="en">Genetics</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Social Security and pensions</termIdentifier>
+        <caption>
+            <langstring language="en">Social Security and pensions</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Social Security and pensions::Benefits administration</termIdentifier>
+            <caption>
+                <langstring language="en">Benefits administration</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Benefits policy</termIdentifier>
+            <caption>
+                <langstring language="en">Benefits policy</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Bereavement benefits</termIdentifier>
+            <caption>
+                <langstring language="en">Bereavement benefits</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Family benefits</termIdentifier>
+            <caption>
+                <langstring language="en">Family benefits</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Housing benefits</termIdentifier>
+            <caption>
+                <langstring language="en">Housing benefits</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Pensions</termIdentifier>
+            <caption>
+                <langstring language="en">Pensions</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Sickness, disability and carers' benefits</termIdentifier>
+            <caption>
+                <langstring language="en">Sickness, disability and carers' benefits</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social Security and pensions::Working age benefits</termIdentifier>
+            <caption>
+                <langstring language="en">Working age benefits</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Social services</termIdentifier>
+        <caption>
+            <langstring language="en">Social services</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Social services::Children's social services</termIdentifier>
+            <caption>
+                <langstring language="en">Children's social services</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Social services::Community care</termIdentifier>
+            <caption>
+                <langstring language="en">Community care</langstring>
+            </caption>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>Transport</termIdentifier>
+        <caption>
+            <langstring language="en">Transport</langstring>
+        </caption>
+        <term>
+            <termIdentifier>Transport::Aviation</termIdentifier>
+            <caption>
+                <langstring language="en">Aviation</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Transport::Railways</termIdentifier>
+            <caption>
+                <langstring language="en">Railways</langstring>
+            </caption>
+        </term>
+        <term>
+            <termIdentifier>Transport::Roads</termIdentifier>
+            <caption>
+                <langstring language="en">Roads</langstring>
+            </caption>
+            <term>
+                <termIdentifier>Transport::Roads::Buses</termIdentifier>
+                <caption>
+                    <langstring language="en">Buses</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Transport::Roads::Cycling</termIdentifier>
+                <caption>
+                    <langstring language="en">Cycling</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>Transport::Roads::Motorcycles</termIdentifier>
+                <caption>
+                    <langstring language="en">Motorcycles</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>Transport::Shipping</termIdentifier>
+            <caption>
+                <langstring language="en">Shipping</langstring>
+            </caption>
+        </term>
+    </term>
+</vdex>

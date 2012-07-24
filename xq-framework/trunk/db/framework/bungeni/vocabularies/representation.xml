@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true">
+    <vocabName>
+        <langstring language="en">Parliament: Regions / Provinces / Constituencies</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.representation</vocabIdentifier>
+    <term>
+        <termIdentifier>r1</termIdentifier>
+        <caption>
+            <langstring language="en">Region 1</langstring>
+        </caption>
+        <term>
+            <termIdentifier>r1::p1</termIdentifier>
+            <caption>
+                <langstring language="en">Province 1</langstring>
+            </caption>
+            <term>
+                <termIdentifier>r1::p1::c1</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 1</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r1::p1::c2</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 2</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r1::p1::c3</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 3</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>r1::p2</termIdentifier>
+            <caption>
+                <langstring language="en">Province 2</langstring>
+            </caption>
+            <term>
+                <termIdentifier>r1::p2::c1</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 1</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r1::p2::c2</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 2</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r1::p2::c3</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 3</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+    <term>
+        <termIdentifier>r2</termIdentifier>
+        <caption>
+            <langstring language="en">Region 2</langstring>
+        </caption>
+        <term>
+            <termIdentifier>r2::p1</termIdentifier>
+            <caption>
+                <langstring language="en">Province 1</langstring>
+            </caption>
+            <term>
+                <termIdentifier>r2::p1::c1</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 1</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r2::p1::c2</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 2</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r2::p1::c3</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 3</langstring>
+                </caption>
+            </term>
+        </term>
+        <term>
+            <termIdentifier>r2::p2</termIdentifier>
+            <caption>
+                <langstring language="en">Province 2</langstring>
+            </caption>
+            <term>
+                <termIdentifier>r2::p2::c1</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 1</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r2::p2::c2</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 2</langstring>
+                </caption>
+            </term>
+            <term>
+                <termIdentifier>r2::p2::c3</termIdentifier>
+                <caption>
+                    <langstring language="en">Constituency 3</langstring>
+                </caption>
+            </term>
+        </term>
+    </term>
+</vdex>

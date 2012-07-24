@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0" orderSignificant="true" profileType="flatTokenTerms">
+    <vocabName>
+        <langstring language="en">change_procedure</langstring>
+    </vocabName>
+    <vocabIdentifier>org.bungeni.metadata.vocabularies.change_procedure</vocabIdentifier>
+    <term>
+        <termIdentifier>a</termIdentifier>
+        <caption>
+            <langstring language="en">Automatic</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>m</termIdentifier>
+        <caption>
+            <langstring language="en">Manual</langstring>
+        </caption>
+    </term>
+</vdex>

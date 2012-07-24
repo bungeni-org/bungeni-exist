@@ -78,7 +78,7 @@
         <route href="/member">
             <title>Business | Member of Parliament</title>
             <navigation>members</navigation>
-            <subnavigation>current</subnavigation>
+            <subnavigation>members</subnavigation>
         </route>
         <route href="/member-personalinfo">
             <title>Business | Member of Parliament</title>

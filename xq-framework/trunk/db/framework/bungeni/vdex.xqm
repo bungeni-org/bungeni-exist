@@ -1,5 +1,10 @@
-import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
+xquery version "3.0";
+
 module namespace vdex = 'http://www.imsglobal.org/xsd/imsvdex_v1p0';
+
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
+import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
+import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 declare default element namespace "http://www.imsglobal.org/xsd/imsvdex_v1p0";
 (:~
     : Module for integration Vdex files exported from Bungeni
@@ -13,6 +18,7 @@ declare default element namespace "http://www.imsglobal.org/xsd/imsvdex_v1p0";
  : Get a Vdex vocabulary with given Identifier
  :
  : @param $vocabId Unique identifier for the vocabulary
+ : @param $collPath absolute path to the vocabularies collection
  :
  : @return <vdex/> node
 :)
@@ -27,38 +33,65 @@ declare function vdex:getVdexCollection($vocabId as xs:string, $collPath as xs:s
     }     
 };
 
-(:~
- : Process a given id and return relevant term based on current language selection or default to default
- :
- : @param $selectedLang the prevailing language of the user
- : @param $termId the term identifier in the vdex file
- : @param $collDir the path to the collection of vdex files
- : @param $defaultLang the default language as set in the config.xml file
-:)
-declare function vdex:process($selectedLang as xs:string,
-                            $termId as xs:string,
-                            $collDir as xs:string, 
-                            $defaultLang as xs:string) {        
-    for $node in $nodes              
-        let $selectedVocab := i18n:getVdexCollection($vocabularyId, $vocabularyCollPath)  
-        return        
-            vdex:getLocalizedTerm($termId, $selectedLang, $defaultLang, $selectedVocab)
+declare function vdex:getVocabName($vocabId as xs:string,
+                                $collPath as xs:string,
+                                $getLang as xs:string) {
+    let $selectedVocab := vdex:getVdexCollection($vocabId, $collPath)
+    return 
+        if(exists($selectedVocab/vocabName/langstring[@language eq $getLang])) then 
+            $selectedVocab/vocabName/langstring[@language eq $getLang]/text() 
+        else 
+            $selectedVocab/vocabName/langstring[1]/text() 
 };
 
-
 (: 
- : Get the localized term for a given term Id from the given vdex vocabulary 
- : if no localized term is available, the default value is used
+ : Get the caption for a given term Id from the given vdex vocabulary 
+ : if no caption is available, the term id is returned as default
  :
  : @param $termId the term identifier in the vdex file
- : @param $selectedVocab the vocab file returned from VocabId in vdex:getVdexCollection()
+ : @param $vocabId unique identifier for the vocabulary
+ : @param $collPath absolute path to the vocabularies collection
+ : @param $getLang the selected/default language given to 'vocabularize'
 :)
-declare function vdex:getLocalizedTerm($termId as xs:string, 
-                                        $selectedLang as xs:string, 
-                                        $defaultLang as xs:string, 
-                                        $selectedVocab as node()) {
-    if(exists($selectedVocab//termIdentifier[text() eq $termId])) then 
-        $selectedVocab//termIdentifier[text() eq $termId]/following-sibling::caption/langstring[if (@language eq $selectedLang) then (@language eq $selectedLang) else (@language eq $defaultLang)][1]/text() 
-    else 
-        $termId
+declare function vdex:getCaptionByTermId($termId as xs:string, 
+                                $vocabId as xs:string,
+                                $collPath as xs:string,
+                                $getLang as xs:string) {
+    let $selectedVocab := vdex:getVdexCollection($vocabId, $collPath)
+    return 
+        if(exists($selectedVocab//termIdentifier[text() eq $termId]) and exists($selectedVocab//langstring[@language eq $getLang])) then 
+            $selectedVocab//termIdentifier[text() eq $termId]/following-sibling::caption/langstring[@language eq $getLang]/text() 
+        else 
+            $termId
+};
+
+(: 
+ : Identify-transform to embed vocalublaries explicitly
+ :
+ : @return a deep copy of the document with additional vocabulatioes 
+ :)
+declare function vdex:set-vocabularies(
+   $node as node(),
+   $element as xs:string,
+   $vdexid as xs:string
+   ) as element() {
+    element
+        {node-name($node)}
+            {if (string(node-name($node))=$element and $node[@vdex eq $vdexid]) then ( 
+
+                        for $att in $node/@*
+                            return
+                                attribute {name($att)} {$att}
+                            ,
+                            attribute name {vdex:getVocabName($vdexid,cmn:get-vdex-db(),template:set-lang())},
+                            attribute term {vdex:getCaptionByTermId($node/text(),$vdexid,cmn:get-vdex-db(),template:set-lang())}
+                   )
+            else
+                $node/@*
+               ,
+               for $child in $node/node()
+                    return if ($child instance of element())
+                        then vdex:set-vocabularies($child, $element, $vdexid)
+                        else $child 
+             }
 };

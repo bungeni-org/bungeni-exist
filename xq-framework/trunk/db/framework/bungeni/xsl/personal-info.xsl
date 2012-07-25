@@ -46,9 +46,10 @@
                 <div id="doc-main-section">
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
+                            <xsl:variable name="img_uuid" select="ref/bu:ontology/bu:image/bu:imageUuid"/>
                             <p class="imgonlywrap">
                                 <xsl:choose>
-                                    <xsl:when test="ref/bu:ontology/bu:image">
+                                    <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_uuid))">
                                         <img src="../../bungeni-atts/{ref/bu:ontology/bu:image/bu:imageUuid}" alt="Place Holder for M.P Photo" align="left"/>
                                     </xsl:when>
                                     <xsl:otherwise>

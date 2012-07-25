@@ -31,7 +31,13 @@ Get the path to the attachments collection
 declare function cmn:get-att-db() as xs:string {
     $config:ATT-COLLECTION
  };
- 
+
+(:~
+Get the path to the vocabularies collection
+:)
+declare function cmn:get-vdex-db() as xs:string {
+    $config:VDEX
+ };
 
 (:~
 Get the UI configuraiton document

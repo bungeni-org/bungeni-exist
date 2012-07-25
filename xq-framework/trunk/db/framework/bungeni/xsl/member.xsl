@@ -50,7 +50,7 @@
                             <p class="imgonlywrap">
                                 <xsl:choose>
                                     <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_uuid))">
-                                        <img src="../../bungeni-atts/{ref/bu:ontology/bu:image/bu:imageUuid}" alt="Place Holder for M.P Photo" align="left"/>
+                                        <img src="../../bungeni-atts/{$img_uuid}" alt="Place Holder for M.P Photo" align="left"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <img src="assets/images/placeholder.jpg" alt="Place Holder for M.P Photo" align="left"/>
@@ -64,6 +64,13 @@
                                     <td class="labels fbt">name:</td>
                                     <td class="fbt">
                                         <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,' ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="labels fbottom">
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:gender/@name"/>:</td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:gender/@term"/>
                                     </td>
                                 </tr>
                                 <tr>

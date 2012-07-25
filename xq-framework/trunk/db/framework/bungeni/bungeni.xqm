@@ -9,6 +9,7 @@ import module namespace config = "http://bungeni.org/xquery/config" at "../confi
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
+import module namespace vdex = "http://www.imsglobal.org/xsd/imsvdex_v1p0" at "vdex.xqm";
 import module namespace kwic="http://exist-db.org/xquery/kwic";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
@@ -2638,10 +2639,12 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology
+    let $vocabularized := vdex:set-vocabularies($member-doc,"bu:gender","org.bungeni.metadata.vocabularies.gender")
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
-                    {collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology}
+                    {$vocabularized}
                     <ref>
                     {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology}
                     </ref>

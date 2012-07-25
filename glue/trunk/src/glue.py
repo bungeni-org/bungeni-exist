@@ -1297,9 +1297,20 @@ def main_queue(config_file, afile):
             sba = SeekBindAttachmentsWalker(cfgs)
             sba.attachments_seek_rename(bunparse)
             info_object = pxf.process_file(new_afile)
+            os.remove(new_afile)
             if info_object[1] == True:
                 in_queue = True
-            os.remove(new_afile)
+            elif info_object[1] == False:
+                in_queue = False
+                return in_queue
+            elif info_object[1] == None:
+                # mark parl-information document for removal from message-queue
+                in_queue = True
+                return in_queue
+            else:
+                print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+                in_queue = False
+                return in_queue
         else:
             # image att for users are zipped independently
             local_dir = os.path.dirname(afile)

@@ -267,15 +267,27 @@ $(document).ready(function () {
                 },
                 success: function(data) {
                     var events = [];
-                    for (var i = 0; i < data.ontology.length; i++) {             
-                        events.push({
-                            title: data.ontology[i].legislature.shortName["#text"]+" at the "+data.ontology[i].groupsitting.venue.shortName["#text"],
-                            start: data.ontology[i].groupsitting.startDate["#text"],
-                            end: data.ontology[i].groupsitting.endDate["#text"],
-                            url: "sitting?uri="+data.ontology[i].groupsitting.uri,
-                            allDay: false
-                        });                       
-                    }                   
+                    if(data) {
+                        if (data.ontology.length == undefined) {
+                            events.push({
+                                title: data.ontology.legislature.shortName["#text"]+" at the "+data.ontology.groupsitting.venue.shortName["#text"],
+                                start: data.ontology.groupsitting.startDate["#text"],
+                                end: data.ontology.groupsitting.endDate["#text"],
+                                url: "sitting?uri="+data.ontology.groupsitting.uri,
+                                allDay: false
+                            });  
+                        } else {
+                            for (var i = 0; i < data.ontology.length; i++) {             
+                                events.push({
+                                    title: data.ontology[i].legislature.shortName["#text"]+" at the "+data.ontology[i].groupsitting.venue.shortName["#text"],
+                                    start: data.ontology[i].groupsitting.startDate["#text"],
+                                    end: data.ontology[i].groupsitting.endDate["#text"],
+                                    url: "sitting?uri="+data.ontology[i].groupsitting.uri,
+                                    allDay: false
+                                });                       
+                            }                          
+                        }
+                    } else { }
                     callback(events);
                 }
             });

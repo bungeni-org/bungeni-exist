@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -30,12 +30,6 @@
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
             </div>
-            <!-- Renders the document download types -->
-            <xsl:call-template name="doc-formats">
-                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
-                <xsl:with-param name="doc-type" select="$doc-type"/>
-                <xsl:with-param name="uri" select="$doc_uri"/>
-            </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">
@@ -55,7 +49,7 @@
                             <xsl:value-of select="bu:ontology/bu:groupsitting/bu:convocationType"/>
                         </i>
                     </h4>
-                    <div class="doc-status">
+                    <h4 class="doc-status">
                         <span>
                             <b class="camel-txt">
                                 <i18n:text key="sitting-venue">Venue(nt)</i18n:text>:</b>
@@ -70,7 +64,7 @@
                         <span>
                             <xsl:value-of select="format-dateTime(bu:ontology/bu:groupsitting/bu:startDate,$datetime-format,'en',(),())"/>
                         </span>
-                    </div>
+                    </h4>
                     <div id="doc-content-area">
                         <table class="doc-tbl-details">
                             <xsl:for-each select="ref/bu:ontology">
@@ -94,12 +88,12 @@
                                             </xsl:when>
                                             <xsl:when test="$doc-type = 'Event'">
                                                 <xsl:variable name="event-href" select="bu:document/@uri"/>
-                                                <a href="{lower-case($eventOf)}/event?uri={$event-href}">
+                                                <a href="../bungeni/{lower-case($eventOf)}-event?uri={$event-href}">
                                                     <xsl:value-of select="bu:document/bu:title"/>
                                                 </a>
                                             </xsl:when>
                                             <xsl:otherwise>
-                                                <a href="{lower-case($doc-type)}/text?uri={$subDocIdentifier}">
+                                                <a href="../bungeni/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
                                                     <xsl:value-of select="bu:document/bu:title"/>
                                                 </a>
                                             </xsl:otherwise>

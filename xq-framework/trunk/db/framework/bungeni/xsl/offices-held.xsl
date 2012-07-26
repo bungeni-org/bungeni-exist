@@ -28,20 +28,7 @@
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="member/pdf?uri={$doc-uri}" title="get PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="member/xml?uri={$doc-uri}" title="get raw xml output" class="xml">
-                            <em>XML</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="mem-profile">

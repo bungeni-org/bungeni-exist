@@ -182,7 +182,7 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     
     let $doc := <doc>        
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
             }
         </doc>
         
@@ -196,6 +196,26 @@ declare function bun:gen-member-pdf($memberid as xs:string) {
     let $out := response:stream-binary($pdf, "application/pdf")     
     
     return <xml />     
+};
+
+(:~
+:   Generates a xquery string with applied permissions
+: @param acl
+:   permission type
+: @return
+:   A string with embedded permissions ready for evaluation.
+:)
+declare function bun:xqy-all-documentitems-with-acl($acl as xs:string) {
+  let $acl-filter := cmn:get-acl-permission-as-attr($acl)
+    
+    (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
+    make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
+  return  
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@for='document']",
+                "/bu:document/(bu:permissions except bu:versions)",
+                "/bu:permission[",$acl-filter,"]",
+                "/ancestor::bu:ontology")
 };
 
 (:~
@@ -2663,8 +2683,8 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
         { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology }
         <ref>    
             {
-            (: Get all parliamentary documents the user is either owner or signatory :)
-            for $match in collection(cmn:get-lex-db())/bu:ontology[@for='document']
+            (: Get all parliamentary documents the user is either owner or signatory :)          
+            for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
             where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
                   bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
             return

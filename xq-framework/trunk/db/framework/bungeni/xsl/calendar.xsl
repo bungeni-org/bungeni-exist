@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -15,9 +15,9 @@
         document as opposed to main document. -->
     <xsl:param name="serverport"/>
     <xsl:template match="doc">
-        <xsl:variable name="doc-type" select="bu:ontology/@type"/>
+        <xsl:variable name="doc-type" select="bu:ontology//bu:groupsitting/bu:docType/bu:value"/>
         <xsl:variable name="doc_uri" select="bu:ontology/bu:groupsitting/@uri"/>
-        <xsl:variable name="mover_uri" select="bu:ontology/bu:legislativeItem/bu:owner/@href"/>
+        <xsl:variable name="mover_uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <xsl:variable name="j-obj" select="json"/>
         <div id="main-wrapper">
             <div id="uri" class="hide">
@@ -29,12 +29,6 @@
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
             </div>
-            <!-- Renders the document download types -->
-            <xsl:call-template name="doc-formats">
-                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
-                <xsl:with-param name="doc-type" select="$doc-type"/>
-                <xsl:with-param name="uri" select="$doc_uri"/>
-            </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">
@@ -42,11 +36,11 @@
                         KENYA PARLIAMENT
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:shortName"/>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:shortName"/>
                     </h4>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="bu:ontology/bu:legislativeItem/bu:body"/>
+                            <xsl:copy-of select="bu:ontology/bu:document/bu:body"/>
                             <div id="calendar"/>
                         </div>
                     </div>

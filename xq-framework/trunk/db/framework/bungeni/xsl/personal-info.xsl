@@ -31,11 +31,6 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
-                        <a href="member/pdf?uri={$doc-uri}" title="get PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                    <li>
                         <a href="member/xml?uri={$doc-uri}" title="get raw xml output" class="xml">
                             <em>XML</em>
                         </a>

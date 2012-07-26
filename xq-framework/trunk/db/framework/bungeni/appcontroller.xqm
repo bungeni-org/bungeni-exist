@@ -370,7 +370,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/tableddocument/xml")   
     		 then 
                 rou:get-xml($CONTROLLER-DOC)
-    	else if ($EXIST-PATH eq "/agendaitem/xml" or $EXIST-PATH eq "/member/xml")   
+    	else if ($EXIST-PATH eq "/agendaitem/xml")   
+    		 then 
+                rou:get-xml($CONTROLLER-DOC)                
+    	else if ($EXIST-PATH eq "/member/xml")   
     		 then 
                 rou:get-xml($CONTROLLER-DOC)                             
 

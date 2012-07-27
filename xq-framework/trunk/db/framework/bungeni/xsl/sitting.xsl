@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -26,7 +26,7 @@
                 <h1 id="doc-title-blue">
                     <i18n:text key="doc-{$doc-type}">Sitting(nt)</i18n:text>:&#160;                  
                     <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
-                    -&#160;<xsl:value-of select="bu:ontology/bu:groupsitting/bu:activityType"/>                      
+                    -&#160;<xsl:value-of select="bu:ontology/bu:groupsitting/bu:activityType/bu:value/@term"/>                      
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
             </div>
@@ -41,12 +41,12 @@
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
                         <i18n:text key="sitting-activity">sitting activity(nt)</i18n:text>: <i>
-                            <xsl:value-of select="bu:ontology/bu:groupsitting/bu:activityType"/>
+                            <xsl:value-of select="bu:ontology/bu:groupsitting/bu:activityType/bu:value/@term"/>
                         </i>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
                         <i18n:text key="sitting-convocation">sitting convocation(nt)</i18n:text>: <i>
-                            <xsl:value-of select="bu:ontology/bu:groupsitting/bu:convocationType"/>
+                            <xsl:value-of select="bu:ontology/bu:groupsitting/bu:convocationType/bu:value/@term"/>
                         </i>
                     </h4>
                     <h4 class="doc-status">

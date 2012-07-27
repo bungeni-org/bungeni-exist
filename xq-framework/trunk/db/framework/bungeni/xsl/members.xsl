@@ -99,7 +99,7 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:salutation,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
             </div>
@@ -124,23 +124,16 @@
                         </span>
                     </div>
                     <div class="block">
-                        <span class="labels">gender:</span>
+                        <span class="labels">elected/nominated:</span>
                         <span>
-                            <xsl:value-of select="bu:ontology/bu:membership/bu:gender"/>
+                            <xsl:value-of select="bu:ontology/bu:membership/bu:memberElectionType/bu:value/@term"/>
                         </span>
                     </div>
                     <div class="block">
                         <span class="labels">
-                            <i18n:text key="dob">date of birth(nt)</i18n:text>:</span>
+                            <i18n:text key="date-start">start date(nt)</i18n:text>:</span>
                         <span>
-                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
-                        </span>
-                    </div>
-                    <div class="block">
-                        <span class="labels">
-                            <i18n:text key="status">status(nt)</i18n:text>:</span>
-                        <span>
-                            <xsl:value-of select="bu:ontology/bu:membership/bu:status/bu:value"/>
+                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:startDate),$date-format,'en',(),())"/>
                         </span>
                     </div>
                     <div class="block">

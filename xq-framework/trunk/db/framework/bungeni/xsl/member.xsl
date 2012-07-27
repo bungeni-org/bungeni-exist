@@ -77,7 +77,7 @@
                                 <tr>
                                     <td class="labels fbottom">elected/nominated:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
+                                        <xsl:value-of select="bu:ontology/bu:membership/bu:memberElectionType/bu:value/@term"/>
                                     </td>
                                 </tr>
                                 <tr>

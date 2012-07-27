@@ -61,6 +61,15 @@
                                         <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthCountry"/>
                                     </td>
                                 </tr>
+                                <xsl:if test="ref/bu:ontology/bu:user/bu:maritalStatus/@name">
+                                    <tr>
+                                        <td class="labels fbottom">
+                                            <xsl:value-of select="ref/bu:ontology/bu:user/bu:maritalStatus/@name"/>:</td>
+                                        <td class="fbt">
+                                            <xsl:value-of select="ref/bu:ontology/bu:user/bu:maritalStatus/@term"/>
+                                        </td>
+                                    </tr>
+                                </xsl:if>
                                 <tr>
                                     <td class="labels fbottom">date of birth:</td>
                                     <td class="fbt">

@@ -12,8 +12,8 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:template match="assigned-items">
-        <xsl:variable name="doc-type" select="group/bu:ontology/bu:legislature/bu:type"/>
-        <xsl:variable name="doc_uri" select="group/bu:ontology/bu:group/@uri"/>
+        <xsl:variable name="doc-type" select="group/bu:ontology/bu:group/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="group/bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 id="doc-title-blue">
@@ -25,40 +25,12 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="uri">
-                    <xsl:value-of select="$doc_uri"/>
+                    <xsl:value-of select="$doc-uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">assigned</xsl:with-param>
                 <xsl:with-param name="excludes" select="exlude/tab"/>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">

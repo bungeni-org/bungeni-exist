@@ -1548,7 +1548,7 @@ declare function bun:get-committees(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'])}</count>
         <documentType>committee</documentType>
         <listingUrlPrefix>committee/text</listingUrlPrefix>        
         <offset>{$offset}</offset>
@@ -1558,32 +1558,32 @@ declare function bun:get-committees(
         <alisting>
         {
             if ($sortby = 'start_dt_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>  
                 )
                 
             else if ($sortby eq 'start_dt_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>     
                 )
             else if ($sortby = 'fN_asc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>      
                 )    
             else if ($sortby = 'fN_desc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
                 order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>        
                 )                 
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@type='group']/bu:group[@type='committee'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>

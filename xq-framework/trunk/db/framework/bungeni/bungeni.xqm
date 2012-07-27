@@ -2006,7 +2006,7 @@ declare function bun:strip-namespace($e as node()) {
 
 declare function local:get-sitting-items($sittingdoc as node()) {
     <doc>
-        {$sittingdoc}
+        {if ($sittingdoc) then vdex:set-vocabularies($sittingdoc) else $sittingdoc}
         <ref>
             {
                 for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
@@ -2617,7 +2617,7 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
-                        {$match}
+                        {vdex:set-vocabularies($match)}
                         <ref>
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
@@ -2628,7 +2628,7 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
                     <doc>
-                        {$match}
+                        {vdex:set-vocabularies($match)}
                         <ref>
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
@@ -2639,7 +2639,7 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
-                        {$match}
+                        {vdex:set-vocabularies($match)}
                         <ref>
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
@@ -2660,13 +2660,13 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology
-    let $vocabularized := vdex:set-vocabularies($member-doc,"bu:gender","org.bungeni.metadata.vocabularies.gender")
+    let $vocabularized := vdex:set-vocabularies($member-doc)
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
                     {$vocabularized}
                     <ref>
-                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology}
+                    {vdex:set-vocabularies(collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology)}
                     </ref>
                 </doc>
     

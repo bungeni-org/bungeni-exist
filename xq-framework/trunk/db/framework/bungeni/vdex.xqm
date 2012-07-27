@@ -59,39 +59,39 @@ declare function vdex:getCaptionByTermId($termId as xs:string,
                                 $getLang as xs:string) {
     let $selectedVocab := vdex:getVdexCollection($vocabId, $collPath)
     return 
-        if(exists($selectedVocab//termIdentifier[text() eq $termId]) and exists($selectedVocab//langstring[@language eq $getLang])) then 
+        if( exists($selectedVocab//termIdentifier[text() eq $termId]) and 
+            exists($selectedVocab//langstring[@language eq $getLang])) then 
             $selectedVocab//termIdentifier[text() eq $termId]/following-sibling::caption/langstring[@language eq $getLang]/text() 
         else 
             $termId
 };
 
 (: 
- : Identify-transform to embed vocalublaries explicitly
+ : Identify-transform to embed any known vocalublaries
+ :
+ : @param $node a document node
  :
  : @return a deep copy of the document with additional vocabulatioes 
  :)
-declare function vdex:set-vocabularies(
-   $node as node(),
-   $element as xs:string,
-   $vdexid as xs:string
-   ) as element() {
+declare function vdex:set-vocabularies($node as node()) as element() {
     element
         {node-name($node)}
-            {if (string(node-name($node))=$element and $node[@vdex eq $vdexid]) then ( 
+            {
+            if (name($node/@vdex) eq 'vdex') then ( 
 
                         for $att in $node/@*
                             return
                                 attribute {name($att)} {$att}
                             ,
-                            attribute name {vdex:getVocabName($vdexid,cmn:get-vdex-db(),template:set-lang())},
-                            attribute term {vdex:getCaptionByTermId($node/text(),$vdexid,cmn:get-vdex-db(),template:set-lang())}
+                            attribute name {vdex:getVocabName(data($node/@vdex),cmn:get-vdex-db(),template:set-lang())},
+                            attribute term {vdex:getCaptionByTermId($node/text(),data($node/@vdex),cmn:get-vdex-db(),template:set-lang())}
                    )
             else
                 $node/@*
                ,
                for $child in $node/node()
                     return if ($child instance of element())
-                        then vdex:set-vocabularies($child, $element, $vdexid)
+                        then vdex:set-vocabularies($child)
                         else $child 
              }
 };

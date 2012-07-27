@@ -19,7 +19,7 @@
     <xsl:template match="doc">
         <xsl:variable name="ver-id" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
-        <xsl:variable name="ver-uri" select="bu:ontology/bu:legislativeItem/bu:versions/bu:version[@uri=$ver-id]/@uri"/>
+        <xsl:variable name="ver-uri" select="bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-id]/@uri"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">

@@ -82,6 +82,19 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                         <xf:output ref="xhtml:a/@name"/>
                     </xf:repeat>
                     
+                    <xf:group appearance="minimal" class="configsTriggerGroup">            
+                        <xf:trigger class="configsSubTrigger">
+                            <xf:label>add navigation</xf:label>
+                            <xf:hint>Add a new navigation</xf:hint>
+                              <xf:action>
+                                  <xf:message level="ephemeral">Loading navigation template...</xf:message>
+                                  <xf:load show="embed" targetid="tabgroup">
+                                      <xf:resource value="'./admin-add-nav.xml'"/>
+                                  </xf:load>
+                              </xf:action>
+                        </xf:trigger>
+                    </xf:group>                    
+                    
                     <xf:group appearance="minimal" class="configsTriggerGroup">
                         <xf:trigger class="configsSubTrigger action-save">
                             <xf:label>save changes</xf:label>

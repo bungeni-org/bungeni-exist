@@ -2723,3 +2723,9 @@ declare function bun:get-assigned-items($committeeid as xs:string, $parts as nod
     return
         transform:transform($doc, $stylesheet, ())  
 };
+
+declare function local:get-parl-info() as element() {
+
+    collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value eq 'government'][1]/ancestor::bu:ontology
+
+};

@@ -76,7 +76,7 @@ ul.scheduling li {
    border-bottom:1px;
    border-bottom-style:solid;
    text-shadow: 0px 2px 3px #dddddd;
-   color:#b22b14;
+   color:#bb0000;
 }
 #utility-nav li.selected a ,
 #utility-nav li a:hover 
@@ -154,10 +154,10 @@ td.datepickerNotInMonth a {
 	color: #666;
 }
 tbody.datepickerDays td.datepickerSelected{
-	background: #136A9F;	
+	background: #ea6363;	
 }
 tbody.datepickerDays td.datepickerNotInMonth.datepickerSelected {
-	background: #17384d;
+	background: #c45353;
 }
 tbody.datepickerYears td.datepickerSelected,
 tbody.datepickerMonths td.datepickerSelected{
@@ -165,7 +165,7 @@ tbody.datepickerMonths td.datepickerSelected{
 }
 div.datepicker a:hover,
 div.datepicker a:hover {
-	color: #88c5eb;
+	color: #eac0c0;
 }
 div.datepicker td.datepickerNotInMonth a:hover {
 	color: #999;

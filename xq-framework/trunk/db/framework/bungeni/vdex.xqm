@@ -74,24 +74,29 @@ declare function vdex:getCaptionByTermId($termId as xs:string,
  : @return a deep copy of the document with additional vocabulatioes 
  :)
 declare function vdex:set-vocabularies($node as node()) as element() {
-    element
-        {node-name($node)}
-            {
-            if (name($node/@vdex) eq 'vdex') then ( 
-
-                        for $att in $node/@*
-                            return
-                                attribute {name($att)} {$att}
-                            ,
-                            attribute name {vdex:getVocabName(data($node/@vdex),cmn:get-vdex-db(),template:set-lang())},
-                            attribute term {vdex:getCaptionByTermId($node/text(),data($node/@vdex),cmn:get-vdex-db(),template:set-lang())}
-                   )
-            else
-                $node/@*
-               ,
-               for $child in $node/node()
-                    return if ($child instance of element())
-                        then vdex:set-vocabularies($child)
-                        else $child 
-             }
+    if ($node) then (
+        element
+            {node-name($node)}
+                {
+                if (name($node/@vdex) eq 'vdex') then ( 
+    
+                            for $att in $node/@*
+                                return
+                                    attribute {name($att)} {$att}
+                                ,
+                                attribute name {vdex:getVocabName(data($node/@vdex),cmn:get-vdex-db(),template:set-lang())},
+                                attribute term {vdex:getCaptionByTermId($node/text(),data($node/@vdex),cmn:get-vdex-db(),template:set-lang())}
+                       )
+                else
+                    $node/@*
+                   ,
+                   for $child in $node/node()
+                        return if ($child instance of element())
+                            then vdex:set-vocabularies($child)
+                            else $child 
+                 }
+     )
+    else
+        (: no node :)
+        <doc/>
 };

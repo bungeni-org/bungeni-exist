@@ -14,7 +14,6 @@ div#header {
     width:100%;
     margin:0;
     height:119px;
-    background:#bb0000 url(../images/shield.png) bottom left no-repeat;
     padding-top:0;
 }
 div#sub-header {
@@ -23,7 +22,7 @@ div#sub-header {
     margin:0;
     margin-top:-4px;
     height:23px;
-    background-color:#006600;
+    background-color:#01a54f;
     padding-top:0px;
 }
 div#pre-banner {
@@ -32,6 +31,11 @@ div#pre-banner {
     background-color:#000000;
 }
 
+div#banner-wrapper {
+    width:100%;
+    height:96px;
+    background:#ef1c25 url(../images/kenya.png) bottom left no-repeat;    
+}
 div#header-banner {
     width:960px;
     height:78px;

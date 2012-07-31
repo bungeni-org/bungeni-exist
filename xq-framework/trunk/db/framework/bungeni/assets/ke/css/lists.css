@@ -91,13 +91,13 @@ div.doc-toggle.opened {
     
 /*** mainnav ***/
  #mainnav {
-     margin-top:-26px; /* group4 */
+     margin-top:-32px; /* group4 */
  }
  #mainnav ul {
     position:absolute;
     height:26px; /* group4 */
     background:transparent;
-    border-bottom:1px solid #333;
+    border-bottom:1px solid #01a54f;
     margin:0;
     padding:3px 6px 0;
     list-style:none;
@@ -118,7 +118,6 @@ div.doc-toggle.opened {
     height:25px; /* group4 */
     font-weight:bold;
     background:#7a0000;
-    border:1px solid #000;
     border-bottom:none;
     -webkit-background-clip: padding-box;
     -webkit-font-smoothing:antialiased;
@@ -156,9 +155,9 @@ div.doc-toggle.opened {
     position:absolute;
     z-index:3;
     bottom:-1px;
-    background:#bb0000;
+    background:#ef1c25;
     overflow:hidden;
-    border-bottom:1px solid #333;
+    border-bottom:1px solid #fff;
     margin-top:-26px; /* group4 */
     -webkit-background-clip: padding-box;
 }
@@ -168,7 +167,6 @@ div.doc-toggle.opened {
     border-bottom-right-radius:8px;
     -webkit-border-bottom-right-radius:8px;
     -moz-border-radius-bottomright:8px;
-    border-right:1px solid #222;
 }
 
 #mainnav ul a:after {
@@ -176,11 +174,10 @@ div.doc-toggle.opened {
     border-bottom-left-radius:8px;
     -webkit-border-bottom-left-radius:8px;
     -moz-border-radius-bottomleft:8px;
-    border-left:1px solid #222;
 }
 
 #mainnav ul li.selected a {
-    background:#006600;
+    background:#01a54f;
     color:#fff;
     height:26px; /* group4 */
     text-shadow:#222 0 1px 0;
@@ -194,7 +191,7 @@ div.doc-toggle.opened {
 
 #mainnav ul li.selected:before, 
 #mainnav ul li.selected:after {
-    background:#006600;
+    background:#01a54f;
     bottom:0;
     -webkit-background-clip: padding-box;
 }

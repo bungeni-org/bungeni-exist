@@ -3,10 +3,10 @@ body,button,input,select,textarea {
     color:#222
 }
 
-body { background-color:#f9f8f8; }
+body { background-color:#edecec; }
 
 a, a:link, a:visited {
-    color: #cb8704;
+    color: #8f5e00;
     text-decoration: none;
 }
 

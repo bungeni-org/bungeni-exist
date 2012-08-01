@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontology xmlns="http://portal.bungeni.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://portal.bungeni.org/1.0/ bill.xsd" for="">
+    <document internal-uri=""/>
+    <legislature href="" isA="">
+        <parliamentId type=""/>
+        <electionDate select="" type=""/>
+        <country isA="">
+            <value/>
+        </country>
+    </legislature>
+    <bungeni id="" isA="" showAs="">
+        <tags>
+            <tag isA="">
+                <value/>
+            </tag>
+        </tags>
+        <timestampDate type=""/>
+        <withPermissions href=""/>
+    </bungeni>
+    <bill isA="">
+        <document internal-uri=""/>
+        <docSubType isA="">
+            <value/>
+        </docSubType>
+        <group href="" isA=""/>
+    </bill>
+    <attachments>
+        <attachment>
+            <mimetype isA="">
+                <value/>
+            </mimetype>
+            <status isA="">
+                <value/>
+            </status>
+            <attachmentId key="" type=""/>
+            <description>
+                <div xmlns="http://www.w3.org/1999/xhtml/"/>
+            </description>
+            <title type=""/>
+            <headId type="">Test</headId>
+            <statusDate type=""/>
+            <changes>
+                <change>
+                    <userId type=""/>
+                    <sequence type=""/>
+                    <auditId type=""/>
+                    <activeDate type=""/>
+                    <auditDate type=""/>
+                    <auditAction isA="">
+                        <value/>
+                    </auditAction>
+                    <procedureType isA="">
+                        <value/>
+                    </procedureType>
+                </change>
+            </changes>
+            <savedFile type=""/>
+            <audits>
+                <audit>
+                    <type isA="">
+                        <value/>
+                    </type>
+                </audit>
+            </audits>
+            <permissions id="">
+                <permission name="" role="" setting=""/>
+            </permissions>
+            <type isA="">
+                <value/>
+            </type>
+            <name type=""/>
+            <fileUuid type=""/>
+        </attachment>
+    </attachments>
+    <signatories>
+        <signatory isA="">
+            <status isA="">
+                <value/>
+            </status>
+            <headId type=""/>
+            <signatoryId key="" type=""/>
+            <userId type=""/>
+            <person href="" showAs=""/>
+        </signatory>
+    </signatories>
+</ontology>

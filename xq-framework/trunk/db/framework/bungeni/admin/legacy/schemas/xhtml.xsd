@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xhtml="http://www.w3.org/1999/xhtml/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" elementFormDefault="qualified" targetNamespace="http://www.w3.org/1999/xhtml/">
+    <xs:import namespace="http://portal.bungeni.org/1.0/" schemaLocation="bill.xsd"/>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+    <xs:element name="div">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="br" form="unqualified">
+                    <xs:complexType/>
+                </xs:element>
+                <xs:element name="ul" form="unqualified">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="li" form="unqualified" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

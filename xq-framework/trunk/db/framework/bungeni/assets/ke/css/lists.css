@@ -91,7 +91,7 @@ div.doc-toggle.opened {
     
 /*** mainnav ***/
  #mainnav {
-     margin-top:-32px; /* group4 */
+     margin-top:-31px; /* group4 */
  }
  #mainnav ul {
     position:absolute;
@@ -157,7 +157,7 @@ div.doc-toggle.opened {
     bottom:-1px;
     background:#ef1c25;
     overflow:hidden;
-    border-bottom:1px solid #fff;
+    border-bottom:1px solid #ef1c25;
     margin-top:-26px; /* group4 */
     -webkit-background-clip: padding-box;
 }
@@ -203,6 +203,7 @@ div.doc-toggle.opened {
     text-decoration: none; 
     padding: 2px 11px; 
     text-align:center;
+    text-shadow: #222 0 1px 0;
 }
 
 .submenu ul li a:visited {
@@ -212,7 +213,8 @@ div.doc-toggle.opened {
 
 .submenu ul li a:hover, 
 .submenu ul li a.current {
-    color: #f7a405;
+    color: #ffa800;
+    text-shadow: #1b661b 0 1px 0;
     } 
     
 /* global expand and collapse */
@@ -328,7 +330,7 @@ div#content-wrapper {
 .tab_container {
 	overflow: hidden;
 	clear: both;
-	background: #fff;
+	background: #f9f8f8;
 }
 .tab_content {
 	padding-left: 10px;
@@ -351,6 +353,7 @@ div#content-wrapper {
     width:960px;
     height:18px;
     margin:0 auto;
+    text-align:right;
 }
 ul#portal-languageselector {
     padding:0;
@@ -368,6 +371,7 @@ ul#portal-personaltools {
 }
 #portal-languageselector li.selected {
     background-color: #7a0000;
+    text-shadow: #222 0 1px 0;
     -moz-border-radius-bottomleft: 3px; 
     -webkit-border-bottom-left-radius:3px; 
     border-bottom-left-radius:3px; 

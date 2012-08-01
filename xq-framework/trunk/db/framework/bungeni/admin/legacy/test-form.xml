@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:bu="http://portal.bungeni.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <head>
+        <title>Loading data from an XML Schema file</title>
+        <style type="text/css">
+            @namespace xf url("http://www.w3.org/2002/xforms");
+            xf|input {
+                display : table-row;
+                line-height : 2em;
+            }
+            
+            xf|label {
+                display : table-cell;
+                text-align : right;
+                font-family : Ariel, Helvetica, sans-serif;
+                font-weight : bold;
+                font-size : small;
+                padding-right : 5px;
+                width : 150px;
+            }
+            
+            *:required {
+                background-color : yellow;
+            }
+            
+            *:invalid {
+                background-color : pink;
+            }</style>
+        <xf:model id="test" schema="schemas/bill.xsd">
+            <xf:instance src="schemas/bill.xml"/>
+        </xf:model>
+    </head>
+    <body>
+        <xf:group model="test" nodeset="/bill" appearance="compact">
+            <xf:input ref="bu:document">
+                <xf:hint>how many items to list per page</xf:hint>
+                <xf:alert>Invalid non-numeric value entered</xf:alert>
+                <xf:label>Name:</xf:label>
+            </xf:input>
+            <xf:input ref="bu:docSubType">
+                <xf:hint>how many items to list per page</xf:hint>
+                <xf:alert>Invalid non-numeric value entered</xf:alert>
+                <xf:label>is A:</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group model="test" nodeset="/signatory">
+            <xf:input ref="bu:headId">
+                <xf:hint>how many items to list per page</xf:hint>
+                <xf:alert>Invalid non-numeric value entered</xf:alert>
+                <xf:label>is A:</xf:label>
+            </xf:input>
+        </xf:group>
+    </body>
+</html>

@@ -16,8 +16,8 @@
         <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
+            <div id="title-holder">
+                <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
@@ -35,7 +35,6 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">
-                        (baked)
                         <table class="tbl-tgl">
                             <tr>
                                 <td class="fbtd">
@@ -47,17 +46,29 @@
                                 <td class="fbtd">
                                     <a>end</a>
                                 </td>
+                                <td class="fbtd">
+                                    <a>type</a>
+                                </td>
                             </tr>
-                            <tr class="items">
-                                <td class="fbt bclr">Member, P0_01</td>
-                                <td class="fbt bclr">Jan 18, 2001</td>
-                                <td class="fbt bclr">Jan 18, 2001</td>
-                            </tr>
-                            <tr class="items">
-                                <td class="fbt bclr">Member, P0_01</td>
-                                <td class="fbt bclr">jan 18, 2001</td>
-                                <td class="fbt bclr">Jan 18, 2001</td>
-                            </tr>
+                            <xsl:for-each select="bu:ontology/bu:members/bu:member/bu:membershipType[bu:value eq 'committee_member']/ancestor::bu:member">
+                                <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
+                                <tr class="items">
+                                    <td class="fbt bclr">
+                                        <a href="member?uri={bu:person/@href}">
+                                            <xsl:value-of select="bu:person/@showAs"/>
+                                        </a>
+                                    </td>
+                                    <td class="fbt bclr">
+                                        <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
+                                    </td>
+                                    <td class="fbt bclr">
+                                        <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
+                                    </td>
+                                    <td class="fbt bclr">
+                                        <xsl:value-of select="bu:membershipType"/>
+                                    </td>
+                                </tr>
+                            </xsl:for-each>
                         </table>
                     </div>
                 </div>

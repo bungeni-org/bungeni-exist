@@ -1532,12 +1532,13 @@ declare function bun:get-raw-xml($docid as xs:string) as element() {
 declare function bun:get-committees(
         $offset as xs:integer, 
         $limit as xs:integer, 
+        $parts as node(),
         $querystr as xs:string, 
         $sortby as xs:string
         ) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt("xsl/committees.xsl")    
+    let $stylesheet := cmn:get-xslt($parts/view/xsl)      
     
     (: 
         The line below is documented in bun:get-documentitems()
@@ -2354,6 +2355,34 @@ declare function bun:get-parl-group(
         transform:transform($doc, $stylesheet, ())
 };
 
+declare function bun:get-parl-committee(
+            $acl as xs:string, 
+            $docid as xs:string, 
+            $parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    (: !+FIX_THIS , !+ACL_NEW_API
+    let $acl-filter := cmn:get-acl-filter($acl)
+    :)
+    let $doc := document {
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+                    return
+                        (: $parts/parent::node() returns all tabs of this doctype :)
+                        bun:get-ref-comm-members($match, $parts/parent::node())   
+                }     
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
+declare function bun:get-ref-comm-members($docitem as node(), $docviews as node()) {
+    <doc>
+        {$docitem}
+        <ref/>
+        {bun:get-excludes($docitem, $docviews)}
+    </doc>     
+};
+
 (:~
 :   Retrives all the groups assigned to the membership or referenced documents from the 
 :   input document-node.
@@ -2374,7 +2403,7 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $docviews as node
         {$docitem}
         <ref>
             {
-                let $doc-ref := data($docitem/child::bu:group/@href)
+                let $doc-ref := data($docitem/child::*/bu:group/@href)
                 return 
                     (: !+FIX_THIS - ultimately this should be replaced by the acl based group access api :)
                     collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri eq $doc-ref]/ancestor::bu:ontology

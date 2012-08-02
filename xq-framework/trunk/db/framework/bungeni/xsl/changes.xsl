@@ -60,6 +60,9 @@
                                     <i18n:text key="tab-desc">description(nt)</i18n:text>
                                 </th>
                                 <th>
+                                    <i18n:text key="tab-status">status(nt)</i18n:text>
+                                </th>
+                                <th>
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
                                 <!-- !+FIX_THIS not-implemented
@@ -79,14 +82,14 @@
                                         <span>
                                             <xsl:choose>
                                                 <xsl:when test="bu:type/bu:value eq 'event'">
-                                                    <a href="{lower-case($doc-type)}-event?uri={@href}">
+                                                    <!--a href="{lower-case($doc-type)}-event?uri={@href}">
                                                         <xsl:value-of select="bu:title"/>
-                                                    </a> 
+                                                    </a--> 
                                                     <!-- !+NOTE (ao, 10 July 2012) This does not work on integrated Bungeni UI. The path 
                                                         seems to get lost -->
-                                                    <!--a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
+                                                    <a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
                                                         <xsl:value-of select="bu:title"/>
-                                                    </a-->
+                                                    </a>
                                                 </xsl:when>
                                                 <xsl:when test="bu:type/bu:value eq 'annex'">
                                                     <xsl:value-of select="bu:title"/>:
@@ -98,6 +101,11 @@
                                                     <xsl:value-of select="bu:title"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <xsl:value-of select="bu:status/bu:value"/>
                                         </span>
                                     </td>
                                     <td>

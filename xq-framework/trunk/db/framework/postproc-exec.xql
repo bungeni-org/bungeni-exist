@@ -6,12 +6,15 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=yes";
 
 let $getqrystr := xs:string(request:get-query-string())
 let $sigs := pproc:update-signatories()
+let $members := pproc:update-groups()
 let $events := pproc:update-events()
 let $sittings := pproc:update-sittings()
 
 return 
     if ($sigs/node()) then 
         $sigs
+    else if ($members/node()) then 
+        $members        
     else if ($events/node()) then 
         $events
     else if ($sittings/node()) then 

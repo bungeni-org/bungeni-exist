@@ -11,14 +11,14 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="assigned-items">
-        <xsl:variable name="doc-type" select="group/bu:ontology/bu:group/@type"/>
-        <xsl:variable name="doc-sub-type" select="group/documentType"/>
-        <xsl:variable name="doc_uri" select="group/bu:ontology/bu:group/@uri"/>
+    <xsl:template match="doc">
+        <xsl:variable name="ver_id" select="version"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
-                    <xsl:value-of select="group/bu:ontology/bu:group/bu:fullName"/>
+            <div id="title-holder">
+                <h1 class="title">
+                    <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -26,62 +26,39 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="uri">
-                    <xsl:value-of select="$doc_uri"/>
+                    <xsl:value-of select="$doc-uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">staff</xsl:with-param>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">
                         <table class="tbl-tgl">
                             <tr>
-                                <td class="fbtd">item</td>
-                                <td class="fbtd">start date</td>
-                                <td class="fbtd">end date</td>
-                                <td class="fbtd">due date</td>
+                                <th class="fbtd">name</th>
+                                <th class="fbtd">start</th>
+                                <th class="fbtd">end</th>
+                                <th class="fbtd">type</th>
                             </tr>
-                            <xsl:for-each select="items/bu:ontology">
+                            <xsl:for-each select="bu:ontology/bu:members/bu:member/bu:membershipType[bu:value eq 'committee_staff']/ancestor::bu:member">
+                                <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
                                 <tr class="items">
-                                    <td class="fbt bclr" style="text-align-left;">
-                                        <a href="{bu:document/@type}/text?uri={bu:legislativeItem/@uri}">
-                                            <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                    <td class="fbt bclr">
+                                        <a href="member?uri={bu:person/@href}">
+                                            <xsl:value-of select="bu:person/@showAs"/>
                                         </a>
                                     </td>
-                                    <td class="fbt bclr">None</td>
                                     <td class="fbt bclr">
-                                        <xsl:value-of select="format-date(bu:legislativeItem/bu:publicationDate,$date-format,'en',(),())"/>
+                                        <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
                                     </td>
-                                    <td class="fbt bclr">None</td>
+                                    <td class="fbt bclr">
+                                        <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
+                                    </td>
+                                    <td class="fbt bclr">
+                                        <xsl:value-of select="bu:membershipType"/>
+                                    </td>
                                 </tr>
                             </xsl:for-each>
                         </table>

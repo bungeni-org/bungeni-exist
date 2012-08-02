@@ -11,13 +11,13 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:template match="assigned-items">
-        <xsl:variable name="doc-type" select="group/bu:ontology/bu:group/bu:docType/bu:value"/>
-        <xsl:variable name="doc-uri" select="group/bu:ontology/bu:group/@uri"/>
+    <xsl:template match="doc">
+        <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
-                    <xsl:value-of select="group/bu:ontology/bu:group/bu:fullName"/>
+            <div id="title-holder">
+                <h1 class="title">
+                    <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
@@ -28,12 +28,13 @@
                     <xsl:value-of select="$doc-uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">assigned</xsl:with-param>
-                <xsl:with-param name="excludes" select="exlude/tab"/>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">
+                        (pending)
                         <table class="tbl-tgl">
                             <tr>
                                 <td class="fbtd">item</td>
@@ -44,13 +45,13 @@
                             <xsl:for-each select="items/bu:ontology">
                                 <tr class="items">
                                     <td class="fbt bclr" style="text-align-left;">
-                                        <a href="{bu:document/@type}/text?uri={bu:legislativeItem/@uri}">
-                                            <xsl:value-of select="bu:legislativeItem/bu:shortName"/>
+                                        <a href="{lower-case($doc-type)}/text?uri={bu:document/@uri}">
+                                            <xsl:value-of select="bu:group/bu:shortName"/>
                                         </a>
                                     </td>
                                     <td class="fbt bclr">None</td>
                                     <td class="fbt bclr">
-                                        <xsl:value-of select="format-date(bu:legislativeItem/bu:publicationDate,$date-format,'en',(),())"/>
+                                        <xsl:value-of select="format-date(bu:group/bu:publicationDate,$date-format,'en',(),())"/>
                                     </td>
                                     <td class="fbt bclr">None</td>
                                 </tr>

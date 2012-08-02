@@ -188,7 +188,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/assignedgroups">
+        <route href="/bill-assignedgroups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -203,7 +203,7 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill/version/documents">
+        <route href="/bill-version/documents">
             <title>Business | Bill</title>
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
@@ -614,6 +614,10 @@
             The name is always that of a content type
         -->
         <views name="Committee">
+            <view path="committees" id="listing" tag="listing">
+                <template>xml/committees.xml</template>
+                <xsl>xsl/committees.xsl</xsl>
+            </view>
             <view path="committee-text" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
@@ -621,7 +625,7 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/committee.xsl</xsl>
             </view>
-            <view path="committee-members" id="members" tag="tab">
+            <view path="committee-members" id="members" tag="tab" check-for="[bu:member/bu:membershipType[bu:value eq 'committee_member']/child::node()]">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
@@ -642,7 +646,7 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/comm-sittings.xsl</xsl>
             </view>
-            <view path="committee-staff" id="staff" tag="tab">
+            <view path="committee-staff" id="staff" tag="tab" check-for="[bu:member/bu:membershipType[bu:value eq 'committee_staff']/child::node()]">
                 <title>
                     <i18n:text key="tab-staff">staff(nt)</i18n:text>
                 </title>

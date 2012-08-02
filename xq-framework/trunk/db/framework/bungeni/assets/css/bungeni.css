@@ -29,3 +29,6 @@
 @import url("member.css");
 @import url("popout.css");
 @import url("whatson.css");
+/* widgets */
+@import url("fullcalendar.css");
+@import url("datepicker.css");

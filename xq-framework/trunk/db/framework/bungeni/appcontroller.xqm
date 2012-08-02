@@ -124,9 +124,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $act-entries-tmpl :=  bun:get-committees($offset,$limit,$qry,$sty),
+                    $parts := cmn:get-view-listing-parts('Committee','profile'),
+                    $act-entries-tmpl :=  bun:get-committees($offset,$limit,$parts,$qry,$sty),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/committees.xml")/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     								    template:process-tmpl(
@@ -137,7 +138,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        (),
     								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"xml/listing-search-form.xml",'committee')))))
     								    )  
-                    
+                  
         (:~ ITEM LISTINGS :)        
     	else if ($EXIST-PATH eq "/bills")
     		 then 
@@ -523,7 +524,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -543,9 +544,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-assigned-items($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-PATH, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
     								 return 
     									template:process-tmpl(
@@ -563,7 +564,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-assigned-items($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -583,7 +584,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-assigned-items($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -603,7 +604,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-assigned-items($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

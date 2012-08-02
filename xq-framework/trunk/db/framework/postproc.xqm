@@ -52,6 +52,38 @@ declare function pproc:update-signatories() {
 };
 
 (:~
+    This method inserts <bu:person/> node in the bu:member based on bu:userId provided by each 
+    signatory node in a parliamentary document.
+    
+    @return nothing or <response type="error">
+                            <code/>
+                            <desc/>
+                        </response>
+:)
+declare function pproc:update-groups() {
+
+    try {
+        (: iterate through all groups with bu:member nodes and update with retrived Person's URI :)
+        for $membership in collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:members/bu:member
+        let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $membership/bu:userId][1]
+        let $user-uri := $user/@uri
+        let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
+        return 
+            (: safe-guarding multiple <bu:person/> nodes since 2012! :)
+            if (empty($membership/bu:person)) then
+                update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $membership
+            else
+                ()
+    } catch * {
+        <response type="error">
+           <code>{$err:code}</code>
+           <desc>{$err:description}</desc>
+        </response>
+    }
+
+};
+
+(:~
     This method replaces place-holder for referenced document within an Event: First get all non-Event documents, if 
     they contain workflowEvents, we use the docIds to locate the Event documents being referred to and update 
     the refersTo href attributes. Consequently, workflowEvents in the non-Event documents are also updated with 

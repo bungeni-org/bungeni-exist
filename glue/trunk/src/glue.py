@@ -672,6 +672,14 @@ class RepoSyncUploader(object):
             print _COLOR.FAIL, e, '\nERROR: reposync.xml is not generated. Run with `-s` switch to sync with repository first.', _COLOR.ENDC
             sys.exit()
 
+    def upload_file(self, on_file):
+        self.username = self.webdav_cfg.get_username()
+        self.password = self.webdav_cfg.get_password()
+        self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
+        webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+        up_stat = webdaver.pushFile(str(on_file))
+        return up_stat
+
     def upload_files(self):
         coll = self.dom.selectSingleNode("//collection")
         paths = coll.elements("file")
@@ -696,14 +704,50 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
         super(GenericDirWalkerATTS, self).__init__()
         self.webdav_cfg = input_params["webdav_config"]
 
+    """
+    
+    For uploading Attachment files but able to break and return if upload error is detected,
+    useful to flag the current uploading to be left in queue
+    """
+    def process_atts(self, folder_path):
+        upload_stat = False
+        listing = os.listdir(folder_path)
+        for att in listing:
+            att_path = os.path.join(folder_path, att)
+            LOG.debug("uploading file : " + att_path)
+            try:
+                self.username = self.webdav_cfg.get_username()
+                self.password = self.webdav_cfg.get_password()
+                self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_atts_folder()
+                webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+                webdaver.pushFile(att_path)
+                upload_stat = True
+            except SardineException, e:
+                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                break
+            except HttpHostConnectException, e:
+                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                break
+        if upload_stat == True:
+            return upload_stat
+        else:
+            return False
+
     def fn_callback(self, input_file_path):
         if GenericDirWalkerATTS.fn_callback(self, input_file_path)[0] == True:
-            self.username = self.webdav_cfg.get_username()
-            self.password = self.webdav_cfg.get_password()
-            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_atts_folder()
-            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
-            webdaver.pushFile(input_file_path)
-            return (False, None)
+            try:
+                self.username = self.webdav_cfg.get_username()
+                self.password = self.webdav_cfg.get_password()
+                self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_atts_folder()
+                webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+                webdaver.pushFile(input_file_path)
+                return (False, None)
+            except SardineException, e:
+                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                return (False, None)
+            except HttpHostConnectException, e:
+                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                return (False, None)
         else:
             return (False,None)
 
@@ -769,14 +813,14 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                     LOG.debug( data )
                 else:
                     print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), _COLOR.ENDC
-                return True
+                return (True, file_uri)
             else:
                 print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
-                return False
+                return (False, None)
             conn.close()
         except socket.error, (code, message):
             print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
-            return False
+            return (False, None)
 
 
     def fn_callback(self, input_file_path):
@@ -869,7 +913,10 @@ class WebDavClient(object):
             sys.exit()
 
     def pushFile(self, onto_file):
-        a_file = File(onto_file)
+        try:
+            a_file = File(onto_file)
+        except Exception, E:
+            print _COLOR.FAIL, E, '\nERROR: E While processing xml ', onto_file, _COLOR.ENDC
         try:
             inputStream = FileInputStream(a_file)
             length = a_file.length()
@@ -887,14 +934,16 @@ class WebDavClient(object):
             try:
                 self.sardine.put(self.put_folder+os.path.basename(onto_file), bytes)
                 print "PUT: "+self.put_folder+os.path.basename(onto_file)
+                return True
             except SardineException, e:
                 print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , _COLOR.ENDC
-                sys.exit()
+                return False
             except HttpHostConnectException, e:
                 print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
                 sys.exit()
         except FileNotFoundException, e:
             print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last synchronization. Do a re-sync before uploading" , _COLOR.ENDC
+            return True
 
 class PoTranslationsConfig(Config):
     """
@@ -925,10 +974,10 @@ class PostTransform(object):
     def __init__(self, input_params = None):
         self.webdav_cfg = input_params["webdav_config"]
 
-    def update(self):
+    def update(self, uri = None):
         import urllib2
         try:
-            xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql'
+            xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+uri
             username = self.webdav_cfg.get_username()
             password = self.webdav_cfg.get_password()
 
@@ -1279,11 +1328,7 @@ def main_queue(config_file, afile):
     Do Unzipping and Transformations
     """
     import fnmatch
-    if os.path.isdir(afile) == True:
-        print "just a directory"
-        in_queue = True
-        return in_queue
-    elif fnmatch.fnmatch(afile, "*.zip") and os.path.isfile(afile):
+    if fnmatch.fnmatch(afile, "*.zip") and os.path.isfile(afile):
         unzip = GenericDirWalkerUNZIP()
         temp_dir = cfg.get_temp_files_folder()
         unzip.extractor(afile, temp_dir)
@@ -1330,6 +1375,7 @@ def main_queue(config_file, afile):
         bunparse = ParseBungeniXML(afile)
         image_node = bunparse.get_image_file()
         if (image_node is not None):
+            print "Has profile image. Will be processed with attached zip file"
             return True
         else:
             info_object = pxf.process_file(afile)
@@ -1346,6 +1392,10 @@ def main_queue(config_file, afile):
                 print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
                 in_queue = False
                 return in_queue
+    elif fnmatch.fnmatch(afile, "*.xml"):
+        print "[" + afile + "] not found in filesystem"
+        in_queue = True
+        return in_queue
     else:
         # ignore any other file type, not interested with them currently...
         in_queue = True
@@ -1359,9 +1409,9 @@ def main_queue(config_file, afile):
         mkdir_p(cfg.get_temp_files_folder())
     sxw.create_sync_file()
     # reaching here means there is a successfull file
-    sync_stat = sxw.sync_file(info_object[0])
+    sync_stat_obj = sxw.sync_file(info_object[0])
     sxw.close_sync_file()
-    if sync_stat == True:
+    if sync_stat_obj[0] == True:
         in_queue = True
     else:
         in_queue = False
@@ -1369,9 +1419,31 @@ def main_queue(config_file, afile):
     """
     Do uploading to eXist
     """
-    webdav_upload(cfg, wd_cfg)
+    print _COLOR.OKGREEN + "Uploading XML file(s) to eXist via WebDav..." + _COLOR.ENDC
+    # first reset bungeni xmls folder
+    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
+    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
+    rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
+    if in_queue == True:
+        upload_stat = rsu.upload_file(info_object[0])
+    else:
+        in_queue = False
+        return in_queue
+
+    print _COLOR.OKGREEN + "Uploading ATTACHMENT file(s) to eXist via WebDav..." + _COLOR.ENDC
+    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
+    # upload attachments at this juncture
+    pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
+    info_obj = pafw.process_atts(cfg.get_attachments_output_folder())
+    if info_obj == True:
+        in_queue = True
+    else:
+        return False
+    print _COLOR.OKGREEN + "Completed upload to eXist!" + _COLOR.ENDC
+    # do post-transform
     pt = PostTransform({"webdav_config": wd_cfg})
-    info_object = pt.update()
+    print "Initiating PostTransform request on eXist-db", sync_stat_obj[1]
+    info_object = pt.update(str(sync_stat_obj[1]))
     
     if info_object == True:
         in_queue = True

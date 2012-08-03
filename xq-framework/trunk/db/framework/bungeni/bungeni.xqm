@@ -2688,14 +2688,14 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid][1]/ancestor::bu:ontology
     let $vocabularized := vdex:set-vocabularies($member-doc)
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
                     {$vocabularized}
                     <ref>
-                    {vdex:set-vocabularies(collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid]/ancestor::bu:ontology)}
+                    {vdex:set-vocabularies(collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology)}
                     </ref>
                 </doc>
     

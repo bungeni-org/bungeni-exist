@@ -720,11 +720,11 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
                 self.password = self.webdav_cfg.get_password()
                 self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_atts_folder()
                 webdaver = WebDavClient(self.username, self.password, self.xml_folder)
-                webdaver.pushFile(att_path)
-                upload_stat = True
-            except SardineException, e:
-                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
-                break
+                up_info_obj = webdaver.pushFile(att_path)
+                if up_info_obj == True:
+                    upload_stat = True
+                else:
+                    upload_stat = False
             except HttpHostConnectException, e:
                 print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
                 break
@@ -811,9 +811,10 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                     # 'ignore' means that its in the repository so we add anything that that is not `ignore` to the reposync list
                     self.add_item_to_repo(str(input_file_path))
                     LOG.debug( data )
+                    return (True, file_uri)
                 else:
                     print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), _COLOR.ENDC
-                return (True, file_uri)
+                    return (True, None)
             else:
                 print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
                 return (False, None)
@@ -1411,7 +1412,11 @@ def main_queue(config_file, afile):
     # reaching here means there is a successfull file
     sync_stat_obj = sxw.sync_file(info_object[0])
     sxw.close_sync_file()
-    if sync_stat_obj[0] == True:
+    if sync_stat_obj[0] == True and sync_stat_obj[1] == None:
+        # ignore upload -remove from queue
+        in_queue = True
+        return in_queue
+    elif sync_stat_obj[0] == True:
         in_queue = True
     else:
         in_queue = False
@@ -1442,7 +1447,7 @@ def main_queue(config_file, afile):
     print _COLOR.OKGREEN + "Completed upload to eXist!" + _COLOR.ENDC
     # do post-transform
     pt = PostTransform({"webdav_config": wd_cfg})
-    print "Initiating PostTransform request on eXist-db", sync_stat_obj[1]
+    print "Initiating PostTransform request on eXist-db for URI =>", sync_stat_obj[1]
     info_object = pt.update(str(sync_stat_obj[1]))
     
     if info_object == True:

@@ -5,13 +5,18 @@ import module namespace pproc = "http://exist.bungeni.org/pproc" at "postproc.xq
 declare option exist:serialize "method=xhtml media-type=text/html indent=yes";
 
 let $getqrystr := xs:string(request:get-query-string())
+let $uri := xs:string(request:get-parameter("uri",'none'))
 let $sigs := pproc:update-signatories()
 let $members := pproc:update-groups()
 let $events := pproc:update-events()
 let $sittings := pproc:update-sittings()
 
 return 
-    if ($sigs/node()) then 
+    if ($uri ne 'none') then (
+         pproc:update-document($uri),
+         "Completed PostTransform on eXist-db"
+    )
+    else if ($sigs/node()) then 
         $sigs
     else if ($members/node()) then 
         $members        

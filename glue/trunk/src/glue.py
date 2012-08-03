@@ -622,6 +622,9 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
             elif pipe_type == "parliament":
                 # Handle unique case parliament
                 return (None, None)
+            elif pipe_type == "attachment" or pipe_type == "signatory":
+                # Handle un-pipelined docs
+                return (None, None)
             else:
                 return (True, False)
         else:
@@ -711,8 +714,10 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
     """
     def process_atts(self, folder_path):
         upload_stat = False
+        atts_present = False
         listing = os.listdir(folder_path)
         for att in listing:
+            atts_present = True
             att_path = os.path.join(folder_path, att)
             LOG.debug("uploading file : " + att_path)
             try:
@@ -728,6 +733,8 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
             except HttpHostConnectException, e:
                 print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
                 break
+        if atts_present == False:
+            return True
         if upload_stat == True:
             return upload_stat
         else:

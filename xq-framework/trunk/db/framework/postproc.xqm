@@ -137,3 +137,60 @@ declare function pproc:update-sittings() {
     }
 
 };
+
+(:
+ : Updates all with URI as parameter 
+ :)
+declare function pproc:update-document($uri as xs:string) {
+
+    try {
+        (: it's signatories :)    
+        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else (@internal-uri=$uri)]/ancestor::bu:ontology
+        for $signatory in $doc/bu:signatories/bu:signatory
+        let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $signatory/bu:userId][1]
+        let $user-uri := $user/@uri
+        let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
+        let $up-sigs := if (empty($signatory/bu:person)) then update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $signatory else ()
+        return 
+            (),
+        (: it's events :)
+        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else  (@internal-uri=$uri)]/ancestor::bu:ontology
+        for $wfe in $doc//bu:document/bu:workflowEvents/bu:workflowEvent
+        let $doc-node := $wfe/ancestor::bu:document
+        let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
+        let $event := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[bu:docId eq $wfe/bu:docId]
+        return (
+           update replace $event/bu:eventOf/bu:refersTo/@href with $docuri,
+           update replace $doc-node/bu:workflowEvents/bu:workflowEvent[bu:docId=$wfe/bu:docId]/@href with if($event/@uri) then $event/@uri else "E_DOC_NOT_FOUND"
+                   ),
+        (: it's sittings :)
+        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[@uri=$uri]/ancestor::bu:ontology
+        for $anItem in $doc/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
+        let $doc-node := collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docId eq $anItem/bu:itemId]
+        let $docId := $doc-node/bu:docId
+        let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
+        return 
+            if ($anItem/bu:itemType/bu:value ne 'heading' and empty($anItem/bu:document)) then
+                update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]
+             else
+                 (),
+        (: groups :)
+        let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group[@uri=$uri]/ancestor::bu:ontology
+        for $membership in $doc/bu:members/bu:member
+        let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $membership/bu:userId][1]
+        let $user-uri := $user/@uri
+        let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
+        return 
+            (: safe-guarding multiple <bu:person/> nodes since 2012! :)
+            if (empty($membership/bu:person)) then
+                update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $membership
+            else
+                ()
+    } catch * {
+        <response type="error">
+           <code>{$err:code}</code>
+           <desc>{$err:description}</desc>
+        </response>
+    }
+
+};

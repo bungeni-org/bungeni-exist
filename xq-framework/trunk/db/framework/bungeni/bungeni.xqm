@@ -88,7 +88,7 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
                     <status>overwrite</status>
                 else
                     (: Ambiguous scenario, ignore :)
-                    <status>ignore</status>
+                    <status>overwrite</status>
             )
             else
                 (: Not found on eXist :)
@@ -2709,7 +2709,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
    
     (: return AN Member document with his/her activities :)
     let $doc := <doc>
-        { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid]/ancestor::bu:ontology }
+        { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid][1]/ancestor::bu:ontology }
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          

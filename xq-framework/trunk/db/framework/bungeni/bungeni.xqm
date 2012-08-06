@@ -2506,7 +2506,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
         $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
                             "/bu:ontology[@for='address']",
-                            "/bu:address/bu:assignedTo[@uri eq '",$focal,"']",
+                            "/bu:address/bu:assignedTo[@uri eq '",$focal,"'][1]",
                             (: !+NOTE (ao, 16 Mar 2012) Commented permissions check below since currently
                              : we only have public permissions which dont apply in this case 
                              :)
@@ -2515,9 +2515,9 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
     let $doc := <doc>
                     document {
                             if($address-type eq 'Group') then 
-                                collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal]/ancestor::bu:ontology
+                                collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal][1]/ancestor::bu:ontology
                             else
-                                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$focal]/ancestor::bu:ontology
+                                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$focal][1]/ancestor::bu:ontology
                         }
                     <ref>
                         {

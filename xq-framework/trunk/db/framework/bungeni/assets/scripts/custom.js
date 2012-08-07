@@ -29,8 +29,7 @@ $(document).ready(function () {
        generated */
     $('body').data('compress',$("#i-compress").html());
     $('body').data('expand',$("#i-expand").html());
-    //$('body').data('close',$("#popout-close").html()); !+FIX_THIS (ao, 10Jul2012, not in use due to issues with Bungeni, see 
-    // popout.xsl 
+    $('body').data('close',$("#popout-close").html()); //!+FIX_THIS (ao, 10Jul2012, not in use due to issues with Bungeni, see popout.xsl 
     //Whatson page
     $('body').data('start',$("#range-start").html());
     $('body').data('end',$("#range-end").html());
@@ -322,8 +321,8 @@ $(document).ready(function () {
             text: '<img class="throbber" src="assets/images/throbber.gif" alt="Loading..." />',
             url: $(this).attr('href'), // Use the href attribute of each element for the url to load
             title: {
-               text: '<h1 id="doc-title-red-left">' + $(this).text() + '</h1>', // Give the tooltip a title using each elements text
-               //button: $("body").data("close") // Show a close link in the title !+NOTES see 'close above 
+               text: '<h1 class="title">' + $(this).text() + '</h1>', // Give the tooltip a title using each elements text
+               button: $("body").data("close") // Show a close link in the title !+NOTES see 'close above 
             }
          },
          position: {

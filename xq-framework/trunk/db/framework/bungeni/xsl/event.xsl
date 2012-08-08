@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -27,6 +27,7 @@
         <xsl:variable name="moevent-uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <div id="title-holder">
+                <a style="float:left;font: bold 50px 'Times New Roman',serif;" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
                 <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
@@ -49,10 +50,10 @@
                 <div id="doc-main-section">
                     <div class="rounded-eigh tab_container hanging-menu">
                         <ul class="doc-versions">
-                            <xsl:if test="bu:ontology/bu:document/@uri">
+                            <xsl:if test="bu:ontology/bu:document[@uri, @internal-uri]">
                                 <li>
                                     <a href="{lower-case($doc-type)}-text?uri={$doc-uri}">
-                                        <i18n:text key="list-tab-cur">current(nt)</i18n:text>
+                                        <i18n:text key="doc-{lower-case($doc-type)}">main(nt)</i18n:text>
                                     </a>
                                 </li>
                             </xsl:if>

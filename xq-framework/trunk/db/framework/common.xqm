@@ -182,6 +182,15 @@ declare function local:build-breadcrumbs($exist-path as xs:string) {
             	        <xh:a href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    ,   				
             	        <xh:a class="last" href="{$route/subnavigation}">{local:route-title($route/subnavigation)}</xh:a>
+            	    (:
+            	       !+FIX_THIS (ao, 8th Aug 2012) adding tertiary menus(tabs) to breadcrumbs need to find out the doctype currently
+            	       nowhere to access it as local:route-title() return route info e.g. 'questions' and we need 'question' since that 
+            	       is what ui/doctypes/doctype is identified by.
+            	    ,
+            	    if (1 eq 1) then
+            	           <xh:a class="last" href="{$route/subnavigation}?tab={data(cmn:get-listings-config('question')[@id eq 'uc']/@id)}">{data(cmn:get-listings-config('question')[@id eq 'uc']/@name)}</xh:a> 
+            	    else
+            	       ():)
             	          
            )
 };
@@ -204,7 +213,7 @@ declare function local:route-title($navroute as element()) {
 
 declare function cmn:get-doctype-config($doctype as xs:string) {
    let $config := cmn:get-ui-config()
-   let $dc-config := $config/ui/doctypes/doctype[@name eq $doctype]
+   let $dc-config := $config/ui/doctypes/doctype[lower-case(@name) eq lower-case($doctype)]
    return 
     if ($dc-config) then (
         $dc-config

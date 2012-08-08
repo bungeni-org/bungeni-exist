@@ -735,6 +735,7 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
                 break
         if atts_present == False:
             return True
+        print "[checkpoint] ATTS upload"
         if upload_stat == True:
             return upload_stat
         else:
@@ -806,8 +807,10 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         """
         file_uri = self.get_params(input_file_path)['uri']
         file_stat_date = self.get_params(input_file_path)['status_date']
+        import urllib2
         try:
-            conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),50)
+            socket.setdefaulttimeout(30)
+            conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),30)
             conn.request("GET", "/exist/apps/framework/bungeni/check-update?uri=" + file_uri+"&t=" + file_stat_date)
             response = conn.getresponse()
             if(response.status == 200):
@@ -826,6 +829,12 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                 print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
                 return (False, None)
             conn.close()
+        except socket.timeout:
+            print _COLOR.FAIL, '\nERROR: eXist socket.timedout at sync file... back to MQ', _COLOR.ENDC
+            return (False, None)
+        except urllib2.URLError, e:
+            print _COLOR.FAIL, e, '\nERROR: eXist URLError.timedout at sync file... back to MQ', _COLOR.ENDC
+            return (False, None)
         except socket.error, (code, message):
             print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
             return (False, None)
@@ -983,9 +992,11 @@ class PostTransform(object):
         self.webdav_cfg = input_params["webdav_config"]
 
     def update(self, uri = None):
+        #socket.setblocking(0) #set to non-blocking mode
+        socket.setdefaulttimeout(30) #timeout of 30 seconds
         import urllib2
         try:
-            xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+uri
+            xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+str(uri)
             username = self.webdav_cfg.get_username()
             password = self.webdav_cfg.get_password()
 
@@ -1000,6 +1011,12 @@ class PostTransform(object):
             response = urllib2.urlopen(xqyurl)
             print _COLOR.OKGREEN + response.read() + _COLOR.ENDC
             return True
+        except urllib2.URLError, e:
+            print _COLOR.FAIL, e, '\nERROR: eXist timedout URLError', _COLOR.ENDC
+            return False
+        except socket.timeout:
+            print _COLOR.FAIL, '\nERROR: eXist timedout :(', _COLOR.ENDC
+            return False
         except urllib2.HTTPError, err:
             print _COLOR.FAIL, err.code, err.msg, ': ERROR: While running PostTransform', _COLOR.ENDC
             return False
@@ -1325,6 +1342,7 @@ def main_queue(config_file, afile):
     """
     Get parliament information
     """
+    print "[checkpoint] getting parliament info"
     parl_info = get_parl_info(cfg)
     if parl_info == False:
         return in_queue
@@ -1337,6 +1355,7 @@ def main_queue(config_file, afile):
     """
     import fnmatch
     if fnmatch.fnmatch(afile, "*.zip") and os.path.isfile(afile):
+        print "[checkpoint] unzipping archive files"
         unzip = GenericDirWalkerUNZIP()
         temp_dir = cfg.get_temp_files_folder()
         unzip.extractor(afile, temp_dir)
@@ -1380,6 +1399,7 @@ def main_queue(config_file, afile):
         Check if file has image and ignore because this will be process by the 
         .zip file with the image attachment
         """
+        print "[checkpoint] transforming xmls"
         bunparse = ParseBungeniXML(afile)
         image_node = bunparse.get_image_file()
         if (image_node is not None):
@@ -1412,6 +1432,7 @@ def main_queue(config_file, afile):
     """
     Do sync step
     """
+    print "[checkpoint] entering sync"
     sxw = SyncXmlFilesWalker(cfgs)
     if not os.path.isdir(cfg.get_temp_files_folder()):
         mkdir_p(cfg.get_temp_files_folder())
@@ -1419,6 +1440,7 @@ def main_queue(config_file, afile):
     # reaching here means there is a successfull file
     sync_stat_obj = sxw.sync_file(info_object[0])
     sxw.close_sync_file()
+    print "[checkpoint] exiting sync"
     if sync_stat_obj[0] == True and sync_stat_obj[1] == None:
         # ignore upload -remove from queue
         in_queue = True
@@ -1426,7 +1448,10 @@ def main_queue(config_file, afile):
     elif sync_stat_obj[0] == True:
         in_queue = True
     else:
+        # eXist not responding?!
+        # requeue and try later
         in_queue = False
+        return in_queue
 
     """
     Do uploading to eXist
@@ -1436,6 +1461,7 @@ def main_queue(config_file, afile):
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
     rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
+    print "[checkpoint] uploading XML file"
     if in_queue == True:
         upload_stat = rsu.upload_file(info_object[0])
     else:
@@ -1453,6 +1479,10 @@ def main_queue(config_file, afile):
         return False
     print _COLOR.OKGREEN + "Completed upload to eXist!" + _COLOR.ENDC
     # do post-transform
+    """
+    !+FIX_THIS (ao,8th Aug 2012) PostTransform degenerates and becomes and expensive process 
+    over time temporatily disabled.
+    
     pt = PostTransform({"webdav_config": wd_cfg})
     print "Initiating PostTransform request on eXist-db for URI =>", sync_stat_obj[1]
     info_object = pt.update(str(sync_stat_obj[1]))
@@ -1461,7 +1491,7 @@ def main_queue(config_file, afile):
         in_queue = True
     else:
         in_queue = False
-    
+    """
     return in_queue
 
 def main(options):

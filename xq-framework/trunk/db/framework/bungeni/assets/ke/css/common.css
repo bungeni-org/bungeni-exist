@@ -34,13 +34,26 @@ div#pre-banner {
 div#banner-wrapper {
     width:100%;
     height:96px;
-    background:#ef1c25 url(../images/kenya.png) bottom left no-repeat;    
+    background:#eb1d33 url(../images/kenyas.png) bottom left no-repeat;    
+}
+.repeat-left {
+    overflow: 
+    hidden;
+    width:800px;
+    height:96px;
+    float:left;
+    background:url(../images/header-left-repeat.png) bottom left repeat-x;
+}
+.custom-banner {
+    width:1260px;
+    margin:0 auto;
 }
 div#header-banner {
-    width:960px;
-    height:78px;
-    margin:0 auto 15px auto;
-    background:transparent url(../images/portal_banner.png) no-repeat;
+    width:1000px;
+    height:96px;
+    position:absolute;
+    margin:0 auto 0 auto;
+    background:transparent url(../images/portal_banner.png) bottom left no-repeat;
 }
 div.header-nav {
     display:block;
@@ -54,6 +67,8 @@ div.header-nav {
     width:600px;
     height:40px;
     text-align:right;
+    margin-top:-50px !important;
+    position:relative;    
 }
 #search-form-global .header-links {
     margin-right:2px;

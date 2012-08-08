@@ -1,6 +1,10 @@
 .mem-profile {
     margin-top:20px;
 }
+.mem-desc {
+    width:96%;
+    margin:10px auto;
+}
 .mem-top-left {
     float:left;
 }
@@ -17,7 +21,7 @@
 .mem-photo {
     width:180px;
     height:200px;
-    margin:0 auto auto 20px;
+    margin:0 auto auto 0;
 }
 .photo-listing img {
     max-width:140px !important;

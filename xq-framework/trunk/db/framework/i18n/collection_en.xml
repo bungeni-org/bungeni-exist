@@ -20,11 +20,9 @@
     <msg key="eg-keywords">Type the key words</msg>
     <msg key="eg-w-quotes">with quotes</msg>
     <msg key="eg-w-OR">with the OR</msg>
-    <!-- TOP_LEVEL NAV -->
     <msg key="home">home</msg>
     <msg key="business">business</msg>
     <msg key="members">members</msg>
-    <!-- SUB_LEVEL NAV -->
     <msg key="whatson">what's on</msg>
     <msg key="committees">committees</msg>
     <msg key="bills">bills</msg>
@@ -35,8 +33,7 @@
     <msg key="calendar">calendar</msg>
     <msg key="publications">publications</msg>
     <msg key="current">members</msg>
-    <msg key="politicalgroups">politicalgroups</msg>
-    <!-- LISTINGS -->
+    <msg key="politicalgroups">political groups</msg>
     <msg key="doc-whatson">What's on</msg>
     <msg key="listing">List of&#160;</msg>
     <msg key="list-t-committee">Committees</msg>
@@ -107,13 +104,11 @@
     <msg key="attachedfiles">attached files</msg>
     <msg key="title">title</msg>
     <msg key="relation">relation</msg>
-    <!-- categories -->
     <msg key="cate-document">document</msg>
     <msg key="cate-group">group</msg>
     <msg key="cate-membership">membership</msg>
     <msg key="cate-address">address</msg>
     <msg key="cate-report">report</msg>
-    <!-- TABS - messages found on or within tabs -->
     <msg key="tab-profile">profile</msg>
     <msg key="tab-members">members</msg>
     <msg key="tab-sittings">sittings</msg>
@@ -132,7 +127,6 @@
     <msg key="tab-desc">description</msg>
     <msg key="tab-date">date</msg>
     <msg key="tab-file-title">file title</msg>
-    <!-- address /  contacts -->
     <msg key="addr-type">addr type</msg>
     <msg key="addr-post-type">postal addr type</msg>
     <msg key="addr-city">city</msg>
@@ -140,24 +134,20 @@
     <msg key="addr-country">country</msg>
     <msg key="addr-phone">phone number(s)</msg>
     <msg key="addr-fax">fax number(s)</msg>
-    <msg key="addr-email">email</msg>    
-    <!-- PAGINATION -->
+    <msg key="addr-email">email</msg>
     <msg key="page">Page</msg>
     <msg key="pageof">of</msg>
     <msg key="compress">compress all</msg>
     <msg key="expand">expand all</msg>
-    <!-- PLACEHOLDERS -->
     <msg key="ph-searchall">Search all Bungeni documents...</msg>
     <msg key="ph-searchlisting">search this listing</msg>
-    <!-- MISC -->
     <msg key="download">download</msg>
     <msg key="language">language</msg>
     <msg key="acronym">acronym</msg>
     <msg key="none">none</msg>
     <msg key="number">Number</msg>
     <msg key="from-popout">view as document</msg>
-    <msg key="close">close</msg> 
-    <!-- WHATSON/SITTINGS -->
+    <msg key="close">close</msg>
     <msg key="sittings">sittings</msg>
     <msg key="schedule">scheduled documents</msg>
     <msg key="tdy">today</msg>

@@ -91,7 +91,7 @@ div.doc-toggle.opened {
     
 /*** mainnav ***/
  #mainnav {
-     margin-top:-31px; /* group4 */
+     margin-top:-32px; /* group4 */
  }
  #mainnav ul {
     position:absolute;
@@ -104,7 +104,7 @@ div.doc-toggle.opened {
 }
 #mainnav ul li {
     float:left;
-    margin:0 20px 0 0;
+    margin:0 12px 0 0;
     position:relative;
     padding:0;
 }
@@ -113,10 +113,9 @@ div.doc-toggle.opened {
     display:block;
     color:#fff;
     text-decoration:none;
-    padding:0 15px;
+    padding:0 10px;
     line-height:25px; /* group4 */
     height:25px; /* group4 */
-    font-weight:bold;
     background:#7a0000;
     border-bottom:none;
     -webkit-background-clip: padding-box;
@@ -130,19 +129,6 @@ div.doc-toggle.opened {
     position:relative;
 }
 
-#mainnav ul li:before, #mainnav ul li:after {
-    content:'';
-    width:9px;
-    height:8px;
-    position:absolute;
-    z-index:2;
-    bottom:0;
-    background:#7a0000;
-}
-
-#mainnav ul li:before {
-    left:-8px;
-}
 
 #mainnav ul li:after {
     right:-8px;
@@ -203,7 +189,6 @@ div.doc-toggle.opened {
     text-decoration: none; 
     padding: 2px 11px; 
     text-align:center;
-    text-shadow: #222 0 1px 0;
 }
 
 .submenu ul li a:visited {
@@ -213,8 +198,7 @@ div.doc-toggle.opened {
 
 .submenu ul li a:hover, 
 .submenu ul li a.current {
-    color: #ffa800;
-    text-shadow: #1b661b 0 1px 0;
+    color: #7a0000 !important;
     } 
     
 /* global expand and collapse */
@@ -363,7 +347,7 @@ ul#portal-languageselector {
 ul#portal-personaltools {
     list-style-type:none;
     padding:0;
-    margin:0;    
+    margin:0; 
 }
 #portal-languageselector li,
 #portal-personaltools li {

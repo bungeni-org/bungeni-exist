@@ -16,8 +16,8 @@
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
     <xsl:template match="docs">
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue-center">
+            <div id="title-holder">
+                <h1 class="title">
                     <i18n:text key="list-t-members">Members of Parliament(nt)</i18n:text>
                 </h1>
             </div>
@@ -43,15 +43,7 @@
                     </li>
                 </ul>
             </div>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="#" title="print this page listing" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
@@ -99,7 +91,7 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:salutation,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:salutation,'. ',bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
             </div>

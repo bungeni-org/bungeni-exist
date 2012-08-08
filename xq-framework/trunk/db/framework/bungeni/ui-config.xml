@@ -456,7 +456,7 @@
         -->
         <menu name="mainnav" for="/">
             <div xmlns="http://www.w3.org/1999/xhtml" id="mainnav" class="menu">
-                <ul class="theme-lev-1" id="portal-globalnav">
+                <ul id="portal-globalnav">
                     <li>
                         <a name="home" href="home">
                             <i18n:text key="home">home</i18n:text>
@@ -484,7 +484,7 @@
         </menu>
         <menu name="business" for="business">
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
-                <ul class="theme-lev-1" id="portal-personaltools">
+                <ul id="portal-personaltools">
                     <li>
                         <a name="whatson" href="whatson">
                             <i18n:text key="whatson">what's on(nt)</i18n:text>
@@ -535,7 +535,7 @@
         </menu>
         <menu name="members" for="members">
             <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
-                <ul class="theme-lev-1" id="portal-personaltools">
+                <ul id="portal-personaltools">
                     <li class="navigation">
                         <a name="current" href="members">
                             <i18n:text key="current">current(nt)</i18n:text>
@@ -1101,8 +1101,7 @@
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
                 <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc
-                    No.</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>

@@ -16,8 +16,8 @@
         <xsl:variable name="user-uri" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:membership/@uri"/>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
+            <div id="title-holder">
+                <h1 class="title">
                     <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                 </h1>
             </div>
@@ -122,14 +122,12 @@
                                         <xsl:value-of select="bu:ontology/bu:membership/bu:party/bu:fullName"/>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="labels fbottom">notes:</td>
-                                    <td class="fbt">
-                                        <xsl:copy-of select="bu:ontology/bu:membership/bu:description"/>
-                                    </td>
-                                </tr>
                             </table>
                         </div>
+                    </div>
+                    <div class="clear"/>
+                    <div class="mem-desc">
+                        <xsl:copy-of select="bu:ontology/bu:membership/bu:description"/>
                     </div>
                 </div>
             </div>

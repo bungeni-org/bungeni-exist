@@ -16,8 +16,8 @@
         <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
         <xsl:variable name="doc_uri" select="bu:ontology/bu:group/@uri"/>
         <div id="main-wrapper">
-            <div id="title-holder" class="theme-lev-1-only">
-                <h1 id="doc-title-blue">
+            <div id="title-holder">
+                <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
@@ -31,35 +31,7 @@
                 <xsl:with-param name="tab-path">contacts</xsl:with-param>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
-            <div id="doc-downloads">
-                <ul class="ls-downloads">
-                    <li>
-                        <a href="#" title="get as RSS feed" class="rss">
-                            <em>RSS</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="print this document" class="print">
-                            <em>PRINT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as ODT document" class="odt">
-                            <em>ODT</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as RTF document" class="rtf">
-                            <em>RTF</em>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="get as PDF document" class="pdf">
-                            <em>PDF</em>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">

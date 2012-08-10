@@ -161,11 +161,11 @@
     <msg key="sittings">sedute</msg>
     <msg key="schedule">previsto documentazione</msg>
     <msg key="tdy">oggi</msg>
-    <msg key="old">sedute precedenti</msg>
-    <msg key="pwk">settimana precedente</msg>
+    <msg key="old">30 giorni precedenti</msg>
+    <msg key="pwk">la scorsa settimana</msg>
     <msg key="nwk">la prossima settimana</msg>
     <msg key="twk">questa settimana</msg>
-    <msg key="fut">sedute futuro</msg>
+    <msg key="fut">successivi 30 giorni</msg>
     <msg key="sittinglink">andare a seduta</msg>
     <msg key="whatson-time">tempo</msg>
     <msg key="whatson-business">lavori</msg>

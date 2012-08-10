@@ -1607,7 +1607,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $woview := xs:string(request:get-parameter("showing",'tdy')),   
+                    $woview := xs:string(request:get-parameter("showing",'twk')),   
                     $tab := xs:string(request:get-parameter("tab",'sittings')),  
                     $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$parts),
     		        $act-entries-repl:= document {

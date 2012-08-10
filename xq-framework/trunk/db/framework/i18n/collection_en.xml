@@ -151,11 +151,11 @@
     <msg key="sittings">sittings</msg>
     <msg key="schedule">scheduled documents</msg>
     <msg key="tdy">today</msg>
-    <msg key="old">past sittings</msg>
-    <msg key="pwk">previous week</msg>
+    <msg key="old">last 30 days</msg>
+    <msg key="pwk">last week</msg>
     <msg key="nwk">next week</msg>
     <msg key="twk">this week</msg>
-    <msg key="fut">future sittings</msg>
+    <msg key="fut">next 30 days</msg>
     <msg key="sittinglink">go to sitting</msg>
     <msg key="whatson-time">time</msg>
     <msg key="whatson-business">business</msg>

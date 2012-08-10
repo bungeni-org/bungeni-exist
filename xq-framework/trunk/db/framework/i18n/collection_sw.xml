@@ -161,11 +161,11 @@
     <msg key="sittings">vikao</msg>
     <msg key="schedule">vyeti kwenye ratiba</msg>
     <msg key="tdy">leo</msg>
-    <msg key="old">vikao vya kale</msg>
-    <msg key="pwk">wiki iliyopita</msg>
+    <msg key="old">siku 30 za awali</msg>
+    <msg key="pwk">wiki jana</msg>
     <msg key="nwk">wiki ijayo</msg>
     <msg key="twk">wiki hii</msg>
-    <msg key="fut">vikao vya usoni</msg>
+    <msg key="fut">siku 30 za usoni</msg>
     <msg key="sittinglink">fungua kikao hiki</msg>
     <msg key="whatson-time">saa</msg>
     <msg key="whatson-business">shughuli</msg>

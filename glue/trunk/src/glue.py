@@ -184,6 +184,10 @@ class Transformer(object):
         """
         Run the transformer on the input file
         """
+        print "[checkpoint] entering translation..."
+        if os.path.isfile(input_file) == False:
+            print _COLOR.FAIL, '\nFile disappeared. Will retry ', input_file, _COLOR.ENDC
+            return [None, None]
         print "Executing Transformer with: ", input_file, output, metalex, config_file
         try:
             translatedFiles = self.transformer.translate(
@@ -191,21 +195,27 @@ class Transformer(object):
                 config_file,  
                 self.get_params()
                 )
-            #input stream
-            fis  = FileInputStream(translatedFiles["anxml"])
-            fisMlx  = FileInputStream(translatedFiles["metalex"])
-            #get the document's URI
-            uri = self.get_doc_uri(translatedFiles["metalex"])
-            rep_dict = {'/':'_', ':':','}
-            uri_name = self.replace_all(uri, rep_dict)
-            
-            outFile = File(output + uri_name + ".xml")
-            outMlx = File(metalex + uri_name + ".xml")
-            #copy transformed files to disk
-            FileUtility.getInstance().copyFile(fis, outFile)
-            FileUtility.getInstance().copyFile(fisMlx, outMlx)
-            
-            return [outFile, outMlx]
+            # catch internal exceptions that return 'null'
+            print _COLOR.FAIL, '\n We GOT ', translatedFiles, _COLOR.ENDC
+            if translatedFiles is None:
+                print "[checkpoint] internal failure in the transformer"
+                return [None, None]
+            else:
+                #input stream
+                fis  = FileInputStream(translatedFiles["anxml"])
+                fisMlx  = FileInputStream(translatedFiles["metalex"])
+                #get the document's URI
+                uri = self.get_doc_uri(translatedFiles["metalex"])
+                rep_dict = {'/':'_', ':':','}
+                uri_name = self.replace_all(uri, rep_dict)
+                
+                outFile = File(output + uri_name + ".xml")
+                outMlx = File(metalex + uri_name + ".xml")
+                #copy transformed files to disk
+                FileUtility.getInstance().copyFile(fis, outFile)
+                FileUtility.getInstance().copyFile(fisMlx, outMlx)
+
+                return [outFile, outMlx]
         except SAXParseException, saE:
             print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
@@ -234,11 +244,25 @@ class ParseXML(object):
         """
         Load the xml document from the path
         """
-
-        self.xmlfile = xml_path
-        self.sreader = SAXReader()
-        self.an_xml = File(xml_path)
-        self.xmldoc = self.sreader.read(self.an_xml)
+        try:
+            print "[checkpoint] entered ParseXML"
+            self.xmlfile = xml_path
+            self.sreader = SAXReader()
+            self.an_xml = File(xml_path)
+            if self.an_xml.isFile() == 1:
+                self.xmldoc = self.sreader.read(self.an_xml)             
+            else:
+                print 'ERROR: File ', xml_path, "disappeared! "
+            print "[checkpoint] exited ParseXML"
+        except DocumentException, fNE:
+            print _COLOR.FAIL, fNE, '\nERROR: parsing xml ', xml_path, _COLOR.ENDC
+            return None
+        except IOException, fE:
+            print _COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', xml_path, _COLOR.ENDC       
+        except Exception, E:
+            print _COLOR.FAIL, E, '\nERROR: Saxon parsing xml ', xml_path, _COLOR.ENDC
+        except RuntimeException, ruE:
+            print _COLOR.FAIL, ruE, '\nERROR: ruE Saxon parsing xml ', xml_path, _COLOR.ENDC
 
     def doc_dom(self):
         """
@@ -597,6 +621,12 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
         Used by main_queue for individual processing mode
         """
         bunparse = ParseBungeniXML(input_file_path)
+        print "[checkpoint] running", bunparse.get_contenttype_name()
+        if bunparse.get_contenttype_name() == "":
+            print "ERROR: Reading in bunparse"
+            # probably file is corrupt or not completely written to filesystem
+            # return back to queue
+            return (True, False)
         pipe_type = bunparse.get_contenttype_name()
         if pipe_type is not None:
             if pipe_type in self.input_params["main_config"].get_pipelines():
@@ -1363,11 +1393,23 @@ def main_queue(config_file, afile):
         xml_name = os.path.splitext(xml_basename)[0]
         new_afile = temp_dir + xml_name + ".xml"
         if os.path.isfile(new_afile):
+            print "[checkpoint] found the unzipped .xml file"
             # if there is an XML file inside then we have process its atts
             # descending upon the extracted folder
             bunparse = ParseBungeniXML(new_afile)
+            print "[checkpoint] unzipped file parsed"
             sba = SeekBindAttachmentsWalker(cfgs)
-            sba.attachments_seek_rename(bunparse)
+            image_node = bunparse.get_image_file()
+            if (image_node is not None):
+                print "[checkpoint] entered user doc path"
+                local_dir = os.path.dirname(afile)
+                print "Has profile image. Will process image node"
+                origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
+            else:
+                print "[checkpoint] entered non-user doc path"
+                sba.attachments_seek_rename(bunparse)
+
+            print "[checkpoint] transforming the xml with zipped files"
             info_object = pxf.process_file(new_afile)
             os.remove(new_afile)
             if info_object[1] == True:
@@ -1384,42 +1426,27 @@ def main_queue(config_file, afile):
                 in_queue = False
                 return in_queue
         else:
-            # image att for users are zipped independently
-            local_dir = os.path.dirname(afile)
-            new_afile = local_dir + "/" + xml_name + ".xml"
-            bunparse = ParseBungeniXML(new_afile)
-            sba = SeekBindAttachmentsWalker(cfgs)
-            origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
-            info_object = pxf.process_file(new_afile)
-            if info_object[1] == True:
-                in_queue = True
+            print "[checkpoint] extracted " + new_afile + "] but not found :-J"
+            in_queue = True
+            return in_queue
 
     elif fnmatch.fnmatch(afile, "*.xml") and os.path.isfile(afile):
-        """
-        Check if file has image and ignore because this will be process by the 
-        .zip file with the image attachment
-        """
-        print "[checkpoint] transforming xmls"
-        bunparse = ParseBungeniXML(afile)
-        image_node = bunparse.get_image_file()
-        if (image_node is not None):
-            print "Has profile image. Will be processed with attached zip file"
-            return True
+        print "[checkpoint] transforming the xml"
+        info_object = pxf.process_file(afile)
+        if info_object[1] == True:
+            print "[checkpoint] transformed the xml"
+            in_queue = True
+        elif info_object[1] == False:
+            in_queue = False
+            return in_queue
+        elif info_object[1] == None:
+            # mark parl-information document for removal from message-queue
+            in_queue = True
+            return in_queue
         else:
-            info_object = pxf.process_file(afile)
-            if info_object[1] == True:
-                in_queue = True
-            elif info_object[1] == False:
-                in_queue = False
-                return in_queue
-            elif info_object[1] == None:
-                # mark parl-information document for removal from message-queue
-                in_queue = True
-                return in_queue
-            else:
-                print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
-                in_queue = False
-                return in_queue
+            print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+            in_queue = False
+            return in_queue
     elif fnmatch.fnmatch(afile, "*.xml"):
         print "[" + afile + "] not found in filesystem"
         in_queue = True

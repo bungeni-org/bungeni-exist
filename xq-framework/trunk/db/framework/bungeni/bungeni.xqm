@@ -1749,14 +1749,28 @@ declare function local:validate-custom-date($from as xs:date, $to as xs:date) {
 
 declare function local:get-sitting-subset($sittings) {
     for $sitting in $sittings
-        for $eachitem in $sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
-        let $uri := <uri>{data($sitting/bu:groupsitting/@uri)}</uri>
-        let $startdate := $sitting/bu:groupsitting/bu:startDate
-        let $venue := $sitting/bu:groupsitting/bu:venue/bu:shortName
         return 
-            <ref sitting="{$uri}">
-                { $startdate, $eachitem, $venue, collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq $eachitem/bu:document/@href, @internal-uri eq $eachitem/bu:document/@href]/parent::node() }
-            </ref>
+        if ($sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule) then (
+            for $eachitem in $sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
+            let $uri := <uri>{data($sitting/bu:groupsitting/@uri)}</uri>
+            let $startdate := $sitting/bu:groupsitting/bu:startDate
+            let $venue := $sitting/bu:groupsitting/bu:venue/bu:shortName/text()
+            let $title := $sitting/bu:legislature/bu:shortName
+            return 
+                <ref sitting="{$uri}">
+                    { $startdate, $eachitem, $title, <bu:venue>{$venue}</bu:venue>, collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq $eachitem/bu:document/@href, @internal-uri eq $eachitem/bu:document/@href]/parent::node() }
+                </ref>
+        )
+        else (
+            let $uri := <uri>{data($sitting/bu:groupsitting/@uri)}</uri>
+            let $startdate := $sitting/bu:groupsitting/bu:startDate
+            let $venue := $sitting/bu:groupsitting/bu:venue/bu:shortName/text()
+            let $title := $sitting/bu:legislature/bu:shortName
+            return 
+                <ref sitting="{$uri}">
+                    { $startdate, <bu:itemSchedule/>, $title, <bu:venue>{$venue}</bu:venue>}
+                </ref>        
+        )
 };
 
 declare function local:grouped-sitting-items-by-itemtype($sittings) {

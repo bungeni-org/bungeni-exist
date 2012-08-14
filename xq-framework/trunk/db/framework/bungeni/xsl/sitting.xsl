@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -66,42 +66,51 @@
                         </span>
                     </h4>
                     <div id="doc-content-area">
-                        <table class="doc-tbl-details">
-                            <xsl:for-each select="ref/bu:ontology">
-                                <xsl:variable name="subDocIdentifier">
-                                    <xsl:choose>
-                                        <xsl:when test="bu:document/@uri">
-                                            <xsl:value-of select="bu:document/@uri"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="bu:document/@internal-uri"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:variable>
-                                <tr>
-                                    <td>
-                                        <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
-                                        <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
-                                        <xsl:choose>
-                                            <xsl:when test="$doc-type eq 'Heading'">
-                                                <xsl:value-of select="bu:document/bu:title"/>
-                                            </xsl:when>
-                                            <xsl:when test="$doc-type = 'Event'">
-                                                <xsl:variable name="event-href" select="bu:document/@uri"/>
-                                                <a href="../bungeni/{lower-case($eventOf)}-event?uri={$event-href}">
-                                                    <xsl:value-of select="bu:document/bu:title"/>
-                                                </a>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <a href="../bungeni/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
-                                                    <xsl:value-of select="bu:document/bu:title"/>
-                                                </a>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </td>
-                                </tr>
-                            </xsl:for-each>
-                        </table>
+                        <xsl:choose>
+                            <xsl:when test="ref/bu:ontology">
+                                <table class="doc-tbl-details">
+                                    <xsl:for-each select="ref/bu:ontology">
+                                        <xsl:variable name="subDocIdentifier">
+                                            <xsl:choose>
+                                                <xsl:when test="bu:document/@uri">
+                                                    <xsl:value-of select="bu:document/@uri"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="bu:document/@internal-uri"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
+                                        <tr>
+                                            <td>
+                                                <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
+                                                <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
+                                                <xsl:choose>
+                                                    <xsl:when test="$doc-type eq 'Heading'">
+                                                        <xsl:value-of select="bu:document/bu:title"/>
+                                                    </xsl:when>
+                                                    <xsl:when test="$doc-type = 'Event'">
+                                                        <xsl:variable name="event-href" select="bu:document/@uri"/>
+                                                        <a href="../bungeni/{lower-case($eventOf)}-event?uri={$event-href}">
+                                                            <xsl:value-of select="bu:document/bu:title"/>
+                                                        </a>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <a href="../bungeni/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                                            <xsl:value-of select="bu:document/bu:title"/>
+                                                        </a>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </td>
+                                        </tr>
+                                    </xsl:for-each>
+                                </table>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <div class="txt-center">
+                                    <i18n:text key="no-items">no scheduled items(nt)</i18n:text>
+                                </div>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </div>
                 </div>
             </div>

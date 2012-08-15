@@ -59,6 +59,13 @@ if (len(sys.argv) >= 1):
     # process input command line option for a directory to be monitored
     options, params = getopt.getopt(sys.argv[1:], "d:")
     __bungeni_output_folder__ = options[0][1]
+    if not os.path.isdir(__bungeni_output_folder__):
+        try:
+            os.makedirs(__bungeni_output_folder__)
+        except os.error : # Python >2.5
+            if os.error.errno == errno.EEXIST:
+                pass
+            else: raise
 else:
     print " bungeni_output_folder to watch must be an input parameter "
     sys.exit()

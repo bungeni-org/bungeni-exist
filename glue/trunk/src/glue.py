@@ -196,7 +196,6 @@ class Transformer(object):
                 self.get_params()
                 )
             # catch internal exceptions that return 'null'
-            print _COLOR.FAIL, '\n We GOT ', translatedFiles, _COLOR.ENDC
             if translatedFiles is None:
                 print "[checkpoint] internal failure in the transformer"
                 return [None, None]
@@ -245,24 +244,32 @@ class ParseXML(object):
         Load the xml document from the path
         """
         try:
-            print "[checkpoint] entered ParseXML"
             self.xmlfile = xml_path
             self.sreader = SAXReader()
             self.an_xml = File(xml_path)
-            if self.an_xml.isFile() == 1:
-                self.xmldoc = self.sreader.read(self.an_xml)             
-            else:
-                print 'ERROR: File ', xml_path, "disappeared! "
-            print "[checkpoint] exited ParseXML"
+        except IOException, ioE:
+            print _COLOR.FAIL, ioE, '\nERROR: IOErrorFound reading xml ', xml_path, _COLOR.ENDC
+
+    def doc_parse(self):
+        """
+        !+NOTE Previously, this was done in __init__ but it was tough returning that failure as a boolean.
+        To be called after initializing ParseXML this is to catch any parsing errors and a return boolean. 
+        """
+        try:
+            self.xmldoc = self.sreader.read(self.an_xml)
+            return True
         except DocumentException, fNE:
-            print _COLOR.FAIL, fNE, '\nERROR: parsing xml ', xml_path, _COLOR.ENDC
-            return None
+            print _COLOR.FAIL, fNE, '\nERROR: when trying to pars ', self.xmlfile, _COLOR.ENDC
+            return False
         except IOException, fE:
-            print _COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', xml_path, _COLOR.ENDC       
+            print _COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', self.xmlfile, _COLOR.ENDC
+            return False
         except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: Saxon parsing xml ', xml_path, _COLOR.ENDC
+            print _COLOR.FAIL, E, '\nERROR: Saxon parsing xml ', self.xmlfile, _COLOR.ENDC
+            return False
         except RuntimeException, ruE:
-            print _COLOR.FAIL, ruE, '\nERROR: ruE Saxon parsing xml ', xml_path, _COLOR.ENDC
+            print _COLOR.FAIL, ruE, '\nERROR: ruE Saxon parsing xml ', self.xmlfile, _COLOR.ENDC
+            return False
 
     def doc_dom(self):
         """
@@ -489,12 +496,14 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     """
     def get_from_cache(self, input_file_path):
         bunparse = ParseBungeniXML(input_file_path)
+        bunparse.doc_parse()
         the_parl_doc = bunparse.get_parliament_info()
         return the_parl_doc
 
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseBungeniXML(input_file_path)
+            bunparse.doc_parse()
             the_parl_doc = bunparse.get_parliament_info()
             if the_parl_doc is not None:
                 """
@@ -602,6 +611,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             # get the DOM of the input document
             bunparse = ParseBungeniXML(input_file_path)
+            bunparse.doc_parse()
             # now we process the attachment
             LOG.debug("Calling image/attachment_seek_rename for " + input_file_path )
             self.attachments_seek_rename(bunparse)
@@ -621,12 +631,12 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
         Used by main_queue for individual processing mode
         """
         bunparse = ParseBungeniXML(input_file_path)
-        print "[checkpoint] running", bunparse.get_contenttype_name()
-        if bunparse.get_contenttype_name() == "":
-            print "ERROR: Reading in bunparse"
+        parse_ok = bunparse.doc_parse()
+        if parse_ok == False:
             # probably file is corrupt or not completely written to filesystem
             # return back to queue
             return (True, False)
+        print "[checkpoint] running", bunparse.get_contenttype_name()
         pipe_type = bunparse.get_contenttype_name()
         if pipe_type is not None:
             if pipe_type in self.input_params["main_config"].get_pipelines():
@@ -664,6 +674,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseBungeniXML(input_file_path)
+            bunparse.doc_parse()
             pipe_type = bunparse.get_contenttype_name()
             if pipe_type is not None:
                 if pipe_type in self.input_params["main_config"].get_pipelines():
@@ -699,6 +710,7 @@ class RepoSyncUploader(object):
         self.main_cfg = input_params["main_config"]
         self.webdav_cfg = input_params["webdav_config"]
         self.bunparse = ParseXML(self.main_cfg.get_temp_files_folder()+"reposync.xml")
+        self.bunparse.doc_parse()
         try:
             self.dom = self.bunparse.doc_dom()
         except DocumentException, e:
@@ -1397,6 +1409,7 @@ def main_queue(config_file, afile):
             # if there is an XML file inside then we have process its atts
             # descending upon the extracted folder
             bunparse = ParseBungeniXML(new_afile)
+            bunparse.doc_parse()
             print "[checkpoint] unzipped file parsed"
             sba = SeekBindAttachmentsWalker(cfgs)
             image_node = bunparse.get_image_file()

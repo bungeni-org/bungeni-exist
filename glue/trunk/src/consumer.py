@@ -8,13 +8,14 @@ import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.Channel
 
+from com.xhaus.jyson import JysonCodec as json
 import java.io.IOException
 from java.lang import String
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "0.5"
+__version__ = "0.7"
 __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
@@ -35,8 +36,8 @@ class RabbitMQClient:
         Connections and other settings here should match those set in publisher script
         """
         self.stdout = Logger()
-        self.exchangeName = "bu_outputs"
-        self.queueName = "glue_script"
+        self.exchangeName = "bungeni_serialization_output_queue"
+        self.queueName = "bungeni_serialization_output_queue"
         self.factory = ConnectionFactory()
         self.factory.setHost("localhost")
         self.conn = self.factory.newConnection()
@@ -56,8 +57,9 @@ class RabbitMQClient:
             while (count < declareOk.messageCount):
                 delivery = QueueingConsumer.Delivery
                 delivery = self.consumer.nextDelivery()
-                message = String(delivery.getBody())
-                file_status = main_queue(__config_file__, str(message))
+                message = str(String(delivery.getBody()))
+                obj_data = json.loads(message)
+                file_status = main_queue(__config_file__, str(obj_data['location']))
                 count = count + 1
                 if file_status is None:
                     print "No Parliament Information could be gathered"

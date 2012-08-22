@@ -662,7 +662,9 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
             elif pipe_type == "parliament":
                 # Handle unique case parliament
                 return (None, None)
-            elif pipe_type == "attachment" or pipe_type == "signatory":
+            # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
+            # from queue programmatically
+            elif pipe_type == "attachment" or pipe_type == "signatory" or pipe_type == "report":
                 # Handle un-pipelined docs
                 return (None, None)
             else:
@@ -1409,7 +1411,10 @@ def main_queue(config_file, afile):
             # if there is an XML file inside then we have process its atts
             # descending upon the extracted folder
             bunparse = ParseBungeniXML(new_afile)
-            bunparse.doc_parse()
+            parse_ok = bunparse.doc_parse()
+            if parse_ok == False:
+                # Parsing error return to queue
+                return False
             print "[checkpoint] unzipped file parsed"
             sba = SeekBindAttachmentsWalker(cfgs)
             image_node = bunparse.get_image_file()

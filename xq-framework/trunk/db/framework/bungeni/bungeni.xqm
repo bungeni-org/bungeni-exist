@@ -9,7 +9,7 @@ import module namespace config = "http://bungeni.org/xquery/config" at "../confi
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
-import module namespace vdex = "http://www.imsglobal.org/xsd/imsvdex_v1p0" at "vdex.xqm";
+(:import module namespace vdex = "http://www.imsglobal.org/xsd/imsvdex_v1p0" at "vdex.xqm";:)
 import module namespace kwic="http://exist-db.org/xquery/kwic";
 declare namespace request = "http://exist-db.org/xquery/request";
 declare namespace fo="http://www.w3.org/1999/XSL/Format";
@@ -2021,7 +2021,7 @@ declare function bun:strip-namespace($e as node()) {
 
 declare function local:get-sitting-items($sittingdoc as node()) {
     <doc>
-        {if ($sittingdoc) then vdex:set-vocabularies($sittingdoc) else $sittingdoc}
+        {if ($sittingdoc) then $sittingdoc else $sittingdoc}
         <ref>
             {
                 for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
@@ -2596,8 +2596,15 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
-    let $doc := <doc>       
-            { collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid]/ancestor::bu:ontology }
+    let $doc := <doc>      
+            (:
+                !+FIX_THIS (ao, 23 Aug 2012) Added ...$eventid][1] in the xquery below because in tests where one resets 
+                Bungeni DB everytime, the doc_id is initialized. Since postTransform uses the parent bu:docId in the 
+                event document to find the parent doc, chances are it could find more than two documents in the 
+                collection and perform PostTransform on them...
+            
+            :)
+            { collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid][1]/ancestor::bu:ontology }
             <ref>
             {
                 collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[@uri eq $eventid]/ancestor::bu:ontology
@@ -2663,7 +2670,7 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
-                        {vdex:set-vocabularies($match)}
+                        {$match}
                         <ref>
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
@@ -2674,7 +2681,7 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
                 return 
                     <doc>
-                        {vdex:set-vocabularies($match)}
+                        {$match}
                         <ref>
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
@@ -2685,7 +2692,7 @@ declare function bun:get-members(
                 order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
                 return 
                     <doc>
-                        {vdex:set-vocabularies($match)}
+                        {$match}
                         <ref>
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
@@ -2706,13 +2713,13 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid][1]/ancestor::bu:ontology
-    let $vocabularized := vdex:set-vocabularies($member-doc)
+    let $vocabularized := $member-doc
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
                     {$vocabularized}
                     <ref>
-                    {vdex:set-vocabularies(collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology)}
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology}
                     </ref>
                 </doc>
     

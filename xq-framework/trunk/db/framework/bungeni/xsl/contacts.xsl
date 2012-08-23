@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -101,10 +101,10 @@
                                         <xsl:sort select="bu:address/bu:statusDate" order="descending"/>
                                         <tr class="items">
                                             <td class="fbt bclr">
-                                                <xsl:value-of select="bu:address/bu:logicalAddressType"/>
+                                                <xsl:value-of select="if (bu:address/bu:logicalAddressType/@showAs) then                                                      data(bu:address/bu:logicalAddressType/@showAs) else                                                     bu:address/bu:logicalAddressType"/>
                                             </td>
                                             <td class="fbt bclr">
-                                                <xsl:value-of select="bu:address/bu:postalAddressType"/>
+                                                <xsl:value-of select="if (bu:address/bu:postalAddressType/@showAs) then                                                      data(bu:address/bu:postalAddressType/@showAs) else                                                      bu:address/bu:postalAddressType"/>
                                             </td>
                                             <td class="fbt bclr">
                                                 <xsl:value-of select="bu:address/bu:city"/>

@@ -189,6 +189,7 @@ div.doc-toggle.opened {
     text-decoration: none; 
     padding: 2px 11px; 
     text-align:center;
+    color:#ffffff;
 }
 
 .submenu ul li a:visited {

@@ -68,16 +68,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="labels fbottom">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:gender/@name"/>:</td>
+                                    <td class="labels fbottom">gender:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:gender/@term"/>
+                                        <xsl:value-of select="if (bu:ontology/bu:membership/bu:gender/@showAs) then                                             data(bu:ontology/bu:membership/bu:gender/@showAs) else                                              bu:ontology/bu:membership/bu:gender"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="labels fbottom">elected/nominated:</td>
                                     <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:memberElectionType/bu:value/@term"/>
+                                        <xsl:value-of select="if (bu:ontology/bu:membership/bu:memberElectionType/@showAs) then                                             data(bu:ontology/bu:membership/bu:memberElectionType/@showAs) else                                              bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
                                     </td>
                                 </tr>
                                 <tr>

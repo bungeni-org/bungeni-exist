@@ -592,7 +592,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
                 # first get the current directory name 
                 if abs_path == False:
                     current_dir = os.path.dirname(inputdoc.xmlfile)
-                    full_path = current_dir + "/"  + dir_name + "/"
+                    full_path = current_dir + "/"
                 else:
                     full_path = dir_name
                 # move file to attachments folder and use derived uuid as new name for the file

@@ -1526,8 +1526,8 @@ def main_queue(config_file, afile):
     # do post-transform
     """
     !+FIX_THIS (ao,8th Aug 2012) PostTransform degenerates and becomes and expensive process 
-    over time temporatily disabled.
-    
+    over-time temporarily disabled.
+    """
     pt = PostTransform({"webdav_config": wd_cfg})
     print "Initiating PostTransform request on eXist-db for URI =>", sync_stat_obj[1]
     info_object = pt.update(str(sync_stat_obj[1]))
@@ -1536,7 +1536,6 @@ def main_queue(config_file, afile):
         in_queue = True
     else:
         in_queue = False
-    """
     return in_queue
 
 def main(options):

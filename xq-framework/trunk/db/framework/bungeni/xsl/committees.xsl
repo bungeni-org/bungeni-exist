@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -97,7 +97,7 @@
             <a href="committee-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/> / <xsl:value-of select="bu:ontology/bu:group/bu:status/bu:value"/>
             </div>
             <span>-</span>
             <div class="doc-toggle">
@@ -109,9 +109,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="labels">election date:</td>
+                        <td class="labels">committee type:</td>
                         <td>
-                            <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:parentGroup/bu:electionDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                            <xsl:value-of select="bu:ontology/bu:group/bu:subType"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="labels">continuity type:</td>
+                        <td>
+                            <xsl:value-of select="bu:ontology/bu:group/bu:groupContinuity"/>
                         </td>
                     </tr>
                 </table>

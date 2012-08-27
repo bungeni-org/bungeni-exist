@@ -37,18 +37,10 @@
                     <div class="doc-table-wrapper">
                         <table class="tbl-tgl">
                             <tr>
-                                <td class="fbtd">
-                                    <a>name</a>
-                                </td>
-                                <td class="fbtd">
-                                    <a>start</a>
-                                </td>
-                                <td class="fbtd">
-                                    <a>end</a>
-                                </td>
-                                <td class="fbtd">
-                                    <a>type</a>
-                                </td>
+                                <th class="fbtd">name</th>
+                                <th class="fbtd">start</th>
+                                <th class="fbtd">end</th>
+                                <th class="fbtd">type</th>
                             </tr>
                             <xsl:for-each select="bu:ontology/bu:members/bu:member/bu:membershipType[bu:value eq 'committee_member']/ancestor::bu:member">
                                 <xsl:sort select="bu:document/bu:statusDate" order="descending"/>

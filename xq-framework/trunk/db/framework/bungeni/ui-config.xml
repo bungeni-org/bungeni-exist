@@ -632,6 +632,8 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/comm-members.xsl</xsl>
             </view>
+            <!--
+                !+DEPRECATED (ao, 27th Aug 2012)
             <view path="committee-assigneditems" id="assigned" tag="tab">
                 <title>
                     <i18n:text key="tab-assigned">assigned items(nt)</i18n:text>
@@ -639,6 +641,7 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/comm-assigned.xsl</xsl>
             </view>
+            -->
             <view path="committee-sittings" id="sittings" tag="tab">
                 <title>
                     <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
@@ -1101,7 +1104,8 @@
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
                 <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc
+                    No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>

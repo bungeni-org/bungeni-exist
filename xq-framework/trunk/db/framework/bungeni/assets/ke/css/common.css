@@ -650,6 +650,7 @@ td.fall         { border-width: 1pt; border-style: solid; }
 td.fbt          { border-bottom-width: 1pt; border-bottom-style: solid; border-top-width: 1pt; border-top-style: solid; }
 td.bclr     { border-color: #ccc;border-style: dashed;border-left:0 none;border-right:0 none;}
 td.fbtd         { border-top: 3px double #CCC;border-bottom: 3px double #CCC; }
+th.fbtd         { border-top: 3px double #CCC;border-bottom: 3px double #CCC; }
 td.fbl          { border-bottom-width: 1pt; border-bottom-style: solid; border-left-width: 1pt; border-left-style: solid; }
 td.fbr          { border-bottom-width: 1pt; border-bottom-style: solid; border-right-width: 1pt; border-right-style: solid; }
 td.ftl          { border-top-width: 1pt; border-top-style: solid; border-left-width: 1pt; border-left-style: solid; }

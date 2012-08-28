@@ -63,6 +63,15 @@ h1.title {
     font-size:1.5em;
     text-align:left;  
 }
+.lev-1-search {
+    margin: auto 0px 10px auto;
+    float: right !important;
+    width: 600px;
+    height: 40px;
+    text-align: right;
+    margin-top: -50px !important;
+    position: relative;
+}
 
 h2.sub-title {
     text-shadow: 0px 1px 0px #c1c1c0;
@@ -175,7 +184,7 @@ div#doc-downloads {
  }
  .toggler-list {
     margin-left:10px;
-    width: 100px;
+    width: 110px;
     color: #AAAAA9;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, .1);
     font-weight: normal;

@@ -306,8 +306,6 @@ $(document).ready(function () {
 			}
 			]*/
 	}); 
-	console.log("Looks Good! "+Date());
-	
 	
 	/* QTIPS */
     // Create the tooltips only on document load
@@ -370,6 +368,9 @@ $(document).ready(function () {
     	},    	
     	starts: 1   	
     });    
+    
+    // DHTMLX
+    doOnLoad();    
 });   
 
 function getParameterByName(name)
@@ -383,3 +384,21 @@ function getParameterByName(name)
   else
     return decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
+/*
+ * DHTMLX
+ */
+var prev = null;
+var curr = null;
+var next = null;
+
+function doOnLoad() {
+    scheduler.config.readonly = true;
+	scheduler.config.multi_day = true;
+	scheduler.config.xml_date="%Y-%m-%d %H:%i";
+	
+	scheduler.init('scheduler_here',new Date(),"week");
+	scheduler.load("get-sittings-xml");
+	scheduler.setCurrentView(scheduler._date, scheduler._mode);
+}
+

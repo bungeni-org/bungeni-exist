@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -29,20 +29,21 @@
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
             </div>
-            <div id="region-content" class="rounded-eigh tab_container" role="main">
-                <div id="doc-main-section">
-                    <h3 id="doc-heading" class="doc-headers">
-                        <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS -->
-                        KENYA PARLIAMENT
-                    </h3>
-                    <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="bu:ontology/bu:document/bu:shortName"/>
-                    </h4>
-                    <div id="doc-content-area">
-                        <div>
-                            <xsl:copy-of select="bu:ontology/bu:document/bu:body"/>
-                            <div id="calendar"/>
+            <div id="region-content" class="rounded-eigh tab_container" style="padding:0;" role="main">
+                <div id="doc-calendar-holder">
+                    <div id="scheduler_here" class="dhx_cal_container" style="width:auto; height:100%;">
+                        <div class="dhx_cal_navline">
+                            <div class="dhx_cal_prev_button">&#160;</div>
+                            <div class="dhx_cal_next_button">&#160;</div>
+                            <div class="dhx_cal_today_button"/>
+                            <div class="dhx_cal_date"/>
+                            <div class="dhx_cal_tab" name="day_tab" style="right:204px;"/>
+                            <div class="dhx_cal_tab" name="week_tab" style="right:140px;"/>
+                            <div class="dhx_cal_tab" name="month_tab" style="right:76px;"/>
+                            <div class="dhx_cal_tab" name="year_tab" style="right:280px;"/>
                         </div>
+                        <div class="dhx_cal_header"/>
+                        <div class="dhx_cal_data"/>
                     </div>
                 </div>
             </div>

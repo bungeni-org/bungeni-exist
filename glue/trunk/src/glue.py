@@ -180,7 +180,7 @@ class Transformer(object):
             uri = uri.replace(i, j)
         return uri
 
-    def run(self, input_file, output, metalex, config_file):
+    def run(self, input_file, output, config_file):
         """
         Run the transformer on the input file
         """
@@ -188,7 +188,7 @@ class Transformer(object):
         if os.path.isfile(input_file) == False:
             print _COLOR.FAIL, '\nFile disappeared. Will retry ', input_file, _COLOR.ENDC
             return [None, None]
-        print "Executing Transformer with: ", input_file, output, metalex, config_file
+        print "Executing Transformer with: ", input_file, output, config_file
         try:
             translatedFiles = self.transformer.translate(
                 input_file, 
@@ -201,20 +201,17 @@ class Transformer(object):
                 return [None, None]
             else:
                 #input stream
-                fis  = FileInputStream(translatedFiles["anxml"])
-                fisMlx  = FileInputStream(translatedFiles["metalex"])
+                fis  = FileInputStream(translatedFiles["final"])
                 #get the document's URI
-                uri = self.get_doc_uri(translatedFiles["metalex"])
+                uri = self.get_doc_uri(translatedFiles["final"])
                 rep_dict = {'/':'_', ':':','}
                 uri_name = self.replace_all(uri, rep_dict)
                 
                 outFile = File(output + uri_name + ".xml")
-                outMlx = File(metalex + uri_name + ".xml")
-                #copy transformed files to disk
+                #copy transformed file to disk
                 FileUtility.getInstance().copyFile(fis, outFile)
-                FileUtility.getInstance().copyFile(fisMlx, outMlx)
 
-                return [outFile, outMlx]
+                return [outFile, None]
         except SAXParseException, saE:
             print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
@@ -644,11 +641,9 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                 output_file_name_wo_prefix  =   pipe_type + "_"
                 #truncate to first-3 characters only
                 truncated_prefix = output_file_name_wo_prefix[:3]
-                an_xml_file = "an_" + truncated_prefix
                 on_xml_file = "on_" + truncated_prefix
                 out_files = self.input_params["transformer"].run(
                      input_file_path,
-                     self.input_params["main_config"].get_akomantoso_output_folder() + an_xml_file ,
                      self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                      pipe_path
                      )
@@ -658,7 +653,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     print "NOT TRANSFORMED: Back to queue"
                     return (True, False)
                 else:
-                    return (out_files[1], True)
+                    return (out_files[0], True)
             elif pipe_type == "parliament":
                 # Handle unique case parliament
                 return (None, None)
@@ -684,11 +679,9 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     output_file_name_wo_prefix  =   pipe_type + "_" + str(self.counter)
                     #truncate to first-3 characters only
                     truncated_prefix = output_file_name_wo_prefix[:3]
-                    an_xml_file = "an_" + truncated_prefix
                     on_xml_file = "on_" + truncated_prefix
                     out_files = self.input_params["transformer"].run(
                          input_file_path,
-                         self.input_params["main_config"].get_akomantoso_output_folder() + an_xml_file ,
                          self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                          pipe_path
                          )

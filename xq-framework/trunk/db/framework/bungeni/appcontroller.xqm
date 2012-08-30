@@ -1494,9 +1494,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     return
                         i18n:process($act-entries-tmpl, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
                     
-    	else if ($EXIST-PATH eq "/get-sittings-json" )
+    	else if ($EXIST-PATH eq "/get-sittings-xml" )
     		 then 
-                let $act-entries-tmpl :=  bun:get-sittings-json("public-view")
+                let $act-entries-tmpl :=  bun:get-sittings-xml("public-view")
                     return $act-entries-tmpl
                     
         (:~ MEMBER INFORMATION :)

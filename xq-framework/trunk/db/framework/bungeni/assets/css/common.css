@@ -503,10 +503,6 @@ a.van-light {
 -------------------------------------------------------------- */
 table { width:100%; }
 
-table tr td {
-    padding:2px 5px 2px 2px;
-}
-
 table tr td.labels {
     font-weight:bold;
     text-align:left;

@@ -1992,21 +1992,25 @@ declare function bun:strip-namespace($e as node()) {
   }
 };
 
-declare function bun:get-sittings-json($acl as xs:string) as element()* {
-    util:declare-option("exist:serialize", "method=json media-type=text/javascript"),
+declare function bun:get-sittings-xml($acl as xs:string) as element()* {
+    util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
-    let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
+    let $events := <data> {
+            for $s in util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
                                             "bu:ontology[@for='groupsitting']/",
                                             bun:xqy-generic-perms($acl),"/",
-                                            "ancestor::bu:ontology")),
-        $json_ready := functx:remove-elements-deep($match,('bu:bungeni', 'bu:permissions'))
+                                            "ancestor::bu:ontology"))
+            return <event>
+                        <start_date>{replace($s/bu:groupsitting/bu:startDate/text(),"T", " ")}</start_date>
+                        <end_date>{replace($s/bu:groupsitting/bu:endDate/text(),"T", " ")}</end_date>
+                        <text>{$s/bu:legislature/bu:shortName/text()} - {$s/bu:groupsitting/bu:venue/bu:shortName/text()}</text>
+                        <details>{$s/bu:legislature/bu:shortName/text()}</details>            
+                   </event>
+    }
+    </data>
     
-     return
-        <json>
-        {
-         $json_ready
-        }
-        </json>
+    return
+        $events
 };
  
 declare function bun:strip-namespace($e as node()) {

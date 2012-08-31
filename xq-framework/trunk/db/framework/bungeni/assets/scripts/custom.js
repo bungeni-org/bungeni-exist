@@ -238,74 +238,6 @@ $(document).ready(function () {
 		return false;
 	});               
     */
-    
-    /* CALENDAR */
-	var date = new Date();
-	var d = date.getDate();
-	var m = date.getMonth();
-	var y = date.getFullYear();
-	
-	$('#calendar').fullCalendar({
-		header: {
-			left: 'prev,next today',
-			center: 'title',
-			right: 'agendaDay,basicWeek,month'
-		},
-        defaultView: 'basicWeek',
-		editable: true,
-		disableDragging: true,
-        events: function(start, end, callback) {
-            $.ajax({
-                url: 'get-sittings-json',
-                dataType: 'json',
-                data: {
-                    uri: "all",
-                    // our hypothetical feed requires UNIX timestamps
-                    start: Math.round(start.getTime() / 1000),
-                    end: Math.round(end.getTime() / 1000)
-                },
-                success: function(data) {
-                    var events = [];
-                    if(data) {
-                        if (data.ontology.length == undefined) {
-                            events.push({
-                                title: data.ontology.legislature.shortName["#text"]+" at the "+data.ontology.groupsitting.venue.shortName["#text"],
-                                start: data.ontology.groupsitting.startDate["#text"],
-                                end: data.ontology.groupsitting.endDate["#text"],
-                                url: "sitting?uri="+data.ontology.groupsitting.uri,
-                                allDay: false
-                            });  
-                        } else {
-                            for (var i = 0; i < data.ontology.length; i++) {             
-                                events.push({
-                                    title: data.ontology[i].legislature.shortName["#text"]+" at the "+data.ontology[i].groupsitting.venue.shortName["#text"],
-                                    start: data.ontology[i].groupsitting.startDate["#text"],
-                                    end: data.ontology[i].groupsitting.endDate["#text"],
-                                    url: "sitting?uri="+data.ontology[i].groupsitting.uri,
-                                    allDay: false
-                                });                       
-                            }                          
-                        }
-                    } else { }
-                    callback(events);
-                }
-            });
-        }		
-		/*events: $('#events_json').data('locations')
-		events: [
-			{
-				title: 'Meeting',
-				start: 'Thu Feb 23 2012 10:08:01 GMT+0300 (EAT)',
-				allDay: false
-			},
-			{
-				title: 'Lunch',
-				start: 'Thu Feb 23 2012 12:00 GMT+0300 (EAT)',
-				end: 'Thu Feb 23 2012 16:00 GMT+0300 (EAT)',
-				allDay: false
-			}
-			]*/
-	}); 
 	
 	/* QTIPS */
     // Create the tooltips only on document load
@@ -393,12 +325,15 @@ var curr = null;
 var next = null;
 
 function doOnLoad() {
-    scheduler.config.readonly = true;
-	scheduler.config.multi_day = true;
-	scheduler.config.xml_date="%Y-%m-%d %H:%i";
-	
-	scheduler.init('scheduler_here',new Date(),"week");
-	scheduler.load("get-sittings-xml");
-	scheduler.setCurrentView(scheduler._date, scheduler._mode);
+    // To only load when on the calendar page
+    if (document.getElementById("doc-calendar-holder")) {
+        scheduler.config.readonly = true;
+    	scheduler.config.multi_day = true;
+    	scheduler.config.xml_date="%Y-%m-%d %H:%i";
+    	
+    	scheduler.init('scheduler_here',new Date(),"week");
+    	scheduler.load("get-sittings-xml");
+    	scheduler.setCurrentView(scheduler._date, scheduler._mode);
+    }
 }
 

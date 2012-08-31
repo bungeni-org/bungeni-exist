@@ -2003,7 +2003,11 @@ declare function bun:get-sittings-xml($acl as xs:string) as element()* {
             return <event>
                         <start_date>{replace($s/bu:groupsitting/bu:startDate/text(),"T", " ")}</start_date>
                         <end_date>{replace($s/bu:groupsitting/bu:endDate/text(),"T", " ")}</end_date>
-                        <text>{$s/bu:legislature/bu:shortName/text()} - {$s/bu:groupsitting/bu:venue/bu:shortName/text()}</text>
+                        <text>
+                            &lt;a href="sitting?uri={data($s/bu:groupsitting/@uri)}"&gt;
+                                {$s/bu:legislature/bu:shortName/text()}
+                            &lt;/a&gt; @ {$s/bu:groupsitting/bu:venue/bu:shortName/text()}
+                        </text>
                         <details>{$s/bu:legislature/bu:shortName/text()}</details>            
                    </event>
     }

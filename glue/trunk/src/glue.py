@@ -21,7 +21,7 @@ import ConfigParser, jarray
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "1.2.8"
+__version__ = "1.3.0"
 __maintainer__ = "Anthony Oduor"
 __created__ = "18th Oct 2011"
 __status__ = "Development"
@@ -846,8 +846,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         file_stat_date = self.get_params(input_file_path)['status_date']
         import urllib2
         try:
-            socket.setdefaulttimeout(30)
-            conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),30)
+            socket.setdefaulttimeout(60)
+            conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),60)
             conn.request("GET", "/exist/apps/framework/bungeni/check-update?uri=" + file_uri+"&t=" + file_stat_date)
             response = conn.getresponse()
             if(response.status == 200):
@@ -1030,7 +1030,7 @@ class PostTransform(object):
 
     def update(self, uri = None):
         #socket.setblocking(0) #set to non-blocking mode
-        socket.setdefaulttimeout(30) #timeout of 30 seconds
+        socket.setdefaulttimeout(60) #timeout of 30 seconds
         import urllib2
         try:
             xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+str(uri)
@@ -1052,7 +1052,7 @@ class PostTransform(object):
             print _COLOR.FAIL, e, '\nERROR: eXist timedout URLError', _COLOR.ENDC
             return False
         except socket.timeout:
-            print _COLOR.FAIL, '\nERROR: eXist timedout :(', _COLOR.ENDC
+            print _COLOR.FAIL, '\nERROR: eXist timedout TIMEOUTError', _COLOR.ENDC
             return False
         except urllib2.HTTPError, err:
             print _COLOR.FAIL, err.code, err.msg, ': ERROR: While running PostTransform', _COLOR.ENDC
@@ -1367,7 +1367,18 @@ def list_uniqifier(seq):
     return [ x for x in seq if x not in seen and not seen_add(x)]
 
 def main_queue(config_file, afile):
-    print "Now working on file " + afile
+    """
+    Serially processes XML/ZIP files from the message queue and 
+    uploads to XML repository. Returns True/False to consumer
+        True = Remove from queue
+        False = Retain in queue for whatever reason
+    
+    @param config_file  configuration file
+    @param afile        path to the serialized file
+    
+    @return Boolean 
+    """
+    print "[checkpoint] got file " + afile
     script_path = os.path.dirname(os.path.realpath(__file__))
     PropertyConfigurator.configure(script_path + File.separator + "log4j.properties")
     # comment above lines to run in emotional mode
@@ -1391,39 +1402,73 @@ def main_queue(config_file, afile):
     Do Unzipping and Transformations
     """
     import fnmatch
-    if fnmatch.fnmatch(afile, "*.zip") and os.path.isfile(afile):
-        print "[checkpoint] unzipping archive files"
-        unzip = GenericDirWalkerUNZIP()
+    if os.path.isfile(afile):
+        """
+        Copy afile to temp_files_folder as working-copy(wc_afile)
+        """
         temp_dir = cfg.get_temp_files_folder()
-        unzip.extractor(afile, temp_dir)
-        xml_basename = os.path.basename(afile)
-        xml_name = os.path.splitext(xml_basename)[0]
-        new_afile = temp_dir + xml_name + ".xml"
-        if os.path.isfile(new_afile):
-            print "[checkpoint] found the unzipped .xml file"
-            # if there is an XML file inside then we have process its atts
-            # descending upon the extracted folder
-            bunparse = ParseBungeniXML(new_afile)
-            parse_ok = bunparse.doc_parse()
-            if parse_ok == False:
-                # Parsing error return to queue
-                return False
-            print "[checkpoint] unzipped file parsed"
-            sba = SeekBindAttachmentsWalker(cfgs)
-            image_node = bunparse.get_image_file()
-            if (image_node is not None):
-                print "[checkpoint] entered user doc path"
-                local_dir = os.path.dirname(afile)
-                print "Has profile image. Will process image node"
-                origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
-            else:
-                print "[checkpoint] entered non-user doc path"
-                sba.attachments_seek_rename(bunparse)
+        wc_afile = temp_dir + os.path.basename(afile)
+        shutil.copyfile(afile, wc_afile)
+        print "[checkpoint] copied working-copy to temp folder"
+        
+        if fnmatch.fnmatch(afile, "*.zip") and os.path.isfile(wc_afile):
+            print "[checkpoint] unzipping archive files"
+            unzip = GenericDirWalkerUNZIP()
+            temp_dir = cfg.get_temp_files_folder()
+            unzip.extractor(afile, temp_dir)
+            xml_basename = os.path.basename(wc_afile)
+            xml_name = os.path.splitext(xml_basename)[0]
+            new_afile = temp_dir + xml_name + ".xml"
+            if os.path.isfile(new_afile):
+                print "[checkpoint] found the unzipped XML file"
+                # if there is an XML file inside then we have process its atts
+                # descending upon the extracted folder
+                bunparse = ParseBungeniXML(new_afile)
+                parse_ok = bunparse.doc_parse()
+                if parse_ok == False:
+                    # Parsing error return to queue
+                    return False
+                print "[checkpoint] unzipped file parsed"
+                sba = SeekBindAttachmentsWalker(cfgs)
+                image_node = bunparse.get_image_file()
+                if (image_node is not None):
+                    print "[checkpoint] entered user doc path"
+                    local_dir = os.path.dirname(afile)
+                    print "Has profile image. Will process image node"
+                    origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
+                else:
+                    print "[checkpoint] entered non-user doc path"
+                    sba.attachments_seek_rename(bunparse)
 
-            print "[checkpoint] transforming the xml with zipped files"
-            info_object = pxf.process_file(new_afile)
-            os.remove(new_afile)
+                print "[checkpoint] transforming the xml with zipped files"
+                info_object = pxf.process_file(new_afile)
+                # remove unzipped new_afile & wc_afile from temp_files_folder
+                os.remove(new_afile)
+                os.remove(wc_afile)
+                if info_object[1] == True:
+                    in_queue = True
+                elif info_object[1] == False:
+                    in_queue = False
+                    return in_queue
+                elif info_object[1] == None:
+                    # mark parl-information document for removal from message-queue
+                    in_queue = True
+                    return in_queue
+                else:
+                    print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+                    in_queue = False
+                    return in_queue
+            else:
+                print "[checkpoint] extracted " + new_afile + "] but not found :-J"
+                in_queue = True
+                return in_queue
+        elif fnmatch.fnmatch(afile, "*.xml") and os.path.isfile(wc_afile):
+            print "[checkpoint] transforming the xml"
+            info_object = pxf.process_file(wc_afile)
+            # remove wc_afile from temp_files_folder
+            os.remove(wc_afile)
             if info_object[1] == True:
+                print "[checkpoint] transformed the xml"
                 in_queue = True
             elif info_object[1] == False:
                 in_queue = False
@@ -1437,33 +1482,12 @@ def main_queue(config_file, afile):
                 in_queue = False
                 return in_queue
         else:
-            print "[checkpoint] extracted " + new_afile + "] but not found :-J"
+            # ignore any other file type, not interested with them currently...
+            print "[" + afile + "] ignoring unprocessable filetype"
             in_queue = True
             return in_queue
-
-    elif fnmatch.fnmatch(afile, "*.xml") and os.path.isfile(afile):
-        print "[checkpoint] transforming the xml"
-        info_object = pxf.process_file(afile)
-        if info_object[1] == True:
-            print "[checkpoint] transformed the xml"
-            in_queue = True
-        elif info_object[1] == False:
-            in_queue = False
-            return in_queue
-        elif info_object[1] == None:
-            # mark parl-information document for removal from message-queue
-            in_queue = True
-            return in_queue
-        else:
-            print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
-            in_queue = False
-            return in_queue
-    elif fnmatch.fnmatch(afile, "*.xml"):
-        print "[" + afile + "] not found in filesystem"
-        in_queue = True
-        return in_queue
     else:
-        # ignore any other file type, not interested with them currently...
+        print "[" + afile + "] not found in filesystem"
         in_queue = True
         return in_queue
 

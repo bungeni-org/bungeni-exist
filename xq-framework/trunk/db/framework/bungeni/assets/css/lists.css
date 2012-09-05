@@ -153,6 +153,7 @@ div.doc-toggle.opened {
  
 /*** subnav ***/	     
 .submenu ul li a {
+    color:#ffffff;
     float: left; 
     text-decoration: none; 
     padding: 5px 11px; 

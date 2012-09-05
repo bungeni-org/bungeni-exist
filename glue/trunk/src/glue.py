@@ -16,6 +16,7 @@
 
 import httplib, socket #used in sync check
 import os.path, sys, errno, getopt, shutil, uuid
+import time
 import ConfigParser, jarray
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
@@ -87,7 +88,7 @@ class TransformerConfig(Config):
 
     def get_transformer_resources_folder(self):
         return self.get("general", "transformer_resources_folder")
-    
+
     def get_akomantoso_output_folder(self):
         return self.get("general", "akomantoso_output_folder")
 
@@ -210,7 +211,7 @@ class Transformer(object):
                 outFile = File(output + uri_name + ".xml")
                 #copy transformed file to disk
                 FileUtility.getInstance().copyFile(fis, outFile)
-
+                fis.close()
                 return [outFile, None]
         except SAXParseException, saE:
             print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
@@ -256,7 +257,7 @@ class ParseXML(object):
             self.xmldoc = self.sreader.read(self.an_xml)
             return True
         except DocumentException, fNE:
-            print _COLOR.FAIL, fNE, '\nERROR: when trying to pars ', self.xmlfile, _COLOR.ENDC
+            print _COLOR.FAIL, fNE, '\nERROR: when trying to parse ', self.xmlfile, _COLOR.ENDC
             return False
         except IOException, fE:
             print _COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', self.xmlfile, _COLOR.ENDC
@@ -995,6 +996,8 @@ class WebDavClient(object):
             except HttpHostConnectException, e:
                 print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
                 sys.exit()
+            finally:
+                inputStream.close()
         except FileNotFoundException, e:
             print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last synchronization. Do a re-sync before uploading" , _COLOR.ENDC
             return True
@@ -1519,6 +1522,7 @@ def main_queue(config_file, afile):
     Do uploading to eXist
     """
     print _COLOR.OKGREEN + "Uploading XML file(s) to eXist via WebDav..." + _COLOR.ENDC
+    print "[checkpoint] at", time.localtime(time.time())
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())

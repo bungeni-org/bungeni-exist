@@ -503,6 +503,16 @@ a.van-light {
 -------------------------------------------------------------- */
 table { width:100%; }
 
+table.listing tr th,
+table.tbl-tgl tr th,
+table.timeline tr th {
+    font-weight:bold;
+    text-align:left;
+    width:100px;
+    vertical-align:bottom;
+    white-space:nowrap;
+}
+
 table tr td.labels {
     font-weight:bold;
     text-align:left;

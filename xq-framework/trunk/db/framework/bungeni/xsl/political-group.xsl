@@ -14,10 +14,86 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:template match="doc">
-       
-       <!-- Call the generic group renderer -->
-        <xsl:call-template name="grp-item"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
+        <div id="main-wrapper">
+            <div id="title-holder">
+                <h1 class="title">
+                    <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
+                </h1>
+            </div>
+            <xsl:call-template name="mem-tabs">
+                <xsl:with-param name="tab-group">
+                    <xsl:value-of select="$doc-type"/>
+                </xsl:with-param>
+                <xsl:with-param name="tab-path">member</xsl:with-param>
+                <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="excludes" select="exclude/tab"/>
+            </xsl:call-template>
+            <div id="doc-downloads"/>
+            <div id="region-content" class="rounded-eigh tab_container" role="main">
+                <div id="doc-main-section">
+                    <div class="mem-profile">
+                        <div class="mem-photo mem-top-left">
+                            <xsl:variable name="img_uuid" select="bu:ontology/bu:group/bu:logoData/bu:imageUuid"/>
+                            <p class="imgonlywrap">
+                                <xsl:choose>
+                                    <xsl:when test="bu:ontology/bu:group/bu:logoData and doc-available(concat('../../../bungeni-atts/',$img_uuid))">
+                                        <img src="../../bungeni-atts/{$img_uuid}" alt="Group Logo" align="left"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <img src="assets/images/group.png" alt="Place Holder for Group Logo" align="left"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </p>
+                        </div>
+                        <div class="mem-top-right">
+                            <table class="mem-tbl-details">
+                                <tr>
+                                    <td class="labels fbt">
+                                        <b>
+                                            <i18n:text key="language">language(nt)</i18n:text>:</b>
+                                    </td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:group/@xml:lang"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="labels fbottom">
+                                        <b>
+                                            <i18n:text key="status">status(nt)</i18n:text>:</b>
+                                    </td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:group/bu:status"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="labels fbottom">
+                                        <b>
+                                            <i18n:text key="acronym">acronym(nt)</i18n:text>:</b>
+                                    </td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="labels fbottom">
+                                        <b>
+                                            <i18n:text key="date-start">start date(nt)</i18n:text>:</b>
+                                    </td>
+                                    <td class="fbt">
+                                        <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="clear"/>
+                    <div class="mem-desc">
+                        <xsl:copy-of select="bu:ontology/bu:group/bu:description"/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </xsl:template>
-    
-    <!-- Add local-template overrides here -->
 </xsl:stylesheet>

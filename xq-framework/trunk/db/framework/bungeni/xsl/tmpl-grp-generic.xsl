@@ -80,41 +80,6 @@
         </h4>
     </xsl:template>
     
-    <!-- DOC-ITEM-SPONSOR -->
-    <xsl:template name="doc-item-sponsor">
-        <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
-            <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
-                    <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
-                </a>
-            </i>
-        </h4>
-    </xsl:template>
-    
-    <!-- DOC-ITEM-SIGNATORIES -->
-    <xsl:template name="doc-item-sponsors">
-        <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
-            <i18n:text key="sponsors">Sponsors(nt)</i18n:text>: ( 
-            <xsl:choose>
-                <!-- check whether we have signatories or not -->
-                <xsl:when test="bu:ontology/bu:signatories">
-                    <xsl:for-each select="bu:ontology/bu:signatories/bu:signatory">
-                        <i>
-                            <a href="member?uri={@href}">
-                                <xsl:value-of select="@showAs"/>
-                            </a>
-                        </i>
-                        <xsl:if test="position() &lt; last()">,</xsl:if>
-                    </xsl:for-each>
-                </xsl:when>
-                <xsl:otherwise>
-                    <i18n:text key="none">None(nt)</i18n:text>
-                </xsl:otherwise>
-            </xsl:choose> 
-            )
-        </h4>
-    </xsl:template>
-    
     
     <!-- DOC-ITEM-BODY -->
     <xsl:template name="doc-item-body">

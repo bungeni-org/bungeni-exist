@@ -15,7 +15,7 @@ from java.lang import String
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "0.7"
+__version__ = "0.8"
 __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
@@ -28,6 +28,7 @@ class Logger(object):
     def write(self, message):
         self.terminal.write(message)
         self.log.write(message) 
+        self.log.close()
 
 class RabbitMQClient:
 
@@ -45,33 +46,35 @@ class RabbitMQClient:
         self.channel.exchangeDeclare(self.exchangeName,"direct",False)
 
     def consume_msgs(self):
-        declareOk = self.channel.queueDeclare(self.queueName, True, False, False, None)
-        self.channel.queueBind(self.queueName, self.exchangeName, self.queueName)
-        self.consumer = QueueingConsumer(self.channel)
-        self.channel.basicConsume(self.queueName, False, self.consumer)
-        count = 0
-        if declareOk.messageCount <= 0:
-            self.stdout.write(time.asctime(time.localtime(time.time())) + " NO MESSAGES \n")
-        else:
-            self.stdout.write(time.asctime(time.localtime(time.time())) + " " + str(declareOk.messageCount) + " MESSAGES! \n")
-            while (count < declareOk.messageCount):
-                delivery = QueueingConsumer.Delivery
-                delivery = self.consumer.nextDelivery()
-                message = str(String(delivery.getBody()))
-                obj_data = json.loads(message)
-                file_status = main_queue(__config_file__, str(obj_data['location']))
-                count = count + 1
-                if file_status is None:
-                    print "No Parliament Information could be gathered"
-                    sys.exit(0)
-                elif file_status is True:
-                    # Acknowledgements to RabbitMQ the successfully, processed files
-                    self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
-                else:
-                    # Reject file, requeue for investigation or future attempts
-                    self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
-        self.channel.close()
-        self.conn.close()
+        try:
+            declareOk = self.channel.queueDeclare(self.queueName, True, False, False, None)
+            self.channel.queueBind(self.queueName, self.exchangeName, self.queueName)
+            self.consumer = QueueingConsumer(self.channel)
+            self.channel.basicConsume(self.queueName, False, self.consumer)
+            count = 0
+            if declareOk.messageCount <= 0:
+                self.stdout.write(time.asctime(time.localtime(time.time())) + " NO MESSAGES \n")
+            else:
+                self.stdout.write(time.asctime(time.localtime(time.time())) + " " + str(declareOk.messageCount) + " MESSAGES! \n")
+                while (count < declareOk.messageCount):
+                    delivery = QueueingConsumer.Delivery
+                    delivery = self.consumer.nextDelivery()
+                    message = str(String(delivery.getBody()))
+                    obj_data = json.loads(message)
+                    file_status = main_queue(__config_file__, str(obj_data['location']))
+                    count = count + 1
+                    if file_status is None:
+                        print "No Parliament Information could be gathered"
+                        sys.exit(0)
+                    elif file_status is True:
+                        # Acknowledgements to RabbitMQ the successfully, processed files
+                        self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
+                    else:
+                        # Reject file, requeue for investigation or future attempts
+                        self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
+        finally:
+            self.channel.close()
+            self.conn.close()
 
 if (len(sys.argv) >= 2):
     # process input command line options

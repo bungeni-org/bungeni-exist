@@ -22,12 +22,13 @@ import ConfigParser, jarray
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __maintainer__ = "Anthony Oduor"
 __created__ = "18th Oct 2011"
 __status__ = "Development"
 
 __parl_info__ = "parliament_info.xml"
+__repo_sync__ = "reposync.xml"
 
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
@@ -271,7 +272,7 @@ class ParseXML(object):
 
     def doc_dom(self):
         """
-        Used by RepoSyncUploader to read a reposync.xml file generated 
+        Used by RepoSyncUploader to read a __repo_sync__ file generated 
         before uploading to eXist-db
         """
         return self.xmldoc
@@ -326,9 +327,13 @@ class ParseBungeniXML(ParseXML):
         return self.__global_path__ + "attachments"
 
     def xpath_get_image(self):
-        
+
         return self.__global_path__ + "image"
-            
+
+    def xpath_get_log_data(self):
+
+        return self.__global_path__ + "logo_data"
+
     def get_attached_files(self):
         """
         Gets the attached_files node for a document
@@ -337,9 +342,15 @@ class ParseBungeniXML(ParseXML):
 
     def get_image_file(self):
         """
-        Gets the image node for a user document
+        Gets the image node for a user/group document
         """
-        return self.xmldoc.selectSingleNode(self.xpath_get_image())
+        # get from default <image/> node...
+        image_node = self.xmldoc.selectSingleNode(self.xpath_get_image())
+        if image_node is not None:
+            return image_node
+        else:
+            # ...or from <log_data/>. Known to have an image.
+            return self.xmldoc.selectSingleNode(self.xpath_get_log_data())
 
 class ParseOntologyXML(ParseXML):
     """
@@ -699,18 +710,18 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
 class RepoSyncUploader(object):
     """
     
-    Pushes XML files one-by-one into eXist server from reposync.xml list of items
+    Pushes XML files one-by-one into eXist server from __repo_sync__ list of items
     """
     def __init__(self, input_params):
         self.input_params = input_params
         self.main_cfg = input_params["main_config"]
         self.webdav_cfg = input_params["webdav_config"]
-        self.bunparse = ParseXML(self.main_cfg.get_temp_files_folder()+"reposync.xml")
+        self.bunparse = ParseXML(self.main_cfg.get_temp_files_folder() + __repo_sync__)
         self.bunparse.doc_parse()
         try:
             self.dom = self.bunparse.doc_dom()
         except DocumentException, e:
-            print _COLOR.FAIL, e, '\nERROR: reposync.xml is not generated. Run with `-s` switch to sync with repository first.', _COLOR.ENDC
+            print _COLOR.FAIL, e, '\nERROR: __repo_sync__ file not found. Use `-s` switch to sync first.', _COLOR.ENDC
             sys.exit()
 
     def upload_file(self, on_file):
@@ -1439,12 +1450,12 @@ def main_queue(config_file, afile):
                 sba = SeekBindAttachmentsWalker(cfgs)
                 image_node = bunparse.get_image_file()
                 if (image_node is not None):
-                    print "[checkpoint] entered user doc path"
+                    print "[checkpoint] entered user/group doc path"
                     local_dir = os.path.dirname(afile)
-                    print "Has profile image. Will process image node"
+                    print "[checkpoint] processing image/log_data file"
                     origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
                 else:
-                    print "[checkpoint] entered non-user doc path"
+                    print "[checkpoint] entered attachments doc path"
                     sba.attachments_seek_rename(bunparse)
 
                 print "[checkpoint] transforming the xml with zipped files"

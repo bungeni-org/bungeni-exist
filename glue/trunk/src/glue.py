@@ -866,7 +866,6 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
             else:
                 print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
                 return (False, None)
-            conn.close()
         except socket.timeout:
             print _COLOR.FAIL, '\nERROR: eXist socket.timedout at sync file... back to MQ', _COLOR.ENDC
             return (False, None)
@@ -876,6 +875,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         except socket.error, (code, message):
             print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
             return (False, None)
+        finally:
+            conn.close()
 
 
     def fn_callback(self, input_file_path):
@@ -904,10 +905,11 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                         print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
                 else:
                     print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
-                conn.close()
             except socket.error, (code, message):
                 print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
                 sys.exit()
+            finally:
+                conn.close()            
 
             return (False, None)
         else:
@@ -1060,6 +1062,8 @@ class PostTransform(object):
         except urllib2.HTTPError, err:
             print _COLOR.FAIL, err.code, err.msg, ': ERROR: While running PostTransform', _COLOR.ENDC
             return False
+        finally:
+            response.close()
 
 class POFilesTranslator(object):
     """

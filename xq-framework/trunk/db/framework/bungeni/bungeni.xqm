@@ -274,6 +274,23 @@ declare function bun:xqy-list-groupitem($type as xs:string) {
                 "/bu:group[@type='",$type,"']",
                 "/ancestor::bu:ontology")
 };
+
+declare function bun:xqy-list-groupitems-with-tabs($type as xs:string, $status as xs:string) {
+
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@for='group']/bu:group/bu:docType[bu:value eq '",$type,"']",
+                "/following-sibling::bu:status[bu:value eq '",$status,"']",
+                "/ancestor::bu:ontology")
+};
+
+declare function bun:list-groupitems-with-tabs($type as xs:string, $status as xs:string) {
+
+    let $eval-query := bun:xqy-list-groupitems-with-tabs($type, $status)
+    return 
+        util:eval($eval-query)
+};
+
+
 declare function bun:xqy-search-group() {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')","/bu:ontology[@for='group']")
@@ -1530,26 +1547,37 @@ declare function bun:get-raw-xml($docid as xs:string) as element() {
 :   A listing of documents of group type committee
 :)
 declare function bun:get-committees(
+        $view-rel-path as xs:string,
         $offset as xs:integer, 
         $limit as xs:integer, 
         $parts as node(),
         $querystr as xs:string, 
         $sortby as xs:string
-        ) as element() {
+        ) as element() {   
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($parts/view/xsl)      
+    let $stylesheet := cmn:get-xslt($parts/view/xsl)
     
-    (: 
-        The line below is documented in bun:get-documentitems()
-    :)
+    let $tab := xs:string(request:get-parameter("tab","active")) 
+    let $listings-filter := cmn:get-listings-config("Committee")    
+    let $coll := bun:list-groupitems-with-tabs("Committee", $tab)
+    
+    (: The line below is documented in bun:get-documentitems() :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'])}</count>
+        <count>{count($coll)}</count>
+        <tags>
+        {
+            for $listing in $listings-filter
+                return 
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-groupitems-with-tabs('Committee', $listing/@id))) }">{data($listing/@name)}</tag>
+                    
+         }
+         </tags>         
         <documentType>committee</documentType>
         <listingUrlPrefix>committee/text</listingUrlPrefix>        
         <offset>{$offset}</offset>
@@ -1558,39 +1586,10 @@ declare function bun:get-committees(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'start_dt_oldest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
-                return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>  
-                )
-                
-            else if ($sortby eq 'start_dt_newest') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
-                return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>     
-                )
-            else if ($sortby = 'fN_asc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
-                return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>      
-                )    
-            else if ($sortby = 'fN_desc') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
-                return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>        
-                )                 
-            else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='Committee'],$offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>
-                   
-                )
-
+                    <doc>{$match}</doc>
         } 
         </alisting>
     </docs>
@@ -1601,6 +1600,8 @@ declare function bun:get-committees(
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
+                <param name="listing-tab" value="{$tab}" />
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />                
             </parameters>
            ) 
        
@@ -1998,6 +1999,7 @@ declare function bun:get-sittings-xml($acl as xs:string) as element()* {
     let $events := <data> {
             for $s in util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
                                             "bu:ontology[@for='groupsitting']/",
+                                            "bu:groupsitting/",
                                             bun:xqy-generic-perms($acl),"/",
                                             "ancestor::bu:ontology"))
             return <event>

@@ -1104,8 +1104,7 @@
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
                 <searchin name="f_t" value="title" field="bu:document/bu:shortTitle">Title</searchin>
                 <searchin name="f_b" value="body" field="bu:document/bu:body">Body</searchin>
-                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc
-                    No.</searchin>
+                <searchin name="f_d" value="docno" field="bu:document/bu:registryNumber">Doc No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1189,7 +1188,7 @@
             </listingfilters>
         </doctype>
         <doctype category="document" name="Event"/>
-        <doctype category="group" name="committee">
+        <doctype category="group" name="Committee">
             <orderbys>
                 <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="descending" field="bu:document/bu:statusDate" default="true">status date [newest]</orderby>
@@ -1202,6 +1201,11 @@
                     Name</searchin>
                 <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
+            <listingfilters>
+                <listingfilter id="draft" name="draft">contains(bu:status/bu:value,'draft')</listingfilter>
+                <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
+                <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'dissolved')</listingfilter>
+            </listingfilters>
         </doctype>
         <doctype category="group" name="politicalgroup">
             <orderbys>

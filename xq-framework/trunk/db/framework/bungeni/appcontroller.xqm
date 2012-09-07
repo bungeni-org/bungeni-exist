@@ -125,7 +125,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $parts := cmn:get-view-listing-parts('Committee','profile'),
-                    $act-entries-tmpl :=  bun:get-committees($offset,$limit,$parts,$qry,$sty),
+                    $act-entries-tmpl :=  bun:get-committees($CONTROLLER-DOC/exist-res,$offset,$limit,$parts,$qry,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
     								 } 

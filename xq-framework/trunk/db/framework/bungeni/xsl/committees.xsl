@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -15,6 +15,8 @@
     
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
     <xsl:param name="sortby"/>
+    <xsl:param name="listing-tab"/>
+    <xsl:param name="item-listing-rel-base"/>    
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -28,24 +30,21 @@
             </div>
             <div id="tab-menu" class="ls-tabs">
                 <ul class="tabbernav">
-                    <li class="active">
-                        <a href="#">
-                            <i18n:text key="list-tab-cur">current(nt)</i18n:text>
-                            <xsl:text>&#160;(</xsl:text>
-                            <xsl:value-of select="paginator/count"/>
-                            <xsl:text>)</xsl:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i18n:translate>
-                                <i18n:text key="archive">Text to translate with ({1})</i18n:text>
-                                <i18n:param>
-                                    <xsl:value-of select="@count"/>
-                                </i18n:param>
-                            </i18n:translate>
-                        </a>
-                    </li>
+                    <xsl:for-each select="/docs/paginator/tags/tag">
+                        <li>
+                            <xsl:if test="@id eq $listing-tab">
+                                <xsl:attribute name="class">active</xsl:attribute>
+                            </xsl:if>
+                            <a href="{$item-listing-rel-base}?tab={@id}">
+                                <i18n:translate>
+                                    <i18n:text key="{@id}">nt({1})</i18n:text>
+                                    <i18n:param>
+                                        <xsl:value-of select="@count"/>
+                                    </i18n:param>
+                                </i18n:translate>
+                            </a>
+                        </li>
+                    </xsl:for-each>
                 </ul>
             </div>
             <div id="doc-downloads"/>

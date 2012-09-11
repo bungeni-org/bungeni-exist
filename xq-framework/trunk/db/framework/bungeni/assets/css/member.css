@@ -41,6 +41,7 @@ p.imgonlywrap {
   
 p.imgonlywrap img {
     width:auto;
+    max-width:200px;
     height:auto;
     display: block;
     position: relative;

@@ -40,15 +40,24 @@ declare function rou:func-name(
 :)
 
 declare function rou:get-home($CONTROLLER-DOC as node()) {
-
-        template:process-tmpl(
-           $CONTROLLER-DOC/rel-path, 
-           $CONTROLLER-DOC/exist-cont, 
-           $config:DEFAULT-TEMPLATE,
-           cmn:get-route($CONTROLLER-DOC/exist-path),
-            (),         		   
-           cmn:build-nav-tmpl($CONTROLLER-DOC/exist-path, "xml/index.xml")
-        )
+        let 
+            $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+            $parts := cmn:get-view-parts("/home"),
+            $act-entries-tmpl :=  bun:get-government($parts),
+            $act-entries-repl:= document {
+    							template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    						 } 
+    						 return 
+    							template:process-tmpl(
+    							   $CONTROLLER-DOC/rel-path, 
+    							   $CONTROLLER-DOC/exist-cont, 
+    							   $config:DEFAULT-TEMPLATE, 
+    							   cmn:get-route($CONTROLLER-DOC/exist-path),
+                                    <route-override>
+                                        <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                    </route-override>, 
+    							   cmn:build-nav-node($CONTROLLER-DOC/exist-path, $act-entries-repl)
+    							 )         
 };
 
 

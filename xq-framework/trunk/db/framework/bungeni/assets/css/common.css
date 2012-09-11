@@ -524,5 +524,3 @@ table tr td.labels {
 tbody tr.items:hover {
   background: #eee;
 }
-
-td { vertical-align: middle; }

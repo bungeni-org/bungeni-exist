@@ -2388,6 +2388,28 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
 };
 
 (:~ 
+:   Used to retrieve a government info
+:
+: @param _tmpl
+: @return
+:   A document-node of subtype government
+: @stylesheet 
+:   committee.xsl, home.xsl
+:)
+declare function bun:get-government($parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $doc := <doc>{
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'government']/ancestor::bu:ontology
+                    return
+                        $match  
+                }</doc>   
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
+(:~ 
 :   Used to retrieve a group document with a given URI
 :
 : @param acl

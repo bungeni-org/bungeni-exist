@@ -34,7 +34,6 @@
     <msg key="agendaitems">pointi za ajenda</msg>
     <msg key="calendar">kalenda</msg>
     <msg key="publications">machapisho</msg>
-    <msg key="current">sasa</msg>
     <msg key="politicalgroups">makundi ya kisiasa</msg>
     <!-- LISTINGS -->
     <msg key="doc-whatson">Yaliyomo</msg>
@@ -55,6 +54,10 @@
     <msg key="list-tab-gaz">kwenye jarida</msg>
     <msg key="past">kale ({1})</msg>
     <msg key="archive">nyaraka ({1})</msg>
+    <msg key="draft">rasimu ({1})</msg>
+    <msg key="active">iliyoko ({1})</msg>
+    <msg key="dissolved">iliyofutwa ({1})</msg>
+    <msg key="current">sasa ({1})</msg>
     <msg key="former">zamani ({1})</msg>
     <msg key="pri-sponsor">mdhamini mkuu</msg>
     <msg key="sponsors">wadhamini</msg>

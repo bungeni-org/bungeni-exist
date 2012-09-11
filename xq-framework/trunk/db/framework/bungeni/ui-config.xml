@@ -19,7 +19,7 @@
     <!-- LISTING CONFIG PREFERNCES -->
     <listings>
         <!-- limits the number of items shown on a listing page -->
-        <limit>15</limit>
+        <limit>3</limit>
         <!-- number of pages linked on the paginator before showing next -->
         <visiblePages>3</visiblePages>
         <!-- whatson on custom calenar range filter -->
@@ -538,7 +538,7 @@
                 <ul id="portal-personaltools">
                     <li class="navigation">
                         <a name="current" href="members">
-                            <i18n:text key="current">current(nt)</i18n:text>
+                            <i18n:text key="members">current(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
@@ -1207,7 +1207,7 @@
                 <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'dissolved')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="group" name="politicalgroup">
+        <doctype category="group" name="PoliticalGroup">
             <orderbys>
                 <orderby value="st_date_oldest" order="ascending" field="bu:legislature/bu:statusDate">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="descending" field="bu:legislature/bu:statusDate" default="true">status date
@@ -1222,8 +1222,8 @@
                 <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
-                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+                <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
+                <listingfilter id="draft" name="draft">contains(bu:status/bu:value,'draft')</listingfilter>
             </listingfilters>
         </doctype>
         <doctype category="group" name="ministry">
@@ -1252,7 +1252,7 @@
                 <listingfilter id="schedule" name="scheduled items">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="membership" name="membership">
+        <doctype category="membership" name="Membership">
             <orderbys>
                 <orderby value="st_date_oldest" order="ascending" field="bu:legislature/bu:statusDate">status date [oldest]</orderby>
                 <orderby value="st_date_newest" order="descending" field="bu:legislature/bu:statusDate" default="true">status date
@@ -1260,15 +1260,13 @@
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>
-                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName">First
-                    Name</searchin>
-                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last
-                    Name</searchin>
+                <searchin name="fn" value="fstname" field="bu:membership/bu:firstName">First Name</searchin>
+                <searchin name="ln" value="lsname" field="bu:membership/bu:lastName">Last Name</searchin>
                 <searchin name="ds" value="desc" field="bu:membership/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter name="under consideration">bu:tags[not(contains(bu:tag/bu:value,'terminal'))]</listingfilter>
-                <listingfilter name="archived">bu:tags[contains(bu:tag/bu:value,'terminal')]</listingfilter>
+                <listingfilter id="current" name="current">empty(bu:endDate)</listingfilter>
+                <listingfilter id="former" name="former">not(empty(bu:endDate))</listingfilter>
             </listingfilters>
         </doctype>
         <doctype category="address" name="address"/>

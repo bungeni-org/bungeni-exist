@@ -34,7 +34,6 @@
     <msg key="agendaitems">punti dell'ordine</msg>
     <msg key="calendar">calendario</msg>
     <msg key="publications">publicazzioni</msg>
-    <msg key="current">corrente</msg>
     <msg key="politicalgroups">gruppi politici</msg>    
     <!-- LISTINGS -->
     <msg key="doc-whatson">In agenda</msg>
@@ -55,6 +54,10 @@
     <msg key="list-tab-gaz">gazzetta</msg>
     <msg key="past">passato ({1})</msg>
     <msg key="archive">archiviati ({1})</msg>
+    <msg key="draft">bozza ({1})</msg>
+    <msg key="active">attivo ({1})</msg>
+    <msg key="dissolved">sciolto ({1})</msg>
+    <msg key="current">corrente ({1})</msg>
     <msg key="former">ex ({1})</msg>
     <msg key="pri-sponsor">primario sponsor</msg>
     <msg key="sponsors">sponsor</msg>

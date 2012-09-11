@@ -32,7 +32,6 @@
     <msg key="agendaitems">agenda items</msg>
     <msg key="calendar">calendar</msg>
     <msg key="publications">publications</msg>
-    <msg key="current">members</msg>
     <msg key="politicalgroups">political groups</msg>
     <msg key="doc-whatson">What's on</msg>
     <msg key="listing">List of&#160;</msg>
@@ -52,6 +51,10 @@
     <msg key="list-tab-gaz">gazette</msg>
     <msg key="past">past ({1})</msg>
     <msg key="archive">archived ({1})</msg>
+    <msg key="draft">draft ({1})</msg>
+    <msg key="active">active ({1})</msg>
+    <msg key="dissolved">dissolved ({1})</msg>
+    <msg key="current">current ({1})</msg>
     <msg key="former">former ({1})</msg>
     <msg key="pri-sponsor">primary sponsor</msg>
     <msg key="sponsors">sponsors</msg>

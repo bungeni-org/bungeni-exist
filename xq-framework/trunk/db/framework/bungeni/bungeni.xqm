@@ -303,6 +303,24 @@ declare function bun:xqy-list-membership($type as xs:string) {
                 "/bu:membership/bu:membershipType[bu:value eq 'member_of_parliament']",
                 "/ancestor::bu:ontology")
 };
+
+
+declare function bun:xqy-list-membership-with-tabs($type as xs:string, $status as xs:string) {
+
+    fn:concat("collection('",cmn:get-lex-db() ,"')",
+                "/bu:ontology[@for='membership']/bu:membership[bu:docType/bu:value eq '",$type,"'", 
+                " and ",$status,"]",
+                "/bu:membershipType[bu:value eq 'member_of_parliament']",
+                "/ancestor::bu:ontology")
+};
+
+declare function bun:list-membership-with-tabs($type as xs:string, $status as xs:string) {
+
+    let $eval-query := bun:xqy-list-membership-with-tabs($type, $status)
+    return 
+        util:eval($eval-query)
+};
+
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
             "/bu:ontology[@for='membership']")
@@ -1555,12 +1573,14 @@ declare function bun:get-committees(
         $sortby as xs:string
         ) as element() {   
     
+    let $getqrystr := xs:string(request:get-query-string())
+    
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/view/xsl)
     
     let $tab := xs:string(request:get-parameter("tab","active")) 
-    let $listings-filter := cmn:get-listings-config("Committee")    
-    let $coll := bun:list-groupitems-with-tabs("Committee", $tab)
+    let $listings-filter := cmn:get-listings-config($parts/doctype)    
+    let $coll := bun:list-groupitems-with-tabs($parts/doctype, $tab)
     
     (: The line below is documented in bun:get-documentitems() :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset    
@@ -1574,12 +1594,14 @@ declare function bun:get-committees(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-groupitems-with-tabs('Committee', $listing/@id))) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-groupitems-with-tabs($parts/doctype, $listing/@id)) }">{data($listing/@name)}</tag>
                     
          }
-         </tags>         
+         </tags>    
+        <currentView>{$parts/current-view}</currentView>
         <documentType>committee</documentType>
-        <listingUrlPrefix>committee/text</listingUrlPrefix>        
+        <listingUrlPrefix>committee/text</listingUrlPrefix>
+        <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>        
@@ -1603,8 +1625,7 @@ declare function bun:get-committees(
                 <param name="listing-tab" value="{$tab}" />
                 <param name="item-listing-rel-base" value="{$view-rel-path}" />                
             </parameters>
-           ) 
-       
+           )   
 };
 
 (:~
@@ -2052,6 +2073,7 @@ declare function local:get-sitting-items($sittingdoc as node()) {
 :   A listing of documents of group type policicalgroups
 :)
 declare function bun:get-politicalgroups(
+        $view-rel-path as xs:string,
         $offset as xs:integer, 
         $limit as xs:integer, 
         $parts as node(),
@@ -2059,8 +2081,14 @@ declare function bun:get-politicalgroups(
         $sortby as xs:string
         ) as element() {
     
+    let $getqrystr := xs:string(request:get-query-string())
+    
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/view/xsl)    
+    
+    let $tab := xs:string(request:get-parameter("tab","active")) 
+    let $listings-filter := cmn:get-listings-config("PoliticalGroup")    
+    let $coll := bun:list-groupitems-with-tabs($parts/doctype, $tab)    
     
     (: 
         The line below is documented in bun:get-documentitems()
@@ -2071,10 +2099,19 @@ declare function bun:get-politicalgroups(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'])}</count>
+        <count>{count($coll)}</count>
+        <tags>
+        {
+            for $listing in $listings-filter
+                return 
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-groupitems-with-tabs($parts/doctype, $listing/@id)) }">{data($listing/@name)}</tag>
+                    
+         }
+         </tags>         
         <currentView>{$parts/current-view}</currentView>
         <documentType>political-group</documentType>
-        <listingUrlPrefix>political-group/text</listingUrlPrefix>        
+        <listingUrlPrefix>political-group/text</listingUrlPrefix>      
+        <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
@@ -2084,34 +2121,34 @@ declare function bun:get-politicalgroups(
             switch ($sortby)
             
             case 'start_dt_oldest' return 
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:group/bu:startDate ascending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:group/bu:startDate ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>  
                 
             case 'start_dt_newest' return 
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:group/bu:startDate descending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:group/bu:startDate descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>     
 
             case 'fN_asc' return
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName ascending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislature/bu:fullName ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>      
   
             case 'fN_desc' return 
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:legislature/bu:fullName descending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:legislature/bu:fullName descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>        
              
             default return 
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value='PoliticalGroup'],$offset,$limit)
+                for $match in subsequence($coll,$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
-                    <doc>{$match/ancestor::bu:ontology}</doc>
+                    <doc>{$match}</doc>
         } 
         </alisting>
     </docs>
@@ -2122,6 +2159,8 @@ declare function bun:get-politicalgroups(
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
+                <param name="listing-tab" value="{$tab}" />
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />                 
             </parameters>
            )     
 };
@@ -2652,6 +2691,7 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
 };
 
 declare function bun:get-members(
+            $view-rel-path as xs:string,
             $offset as xs:integer, 
             $limit as xs:integer, 
             $parts as node(),
@@ -2660,14 +2700,32 @@ declare function bun:get-members(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/view/xsl)    
+    let $tab := xs:string(request:get-parameter("tab","current")) 
+    let $getqrystr := xs:string(request:get-query-string())  
+    
+    let $listings-filter := cmn:get-listings-config($parts/doctype) 
+    let $coll := bun:list-membership-with-tabs($parts/doctype, $listings-filter[@id eq $tab]/text())    
+    
+    (: The line below is documented in bun:get-documentitems() :)
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset       
     
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
         (: Count the total number of members :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology)}</count>
+        <count>{count($coll)}</count>
+        <tags>
+        {
+            for $listing in $listings-filter
+                return 
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($parts/doctype, $listing/text())) }">{data($listing/@name)}</tag>
+                    
+        }
+        </tags>          
         <currentView>{$parts/current-view}</currentView>
-        <documentType>membership</documentType>
+        <documentType>{$parts/doctype}</documentType>
+        <listingUrlPrefix>{$parts/default-view}</listingUrlPrefix>
+        <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>        
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
         <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
@@ -2676,8 +2734,8 @@ declare function bun:get-members(
         {
             if ($sortby = 'ln') then (
             
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)                
-                order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
+                for $match in subsequence($coll,$offset,$limit)                
+                order by $match/bu:membership/bu:lastName descending
                 return 
                     <doc>
                         {$match}
@@ -2687,8 +2745,8 @@ declare function bun:get-members(
                     </doc>  
                 )
             else if ($sortby = 'fn') then (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:membership/bu:firstName descending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:firstName descending
                 return 
                     <doc>
                         {$match}
@@ -2698,8 +2756,8 @@ declare function bun:get-members(
                     </doc>       
                 )                
             else  (
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='membership']/bu:membership/bu:membershipType[bu:value eq "member_of_parliament"]/ancestor::bu:ontology,$offset,$limit)
-                order by $match/ancestor::bu:ontology/bu:membership/bu:lastName descending
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:lastName descending
                 return 
                     <doc>
                         {$match}
@@ -2714,7 +2772,14 @@ declare function bun:get-members(
     </docs>
     
     return
-        transform:transform($doc, $stylesheet, ()) 
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="listing-tab" value="{$tab}" />
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />                
+            </parameters>
+        
+        ) 
        
 };
 

@@ -82,6 +82,7 @@ declare function cmn:get-view-listing-parts($doctype as xs:string, $default-view
     let $current-path := data($listing-view/@path)
     let $default-path := data($views/view[@id eq $default-view]/@path)
         return  <listing>
+                    <doctype>{$doctype}</doctype>
                     {$listing-view}
                     <current-view>{$current-path}</current-view>
                     <default-view>{$default-path}</default-view>

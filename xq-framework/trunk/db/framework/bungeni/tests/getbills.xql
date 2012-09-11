@@ -4,7 +4,7 @@ declare namespace request="http://exist-db.org/xquery/request";
 
 import module namespace json="http://www.json.org";
 import module namespace xmldb = "http://exist-db.org/xquery/xmldb";
-import module namespace lexcommon="http://exist.bungeni.org/lexcommon" at "common.xqm";
+import module namespace lexcommon="http://exist.bungeni.org/lexcommon" at "../common.xqm";
 
 
 (: return pure xhtml :)

@@ -26,7 +26,7 @@
                 <xsl:with-param name="tab-group">
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">member</xsl:with-param>
+                <xsl:with-param name="tab-path">profile</xsl:with-param>
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>

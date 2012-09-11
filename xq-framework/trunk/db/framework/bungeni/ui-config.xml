@@ -19,7 +19,7 @@
     <!-- LISTING CONFIG PREFERNCES -->
     <listings>
         <!-- limits the number of items shown on a listing page -->
-        <limit>3</limit>
+        <limit>15</limit>
         <!-- number of pages linked on the paginator before showing next -->
         <visiblePages>3</visiblePages>
         <!-- whatson on custom calenar range filter -->

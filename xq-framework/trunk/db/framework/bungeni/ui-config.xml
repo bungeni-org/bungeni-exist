@@ -701,12 +701,12 @@
             </view>
         </views>
         <views name="government">
-            <view path="government-text" id="profile" tag="tab">
+            <view path="home" id="profile" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>xml/committee.xml</template>
-                <xsl>xsl/government.xsl</xsl>
+                <xsl>xsl/home.xsl</xsl>
             </view>
         </views>
         <views name="Bill">

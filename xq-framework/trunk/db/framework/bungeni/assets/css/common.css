@@ -501,7 +501,11 @@ a.van-light {
 
 /* Tables
 -------------------------------------------------------------- */
-table { width:100%; }
+table.listing,
+table.tbl-tgl,
+table.timeline {
+    width:100%;
+}
 
 table.listing tr th,
 table.tbl-tgl tr th,

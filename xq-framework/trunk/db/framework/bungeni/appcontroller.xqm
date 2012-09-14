@@ -335,7 +335,39 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let
                     $act-entries-tmpl :=  bun:get-atom-feed("public-view", "AgendaItem","user")
                     return $act-entries-tmpl                    
-            
+           
+        (: ePUB GENERATORS :)
+    	else if ($EXIST-PATH eq "/bill/epub")   
+    		 then 
+                let $views := cmn:get-views-for-type("Bill"),
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                return $act-entries-tmpl 
+    	else if ($EXIST-PATH eq "/question/epub")   
+    		 then 
+                let $views := cmn:get-views-for-type("Question"),
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                return $act-entries-tmpl  
+    	else if ($EXIST-PATH eq "/motion/epub")   
+    		 then 
+                let $views := cmn:get-views-for-type("Motion"),
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                return $act-entries-tmpl 
+    	else if ($EXIST-PATH eq "/tableddocument/epub")   
+    		 then 
+                let $views := cmn:get-views-for-type("TabledDocument"),
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                return $act-entries-tmpl 
+    	else if ($EXIST-PATH eq "/agendaitem/epub")   
+    		 then 
+                let $views := cmn:get-views-for-type("AgendaItem"),
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                return $act-entries-tmpl           
+           
         (: PDF FO GENERATORS :)
     	else if ($EXIST-PATH eq "/bill/pdf")   
     		 then 
@@ -538,27 +570,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									 )
-    	else if ($EXIST-PATH eq "/committee-assigneditems" )
-    		 then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,$parts),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    									template:process-tmpl(
-    									   $REL-PATH, 
-    									   $EXIST-CONTROLLER, 
-    									   $config:DEFAULT-TEMPLATE, 
-    									   cmn:get-route($EXIST-PATH),
-                                            <route-override>
-                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                            </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									 )      
+    									 )     
     	else if ($EXIST-PATH eq "/committee-sittings" )
     		 then 
                 let 

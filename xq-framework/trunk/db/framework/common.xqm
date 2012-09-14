@@ -90,6 +90,13 @@ declare function cmn:get-view-listing-parts($doctype as xs:string, $default-view
 };
 
 (:~
+    Get a views path configuration as per given context.
+:)
+declare function cmn:get-views-for-type($type as xs:string) as node()* {
+        cmn:get-ui-config()/ui/viewgroups/views[@name eq $type]
+};
+
+(:~
     Get a tabs/view path configuration as per context. Currently 
     returns a template and stylesheet for document transformations
 :)

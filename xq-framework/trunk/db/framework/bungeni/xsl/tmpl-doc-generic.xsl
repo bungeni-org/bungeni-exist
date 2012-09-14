@@ -18,6 +18,7 @@
         Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
     <xsl:param name="version"/>
+    <xsl:param name="epub"/>
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
@@ -37,37 +38,39 @@
             <xsl:call-template name="doc-item-title">
                 <xsl:with-param name="ver-uri" select="$ver-uri"/>
             </xsl:call-template>
-            <!-- Renders tab-feature to the view -->
-            <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group">
-                    <xsl:choose>
-                        <xsl:when test="$version eq 'true'">
-                            <xsl:value-of select="concat($doc-type,'-ver')"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$doc-type"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-                <xsl:with-param name="uri">
-                    <xsl:choose>
-                        <xsl:when test="$version eq 'true'">
-                            <xsl:value-of select="$ver-uri"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$doc-uri"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-                <xsl:with-param name="tab-path">text</xsl:with-param>
-                <xsl:with-param name="excludes" select="exclude/tab"/>
-            </xsl:call-template>
-            <!-- Renders the document download types -->
-            <xsl:call-template name="doc-formats">
-                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
-                <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
-                <xsl:with-param name="uri" select="$doc-uri"/>
-            </xsl:call-template>
+            <xsl:if test="$epub ne 'true'">
+                <!-- Renders tab-feature to the view -->
+                <xsl:call-template name="doc-tabs">
+                    <xsl:with-param name="tab-group">
+                        <xsl:choose>
+                            <xsl:when test="$version eq 'true'">
+                                <xsl:value-of select="concat($doc-type,'-ver')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$doc-type"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                    <xsl:with-param name="uri">
+                        <xsl:choose>
+                            <xsl:when test="$version eq 'true'">
+                                <xsl:value-of select="$ver-uri"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$doc-uri"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                    <xsl:with-param name="tab-path">text</xsl:with-param>
+                    <xsl:with-param name="excludes" select="exclude/tab"/>
+                </xsl:call-template>
+                <!-- Renders the document download types -->
+                <xsl:call-template name="doc-formats">
+                    <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                    <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
+                    <xsl:with-param name="uri" select="$doc-uri"/>
+                </xsl:call-template>
+            </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <!-- If there is a versions node in this document, there are

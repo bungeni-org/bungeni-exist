@@ -16,6 +16,7 @@
          document as opposed to main document. -->
     <xsl:param name="serverport"/>
     <xsl:param name="version"/>
+    <xsl:param name="epub"/>
     <xsl:template match="doc">
         <xsl:variable name="ver-id" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
@@ -42,36 +43,38 @@
                     </xsl:if>
                 </h1>
             </div>
-            <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group">
-                    <xsl:choose>
-                        <xsl:when test="$version eq 'true'">
-                            <xsl:value-of select="concat($doc-type,'-ver')"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$doc-type"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-                <xsl:with-param name="uri">
-                    <xsl:choose>
-                        <xsl:when test="$version eq 'true'">
-                            <xsl:value-of select="$ver-uri"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="$doc-uri"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-                <xsl:with-param name="tab-path">related</xsl:with-param>
-                <xsl:with-param name="excludes" select="exclude/tab"/>
-            </xsl:call-template>
-            <!-- Renders the document download types -->
-            <xsl:call-template name="doc-formats">
-                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
-                <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
-                <xsl:with-param name="uri" select="$doc-uri"/>
-            </xsl:call-template>
+            <xsl:if test="$epub ne 'true'">
+                <xsl:call-template name="doc-tabs">
+                    <xsl:with-param name="tab-group">
+                        <xsl:choose>
+                            <xsl:when test="$version eq 'true'">
+                                <xsl:value-of select="concat($doc-type,'-ver')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$doc-type"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                    <xsl:with-param name="uri">
+                        <xsl:choose>
+                            <xsl:when test="$version eq 'true'">
+                                <xsl:value-of select="$ver-uri"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$doc-uri"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:with-param>
+                    <xsl:with-param name="tab-path">related</xsl:with-param>
+                    <xsl:with-param name="excludes" select="exclude/tab"/>
+                </xsl:call-template>
+                <!-- Renders the document download types -->
+                <xsl:call-template name="doc-formats">
+                    <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                    <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
+                    <xsl:with-param name="uri" select="$doc-uri"/>
+                </xsl:call-template>
+            </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="list-block">

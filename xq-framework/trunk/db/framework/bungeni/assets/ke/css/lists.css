@@ -9,6 +9,7 @@ ul.ls-downloads li { float: right; padding: 0px;padding-right:8px; margin: 0px;m
 ul.ls-downloads li a { display: block; height: 15px;margin-right:0px; }
 ul.ls-downloads li a.rss { margin-right:0px;background: url(../images/ico-rss.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a.print { margin-right:0px;background: url(../images/ico-print.png) no-repeat left top; width: 15px; }
+ul.ls-downloads li a.epub { margin-right:0px;background: url(../images/ico-epub.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a.odt { margin-right:0px;background: url(../images/ico-doc.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a.rtf { margin-right:0px;background: url(../images/ico-rtf.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a.pdf { margin-right:0px;background: url(../images/ico-pdf.png) no-repeat left top; width: 15px; }

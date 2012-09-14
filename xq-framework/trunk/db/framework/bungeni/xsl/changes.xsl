@@ -12,6 +12,9 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
+    
+    <!--PARAMS -->
+    <xsl:param name="epub"/>
     <xsl:param name="serverport"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
@@ -34,20 +37,22 @@
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
             </div>
-            <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-type"/>
-                </xsl:with-param>
-                <xsl:with-param name="tab-path">timeline</xsl:with-param>
-                <xsl:with-param name="uri" select="$doc-uri"/>
-                <xsl:with-param name="excludes" select="exclude/tab"/>
-            </xsl:call-template>
-            <!-- Renders the document download types -->
-            <xsl:call-template name="doc-formats">
-                <xsl:with-param name="render-group">parl-doc</xsl:with-param>
-                <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
-                <xsl:with-param name="uri" select="$doc-uri"/>
-            </xsl:call-template>
+            <xsl:if test="$epub ne 'true'">
+                <xsl:call-template name="doc-tabs">
+                    <xsl:with-param name="tab-group">
+                        <xsl:value-of select="$doc-type"/>
+                    </xsl:with-param>
+                    <xsl:with-param name="tab-path">timeline</xsl:with-param>
+                    <xsl:with-param name="uri" select="$doc-uri"/>
+                    <xsl:with-param name="excludes" select="exclude/tab"/>
+                </xsl:call-template>
+                <!-- Renders the document download types -->
+                <xsl:call-template name="doc-formats">
+                    <xsl:with-param name="render-group">parl-doc</xsl:with-param>
+                    <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
+                    <xsl:with-param name="uri" select="$doc-uri"/>
+                </xsl:call-template>
+            </xsl:if>
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">

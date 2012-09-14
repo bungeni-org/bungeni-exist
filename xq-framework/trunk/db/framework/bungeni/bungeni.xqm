@@ -9,6 +9,7 @@ import module namespace config = "http://bungeni.org/xquery/config" at "../confi
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
+import module namespace scriba = "http://scribaebookmake.sourceforge.net/1.0/" at "../scriba.xqm";
 (:import module namespace vdex = "http://www.imsglobal.org/xsd/imsvdex_v1p0" at "vdex.xqm";:)
 import module namespace kwic="http://exist-db.org/xquery/kwic";
 declare namespace request = "http://exist-db.org/xquery/request";
@@ -16,11 +17,12 @@ declare namespace fo="http://www.w3.org/1999/XSL/Format";
 declare namespace xslfo="http://exist-db.org/xquery/xslfo"; 
 import module namespace json="http://www.json.org";
 
-
+declare namespace epub="http://exist-db.org/xquery/epub";
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace transform="http://exist-db.org/xquery/transform";
 declare namespace xh = "http://www.w3.org/1999/xhtml";
 declare namespace bu="http://portal.bungeni.org/1.0/";
+
 
 (:
 Library for common lex functions
@@ -138,6 +140,45 @@ declare function bun:gen-pdf-output($docid as xs:string)
 };
 
 (:~
+:  Renders ePUB output for parliamentary document using scriba module
+: @param docid
+:   The URI of the document
+:
+: @return
+:   A ePUB document
+:)
+declare function bun:gen-epub-output($docid as xs:string, $views as node())
+{
+    let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
+
+    let $pages := <pages>{
+        for $view in $views/view[@tag eq 'tab']
+            return
+                <page>{
+                    transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
+                                            <parameters>
+                                                <param name="epub" value="true" />
+                                            </parameters>)
+                 }</page>
+         }</pages>
+    
+    (: for timeline
+        let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
+    :)    
+
+    let $book := scriba:create-book(
+        $doc/bu:document/bu:title, 
+        data($doc/bu:document/bu:owner/@showAs), 
+        $pages)
+        
+    let $epub := epub:scriba-ebook-maker($book)
+    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  "newscriba.epub")) 
+    let $out := response:stream-binary($epub, "application/epub+zip")     
+    return <xml />     
+    
+};
+
+(:~
 :  streams the attachment with the given id
 : @param acl 
 :   permissions scheme allowed for this file
@@ -251,7 +292,8 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $
                 "/bu:ontology[@for='document']",
                 "/bu:document/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document/(bu:permissions except bu:versions)",
-                "/bu:permission[",$acl-filter,"]",
+                (: !+NOTE (ao, 14th Sept 2012) tmp disabled was causing empty listing to be returned :)
+                (:"/bu:permission[",$acl-filter,"]",:)
                 "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
                 "/ancestor::bu:ontology")
 };
@@ -2240,8 +2282,9 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
     fn:concat(
         bun:xqy-docitem-uri($uri), 
         "/", 
-        bun:xqy-docitem-perms($acl),
-        "/",
+        (: !+NOTE (ao, 14th Sept 2012) tmp disabled was causing empty document to be returned :)
+        (:bun:xqy-docitem-perms($acl),
+        "/",:)
         bun:xqy-docitem-ancestor-root()
         )
 };

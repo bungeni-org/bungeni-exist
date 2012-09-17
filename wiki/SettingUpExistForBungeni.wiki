@@ -15,7 +15,7 @@
 Checkout source of eXist into a separate folder 
 
 {{{
-svn co https://exist.svn.sourceforge.net/svnroot/exist/trunk/eXist ~/eXist
+svn co http://svn.code.sf.net/p/exist/code/trunk/eXist ~/eXist
 }}}
 
 Configure extensions, by enabling XSLFO module, edit ~/eXist/extensions/build.properties and enable the xslfo module :

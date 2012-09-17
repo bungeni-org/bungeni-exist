@@ -5,7 +5,8 @@ declare namespace transform = "http://exist-db.org/xquery/transform";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
 
 (:~
-    : Module for Generating ScribaEbookMaker main config file. The SCF
+    : Module for Generating ScribaEbookMaker main config file. The SCF, see structure below in
+    : scriba:create-book()
     
     : @author Anthony Oduor <aowino@googlemail.com>
 :)
@@ -17,10 +18,12 @@ import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
  :
  : @return <metaitem/> node(s)
 :)
-declare function scriba:add-authors($author as xs:string) {
+declare function scriba:add-authors($creators as node()) {
 
-    if ($author) then 
-        <metaitem eletype="dc" elename="creator" role="aut">{$author}</metaitem>
+    if (not(empty($creators/node()))) then 
+        for $creator in $creators/node()
+            return 
+                <metaitem eletype="dc" elename="creator" role="{data($creator/@role)}">{$creator/text()}</metaitem>
     else
         <metaitem eletype="dc" elename="creator" role="aut">Bungeni Creator</metaitem>     
 };
@@ -40,75 +43,72 @@ declare function scriba:add-title($title as xs:string) {
 };
 
 (:~
- : Add main component - <metatdata/> node
+ : Generate main component - <contents/> node
  :
- : @param $title of document
- : @param $authors of document
- :
- : @return <metdadata/> node
-:)
-declare function scriba:generate-metadata($title as xs:string, $authors as xs:string) {
-
-    <metadata>
-        {scriba:add-title($title)}    
-        {scriba:add-authors($authors)}
-        <metaitem eletype="dc" elename="creator" role="edt">Bungeni Parliament</metaitem>
-        <metaitem eletype="dc" elename="language">it</metaitem>
-        <metaitem eletype="dc" elename="identifier" id="senabookid">testId</metaitem>
-        <metaitem eletype="dc" elename="subject">Legislation</metaitem>
-        <metaitem eletype="dc" elename="date">%date%</metaitem>
-        <metaitem eletype="meta" elename="meta" name="copyright" content="Bungeni Parliament" destination="opf"/>
-        <metaitem eletype="meta" elename="meta" name="dtb:uid" content="testId" destination="ncx"/>
-        <metaitem eletype="meta" elename="meta" name="dtb:depth" content="1" destination="ncx"/>
-        <metaitem eletype="meta" elename="meta" name="dtb:totalPageCount" content="2" destination="ncx"/>
-        <metaitem eletype="meta" elename="meta" name="dtb:maxPageNumber" content="2" destination="ncx"/>
-    </metadata>
-};
-
-(:~
- : Add main component - <contents/> node
- :
- : @param $title of document
- : @param $authors of document
+ : @param $pages content nodes that will make up pages of the ePUB
  :
  : @return <contents/> node
 :)
-declare function scriba:generateContent($pages as node()) {
+declare function scriba:generate-content($pages as node()) {
 
     <contents tocId="toc">{
         for $page at $pos in $pages/page
             return
-                <content packageId="bungeni_{$pos}" 
-                        packagePath="Bungeni{$pos}" 
-                        packageFile="bungeni/bungeni_{$pos}.htm" 
+                <content packageId="bungeni_{$page/@id}" 
+                        packagePath="Bungeni_{$pos}_{$page/@id}" 
+                        packageFile="bungeni/bungeni_{$page/@id}.htm" 
                         contentMediaType="application/xhtml+xml" 
                         isInSpine="true" 
-                        tocName="Bungeni {$pos}" 
+                        tocName="Bungeni {$page/@id}" 
                         isNeededTidy="true" 
                         isNeededXsl="false">
                     {scriba:escapee($page)}
                 </content>
     }
     </contents>
+    
 };
 
 (:~
- : Add main component - <contents/> node
+ : Creates <book/> node - Scriba's configuration file. See structure below
  :
+    <book version="1.0">
+        <metadata>
+            <metaitem eletype="dc/meta" elename=""/>
+            ...
+        </metadata>
+        <contents tocId="toc">
+            <content packageId="bungeni_{name}" 
+                    packagePath="Bungeni_{$pos}_{name}" 
+                    packageFile="bungeni/bungeni_{name}.htm" 
+                    contentMediaType="application/xhtml+xml" 
+                    isInSpine="true" 
+                    tocName="Bungeni {name}" 
+                    isNeededTidy="true" 
+                    isNeededXsl="false">
+                    
+                    <![CDATA[ *insert content* ]]>
+                    
+            </content>
+            ...
+        </contents>
+    </book>
+ :
+ : @param $lang ISO code of the language in use
  : @param $title of document
  : @param $authors of document
+ : @param $pages paged contents of ebook
  :
- : @return <contents/> node
+ : @return <book/> node
 :)
-declare function scriba:create-book($title as xs:string, $authors as xs:string, $pages as node()) {
+declare function scriba:create-book($lang as xs:string, $title as xs:string, $authors as node(), $pages as node()) {
             
      <book version="1.0">
         <metadata>
             {scriba:add-title($title)}    
             {scriba:add-authors($authors)}
-            <metaitem eletype="dc" elename="creator" role="edt">Bungeni Parliament</metaitem>
-            <metaitem eletype="dc" elename="language">it</metaitem>
-            <metaitem eletype="dc" elename="identifier" id="senabookid">testId</metaitem>
+            <metaitem eletype="dc" elename="language">{$lang}</metaitem>
+            <metaitem eletype="dc" elename="identifier" id="bungenibookid">bungeniId</metaitem>
             <metaitem eletype="dc" elename="subject">Legislation</metaitem>
             <metaitem eletype="dc" elename="date">%date%</metaitem>
             <metaitem eletype="meta" elename="meta" name="copyright" content="Bungeni Parliament" destination="opf"/>
@@ -116,10 +116,11 @@ declare function scriba:create-book($title as xs:string, $authors as xs:string, 
             <metaitem eletype="meta" elename="meta" name="dtb:depth" content="1" destination="ncx"/>
             <metaitem eletype="meta" elename="meta" name="dtb:totalPageCount" content="{count($pages/page)}" destination="ncx"/>
             <metaitem eletype="meta" elename="meta" name="dtb:maxPageNumber" content="{count($pages/page)}" destination="ncx"/>
-        </metadata>     
-        {
-            scriba:generateContent($pages)
-        }</book>
+        </metadata>{
+            
+            scriba:generate-content($pages)   
+            
+    }</book>
 };
 
 (:~

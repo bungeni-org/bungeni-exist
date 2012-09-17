@@ -154,7 +154,7 @@ declare function bun:gen-epub-output($docid as xs:string, $views as node())
     let $pages := <pages>{
         for $view in $views/view[@tag eq 'tab']
             return
-                <page>{
+                <page id="{$view/@id}">{
                     transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
                                             <parameters>
                                                 <param name="epub" value="true" />
@@ -164,15 +164,22 @@ declare function bun:gen-epub-output($docid as xs:string, $views as node())
     
     (: for timeline
         let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
-    :)    
-
-    let $book := scriba:create-book(
-        $doc/bu:document/bu:title, 
-        data($doc/bu:document/bu:owner/@showAs), 
-        $pages)
+    :)  
+    
+    let $lang := template:set-lang()
+    let $title := $doc/bu:document/bu:title
+    let $authors := <creators>
+                        <creator role="aut">{data($doc/bu:document/bu:owner/bu:person/@showAs)}</creator>
+            {
+                for $signatory in $doc/bu:signatories/bu:signatory
+                    return 
+                        <creator role="edt">{data($signatory/bu:person/@showAs)}</creator>
+            }</creators>    
+             
+    let $book := scriba:create-book($lang,$title,$authors,$pages)
         
     let $epub := epub:scriba-ebook-maker($book)
-    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  "newscriba.epub")) 
+    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  "document.epub")) 
     let $out := response:stream-binary($epub, "application/epub+zip")     
     return <xml />     
     
@@ -292,8 +299,7 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $
                 "/bu:ontology[@for='document']",
                 "/bu:document/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document/(bu:permissions except bu:versions)",
-                (: !+NOTE (ao, 14th Sept 2012) tmp disabled was causing empty listing to be returned :)
-                (:"/bu:permission[",$acl-filter,"]",:)
+                "/bu:permission[",$acl-filter,"]",
                 "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
                 "/ancestor::bu:ontology")
 };
@@ -2282,9 +2288,8 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
     fn:concat(
         bun:xqy-docitem-uri($uri), 
         "/", 
-        (: !+NOTE (ao, 14th Sept 2012) tmp disabled was causing empty document to be returned :)
-        (:bun:xqy-docitem-perms($acl),
-        "/",:)
+        bun:xqy-docitem-perms($acl),
+        "/",
         bun:xqy-docitem-ancestor-root()
         )
 };

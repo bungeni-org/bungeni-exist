@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<boundaries>
+    <boundary area="viking">
+        <point latitude="61" longitude="0"/>
+        <point latitude="61" longitude="4"/>
+        <point latitude="58.5" longitude="4"/>
+        <point latitude="58.5" longitude="0"/>
+    </boundary>
+    <boundary area="north utsire">
+        <point latitude="61" longitude="4"/>
+        <point latitude="61" longitude="5"/>
+        <point latitude="59" longitude="5.58"/>
+        <point latitude="59" longitude="4"/>
+    </boundary>
+    <boundary area="south utsire">
+        <point latitude="59" longitude="4"/>
+        <point latitude="59" longitude="5.58"/>
+        <point latitude="58" longitude="7.08"/>
+        <point latitude="57.75" longitude="7.5"/>
+        <point latitude="57.75" longitude="4"/>
+    </boundary>
+    <boundary area="forties">
+        <point latitude="58.5" longitude="-1"/>
+        <point latitude="58.5" longitude="4"/>
+        <point latitude="56" longitude="4"/>
+        <point latitude="56" longitude="-1"/>
+    </boundary>
+    <boundary area="forth">
+        <point latitude="55.67" longitude="-1.83"/>
+        <point latitude="56" longitude="-1"/>
+        <point latitude="57" longitude="-1"/>
+        <point latitude="57" longitude="-2.17"/>
+    </boundary>
+    <boundary area="cromarty">
+        <point latitude="57" longitude="-2.17"/>
+        <point latitude="57" longitude="-1"/>
+        <point latitude="58.5" longitude="-1"/>
+        <point latitude="58.5" longitude="-3"/>
+    </boundary>
+    <boundary area="tyne">
+        <point latitude="54.25" longitude="-0.33"/>
+        <point latitude="54.25" longitude="0.75"/>
+        <point latitude="56" longitude="-1"/>
+        <point latitude="55.67" longitude="-1.83"/>
+    </boundary>
+    <boundary area="dogger">
+        <point latitude="56" longitude="-1"/>
+        <point latitude="54.25" longitude="0.75"/>
+        <point latitude="54.25" longitude="4"/>
+        <point latitude="56" longitude="4"/>
+    </boundary>
+    <boundary area="fisher">
+        <point latitude="57.75" longitude="4"/>
+        <point latitude="56" longitude="4"/>
+        <point latitude="56" longitude="8.17"/>
+        <point latitude="57.08" longitude="8.58"/>
+        <point latitude="57.75" longitude="7.5"/>
+    </boundary>
+    <boundary area="german bight">
+        <point latitude="56" longitude="8.17"/>
+        <point latitude="56" longitude="4"/>
+        <point latitude="54.25" longitude="4"/>
+        <point latitude="53.58" longitude="4.67"/>
+        <point latitude="52.75" longitude="4.67"/>
+    </boundary>
+    <boundary area="humber">
+        <point latitude="52.75" longitude="1.67"/>
+        <point latitude="52.75" longitude="4.67"/>
+        <point latitude="53.58" longitude="4.67"/>
+        <point latitude="54.25" longitude="4"/>
+        <point latitude="54.25" longitude="-0.33"/>
+    </boundary>
+    <boundary area="thames">
+        <point latitude="51.25" longitude="1.42"/>
+        <point latitude="51.25" longitude="2.92"/>
+        <point latitude="52.75" longitude="4.67"/>
+        <point latitude="52.75" longitude="1.67"/>
+    </boundary>
+    <boundary area="dover">
+        <point latitude="50.75" longitude="0.25"/>
+        <point latitude="50.25" longitude="1.5"/>
+        <point latitude="51.25" longitude="2.92"/>
+        <point latitude="51.25" longitude="1.42"/>
+    </boundary>
+    <boundary area="wight">
+        <point latitude="50.58" longitude="-1.92"/>
+        <point latitude="49.75" longitude="-1.92"/>
+        <point latitude="50.25" longitude="1.5"/>
+        <point latitude="50.75" longitude="0.25"/>
+    </boundary>
+    <boundary area="portland">
+        <point latitude="50.42" longitude="-3.5"/>
+        <point latitude="48.83" longitude="-3.5"/>
+        <point latitude="49.75" longitude="-1.92"/>
+        <point latitude="50.58" longitude="-1.92"/>
+    </boundary>
+    <boundary area="plymouth">
+        <point latitude="50.08" longitude="-5.75"/>
+        <point latitude="50" longitude="-6.25"/>
+        <point latitude="48.45" longitude="-6.25"/>
+        <point latitude="48.45" longitude="-4.75"/>
+        <point latitude="48.83" longitude="-3.5"/>
+        <point latitude="50.42" longitude="-3.5"/>
+    </boundary>
+    <boundary area="biscay">
+        <point latitude="48.45" longitude="-4.75"/>
+        <point latitude="48.45" longitude="-6.25"/>
+        <point latitude="43.58" longitude="-6.25"/>
+    </boundary>
+    <boundary area="trafalgar">
+        <point latitude="35" longitude="-15"/>
+        <point latitude="35" longitude="-6.25"/>
+        <point latitude="41" longitude="-8.67"/>
+        <point latitude="41" longitude="-15"/>
+        <point latitude="35" longitude="-15"/>
+    </boundary>
+    <boundary area="fitzroy">
+        <point latitude="48.45" longitude="-15"/>
+        <point latitude="41" longitude="-15"/>
+        <point latitude="41" longitude="-8.67"/>
+        <point latitude="43.58" longitude="-6.25"/>
+        <point latitude="48.45" longitude="-6.25"/>
+    </boundary>
+    <boundary area="sole">
+        <point latitude="50" longitude="-6.25"/>
+        <point latitude="50" longitude="-15"/>
+        <point latitude="48.45" longitude="-15"/>
+        <point latitude="48.45" longitude="-6.25"/>
+    </boundary>
+    <boundary area="lundy">
+        <point latitude="52" longitude="-5.08"/>
+        <point latitude="52.5" longitude="-6.25"/>
+        <point latitude="50" longitude="-6.25"/>
+        <point latitude="50.08" longitude="-5.75"/>
+    </boundary>
+    <boundary area="fastnet">
+        <point latitude="51.58" longitude="-10"/>
+        <point latitude="50" longitude="-10"/>
+        <point latitude="50" longitude="-6.25"/>
+        <point latitude="52.5" longitude="-6.25"/>
+    </boundary>
+    <boundary area="irish sea">
+        <point latitude="54.83" longitude="-5.08"/>
+        <point latitude="54.75" longitude="-5.75"/>
+        <point latitude="52.5" longitude="-6.25"/>
+        <point latitude="52" longitude="-5.08"/>
+    </boundary>
+    <boundary area="shannon">
+        <point latitude="53.5" longitude="-15"/>
+        <point latitude="50" longitude="-15"/>
+        <point latitude="50" longitude="-10"/>
+        <point latitude="51.58" longitude="-10"/>
+        <point latitude="53.5" longitude="-10.08"/>
+    </boundary>
+    <boundary area="rockall">
+        <point latitude="58" longitude="-10"/>
+        <point latitude="58" longitude="-15"/>
+        <point latitude="53.5" longitude="-15"/>
+        <point latitude="53.5" longitude="-10.08"/>
+        <point latitude="54.33" longitude="-10"/>
+    </boundary>
+    <boundary area="malin">
+        <point latitude="57" longitude="-5.83"/>
+        <point latitude="57" longitude="-10"/>
+        <point latitude="54.33" longitude="-10"/>
+        <point latitude="54.75" longitude="-5.75"/>
+        <point latitude="54.83" longitude="-5.08"/>
+    </boundary>
+    <boundary area="hebrides">
+        <point latitude="60.58" longitude="-10"/>
+        <point latitude="57" longitude="-10"/>
+        <point latitude="57" longitude="-5.83"/>
+        <point latitude="58.67" longitude="-5"/>
+    </boundary>
+    <boundary area="bailey">
+        <point latitude="62.42" longitude="-15"/>
+        <point latitude="58" longitude="-15"/>
+        <point latitude="58" longitude="-10"/>
+        <point latitude="60.58" longitude="-10"/>
+    </boundary>
+    <boundary area="faeroes">
+        <point latitude="63.33" longitude="-7.5"/>
+        <point latitude="61.17" longitude="-11.5"/>
+        <point latitude="59.5" longitude="-7.25"/>
+        <point latitude="61.83" longitude="-2.5"/>
+        <point latitude="63.33" longitude="-7.5"/>
+    </boundary>
+    <boundary area="fair isle">
+        <point latitude="61.83" longitude="-2.5"/>
+        <point latitude="59.5" longitude="-7.25"/>
+        <point latitude="58.67" longitude="-5"/>
+        <point latitude="58.5" longitude="-3"/>
+        <point latitude="58.5" longitude="0"/>
+        <point latitude="61" longitude="0"/>
+        <point latitude="61.83" longitude="-2.5"/>
+    </boundary>
+    <boundary area="southeast iceland">
+        <point latitude="63.58" longitude="-18"/>
+        <point latitude="61.17" longitude="-11.5"/>
+        <point latitude="63.33" longitude="-7.5"/>
+        <point latitude="65" longitude="-13.58"/>
+    </boundary>
+</boundaries>

@@ -8,9 +8,8 @@
                 <xs:element ref="bu:document"/>
                 <xs:element ref="bu:legislature"/>
                 <xs:element ref="bu:bungeni"/>
-                <xs:element ref="bu:bill"/>
+                <xs:element ref="bu:question"/>
                 <xs:element ref="bu:attachments"/>
-                <xs:element ref="bu:signatories"/>
             </xs:sequence>
             <xs:attribute name="for" use="required" type="xs:NCName"/>
         </xs:complexType>
@@ -56,7 +55,7 @@
     <xs:element name="tags">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="bu:tag"/>
+                <xs:element maxOccurs="unbounded" ref="bu:tag"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -74,14 +73,24 @@
             <xs:attribute name="href" use="required"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="bill">
+    <xs:element name="question">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="bu:document"/>
                 <xs:element ref="bu:docSubType"/>
+                <xs:element ref="bu:responseType"/>
                 <xs:element ref="bu:group"/>
             </xs:sequence>
             <xs:attribute name="isA" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="responseType">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bu:bu.value">
+                    <xs:attribute name="isA" use="required" type="xs:NCName"/>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     <xs:element name="group">
@@ -131,51 +140,23 @@
             <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="signatories">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="bu:signatory"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="signatory">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="bu:status"/>
-                <xs:element ref="bu:headId"/>
-                <xs:element ref="bu:signatoryId"/>
-                <xs:element ref="bu:userId"/>
-                <xs:element ref="bu:person"/>
-            </xs:sequence>
-            <xs:attribute name="isA" use="required" type="xs:NCName"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="signatoryId">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:integer">
-                    <xs:attribute name="key" use="required" type="xs:boolean"/>
-                    <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
     <xs:element name="document">
         <xs:complexType>
             <xs:sequence minOccurs="0">
                 <xs:element ref="bu:docType"/>
                 <xs:element ref="bu:statusDate"/>
-                <xs:element ref="bu:changes"/>
-                <xs:element ref="bu:owner"/>
-                <xs:element ref="bu:audits"/>
-                <xs:element ref="bu:docId"/>
                 <xs:element ref="bu:versions"/>
                 <xs:element ref="bu:registryNumber"/>
+                <xs:element ref="bu:owner"/>
+                <xs:element ref="bu:audits"/>
+                <xs:element ref="bu:changes"/>
+                <xs:element ref="bu:docId"/>
                 <xs:element ref="bu:workflowEvents"/>
-                <xs:element ref="bu:body"/>
                 <xs:element ref="bu:status"/>
+                <xs:element ref="bu:body"/>
                 <xs:element ref="bu:title"/>
                 <xs:element ref="bu:type"/>
+                <xs:element ref="bu:progressiveNumber"/>
                 <xs:element ref="bu:docSubType"/>
                 <xs:element ref="bu:permissions"/>
             </xs:sequence>
@@ -183,6 +164,7 @@
             <xs:attribute name="id" type="xs:NCName"/>
             <xs:attribute name="internal-uri" use="required"/>
             <xs:attribute name="isA" type="xs:NCName"/>
+            <xs:attribute name="uri" use="required"/>
             <xs:attribute ref="xml:lang"/>
         </xs:complexType>
     </xs:element>
@@ -191,24 +173,6 @@
             <xs:complexContent>
                 <xs:extension base="bu:bu.value">
                     <xs:attribute name="isA" use="required" type="xs:NCName"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="owner">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="bu:person"/>
-                <xs:element ref="bu:role"/>
-            </xs:sequence>
-            <xs:attribute name="isA" use="required" type="xs:NCName"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="role">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="bu:bu.value">
-                    <xs:attribute name="type" use="required" type="xs:NCName"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -241,6 +205,30 @@
     <xs:element name="refersToChange">
         <xs:complexType>
             <xs:attribute name="href" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="owner">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="bu:person"/>
+                <xs:element ref="bu:role"/>
+            </xs:sequence>
+            <xs:attribute name="isA" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="person">
+        <xs:complexType>
+            <xs:attribute name="href" use="required"/>
+            <xs:attribute name="showAs" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="role">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bu:bu.value">
+                    <xs:attribute name="type" use="required" type="xs:NCName"/>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
     </xs:element>
     <xs:element name="workflowEvents">
@@ -293,9 +281,7 @@
     </xs:complexType>
     <xs:element name="value">
         <xs:complexType mixed="true">
-            <xs:attribute name="isA" type="xs:NCName"/>
-            <xs:attribute name="type" type="xs:NMTOKEN"/>
-            <xs:attribute name="vdex"/>
+            <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="timestampDate">
@@ -415,18 +401,18 @@
                     <xs:element ref="bu:auditId"/>
                     <xs:element ref="bu:description"/>
                     <xs:element ref="bu:docId"/>
+                    <xs:element ref="bu:groupId"/>
                     <xs:element ref="bu:headId"/>
                     <xs:element ref="bu:parliamentId"/>
+                    <xs:element ref="bu:registryNumber"/>
                     <xs:element ref="bu:status"/>
                     <xs:element ref="bu:statusDate"/>
+                    <xs:element ref="bu:timestampDate"/>
                     <xs:element ref="bu:title"/>
                     <xs:element ref="bu:auditFor"/>
+                    <xs:element ref="bu:uri"/>
                 </xs:choice>
-                <xs:element minOccurs="0" ref="bu:registryNumber"/>
-                <xs:sequence minOccurs="0">
-                    <xs:element ref="bu:timestampDate"/>
-                    <xs:element ref="bu:groupId"/>
-                </xs:sequence>
+                <xs:element minOccurs="0" ref="bu:progressiveNumber"/>
                 <xs:element ref="bu:type"/>
                 <xs:element minOccurs="0" ref="bu:name"/>
             </xs:sequence>
@@ -442,6 +428,7 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    <xs:element name="uri" type="xs:string"/>
     <xs:element name="permissions">
         <xs:complexType>
             <xs:sequence>
@@ -475,6 +462,11 @@
             </xs:simpleContent>
         </xs:complexType>
     </xs:element>
+    <xs:element name="refersToAudit">
+        <xs:complexType>
+            <xs:attribute name="href" use="required"/>
+        </xs:complexType>
+    </xs:element>
     <xs:element name="userId">
         <xs:complexType>
             <xs:simpleContent>
@@ -482,28 +474,6 @@
                     <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
                 </xs:extension>
             </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="person">
-        <xs:complexType>
-            <xs:attribute name="href" use="required"/>
-            <xs:attribute name="isA" type="xs:NCName"/>
-            <xs:attribute name="showAs" use="required"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="docId">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:integer">
-                    <xs:attribute name="key" use="required" type="xs:boolean"/>
-                    <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="refersToAudit">
-        <xs:complexType>
-            <xs:attribute name="href" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="sequence">
@@ -569,8 +539,27 @@
             </xs:simpleContent>
         </xs:complexType>
     </xs:element>
+    <xs:element name="docId">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:integer">
+                    <xs:attribute name="key" use="required" type="xs:boolean"/>
+                    <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
     <xs:element name="body" type="bu:div"/>
     <xs:element name="groupId">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:integer">
+                    <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="progressiveNumber">
         <xs:complexType>
             <xs:simpleContent>
                 <xs:extension base="xs:integer">

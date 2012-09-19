@@ -3,13 +3,13 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=yes";
  
 (: save-new.xq :)
  
-let $collection := '/db/bungeni-xml'
+let $collection := '/db/framework/bungeni/admin/legacy/data'
  
 (: this is where the form "POSTS" documents to this XQuery using the POST method of a submission :)
 let $item := request:get-data()
  
 (: get the next ID from the next-id.xml file :)
-let $next-id-file-path := '/db/framework/bungeni/admin/legacy/next-id.xml'
+let $next-id-file-path := '/db/framework/bungeni/admin/legacy/edit/next-id.xml'
 let $id := doc($next-id-file-path)/data/next-id/text() 
 let $file := concat($id, '.xml')
 
@@ -35,6 +35,6 @@ return
     </head>
     <body>
     <p>Item {$original-id} has been saved.</p>
-    <!--a href="../views/list-items.xq">List all items</a-->
+    <a href="../views/list-items.xq">List all items</a>
     </body>
 </html>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ontology xmlns="http://portal.bungeni.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://portal.bungeni.org/1.0/ bungeni-xml.xsd" for="">
+    <document internal-uri="" uri="">
+        <docType isA="">
+            <value type=""/>
+        </docType>
+        <statusDate type=""/>
+        <versions id="">
+            <version id="" uri="">
+                <refersToAudit href=""/>
+                <refersToChange href=""/>
+                <userId type=""/>
+                <sequence type=""/>
+                <auditId type=""/>
+                <activeDate type=""/>
+                <auditDate type=""/>
+                <auditAction isA="">
+                    <value type=""/>
+                </auditAction>
+                <procedureType isA="">
+                    <value type=""/>
+                </procedureType>
+            </version>
+        </versions>
+        <registryNumber type=""/>
+        <owner isA="">
+            <person href="" showAs=""/>
+            <role type="">
+                <value type=""/>
+            </role>
+        </owner>
+        <audits>
+            <audit>
+                <progressiveNumber type=""/>
+                <type isA="">
+                    <value type=""/>
+                </type>
+                <name type=""/>
+            </audit>
+        </audits>
+        <changes>
+            <change>
+                <refersToAudit href=""/>
+                <userId type=""/>
+                <sequence type=""/>
+                <auditId type=""/>
+                <activeDate type=""/>
+                <auditDate type=""/>
+                <auditAction isA="">
+                    <value type=""/>
+                </auditAction>
+                <procedureType isA="">
+                    <value type=""/>
+                </procedureType>
+                <permissions id="">
+                    <permission name="" role="" setting=""/>
+                </permissions>
+            </change>
+        </changes>
+        <docId key="" type=""/>
+        <workflowEvents id="">
+            <workflowEvent href="">
+                <body>
+                    <div xmlns="http://www.w3.org/1999/xhtml/"/>
+                </body>
+                <docSubType isA="">
+                    <value type=""/>
+                </docSubType>
+                <description>
+                    <div xmlns="http://www.w3.org/1999/xhtml/"/>
+                </description>
+                <title type=""/>
+                <acronym isA="">
+                    <value type=""/>
+                </acronym>
+                <docId key="" type=""/>
+                <statusDate type=""/>
+                <timestampDate type=""/>
+                <status isA="">
+                    <value type=""/>
+                </status>
+                <headId type=""/>
+                <groupId type=""/>
+                <type isA="">
+                    <value type=""/>
+                </type>
+            </workflowEvent>
+        </workflowEvents>
+        <status isA="">
+            <value type=""/>
+        </status>
+        <body>
+            <div xmlns="http://www.w3.org/1999/xhtml/"/>
+        </body>
+        <title type=""/>
+        <type isA="">
+            <value type=""/>
+        </type>
+        <progressiveNumber type=""/>
+        <docSubType isA="">
+            <value type=""/>
+        </docSubType>
+        <permissions id="">
+            <permission name="" role="" setting=""/>
+        </permissions>
+    </document>
+    <legislature href="" isA="">
+        <parliamentId type=""/>
+        <electionDate select="" type=""/>
+        <country isA="">
+            <value type=""/>
+        </country>
+    </legislature>
+    <bungeni id="" isA="" showAs="">
+        <tags>
+            <tag isA="">
+                <value type=""/>
+            </tag>
+        </tags>
+        <timestampDate type=""/>
+        <withPermissions href=""/>
+    </bungeni>
+    <question isA="">
+        <document internal-uri="" uri="">
+            <docType isA="">
+                <value type=""/>
+            </docType>
+            <statusDate type=""/>
+            <versions id="">
+                <version id="" uri="">
+                    <refersToAudit href=""/>
+                    <refersToChange href=""/>
+                    <userId type=""/>
+                    <sequence type=""/>
+                    <auditId type=""/>
+                    <activeDate type=""/>
+                    <auditDate type=""/>
+                    <auditAction isA="">
+                        <value type=""/>
+                    </auditAction>
+                    <procedureType isA="">
+                        <value type=""/>
+                    </procedureType>
+                </version>
+            </versions>
+            <registryNumber type=""/>
+            <owner isA="">
+                <person href="" showAs=""/>
+                <role type="">
+                    <value type=""/>
+                </role>
+            </owner>
+            <audits>
+                <audit>
+                    <progressiveNumber type=""/>
+                    <type isA="">
+                        <value type=""/>
+                    </type>
+                    <name type=""/>
+                </audit>
+            </audits>
+            <changes>
+                <change>
+                    <refersToAudit href=""/>
+                    <userId type=""/>
+                    <sequence type=""/>
+                    <auditId type=""/>
+                    <activeDate type=""/>
+                    <auditDate type=""/>
+                    <auditAction isA="">
+                        <value type=""/>
+                    </auditAction>
+                    <procedureType isA="">
+                        <value type=""/>
+                    </procedureType>
+                    <permissions id="">
+                        <permission name="" role="" setting=""/>
+                    </permissions>
+                </change>
+            </changes>
+            <docId key="" type=""/>
+            <workflowEvents id="">
+                <workflowEvent href="">
+                    <body>
+                        <div xmlns="http://www.w3.org/1999/xhtml/"/>
+                    </body>
+                    <docSubType isA="">
+                        <value type=""/>
+                    </docSubType>
+                    <description>
+                        <div xmlns="http://www.w3.org/1999/xhtml/"/>
+                    </description>
+                    <title type=""/>
+                    <acronym isA="">
+                        <value type=""/>
+                    </acronym>
+                    <docId key="" type=""/>
+                    <statusDate type=""/>
+                    <timestampDate type=""/>
+                    <status isA="">
+                        <value type=""/>
+                    </status>
+                    <headId type=""/>
+                    <groupId type=""/>
+                    <type isA="">
+                        <value type=""/>
+                    </type>
+                </workflowEvent>
+            </workflowEvents>
+            <status isA="">
+                <value type=""/>
+            </status>
+            <body>
+                <div xmlns="http://www.w3.org/1999/xhtml/"/>
+            </body>
+            <title type=""/>
+            <type isA="">
+                <value type=""/>
+            </type>
+            <progressiveNumber type=""/>
+            <docSubType isA="">
+                <value type=""/>
+            </docSubType>
+            <permissions id="">
+                <permission name="" role="" setting=""/>
+            </permissions>
+        </document>
+        <docSubType isA="">
+            <value type=""/>
+        </docSubType>
+        <responseType isA="">
+            <value type=""/>
+        </responseType>
+        <group href="" isA=""/>
+    </question>
+    <attachments>
+        <attachment>
+            <mimetype isA="">
+                <value type=""/>
+            </mimetype>
+            <status isA="">
+                <value type=""/>
+            </status>
+            <attachmentId key="" type=""/>
+            <description>
+                <div xmlns="http://www.w3.org/1999/xhtml/"/>
+            </description>
+            <title type=""/>
+            <headId type=""/>
+            <statusDate type=""/>
+            <changes>
+                <change>
+                    <refersToAudit href=""/>
+                    <userId type=""/>
+                    <sequence type=""/>
+                    <auditId type=""/>
+                    <activeDate type=""/>
+                    <auditDate type=""/>
+                    <auditAction isA="">
+                        <value type=""/>
+                    </auditAction>
+                    <procedureType isA="">
+                        <value type=""/>
+                    </procedureType>
+                    <permissions id="">
+                        <permission name="" role="" setting=""/>
+                    </permissions>
+                </change>
+            </changes>
+            <savedFile type=""/>
+            <audits>
+                <audit>
+                    <progressiveNumber type=""/>
+                    <type isA="">
+                        <value type=""/>
+                    </type>
+                    <name type=""/>
+                </audit>
+            </audits>
+            <permissions id="">
+                <permission name="" role="" setting=""/>
+            </permissions>
+            <type isA="">
+                <value type=""/>
+            </type>
+            <name type=""/>
+            <fileUuid type=""/>
+        </attachment>
+    </attachments>
+</ontology>

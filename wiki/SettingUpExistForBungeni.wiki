@@ -24,6 +24,31 @@ Configure extensions, by enabling XSLFO module, edit ~/eXist/extensions/build.pr
 include.module.xslfo = true
 }}}
 
+== Adding ePUB module ==
+
+
+=== Installing Ebook Maker ===
+
+The ePUB module is based on Scriba Ebook Maker Project (see [http://scribaebookmake.sourceforge.net). This was extended with an API to allow eXist-db access the library's functionality.
+
+Download it from: http://bungeni-exist.googlecode.com/files/scriba-ebook-maker.tar.gz
+
+See the folder structure once extracted:
+{{{
+scriba-ebook-maker/
+├── lib/
+└── scriba-ebook-maker.jar
+}}}
+Copy the contents (`lib` directory and the `.jar` file) into `~/eXist/lib/user/`
+
+=== Setting up ePUB Module ===
+
+Export source of ePUB Module into the extensions folder in eXist
+
+{{{
+svn export http://bungeni-exist.googlecode.com/svn/exist-scriba/trunk/epub ~/eXist/extensions/modules/src/org/exist/xquery/modules/epub
+}}}
+
 Now build eXist using ant 
 
 {{{
@@ -33,17 +58,17 @@ JAVA_HOME=/path/to/java/home ./build.sh all
 
 = Configuring the Installation =
 
- * Activate the compression, datetime and XSLFOModule modules in conf.xml :
+ * Activate the compression, datetime, ePUB and XSLFOModule modules in conf.xml :
 {{{
-      <!-- Required module - May not be activated by default -->
+      <!-- Required modules -->
          <module uri="http://exist-db.org/xquery/xslfo" class="org.exist.xquery.modules.xslfo.XSLFOModule">
             <parameter name="processorAdapter" value="org.exist.xquery.modules.xslfo.ApacheFopProcessorAdapter"/>
          </module>
+         <module uri="http://exist-db.org/xquery/epub" class="org.exist.xquery.modules.epub.EpubModule" />
 
       <!-- Optional Modules -->
          <module class="org.exist.backup.xquery.BackupModule"
                     uri="http://exist-db.org/xquery/backups"/>
-
          <module class="org.exist.xquery.modules.compression.CompressionModule"
                     uri="http://exist-db.org/xquery/compression" />
          <module class="org.exist.xquery.modules.datetime.DateTimeModule"

@@ -1,290 +1,290 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ontology xmlns="http://portal.bungeni.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://portal.bungeni.org/1.0/ bungeni-xml.xsd" for="">
-    <document internal-uri="" uri="">
-        <docType isA="">
-            <value type=""/>
-        </docType>
-        <statusDate type=""/>
-        <versions id="">
-            <version id="" uri="">
-                <refersToAudit href=""/>
-                <refersToChange href=""/>
-                <userId type=""/>
-                <sequence type=""/>
-                <auditId type=""/>
-                <activeDate type=""/>
-                <auditDate type=""/>
-                <auditAction isA="">
+<bu:ontology xmlns:bu="http://portal.bungeni.org/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://portal.bungeni.org/1.0/ bungeni-xml.xsd" for="">
+    <bu:document internal-uri="" uri="">
+        <bu:docType isA="">
+            <bu:value type=""/>
+        </bu:docType>
+        <bu:statusDate type=""/>
+        <bu:versions id="">
+            <bu:version id="" uri="">
+                <bu:refersToAudit href=""/>
+                <bu:refersToChange href=""/>
+                <bu:userId type=""/>
+                <bu:sequence type=""/>
+                <bu:auditId type=""/>
+                <bu:activeDate type=""/>
+                <bu:auditDate type=""/>
+                <bu:auditAction isA="">
+                    <bu:value type=""/>
+                </bu:auditAction>
+                <bu:procedureType isA="">
                     <value type=""/>
-                </auditAction>
-                <procedureType isA="">
-                    <value type=""/>
-                </procedureType>
-            </version>
-        </versions>
+                </bu:procedureType>
+            </bu:version>
+        </bu:versions>
         <registryNumber type=""/>
-        <owner isA="">
-            <person href="" showAs=""/>
-            <role type="">
-                <value type=""/>
-            </role>
-        </owner>
-        <audits>
-            <audit>
-                <progressiveNumber type=""/>
-                <type isA="">
-                    <value type=""/>
-                </type>
-                <name type=""/>
-            </audit>
-        </audits>
-        <changes>
-            <change>
-                <refersToAudit href=""/>
-                <userId type=""/>
-                <sequence type=""/>
-                <auditId type=""/>
-                <activeDate type=""/>
-                <auditDate type=""/>
-                <auditAction isA="">
-                    <value type=""/>
-                </auditAction>
-                <procedureType isA="">
-                    <value type=""/>
-                </procedureType>
-                <permissions id="">
-                    <permission name="" role="" setting=""/>
-                </permissions>
-            </change>
-        </changes>
-        <docId key="" type=""/>
-        <workflowEvents id="">
-            <workflowEvent href="">
-                <body>
+        <bu:owner isA="">
+            <bu:person href="" showAs=""/>
+            <bu:role type="">
+                <bu:value type=""/>
+            </bu:role>
+        </bu:owner>
+        <bu:audits>
+            <bu:audit>
+                <bu:progressiveNumber type=""/>
+                <bu:type isA="">
+                    <bu:value type=""/>
+                </bu:type>
+                <bu:name type=""/>
+            </bu:audit>
+        </bu:audits>
+        <bu:changes>
+            <bu:change>
+                <bu:refersToAudit href=""/>
+                <bu:userId type=""/>
+                <bu:sequence type=""/>
+                <bu:auditId type=""/>
+                <bu:activeDate type=""/>
+                <bu:auditDate type=""/>
+                <bu:auditAction isA="">
+                    <bu:value type=""/>
+                </bu:auditAction>
+                <bu:procedureType isA="">
+                    <bu:value type=""/>
+                </bu:procedureType>
+                <bu:permissions id="">
+                    <bu:permission name="" role="" setting=""/>
+                </bu:permissions>
+            </bu:change>
+        </bu:changes>
+        <bu:docId key="" type=""/>
+        <bu:workflowEvents id="">
+            <bu:workflowEvent href="">
+                <bu:body>
                     <div xmlns="http://www.w3.org/1999/xhtml/"/>
-                </body>
-                <docSubType isA="">
-                    <value type=""/>
-                </docSubType>
-                <description>
+                </bu:body>
+                <bu:docSubType isA="">
+                    <bu:value type=""/>
+                </bu:docSubType>
+                <bu:description>
                     <div xmlns="http://www.w3.org/1999/xhtml/"/>
-                </description>
-                <title type=""/>
-                <acronym isA="">
-                    <value type=""/>
-                </acronym>
-                <docId key="" type=""/>
-                <statusDate type=""/>
-                <timestampDate type=""/>
-                <status isA="">
-                    <value type=""/>
-                </status>
-                <headId type=""/>
-                <groupId type=""/>
-                <type isA="">
-                    <value type=""/>
-                </type>
-            </workflowEvent>
-        </workflowEvents>
-        <status isA="">
-            <value type=""/>
-        </status>
-        <body>
+                </bu:description>
+                <bu:title type=""/>
+                <bu:acronym isA="">
+                    <bu:value type=""/>
+                </bu:acronym>
+                <bu:docId key="" type=""/>
+                <bu:statusDate type=""/>
+                <bu:timestampDate type=""/>
+                <bu:status isA="">
+                    <bu:value type=""/>
+                </bu:status>
+                <bu:headId type=""/>
+                <bu:groupId type=""/>
+                <bu:type isA="">
+                    <bu:value type=""/>
+                </bu:type>
+            </bu:workflowEvent>
+        </bu:workflowEvents>
+        <bu:status isA="">
+            <bu:value type=""/>
+        </bu:status>
+        <bu:body>
             <div xmlns="http://www.w3.org/1999/xhtml/"/>
-        </body>
-        <title type=""/>
-        <type isA="">
-            <value type=""/>
-        </type>
-        <progressiveNumber type=""/>
-        <docSubType isA="">
-            <value type=""/>
-        </docSubType>
-        <permissions id="">
-            <permission name="" role="" setting=""/>
-        </permissions>
-    </document>
-    <legislature href="" isA="">
-        <parliamentId type=""/>
-        <electionDate select="" type=""/>
-        <country isA="">
-            <value type=""/>
-        </country>
-    </legislature>
-    <bungeni id="" isA="" showAs="">
-        <tags>
-            <tag isA="">
-                <value type=""/>
-            </tag>
-        </tags>
-        <timestampDate type=""/>
-        <withPermissions href=""/>
-    </bungeni>
-    <question isA="">
-        <document internal-uri="" uri="">
-            <docType isA="">
-                <value type=""/>
-            </docType>
-            <statusDate type=""/>
-            <versions id="">
-                <version id="" uri="">
-                    <refersToAudit href=""/>
-                    <refersToChange href=""/>
-                    <userId type=""/>
-                    <sequence type=""/>
-                    <auditId type=""/>
-                    <activeDate type=""/>
-                    <auditDate type=""/>
-                    <auditAction isA="">
-                        <value type=""/>
-                    </auditAction>
-                    <procedureType isA="">
-                        <value type=""/>
-                    </procedureType>
-                </version>
-            </versions>
-            <registryNumber type=""/>
-            <owner isA="">
-                <person href="" showAs=""/>
-                <role type="">
-                    <value type=""/>
-                </role>
-            </owner>
-            <audits>
-                <audit>
-                    <progressiveNumber type=""/>
-                    <type isA="">
-                        <value type=""/>
-                    </type>
-                    <name type=""/>
-                </audit>
-            </audits>
-            <changes>
-                <change>
-                    <refersToAudit href=""/>
-                    <userId type=""/>
-                    <sequence type=""/>
-                    <auditId type=""/>
-                    <activeDate type=""/>
-                    <auditDate type=""/>
-                    <auditAction isA="">
-                        <value type=""/>
-                    </auditAction>
-                    <procedureType isA="">
-                        <value type=""/>
-                    </procedureType>
-                    <permissions id="">
-                        <permission name="" role="" setting=""/>
-                    </permissions>
-                </change>
-            </changes>
-            <docId key="" type=""/>
-            <workflowEvents id="">
-                <workflowEvent href="">
-                    <body>
+        </bu:body>
+        <bu:title type=""/>
+        <bu:type isA="">
+            <bu:value type=""/>
+        </bu:type>
+        <bu:progressiveNumber type=""/>
+        <bu:docSubType isA="">
+            <bu:value type=""/>
+        </bu:docSubType>
+        <bu:permissions id="">
+            <bu:permission name="" role="" setting=""/>
+        </bu:permissions>
+    </bu:document>
+    <bu:legislature href="" isA="">
+        <bu:parliamentId type="">Text</bu:parliamentId>
+        <bu:electionDate select="" type="">000-00-00</bu:electionDate>
+        <bu:country isA="">
+            <bu:value type=""/>
+        </bu:country>
+    </bu:legislature>
+    <bu:bungeni id="" isA="" showAs="">
+        <bu:tags>
+            <bu:tag isA="">
+                <bu:value type=""/>
+            </bu:tag>
+        </bu:tags>
+        <bu:timestampDate type=""/>
+        <bu:withPermissions href=""/>
+    </bu:bungeni>
+    <bu:question isA="">
+        <bu:document internal-uri="" uri="">
+            <bu:docType isA="">
+                <bu:value type=""/>
+            </bu:docType>
+            <bu:statusDate type=""/>
+            <bu:versions id="">
+                <bu:version id="" uri="">
+                    <bu:refersToAudit href=""/>
+                    <bu:refersToChange href=""/>
+                    <bu:userId type=""/>
+                    <bu:sequence type=""/>
+                    <bu:auditId type=""/>
+                    <bu:activeDate type=""/>
+                    <bu:auditDate type=""/>
+                    <bu:auditAction isA="">
+                        <bu:value type=""/>
+                    </bu:auditAction>
+                    <bu:procedureType isA="">
+                        <bu:value type=""/>
+                    </bu:procedureType>
+                </bu:version>
+            </bu:versions>
+            <bu:registryNumber type=""/>
+            <bu:owner isA="">
+                <bu:person href="" showAs=""/>
+                <bu:role type="">
+                    <bu:value type=""/>
+                </bu:role>
+            </bu:owner>
+            <bu:audits>
+                <bu:audit>
+                    <bu:progressiveNumber type=""/>
+                    <bu:type isA="">
+                        <bu:value type=""/>
+                    </bu:type>
+                    <bu:name type=""/>
+                </bu:audit>
+            </bu:audits>
+            <bu:changes>
+                <bu:change>
+                    <bu:refersToAudit href=""/>
+                    <bu:userId type=""/>
+                    <bu:sequence type=""/>
+                    <bu:auditId type=""/>
+                    <bu:activeDate type=""/>
+                    <bu:auditDate type=""/>
+                    <bu:auditAction isA="">
+                        <bu:value type=""/>
+                    </bu:auditAction>
+                    <bu:procedureType isA="">
+                        <bu:value type=""/>
+                    </bu:procedureType>
+                    <bu:permissions id="">
+                        <bu:permission name="" role="" setting=""/>
+                    </bu:permissions>
+                </bu:change>
+            </bu:changes>
+            <bu:docId key="" type=""/>
+            <bu:workflowEvents id="">
+                <bu:workflowEvent href="">
+                    <bu:body>
                         <div xmlns="http://www.w3.org/1999/xhtml/"/>
-                    </body>
-                    <docSubType isA="">
-                        <value type=""/>
-                    </docSubType>
-                    <description>
+                    </bu:body>
+                    <bu:docSubType isA="">
+                        <bu:value type=""/>
+                    </bu:docSubType>
+                    <bu:description>
                         <div xmlns="http://www.w3.org/1999/xhtml/"/>
-                    </description>
-                    <title type=""/>
-                    <acronym isA="">
-                        <value type=""/>
-                    </acronym>
-                    <docId key="" type=""/>
-                    <statusDate type=""/>
-                    <timestampDate type=""/>
-                    <status isA="">
-                        <value type=""/>
-                    </status>
-                    <headId type=""/>
-                    <groupId type=""/>
-                    <type isA="">
-                        <value type=""/>
-                    </type>
-                </workflowEvent>
-            </workflowEvents>
-            <status isA="">
-                <value type=""/>
-            </status>
-            <body>
+                    </bu:description>
+                    <bu:title type=""/>
+                    <bu:acronym isA="">
+                        <bu:value type=""/>
+                    </bu:acronym>
+                    <bu:docId key="" type=""/>
+                    <bu:statusDate type=""/>
+                    <bu:timestampDate type=""/>
+                    <bu:status isA="">
+                        <bu:value type=""/>
+                    </bu:status>
+                    <bu:headId type=""/>
+                    <bu:groupId type=""/>
+                    <bu:type isA="">
+                        <bu:value type=""/>
+                    </bu:type>
+                </bu:workflowEvent>
+            </bu:workflowEvents>
+            <bu:status isA="">
+                <bu:value type=""/>
+            </bu:status>
+            <bu:body>
                 <div xmlns="http://www.w3.org/1999/xhtml/"/>
-            </body>
-            <title type=""/>
-            <type isA="">
-                <value type=""/>
-            </type>
-            <progressiveNumber type=""/>
-            <docSubType isA="">
-                <value type=""/>
-            </docSubType>
-            <permissions id="">
-                <permission name="" role="" setting=""/>
-            </permissions>
-        </document>
-        <docSubType isA="">
-            <value type=""/>
-        </docSubType>
-        <responseType isA="">
-            <value type=""/>
-        </responseType>
-        <group href="" isA=""/>
-    </question>
-    <attachments>
-        <attachment>
-            <mimetype isA="">
-                <value type=""/>
-            </mimetype>
-            <status isA="">
-                <value type=""/>
-            </status>
-            <attachmentId key="" type=""/>
-            <description>
+            </bu:body>
+            <bu:title type=""/>
+            <bu:type isA="">
+                <bu:value type=""/>
+            </bu:type>
+            <bu:progressiveNumber type=""/>
+            <bu:docSubType isA="">
+                <bu:value type=""/>
+            </bu:docSubType>
+            <bu:permissions id="">
+                <bu:permission name="" role="" setting=""/>
+            </bu:permissions>
+        </bu:document>
+        <bu:docSubType isA="">
+            <bu:value type=""/>
+        </bu:docSubType>
+        <bu:responseType isA="">
+            <bu:value type=""/>
+        </bu:responseType>
+        <bu:group href="" isA=""/>
+    </bu:question>
+    <bu:attachments>
+        <bu:attachment>
+            <bu:mimetype isA="">
+                <bu:value type=""/>
+            </bu:mimetype>
+            <bu:status isA="">
+                <bu:value type=""/>
+            </bu:status>
+            <bu:attachmentId key="" type=""/>
+            <bu:description>
                 <div xmlns="http://www.w3.org/1999/xhtml/"/>
-            </description>
-            <title type=""/>
-            <headId type=""/>
-            <statusDate type=""/>
-            <changes>
-                <change>
-                    <refersToAudit href=""/>
-                    <userId type=""/>
-                    <sequence type=""/>
-                    <auditId type=""/>
-                    <activeDate type=""/>
-                    <auditDate type=""/>
-                    <auditAction isA="">
-                        <value type=""/>
-                    </auditAction>
-                    <procedureType isA="">
-                        <value type=""/>
-                    </procedureType>
-                    <permissions id="">
-                        <permission name="" role="" setting=""/>
-                    </permissions>
-                </change>
-            </changes>
-            <savedFile type=""/>
-            <audits>
-                <audit>
-                    <progressiveNumber type=""/>
-                    <type isA="">
-                        <value type=""/>
-                    </type>
-                    <name type=""/>
-                </audit>
-            </audits>
-            <permissions id="">
-                <permission name="" role="" setting=""/>
-            </permissions>
-            <type isA="">
-                <value type=""/>
-            </type>
-            <name type=""/>
-            <fileUuid type=""/>
-        </attachment>
-    </attachments>
-</ontology>
+            </bu:description>
+            <bu:title type=""/>
+            <bu:headId type=""/>
+            <bu:statusDate type=""/>
+            <bu:changes>
+                <bu:change>
+                    <bu:refersToAudit href=""/>
+                    <bu:userId type=""/>
+                    <bu:sequence type=""/>
+                    <bu:auditId type=""/>
+                    <bu:activeDate type=""/>
+                    <bu:auditDate type=""/>
+                    <bu:auditAction isA="">
+                        <bu:value type=""/>
+                    </bu:auditAction>
+                    <bu:procedureType isA="">
+                        <bu:value type=""/>
+                    </bu:procedureType>
+                    <bu:permissions id="">
+                        <bu:permission name="" role="" setting=""/>
+                    </bu:permissions>
+                </bu:change>
+            </bu:changes>
+            <bu:savedFile type=""/>
+            <bu:audits>
+                <bu:audit>
+                    <bu:progressiveNumber type=""/>
+                    <bu:type isA="">
+                        <bu:value type=""/>
+                    </bu:type>
+                    <bu:name type=""/>
+                </bu:audit>
+            </bu:audits>
+            <bu:permissions id="">
+                <bu:permission name="" role="" setting=""/>
+            </bu:permissions>
+            <bu:type isA="">
+                <bu:value type=""/>
+            </bu:type>
+            <bu:name type=""/>
+            <bu:fileUuid type=""/>
+        </bu:attachment>
+    </bu:attachments>
+</bu:ontology>

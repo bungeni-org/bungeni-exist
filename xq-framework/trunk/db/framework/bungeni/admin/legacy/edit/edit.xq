@@ -1,7 +1,11 @@
 xquery version "3.0";
+
+import module namespace s2f='http://code.google.com/p/xrx/s2f' at '../schema-to-xforms.xqm';
+
 declare namespace exist="http://exist.sourceforge.net/NS/exist"; 
 declare namespace system="http://exist-db.org/xquery/system";
 declare namespace request="http://exist-db.org/xquery/request";
+declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 
 (: media-type of application/xhtml+xml is necessary for Firefox plugin to render
  : xforms, as per ibm.com/developerwords/xml/library/x-xformsfirefox/ :)
@@ -25,8 +29,12 @@ else
                         ('bungeni-tmpl.xml')
                     else 
                         ( concat( $server-port, '/exist/rest', $collection, '/', $id, '.xml'))
+                        
+let $schemais := doc("bungeni-xml.xsd")
+
 return
-<html xmlns="http://www.w3.org/1999/xhtml"
+    s2f:schema-to-xforms($schemais, "bungeni-tmpl.xsd")
+(:<html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xf="http://www.w3.org/2002/xforms" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema" 
     xmlns:bu="http://portal.bungeni.org/1.0/"
@@ -99,4 +107,4 @@ return
        </xf:submit><br/>
        <a href="../views/list-items.xq">List Items</a>
     </body>
-</html>
+</html>:)

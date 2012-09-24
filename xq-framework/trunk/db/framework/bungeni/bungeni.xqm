@@ -150,6 +150,9 @@ declare function bun:gen-pdf-output($docid as xs:string)
 declare function bun:gen-epub-output($docid as xs:string, $views as node())
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
+    
+    (: creating unique output filename based on URI :)
+    let $output := concat(replace(substring-after($docid, '/'),'/','-'),".epub")
 
     let $pages := <pages>{
         for $view in $views/view[@tag eq 'tab']
@@ -175,11 +178,12 @@ declare function bun:gen-epub-output($docid as xs:string, $views as node())
                     return 
                         <creator role="edt">{data($signatory/bu:person/@showAs)}</creator>
             }</creators>    
-             
-    let $book := scriba:create-book($lang,$title,$authors,$pages)
+            
+    let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)             
+    let $book := scriba:create-book($lang,$title,$authors,$pages-i18n)
         
     let $epub := epub:scriba-ebook-maker($book)
-    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  "document.epub")) 
+    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  $output)) 
     let $out := response:stream-binary($epub, "application/epub+zip")     
     return <xml />     
     

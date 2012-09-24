@@ -51,7 +51,9 @@ declare function scriba:add-title($title as xs:string) {
 :)
 declare function scriba:generate-content($pages as node()) {
 
-    <contents tocId="toc">{
+    <contents tocId="toc">
+        <content packageId="toc" packagePath="/" packageFile="toc.ncx" contentMediaType="application/x-dtbncx+xml" />
+        {
         for $page at $pos in $pages/page
             return
                 <content packageId="bungeni_{$page/@id}" 
@@ -64,7 +66,7 @@ declare function scriba:generate-content($pages as node()) {
                         isNeededXsl="false">
                     {scriba:escapee($page)}
                 </content>
-    }
+        }
     </contents>
     
 };

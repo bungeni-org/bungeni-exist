@@ -151,13 +151,10 @@ declare function bun:gen-epub-output($docid as xs:string, $views as node())
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
     
-    (: creating unique output filename based on URI :)
-    let $output := concat(replace(substring-after($docid, '/'),'/','-'),".epub")
-
     let $pages := <pages>{
         for $view in $views/view[@tag eq 'tab']
             return
-                <page id="{$view/@id}">{
+                <page id="i18n({$view/title/i18n:text/@key},chapter)">{
                     transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
                                             <parameters>
                                                 <param name="epub" value="true" />
@@ -170,6 +167,10 @@ declare function bun:gen-epub-output($docid as xs:string, $views as node())
     :)  
     
     let $lang := template:set-lang()
+    (: creating unique output filename based on URI and active LANGUAGE :)
+    let $output-nolang := functx:substring-before-last($docid, '/')
+    let $output := concat(replace(substring-after($output-nolang, '/'),'/','-'),"-",$lang,".epub")
+    
     let $title := $doc/bu:document/bu:title
     let $authors := <creators>
                         <creator role="aut">{data($doc/bu:document/bu:owner/bu:person/@showAs)}</creator>

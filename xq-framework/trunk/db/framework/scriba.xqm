@@ -3,6 +3,7 @@ xquery version "3.0";
 module namespace scriba = 'http://scribaebookmake.sourceforge.net/1.0/';
 declare namespace transform = "http://exist-db.org/xquery/transform";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
+import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
 (:~
     : Module for Generating ScribaEbookMaker main config file. The SCF, see structure below in
@@ -57,7 +58,7 @@ declare function scriba:generate-content($pages as node()) {
         for $page at $pos in $pages/page
             return
                 <content packageId="bungeni_{$page/@id}" 
-                        packagePath="Bungeni_{$pos}_{$page/@id}" 
+                        packagePath="{$pos} {functx:capitalize-first($page/@id)}" 
                         packageFile="bungeni/bungeni_{$page/@id}.htm" 
                         contentMediaType="application/xhtml+xml" 
                         isInSpine="true" 

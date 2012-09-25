@@ -736,13 +736,6 @@
                 <template>xml/details.xml</template>
                 <xsl>xsl/details.xsl</xsl>
             </view>
-            <view path="bill-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
-                <title>
-                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
-                </title>
-                <template>xml/assigned-groups.xml</template>
-                <xsl>xsl/assigned-groups.xsl</xsl>
-            </view>
             <view path="bill-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -796,13 +789,6 @@
                 </title>
                 <template>xml/details.xml</template>
                 <xsl>xsl/details.xsl</xsl>
-            </view>
-            <view path="question-assigned-groups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
-                <title>
-                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
-                </title>
-                <template>xml/assigned-groups.xml</template>
-                <xsl>xsl/assigned-groups.xsl</xsl>
             </view>
             <view path="question-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
@@ -862,13 +848,6 @@
                 <template>xml/details.xml</template>
                 <xsl>xsl/details.xsl</xsl>
             </view>
-            <view path="motion-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
-                <title>
-                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
-                </title>
-                <template>xml/assigned-groups.xml</template>
-                <xsl>xsl/assigned-groups.xsl</xsl>
-            </view>
             <view path="motion-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -923,13 +902,6 @@
                 <template>xml/details.xml</template>
                 <xsl>xsl/details.xsl</xsl>
             </view>
-            <view path="tableddocument-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
-                <title>
-                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
-                </title>
-                <template>xml/assigned-groups.xml</template>
-                <xsl>xsl/assigned-groups.xsl</xsl>
-            </view>
             <view path="tableddocument-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -980,13 +952,6 @@
                 </title>
                 <template>xml/details.xml</template>
                 <xsl>xsl/details.xsl</xsl>
-            </view>
-            <view path="agendaitem-assignedgroups" id="assigned" tag="tab" check-for="[bu:item_assignments/child::node()]">
-                <title>
-                    <i18n:text key="tab-assigned">assigned groups(nt)</i18n:text>
-                </title>
-                <template>xml/assigned-groups.xml</template>
-                <xsl>xsl/assigned-groups.xsl</xsl>
             </view>
             <view path="agendaitem-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>

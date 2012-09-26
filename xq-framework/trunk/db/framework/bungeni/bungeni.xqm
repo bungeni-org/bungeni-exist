@@ -854,6 +854,45 @@ declare function bun:adv-ft-search(
 };
 
 (:~
+:   Performs a lucene search using the XML syntax
+: @param coll-subset
+: @param qryall
+: @param qryexact
+: @param qryhas
+: @return
+:   search results in a <doc/> document
+:)
+declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string) as element()* {
+        
+        let $qryall-words := tokenize($qryall, '\s')
+        let $query-node :=  <query>
+                                <bool>
+                                    <bool> {
+                                        for $word in $qryall-words
+                                            return
+                                            <term occur="must">{$word}</term>
+                                        }
+                                    </bool>    
+                                </bool>
+                            </query>        
+        
+        for $search-rs in $coll-subset[ft:query(., $query-node)]
+        let $expanded := kwic:expand($search-rs),
+        $config := <config xmlns="" width="160"/>
+        order by ft:score($search-rs) descending
+        return
+            (:  <doc>
+                    <bu:ontology/>
+                    <kwic/>
+                </doc>
+            :)
+            <doc>
+                {$search-rs}
+                <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+            </doc>
+};
+
+(:~
 :   Similar to bun:search-documentitems()
 :)
 declare function bun:search-groupitems(

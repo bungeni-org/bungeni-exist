@@ -1,6 +1,6 @@
 package org.exist.xquery.modules.epub;
 
-import it.senato.areatesti.ebook.ebookmaker.api.ScribaEbookMakerAPI;
+import it.senato.areatesti.ebook.scriba.api.ScribaEbookMakerAPI;
 
 import org.apache.log4j.Logger;
 import org.exist.dom.QName;

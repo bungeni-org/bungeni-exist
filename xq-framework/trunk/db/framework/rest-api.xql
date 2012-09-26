@@ -17,43 +17,96 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
  :
  : @author Anthony Oduor <aowino@googlemail.com>
  : 
- : http://localhost:8088/exist/restxq/ontology?type=Bill,Question,AgendaItem,Motion?offset=1&limit=5
+ : http://localhost:8088/exist/restxq/ontology?group=document&type=Bill?offset=1&limit=5
  :
 :)
 
 declare
     %rest:GET
     %rest:path("/ontology")  
-    %rest:query-param("type", "{$type}", "none")
+    %rest:query-param("group", "{$group}", "*")    
+    %rest:query-param("type", "{$type}", "*")
     %rest:query-param("offset", "{$offset}", 1)
     %rest:query-param("limit", "{$limit}", 2)    
     %rest:query-param("search", "{$search}", "none")
-    %rest:query-param("status", "{$status}", "first_reading_pending")
+    %rest:query-param("status", "{$status}", "*")
+    %rest:query-param("daterange", "{$daterange}", "*")
     %output:method("xml")
     
+    (: Cascading collection based on parameters given, default apply when not given explicitly by client :)
     function local:documents(
+        $group as xs:string*,
         $type as xs:string*, 
         $offset as xs:int,
         $limit as xs:int,
         $search as xs:string*,
-        $status as xs:string) {
+        $status as xs:string,
+        $daterange as xs:string) {
         <docs>
+            <group>{$group}</group>           
             <type>{$type}</type>   
             <offset>{$offset}</offset>
             <limit>{$limit}</limit>
             <search>{$search}</search>
             <status>{$status}</status>
+            <daterange>{$daterange}</daterange>
             {
-                let $coll-doctype := 
+                (: get entire collection OR trim by group types mainly: document, group, membership... :)
+                let $coll-by-group :=  
+                    switch($group)
+                        case "*"
+                            return collection(cmn:get-lex-db())/bu:ontology
+                        default
+                            return
+                                for $dgroup in tokenize($group,",")
+                                return collection(cmn:get-lex-db())/bu:ontology[@for=$dgroup]   
+                
+                (: from $coll-by-group get collection by docTypes mainly: Bill, Question, Motion... :)
+                let $coll-by-doctype := 
                     switch($type)
                         case "*"
-                            return collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType
+                            return $coll-by-group
                         default
                             return
                                 for $dtype in tokenize($type,",")
-                                return collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value=$dtype]
+                                return $coll-by-group/child::*/bu:docType[bu:value=$dtype]/ancestor::bu:ontology
+                                
+                (: trim $coll-by-doctype subset by bu:status :)
+                let $coll-by-status := 
+                    switch($status)
+                        case "*"
+                            return $coll-by-doctype
+                        default
+                            return
+                                for $dstatus in $coll-by-doctype
+                                where $dstatus/child::*/bu:status/bu:value eq $status 
+                                return $dstatus  
+                                
+                (: trim $coll-by-status subset by bu:statusDate :)
+                let $coll-by-statusdate := 
+                    switch($daterange)
+                        case "*"
+                            return $coll-by-status
+                        default
+                            return
+                                for $match in $coll-by-status
+                                let $dates := tokenize($daterange,",")
+                                return 
+                                    $match/child::*[xs:dateTime(bu:statusDate) gt xs:dateTime(concat($dates[1],"T00:00:00"))]
+                                    [xs:dateTime(bu:statusDate) lt xs:dateTime(concat($dates[2],"T23:59:59"))]/ancestor::bu:ontology                        
+                           
+                (: finally search the subset collection if and only if there are is a search param given :)    
+                let $ontology_rs := 
+                    switch($search)
+                        case "none"
+                            return $coll-by-statusdate
+                        default
+                            return
+                                bun:adv-ft-search($coll-by-statusdate, $search)                          
+                           
                 return 
-                    subsequence($coll-doctype,$offset,$limit)
+                    subsequence($ontology_rs,$offset,$limit)
+                    (:<count>{count($coll-by-statusdate)}</count>:)
             }
         </docs>
 };

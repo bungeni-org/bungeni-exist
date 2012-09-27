@@ -866,16 +866,42 @@ declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string
         
         let $qryall-words := tokenize($qryall, '\s')
         let $query-node :=  <query>
-                                <bool>
-                                    <bool> {
+                                {           
+                                (: if there is an instance of the double-quote,
+                                 : assumes that there are exact phrases to be matched 
+                                 :)
+                                if(contains($qryall,'"')) then (
+                                    (: match anything within double-quotes as phrases :)
+                                    let $phrased := for $match in functx:get-matches($qryall,'(".*?")')
+                                                    return 
+                                                      if($match ne "") then 
+                                                        <phrase>{substring-before(substring-after($match,'"'),'"')}</phrase>
+                                                      else ()
+                                    (: for those not in double-quotes, match them as single items :)
+                                    let $unphrased := <bool>{
+                                                        for $match in tokenize($qryall,'(".*?")')
+                                                        let $match-words := tokenize($match, '\s')
+                                                        for $word in $match-words
+                                                            return
+                                                                if($word ne "") then 
+                                                                    <term occur="must">{$word}</term>
+                                                                else ()
+                                                      }
+                                                      </bool>
+                                    return ($phrased,$unphrased)
+                                )
+                                (: if there is no instance of the double-quote, split items for search :)                                
+                                else (
+                                    <bool> 
+                                        {
                                         for $word in $qryall-words
-                                            return
-                                            <term occur="must">{$word}</term>
+                                           return
+                                           <term occur="must">{$word}</term>
                                         }
-                                    </bool>    
-                                </bool>
+                                    </bool>                                  
+                                )
+                                }                                                               
                             </query>        
-        
         for $search-rs in $coll-subset[ft:query(., $query-node)]
         let $expanded := kwic:expand($search-rs),
         $config := <config xmlns="" width="160"/>

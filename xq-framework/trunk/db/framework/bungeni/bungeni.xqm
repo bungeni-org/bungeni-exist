@@ -2640,7 +2640,7 @@ declare function bun:get-ref-timeline-activities($docitem as node(), $docviews a
                 : !+FIX_THIS (ao, 8th Aug 2012) workflowEvents dont have permissions with them...
                 : currently using 'internal' to hide them from anonymous :)
                 let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, $event/child::*}
-                let $audits := for $audit in $docitem//bu:audits/child::* return element timeline { attribute id {$audit/@id }, $audit/child::*} 
+                let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, $audit/child::*} 
                 
                 for $eachitem in ($wfevents, $audits) 
                 order by $eachitem/bu:statusDate descending

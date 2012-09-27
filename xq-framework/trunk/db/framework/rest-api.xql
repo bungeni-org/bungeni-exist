@@ -22,19 +22,20 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 :)
 
 declare
-    %rest:GET
+    %rest:POST("{$body}")
     %rest:path("/ontology")  
-    %rest:query-param("group", "{$group}", "*")    
-    %rest:query-param("type", "{$type}", "*")
-    %rest:query-param("offset", "{$offset}", 1)
-    %rest:query-param("limit", "{$limit}", 2)    
-    %rest:query-param("search", "{$search}", "none")
-    %rest:query-param("status", "{$status}", "*")
-    %rest:query-param("daterange", "{$daterange}", "*")
-    %output:method("xml")
+    %rest:form-param("group", "{$group}", "*")    
+    %rest:form-param("type", "{$type}", "*")
+    %rest:form-param("offset", "{$offset}", 1)
+    %rest:form-param("limit", "{$limit}", 0)    
+    %rest:form-param("search", "{$search}", "none")
+    %rest:form-param("status", "{$status}", "*")
+    %rest:form-param("daterange", "{$daterange}", "*")
+    %output:method("json")
     
     (: Cascading collection based on parameters given, default apply when not given explicitly by client :)
     function local:documents(
+        $body as xs:string*,
         $group as xs:string*,
         $type as xs:string*, 
         $offset as xs:int,
@@ -106,7 +107,7 @@ declare
                            
                 return 
                     subsequence($ontology_rs,$offset,$limit)
-                    (:<count>{count($coll-by-statusdate)}</count>:)
+                    (:<count>{count($ontology_rs)}</count>:)
             }
         </docs>
 };

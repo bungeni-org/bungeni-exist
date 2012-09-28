@@ -1,0 +1,62 @@
+#summary REST API for searching and retrieving documents on eXist-db repository.
+#labels Phase-Implementation
+
+<wiki:toc max_depth="5" />
+
+= Introduction =
+
+This API exposes all Bungeni documents on eXist-db in a RESTful manner.
+
+= Pre-requisites =
+
+ * [http://svn.code.sf.net/p/exist/code/trunk/eXist eXist-db] r 17081 and up. (see [SettingUpExistForBungeni])
+ * [BungeniXQFramework Bungeni XQuery Framework]
+
+= Usage =
+
+The API currently accepts POST requests only and is accessble on the URL
+
+{{{
+http://localhost:8088/exist/restxq/ontology
+}}}
+
+The API accepts 7 parameters
+  * *group* - Generic categorization of Bungeni documents
+  * *type* - Bungeni document type e.g. Bill, Question
+  * *offset* - An integer. Return subset of documents returned from this poiition
+  * *limit* - An integer. Limit the number of documents to return
+  * *status* - trim result-set based on status parameter given
+  * *daterange* - trim result-set based on statuDate field of the documents
+  * *search* - text
+
+It returns a JSON Object with query information given and returned documents from the search text given.
+
+The `group` and `type` parameters are case sensitive.
+
+== Valid Group Types ==
+
+default is `*`
+
+`document`, `group`, `membership`
+
+
+== Valid Document Types ==
+default is `*`
+
+`Bill`, `Question`, `AgendaItem`, `Motion`, `TabledDocument`, `Committee`, `PoliticalGroup`
+
+you can search on multiple-specific document types by separating with a comma.
+
+The default value indicates what the API uses internally if the parameter is not supplied by the REST client.
+
+= Examples using cURL =
+
+{{{
+curl -i -X POST --data "type=*&search=\"Committee status make available\"&offset=1&limit=1" http://localhost:8088/exist/restxq/ontology -v
+}}}
+searches for the phrase *"Committee status make available"* in all documents but limits return to only one document from the result set.
+
+{{{
+curl -i -X POST --data "type=AgendaItem,Bill&search=\"Committee status make available\"&offset=1&limit=5" http://localhost:8088/exist/restxq/ontology -v
+}}}
+searches for the phrase *"Committee status make available"* in agenda-item and bill documents but limits return to five document from the result set.

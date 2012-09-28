@@ -1,5 +1,8 @@
 #summary building and configuring exist from source
 #labels bungeni,Featured
+#sidebar TableOfContents
+
+<wiki:toc max_depth="3" />
 
 = Reference = 
 

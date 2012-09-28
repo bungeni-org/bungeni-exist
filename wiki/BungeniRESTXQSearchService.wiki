@@ -1,7 +1,8 @@
 #summary REST API for searching and retrieving documents on eXist-db repository.
 #labels Phase-Implementation
+#sidebar TableOfContents
 
-<wiki:toc max_depth="5" />
+<wiki:toc max_depth="3" />
 
 = Introduction =
 

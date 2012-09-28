@@ -1,5 +1,6 @@
 #summary the script keeps XML repository in-sync with the main Bungeni application
 #labels bungeni-glue,bungeni,bungeni-exist
+#sidebar TableOfContents
 
 <wiki:toc max_depth="3" />
 

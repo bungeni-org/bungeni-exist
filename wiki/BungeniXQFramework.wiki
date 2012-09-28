@@ -1,5 +1,6 @@
 #summary the Bungeni XQ Framework
 #labels bungeni,Featured
+#sidebar TableOfContents
 
 <wiki:toc max_depth="3" />
 

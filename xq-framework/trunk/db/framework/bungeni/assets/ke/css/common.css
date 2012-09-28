@@ -91,6 +91,11 @@ div#main-wrapper {
 
 }
 
+.big-dbl-arrow {
+    float:left;
+    font: bold 50px 'Times New Roman',serif;
+}
+
 h1.title {
     text-shadow: 0px 1px 0px #c1c1c0;
     font-weight:normal;

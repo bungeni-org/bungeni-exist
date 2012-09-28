@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -27,7 +27,7 @@
         <xsl:variable name="moevent-uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <div id="title-holder">
-                <a style="float:left;font: bold 50px 'Times New Roman',serif;" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
+                <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
                 <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
@@ -57,8 +57,8 @@
                                     </a>
                                 </li>
                             </xsl:if>
-                            <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent)"/>
-                            <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
+                            <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'])"/>
+                            <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal']">
                                 <xsl:sort select="bu:statusDate" order="descending"/>
                                 <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
                                 <li>

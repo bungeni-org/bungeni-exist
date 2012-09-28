@@ -154,6 +154,31 @@ declare function template:copy-and-replace($request-rel-path as xs:string, $elem
 };
 
 (:~
+: Identinty transform to rewrite src, href and action attribute URIs
+: Used by ePUB bun:gen-epub to makes links absolute.
+:
+: @param request-rel-path
+:   Relative path of this request URI
+: @param element
+:   ePUB pages which needs to be rewritten with absolute paths
+:
+: @return
+:   The transformed result
+:)
+declare function template:re-write-paths($request-rel-path as xs:string, $element as element()) {
+  element {node-name($element)} {
+     for $attr in $element/@* return
+        template:adjust-absolute-paths($request-rel-path, $attr)
+     ,
+     for $child in $element/node() return
+        if($child instance of element()) then
+            template:re-write-paths($request-rel-path, $child)
+        else
+            $child
+    }
+};
+
+(:~
 : Rewrites src, href and action attribute URIs
 :
 : @param request-rel-path

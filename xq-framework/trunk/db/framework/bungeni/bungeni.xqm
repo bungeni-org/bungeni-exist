@@ -147,7 +147,7 @@ declare function bun:gen-pdf-output($docid as xs:string)
 : @return
 :   A ePUB document
 :)
-declare function bun:gen-epub-output($docid as xs:string, $views as node())
+declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string, $views as node())
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
     
@@ -180,8 +180,9 @@ declare function bun:gen-epub-output($docid as xs:string, $views as node())
                         <creator role="edt">{data($signatory/bu:person/@showAs)}</creator>
             }</creators>    
             
-    let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)             
-    let $book := scriba:create-book($lang,$title,$authors,$pages-i18n)
+    let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)      
+    let $pages-abs-links := template:re-write-paths($exist-cont,$pages-i18n)
+    let $book := scriba:create-book($lang,$title,$authors,$pages-abs-links)
         
     let $epub := epub:scriba-ebook-maker($book)
     let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  $output)) 
@@ -915,6 +916,7 @@ declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string
             <doc>
                 {$search-rs}
                 <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+                {$query-node}
             </doc>
 };
 

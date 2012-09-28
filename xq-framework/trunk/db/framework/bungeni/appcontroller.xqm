@@ -341,31 +341,31 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let $views := cmn:get-views-for-type("Bill"),
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                    $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
                 return $act-entries-tmpl 
     	else if ($EXIST-PATH eq "/question/epub")   
     		 then 
                 let $views := cmn:get-views-for-type("Question"),
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                    $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
                 return $act-entries-tmpl  
     	else if ($EXIST-PATH eq "/motion/epub")   
     		 then 
                 let $views := cmn:get-views-for-type("Motion"),
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                    $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
                 return $act-entries-tmpl 
     	else if ($EXIST-PATH eq "/tableddocument/epub")   
     		 then 
                 let $views := cmn:get-views-for-type("TabledDocument"),
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                    $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
                 return $act-entries-tmpl 
     	else if ($EXIST-PATH eq "/agendaitem/epub")   
     		 then 
                 let $views := cmn:get-views-for-type("AgendaItem"),
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-epub-output($docnumber, $views)
+                    $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
                 return $act-entries-tmpl           
            
         (: PDF FO GENERATORS :)

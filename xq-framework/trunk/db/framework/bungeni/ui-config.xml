@@ -1168,7 +1168,6 @@
                 <searchin name="ds" value="desc" field="bu:group/bu:description">Description</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="draft" name="draft">contains(bu:status/bu:value,'draft')</listingfilter>
                 <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
                 <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'dissolved')</listingfilter>
             </listingfilters>

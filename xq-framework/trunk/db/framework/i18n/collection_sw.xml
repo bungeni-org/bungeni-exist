@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="sw">
     <msg key="welcome">Karibu Nyumbani</msg>
+    <msg key="bungeni-pub">Chapisho la Bungeni</msg>
     <msg key="adv-search">Tafuta kwa Hali ya juu</msg>
     <msg key="search-settings">Mazingira ya Kutafuta</msg>
     <msg key="search-results">matokeo ya utafutaji</msg>

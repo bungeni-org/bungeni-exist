@@ -55,7 +55,7 @@ declare function scriba:generate-content($pages as node()) {
     <contents tocId="toc">
         <content packageId="toc" packagePath="/" packageFile="toc.ncx" contentMediaType="application/x-dtbncx+xml" />
         <content packageId="cover-image" 
-                packagePath="/IMG"
+                packagePath="/"
                 contentUrl="http://localhost:8088/exist/rest/db/framework/bungeni/assets/images/bungeni-logo.png"
                 packageFile="bungeni-logo.png" 
                 isInSpine="true"
@@ -66,8 +66,8 @@ declare function scriba:generate-content($pages as node()) {
                 isNeeded="xsl">
                 <![CDATA[
                     <div id="cover-image" style="margin:0 auto;"> 
-                        <h1>Bungeni Publication</h1>                     
-                        <img src="IMG/bungeni-logo.png" alt="Bungeni Logo"/> 
+                        <h1>Bungeni MMXII</h1>                     
+                        <img src="bungeni-logo.png" alt="Bungeni Logo"/> 
                     </div>
                 ]]>
         </content>                
@@ -131,7 +131,7 @@ declare function scriba:create-book($lang as xs:string, $title as xs:string, $au
             <metaitem eletype="dc" elename="identifier" id="bungenibookid">bungeniId</metaitem>
             <metaitem eletype="dc" elename="subject">Legislation</metaitem>
             <metaitem eletype="dc" elename="date">%date%</metaitem>
-            <metaitem eletype="meta" elename="meta" name="cover" content="cover-image" destination="opf"/>        
+            <metaitem eletype="meta" elename="meta" name="cover" content="cover-image" destination="opf"/>       
             <metaitem eletype="meta" elename="meta" name="copyright" content="Bungeni Parliament" destination="opf"/>
             <metaitem eletype="meta" elename="meta" name="dtb:uid" content="bungeniId" destination="ncx"/>
             <metaitem eletype="meta" elename="meta" name="dtb:depth" content="1" destination="ncx"/>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="it">
     <msg key="welcome">Benvenuto Casa</msg>
+    <msg key="bungeni-pub">Bungeni Pubblicazione</msg>
     <msg key="adv-search">Ricerca Avanzata</msg>
     <msg key="search-settings">Impostazioni di Ricerca</msg>
     <msg key="search-results">risultati della ricerca</msg>

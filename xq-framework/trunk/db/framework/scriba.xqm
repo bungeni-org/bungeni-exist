@@ -54,20 +54,27 @@ declare function scriba:generate-content($pages as node()) {
 
     <contents tocId="toc">
         <content packageId="toc" packagePath="/" packageFile="toc.ncx" contentMediaType="application/x-dtbncx+xml" />
-        <content packageId="cover-image" 
+        <content packageId="cover" 
+                packagePath="/"
+                contentUrl="http://localhost:8088/exist/rest/db/framework/bungeni/assets/images/cover.png"
+                packageFile="cover.png" 
+                isInSpine="false"
+                contentMediaType="image/png"/>      
+        <content packageId="section-image" 
                 packagePath="/"
                 contentUrl="http://localhost:8088/exist/rest/db/framework/bungeni/assets/images/bungeni-logo.png"
-                packageFile="bungeni-logo.png" 
-                isInSpine="true"
-                contentMediaType="image/png"/>        
-        <content packageId="cover" packagePath="/" packageFile="cover.html" isInSpine="true" contentMediaType="application/xhtml+xml" 
-                tocName="Cover Page" 
+                packageFile="section-image.png" 
+                isInSpine="false"
+                contentMediaType="image/png"/>                
+        <content packageId="titlepage" packagePath="/" packageFile="titlepage.html" isInSpine="true" contentMediaType="application/xhtml+xml" 
+                tocName="Title Page" 
                 isNeededTidy="true" 
                 isNeeded="xsl">
                 <![CDATA[
-                    <div id="cover-image" style="margin:0 auto;"> 
-                        <h1>Bungeni MMXII</h1>                     
-                        <img src="bungeni-logo.png" alt="Bungeni Logo"/> 
+                    <div style="margin:0 auto;"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" viewBox=0 0 416 616" preserveAspectRatio=none">
+                            <img src="cover.png" alt="Bungeni Logo"/> 
+                        </svg>
                     </div>
                 ]]>
         </content>                
@@ -131,7 +138,7 @@ declare function scriba:create-book($lang as xs:string, $title as xs:string, $au
             <metaitem eletype="dc" elename="identifier" id="bungenibookid">bungeniId</metaitem>
             <metaitem eletype="dc" elename="subject">Legislation</metaitem>
             <metaitem eletype="dc" elename="date">%date%</metaitem>
-            <metaitem eletype="meta" elename="meta" name="cover" content="cover-image" destination="opf"/>       
+            <metaitem eletype="meta" elename="meta" name="cover" content="cover" destination="opf"/>       
             <metaitem eletype="meta" elename="meta" name="copyright" content="Bungeni Parliament" destination="opf"/>
             <metaitem eletype="meta" elename="meta" name="dtb:uid" content="bungeniId" destination="ncx"/>
             <metaitem eletype="meta" elename="meta" name="dtb:depth" content="1" destination="ncx"/>

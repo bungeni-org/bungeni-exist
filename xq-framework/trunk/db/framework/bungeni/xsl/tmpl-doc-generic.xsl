@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -159,7 +159,7 @@
         <xsl:param name="doc-type"/>
         <h3 id="doc-heading" class="doc-headers">
             <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS -->
-            KENYA PARLIAMENT
+            BUNGENI PARLIAMENT
         </h3>
         <h4 id="doc-item-desc" class="doc-headers">
             <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
@@ -179,8 +179,8 @@
     <xsl:template name="doc-item-number">
         <xsl:param name="doc-type"/>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
-            <i18n:text key="doc-{lower-case($doc-type)}">Bill(nt)</i18n:text>&#160;<i18n:text key="number">Number(nt)</i18n:text>: 
-            <xsl:value-of select="bu:ontology/bu:document/bu:itemNumber"/>
+            <i18n:text key="number">Number(nt)</i18n:text>: 
+            <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
         </h4>
     </xsl:template>
     
@@ -231,13 +231,16 @@
                 <b class="camel-txt">
                     <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
             </span>
+            &#160;
             <span>
                 <xsl:value-of select="$render-doc/bu:status"/>
             </span>
+            &#160;
             <span>
                 <b class="camel-txt">
                     <i18n:text key="date-on">Date(nt)</i18n:text>:</b>
             </span>
+            &#160;
             <span>
                 <xsl:value-of select="format-dateTime($render-doc/bu:statusDate,$datetime-format,'en',(),())"/>
             </span>

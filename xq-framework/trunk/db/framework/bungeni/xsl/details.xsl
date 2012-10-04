@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -79,7 +79,7 @@
                 <div id="doc-main-section">
                     <div class="list-block">
                         <div class="block-label">
-                            <i18n:text key="docid">Doc Id(nt)</i18n:text>
+                            <i18n:text key="registry-no">registry number(nt)</i18n:text>
                         </div>
                         <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
                     </div>
@@ -121,7 +121,7 @@
                                         <td class="labels">
                                             <i18n:text key="submit-date">submission date(nt)</i18n:text>:</td>
                                         <td>
-                                            <xsl:value-of select="format-dateTime(bu:ontology/bu:legislativeItem/bu:statusDate,$datetime-format,'en',(),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -143,7 +143,7 @@
                                                     <xsl:value-of select="concat(bu:ontology/bu:ministry/bu:shortName,' - ',primary/bu:ontology/bu:ministry/bu:fullName)"/>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="concat(ref/bu:ontology//bu:ministry/bu:shortName,' - ',secondary/bu:ontology//bu:ministry/bu:fullName)"/>
+                                                    <xsl:value-of select="concat(ref/bu:ontology/bu:ministry/bu:shortName,' - ',secondary/bu:ontology//bu:ministry/bu:fullName)"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </td>
@@ -157,7 +157,7 @@
                                         <td class="labels">
                                             <i18n:text key="registry-no">registry number(nt)</i18n:text>:</td>
                                         <td>
-                                            <xsl:value-of select="bu:ontology/bu:legislativeItem/bu:registryNumber"/>
+                                            <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
                                         </td>
                                     </tr>
                                 </table>

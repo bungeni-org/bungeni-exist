@@ -168,4 +168,8 @@
     <msg key="date-from">from</msg>
     <msg key="date-to">to</msg>
     <msg key="btn-filter">filter</msg>
+    <msg key="parl-fullname">parliament name</msg>
+    <msg key="parl-shortname">short name</msg>
+    <msg key="parl-start-date">election date</msg>
+    <msg key="parl-power-date">in power from</msg>
 </catalogue>

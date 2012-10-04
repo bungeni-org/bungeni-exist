@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -39,6 +39,9 @@
                 <i18n:text key="close">close(nt)</i18n:text>
             </span-->
             <div id="title-holder">
+                <xsl:if test="$version eq 'true'">
+                    <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
+                </xsl:if>
                 <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
@@ -92,9 +95,9 @@
                             <div id="block1" class="list-block">
                                 <div>
                                     <span class="tgl tgl-wrap">-</span>
-                                    <a href="#1">
+                                    <b>
                                         <i18n:text key="versions">versions(nt)</i18n:text>
-                                    </a>
+                                    </b>
                                 </div>
                                 <div class="doc-toggle opened">
                                     <ul class="ls-row">
@@ -131,9 +134,9 @@
                             <div id="block2" class="list-block">
                                 <div>
                                     <span class="tgl tgl-wrap">-</span>
-                                    <a href="#1">
+                                    <b>
                                         <i18n:text key="events">events(nt)</i18n:text>
-                                    </a>
+                                    </b>
                                 </div>
                                 <div class="doc-toggle opened">
                                     <ul class="ls-row">
@@ -157,9 +160,9 @@
                         <div id="block3" class="list-block">
                             <div>
                                 <span class="tgl tgl-wrap">-</span>
-                                <a href="#1">
+                                <b>
                                     <i18n:text key="attachedfiles">attached files(nt)</i18n:text>
-                                </a>
+                                </b>
                             </div>
                             <div class="doc-toggle opened">
                                 <ul class="ls-row">

@@ -321,7 +321,8 @@ div#doc-downloads {
     padding-bottom:10px;
 }
 .list-block .block-label {
-    width:120px;
+    min-width:120px;
+    width:auto;
     float:left;
     font-weight:bold;
 }

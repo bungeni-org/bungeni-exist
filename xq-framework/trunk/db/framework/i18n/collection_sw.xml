@@ -178,4 +178,9 @@
     <msg key="date-from">kutoka</msg>
     <msg key="date-to">hadi</msg>
     <msg key="btn-filter">chuja</msg>
+    <!-- PARLIAMENT INFO -->
+    <msg key="parl-fullname">jina la bunge</msg>
+    <msg key="parl-shortname">jina fupi</msg>
+    <msg key="parl-start-date">tarehe iliyochaguliwa</msg>
+    <msg key="parl-power-date">mamlakani kuanzia tarehe</msg>
 </catalogue>

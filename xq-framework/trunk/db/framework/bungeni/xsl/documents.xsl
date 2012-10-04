@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -97,41 +97,33 @@
                                     </a>
                                 </div>
                                 <div class="doc-toggle opened">
-                                    <table class="listing timeline tbl-tgl">
-                                        <tr>
-                                            <th>
-                                                <i18n:text key="status">status(nt)</i18n:text>
-                                            </th>
-                                            <th>
-                                                <i18n:text key="tab-desc">description(nt)</i18n:text>
-                                            </th>
-                                            <th>
-                                                <i18n:text key="tab-date">date(nt)</i18n:text>
-                                            </th>
-                                        </tr>
+                                    <ul class="ls-row">
                                         <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
                                             <xsl:sort select="bu:activeDate" order="descending"/>
-                                            <tr>
-                                                <td>
-                                                    <span>
-                                                        <xsl:value-of select="bu:procedureType/bu:value"/>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
-                                                            <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
-                                                        </a>
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>
-                                                        <xsl:value-of select="format-dateTime(bu:activeDate,$datetime-format,'en',(),())"/>
-                                                    </span>
-                                                </td>
-                                            </tr>
+                                            <li>
+                                                <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
+                                                    <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
+                                                </a>
+                                                <div class="struct-ib"> / 
+                                                    <xsl:variable name="procedureType">
+                                                        <xsl:choose>
+                                                            <xsl:when test="bu:procedureType/bu:value eq 'm'">
+                                                                <xsl:text>modified</xsl:text>
+                                                            </xsl:when>
+                                                            <xsl:when test="bu:procedureType/bu:value eq 'a'">
+                                                                <xsl:text>added</xsl:text>
+                                                            </xsl:when>
+                                                            <xsl:otherwise>
+                                                                <xsl:value-of select="bu:procedureType/bu:value"/>
+                                                            </xsl:otherwise>
+                                                        </xsl:choose>
+                                                    </xsl:variable>
+                                                    <xsl:value-of select="$procedureType"/>
+                                                    / <xsl:value-of select="format-dateTime(bu:activeDate,$datetime-format,'en',(),())"/>
+                                                </div>
+                                            </li>
                                         </xsl:for-each>
-                                    </table>
+                                    </ul>
                                 </div>
                             </div>
                         </xsl:if>
@@ -170,39 +162,17 @@
                                 </a>
                             </div>
                             <div class="doc-toggle opened">
-                                <table class="listing timeline">
-                                    <tr>
-                                        <th>
-                                            <i18n:text key="tab-file-title">file title(nt)</i18n:text>
-                                        </th>
-                                        <th>
-                                            <i18n:text key="tab-type">type(nt)</i18n:text>
-                                        </th>
-                                        <th>
-                                            <i18n:text key="tab-date">date(nt)</i18n:text>
-                                        </th>
-                                    </tr>
+                                <ul class="ls-row">
                                     <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
-                                        <xsl:sort select="bu:statusDate" order="descending"/>
-                                        <tr>
-                                            <td>
-                                                <a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
-                                                    <xsl:value-of select="bu:name"/>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <span>
-                                                    <xsl:value-of select="bu:mimetype/bu:value"/>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span>
-                                                    <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                                </span>
-                                            </td>
-                                        </tr>
+                                        <li>
+                                            <a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
+                                                <xsl:value-of select="bu:name"/>
+                                            </a>
+                                            <div class="struct-ib"> (<xsl:value-of select="bu:mimetype/bu:value"/>) / <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                            </div>
+                                        </li>
                                     </xsl:for-each>
-                                </table>
+                                </ul>
                             </div>
                         </div>
                     </div>

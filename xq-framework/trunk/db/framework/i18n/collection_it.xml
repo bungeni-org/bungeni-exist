@@ -178,4 +178,9 @@
     <msg key="date-from">da</msg>
     <msg key="date-to">al</msg>
     <msg key="btn-filter">filtrare</msg>
+    <!-- PARLIAMENT INFO -->
+    <msg key="parl-fullname">parlamento nome</msg>
+    <msg key="parl-shortname">nome breve</msg>
+    <msg key="parl-start-date">data di elezione</msg>
+    <msg key="parl-power-date">in alimentazione</msg>
 </catalogue>

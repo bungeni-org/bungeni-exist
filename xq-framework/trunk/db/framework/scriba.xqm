@@ -142,8 +142,8 @@ declare function scriba:create-book($lang as xs:string, $title as xs:string, $au
             <metaitem eletype="meta" elename="meta" name="copyright" content="Bungeni Parliament" destination="opf"/>
             <metaitem eletype="meta" elename="meta" name="dtb:uid" content="bungeniId" destination="ncx"/>
             <metaitem eletype="meta" elename="meta" name="dtb:depth" content="1" destination="ncx"/>
-            <metaitem eletype="meta" elename="meta" name="dtb:totalPageCount" content="{count($pages/page)}" destination="ncx"/>
-            <metaitem eletype="meta" elename="meta" name="dtb:maxPageNumber" content="{count($pages/page)}" destination="ncx"/>
+            <metaitem eletype="meta" elename="meta" name="dtb:totalPageCount" content="0" destination="ncx"/>
+            <metaitem eletype="meta" elename="meta" name="dtb:maxPageNumber" content="0" destination="ncx"/>
         </metadata>{
             
             scriba:generate-content($pages)   

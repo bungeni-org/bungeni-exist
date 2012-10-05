@@ -35,7 +35,7 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="doc-table-wrapper">
-                        <table class="tbl-tgl">
+                        <table class="listing">
                             <tr>
                                 <th class="fbtd">name</th>
                                 <th class="fbtd">start</th>

@@ -2376,7 +2376,7 @@ declare function bun:documentitem-full-acl($acl as xs:string, $uri as xs:string)
         }
 
     return 
-        local:treewalker-acl($acl-permissions, $match)
+        bun:treewalker-acl($acl-permissions, $match)
 };
 
 (:
@@ -2389,7 +2389,7 @@ declare function bun:documentitem-full-acl($acl as xs:string, $uri as xs:string)
     @return
         the document without unauthorised nodes()
 :)
-declare function local:treewalker-acl ($acl-permissions as node(), $doc) {
+declare function bun:treewalker-acl($acl-permissions as node(), $doc) {
 
     let $children := $doc/*
     return
@@ -2406,14 +2406,14 @@ declare function local:treewalker-acl ($acl-permissions as node(), $doc) {
                     element {name($c)}{
                          $c/@*,
                          $c/text(),
-                         local:treewalker-acl($acl-permissions, $c)
+                         bun:treewalker-acl($acl-permissions, $c)
                       }
             (: 'c' has no bu:permissions node, add to tree :)
             else if (not($c/bu:permissions/bu:permission)) then
                     element {name($c)}{
                          $c/@*,
                          $c/text(),
-                         local:treewalker-acl($acl-permissions, $c)
+                         bun:treewalker-acl($acl-permissions, $c)
                       }
             (: fails above two checks, omit from tree :)
             else   
@@ -2424,7 +2424,7 @@ declare function local:treewalker-acl ($acl-permissions as node(), $doc) {
     Removes changes that don't fit the permissions given.
     
     !+NOTE (ao, 7th-May-2012) This and similar methods are deprecated in favour of 
-    local:treewalker-acl(). Reason being it complicated the views because they were called 
+    bun:treewalker-acl(). Reason being it complicated the views because they were called 
     only on certain views and would disappear otherwise. This inconsistency had to be 
     eliminated
 :)

@@ -1050,6 +1050,9 @@
         <acl name="public-view" axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission">
             <permission name="zope.View" role="bungeni.Anonymous" setting="Allow"/>
         </acl>
+        <acl name="role-view">
+            <permission name="zope.View" role="$role" setting="Allow"/>
+        </acl>
         <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
     </acl-groups>
     <!-- Document Types

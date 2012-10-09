@@ -1,5 +1,6 @@
 xquery version "3.0";
 
+import module namespace functx = "http://www.functx.com" at "functx.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "common.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "template.xqm";
 import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni/bungeni.xqm";
@@ -22,8 +23,9 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 :)
 
 declare
-    %rest:POST("{$body}")
-    %rest:path("/ontology")  
+    %rest:path("/ontology")
+    %rest:POST("{$body}")    
+    %rest:form-param("role", "{$role}", "bungeni.Anonymous")     
     %rest:form-param("group", "{$group}", "*")    
     %rest:form-param("type", "{$type}", "*")
     %rest:form-param("offset", "{$offset}", 1)
@@ -36,6 +38,7 @@ declare
     (: Cascading collection based on parameters given, default apply when not given explicitly by client :)
     function local:documents(
         $body as xs:string*,
+        $role as xs:string*,        
         $group as xs:string*,
         $type as xs:string*, 
         $offset as xs:int,
@@ -44,6 +47,7 @@ declare
         $status as xs:string,
         $daterange as xs:string) {
         <docs>
+            <role>{$role}</role>         
             <group>{$group}</group>           
             <type>{$type}</type>   
             <offset>{$offset}</offset>
@@ -52,15 +56,26 @@ declare
             <status>{$status}</status>
             <daterange>{$daterange}</daterange>
             {
+                let $acl-filter-attr := cmn:get-acl-permission-as-attr-for-role($role)
+                let $acl-filter-node := cmn:get-acl-permission-as-node-for-role($role)
+             
+                (: get entire collection and apply given permission on the main document :)
+                let $eval-query :=  fn:concat("collection('",cmn:get-lex-db() ,"')",
+                                    (: the first node in root element has the documents main permission :)
+                                    "/bu:ontology/child::node()[1]/(bu:permissions except bu:versions)",
+                                    "/bu:permission[",$acl-filter-attr,"]",
+                                    "/ancestor::bu:ontology")                   
+                let $coll :=  util:eval($eval-query)             
+            
                 (: get entire collection OR trim by group types mainly: document, group, membership... :)
                 let $coll-by-group :=  
                     switch($group)
                         case "*"
-                            return collection(cmn:get-lex-db())/bu:ontology
+                            return $coll
                         default
                             return
                                 for $dgroup in tokenize($group,",")
-                                return collection(cmn:get-lex-db())/bu:ontology[@for=$dgroup]   
+                                return $coll[@for=$dgroup]   
                 
                 (: from $coll-by-group get collection by docTypes mainly: Bill, Question, Motion... :)
                 let $coll-by-doctype := 
@@ -104,9 +119,21 @@ declare
                         default
                             return
                                 bun:adv-ft-search($coll-by-statusdate, $search)                          
-                           
+                  
+                (: strip nodes with failing permissions recursively to all nodes :)
+                let $ontology_strip_deep := for $doc in $ontology_rs
+                                            return bun:treewalker-acl($acl-filter-node,document{$doc})                                 
+                        
+                (: strip classified nodes :)
+                let $ontology_strip := functx:remove-elements-deep($ontology_strip_deep,
+                                    ('bu:bungeni','bu:legislature','bu:versions', 'bu:permissions', 'bu:audits'))                                   
+                        
+                        
                 return 
-                    subsequence($ontology_rs,$offset,$limit)
+                    (   <total>{count($ontology_rs)}</total>,
+                        subsequence($ontology_strip,$offset,$limit)
+                     )                  
+                    (:$acl-filter-node:)
                     (:<count>{count($ontology_rs)}</count>:)
             }
         </docs>
@@ -114,14 +141,24 @@ declare
 
 declare
     %rest:GET
-    %rest:path("/ontology/{$type}/{$docid}")
+    %rest:path("/{$country-code}/{$type}")
     
-    function local:documents($type as xs:string, $docid as xs:int) {
+    function local:documents($country-code as xs:string, $type as xs:string) {
         <docs>
-            <type>{$type}</type>   
-            <docid>{$docid}</docid>
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docType/bu:value eq $type][bu:docId = $docid]
+                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq $type]
+            }
+        </docs>
+};
+
+declare
+    %rest:GET
+    %rest:path("/{$country-code}/{$type}/{$docid}")
+    
+    function local:documents($country-code as xs:string, $type as xs:string, $docid as xs:int) {
+        <docs>
+            {
+                collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docType/bu:value eq $type][bu:docId = $docid]/parent::node()
             }
         </docs>
 };

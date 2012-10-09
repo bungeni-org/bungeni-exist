@@ -401,6 +401,29 @@ declare function cmn:get-acl-permission-as-attr($filter-name as xs:string) {
 };
 
 (:~
+: Returns the input filters corresponding permission as a attribute condition string
+: given the @role
+:)
+declare function cmn:get-acl-permission-as-attr-for-role($role-name as xs:string) {
+    let $perm := cmn:get-acl-permissions("role-view")
+    return 
+        fn:concat("@name='",$perm/@name, "' and ", "@role='", $role-name, "' and ", "@setting='",$perm/@setting, "'")
+};
+
+(:~
+: Returns the node permissions node condition string given the @role
+:)
+declare function cmn:get-acl-permission-as-node-for-role($role-name as xs:string) {
+    let $perm := cmn:get-acl-permissions("role-view")
+    return 
+        element {name($perm)} {
+             $perm/@name,
+             attribute role {$role-name},             
+             $perm/@setting
+          }
+};
+
+(:~
 Loads an XSLT file 
 :)
 declare function cmn:get-xslt($value as xs:string) as document-node() {

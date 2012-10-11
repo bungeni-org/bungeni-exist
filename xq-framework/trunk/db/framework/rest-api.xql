@@ -58,13 +58,21 @@ declare
             {
                 let $acl-filter-attr := cmn:get-acl-permission-as-attr-for-role($role)
                 let $acl-filter-node := cmn:get-acl-permission-as-node-for-role($role)
+                
+                let $token-roles := tokenize($role,",")
+                let $roles :=   for $arole at $pos in $token-roles
+                                let $counter := count($token-roles)
+                                return (
+                                    fn:concat("bu:permission[",cmn:get-acl-permission-as-attr-for-role($arole),"]"),
+                                    if($pos lt $counter) then "and" else () )
+                
+                let $roles-string := fn:string-join($roles," ")
              
                 (: get entire collection and apply given permission on the main document :)
                 let $eval-query :=  fn:concat("collection('",cmn:get-lex-db() ,"')",
                                     (: the first node in root element has the documents main permission :)
-                                    "/bu:ontology/child::node()[1]/(bu:permissions except bu:versions)",
-                                    "/bu:permission[",$acl-filter-attr,"]",
-                                    "/ancestor::bu:ontology")                   
+                                    "/bu:ontology/child::node()[1]/bu:permissions",
+                                    "[",$roles-string,"]/ancestor::bu:ontology")                   
                 let $coll :=  util:eval($eval-query)             
             
                 (: get entire collection OR trim by group types mainly: document, group, membership... :)

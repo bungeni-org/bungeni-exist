@@ -32,8 +32,7 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="mem-profile">
-                        <div class="mem-table-wrapper">
-                            (baked)
+                        <div class="doc-table-wrapper">
                             <table class="listing">
                                 <tr>
                                     <th class="fbtd">office</th>

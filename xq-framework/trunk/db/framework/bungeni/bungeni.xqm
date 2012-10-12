@@ -1676,6 +1676,32 @@ declare function bun:get-raw-xml($docid as xs:string) as element() {
 };
 
 (:~
+:  Renders AkomaNtoso output for parliamentary document
+: @param docid
+:   The URI of the document
+:
+: @return
+:   An AKN document
+:)
+declare function bun:get-akn-xml($docid as xs:string)
+{
+    util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt('xsl/bu-to-akn.xsl') 
+    
+    let $doc := document        
+            {
+                collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
+            }    
+        
+    let $transformed := transform:transform($doc,$stylesheet,())
+    
+    return $transformed 
+    
+};
+
+(:~
 :   Retieves all group documents of type committee
 : @param offset
 : @param limit

@@ -132,3 +132,9 @@ declare function rou:get-xml($CONTROLLER-DOC as node()) {
         $act-entries-tmpl :=  bun:get-raw-xml($docnumber)
     return $act-entries-tmpl   
 };
+
+declare function rou:get-akn($CONTROLLER-DOC as node()) {
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+        $act-entries-tmpl :=  bun:get-akn-xml($docnumber)
+    return $act-entries-tmpl   
+};

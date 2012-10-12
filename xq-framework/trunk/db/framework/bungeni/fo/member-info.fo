@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:bu="http://portal.bungeni.org/1.0/" version="2.0">
+    <xsl:import href="../xsl/xhtml2fo.xsl"/>
     <xsl:output method="xml" version="2.0" indent="yes"/>
     <xsl:include href="../xsl/config.xsl"/>
-    <xsl:import href="../xsl/xhtml2fo.xsl"/>
     <!--xsl:include href="xhtml2fo.xsl" /-->
     <xsl:template match="doc">
         <xsl:variable name="doc-name" select="bu:ontology/bu:legislature/bu:shortName"/>
@@ -33,7 +33,7 @@
                               not working properly at the moment. Current guide
                               http://xmlgraphics.apache.org/fop/0.95/metadata.html
                         -->
-                        <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+                        <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
                             <!-- XMP properties go here -->
                             <xmp:CreatorTool>eXist XML Database with xsl-fo module.</xmp:CreatorTool>
                             <pdf:Keywords>
@@ -62,7 +62,7 @@
                 </fo:static-content> 
                 <!-- THIS IS THE MAIN BODY -->
                 <fo:flow flow-name="xsl-region-body">
-                    <fo:block text-align="center" font-size="12pt" font-family="'Times New Roman', san-serif">KENYA PARLIAMENT</fo:block>
+                    <fo:block text-align="center" font-size="12pt" font-family="'Times New Roman', san-serif">BUNGENI PARLIAMENT</fo:block>
                     <fo:block font-family="'Times New Roman', san-serif" space-before="10pt" font-size="12pt" text-align="center">
                         MEMBER OF PARLIAMENT
                     </fo:block>

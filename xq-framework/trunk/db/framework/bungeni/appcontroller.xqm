@@ -390,7 +390,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $act-entries-tmpl :=  bun:gen-member-pdf($memid)
                 return $act-entries-tmpl                           
           
-        (:Get AkomaNtoso XML:)
+        (:Get Ontology XML:)
     	else if ($EXIST-PATH eq "/bill/xml")   
     		 then 
                 rou:get-xml($CONTROLLER-DOC)    
@@ -408,7 +408,24 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 rou:get-xml($CONTROLLER-DOC)                
     	else if ($EXIST-PATH eq "/member/xml")   
     		 then 
-                rou:get-xml($CONTROLLER-DOC)                             
+                rou:get-xml($CONTROLLER-DOC)  
+                
+        (:Get AkomaNtoso XML:)
+    	else if ($EXIST-PATH eq "/bill/akn")   
+    		 then 
+                rou:get-akn($CONTROLLER-DOC)    
+    	else if ($EXIST-PATH eq "/question/akn")   
+    		 then 
+                rou:get-akn($CONTROLLER-DOC)
+    	else if ($EXIST-PATH eq "/motion/akn")   
+    		 then 
+                rou:get-akn($CONTROLLER-DOC) 
+    	else if ($EXIST-PATH eq "/tableddocument/akn")   
+    		 then 
+                rou:get-akn($CONTROLLER-DOC)
+    	else if ($EXIST-PATH eq "/agendaitem/akn")   
+    		 then 
+                rou:get-akn($CONTROLLER-DOC)                
                 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
@@ -1703,7 +1720,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
               then
     		 <doc>
     		 <req>
-    		 {request:get-effective-uri()}
+    		 {request:get-server-name()}
     		 </req>
     		 <ep> {
     		 $EXIST-PATH}</ep>

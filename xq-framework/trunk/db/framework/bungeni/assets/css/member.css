@@ -12,6 +12,7 @@
     float:right;
     text-align:center;
     width:auto;    
+    min-height:250px;
 }
 .mem-table-wrapper {
     margin:0 auto;

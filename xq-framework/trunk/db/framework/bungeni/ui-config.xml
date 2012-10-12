@@ -579,6 +579,7 @@
             <format type="pdf" href="null">Download PDF format</format>
             <format type="xml" href="null">Download XML format</format>
             <format type="epub" href="null">Download ePUB format</format>
+            <format type="akn" href="null">Download AkomaNtoso format</format>
         </rendergroup>
         <rendergroup name="members">
             <format type="edit" href="build">Edit document. Will need to login to eXist</format>

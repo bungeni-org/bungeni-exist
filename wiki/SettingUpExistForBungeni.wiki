@@ -81,8 +81,7 @@ JAVA_HOME=/path/to/java/home ./build.sh all
 {{{
    <transformer class="net.sf.saxon.TransformerFactoryImpl"/>
 }}}
- * Import the data into eXist from svn : [http://bungeni-exist.googlecode.com/svn/trunk/database /svn/trunk/database]
- * Add a reference to the schema in webapp/WEB-INF/catalog.xml :
+ * Add a reference to the schema in ~/eXist/webapp/WEB-INF/catalog.xml :
      {{{
      <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
         <uri name="http://www.akomantoso.org/1.0" uri="xmldb:exist:///db/bungeni/grammar/akomantoso10.xsd" />

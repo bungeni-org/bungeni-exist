@@ -44,6 +44,7 @@ EXIST_INST=exist_r$EXIST_REV
 EXIST_INST_PATH=`pwd`/$EXIST_INST
 
 rm -rf $EXIST_INST_PATH/*
+mkdir -p $EXIST_INST_PATH
 cp -R $EXIST_FOLDER/* $EXIST_INST_PATH/
 echo "Preparing eXist installation"
 cd $EXIST_INST_PATH 

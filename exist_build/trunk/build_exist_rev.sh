@@ -115,7 +115,7 @@ echo "Removing .svn files from the exist installation folder"
 find . -name '.svn' -print0 | xargs -0 rm -rf 
 
 echo "Building eXist installation in $EXIST_INST"
-JAVA_HOME=$JAVA_HOME ./build.sh rebuild
+JAVA_HOME=$JAVA_HOME ./build.sh all
 cd ..
 echo "Cleaning up build"
 rm -rf ./$EXIST_INST/src
@@ -124,6 +124,6 @@ rm -rf ./$EXIST_INST/installer
 rm -rf ./$EXIST_INST/test
 find ./$EXIST_INST -name '*.java' | xargs rm -rf
 echo "Building deployment archive"
-tar cvzf ./$EXIST_INST.tar.gz ./$EXIST_INST
+tar cvzf ./$EXIST_INST.tar.gz $EXIST_INST
 echo "Generated $EXIST_INST.tar.gz"
 

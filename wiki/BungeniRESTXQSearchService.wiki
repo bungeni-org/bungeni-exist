@@ -29,6 +29,7 @@ The API accepts 7 parameters
   * *status* - trim result-set based on status parameter given
   * *daterange* - trim result-set based on statuDate field of the documents
   * *search* - text
+  * *role* - user role(s) as defined in Bungeni
 
 It returns a JSON Object with query information given and returned documents from the search text given.
 
@@ -46,7 +47,14 @@ default is `*`
 
 `Bill`, `Question`, `AgendaItem`, `Motion`, `TabledDocument`, `Committee`, `PoliticalGroup`
 
-you can search on multiple-specific document types by separating with a comma.
+You can search on multiple-specific document types by separating with a comma.
+
+== Valid roles ==
+default is `bungeni.Anonymous`
+
+`bungeni.Clerk`, `bungeni.Speaker`, `bungeni.Owner`, `bungeni.Anonymous`, `bungeni.MP`, `bungeni.Minister`
+
+You can search as multiple roles by separating with a comma.
 
 The default value indicates what the API uses internally if the parameter is not supplied by the REST client.
 
@@ -61,3 +69,8 @@ searches for the phrase *"Committee status make available"* in all documents but
 curl -i -X POST --data "type=AgendaItem,Bill&search=\"Committee status make available\"&offset=1&limit=5" http://localhost:8088/exist/restxq/ontology -v
 }}}
 searches for the phrase *"Committee status make available"* in agenda-item and bill documents but limits return to five document from the result set.
+
+{{{
+curl -i -X POST --data "type=AgendaItem,Bill&search=\"Committee status make available\"&offset=1&limit=5&role=bungeni.Clerk,bungeni.MP" http://localhost:8088/exist/restxq/ontology -v
+}}}
+With `bungeni.Clerk` and `bungeni.MP` passed as permission filters. Searches for the phrase *"Committee status make available"* in agenda-item and bill documents but limits return to five document from the result set.

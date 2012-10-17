@@ -84,7 +84,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
     								        $CONTROLLER-DOC/exist-cont, 
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($CONTROLLER-DOC/exist-path),
-    								        (),
+    								        <null/>,
     									    (cmn:build-nav-node(
     									       $CONTROLLER-DOC/exist-path,
     									       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 

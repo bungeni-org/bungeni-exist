@@ -370,7 +370,7 @@ declare function template:set-lang() {
             request:get-cookie-value('lang')                
             
         else    
-            response:set-cookie('lang',$config:DEFAULT-LANG)         
+            $config:DEFAULT-LANG        
 };
 
 (:~

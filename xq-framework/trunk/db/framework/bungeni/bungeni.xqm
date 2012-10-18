@@ -915,8 +915,15 @@ declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string
             :)
             <doc>
                 {$search-rs}
+                <bu:attachment-links>
+                {
+                (: adding attachments with relative path to links :)                
+                    functx:replace-element-values($search-rs/bu:attachments/bu:attachment,
+                           for $p in $search-rs/bu:attachments/bu:attachment/bu:fileUuid
+                           return concat("/exist/rest/bungeni-atts/",$p)) 
+                }   
+                </bu:attachment-links>
                 <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
-                {$query-node}
             </doc>
 };
 

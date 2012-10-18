@@ -118,7 +118,7 @@ declare
                                 return 
                                     $match/child::*[xs:dateTime(bu:statusDate) gt xs:dateTime(concat($dates[1],"T00:00:00"))]
                                     [xs:dateTime(bu:statusDate) lt xs:dateTime(concat($dates[2],"T23:59:59"))]/ancestor::bu:ontology                        
-                           
+
                 (: finally search the subset collection if and only if there are is a search param given :)    
                 let $ontology_rs := 
                     switch($search)
@@ -134,9 +134,9 @@ declare
                         
                 (: strip classified nodes :)
                 let $ontology_strip := functx:remove-elements-deep($ontology_strip_deep,
-                                    ('bu:bungeni','bu:legislature','bu:versions', 'bu:permissions', 'bu:audits'))                                   
-                        
-                        
+                                    ('bu:bungeni','bu:legislature','bu:versions', 'bu:permissions', 
+                                    'bu:audits', 'bu:attachments'))
+                                                      
                 return 
                     (   <total>{count($ontology_rs)}</total>,
                         subsequence($ontology_strip,$offset,$limit)

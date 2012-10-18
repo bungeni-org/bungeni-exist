@@ -30,7 +30,7 @@
             <div id="popout-content" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">
-                        <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> KENYA
+                        <!-- !+FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> BUNGENI
                         PARLIAMENT </h3>
                     <h1 class="title">
                         <xsl:value-of select="bu:ontology/bu:documents/bu:shortTitle"/>

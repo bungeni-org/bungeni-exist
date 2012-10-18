@@ -126,7 +126,7 @@
                     </div>
                     <div class="clear"/>
                     <div class="mem-desc">
-                        <xsl:copy-of select="bu:ontology/bu:membership/bu:description"/>
+                        <xsl:copy-of select="bu:ontology/bu:membership/bu:description/child::node()" copy-namespaces="no"/>
                     </div>
                 </div>
             </div>

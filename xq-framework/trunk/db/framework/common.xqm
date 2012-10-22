@@ -7,6 +7,7 @@ declare namespace request="http://exist-db.org/xquery/request";
 import module namespace config = "http://bungeni.org/xquery/config" at "config.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "fw.xqm";
 declare namespace i18n = "http://exist-db.org/xquery/i18n";
+declare namespace bu="http://portal.bungeni.org/1.0/";
 
 
 (:
@@ -378,7 +379,7 @@ declare function cmn:get-acl-permissions($filter-name as xs:string) as node()+{
     let $acl-group := cmn:get-acl-group($filter-name)
     return
         if ($acl-group) then
-            $acl-group/permission
+            $acl-group/bu:control
         else
             ()
 };

@@ -4,7 +4,7 @@
     This file is the UI configuration file used by the System 
     It describes date formats , route navigations and tab structures for the application
 -->
-<ui xmlns:i18n="http://exist-db.org/xquery/i18n">
+<ui xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/">
     <!-- GENERAL FORMAT PREFERNCES -->
     <!-- "http://exist-db.org/xquery/i18n" 
         specify date and datetime formats here , these formats are used by the XSLT scripts
@@ -1049,10 +1049,10 @@
         <!-- !+FIX_THIS_TODO (ah, nov-2011) axis needs to be factored as a sub-element since axis is different for different content 
             types -->
         <acl name="public-view" axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission">
-            <permission name="zope.View" role="bungeni.Anonymous" setting="Allow"/>
+            <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
         </acl>
         <acl name="role-view">
-            <permission name="zope.View" role="$role" setting="Allow"/>
+            <bu:control name="View" role="$role" setting="Allow"/>
         </acl>
         <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
     </acl-groups>
@@ -1099,6 +1099,9 @@
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
+            <acl name="public-view">
+                <permission name="bungeni.question.View" role="bungeni.Anonymous" setting="Deny"/>
+            </acl>
         </doctype>
         <doctype category="document" name="Motion">
             <orderbys>
@@ -1238,7 +1241,11 @@
                 <listingfilter id="former" name="former">not(empty(bu:endDate))</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="address" name="address"/>
+        <doctype category="address" name="address">
+            <acl name="public-view">
+                <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>
+            </acl>
+        </doctype>
         <doctype category="report" name="report"/>
     </doctypes>
     <custom>

@@ -268,7 +268,7 @@ declare function bun:xqy-all-documentitems-with-acl($acl as xs:string) {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@for='document']",
                 "/bu:document/(bu:permissions except bu:versions)",
-                "/bu:permission[",$acl-filter,"]",
+                "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
 
@@ -292,7 +292,7 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/bu:document/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document",
                 "/(bu:permissions except bu:versions)",
-                "/bu:permission[",$acl-filter,"]",
+                "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
 
@@ -305,7 +305,7 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $
                 "/bu:ontology[@for='document']",
                 "/bu:document/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document/(bu:permissions except bu:versions)",
-                "/bu:permission[",$acl-filter,"]",
+                "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
                 "/ancestor::bu:ontology")
 };
@@ -317,7 +317,7 @@ declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
                 "/bu:ontology[@for='document']",
                 "/bu:document",
                 "/(bu:permissions except bu:versions)",
-                "/bu:permission[",$acl-filter,"]",
+                "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
 
@@ -2367,7 +2367,7 @@ declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
     : <http://sourceforge.net/mailarchive/forum.php?thread_name=CAPoZz4TDjD1B1JqJOKF9z%3DWFGO%3D1xVVg5xo_ksc8y5H66hGNag%40mail.gmail.com&forum_name=exist-open>
     :)
     return fn:concat(
-        "(bu:permissions except bu:versions)/bu:permission[", 
+        "(bu:permissions except bu:versions)/bu:control[", 
         cmn:get-acl-permission-attr($acl-permissions), 
         "]")
 };
@@ -2431,7 +2431,7 @@ declare function bun:treewalker-acl($acl-permissions as node(), $doc) {
         for $c in $children
         return
             (: passes authentication, add to tree :)
-            if ($c/bu:permissions/bu:permission[
+            if ($c/bu:permissions/bu:control[
                     @name=data($acl-permissions/@name) and 
                     @role=data($acl-permissions/@role) and 
                     @setting=data($acl-permissions/@setting)
@@ -2442,7 +2442,7 @@ declare function bun:treewalker-acl($acl-permissions as node(), $doc) {
                          bun:treewalker-acl($acl-permissions, $c)
                       }
             (: 'c' has no bu:permissions node, add to tree :)
-            else if (not($c/bu:permissions/bu:permission)) then
+            else if (not($c/bu:permissions/bu:control)) then
                     element {name($c)}{
                          $c/@*,
                          $c/text(),
@@ -2463,7 +2463,7 @@ declare function bun:treewalker-acl($acl-permissions as node(), $doc) {
 :)
 declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $docitem as node() ) {
   if ($docitem/self::bu:change) then
-        if ($docitem/bu:permissions/bu:permission[
+        if ($docitem/bu:permissions/bu:control[
                 @name=data($acl-permissions/@name) and 
                 @role=data($acl-permissions/@role) and 
                 @setting=data($acl-permissions/@setting)

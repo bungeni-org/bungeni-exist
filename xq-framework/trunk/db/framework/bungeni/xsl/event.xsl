@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -57,20 +57,20 @@
                                     </a>
                                 </li>
                             </xsl:if>
-                            <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'])"/>
-                            <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal']">
+                            <xsl:variable name="total_versions" select="count(ref/bu:ontology/bu:document)"/>
+                            <xsl:for-each select="ref/bu:ontology/bu:document">
                                 <xsl:sort select="bu:statusDate" order="descending"/>
                                 <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
                                 <li>
                                     <xsl:choose>
                                         <!-- if current URI is equal to this versions URI -->
-                                        <xsl:when test="$event-uri eq @href">
+                                        <xsl:when test="$event-uri eq @uri">
                                             <span>
                                                 <i18n:text key="doc-event">event(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </span>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <a href="{lower-case($doc-type)}-event?uri={@href}">
+                                            <a href="{lower-case($doc-type)}-event?uri={@uri}">
                                                 <i18n:text key="doc-event">event(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </a>
                                         </xsl:otherwise>

@@ -386,6 +386,18 @@ declare function cmn:get-acl-permissions($filter-name as xs:string) as node()+{
 
 
 (:~
+:Gets the permission nodes for a named acl
+:)
+declare function cmn:get-acl-doctype-permissions($doctype as xs:string, $filter-name as xs:string) as node()+{
+    let $acl-doctype := cmn:get-doctype-config($doctype)/acl[@name eq $filter-name]
+    return
+        if ($acl-doctype) then
+            $acl-doctype/bu:control
+        else
+            ()
+};
+
+(:~
 : Returns the permission node as a attributed string
 :)
 declare function cmn:get-acl-permission-attr($permission as node()) {
@@ -398,6 +410,16 @@ declare function cmn:get-acl-permission-attr($permission as node()) {
 :)
 declare function cmn:get-acl-permission-as-attr($filter-name as xs:string) {
     let $acl-perm := cmn:get-acl-permissions($filter-name)
+    return cmn:get-acl-permission-attr($acl-perm)
+};
+
+(:~
+: Returns the input filters corresponding permission as a attribute condition string
+: @param $doctype
+: @param $filter-name
+:)
+declare function cmn:get-acl-permission-as-attr($doctype as xs:string, $filter-name as xs:string) {
+    let $acl-perm := cmn:get-acl-doctype-permissions($doctype,$filter-name)
     return cmn:get-acl-permission-attr($acl-perm)
 };
 

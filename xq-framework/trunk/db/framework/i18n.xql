@@ -121,7 +121,8 @@ declare function i18n:translate($node as node(),$text as xs:string,$selectedCata
     if(contains($text,'{')) then 
         (: text contains parameters to substitute :)
         let $params := $node//i18n:param
-        let $paramKey := substring-before(substring-after($text, '{'),'}')
+        (: !+NOTE (ao, Oct 23 2012) added [1] on $text since we may have more than one catalogue file :)
+        let $paramKey := substring-before(substring-after($text[1], '{'),'}')
         return                        
             if(number($paramKey) and exists($params[position() eq number($paramKey)])) then
                 (: numerical parameters to substituce :) 
@@ -157,7 +158,8 @@ declare function i18n:replaceParam($node as node(), $param as node(),$paramKey a
         return i18n:translate($node,$result,$selectedCatalogue)                                            
     else     
         (: simply substitute {paramKey} with it's param value' :)
-        let $result := replace($text, concat("\{", $paramKey, "\}"), $param)
+        (: !+NOTE (ao, Oct 23 2012) added [1] on $text since we may have more than one catalogue file :)
+        let $result := replace($text[1], concat("\{", $paramKey, "\}"), $param)
         return 
             i18n:translate($node, $result,$selectedCatalogue)
 };

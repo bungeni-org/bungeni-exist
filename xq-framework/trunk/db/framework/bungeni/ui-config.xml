@@ -710,6 +710,14 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/home.xsl</xsl>
             </view>
+            <!-- global search link -->
+            <view path="government-text" id="profile" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/home.xsl</xsl>
+            </view>
         </views>
         <views name="Bill">
             <view path="bills" id="listing" tag="listing">
@@ -1080,6 +1088,9 @@
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
         </doctype>
         <doctype category="document" name="Question">
             <orderbys>
@@ -1100,7 +1111,7 @@
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
             <acl name="public-view">
-                <permission name="bungeni.question.View" role="bungeni.Anonymous" setting="Deny"/>
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
             </acl>
         </doctype>
         <doctype category="document" name="Motion">
@@ -1121,6 +1132,9 @@
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
         </doctype>
         <doctype category="document" name="TabledDocument">
             <orderbys>
@@ -1140,6 +1154,9 @@
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
         </doctype>
         <doctype category="document" name="AgendaItem">
             <orderbys>
@@ -1159,8 +1176,15 @@
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
                 <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
         </doctype>
-        <doctype category="document" name="Event"/>
+        <doctype category="document" name="Event">
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
         <doctype category="group" name="Committee">
             <orderbys>
                 <orderby value="st_date_oldest" order="ascending" field="bu:document/bu:statusDate">status date [oldest]</orderby>
@@ -1178,6 +1202,9 @@
                 <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
                 <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'dissolved')</listingfilter>
             </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
         </doctype>
         <doctype category="group" name="PoliticalGroup">
             <orderbys>

@@ -2519,6 +2519,40 @@ declare function bun:get-parl-doc($acl as xs:string,
 };
 
 (:~
+:   Used to retrieve a legislative-document with events applying acl
+:
+: @param acl
+: @param docid
+: @param _tmpl
+: @param tab
+:   The corresponding transform template passed by the calling funcction
+:)
+declare function bun:get-parl-doc-with-events($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    
+    (: !+ACL_NEW_API
+    let $acl-filter := cmn:get-acl-filter($acl)
+    :)
+    
+    let $doc := document {
+            (:Returs a AN Document :)
+            (:  !+ACL_NEW_API - changed call to use new ACL API , 
+            :   the root is an ontology document now not a legislativeItem
+            :)
+            let $match := bun:documentitem-full-acl($acl, $doc-uri)
+            return
+                (: $parts/parent::node() returns all tabs of this doctype :)
+                bun:get-ref-events($match, $parts/parent::node())
+        }
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
+(:~
 :   Used to retrieve a legislative-document timeline page
 :
 : @param acl
@@ -2649,6 +2683,34 @@ declare function bun:get-ref-assigned-grps($docitem as node(), $docviews as node
         </ref>
         {bun:get-excludes($docitem, $docviews)}
     </doc>     
+};
+
+declare function bun:get-ref-events($docitem as node(), $docviews as node()) {
+    <doc>
+        {$docitem}
+        <ref>
+        {
+            let $uri := data(if ($docitem/bu:document/@uri) then ($docitem/bu:document/@uri) else ($docitem/bu:document/@internal-uri) )
+            let $acl-filter := cmn:get-acl-permission-as-attr(data($docviews/@name),'public-view')
+            return
+                bun:xqy-list-events-with-acl($uri, $acl-filter)
+        }
+        </ref>
+        {bun:get-excludes($docitem, $docviews)}
+    </doc>     
+};
+
+declare function bun:xqy-list-events-with-acl($parent-uri as xs:string, $acl-filter as xs:string) {
+
+    let $events-qry := fn:concat("collection('",cmn:get-lex-db() ,"')",
+        "/bu:ontology[@for='document']",
+        "/bu:document[bu:docType/bu:value eq 'Event']",
+        "[bu:eventOf/bu:refersTo[@href eq '",$parent-uri,"']]",
+        "/(bu:permissions except bu:versions)",
+        "/bu:control[",$acl-filter,"]",
+        "/ancestor::bu:ontology")
+     return 
+        util:eval($events-qry)
 };
 
 (:~
@@ -2819,19 +2881,23 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
+    (:
+        !+FIX_THIS (ao, 23 Aug 2012) Added ...$eventid][1] in the xquery below because in tests where one resets 
+        Bungeni DB everytime, the doc_id is initialized. Since postTransform uses the parent bu:docId in the 
+        event document to find the parent doc, chances are it could find more than two documents in the 
+        collection and perform PostTransform on them...
+    
+    :)
+    let $docitem := collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid][1]/ancestor::bu:ontology
     
     let $doc := <doc>      
-            (:
-                !+FIX_THIS (ao, 23 Aug 2012) Added ...$eventid][1] in the xquery below because in tests where one resets 
-                Bungeni DB everytime, the doc_id is initialized. Since postTransform uses the parent bu:docId in the 
-                event document to find the parent doc, chances are it could find more than two documents in the 
-                collection and perform PostTransform on them...
-            
-            :)
-            { collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid][1]/ancestor::bu:ontology }
+            { $docitem }
             <ref>
             {
-                collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[@uri eq $eventid]/ancestor::bu:ontology
+                let $uri := data(if ($docitem/bu:document/@uri) then ($docitem/bu:document/@uri) else ($docitem/bu:document/@internal-uri) )
+                let $acl-filter := cmn:get-acl-permission-as-attr('Event','public-view')
+                return
+                    bun:xqy-list-events-with-acl($uri, $acl-filter)           
             }            
             </ref>
             <event>{$eventid}</event>

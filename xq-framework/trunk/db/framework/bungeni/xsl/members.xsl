@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -100,10 +100,10 @@
             <div class="doc-toggle">
                 <div style="min-height:110px;">
                     <p class="imgonlywrap photo-listing" style="float:left;">
-                        <xsl:variable name="img_uuid" select="ref/bu:ontology/bu:image/bu:imageUuid"/>
+                        <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
                         <xsl:choose>
-                            <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_uuid))">
-                                <img src="../../bungeni-atts/{$img_uuid}" alt="Place Holder for M.P Photo" align="left"/>
+                            <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_hash))">
+                                <img src="../../bungeni-atts/{$img_hash}" alt="Place Holder for M.P Photo" align="left"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <img src="assets/images/placeholder.jpg" alt="No Photo Available" align="left"/>

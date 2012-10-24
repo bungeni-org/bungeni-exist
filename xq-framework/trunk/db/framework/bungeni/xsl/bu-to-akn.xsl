@@ -114,13 +114,13 @@
             <xsl:choose>
                 <xsl:when test="$for-reference eq 'true'">
                     <xsl:for-each select="bu:attachment">
-                        <hasAttachment id="{concat(bu:type/bu:value,bu:headId)}" href="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:fileUuid)}" showAs="{bu:mimetype/bu:value}"/>
+                        <hasAttachment id="{concat(bu:type/bu:value,bu:headId)}" href="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:fileHash)}" showAs="{bu:mimetype/bu:value}"/>
                     </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>
                     <attachments>
                         <xsl:for-each select="bu:attachment">
-                            <componentRef id="{concat(bu:type/bu:value,bu:headId)}" src="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:fileUuid)}" showAs="{bu:mimetype/bu:value}"/>
+                            <componentRef id="{concat(bu:type/bu:value,bu:headId)}" src="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:fileHash)}" showAs="{bu:mimetype/bu:value}"/>
                         </xsl:for-each>
                     </attachments>
                 </xsl:otherwise>

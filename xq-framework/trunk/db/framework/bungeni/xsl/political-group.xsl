@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     
     <!-- Generic templates applied to document views -->
     <xsl:import href="tmpl-grp-generic.xsl"/>
@@ -35,11 +35,11 @@
                 <div id="doc-main-section">
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
-                            <xsl:variable name="img_uuid" select="bu:ontology/bu:group/bu:logoData/bu:imageUuid"/>
+                            <xsl:variable name="img_hash" select="bu:ontology/bu:group/bu:logoData/bu:imageHash"/>
                             <p class="imgonlywrap">
                                 <xsl:choose>
-                                    <xsl:when test="bu:ontology/bu:group/bu:logoData and doc-available(concat('../../../bungeni-atts/',$img_uuid))">
-                                        <img src="../../bungeni-atts/{$img_uuid}" alt="Group Logo" align="left"/>
+                                    <xsl:when test="bu:ontology/bu:group/bu:logoData and doc-available(concat('../../../bungeni-atts/',$img_hash))">
+                                        <img src="../../bungeni-atts/{$img_hash}" alt="Group Logo" align="left"/>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <img src="assets/images/group.png" alt="Place Holder for Group Logo" align="left"/>

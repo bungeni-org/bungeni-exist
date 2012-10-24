@@ -213,7 +213,7 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
     return
         if($attachedfile/bu:attachmentId cast as xs:integer eq $attid) then (
             response:stream-binary(
-                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:fileUuid)) cast as xs:base64Binary,
+                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:fileHash)) cast as xs:base64Binary,
                 $attachedfile/bu:mimetype/bu:value,
                 $attachedfile/bu:name),
             response:set-header("Content-Disposition" , concat("attachment; filename=",  $attachedfile/bu:name)),
@@ -919,7 +919,7 @@ declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string
                 {
                 (: adding attachments with relative path to links :)                
                     functx:replace-element-values($search-rs/bu:attachments/bu:attachment,
-                           for $p in $search-rs/bu:attachments/bu:attachment/bu:fileUuid
+                           for $p in $search-rs/bu:attachments/bu:attachment/bu:fileHash
                            return concat("/exist/rest/bungeni-atts/",$p)) 
                 }   
                 </bu:attachment-links>

@@ -560,14 +560,14 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
                 if saved_file_node is not None:
                     # get the name of the saved file node
                     original_name = saved_file_node.getText()
-                    # rename file with uuid
-                    new_name = str(uuid.uuid4())
                     # first get the current directory name 
                     current_dir = os.path.dirname(inputdoc.xmlfile)
+                     # rename file with md5sum
+                    new_name = __md5_file(current_dir + "/" + original_name)
                     # move file to attachments folder and use derived uuid as new name for the file
                     shutil.move(current_dir + "/" + original_name, self.atts_folder + new_name)
                     # add new node on document with uuid
-                    node.addElement("field").addText(new_name).addAttribute("name","att_uuid")
+                    node.addElement("field").addText(new_name).addAttribute("name","att_hash")
                     document_updated = True
             if document_updated:
                 inputdoc.write_to_disk()
@@ -596,18 +596,18 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
             if saved_file_node is not None:
                 # get the name of the saved file node
                 original_name = saved_file_node.getText()
-                # rename file with uuid
-                new_name = str(uuid.uuid4())
                 # first get the current directory name 
                 if abs_path == False:
                     current_dir = os.path.dirname(inputdoc.xmlfile)
                     full_path = current_dir + "/"
                 else:
                     full_path = dir_name
+                # rename file with md5sum
+                new_name = __md5_file(full_path + original_name)
                 # move file to attachments folder and use derived uuid as new name for the file
                 shutil.move(full_path + original_name, self.atts_folder + new_name)
                 # add new node on document with uuid
-                image_node.addElement("field").addText(new_name).addAttribute("name","img_uuid")
+                image_node.addElement("field").addText(new_name).addAttribute("name","img_hash")
                 document_updated = True
             if document_updated:
                 inputdoc.write_to_disk()
@@ -1369,12 +1369,13 @@ def __md5_file(f, block_size=2**20):
     """
     import hashlib
     md5 = hashlib.md5()
+    f = open(f)
     while True:
         data = f.read(block_size)
         if not data:
             break
         md5.update(data)
-    return md5.digest()
+    return md5.hexdigest()
 
 def list_uniqifier(seq):
     #http://www.peterbe.com/plog/uniqifiers-benchmark

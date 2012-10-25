@@ -665,10 +665,12 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     print "NOT TRANSFORMED: Back to queue"
                     return (True, False)
                 else:
+                    if pipe_type == "parliament":
+                        # if it was a parliament info document update cached copy 
+                        # to remain upto date.
+                        tmp_folder = self.input_params["main_config"].get_temp_files_folder()
+                        shutil.copyfile(input_file_path, tmp_folder + __parl_info__)
                     return (out_files[0], True)
-            elif pipe_type == "parliament":
-                # Handle unique case parliament
-                return (None, None)
             # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
             # from queue programmatically
             elif pipe_type == "attachment" or pipe_type == "signatory" or pipe_type == "report":
@@ -1468,10 +1470,6 @@ def main_queue(config_file, afile):
                     in_queue = True
                 elif info_object[1] == False:
                     in_queue = False
-                    return in_queue
-                elif info_object[1] == None:
-                    # mark parl-information document for removal from message-queue
-                    in_queue = True
                     return in_queue
                 else:
                     print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC

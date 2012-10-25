@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -18,7 +18,7 @@
         <div id="main-wrapper">
             <div id="title-holder">
                 <h1 class="title">
-                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName,', ',ref/bu:ontology/bu:user/bu:title)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -45,88 +45,144 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div class="mem-profile">
-                        <div class="mem-photo mem-top-left">
-                            <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
-                            <p class="imgonlywrap">
-                                <xsl:choose>
-                                    <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_hash))">
-                                        <img src="../../bungeni-atts/{$img_hash}" alt="Place Holder for M.P Photo" align="left"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <img src="assets/images/placeholder.jpg" alt="Place Holder for M.P Photo" align="left"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </p>
-                        </div>
-                        <div class="mem-top-right">
-                            <table class="mem-tbl-details">
-                                <tr>
-                                    <td class="labels fbt">name:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,' ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">gender:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="if (bu:ontology/bu:membership/bu:gender/@showAs) then                                             data(bu:ontology/bu:membership/bu:gender/@showAs) else                                              bu:ontology/bu:membership/bu:gender"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">elected/nominated:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="if (bu:ontology/bu:membership/bu:memberElectionType/@showAs) then                                             data(bu:ontology/bu:membership/bu:memberElectionType/@showAs) else                                              bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">election/nomination date:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:electionNominationDate),$date-format,'en',(),())"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">start date:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:startDate),$date-format,'en',(),())"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">language:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/@xml:lang"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">constituency:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:constituency/@name"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">province:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:province/@name"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">region:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:region/@name"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="labels fbottom">political party:</td>
-                                    <td class="fbt">
-                                        <xsl:value-of select="bu:ontology/bu:membership/bu:party/bu:fullName"/>
-                                    </td>
-                                </tr>
-                            </table>
+                    <div class="item">
+                        <h3 class="toggleOpen">membership information</h3>
+                        <div class="toggle" style="display:block;">
+                            <span class="toggleClose">x</span>
+                            <div class="mem-profile">
+                                <div class="mem-photo mem-top-left">
+                                    <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
+                                    <p class="imgonlywrap">
+                                        <xsl:choose>
+                                            <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_hash))">
+                                                <img src="../../bungeni-atts/{$img_hash}" alt="Place Holder for M.P Photo" align="left"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <img src="assets/images/placeholder.jpg" alt="Place Holder for M.P Photo" align="left"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </p>
+                                </div>
+                                <div class="mem-top-right">
+                                    <table class="mem-tbl-details">
+                                        <tr>
+                                            <td class="labels fbottom">elected/nominated:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="if (bu:ontology/bu:membership/bu:memberElectionType/@showAs) then                                             data(bu:ontology/bu:membership/bu:memberElectionType/@showAs) else                                              bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">election/nomination date:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:electionNominationDate),$date-format,'en',(),())"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">start date:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:startDate),$date-format,'en',(),())"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">language:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="bu:ontology/bu:membership/@xml:lang"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">constituency:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="bu:ontology/bu:membership/bu:constituency/@name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">province:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="bu:ontology/bu:membership/bu:province/@name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">region:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="bu:ontology/bu:membership/bu:region/@name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="labels fbottom">political party:</td>
+                                            <td class="fbt">
+                                                <xsl:value-of select="bu:ontology/bu:membership/bu:party/bu:fullName"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="clear"/>
+                            <div class="mem-desc">
+                                <xsl:copy-of select="bu:ontology/bu:membership/bu:notes/child::node()" copy-namespaces="no"/>
+                            </div>
                         </div>
                     </div>
-                    <div class="clear"/>
-                    <div class="mem-desc">
-                        <xsl:copy-of select="bu:ontology/bu:membership/bu:description/child::node()" copy-namespaces="no"/>
+                    <div class="item">
+                        <h3 class="toggleOpen">personal information</h3>
+                        <div class="toggle">
+                            <span class="toggleClose">x</span>
+                            <div class="mem-profile">
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="Name">Name(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="concat(ref/bu:ontology/bu:user/bu:title,' ',ref/bu:ontology/bu:user/bu:firstName,' ', ref/bu:ontology/bu:user/bu:lastName)"/>
+                                </div>
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="Gender">Gender(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="if (bu:ontology/bu:membership/bu:gender/@showAs) then                                             data(bu:ontology/bu:membership/bu:gender/@showAs) else                                              bu:ontology/bu:membership/bu:gender"/>
+                                </div>
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="Country of Birth">birth country(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthCountry"/>
+                                </div>
+                                <xsl:if test="ref/bu:ontology/bu:user/bu:maritalStatus/@showAs">
+                                    <div class="list-block">
+                                        <div class="block-label">
+                                            <i18n:text key="Marital Status">Marital Status(nt):</i18n:text>:
+                                        </div>
+                                        <xsl:value-of select="ref/bu:ontology/bu:user/bu:maritalStatus/@showAs"/>
+                                    </div>
+                                </xsl:if>
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="Date of Birth">date of birth(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
+                                </div>
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="Nationality at Birth">Nationality at Birth(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthNationality"/>
+                                </div>
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="Current Nationality">Current Nationality(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="ref/bu:ontology/bu:user/bu:currentNationality"/>
+                                </div>
+                                <div class="list-block">
+                                    <div class="block-label">
+                                        <i18n:text key="National Id">National Id(nt):</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="ref/bu:ontology/bu:user/bu:nationalId"/>
+                                </div>
+                            </div>
+                            <div class="clear"/>
+                            <div class="mem-desc">
+                                <xsl:copy-of select="ref/bu:ontology/bu:user/bu:description/child::node()" copy-namespaces="no"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -281,6 +281,17 @@ $(document).ready(function () {
       })
     });
     
+    /* Independent Toggle */
+    $(function() {
+    	$('h3.toggleOpen').click(function() {
+    		$(this).next('.toggle').slideDown("medium");
+    	});
+    	$('span.toggleClose').click(function() {
+    		$(this).parents('.toggle').slideUp("medium");
+    	});
+    });
+    
+    
     var fullDate = new Date();
     var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
     var currentDate = fullDate.getFullYear() + "/" + twoDigitMonth + "-" + fullDate.getDate();

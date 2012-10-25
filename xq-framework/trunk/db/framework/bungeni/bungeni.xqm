@@ -1678,7 +1678,7 @@ declare function bun:get-raw-xml($docid as xs:string) as element() {
 
     functx:remove-elements-deep(
         collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]],
-        ('bu:versions', 'bu:permissions', 'bu:changes')
+        ('bu:versions', 'bu:permissions', 'bu:changes','bu:description')
     )
 };
 
@@ -2588,7 +2588,7 @@ declare function bun:get-government($parts as node()) as element()* {
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     let $doc := <doc>{
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'government']/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Parliament']/ancestor::bu:ontology
                     return
                         $match  
                 }</doc>   
@@ -3028,12 +3028,11 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid][1]/ancestor::bu:ontology
-    let $vocabularized := $member-doc
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[@uri=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
-                    {$vocabularized}
+                    {$member-doc}
                     <ref>
                     {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology}
                     </ref>

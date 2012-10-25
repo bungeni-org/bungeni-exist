@@ -80,11 +80,6 @@
             <navigation>members</navigation>
             <subnavigation>members</subnavigation>
         </route>
-        <route href="/member-personalinfo">
-            <title>Business | Member of Parliament</title>
-            <navigation>members</navigation>
-            <subnavigation>current</subnavigation>
-        </route>
         <route href="/member-officesheld">
             <title>Business | Member of Parliament</title>
             <navigation>members</navigation>
@@ -998,13 +993,6 @@
                 </title>
                 <template>xml/member.xml</template>
                 <xsl>xsl/member.xsl</xsl>
-            </view>
-            <view path="member-personalinfo" id="info" tag="tab">
-                <title>
-                    <i18n:text key="tab-info">information(nt)</i18n:text>
-                </title>
-                <template>xml/member.xml</template>
-                <xsl>xsl/personal-info.xsl</xsl>
             </view>
             <view path="member-officesheld" id="offices" tag="tab">
                 <title>

@@ -326,6 +326,9 @@ div#doc-downloads {
     float:left;
     font-weight:bold;
 }
+.mem-profile .list-block .block-label {
+    min-width:160px;
+}
 .list-block div.doc-toggle {
     width:90%;
 }
@@ -504,6 +507,44 @@ span.hi {
 a.van-light {
     color:#1f34fd;
 }
+
+/* Independent Toggle
+-------------------------------------------------------------- */
+.item {
+	margin: 30px 0;
+}
+.toggle {
+	position: relative;
+	margin:0;
+	display: none;
+}
+.toggle p {
+	font-size: 13px;
+	margin:15px 0 0 0;
+	line-height: 20px;
+}
+h3.toggleOpen {
+	margin-left:20px;
+	cursor: pointer;
+}
+.toggleClose {
+    border-radius: 7px 7px 7px 7px;
+    box-shadow: none;
+    font: bold 131% sans-serif;
+    padding: 0 6px 2px;
+    position: absolute;
+	display: block;
+	background: #666;
+	color: #fff;
+	top: -30px;
+	right: 5px;
+	cursor: pointer;
+}
+.toggleClose:hover {
+	background: #444;
+	color: #ccc;
+}
+
 
 /* Tables
 -------------------------------------------------------------- */

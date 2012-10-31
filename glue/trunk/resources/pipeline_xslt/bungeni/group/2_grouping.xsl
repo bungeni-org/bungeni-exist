@@ -244,6 +244,24 @@
         </fullName>
     </xsl:template>
     
+    <xsl:template match="logo_data">
+        <logoData isA="TLCObject">
+            <xsl:apply-templates />
+        </logoData>
+    </xsl:template>     
+    
+    <xsl:template match="field[@name='saved_file']">
+        <savedFile type="xs:string">
+            <xsl:value-of select="." />
+        </savedFile>
+    </xsl:template>      
+    
+    <xsl:template match="field[@name='img_hash']">
+        <imageHash type="xs:string">
+            <xsl:value-of select="." />
+        </imageHash>
+    </xsl:template>    
+    
     <xsl:template match="field[@name='description']">
         <description>
             <xsl:value-of select="." />
@@ -330,19 +348,21 @@
     </xsl:template>
     
     <xsl:template match="field[@name='group_continuity']">
-        <groupContinuity isA="TLCTerm" vdex="org.bungeni.metadata.vocabularies.committee_continuity">
+        <groupContinuity isA="TLCTerm">
+            <xsl:attribute name="showAs" select="@displayAs"/>
             <xsl:value-of select="."/>
         </groupContinuity>
     </xsl:template> 
     
-    <xsl:template match="field[@name='proportional_presentation']">
-        <proportionalPresentation type="xs:string">
+    <xsl:template match="field[@name='proportional_representation']">
+        <proportionalRepresentation type="xs:string">
             <xsl:value-of select="."/>
-        </proportionalPresentation>
+        </proportionalRepresentation>
     </xsl:template>     
     
     <xsl:template match="field[@name='sub_type']">
-        <subType isA="TLCTerm" vdex="org.bungeni.metadata.vocabularies.committee_type">
+        <subType isA="TLCTerm">
+            <xsl:attribute name="showAs" select="@displayAs"/>
             <xsl:value-of select="."/>
         </subType>
     </xsl:template>    
@@ -392,13 +412,15 @@
     </xsl:template>      
     
     <xsl:template match="field[@name='postal_address_type']">
-        <postalAddressType isA="TLCTerm" vdex="org.bungeni.metadata.vocabularies.postal_address_type">
+        <postalAddressType isA="TLCTerm">
+            <xsl:attribute name="showAs" select="@displayAs"/>
             <xsl:value-of select="."/>
         </postalAddressType>
     </xsl:template>
     
     <xsl:template match="field[@name='logical_address_type']">
-        <logicalAddressType isA="TLCTerm" vdex="org.bungeni.metadata.vocabularies.logical_address_type">
+        <logicalAddressType isA="TLCTerm">
+            <xsl:attribute name="showAs" select="@displayAs"/>
             <xsl:value-of select="."/>
         </logicalAddressType>
     </xsl:template>      

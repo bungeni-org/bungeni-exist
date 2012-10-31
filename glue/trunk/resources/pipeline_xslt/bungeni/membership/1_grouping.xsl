@@ -114,6 +114,7 @@
                     @name='status' or 
                     @name='election_nomination_date' or 
                     @name='start_date' or 
+                    @name='end_date' or                     
                     @name='notes' ]" 
                 />     
                 <referenceToUser uri="{concat('/ontology/Person/',$full-user-identifier)}" />
@@ -134,11 +135,11 @@
                 <xsl:copy-of select="group/field[  
                     @name='short_name' or
                     @name='full_name' or 
-                    @name='description' or 
                     @name='type' or 
                     @name='group_id' or  
                     @name='election_date' or 
                     @name='start_date' or 
+                    @name='end_date' or 
                     @name='dissolution_date' or 
                     @name='results_date' or 
                     @name='proportional_presentation' or 

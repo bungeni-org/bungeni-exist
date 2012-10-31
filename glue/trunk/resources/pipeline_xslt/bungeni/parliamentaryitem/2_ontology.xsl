@@ -35,7 +35,13 @@
     <xsl:variable name="for-parliament" select="data(/ontology/bungeni/parliament/@href)" />
     <xsl:variable name="parliament-id" select="data(/ontology/bungeni/@id)" />
     <xsl:variable name="type-mappings" select="//custom/value" />
+    <xsl:variable name="bungeni-content-type" select="data(//custom/bungeni_doc_type)" />
+    <xsl:variable name="content-type-uri-name" select="data(/ontology/document/docType[@isA='TLCTerm']/value)" />
     
+    <!-- permission names for the type -->
+    <xsl:variable name="perm-content-type-view" select="concat('bungeni.',$bungeni-content-type,'.View')" />
+    <xsl:variable name="perm-content-type-edit" select="concat('bungeni.',$bungeni-content-type,'.View')" />
+  
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -81,7 +87,8 @@
 
     <xsl:template match="_vp_response_type">
         <responseType isA="TLCTerm">
-            <value isA="TLCTerm" vdex="org.bungeni.metadata.vocabularies.response_type">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm">
                 <xsl:value-of select="field[@name='value']" />
             </value>
         </responseType>
@@ -96,7 +103,8 @@
     
     <xsl:template match="field[@name='doc_type']">
         <docSubType isA="TLCObject">
-            <value isA="TLCTerm" vdex="org.bungeni.metadata.vocabularies.event_type"><xsl:value-of select="." /></value>
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm"><xsl:value-of select="." /></value>
         </docSubType>
     </xsl:template>    
     
@@ -137,6 +145,7 @@
     
     <xsl:template match="field[@name='status']">
         <status isA="TLCTerm">
+            <xsl:attribute name="showAs" select="@displayAs"/>
             <value type="xs:string"><xsl:value-of select="." /></value>
         </status>
     </xsl:template>    
@@ -223,10 +232,10 @@
         </savedFile>
     </xsl:template>  
     
-    <xsl:template match="field[@name='att_uuid']">
-        <fileUuid type="xs:string">
+    <xsl:template match="field[@name='att_hash']">
+        <fileHash type="xs:string">
             <xsl:value-of select="." />
-        </fileUuid>
+        </fileHash>
     </xsl:template>
     
     <xsl:template match="field[@name='language']">
@@ -312,10 +321,22 @@
     </xsl:template>
 
     <xsl:template match="permission">
+        <xsl:variable name="perm-name" select="data(field[@name='permission'])" />
+        <xsl:variable name="perm-role" select="data(field[@name='role'])" />
+        <xsl:variable name="perm-setting" select="data(field[@name='setting'])" />
         <permission 
-            setting="{field[@name='setting']}" 
-            name="{field[@name='permission']}"  
-            role="{field[@name='role']}" />
+            setting="{$perm-setting}" 
+            name="{$perm-name}"  
+            role="{$perm-role}" />
+            <xsl:choose>
+                <xsl:when test="$perm-name eq $perm-content-type-view">
+                    <control name="View" setting="{$perm-setting}" role="{$perm-role}" />  
+                </xsl:when>
+                <xsl:when test="$perm-name eq $perm-content-type-edit">
+                    <control name="Edit" setting="{$perm-setting}" role="{$perm-role}" />  
+                </xsl:when>
+                <xsl:otherwise />
+            </xsl:choose>
     </xsl:template>
     
     <xsl:template match="item_signatories">
@@ -511,7 +532,7 @@
         <xsl:variable name="user-uri" select="busers:get_user_uri($country-code, $user-identifier)" />
    
         <owner isA="TLCPerson">
-            <person href="{$user-uri}" showAs="{concat($last-name, ' ,', $first-name)}" />
+            <person href="{$user-uri}" showAs="{concat($last-name, ', ', $first-name)}" />
             <role type="TLCConcept">
                 <value type="xs:string">
                     <xsl:value-of select="bctypes:get_content_type_uri_name(

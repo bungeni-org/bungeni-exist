@@ -87,6 +87,7 @@
                 
                 <xsl:copy-of select="field[ @name='parent_group_id' or 
                     @name='committee_id' or 
+                    @name='acronym' or 
                     @name='short_name' or
                     @name='full_name' or 
                     @name='description' or 
@@ -97,12 +98,15 @@
                     @name='group_continuity' or 
                     @name='sub_type' or 
                     @name='start_date' or 
+                    @name='end_date' or 
                     @name='status' or 
-                    @name='election_date' ] | group_addresses | contained_groups"></xsl:copy-of>
-                
-                <!-- PERMISSIONS -->
-                <xsl:copy-of select="permissions" />                
-                
+                    @name='election_date' ]"/>
+                <!-- GROUP LOGO -->
+                <xsl:copy-of select="logo_data"/>
+                                
+                <!-- ADDRESSES, SUB-GROUPS, PERMISSIONS -->
+                <xsl:copy-of select="group_addresses | contained_groups"/>                
+                <xsl:copy-of select="permissions" />                               
             </group>
             <legislature isA="TLCConcept" href="{$for-parliament}">
                 <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate> 
@@ -112,8 +116,8 @@
                     @name='election_date' or 
                     @name='dissolution_date' or 
                     @name='results_date' or 
-                    @name='proportional_presentation' or 
-                    @name='status_date' ] | agenda_items | parent_group" 
+                    @name='proportional_representation' or 
+                    @name='status_date' ] | agenda_items" 
                 />                 
             </legislature>
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">

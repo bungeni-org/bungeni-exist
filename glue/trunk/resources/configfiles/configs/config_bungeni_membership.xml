@@ -30,7 +30,7 @@
             <parameter name="for-parliament" />
             <parameter name="type-mappings">
                 <value>
-                    <map from="membership" uri-name="Membership"  element-name="membership" />
+                    <map from="group_membership" uri-name="Membership"  element-name="membership" />
                 </value>
             </parameter>            
         </parameters>

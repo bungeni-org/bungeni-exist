@@ -27,6 +27,11 @@
     <xsl:variable name="for-parliament" select="data(/ontology/bungeni/parliament/@href)" />  
     <xsl:variable name="parliament-id" select="data(/ontology/bungeni/@id)" />
     <xsl:variable name="type-mappings" select="//custom/value" />
+    <xsl:variable name="bungeni-groupsitting-type" select="data(//custom/bungeni_grp_type)" />
+    
+    <!-- permission names for the type -->
+    <xsl:variable name="perm-content-type-view" select="concat('bungeni.',$bungeni-groupsitting-type,'.View')" />
+    <xsl:variable name="perm-content-type-edit" select="concat('bungeni.',$bungeni-groupsitting-type,'.View')" />    
 
     <xsl:template match="/">
         <xsl:apply-templates/>
@@ -223,10 +228,22 @@
     </xsl:template>
     
     <xsl:template match="permission">
+        <xsl:variable name="perm-name" select="data(field[@name='permission'])" />
+        <xsl:variable name="perm-role" select="data(field[@name='role'])" />
+        <xsl:variable name="perm-setting" select="data(field[@name='setting'])" />
         <permission 
-            setting="{field[@name='setting']}" 
-            name="{field[@name='permission']}"  
-            role="{field[@name='role']}" />
+            setting="{$perm-setting}" 
+            name="{$perm-name}"  
+            role="{$perm-role}" />
+        <xsl:choose>
+            <xsl:when test="$perm-name eq $perm-content-type-view">
+                <control name="View" setting="{$perm-setting}" role="{$perm-role}" />  
+            </xsl:when>
+            <xsl:when test="$perm-name eq $perm-content-type-edit">
+                <control name="Edit" setting="{$perm-setting}" role="{$perm-role}" />  
+            </xsl:when>
+            <xsl:otherwise />
+        </xsl:choose>
     </xsl:template> 
     
     <xsl:template match="field[@name='item_id']">

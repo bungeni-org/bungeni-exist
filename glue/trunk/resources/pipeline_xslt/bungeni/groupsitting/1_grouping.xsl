@@ -121,6 +121,9 @@
             -->
             <custom>
                 <xsl:copy-of select="$type-mappings" />
+                <bungeni_grp_type>
+                    <xsl:value-of select="$bungeni-groupsitting-type"/>
+                </bungeni_grp_type>                
             </custom>            
         </ontology>
     </xsl:template>

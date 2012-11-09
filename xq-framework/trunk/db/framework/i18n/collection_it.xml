@@ -150,6 +150,10 @@
     <msg key="pageof">di</msg>
     <msg key="compress">tutti compremere</msg>
     <msg key="expand">tutti espandere</msg>
+    <msg key="collapse-membership">adesione informazioni crollato</msg>
+    <msg key="expand-membership">ampliare le informazioni di appartenenza</msg>
+    <msg key="collapse-personal">crollato dati personali</msg>
+    <msg key="expand-personal">ampliato le informazioni personali</msg>      
     <!-- PLACEHOLDERS -->
     <msg key="ph-searchall">Cerca tutti i documenti Bungeni...</msg>
     <msg key="ph-searchlisting">ricerca questo annuncio</msg>

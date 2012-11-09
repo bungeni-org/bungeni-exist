@@ -2380,7 +2380,7 @@ declare function bun:xqy-generic-perms($acl as xs:string) as xs:string{
     : if any and will be deprecated.
     :)
     return fn:concat(
-        "bu:permissions/bu:permission[", 
+        "bu:permissions/bu:control[", 
         cmn:get-acl-permission-attr($acl-permissions), 
         "]")
 };

@@ -150,6 +150,10 @@
     <msg key="pageof">kwa</msg>
     <msg key="compress">shindilia zote</msg>
     <msg key="expand">panua zote</msg>
+    <msg key="collapse-membership">shindilia ripoti ya uanachama</msg>
+    <msg key="expand-membership">panua ripoti ya uanachama</msg>
+    <msg key="collapse-personal">shindilia ripoti ya kibinafsi</msg>
+    <msg key="expand-personal">panua ripoti ya kibinafsi</msg>         
     <!-- PLACEHOLDERS -->
     <msg key="ph-searchall">Tafuta kwenye hati zote Bungeni...</msg>
     <msg key="ph-searchlisting">tafuta katika orodha hii</msg>

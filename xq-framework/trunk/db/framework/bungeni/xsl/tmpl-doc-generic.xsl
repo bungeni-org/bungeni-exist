@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -75,6 +75,8 @@
             </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
+                    <!-- Document Emblem -->
+                    <xsl:call-template name="doc-item-emblem"/>                    
                     <!-- If there is a versions node in this document, there are
                         rendered at this juncture -->
                     <xsl:call-template name="doc-item-versions">
@@ -94,6 +96,11 @@
             </div>
         </div>
     </xsl:template>
+    
+    <!-- DOC-ITEM-EMBLEM -->
+    <xsl:template name="doc-item-emblem">
+        <img class="parl-emblem" src="assets/images/emblem.png" alt="emblem"/>
+    </xsl:template>    
 
     <!-- DOC-ITEM-TITLE -->
     <xsl:template name="doc-item-title">
@@ -105,7 +112,7 @@
                 <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
             </xsl:if>
             <h1 class="title">
-                <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
+                #<xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>: <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </h1>
             <h2 class="sub-title">
                 <!-- If its a version and not a main document... add version title below main title -->
@@ -178,15 +185,15 @@
     <!-- DOC-ITEM-NUMBER -->
     <xsl:template name="doc-item-number">
         <xsl:param name="doc-type"/>
-        <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
-            <i18n:text key="number">Number(nt)</i18n:text>: 
-            <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
+        <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+            <i18n:text key="number">number(nt)</i18n:text>: 
+            <xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>
         </h4>
     </xsl:template>
     
     <!-- DOC-ITEM-SPONSOR -->
     <xsl:template name="doc-item-sponsor">
-        <h4 id="doc-item-desc2" class="doc-headers-darkgrey camel-txt">
+        <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
                 <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
                     <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
@@ -198,7 +205,7 @@
     <!-- DOC-ITEM-SIGNATORIES -->
     <xsl:template name="doc-item-sponsors">
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
-            <i18n:text key="sponsors">Sponsors(nt)</i18n:text>: ( 
+            <i18n:text key="sponsors">sponsors(nt)</i18n:text>: ( 
             <xsl:choose>
                 <!-- check whether we have signatories or not -->
                 <xsl:when test="bu:ontology/bu:signatories">
@@ -213,7 +220,7 @@
                     </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>
-                    <i18n:text key="none">None(nt)</i18n:text>
+                    <i18n:text key="none">none(nt)</i18n:text>
                 </xsl:otherwise>
             </xsl:choose> 
             )
@@ -226,25 +233,25 @@
         <xsl:param name="ver-uri"/>
         <xsl:variable name="ref-audit" select="substring-after(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:refersToAudit/@href,'#')"/>
         <xsl:variable name="render-doc" select="if ($version eq 'true') then                         bu:ontology/bu:document/bu:audits/bu:audit[@id=$ref-audit]                          else                         bu:ontology/bu:document                         "/>
-        <h4 class="doc-status">
+        <p class="inline-centered">
             <span>
-                <b class="camel-txt">
-                    <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
+                <b>
+                    <i18n:text key="last-event">last event(nt)</i18n:text>:</b>
+            </span>
+            &#160;           
+            <span>
+                <xsl:value-of select="$render-doc/bu:status/@showAs"/>
             </span>
             &#160;
             <span>
-                <xsl:value-of select="$render-doc/bu:status"/>
-            </span>
-            &#160;
-            <span>
-                <b class="camel-txt">
-                    <i18n:text key="date-on">Date(nt)</i18n:text>:</b>
+                <b>
+                    <i18n:text key="date-on">date(nt)</i18n:text>:</b>
             </span>
             &#160;
             <span>
                 <xsl:value-of select="format-dateTime($render-doc/bu:statusDate,$datetime-format,'en',(),())"/>
             </span>
-        </h4>
+        </p>
         <div id="doc-content-area">
             <div>
                 <xsl:choose>

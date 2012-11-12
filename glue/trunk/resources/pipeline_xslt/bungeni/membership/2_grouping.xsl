@@ -43,13 +43,13 @@
     </xsl:template>
     
     <xsl:template match="field[@name='active_p']">
-        <status type="xs:string">
+        <activeP type="xs:string">
             <xsl:variable name="field_active" select="." />
             <xsl:choose >
-                <xsl:when test="$field_active eq 'A'">active</xsl:when>
+                <xsl:when test="$field_active eq 'True'">active</xsl:when>
                 <xsl:otherwise>inactive</xsl:otherwise>
             </xsl:choose>
-        </status>
+        </activeP>
     </xsl:template>
     
     <xsl:template match="field[@name='first_name']">

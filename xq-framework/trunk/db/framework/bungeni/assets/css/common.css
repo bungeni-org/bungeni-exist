@@ -181,6 +181,9 @@ div#doc-downloads {
 .tgl-wrap {
     margin-right:10px;
 }
+.tgl-pad-right {
+    padding-right:5px;
+}
  
  .toggle-wrapper {
     margin:0 auto;
@@ -222,6 +225,10 @@ div#doc-downloads {
     position:relative;
     top:0px;
     right:10px;
+}
+
+.address-info {
+    margin-left:15px;
 }
 
 /* emblem */
@@ -310,6 +317,11 @@ img.parl-emblem {
 }
  
 /*reusables*/
+.timeline-action {
+    font-style: italic;
+    color:#888;
+    padding-right:3px;
+}
 .camel-txt {
     text-transform:capitalize;
 }

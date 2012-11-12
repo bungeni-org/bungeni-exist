@@ -77,6 +77,8 @@
     <msg key="dob">data di nascita</msg>
     <msg key="status">stato</msg>
     <msg key="docid">Documento di Identità</msg>
+    <msg key="docuri">URI</msg>
+    <msg key="progressiveno">progressivo nu.</msg>
     <msg key="parliament">Parlemento</msg>
     <msg key="session-yr">Sessione Dell'anno</msg>
     <msg key="session-no">Sessione Numero</msg>
@@ -131,7 +133,7 @@
     <msg key="tab-history">storia</msg>
     <msg key="tab-details">dettagli</msg>
     <msg key="tab-assigned">assegnato gruppi</msg>
-    <msg key="tab-documents">documentazione</msg>
+    <msg key="tab-documents">appendice</msg>
     <msg key="tab-type">tipo</msg>
     <msg key="tab-desc">descrizione</msg>
     <msg key="tab-date">data</msg>

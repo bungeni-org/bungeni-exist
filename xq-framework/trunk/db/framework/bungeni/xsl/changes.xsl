@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -65,9 +65,6 @@
                                     <i18n:text key="tab-desc">description(nt)</i18n:text>
                                 </th>
                                 <th>
-                                    <i18n:text key="tab-status">status(nt)</i18n:text>
-                                </th>
-                                <th>
                                     <i18n:text key="tab-date">date(nt)</i18n:text>
                                 </th>
                                 <!-- !+FIX_THIS not-implemented
@@ -76,11 +73,20 @@
                                 </th-->
                             </tr>
                             <xsl:for-each select="ref/timeline">
-                                <xsl:sort select="bu:statusDate" order="descending"/>
+                                <xsl:variable name="timeline-type">
+                                    <xsl:choose>
+                                        <xsl:when test="bu:type/bu:value">
+                                            <xsl:value-of select="bu:type/bu:value"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$doc-type"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
                                 <tr>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="bu:type/bu:value"/>
+                                            <xsl:value-of select="lower-case($timeline-type)"/>
                                         </span>
                                     </td>
                                     <td>
@@ -91,7 +97,7 @@
                                                         <xsl:value-of select="bu:title"/>
                                                     </a--> 
                                                     <!-- !+NOTE (ao, 10 July 2012) This does not work on integrated Bungeni UI. The path 
-                                                        seems to get lost -->
+                                                    seems to get lost -->
                                                     <a href="popout?uri={@href}" rel="{lower-case($doc-type)}-event?uri={@href}" onclick="return false;">
                                                         <xsl:value-of select="bu:title"/>
                                                     </a>
@@ -102,7 +108,15 @@
                                                         <xsl:value-of select="bu:name"/>
                                                     </a>
                                                 </xsl:when>
+                                                <xsl:when test="bu:auditAction/bu:value">
+                                                    <xsl:value-of select="bu:auditAction/bu:value"/>
+                                                    <!--xsl:if test="bu:auditAction/bu:value eq 'version'">
+                                                         <xsl:value-of select="bu:sequence"/>
+                                                    </xsl:if-->
+                                                </xsl:when>
                                                 <xsl:otherwise>
+                                                    <span class="timeline-action">
+                                                        <xsl:value-of select="bu:status/bu:value"/>:</span>
                                                     <xsl:value-of select="bu:title"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
@@ -110,12 +124,7 @@
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="bu:status/bu:value"/>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span>
-                                            <xsl:value-of select="format-dateTime(bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                            <xsl:value-of select="format-dateTime((bu:statusDate,bu:activeDate),'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </span>
                                     </td>
                                     <!--td>

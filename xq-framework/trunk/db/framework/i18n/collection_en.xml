@@ -73,8 +73,10 @@
     <msg key="gender">gender</msg>
     <msg key="dob">date of birth</msg>
     <msg key="status">status</msg>
-    <msg key="docid">Doc Id</msg>
-    <msg key="parliament">Parliament</msg>
+    <msg key="docid">registry no.</msg>
+    <msg key="docuri">URI</msg>
+    <msg key="progressiveno">progressive no.</msg>
+    <msg key="parliament">parliament</msg>
     <msg key="session-yr">session year</msg>
     <msg key="session-no">session number</msg>
     <msg key="resp-type">response type</msg>
@@ -126,7 +128,7 @@
     <msg key="tab-history">history</msg>
     <msg key="tab-details">details</msg>
     <msg key="tab-assigned">assigned groups</msg>
-    <msg key="tab-documents">documents</msg>
+    <msg key="tab-documents">appendix</msg>
     <msg key="tab-type">type</msg>
     <msg key="tab-desc">description</msg>
     <msg key="tab-date">date</msg>

@@ -40,15 +40,16 @@
                                 <th class="fbtd">name</th>
                                 <th class="fbtd">start</th>
                                 <th class="fbtd">end</th>
-                                <th class="fbtd">type</th>
+                                <th class="fbtd">status</th>
                             </tr>
                             <xsl:for-each select="bu:ontology/bu:members/bu:member/bu:membershipType[bu:value eq 'committee_staff']/ancestor::bu:member">
                                 <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
                                 <tr class="items">
                                     <td class="fbt bclr">
-                                        <a href="member?uri={bu:person/@href}">
+                                        <!--a href="member?uri={bu:person/@href}">
                                             <xsl:value-of select="bu:person/@showAs"/>
-                                        </a>
+                                        </a-->
+                                        <xsl:value-of select="bu:person/@showAs"/>
                                     </td>
                                     <td class="fbt bclr">
                                         <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
@@ -57,7 +58,7 @@
                                         <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
                                     </td>
                                     <td class="fbt bclr">
-                                        <xsl:value-of select="bu:membershipType"/>
+                                        <xsl:value-of select="bu:activeP"/>
                                     </td>
                                 </tr>
                             </xsl:for-each>

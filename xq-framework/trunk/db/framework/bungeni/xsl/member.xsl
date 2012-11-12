@@ -59,7 +59,7 @@
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <a id="mTag" href="#membership-info" class="togglers" onClick="toggleAndChangeText('membership-info',this.id,'m-');">
+                    <a id="mTag" href="#" class="togglers" onClick="toggleAndChangeText('membership-info',this.id,'m-');">
                         ▼<i18n:text key="expand-membership">&#160;expanded membership information(nt)</i18n:text>
                     </a>
                     <div id="membership-info" class="toggle">
@@ -137,7 +137,7 @@
                     </div>
                     <br/>
                     <br/>
-                    <a id="pTag" href="#personal-info" class="togglers" onClick="toggleAndChangeText('personal-info',this.id,'p-');">
+                    <a id="pTag" href="#" class="togglers" onClick="toggleAndChangeText('personal-info',this.id,'p-');">
                         ►&#160;<i18n:text key="collapse-personal">&#160;collapsed personal information(nt)</i18n:text>
                     </a>
                     <div id="personal-info" class="toggle" style="display:none;">
@@ -147,6 +147,12 @@
                                     <i18n:text key="Name">Name(nt):</i18n:text>:
                                 </div>
                                 <xsl:value-of select="concat(ref/bu:ontology/bu:user/bu:title,' ',ref/bu:ontology/bu:user/bu:firstName,' ', ref/bu:ontology/bu:user/bu:lastName)"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="Salutation">salutation(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:membership/bu:salutation"/>
                             </div>
                             <div class="list-block">
                                 <div class="block-label">

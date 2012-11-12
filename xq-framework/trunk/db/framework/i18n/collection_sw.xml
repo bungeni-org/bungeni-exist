@@ -77,6 +77,8 @@
     <msg key="dob">tarehe ya kuzaliwa</msg>
     <msg key="status">kiwango</msg>
     <msg key="docid">Kitambulisha Hati</msg>
+    <msg key="docuri">URI</msg>
+    <msg key="progressiveno">nambari kiendelezi.</msg>
     <msg key="parliament">Bunge</msg>
     <msg key="session-yr">Mwaka wa Kikao</msg>
     <msg key="session-no">Nambari ya Kikao</msg>
@@ -131,7 +133,7 @@
     <msg key="tab-history">historia</msg>
     <msg key="tab-details">vipengele</msg>
     <msg key="tab-assigned">vikundi vilivyo awazwa</msg>
-    <msg key="tab-documents">hati</msg>
+    <msg key="tab-documents">nyongeza</msg>
     <msg key="tab-type">aina</msg>
     <msg key="tab-desc">elezo</msg>
     <msg key="tab-date">tarehe</msg>

@@ -221,6 +221,14 @@
                                $full-group-identifier
                                )" />
                            
+                           <xsl:copy-of select="field[@name='group_id' or 
+                               @name='short_name' or
+                               @name='full_name' or 
+                               @name='acronym' or 
+                               @name='status_date' or 
+                               @name='identifier' or 
+                               @name='type' or  
+                               @name='start_date' ]"/>                           
                        </group>
                        
                    </xsl:for-each>

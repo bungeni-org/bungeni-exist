@@ -41,6 +41,16 @@
     <!-- permission names for the type -->
     <xsl:variable name="perm-content-type-view" select="concat('bungeni.',$bungeni-content-type,'.View')" />
     <xsl:variable name="perm-content-type-edit" select="concat('bungeni.',$bungeni-content-type,'.View')" />
+    <!-- event types
+         !+NOTE (ao, 12th Nov 2012) This was especially added because event types did not have a definitive
+         role by themselves. i.e bungeni.event.View; So we check if the document is child (<head/> indicates 
+         that, then we create a view by getting its parent type from the <head/> node.
+    -->
+    <xsl:variable name="perm-event-type-view">
+        <xsl:if test="head/node()">
+            <xsl:value-of select="concat('bungeni.',head/field[@name='type'],'.View')"/>
+        </xsl:if>
+    </xsl:variable>          
   
     <xsl:template match="/">
         <xsl:apply-templates/>
@@ -120,8 +130,7 @@
         
     <xsl:template match="field[@name='start_date']">
         <startDate type="xs:dateTime">
-            <xsl:variable name="start_date" select="." />
-            <xsl:value-of select="bdates:parse-date($start_date)" />
+            <xsl:value-of select="." />
         </startDate>
     </xsl:template> 
     
@@ -195,6 +204,18 @@
         </longTitle>
     </xsl:template>  
     
+    <xsl:template match="field[@name='short_name']">
+        <shortName type="xs:string">
+            <xsl:value-of select="." />
+        </shortName>
+    </xsl:template>       
+    
+    <xsl:template match="field[@name='full_name']">
+        <fullName type="xs:string">
+            <xsl:value-of select="." />
+        </fullName>
+    </xsl:template>     
+    
     <xsl:template match="field[@name='mimetype']">
         <mimetype isA="TLCTerm">
             <value type="xs:string"><xsl:value-of select="." /></value>
@@ -206,6 +227,12 @@
             <xsl:value-of select="." />
         </name>
     </xsl:template>  
+    
+    <xsl:template match="field[@name='identifier']">
+        <identifier type="xs:string">
+            <xsl:value-of select="." />
+        </identifier>
+    </xsl:template>     
     
     <xsl:template match="field[@name='type']">
         <type isA="TLCTerm">
@@ -335,6 +362,9 @@
                 <xsl:when test="$perm-name eq $perm-content-type-edit">
                     <control name="Edit" setting="{$perm-setting}" role="{$perm-role}" />  
                 </xsl:when>
+                <xsl:when test="not(empty($perm-event-type-view)) and ends-with($perm-name,'.View')">
+                    <control name="View" setting="{$perm-setting}" role="{$perm-role}" />  
+                </xsl:when>                
                 <xsl:otherwise />
             </xsl:choose>
     </xsl:template>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -63,13 +63,13 @@
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
                         <div id="toggle-i18n" class="hide">
                             <span id="i-compress">
-                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
                             </span>
                             <span id="i-expand">
-                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
                             </span>
                         </div>
-                        <div class="toggler-list" id="expand-all">- <i18n:text key="compress">compress all(nt)</i18n:text>
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
                         </div>
                     </div>                 
                     <!-- render the actual listing-->
@@ -83,20 +83,18 @@
     <xsl:include href="paginator.xsl"/>
     <xsl:template match="alisting">
         <ul id="list-toggle" class="ls-row clear">
-            <xsl:apply-templates mode="renderui">
-                <xsl:sort select="bu:ontology/bu:membership/bu:firstName" order="ascending"/>
-            </xsl:apply-templates>
+            <xsl:apply-templates mode="renderui"/>
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:salutation,'. ',bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
             </div>
-            <span>-</span>
+            <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
                 <div style="min-height:110px;">
                     <p class="imgonlywrap photo-listing" style="float:left;">

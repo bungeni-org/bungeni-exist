@@ -83,101 +83,149 @@
                     <xsl:with-param name="uri" select="$doc-uri"/>
                 </xsl:call-template>
             </xsl:if>
+            <div id="toggle-i18n" class="hide">
+                <span id="i18n-versions">
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </span>
+                <span id="i18n-events">
+                    <i18n:text key="events">events(nt)</i18n:text>
+                </span>
+                <span id="i18n-atts">
+                    <i18n:text key="attachedfiles">attached files(nt)</i18n:text>
+                </span>
+            </div>
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="blocks">
-                        <div class="list-block">
-                            <b>
-                                <i18n:text key="docid">Doc Id(nt)</i18n:text>
-                            </b> : <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>
+                        <a id="mTagProfile" href="#" class="togglers" onClick="toggleOnly('profile-info',this.id,'profile');">
+                            ▼profile
+                        </a>
+                        <div id="profile-info" class="toggle">
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="docid">Registry #(nt)</i18n:text>&#160;
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>&#160;
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="progressiveno">progressive #(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>&#160;
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="docuri">URI(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="$doc-uri"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="parliament">parliament(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:legislature/@href"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="session-yr">session year(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="substring-before(bu:ontology/bu:legislature/bu:electionDate/@select,'-')"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="session-no">session number(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:legislature/bu:parliamentId/@select"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="submit-date">submission date(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <xsl:value-of select="bu:ontology/child::*/bu:group/bu:type/bu:value"/>
+                                </div>
+                                <xsl:value-of select="bu:ontology/child::*/bu:group/bu:fullName"/>
+                            </div>
                         </div>
+                        <br/>
                         <xsl:if test="$version ne 'true'">
-                            <div id="block1" class="list-block">
-                                <div>
-                                    <span class="tgl tgl-wrap">-</span>
-                                    <b>
-                                        <i18n:text key="versions">versions(nt)</i18n:text>
-                                    </b>
-                                </div>
-                                <div class="doc-toggle opened">
-                                    <ul class="ls-row">
-                                        <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
-                                            <xsl:sort select="bu:activeDate" order="descending"/>
-                                            <li>
-                                                <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
-                                                    <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
-                                                </a>
-                                                <div class="struct-ib"> / 
-                                                    <xsl:variable name="procedureType">
-                                                        <xsl:choose>
-                                                            <xsl:when test="bu:procedureType/bu:value eq 'm'">
-                                                                <xsl:text>modified</xsl:text>
-                                                            </xsl:when>
-                                                            <xsl:when test="bu:procedureType/bu:value eq 'a'">
-                                                                <xsl:text>added</xsl:text>
-                                                            </xsl:when>
-                                                            <xsl:otherwise>
-                                                                <xsl:value-of select="bu:procedureType/bu:value"/>
-                                                            </xsl:otherwise>
-                                                        </xsl:choose>
-                                                    </xsl:variable>
-                                                    <xsl:value-of select="$procedureType"/>
-                                                    / <xsl:value-of select="format-dateTime(bu:activeDate,$datetime-format,'en',(),())"/>
-                                                </div>
-                                            </li>
-                                        </xsl:for-each>
-                                    </ul>
-                                </div>
-                            </div>
-                        </xsl:if>
-                        <xsl:if test="ref/bu:ontology/bu:document">
-                            <div id="block2" class="list-block">
-                                <div>
-                                    <span class="tgl tgl-wrap">-</span>
-                                    <b>
-                                        <i18n:text key="events">events(nt)</i18n:text>
-                                    </b>
-                                </div>
-                                <div class="doc-toggle opened">
-                                    <ul class="ls-row">
-                                        <xsl:for-each select="ref/bu:ontology/bu:document">
-                                            <xsl:sort select="bu:statusDate" order="descending"/>
-                                            <li>
-                                                <!--a href="{lower-case($doc-type)}-event?uri={@uri}">
-                                                    <xsl:value-of select="bu:title"/>
-                                                </a-->
-                                                <a href="popout?uri={@uri}" rel="{lower-case($doc-type)}-event?uri={@uri}" onclick="return false;">
-                                                    <xsl:value-of select="bu:title"/>
-                                                </a>
-                                                <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
-                                                </div>
-                                            </li>
-                                        </xsl:for-each>
-                                    </ul>
-                                </div>
-                            </div>
-                        </xsl:if>
-                        <div id="block3" class="list-block">
-                            <div>
-                                <span class="tgl tgl-wrap">-</span>
-                                <b>
-                                    <i18n:text key="attachedfiles">attached files(nt)</i18n:text>
-                                </b>
-                            </div>
-                            <div class="doc-toggle opened">
+                            <a id="mTagVersions" href="#" class="togglers" onClick="toggleAndChangeFullText('versions-info',this.id,'i18n-versions');">
+                                ▼<i18n:text key="versions">versions(nt)</i18n:text>
+                            </a>
+                            <div id="versions-info" class="toggle">
                                 <ul class="ls-row">
-                                    <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
+                                    <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
+                                        <xsl:sort select="bu:activeDate" order="descending"/>
                                         <li>
-                                            <a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
-                                                <xsl:value-of select="bu:name"/>
+                                            <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
+                                                <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
                                             </a>
-                                            <div class="struct-ib"> (<xsl:value-of select="bu:mimetype/bu:value"/>) / <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                            <div class="struct-ib"> / 
+                                                <xsl:variable name="procedureType">
+                                                    <xsl:choose>
+                                                        <xsl:when test="bu:procedureType/bu:value eq 'm'">
+                                                            <xsl:text>modified</xsl:text>
+                                                        </xsl:when>
+                                                        <xsl:when test="bu:procedureType/bu:value eq 'a'">
+                                                            <xsl:text>added</xsl:text>
+                                                        </xsl:when>
+                                                        <xsl:otherwise>
+                                                            <xsl:value-of select="bu:procedureType/bu:value"/>
+                                                        </xsl:otherwise>
+                                                    </xsl:choose>
+                                                </xsl:variable>
+                                                <xsl:value-of select="$procedureType"/>
+                                                / <xsl:value-of select="format-dateTime(bu:activeDate,$datetime-format,'en',(),())"/>
                                             </div>
                                         </li>
                                     </xsl:for-each>
                                 </ul>
                             </div>
+                            <br/>
+                        </xsl:if>
+                        <xsl:if test="ref/bu:ontology/bu:document">
+                            <a id="mTagEvents" href="#" class="togglers" onClick="toggleAndChangeFullText('events-info',this.id,'i18n-events');">
+                                ▼<i18n:text key="events">events(nt)</i18n:text>
+                            </a>
+                            <div id="events-info" class="toggle">
+                                <ul class="ls-row">
+                                    <xsl:for-each select="ref/bu:ontology/bu:document">
+                                        <xsl:sort select="bu:statusDate" order="descending"/>
+                                        <li>
+                                            <!--a href="{lower-case($doc-type)}-event?uri={@uri}">
+                                                <xsl:value-of select="bu:title"/>
+                                                </a-->
+                                            <a href="popout?uri={@uri}" rel="{lower-case($doc-type)}-event?uri={@uri}" onclick="return false;">
+                                                <xsl:value-of select="bu:title"/>
+                                            </a>
+                                            <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
+                                            </div>
+                                        </li>
+                                    </xsl:for-each>
+                                </ul>
+                            </div>
+                            <br/>
+                        </xsl:if>
+                        <a id="mTagAtts" href="#" class="togglers" onClick="toggleAndChangeFullText('atts-info',this.id,'i18n-atts');">
+                            ▼<i18n:text key="attachedfiles">attached files(nt)</i18n:text>
+                        </a>
+                        <div id="atts-info" class="toggle">
+                            <ul class="ls-row">
+                                <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
+                                    <li>
+                                        <a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
+                                            <xsl:value-of select="bu:name"/>
+                                        </a>
+                                        <div class="struct-ib"> (<xsl:value-of select="bu:mimetype/bu:value"/>) / <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                        </div>
+                                    </li>
+                                </xsl:for-each>
+                            </ul>
                         </div>
+                        <br/>
                     </div>
                 </div>
             </div>

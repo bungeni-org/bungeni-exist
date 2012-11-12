@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -11,6 +11,7 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
+    <xsl:param name="event-uri"/>
     <xsl:template match="doc">
         <xsl:variable name="event-uri" select="event"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
@@ -99,12 +100,12 @@
                                 &#160;<i18n:text key="date-on">Date(nt)</i18n:text>:</b>
                         </span>
                         <span>
-                            <xsl:value-of select="format-dateTime(ref/bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(ref/bu:ontology/bu:document[@uri = $event-uri]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </h4>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="ref/bu:ontology/bu:document/bu:body"/>
+                            <xsl:copy-of select="ref/bu:ontology/bu:document[@uri = $event-uri]/bu:body"/>
                         </div>
                         <!-- TO_BE_REVIEWED -->
                     </div>

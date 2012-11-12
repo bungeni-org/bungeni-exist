@@ -1049,10 +1049,10 @@ declare function bun:search-membership(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'st_date_oldest') then (
+            if ($sortby = 'ln_asc') then (
                (:if (fn:ni$qrystr):)
                 for $match in subsequence($coll,$offset,$limit)
-                order by $match/child::*/bu:statusDate ascending
+                order by $match/bu:membership/bu:lastName ascending
                 return 
                     <doc>
                         {$match}
@@ -1060,10 +1060,43 @@ declare function bun:search-membership(
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
                     </doc>  
-                )             
+                ) 
+            else if ($sortby = 'ln_desc') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:lastName descending
+                return 
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>        
+                )
+            else if ($sortby = 'fn_desc') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:firstName descending
+                return 
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>        
+                )    
+            else if ($sortby = 'fn_asc') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:firstName ascending
+                return 
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>        
+                )                 
             else  (
                 for $match in subsequence($coll,$query-offset,$limit)
-                order by $match/child::*/bu:statusDate descending
+                order by $match/child::*/bu:lastName descending
                 return 
                     <doc>
                         {$match}
@@ -2737,10 +2770,11 @@ declare function bun:get-ref-timeline-activities($docitem as node(), $docviews a
                 : !+FIX_THIS (ao, 8th Aug 2012) workflowEvents dont have permissions with them...
                 : currently using 'internal' to hide them from anonymous :)
                 let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, $event/child::*}
-                let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, $audit/child::*} 
+                let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, $audit/child::*}
+                let $changes := for $change in $docitem//bu:changes/child::* return element timeline { attribute id {$change/@id }, $change/child::*}                
                 
-                for $eachitem in ($wfevents, $audits) 
-                order by $eachitem/bu:statusDate descending
+                for $eachitem in ($wfevents, $audits, $changes) 
+                order by ($eachitem/bu:activeDate,$eachitem/bu:statusDate) descending
                 return $eachitem   
 
                 (:for $per-event in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
@@ -2908,6 +2942,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
                             $stylesheet, 
                             <parameters>
                                 <param name="version" value="true" />
+                                <param name="event-uri" value="$eventid" />
                             </parameters>)
 };
 
@@ -2973,7 +3008,7 @@ declare function bun:get-members(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'ln') then (
+            if ($sortby = 'ln_desc') then (
             
                 for $match in subsequence($coll,$offset,$limit)                
                 order by $match/bu:membership/bu:lastName descending
@@ -2985,7 +3020,18 @@ declare function bun:get-members(
                         </ref>                    
                     </doc>  
                 )
-            else if ($sortby = 'fn') then (
+            else if ($sortby = 'ln_asc') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:lastName ascending
+                return 
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>       
+                )                 
+            else if ($sortby = 'fn_desc') then (
                 for $match in subsequence($coll,$offset,$limit)
                 order by $match/bu:membership/bu:firstName descending
                 return 
@@ -2995,7 +3041,18 @@ declare function bun:get-members(
                         {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
                         </ref>                    
                     </doc>       
-                )                
+                )  
+            else if ($sortby = 'fn_asc') then (
+                for $match in subsequence($coll,$offset,$limit)
+                order by $match/bu:membership/bu:firstName ascending
+                return 
+                    <doc>
+                        {$match}
+                        <ref>
+                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                        </ref>                    
+                    </doc>       
+                )                 
             else  (
                 for $match in subsequence($coll,$offset,$limit)
                 order by $match/bu:membership/bu:lastName descending

@@ -188,11 +188,6 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/bill-details">
-            <title>Business | Bill</title>
-            <navigation>business</navigation>
-            <subnavigation>bills</subnavigation>
-        </route>
         <route href="/bill-documents">
             <title>Business | Bill</title>
             <navigation>business</navigation>
@@ -234,11 +229,6 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/question-details">
-            <title>Business | Related Infomation</title>
-            <navigation>business</navigation>
-            <subnavigation>questions</subnavigation>
-        </route>
         <route href="/question-assignedgroups">
             <title>Business | Bill</title>
             <navigation>business</navigation>
@@ -276,11 +266,6 @@
             <subnavigation>motions</subnavigation>
         </route>
         <route href="/motion-timeline">
-            <title>Business | Motion</title>
-            <navigation>business</navigation>
-            <subnavigation>motions</subnavigation>
-        </route>
-        <route href="/motion-details">
             <title>Business | Motion</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
@@ -326,11 +311,6 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/tableddocument-details">
-            <title>Business | Tabled document</title>
-            <navigation>business</navigation>
-            <subnavigation>tableddocuments</subnavigation>
-        </route>
         <route href="/tableddocument-assignedgroups">
             <title>Business | Tabled document</title>
             <navigation>business</navigation>
@@ -368,11 +348,6 @@
             <subnavigation>agendaitems</subnavigation>
         </route>
         <route href="/agendaitem-timeline">
-            <title>Business | Agenda item</title>
-            <navigation>business</navigation>
-            <subnavigation>agendaitems</subnavigation>
-        </route>
-        <route href="/agendaitem-details">
             <title>Business | Agenda item</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
@@ -733,13 +708,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view path="bill-details" id="related" tag="tab">
-                <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
-                </title>
-                <template>xml/details.xml</template>
-                <xsl>xsl/details.xsl</xsl>
-            </view>
             <view path="bill-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -786,13 +754,6 @@
                 </title>
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
-            </view>
-            <view path="question-details" id="related" tag="tab">
-                <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
-                </title>
-                <template>xml/details.xml</template>
-                <xsl>xsl/details.xsl</xsl>
             </view>
             <view path="question-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
@@ -845,13 +806,6 @@
                 <template>xml/version.xml</template>
                 <xsl>xsl/version.xsl</xsl>
             </view>
-            <view path="motion-details" id="related" tag="tab">
-                <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
-                </title>
-                <template>xml/details.xml</template>
-                <xsl>xsl/details.xsl</xsl>
-            </view>
             <view path="motion-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -899,13 +853,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view path="tableddocument-details" id="related" tag="tab">
-                <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
-                </title>
-                <template>xml/details.xml</template>
-                <xsl>xsl/details.xsl</xsl>
-            </view>
             <view path="tableddocument-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -949,13 +896,6 @@
                 </title>
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
-            </view>
-            <view path="agendaitem-details" id="related" tag="tab">
-                <title>
-                    <i18n:text key="tab-details">details(nt)</i18n:text>
-                </title>
-                <template>xml/details.xml</template>
-                <xsl>xsl/details.xsl</xsl>
             </view>
             <view path="agendaitem-documents" id="attachments" tag="tab" check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]">
                 <title>
@@ -1210,7 +1150,7 @@
             </searchins>
             <listingfilters>
                 <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
-                <listingfilter id="draft" name="draft">contains(bu:status/bu:value,'draft')</listingfilter>
+                <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'draft')</listingfilter>
             </listingfilters>
         </doctype>
         <doctype category="group" name="ministry">
@@ -1241,9 +1181,10 @@
         </doctype>
         <doctype category="membership" name="Membership">
             <orderbys>
-                <orderby value="st_date_oldest" order="ascending" field="bu:legislature/bu:statusDate">status date [oldest]</orderby>
-                <orderby value="st_date_newest" order="descending" field="bu:legislature/bu:statusDate" default="true">status date
-                    [newest]</orderby>
+                <orderby value="ln_asc" order="ascending" field="bu:membership/bu:lastName">last name [ascending]</orderby>
+                <orderby value="ln_desc" order="descending" field="bu:membership/bu:lastName" default="true">last name [descending]</orderby>
+                <orderby value="fn_asc" order="ascending" field="bu:membership/bu:lfirstName">first name [ascending]</orderby>
+                <orderby value="fn_desc" order="descending" field="bu:membership/bu:firstName" default="true">first name [descending]</orderby>
             </orderbys>
             <searchins>
                 <searchin name="all" value="all" field="." default="true">Entire Document</searchin>

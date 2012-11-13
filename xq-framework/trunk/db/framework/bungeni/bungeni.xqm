@@ -2843,7 +2843,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
         $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
                             "/bu:ontology[@for='address']",
-                            "/bu:address/bu:assignedTo[@uri eq '",$focal,"'][1]",
+                            "/bu:address/bu:assignedTo[@uri eq '",$focal,"']",
                             (: !+NOTE (ao, 16 Mar 2012) Commented permissions check below since currently
                              : we only have public permissions which dont apply in this case 
                              :)
@@ -3085,7 +3085,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[@uri=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[@uri=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>

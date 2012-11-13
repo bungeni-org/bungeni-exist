@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -55,19 +55,17 @@
                         </xsl:if>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div id="toggle-i18n" style="display:none;">
+                        <div id="toggle-i18n" class="hide">
                             <span id="i-compress">
-                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                                <i18n:text key="compress">►&#160;compress all(nt)</i18n:text>
                             </span>
                             <span id="i-expand">
-                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                                <i18n:text key="expand">▼&#160;expand all(nt)</i18n:text>
                             </span>
                         </div>
-                        <xsl:if test="paginator/count cast as xs:integer gt 1">
-                            <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
-                            </div>
-                        </xsl:if>
-                    </div>                    
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
+                    </div>                     
                     <!-- 
                         !+LISTING_GENERATOR
                         render the actual listing
@@ -104,7 +102,7 @@
             </xsl:choose>
         </xsl:variable>
         <li>
-            <span>-</span>
+            <span class="tgl-pad-right">▼&#160;&#160;</span>
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/bu:owner/bu:person/@showAs">
                     <xsl:variable name="base-path">

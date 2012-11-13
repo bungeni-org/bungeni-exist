@@ -110,6 +110,7 @@
                      )" />-->
                 
                 <xsl:copy-of select="field[ @name='parent_group_id' or 
+                                            @name='address_id' or 
                                             @name='group_principal_id' or 
                                             @name='min_num_members' or 
                                             @name='num_researchers' or 

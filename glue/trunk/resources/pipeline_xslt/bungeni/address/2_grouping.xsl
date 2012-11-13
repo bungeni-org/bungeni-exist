@@ -285,9 +285,10 @@
     </xsl:template>     
     
     <xsl:template match="field[@name='language']">
-        <!-- !+RENDERED NOW as xml:lang on the legislativeItem
-            <language type="xs"><xsl:value-of select="." /></language>
-        -->
+        <language type="xs:string">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <xsl:value-of select="." />
+        </language>
     </xsl:template>   
     
     <xsl:template match="field[@name='birth_country']">

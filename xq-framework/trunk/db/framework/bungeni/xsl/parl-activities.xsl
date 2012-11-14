@@ -96,7 +96,7 @@
                                                 </xsl:choose>
                                             </td>
                                             <td class="fbt bclr">
-                                                <xsl:value-of select="bu:document/bu:status/bu:value"/>
+                                                <xsl:value-of select="if (data(bu:document/bu:status/@showAs)) then data(bu:document/bu:status/@showAs) else bu:document/bu:status/bu:value"/>
                                             </td>
                                             <td class="fbt bclr">
                                                 <xsl:value-of select="format-dateTime(bu:document/bu:statusDate,$datetime-format,'en',(),())"/>

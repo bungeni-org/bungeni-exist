@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -97,7 +97,7 @@
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="blocks">
-                        <a id="mTagProfile" href="#" class="togglers" onClick="toggleOnly('profile-info',this.id,'profile');">
+                        <a id="mTagProfile" href="#" class="togglers" onClick="toggleOnly('profile-info',this.id,'profile');return false;">
                             ▼profile
                         </a>
                         <div id="profile-info" class="toggle">
@@ -152,7 +152,7 @@
                         </div>
                         <br/>
                         <xsl:if test="$version ne 'true'">
-                            <a id="mTagVersions" href="#" class="togglers" onClick="toggleAndChangeFullText('versions-info',this.id,'i18n-versions');">
+                            <a id="mTagVersions" href="#" class="togglers" onClick="toggleAndChangeFullText('versions-info',this.id,'i18n-versions');return false;">
                                 ▼<i18n:text key="versions">versions(nt)</i18n:text>
                             </a>
                             <div id="versions-info" class="toggle">
@@ -187,7 +187,7 @@
                             <br/>
                         </xsl:if>
                         <xsl:if test="ref/bu:ontology/bu:document">
-                            <a id="mTagEvents" href="#" class="togglers" onClick="toggleAndChangeFullText('events-info',this.id,'i18n-events');">
+                            <a id="mTagEvents" href="#" class="togglers" onClick="toggleAndChangeFullText('events-info',this.id,'i18n-events');return false;">
                                 ▼<i18n:text key="events">events(nt)</i18n:text>
                             </a>
                             <div id="events-info" class="toggle">
@@ -209,7 +209,7 @@
                             </div>
                             <br/>
                         </xsl:if>
-                        <a id="mTagAtts" href="#" class="togglers" onClick="toggleAndChangeFullText('atts-info',this.id,'i18n-atts');">
+                        <a id="mTagAtts" href="#" class="togglers" onClick="toggleAndChangeFullText('atts-info',this.id,'i18n-atts');return false;">
                             ▼<i18n:text key="attachedfiles">attached files(nt)</i18n:text>
                         </a>
                         <div id="atts-info" class="toggle">

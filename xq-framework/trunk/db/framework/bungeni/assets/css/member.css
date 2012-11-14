@@ -11,7 +11,7 @@
 .mem-top-right {
     float:right;
     text-align:center;
-    width:auto;    
+    width:73%;    
     min-height:250px;
 }
 .mem-table-wrapper {
@@ -53,7 +53,7 @@ p.imgonlywrap img {
   }  
   
 table.mem-tbl-details {
-    width:700px;
+    width:100%;
     margin:10px 25px 0 auto;
     float:right;
 }

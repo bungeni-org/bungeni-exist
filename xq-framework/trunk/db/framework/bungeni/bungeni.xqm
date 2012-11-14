@@ -3110,7 +3110,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          
             for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
-            where bu:signatories/bu:signatory[@href=$memberid]/ancestor::bu:ontology or 
+            where bu:signatories/bu:signatory/bu:person[@href=$memberid]/ancestor::bu:ontology or 
                   bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
             return
                   $match

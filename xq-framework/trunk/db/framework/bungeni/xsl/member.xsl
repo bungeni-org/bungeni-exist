@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -45,22 +45,22 @@
             </div>
             <div id="toggle-i18n" class="hide">
                 <span id="m-collapse">
-                    <i18n:text key="collapse-membership"> collapsed membership information(nt)</i18n:text>
+                    <i18n:text key="collapse-membership"> membership information(nt)</i18n:text>
                 </span>
                 <span id="m-expand">
-                    <i18n:text key="expand-membership"> expanded membership information(nt)</i18n:text>
+                    <i18n:text key="expand-membership"> membership information(nt)</i18n:text>
                 </span>
                 <span id="p-collapse">
-                    <i18n:text key="collapse-personal"> collapsed personal information(nt)</i18n:text>
+                    <i18n:text key="collapse-personal"> personal information(nt)</i18n:text>
                 </span>
                 <span id="p-expand">
-                    <i18n:text key="expand-personal"> expanded personal information(nt)</i18n:text>
+                    <i18n:text key="expand-personal"> personal information(nt)</i18n:text>
                 </span>
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
-                <div id="doc-main-section">
-                    <a id="mTag" href="#" class="togglers" onClick="toggleAndChangeText('membership-info',this.id,'m-');">
-                        ▼<i18n:text key="expand-membership">&#160;expanded membership information(nt)</i18n:text>
+                <div id="doc-main-section" class="blocks">
+                    <a id="mTag" href="#" class="togglers" onClick="toggleAndChangeText('membership-info',this.id,'m-');return false;">
+                        ▼<i18n:text key="expand-membership">&#160;- membership information(nt)</i18n:text>
                     </a>
                     <div id="membership-info" class="toggle">
                         <div class="mem-profile">
@@ -137,8 +137,8 @@
                     </div>
                     <br/>
                     <br/>
-                    <a id="pTag" href="#" class="togglers" onClick="toggleAndChangeText('personal-info',this.id,'p-');">
-                        ►&#160;<i18n:text key="collapse-personal">&#160;collapsed personal information(nt)</i18n:text>
+                    <a id="pTag" href="#" class="togglers" onClick="toggleAndChangeText('personal-info',this.id,'p-');return false;">
+                        ►&#160;<i18n:text key="collapse-personal">&#160;+ personal information(nt)</i18n:text>
                     </a>
                     <div id="personal-info" class="toggle" style="display:none;">
                         <div class="mem-profile">

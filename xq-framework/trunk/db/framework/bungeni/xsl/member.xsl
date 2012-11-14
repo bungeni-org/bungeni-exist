@@ -60,7 +60,7 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section" class="blocks">
                     <a id="mTag" href="#" class="togglers" onClick="toggleAndChangeText('membership-info',this.id,'m-');return false;">
-                        ▼<i18n:text key="expand-membership">&#160;- membership information(nt)</i18n:text>
+                        ▼<i18n:text key="expand-membership">&#160; membership information(nt)</i18n:text>
                     </a>
                     <div id="membership-info" class="toggle">
                         <div class="mem-profile">
@@ -138,7 +138,7 @@
                     <br/>
                     <br/>
                     <a id="pTag" href="#" class="togglers" onClick="toggleAndChangeText('personal-info',this.id,'p-');return false;">
-                        ►&#160;<i18n:text key="collapse-personal">&#160;+ personal information(nt)</i18n:text>
+                        ►&#160;<i18n:text key="collapse-personal">&#160; personal information(nt)</i18n:text>
                     </a>
                     <div id="personal-info" class="toggle" style="display:none;">
                         <div class="mem-profile">

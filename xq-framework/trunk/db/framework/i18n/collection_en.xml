@@ -145,10 +145,10 @@
     <msg key="pageof">of</msg>
     <msg key="compress">compress all</msg>
     <msg key="expand">expand all</msg>
-    <msg key="collapse-membership">collapsed membership information</msg>
-    <msg key="expand-membership">expanded membership information</msg>
-    <msg key="collapse-personal">collapsed personal information</msg>
-    <msg key="expand-personal">expanded personal information</msg>
+    <msg key="collapse-membership">membership information</msg>
+    <msg key="expand-membership">membership information</msg>
+    <msg key="collapse-personal">personal information</msg>
+    <msg key="expand-personal">personal information</msg>
     <msg key="ph-searchall">Search all Bungeni documents...</msg>
     <msg key="ph-searchlisting">search this listing</msg>
     <msg key="download">download</msg>

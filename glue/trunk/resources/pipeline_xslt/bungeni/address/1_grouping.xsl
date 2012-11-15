@@ -68,17 +68,17 @@
                 </xsl:attribute>                
                 
                 <xsl:variable name="full-user-identifier"
-                    select="concat($country-code, '.',
+                    select="translate(concat($country-code, '.',
                                     head/field[@name='last_name'], '.', 
                                     head/field[@name='first_name'], '.', 
                                     head/field[@name='date_of_birth'], '.', 
-                                    head/field[@name='user_id'])" />   
+                                    head/field[@name='user_id']),' ','')" />   
                         
                 <xsl:variable name="full-group-identifier" 
-                    select="concat( bctype:get_content_type_uri_name($group-type, $type-mappings), '.',$for-parliament,'-',
+                    select="translate(concat( bctype:get_content_type_uri_name($group-type, $type-mappings), '.',$for-parliament,'-',
                                     $parliament-election-date,'-',
                                     $parliament-id, '.','group',
-                                    '.',$group_id)" /> 
+                                    '.',$group_id),' ','')" /> 
                 
                 <!-- !+URI_GENERATOR,!+FIX_THIS(ah,nov-2011) use ontology uri
                 for group since its non-document entity -->

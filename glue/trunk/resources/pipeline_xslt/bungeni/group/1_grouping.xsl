@@ -41,9 +41,9 @@
         <xsl:variable name="group_principal_id" select="field[@name='group_principal_id']" />
         <xsl:variable name="group_id" select="field[@name='group_id']" />
         
-        <xsl:variable name="full-group-identifier" select="concat(
+        <xsl:variable name="full-group-identifier" select="translate(concat(
             $content-type-uri-name, '.',$for-parliament,'-',$parliament-election-date,'-',$parliament-id, '.','group','.',$group_id
-            )" />
+            ),' ','')" />
         
         <!-- ROOT OF THE DOCUMENT -->
         <ontology for="group">

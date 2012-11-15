@@ -12,7 +12,9 @@
     float:right;
     text-align:center;
     width:73%;    
-    min-height:250px;
+    overflow: auto;
+    min-height:250px;    
+    height:auto!important;
 }
 .mem-table-wrapper {
     margin:0 auto;
@@ -21,7 +23,6 @@
 }
 .mem-photo {
     width:170px;
-    height:200px;
     margin:0 auto auto 0;
 }
 .photo-listing img {

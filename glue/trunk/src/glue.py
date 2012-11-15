@@ -307,7 +307,9 @@ class ParseBungeniXML(ParseXML):
             """
             Get the parliamentary information at this juncture.
             """
-            #parl_params['country-code'] = self.xmldoc.selectSingleNode("contenttype/field[@name='language']").getText()
+            # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
+            # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
+            # parl_params['country-code'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("language")).getText()
             parl_params['parliament-id'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("parliament_id")).getText()
             parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
             parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()
@@ -662,7 +664,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                 # Any error in transfromer return a None object which we want to leave 
                 # the doc in queue e.g. premature end of file encountered
                 if out_files[0] == None:
-                    print "NOT TRANSFORMED: Back to queue"
+                    print _COLOR.OKBLUE, "[checkpoint] not transformed - requeued", _COLOR.ENDC
                     return (True, False)
                 else:
                     if pipe_type == "parliament":

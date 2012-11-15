@@ -50,11 +50,11 @@
                 <!-- !+URI_REWORK(ah, 11-04-2012) -->
                 
                 <xsl:variable name="full-user-identifier"
-                    select="concat($country-code, '.',
+                    select="translate(concat($country-code, '.',
                     user/field[@name='last_name'], '.', 
                     user/field[@name='first_name'], '.', 
                     user/field[@name='date_of_birth'], '.', 
-                    field[@name='user_id'])" />
+                    field[@name='user_id']),' ','')" />
                 
                 <!-- 
                     generates group-membership prefices based on membership_type

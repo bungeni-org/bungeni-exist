@@ -198,28 +198,28 @@
                            
                            <xsl:variable name="group-type" select="field[@name='type']" />
                            
-                           <xsl:variable name="group-type-element-name" select="bctype:get_content_type_element_name(
+                           <xsl:variable name="group-type-element-name" select="translate(bctype:get_content_type_element_name(
                                $group-type, 
                                $type-mappings
-                               )" />
+                               ),' ','')" />
                            
-                           <xsl:variable name="group-type-uri-name" select="bctype:get_content_type_uri_name(
+                           <xsl:variable name="group-type-uri-name" select="translate(bctype:get_content_type_uri_name(
                                $group-type, 
                                $type-mappings
-                               )" />
+                               ),' ','')" />
                            
-                           <xsl:variable name="full-group-identifier" select="bctype:generate-group-identifier(
+                           <xsl:variable name="full-group-identifier" select="translate(bctype:generate-group-identifier(
                                $group-type-uri-name, 
                                $for-parliament, 
                                $parliament-election-date, 
                                $parliament-id, 
                                $group-id
-                               )" />
+                               ),' ','')" />
                            
-                           <xsl:attribute name="href" select="bctype:generate-group-uri(
+                           <xsl:attribute name="href" select="translate(bctype:generate-group-uri(
                                $group-type-uri-name, 
                                $full-group-identifier
-                               )" />
+                               ),' ','')" />
                            
                            <xsl:copy-of select="field[@name='group_id' or 
                                @name='short_name' or

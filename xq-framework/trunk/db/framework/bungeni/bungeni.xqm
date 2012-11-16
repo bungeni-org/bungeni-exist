@@ -2621,7 +2621,12 @@ declare function bun:get-government($parts as node()) as element()* {
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     let $doc := <doc>{
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Parliament']/ancestor::bu:ontology
+                    (: 
+                        !+FIX_THIS (ao, 16th Nov 2012) Temp fix to show one parliament infor in cases
+                        where multiple parliament info are present. Pending support for closing and opening
+                        parliaments.
+                    :)
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Parliament'][1]/ancestor::bu:ontology
                     return
                         $match  
                 }</doc>   

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Membership Workflow" description="Workflow for group membership" note="">
+    <state id="attached" title="Member" permissions_from_parent="true"/>
+    <state id="internal" title="Published Internal" note="Visible to bungeni users">
+        <!-- membership -->
+        <grant permission="bungeni.group_membership.View" role="bungeni.Authenticated"/>
+        <deny permission="bungeni.group_membership.View" role="bungeni.Anonymous"/>
+    </state>
+    
+    <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
+    <state id="inactive" title="Inactive address" like_state="internal">
+        <deny permission="zope.View" role="bungeni.Authenticated" /> 
+        <deny permission="zope.View" role="bungeni.Anonymous" /> 
+    </state>
+    -->
+    
+    
+    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <transition title="Create" source="" destination="attached" trigger="automatic"/>
+    <transition title="Publish Internal" source="attached" destination="internal" condition="user_may_edit_context_parent" trigger="manual" roles="bungeni.Clerk bungeni.Owner"/>
+    <transition title="Re-publish" source="internal" destination="attached" condition="user_may_edit_context_parent" trigger="manual" roles="bungeni.Clerk bungeni.Owner"/>
+    
+    <!--
+    <transition title="Deactivate"
+        source="attached internal"
+        destination="inactive"
+        condition="user_may_edit_context_parent"
+        trigger="manual"
+        roles="bungeni.Clerk bungeni.Owner"
+        require_confirmation="true"
+    />
+    -->
+</workflow>

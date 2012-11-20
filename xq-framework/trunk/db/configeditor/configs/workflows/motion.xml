@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Motion Workflow" description="A Motion" tags="draft private public         approved tobescheduled scheduled         actionclerk actionmp         terminal succeed fail     " permission_actions=".View .Edit .Add .Delete">
+    
+    <!-- features -->
+    <feature name="audit" enabled="true"/>
+    <feature name="version" enabled="true"/>
+    <feature name="attachment" enabled="true"/>
+    <feature name="event" enabled="true"/>
+    <feature name="signatory" enabled="true">
+        <parameter name="min_signatories" value="1"/>
+        <parameter name="open_states" value="admissible"/>
+    </feature>
+    <feature name="schedule" enabled="true"/>
+    <feature name="workspace" enabled="true"/>
+    <feature name="notification" enabled="true"/>
+    <feature name="download" enabled="true"/>
+    <feature name="group_assignment" enabled="true"/>
+    
+    <!-- global grants -->
+    <grant permission="bungeni.motion.Add" role="bungeni.Clerk"/>
+    <grant permission="bungeni.motion.Add" role="bungeni.MP"/>
+    <state id="working_draft" title="Working Draft" tags="draft private">
+        <!-- motion -->
+        <grant permission="bungeni.motion.View" role="bungeni.Clerk"/>
+        <deny permission="bungeni.motion.View" role="bungeni.Speaker"/>
+        <deny permission="bungeni.motion.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.motion.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.motion.View" role="bungeni.MP"/>
+        <deny permission="bungeni.motion.View" role="bungeni.Minister"/>
+        <deny permission="bungeni.motion.View" role="bungeni.Anonymous"/>
+        <deny permission="bungeni.motion.View" role="bungeni.CommitteeMember"/>
+        <grant permission="bungeni.motion.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.MP"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.Minister"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.Anonymous"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.CommitteeMember"/>
+        <grant permission="bungeni.motion.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.Speaker"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.MP"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.Minister"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.Anonymous"/>
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.MP"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Minister"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Speaker"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.MP"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Minister"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Anonymous"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.MP"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Minister"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Anonymous"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <!-- event -->
+        <grant permission="bungeni.event.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.View" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.View" role="bungeni.Signatory"/>
+        <grant permission="bungeni.event.View" role="bungeni.MP"/>
+        <grant permission="bungeni.event.View" role="bungeni.Minister"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+        <!-- group_assignment -->
+        <deny permission="bungeni.group_assignment.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.group_assignment.View" role="bungeni.Clerk"/>
+        <deny permission="bungeni.group_assignment.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.group_assignment.Delete" role="bungeni.Clerk"/>
+    </state>
+    <state id="draft" title="Draft" like_state="working_draft" tags="draft private">
+        <!-- motion -->
+        <deny permission="bungeni.motion.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.motion.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.motion.Delete" role="bungeni.Owner"/>
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+    </state>
+    <state id="submitted_signatories" title="Submitted to Signatories" version="true" like_state="draft" tags="actionmp">
+        <!-- motion -->
+        <grant permission="bungeni.motion.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.motion.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner"/>
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="redraft" title="Redraft" like_state="draft" note="document under review before resubmission" version="true">
+        <deny permission="bungeni.motion.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="withdrawn_signatory" title="Dropped" like_state="submitted_signatories" note="motion has been withdrawn before submission to house">
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+    </state>
+    <state id="submitted" title="Submitted" version="true" like_state="submitted_signatories" tags="actionclerk">
+        <!-- motion -->
+        <grant permission="bungeni.motion.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Speaker"/>
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="received" title="Received by Clerks Office" like_state="submitted" tags="actionclerk">
+        <!-- motion -->
+        <grant permission="bungeni.motion.Edit" role="bungeni.Clerk"/>
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.motion.View" role="bungeni.CommitteeMember"/>
+        <grant permission="bungeni.motion.Edit" role="bungeni.CommitteeMember"/>
+        <grant permission="bungeni.group_assignment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.group_assignment.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.group_assignment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.group_assignment.Delete" role="bungeni.Clerk"/>
+    </state>
+    <state id="clarification_required" title="Requires Clarification to Receive" version="true" like_state="submitted" tags="actionmp">
+        <!-- motion -->
+        <grant permission="bungeni.motion.Edit" role="bungeni.Owner"/>
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+    </state>
+    <state id="completed" title="Submitted to the Speaker" version="true" like_state="submitted">
+        <!-- motion -->
+        <grant permission="bungeni.motion.Edit" role="bungeni.Speaker"/>
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Speaker"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker"/>
+    </state>
+    <state id="incomplete" title="Requires Clarification to Approve" version="true" like_state="received" tags="actionclerk"/>
+    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" tags="terminal fail">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <state id="inadmissible" title="Inadmissible" like_state="withdrawn_internal" tags="terminal fail"/>
+    <state id="admissible" title="Admissible" version="true" like_state="submitted" tags="public approved">
+        <!-- motion -->
+        <grant permission="bungeni.motion.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Speaker"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Owner"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Signatory"/>
+        <grant permission="bungeni.motion.View" role="bungeni.MP"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Minister"/>
+        <grant permission="bungeni.motion.View" role="bungeni.Anonymous"/>
+    </state>
+    <state id="schedule_pending" title="Schedule pending" like_state="admissible" tags="public tobescheduled"/>
+    <state id="scheduled" title="Scheduled" like_state="admissible" tags="public scheduled"/>
+    <state id="adopted" title="Adopted" version="true" like_state="admissible" tags="public terminal succeed">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <state id="adopted_amendments" title="Adopted with amendments" version="true" like_state="adopted" tags="public terminal succeed"/>
+    <state id="adjourned" title="Debate adjourned" like_state="admissible" tags="public approved" note="a motion was debated and the debate adjourned"/>
+    <state id="deferred" title="Deferred" like_state="admissible" tags="public approved" note="An admissable motion that cannot be debated."/>
+    <state id="elapsed" title="Elapsed" like_state="adopted" tags="public terminal fail" note="A defered motion that was not debated"/>
+    <state id="dropped" title="Dropped" like_state="adopted" tags="public terminal fail" note="A motion was scheduled, but dropped e.g. becuase no show of MP."/>
+    <state id="rejected" title="Rejected" like_state="adopted" tags="public terminal fail"/>
+    <state id="withdrawn" title="Withdrawn" like_state="adopted" tags="public terminal fail"/>
+    <transition title="Create Motion" source="" destination="draft" condition="user_is_context_owner" trigger="automatic"/>
+    <transition title="Create Motion (On behalf of)" source="" destination="working_draft" condition="user_is_not_context_owner" trigger="automatic"/>
+    <transition title="Submit" source="draft submitted_signatories redraft" destination="submitted" condition="pi_signatories_check" trigger="manual" roles="bungeni.Owner"/>
+    <transition title="Submit" source="working_draft" destination="submitted" condition="pi_signatories_check" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Submit to Signatories" source="draft redraft" destination="submitted_signatories" condition="pi_has_signatories" roles="bungeni.Owner" trigger="manual"/>
+    <transition title="Redraft" source="submitted_signatories" destination="redraft" condition="user_is_context_owner" roles="bungeni.Owner" trigger="manual"/>
+    <transition title="Drop" source="redraft submitted_signatories" destination="withdrawn_signatory" grouping_unique_sources="withdrawn" condition="user_is_context_owner" roles="bungeni.Owner" trigger="manual"/>
+    <transition title="Receive" source="submitted" destination="received" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Require Clarification to Receive" source="received incomplete" destination="clarification_required" condition="" trigger="manual" roles="bungeni.Clerk" require_confirmation="true"/>
+    <transition title="Redraft (Automatic)" source="clarification_required" destination="redraft" condition="pi_has_signatories" trigger="automatic" note="incomplete document needs to be resubmitted to signatories"/>
+    <transition title="Complete" source="received" destination="completed" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Approve" source="completed" destination="admissible" condition="" trigger="manual" roles="bungeni.Speaker"/>
+    <transition title="Disapprove" source="completed" destination="inadmissible" condition="" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
+    <transition title="Make available for scheduling" source="admissible deferred adjourned" destination="schedule_pending" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Require Recomplete to Approve" source="completed" destination="incomplete" condition="" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
+    <transition title="Recomplete" source="incomplete" destination="completed" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Resubmit" source="clarification_required" destination="submitted" condition="" trigger="manual" roles="bungeni.Owner"/>
+    <transition title="Defer" source="admissible" destination="deferred" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Elapse" source="deferred" destination="elapsed" condition="" trigger="manual" roles="bungeni.Clerk" require_confirmation="true"/>
+    <transition title="Schedule" source="schedule_pending" destination="scheduled" condition="is_scheduled" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Re-schedule" source="scheduled" destination="schedule_pending" condition="" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Revert to admissible" source="schedule_pending" destination="admissible" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Drop" source="scheduled" destination="dropped" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Adjourn debate" source="scheduled" destination="adjourned" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Adopt" source="scheduled" destination="adopted" condition="" trigger="manual" roles="bungeni.Clerk" require_confirmation="true"/>
+    <transition title="Adopt with amendments" source="scheduled" destination="adopted_amendments" condition="" trigger="manual" roles="bungeni.Clerk" require_confirmation="true"/>
+    <transition title="Reject a scheduled motion" source="scheduled" destination="rejected" condition="" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
+    <transition title="Withdraw" source="submitted received completed clarification_required" destination="withdrawn_internal" grouping_unique_sources="withdrawn" condition="" trigger="manual" roles="bungeni.Clerk bungeni.Owner" require_confirmation="true"/>
+    <transition title="Withdraw" source="admissible scheduled deferred adjourned schedule_pending" destination="withdrawn" grouping_unique_sources="withdrawn" condition="" trigger="manual" roles="bungeni.Clerk bungeni.Owner" require_confirmation="true"/>
+</workflow>

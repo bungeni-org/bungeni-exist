@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Bill Workflow" description="A bill" tags="draft private public         approved tobescheduled scheduled         actionclerk actionmp         terminal succeed fail     " permission_actions=".View .Edit .Add .Delete">
+    
+    <!-- features -->
+    <feature name="audit" enabled="true"/>
+    <feature name="version" enabled="true"/>
+    <feature name="attachment" enabled="true"/>
+    <feature name="event" enabled="true"/>
+    <feature name="signatory" enabled="true"/>
+    <feature name="schedule" enabled="true"/>
+    <feature name="workspace" enabled="true"/>
+    <feature name="notification" enabled="true"/>
+    <feature name="download" enabled="true"/>
+    
+    <!-- global grants -->
+    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker"/>
+    <grant permission="bungeni.bill.Add" role="bungeni.Clerk"/>
+    <grant permission="bungeni.bill.Add" role="bungeni.MP"/>
+    <state id="working_draft" title="Working Draft" tags="draft private">
+        <!-- bill -->
+        <grant permission="bungeni.bill.View" role="bungeni.Clerk"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Speaker"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.bill.View" role="bungeni.MP"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Minister"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Anonymous"/>
+        <grant permission="bungeni.bill.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.bill.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.bill.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+        <!-- signatory -->
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <!-- event -->
+        <grant permission="bungeni.event.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.View" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.View" role="bungeni.Signatory"/>
+        <grant permission="bungeni.event.View" role="bungeni.MP"/>
+        <grant permission="bungeni.event.View" role="bungeni.Minister"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <state id="draft" title="Draft Bill" like_state="working_draft" tags="draft private">
+        <!-- bill -->
+        <deny permission="bungeni.bill.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.bill.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.bill.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.bill.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.bill.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="submitted_signatories" title="Submitted to Signatories" version="true" like_state="draft" tags="actionmp">
+        <!-- bill -->
+        <grant permission="bungeni.bill.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.bill.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="redraft" title="Redraft" version="true" like_state="draft" note="document under review before resubmission">
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="withdrawn_signatory" title="Dropped" like_state="submitted_signatories">
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <state id="submitted" title="Submitted to Clerk" version="true" like_state="submitted_signatories" tags="actionclerk">
+        <!-- bill -->
+        <grant permission="bungeni.bill.View" role="bungeni.Clerk"/>
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.bill.View" role="bungeni.Anonymous"/>
+    </state>
+    <state id="received" title="received by clerk" like_state="submitted" tags="actionclerk">
+        <!-- bill -->
+        <grant permission="bungeni.bill.Edit" role="bungeni.Clerk"/>
+        <!-- attachment -->
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+    </state>
+    <state id="gazetted" title="Bill Published in Gazette" version="true" like_state="received" tags="public">
+        <!-- bill -->
+        <grant permission="bungeni.bill.View" role="bungeni.Speaker"/>
+        <grant permission="bungeni.bill.View" role="bungeni.MP"/>
+        <grant permission="bungeni.bill.View" role="bungeni.Minister"/>
+        <grant permission="bungeni.bill.View" role="bungeni.Anonymous"/>
+    </state>
+    <state id="first_reading_pending" title="First Reading Pending" like_state="gazetted" tags="public tobescheduled"/>
+    <state id="first_reading" title="First Reading" like_state="gazetted" tags="public scheduled"/>
+    <state id="first_reading_adjourned" title="First Reading Adjourned" like_state="gazetted" tags="public approved"/>
+    <state id="first_committee" title="Submitted to Select Committee (after 1st reading)" like_state="gazetted" tags="public">
+        <!-- signatory -->
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="first_report_reading_pending" title="First Report Reading Pending" like_state="first_committee" tags="public tobescheduled"/>
+    <state id="first_report_reading" title="First Report Reading" version="true" like_state="first_committee" tags="public scheduled"/>
+    <state id="first_report_reading_adjourned" title="First Report Reading Adjourned" like_state="first_committee" tags="public approved"/>
+    <state id="second_reading_pending" title="Second Reading Pending" like_state="first_committee" tags="public tobescheduled"/>
+    <state id="second_reading" title="Second Reading" version="true" like_state="first_committee" tags="public scheduled"/>
+    <state id="second_reading_adjourned" title="Second Reading Adjourned" like_state="first_committee" tags="public approved"/>
+    <state id="whole_house_pending" title="Whole House Pending" like_state="first_committee" tags="public tobescheduled"/>
+    <state id="whole_house" title="Whole House" like_state="first_committee" tags="public scheduled"/>
+    <state id="whole_house_adjourned" title="Whole House Adjourned" like_state="first_committee" tags="public approved"/>
+    <state id="second_committee" title="Submitted to Select Committee (after 2nd reading)" like_state="first_committee" tags="public"/>
+    <state id="third_reading_pending" title="Third Reading Pending" like_state="first_committee" tags="public tobescheduled"/>
+    <state id="third_reading" title="Third Reading" like_state="first_committee" tags="public scheduled"/>
+    <state id="third_reading_adjourned" like_state="first_committee" title="Third Reading Adjourned" tags="public approved"/>
+    <state id="approved" title="Approved Bill" like_state="first_committee" tags="public terminal succeed approved">
+        <!-- bill -->
+        <deny permission="bungeni.bill.Edit" role="bungeni.Clerk"/>
+        <!-- attachment -->
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <state id="rejected" title="Rejected Bill" like_state="approved" tags="public terminal fail"/>
+    <state id="withdrawn" title="Bill Withdrawn" like_state="approved" tags="public terminal fail"/>
+    <state id="withdrawn_internal" title="Withdrawn" like_state="submitted" tags="private terminal fail">
+        <!-- event -->
+        <deny permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <transition title="Create Bill" source="" destination="working_draft" condition="user_is_not_context_owner" trigger="automatic"/>
+    <transition title="Create Bill" source="" destination="draft" condition="user_is_context_owner" trigger="automatic"/>
+    <transition title="Submit" source="draft redraft submitted_signatories" destination="submitted" condition="pi_signatories_check" trigger="manual" roles="bungeni.Owner"/>
+    <transition title="Submit" source="working_draft" destination="submitted" condition="pi_signatories_check" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Submit to Signatories" source="draft redraft" destination="submitted_signatories" condition="pi_has_signatories" trigger="manual" roles="bungeni.Owner"/>
+    <transition title="Redraft" source="submitted_signatories" destination="redraft" condition="user_is_context_owner" roles="bungeni.Owner" trigger="manual"/>
+    <transition title="Drop" source="redraft submitted_signatories" destination="withdrawn_signatory" grouping_unique_sources="withdrawn" condition="user_is_context_owner" roles="bungeni.Owner" trigger="manual"/>
+    <transition title="Receive" source="submitted" destination="received" trigger="manual" condition="" roles="bungeni.Clerk" order="2"/>
+    <transition title="Publish in Gazette" source="received" destination="gazetted" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Allow scheduling of First Reading" source="gazetted first_reading_adjourned" destination="first_reading_pending" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Schedule First Reading" source="first_reading_pending" destination="first_reading" condition="is_scheduled" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Reschedule First Reading" source="first_reading" destination="first_reading_pending" condition="" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Adjourn First Reading" source="first_reading" destination="first_reading_adjourned" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Submit Bill to Select Committee (I)" source="first_reading" destination="first_committee" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Schedule First Report Reading" source="first_report_reading_pending" destination="first_report_reading" condition="is_scheduled" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Reschedule First Report Reading" source="first_report_reading" destination="first_report_reading_pending" condition="" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Allow scheduling of Second Reading" source="first_reading first_report_reading second_reading_adjourned" destination="second_reading_pending" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Schedule Second Reading" source="second_reading_pending" destination="second_reading" condition="is_scheduled" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Reschedule Second Reading" source="second_reading" destination="second_reading_pending" condition="" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Adjourn First Report Reading" source="first_report_reading" destination="first_report_reading_adjourned" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Allow scheduling of First Report Reading" source="first_committee first_report_reading_adjourned" destination="first_report_reading_pending" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Adjourn Second Reading" source="second_reading" destination="second_reading_adjourned" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Allow scheduling of Whole House Committee" source="second_reading whole_house_adjourned" destination="whole_house_pending" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Allow scheduling/rescheduling of Whole House Committee" source="second_committee" destination="whole_house_pending" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Schedule Whole House Committee" source="whole_house_pending" destination="whole_house" condition="is_scheduled" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Reschedule Whole House Committee" source="whole_house" destination="whole_house_pending" condition="" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Adjourn Whole House Committee" source="whole_house" destination="whole_house_adjourned" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Submit Bill to Select Committee (II)" source="second_reading" destination="second_committee" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Submit/Resubmit Bill to Select Committee (II)" source="whole_house" destination="second_committee" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Allow scheduling of Third Reading" source="whole_house third_reading_adjourned" destination="third_reading_pending" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Schedule Third Reading" source="third_reading_pending" destination="third_reading" condition="is_scheduled" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Reschedule Third Reading" source="third_reading" destination="third_reading_pending" condition="" trigger="system" roles="bungeni.Clerk"/>
+    <transition title="Adjourn Third Reading" source="third_reading" destination="third_reading_adjourned" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Reject" source="second_reading third_reading" destination="rejected" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Approve" source="third_reading" destination="approved" condition="" trigger="manual" roles="bungeni.Clerk"/>
+    <transition title="Withdraw" source="submitted" destination="withdrawn_internal" grouping_unique_sources="withdrawn" condition="" trigger="manual" roles="bungeni.Owner" require_confirmation="true"/>
+    <transition title="Withdraw" source="             gazetted             first_reading             first_committee             first_report_reading             second_reading             whole_house             second_committee             third_reading         " destination="withdrawn" grouping_unique_sources="withdrawn" condition="" trigger="manual" roles="bungeni.Clerk" require_confirmation="true"/>
+</workflow>

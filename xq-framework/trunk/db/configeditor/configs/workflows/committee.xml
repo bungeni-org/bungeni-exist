@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Committee Workflow" description="Workflow for Committees" tags="public" permission_actions=".View .Edit .Add .Delete">
+    <feature name="address" enabled="true"/>
+    
+    <!-- global grants -->
+    <grant permission="bungeni.committee.Edit" role="bungeni.Clerk"/>
+    <grant permission="bungeni.committee.Add" role="bungeni.Clerk"/>
+    <grant permission="bungeni.committee.Delete" role="bungeni.Clerk"/>
+    <state id="draft" title="Draft - Committee not yet Active">
+        <!-- committee -->
+        <grant permission="bungeni.committee.View" role="bungeni.Clerk"/>
+        <deny permission="bungeni.committee.View" role="bungeni.Speaker"/>
+        <deny permission="bungeni.committee.View" role="bungeni.MP"/>
+        <deny permission="bungeni.committee.View" role="bungeni.Minister"/>
+        <deny permission="bungeni.committee.View" role="bungeni.Anonymous"/>
+        <grant permission="bungeni.committee.Delete" role="bungeni.Owner"/>
+        <!-- agenda_item -->
+        <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember"/>
+    </state>
+    <state id="active" title="Active Committee" like_state="draft" tags="public">
+        <!-- committee -->
+        <grant permission="bungeni.committee.View" role="bungeni.Speaker"/>
+        <grant permission="bungeni.committee.View" role="bungeni.MP"/>
+        <grant permission="bungeni.committee.View" role="bungeni.Minister"/>
+        <grant permission="bungeni.committee.View" role="bungeni.Anonymous"/>
+        <deny permission="bungeni.committee.Delete" role="bungeni.Owner"/>
+        <!-- agenda_item -->
+        <grant permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember"/>
+    </state>
+    <state id="dissolved" title="Committee is Dissolved" like_state="active" tags="public">
+        <!-- agenda_item -->
+        <deny permission="bungeni.agenda_item.Add" role="bungeni.CommitteeMember"/>
+    </state>
+    <transition title="Create" source="" destination="draft" trigger="automatic"/>
+    <transition title="Activate" source="draft dissolved" destination="active" trigger="manual" roles="bungeni.Clerk bungeni.Speaker" require_confirmation="true"/>
+    <transition title="Dissolve" source="active" destination="dissolved" condition="has_end_date" trigger="manual" roles="bungeni.Clerk bungeni.Speaker" require_confirmation="true"/>
+    <transition title="Deactivate" source="active dissolved" destination="draft" trigger="manual" roles="bungeni.Clerk bungeni.Speaker" require_confirmation="true"/>
+</workflow>

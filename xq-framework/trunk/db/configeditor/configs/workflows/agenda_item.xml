@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow description="Agenda Item" title="Agenda Item Workflow">
+    <tags document-name="agenda_item.xml" originAttr="tags">
+        <tag>draft</tag>
+        <tag>private</tag>
+        <tag>public</tag>
+        <tag>approved</tag>
+        <tag>tobescheduled</tag>
+        <tag>scheduled</tag>
+        <tag>actionclerk</tag>
+        <tag>actionmp</tag>
+        <tag>terminal</tag>
+        <tag>succeed</tag>
+        <tag>fail</tag>
+        <tag/>
+    </tags>
+    <permActions originAttr="permission_actions">
+        <permAction>.View</permAction>
+        <permAction>.Edit</permAction>
+        <permAction>.Add</permAction>
+        <permAction>.Delete</permAction>
+    </permActions>
+    <feature enabled="true" name="audit"/>
+    <feature enabled="true" name="version"/>
+    <feature enabled="true" name="attachment"/>
+    <feature enabled="true" name="schedule"/>
+    <feature enabled="true" name="workspace"/>
+    <feature enabled="true" name="notification"/>
+    <feature enabled="true" name="download"/>
+    <grant permission="bungeni.agenda_item.Add" role="bungeni.Clerk"/>
+    <state id="working_draft" title="Working Draft">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>draft</tag>
+            <tag>private</tag>
+        </tags>
+        <grant permission="bungeni.agenda_item.View" role="bungeni.Clerk"/>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.Speaker"/>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.MP"/>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.Minister"/>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.Anonymous"/>
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.agenda_item.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Speaker"/>
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.MP"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Minister"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Anonymous"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="draft" like_state="working_draft" title="Draft">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>draft</tag>
+            <tag>private</tag>
+        </tags>
+        <deny permission="bungeni.agenda_item.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.agenda_item.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.agenda_item.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="submitted_signatories" like_state="draft" title="Submitted to Signatories" version="true">
+        <grant permission="bungeni.agenda_item.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="redraft" like_state="draft" note="document under review before resubmission" title="Redraft" version="true">
+        <deny permission="bungeni.agenda_item.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="withdrawn_signatory" like_state="submitted_signatories" title="Dropped">
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+    </state>
+    <state id="submitted" like_state="submitted_signatories" title="Submitted" version="true">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>actionclerk</tag>
+        </tags>
+        <grant permission="bungeni.agenda_item.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.agenda_item.View" role="bungeni.Speaker"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+    </state>
+    <state id="received" like_state="submitted" title="Received by Clerks Office">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>actionclerk</tag>
+        </tags>
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+    </state>
+    <state id="clarification_required" like_state="submitted" title="Requires Clarification to Receive" version="true">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>actionmp</tag>
+        </tags>
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+    </state>
+    <state id="completed" like_state="submitted" title="Submitted to the Speaker" version="true">
+        <deny permission="bungeni.agenda_item.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.agenda_item.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Speaker"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Speaker"/>
+    </state>
+    <state id="incomplete" like_state="received" title="Requires Clarification to Approve" version="true">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>actionclerk</tag>
+        </tags>
+    </state>
+    <state id="inadmissible" like_state="submitted" title="Inadmissible">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>terminal</tag>
+            <tag>fail</tag>
+        </tags>
+    </state>
+    <state id="withdrawn_internal" like_state="submitted" title="Withdrawn">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>terminal</tag>
+            <tag>fail</tag>
+        </tags>
+    </state>
+    <state id="admissible" like_state="submitted" title="Admissible" version="true">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>approved</tag>
+        </tags>
+        <grant permission="bungeni.agenda_item.View" role="bungeni.Anonymous"/>
+    </state>
+    <state id="schedule_pending" like_state="admissible" title="Schedule pending">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>tobescheduled</tag>
+        </tags>
+    </state>
+    <state id="debated" like_state="admissible" title="Debated">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>terminal</tag>
+            <tag>succeed</tag>
+        </tags>
+    </state>
+    <state id="scheduled" like_state="admissible" title="Scheduled">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>scheduled</tag>
+        </tags>
+    </state>
+    <state id="adjourned" like_state="admissible" title="Debate adjourned">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>approved</tag>
+        </tags>
+    </state>
+    <state id="deferred" like_state="admissible" title="Deferred">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>approved</tag>
+        </tags>
+    </state>
+    <state id="elapsed" like_state="debated" title="Elapsed">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>terminal</tag>
+            <tag>fail</tag>
+        </tags>
+    </state>
+    <state id="dropped" like_state="debated" title="Dropped">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>terminal</tag>
+            <tag>fail</tag>
+        </tags>
+    </state>
+    <state id="withdrawn" like_state="debated" title="Withdrawn">
+        <tags document-name="agenda_item.xml" originAttr="tags">
+            <tag>public</tag>
+            <tag>terminal</tag>
+            <tag>fail</tag>
+        </tags>
+    </state>
+    <transition condition="user_is_context_owner" title="Create Agenda Item" trigger="automatic">
+        <sources originAttr="source"/>
+        <destinations originAttr="destination">
+            <destination>draft</destination>
+        </destinations>
+    </transition>
+    <transition condition="user_is_not_context_owner" title="Create Agenda Item (On behalf of)" trigger="automatic">
+        <sources originAttr="source"/>
+        <destinations originAttr="destination">
+            <destination>working_draft</destination>
+        </destinations>
+    </transition>
+    <transition condition="pi_signatories_check" title="Submit" trigger="manual">
+        <sources originAttr="source">
+            <source>draft</source>
+            <source>redraft</source>
+            <source>submitted_signatories</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>submitted</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+    <transition condition="pi_signatories_check" title="Submit" trigger="manual">
+        <sources originAttr="source">
+            <source>working_draft</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>submitted</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="pi_has_signatories" title="Submit to Signatories" trigger="manual">
+        <sources originAttr="source">
+            <source>draft</source>
+            <source>redraft</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>submitted_signatories</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+    <transition condition="user_is_context_owner" title="Redraft" trigger="manual">
+        <sources originAttr="source">
+            <source>submitted_signatories</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>redraft</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+    <transition condition="user_is_context_owner" grouping_unique_sources="withdrawn" title="Drop" trigger="manual">
+        <sources originAttr="source">
+            <source>redraft</source>
+            <source>submitted_signatories</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>withdrawn_signatory</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Receive" trigger="manual">
+        <sources originAttr="source">
+            <source>submitted</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>received</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" require_confirmation="true" title="Require Clarification to Receive" trigger="manual">
+        <sources originAttr="source">
+            <source>received</source>
+            <source>incomplete</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>clarification_required</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="pi_has_signatories" note="incomplete document needs to be resubmitted to signatories" title="Redraft (Automatic)" trigger="automatic">
+        <sources originAttr="source">
+            <source>clarification_required</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>redraft</destination>
+        </destinations>
+    </transition>
+    <transition condition="" title="Complete" trigger="manual">
+        <sources originAttr="source">
+            <source>received</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>completed</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Approve" trigger="manual">
+        <sources originAttr="source">
+            <source>completed</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>admissible</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Speaker</role>
+        </roles>
+    </transition>
+    <transition condition="" require_confirmation="true" title="Disapprove" trigger="manual">
+        <sources originAttr="source">
+            <source>completed</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>inadmissible</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Speaker</role>
+        </roles>
+    </transition>
+    <transition title="Allow scheduling" trigger="manual">
+        <sources originAttr="source">
+            <source>admissible</source>
+            <source>deferred</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>schedule_pending</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" require_confirmation="true" title="Require Recomplete to Approve" trigger="manual">
+        <sources originAttr="source">
+            <source>completed</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>incomplete</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Speaker</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Recomplete" trigger="manual">
+        <sources originAttr="source">
+            <source>incomplete</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>completed</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Resubmit" trigger="manual">
+        <sources originAttr="source">
+            <source>clarification_required</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>submitted</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+    <transition title="Reschedule" trigger="system">
+        <sources originAttr="source">
+            <source>scheduled</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>schedule_pending</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="is_scheduled" title="Schedule" trigger="system">
+        <sources originAttr="source">
+            <source>schedule_pending</source>
+            <source>adjourned</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>scheduled</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition title="Revert to admissible" trigger="manual">
+        <sources originAttr="source">
+            <source>schedule_pending</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>admissible</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" note="For reasons such as absence of the MP, the item cannot be be              debated in a sitting, so it is dropped." title="Drop" trigger="manual">
+        <sources originAttr="source">
+            <source>scheduled</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>dropped</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Debate" trigger="manual">
+        <sources originAttr="source">
+            <source>scheduled</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>debated</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Adjourn debate" trigger="manual">
+        <sources originAttr="source">
+            <source>scheduled</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>adjourned</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Defer" trigger="manual">
+        <sources originAttr="source">
+            <source>admissible</source>
+            <source>schedule_pending</source>
+            <source>adjourned</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>deferred</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" title="Elapse" trigger="manual">
+        <sources originAttr="source">
+            <source>deferred</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>elapsed</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+        </roles>
+    </transition>
+    <transition condition="" grouping_unique_sources="withdrawn" require_confirmation="true" title="Withdraw" trigger="manual">
+        <sources originAttr="source">
+            <source>submitted</source>
+            <source>received</source>
+            <source>completed</source>
+            <source>clarification_required</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>withdrawn_internal</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+    <transition condition="" grouping_unique_sources="withdrawn" require_confirmation="true" title="Withdraw" trigger="manual">
+        <sources originAttr="source">
+            <source>admissible</source>
+            <source>scheduled</source>
+            <source>deferred</source>
+            <source>adjourned</source>
+            <source>schedule_pending</source>
+        </sources>
+        <destinations originAttr="destination">
+            <destination>withdrawn</destination>
+        </destinations>
+        <roles originAttr="roles">
+            <role>bungeni.Clerk</role>
+            <role>bungeni.Owner</role>
+        </roles>
+    </transition>
+</workflow>

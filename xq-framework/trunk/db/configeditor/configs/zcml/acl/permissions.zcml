@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configure xmlns="http://namespaces.zope.org/zope" i18n_domain="bungeni">
+    
+    <!-- custom permissions here -->
+</configure>

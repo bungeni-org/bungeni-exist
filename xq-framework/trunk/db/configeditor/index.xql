@@ -32,7 +32,7 @@ return
                     <xf:bind nodeset="from" type="xf:date"/>
                     <xf:bind nodeset="to" type="xf:date" />
 
-                    <xf:submission id="s-query-tasks"
+                    <xf:submission id="s-query-workflows"
                                     resource="{$contextPath}/rest/db/configeditor/views/list-workflows.xql"
                                     method="get"
                                     replace="embedHTML"
@@ -40,14 +40,29 @@ return
                                     ref="instance()"
                                     validate="false">
                         <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">Submission succedded</xf:message>
+                            <xf:message level="ephemeral">Submission for workflows succedded</xf:message>
                         </xf:action>                                    
                         <xf:action ev:event="xforms-submit-error">
                             <xf:message>Submission failed</xf:message>
                         </xf:action>
                     </xf:submission>
+                    
+                    <xf:submission id="s-query-workspaces"
+                                    resource="{$contextPath}/rest/db/configeditor/views/list-workspace.xql"
+                                    method="get"
+                                    replace="embedHTML"
+                                    targetid="embedInline"
+                                    ref="instance()"
+                                    validate="false">
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Submission for workspaces succedded</xf:message>
+                        </xf:action>                                    
+                        <xf:action ev:event="xforms-submit-error">
+                            <xf:message>Submission failed</xf:message>
+                        </xf:action>
+                    </xf:submission>                    
 
-                    <xf:submission id="s-delete-task"
+                    <xf:submission id="s-delete-workflow"
                                     method="delete"
                                     replace="none"
                                     validate="false">
@@ -73,7 +88,7 @@ return
                         </xf:action>
                     </xf:submission>
 
-                    <xf:instance id="i-project" src="{$contextPath}/rest/db/betterform/apps/timetracker/data/project.xml" />
+                    <xf:instance id="i-project" src="{$contextPath}/rest/db/configeditor/data/project.xml" />
 
                     <xf:instance id="i-vars">
                         <data xmlns="">
@@ -94,8 +109,13 @@ return
 
                 <xf:trigger id="overviewTrigger">
                     <xf:label>Overview</xf:label>
-                    <xf:send submission="s-query-tasks"/>
+                    <xf:send submission="s-query-workflows"/>
                 </xf:trigger>
+                
+                <xf:trigger id="overviewWorkspaceTrigger">
+                    <xf:label>Overview</xf:label>
+                    <xf:send submission="s-query-workspaces"/>
+                </xf:trigger>                
 
                 <xf:trigger id="addTask">
                     <xf:label>new</xf:label>
@@ -117,7 +137,7 @@ return
 
                 <xf:trigger id="deleteTask">
                     <xf:label>delete</xf:label>
-                    <xf:send submission="s-delete-task"/>
+                    <xf:send submission="s-delete-workflow"/>
                 </xf:trigger>
 
                 <xf:input id="currentTask" ref="instance('i-vars')/currentTask">
@@ -133,16 +153,23 @@ return
  
                 <div id="toolbar" dojoType="dijit.Toolbar">
                     
-                	<div id="task" dojoType="dijit.form.DropDownButton" showLabel="true" onclick="fluxProcessor.dispatchEvent('overviewTrigger');">
+                	<div id="workflow" dojoType="dijit.form.DropDownButton" showLabel="true" onclick="fluxProcessor.dispatchEvent('overviewTrigger');">
                 		<span>Workflows</span>
                 		<div id="workflowsMenu" dojoType="dijit.TooltipDialog">              		
                 			<div id="addworkflow" dojoType="dijit.form.Button" onclick="embed('addTask','embedDialog');">Add Workflow</div>                 			
                 		</div>
-                	</div>                	
+                	</div>    
+                	
+                	<div id="workspace" dojoType="dijit.form.DropDownButton" showLabel="true" onclick="fluxProcessor.dispatchEvent('overviewWorkspaceTrigger');">
+                		<span>Workspace</span>
+                		<div id="workspaceMenu" dojoType="dijit.TooltipDialog">              		
+                			<div id="addworkspace" dojoType="dijit.form.Button" onclick="embed('addTask','embedDialog');">Add Workspace</div>                 			
+                		</div>
+                	</div>                  	
                 	
                     <div id="addBtn" dojoType="dijit.form.Button" showLabel="true"
                          onclick="embed('addTask','embedDialog');">
-                        <span>New Task</span>
+                        <span>Database</span>
                     </div>            
                     <div dojotype="dijit.form.Button" showLabel="true" onclick="dijit.byId('aboutDialog').show();">
                         <span>About</span>
@@ -226,15 +253,10 @@ return
                             </table>
                         </div>
                     </div>                    
+                
                 </div>
 
                 <img id="shadowTop" src="{$contextPath}/rest/db/configeditor/images/shad_top.jpg" alt=""/>
-
-                <div id="contextTitle">
-                    <span id="durationLabel">
-                        <span id="durationLabel-value" class="xfValue">Workflows</span>
-                    </span>
-                </div>
 
                 <div id="taskDialog" dojotype="dijit.Dialog" style="width:680px;height:680px !important;" title="Workflow" autofocus="false">
                     <div id="embedDialog"></div>

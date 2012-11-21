@@ -15,7 +15,7 @@ declare option exist:serialize "method=xml media-type=text/xml omit-xml-declarat
 
 let $doc := <data>{collection("/db/configeditor/configs/workflows")}</data>
 let $view := xs:string(request:get-parameter("return","none"))
-let $xsl := doc('xsl/split_attrs.xsl')
+let $xsl := doc('xsl/wf_split_attrs.xsl')
 return 
     if ($view eq 'docs') then 
         transform:transform($doc, $xsl, ()) 

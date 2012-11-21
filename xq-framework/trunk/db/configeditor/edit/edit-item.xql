@@ -13,7 +13,7 @@ declare function local:timestamp() as xs:string {
       let $contextPath := request:get-context-path()
       let $path2resource := concat($contextPath,"/apps/configeditor/edit/split-item.xql?item=",$timestamp)
       let $doc := doc($path2resource)
-      let $xsl := doc('/db/configeditor/xsl/split_attrs.xsl')
+      let $xsl := doc('/db/configeditor/xsl/wf_split_attrs.xsl')
       let $splitted := transform:transform($doc, $xsl, <parameters>
                                                           <param name="docname" value="{util:document-name($path2resource)}" />
                                                        </parameters>)
@@ -43,9 +43,10 @@ return
     	<div id="xforms">
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-task" src="{$contextPath}/rest/db/configeditor/data/workflow.xml"/>                  
+                    <xf:instance id="i-workflow" src="{$contextPath}/rest/db/configeditor/data/workflow.xml"/>                  
 
                     <xf:bind nodeset="@title" type="xf:string" required="true()" />
+                    <xf:bind id="documentname" nodeset="tags/@document-name" type="xs:string" required="true()"/>
                     <xf:bind id="feature" nodeset="feature/@enabled" type="xs:boolean" required="true()"/>
                     <!--xf:bind nodeset="project" required="true()" />
                     <xf:bind nodeset="duration/@hours" type="integer" />
@@ -54,7 +55,7 @@ return
                     <xf:bind nodeset="what" required="true()"/>
                     <xf:bind nodeset="created" required="true()"/-->
 
-                  <xf:submission id="s-get-task"
+                  <xf:submission id="s-get-workflow"
                                  method="get"
                                  resource="{local:timestamp()}"
                                  replace="instance"
@@ -64,10 +65,10 @@ return
                                  -->
                  </xf:submission>
 
-                 <xf:instance id="i-project"     src="{$contextPath}/rest/db/betterform/apps/timetracker/data/project.xml"/>
-                 <xf:instance id="i-worker"  	 src="{$contextPath}/rest/db/betterform/apps/timetracker/data/worker.xml"/>
-                 <xf:instance id="i-tasktype"  	 src="{$contextPath}/rest/db/betterform/apps/timetracker/data/tasktype.xml"/>
-                 <xf:instance id="i-controller"  src="{$contextPath}/rest/db/betterform/apps/timetracker/data/controller.xml"/>
+                 <xf:instance id="i-project"     src="{$contextPath}/rest/db/configeditor/data/project.xml"/>
+                 <xf:instance id="i-worker"  	 src="{$contextPath}/rest/db/configeditor/data/worker.xml"/>
+                 <xf:instance id="i-workflowtype"  	 src="{$contextPath}/rest/db/configeditor/data/tasktype.xml"/>
+                 <xf:instance id="i-controller"  src="{$contextPath}/rest/db/configeditor/data/controller.xml"/>
                  <xf:instance id="labels">
                     <data>
                         <item1>Label 1</item1>
@@ -88,7 +89,7 @@ return
                                method="put"
                                replace="none"
                                ref="instance()">
-                    <xf:resource value="concat('{$contextPath}/rest/db/configeditor/configs/workflows/', instance('i-task')/tags/@document-name)"/>
+                    <xf:resource value="concat('{$contextPath}/rest/db/configeditor/configs/workflows/', instance('i-workflow')/tags/@document-name)"/>
 
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -104,22 +105,12 @@ return
                     </xf:header>
 
                     <xf:action ev:event="xforms-submit" if="'{local:mode()}' = 'new'">
-                        <!--xf:message level="ephemeral">Creating timestamp</xf:message>
-                        <xf:setvalue ref="instance('i-task')/task/created" value="now()" />
-                        <xf:recalculate/>
-                        <xf:setvalue ref="instance('i-task')/task/created" value="concat(
-                            year-from-dateTime(.),
-                            substring(.,6,2),
-                            substring(.,9,2),
-                            '-',
-                            substring(.,12,2),
-                            substring(.,15,2),
-                            substring(.,18,2)
-                            )" /-->
+                        <xf:message level="ephemeral">Creating timestamp as name</xf:message>
+                        <!--xf:setvalue ref="instance('i-workflow')/tags/@document-name" value="now()" /-->
                     </xf:action>
 
                     <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">Data stored</xf:message>
+                        <xf:message level="ephemeral">Workflow saved successfully</xf:message>
                         <script type="text/javascript" if="instance('tmp')/wantsToClose">
                             dijit.byId("taskDialog").hide();
                             dojo.publish("/task/refresh");
@@ -138,14 +129,14 @@ return
                 </xf:submission>
 
                 <xf:submission id="s-clean"
-                               ref="instance('i-task')"
+                               ref="instance('i-workflow')"
                                resource="{$contextPath}/rest/db/configeditor/data/workflow.xml"
                                method="get"
                                replace="instance"
-                               instance="i-task">
+                               instance="i-workflow">
                 </xf:submission>
             <xf:action ev:event="xforms-ready" >
-                <xf:send submission="s-get-task" if="'{local:mode()}' = 'edit'"/>
+                <xf:send submission="s-get-workflow" if="'{local:mode()}' = 'edit'"/>
                 <!--xf:setfocus control="date"/-->
             </xf:action>
 
@@ -154,6 +145,13 @@ return
 
         <xf:group ref="." class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
             <xf:group id="add-task-table" appearance="compact">
+            
+                <xf:input id="document-name" ref="tags/@document-name">
+                    <xf:label>Document ID</xf:label>
+                    <xf:alert>The convention current is file name = Document ID</xf:alert>
+                    <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
+                    <xf:alert>invalid file name</xf:alert>
+                </xf:input>            
 
                 <xf:input id="title" ref="@title">
                     <xf:label>Title</xf:label>

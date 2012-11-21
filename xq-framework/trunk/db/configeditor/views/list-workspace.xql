@@ -9,18 +9,14 @@ declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all tasks matching the query :)
 declare function local:main() as node() * {
-    for $workflow in local:getMatchingTasks()
+    for $workspace in local:getMatchingTasks()
         return
             <tr>
-                <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workflow/tags/@document-name)}" /></td>
-                <td>{data($workflow/@title)}</td>
-                <td>{data($workflow/@description)}</td>
-                <td>{count($workflow/tags/tag)}</td>
-                <td>{count($workflow/state)}</td>
-                <td>{count($workflow/transition)}</td>
-                <td>{count($workflow/grant)}</td>
-                <td><a href="javascript:dojo.publish('/task/edit',['{data($workflow/tags/@document-name)}']);">edit</a></td>
-                <td><a href="javascript:dojo.publish('/task/delete',['{data($workflow/tags/@document-name)}']);">delete</a></td>
+                <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workspace/tags/@document-name)}" /></td>
+                <td>{data($workspace/@id)}</td>
+                <td>{count($workspace/state)}</td>
+                <td><a href="javascript:dojo.publish('/task/edit',['{data($workspace/tags/@document-name)}']);">edit</a></td>
+                <td><a href="javascript:dojo.publish('/task/delete',['{data($workspace/tags/@document-name)}']);">delete</a></td>
             </tr>
 };
 
@@ -32,20 +28,20 @@ declare function local:getMatchingTasks() as node() * {
     let $billable := request:get-parameter("billable","")
     let $billed := request:get-parameter("billed","")
 
-    for $workflow in collection('/db/configeditor/configs/workflows')/workflow
-        let $workflow-project := data($workflow/@title)
+    for $workspace in collection('/db/configeditor/configs/workspace')/workspace
+        let $workspace-project := data($workspace/@id)
         let $xsl := doc('/db/configeditor/xsl/wf_split_attrs.xsl')
-        order by $workflow-project ascending
-        return transform:transform($workflow, $xsl, <parameters>
-                                                        <param name="docname" value="{util:document-name($workflow)}" />
+        order by $workspace-project ascending
+        return transform:transform($workspace, $xsl, <parameters>
+                                                        <param name="docname" value="{util:document-name($workspace)}" />
                                                     </parameters>)
 
 };
 
 (: convert all hours to minutes :)
-declare function local:hours-in-minutes($workflows as node()*) as xs:integer
+declare function local:hours-in-minutes($workspaces as node()*) as xs:integer
 {
-  let $sum := sum($workflows//duration/@hours)
+  let $sum := sum($workspaces//duration/@hours)
   return  $sum * 60
 };
 
@@ -60,11 +56,12 @@ return
 
     </head>
     <body>
+
         <div id="contextTitle">
             <span id="durationLabel">
-                <span id="durationLabel-value" class="xfValue">Workflows</span>
+                <span id="durationLabel-value" class="xfValue">Workspace</span>
             </span>
-        </div>     
+        </div>    
     	<div id="dataTable">
     	   <div id="checkBoxSelectors">
     	        Select: <a href="javascript:selectAll();">All</a> | <a href="javascript:selectNone();">None</a>
@@ -74,11 +71,7 @@ return
 			 <tr>
 				<th></th>
 				<th>Doctype</th>
-				<th>Description</th>
-				<th>Tags</th>
 				<th>States</th>
-				<th>Transitions</th>
-				<th>Role Grants</th>
 				<th colspan="2"> </th>
 			 </tr>
 			 {local:main()}

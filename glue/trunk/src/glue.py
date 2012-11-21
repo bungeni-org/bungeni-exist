@@ -158,13 +158,17 @@ class Transformer(object):
         doc_uri = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri())
         status_date = self.xmldoc.selectSingleNode(self.xpath_get_status_date())
         if doc_uri is None:
-            on_sync_params['uri'] = self.xmldoc.selectSingleNode(self.xpath_get_doc_internal_uri()).getValue()
+            uri_raw = self.xmldoc.selectSingleNode(self.xpath_get_doc_internal_uri()).getValue()
+            uri_encoded = uri_raw.encode('utf-8')
         else:
-            on_sync_params['uri'] = doc_uri.getValue()
+            uri_raw = doc_uri.getValue()
+            uri_encoded = uri_raw.encode('utf-8')
         if status_date is None:
             on_sync_params['status_date'] = ""
         else:
             on_sync_params['status_date'] = self.xmldoc.selectSingleNode(self.xpath_get_status_date()).getText()
+        
+        on_sync_params['uri'] = uri_encoded
         return on_sync_params
 
     def get_doc_uri(self,input_file):
@@ -205,11 +209,12 @@ class Transformer(object):
                 #input stream
                 fis  = FileInputStream(translatedFiles["final"])
                 #get the document's URI
-                uri = self.get_doc_uri(translatedFiles["final"])
+                uri_raw = self.get_doc_uri(translatedFiles["final"])
+                # clean uri if it may have unicode characters
+                uri = uri_raw.encode('utf-8') 
                 rep_dict = {'/':'_', ':':','}
                 uri_name = self.replace_all(uri, rep_dict)
-                
-                outFile = File(output + uri_name + ".xml")
+                outFile = File(str(output) + uri_name.decode('iso-8859-1') + ".xml")
                 #copy transformed file to disk
                 FileUtility.getInstance().copyFile(fis, outFile)
                 fis.close()
@@ -860,12 +865,14 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         """
         file_uri = self.get_params(input_file_path)['uri']
         file_stat_date = self.get_params(input_file_path)['status_date']
-        import urllib2
+        import urllib2, urllib
         try:
             socket.setdefaulttimeout(60)
             conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),60)
-            conn.request("GET", "/exist/apps/framework/bungeni/check-update?uri=" + file_uri+"&t=" + file_stat_date)
+            params = urllib.urlencode({'uri': ''+file_uri+'', 't': '' + file_stat_date +''})
+            conn.request("GET", "/exist/apps/framework/bungeni/check-update?",params)
             response = conn.getresponse()
+            print response
             if(response.status == 200):
                 data = response.read()
                 if(self.get_sync(data) != 'ignore'):

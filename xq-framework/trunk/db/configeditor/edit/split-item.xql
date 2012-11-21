@@ -15,7 +15,7 @@ declare option exist:serialize "method=xml media-type=text/xml omit-xml-declarat
 
 let $doctype := xs:string(request:get-parameter("item","workflow.xml"))
 let $path2resource := concat("/db/configeditor/configs/workflows/",$doctype)
-let $xsl := doc('/db/configeditor/xsl/split_attrs.xsl')
+let $xsl := doc('/db/configeditor/xsl/wf_split_attrs.xsl')
 let $doc := doc($path2resource)
 return transform:transform($doc, $xsl, <parameters>
                                             <param name="docname" value="{util:document-name($doc)}" />

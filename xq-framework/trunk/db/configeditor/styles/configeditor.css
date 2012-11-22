@@ -14,11 +14,13 @@ body{
     width:220px;
 }
 #appName{
+    background:url(../images/bungeni_editor.png) left top no-repeat;
+    height:40px;
     float:left;
-    color:#b0c4de;
+    color:#2b92be;
     font-size:20pt;
-    margin-right:10px;                                                                                        
-    margin-top:10px;
+    margin:10px 10px 0 8px;                                                                                        
+    padding-left:40px;
 }
 #bfLoading {
     top:0;
@@ -46,7 +48,7 @@ select{
     
 }
 #searchBar .xfControl input{
-    color:#4682b4;
+    color:#136a9f;
 }
 
 #searchBar .xfControl .xfLabel{
@@ -97,7 +99,7 @@ select{
     float:right;
 }
 #summary td{
-    color:#4682b4 !important;
+    color:#136a9f !important;
     font-size:1.2em;
     padding:5px;
     white-space:nowrap;
@@ -287,7 +289,7 @@ tr.xfRepeatItem  td {
 }
 #durationLabel .xfValue{
     font-size:14pt;
-    color:#4682b4;
+    color:#136a9f;
     display:block;
     margin:5px 0;
 }
@@ -325,10 +327,11 @@ tr.xfRepeatItem  td {
 
 #listingTable th,#listingTable td{
     padding:5px;
-    border:thin solid steelBlue;
+    border:thin solid #136a9f;
 }
 #listingTable th{
-    background:#b0c4de;
+    background:#2b92be;
+    color:#ffffff;
 }
 
 #add-task-table{
@@ -399,4 +402,11 @@ tr.xfRepeatItem  td {
 
 #date-value{
 	width:248px;
+}
+
+
+/* Column actions */
+.col-count {
+    width:20px;
+    display:inline-block;
 }

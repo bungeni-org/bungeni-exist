@@ -12,15 +12,15 @@ declare function local:main() as node() * {
     for $workflow in local:getMatchingTasks()
         return
             <tr>
-                <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workflow/tags/@document-name)}" /></td>
+                <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workflow/@document-name)}" /></td>
                 <td>{data($workflow/@title)}</td>
                 <td>{data($workflow/@description)}</td>
                 <td>{count($workflow/tags/tag)}</td>
-                <td>{count($workflow/state)}</td>
-                <td>{count($workflow/transition)}</td>
+                <td><div class="col-count">{count($workflow/state)}</div>(<a href="javascript:dojo.publish('/wf_states/edit',['{data($workflow/@document-name)}']);">edit</a>)</td>
+                <td><div class="col-count">{count($workflow/transition)}</div>(<a href="javascript:dojo.publish('/wf_transitions/edit',['{data($workflow/@document-name)}']);">edit</a>)</td>
                 <td>{count($workflow/grant)}</td>
-                <td><a href="javascript:dojo.publish('/task/edit',['{data($workflow/tags/@document-name)}']);">edit</a></td>
-                <td><a href="javascript:dojo.publish('/task/delete',['{data($workflow/tags/@document-name)}']);">delete</a></td>
+                <td><a href="javascript:dojo.publish('/wf/edit',['{data($workflow/@document-name)}']);">edit</a></td>
+                <td><a href="javascript:dojo.publish('/wf/delete',['{data($workflow/@document-name)}']);">delete</a></td>
             </tr>
 };
 

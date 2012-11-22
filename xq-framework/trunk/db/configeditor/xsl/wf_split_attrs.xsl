@@ -21,10 +21,16 @@
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
     </xsl:template>
+    <xsl:template match="workflow">
+        <xsl:copy>
+            <xsl:attribute name="document-name" select="$docname"/>
+            <xsl:apply-templates select="@*" mode="preserve"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
     <xsl:template match="@tags">
         <xsl:element name="tags">
             <xsl:attribute name="originAttr">tags</xsl:attribute>
-            <xsl:attribute name="document-name" select="$docname"/>
             <xsl:for-each select="tokenize(., '\s+')">
                 <tag>
                     <xsl:value-of select="."/>

@@ -21,11 +21,8 @@ return
                 <xf:model id="modelone">
                     <xf:instance>
                         <data xmlns="">
-                            <from>2000-01-01</from>
-                            <to>2000-01-02</to>
-                            <project/>
-                            <billable/>
-                            <billed/>
+                            <lastupdate>2000-01-01</lastupdate>
+                            <user>admin</user>
                         </data>
                     </xf:instance>
                     <xf:instance xmlns="" id="workflow-items" src="workflows.xql?return=docs"/>
@@ -100,10 +97,11 @@ return
                     <xf:bind nodeset="instance('i-vars')/default-duration" type="xf:integer"/>
 
                     <xf:action ev:event="xforms-ready">
-                        <xf:setvalue ref="to" value="substring(local-date(), 1, 10)"/>
-                        <xf:recalculate/>
-                        <!-- <xf:setvalue ref="from" value="days-to-date(number(days-from-date(instance()/to) - instance('i-vars')/default-duration))"/> -->
-                        <xf:setvalue ref="from" value="'2010-01-01'"/>
+                        <xf:message level="ephemeral">Default: Workflow listing</xf:message>
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
+                        </xf:action>                        
+                        <!--xf:setvalue ref="to" value="substring(local-date(), 1, 10)"/-->
                     </xf:action>
                 </xf:model>
 
@@ -125,6 +123,24 @@ return
                         </xf:load>
                     </xf:action>
                 </xf:trigger>
+                
+                <xf:trigger id="editStates">
+                    <xf:label>new/edit/deletes</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat('{$contextPath}/rest/db/configeditor/edit/edit-states.xql#xforms?timestamp=',instance('i-vars')/currentTask)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                 
+                
+                <xf:trigger id="editTransitions">
+                    <xf:label>new/edit/deletes</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat('{$contextPath}/rest/db/configeditor/edit/edit-transitions.xql#xforms?timestamp=',instance('i-vars')/currentTask)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                
 
                 <xf:trigger id="editTask">
                     <xf:label>new</xf:label>
@@ -171,89 +187,13 @@ return
                          onclick="embed('addTask','embedDialog');">
                         <span>Database</span>
                     </div>            
+                    <div id="fsBtn" dojoType="dijit.form.Button" showLabel="true">
+                        <span>Save back to filesystem</span>
+                    </div>                 
+                
                     <div dojotype="dijit.form.Button" showLabel="true" onclick="dijit.byId('aboutDialog').show();">
                         <span>About</span>
                     </div>
-                    <div id="overviewBtn" dojoType="dijit.form.DropDownButton" showLabel="true"
-                         onclick="fluxProcessor.dispatchEvent('overviewTrigger');">
-                        <span>Filter</span>
-                        <div id="filterPopup" dojoType="dijit.TooltipDialog">
-                            <table id="searchBar">
-                                <tr>
-                                    <td>
-                                        <xf:input ref="from" incremental="true">
-                                            <xf:label>from</xf:label>
-                                            <xf:action ev:event="xforms-value-changed">
-                                                <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
-                                            </xf:action>
-                                        </xf:input>
-                                    </td>
-                                    <td>
-                                        <xf:input ref="to" incremental="true">
-                                            <xf:label>to</xf:label>
-                                            <xf:action ev:event="xforms-value-changed">
-                                                <xf:dispatch  name="DOMActivate" targetid="overviewTrigger"/>
-                                            </xf:action>
-                                        </xf:input>
-                                    </td>
-                                    <td>
-                                        <xf:select1 ref="project" appearance="minimal" incremental="true">
-                                            <xf:label>Project</xf:label>
-                                            <xf:action ev:event="xforms-value-changed">
-                                                <xf:dispatch  name="DOMActivate" targetid="overviewTrigger"/>
-                                            </xf:action>
-                                            <xf:itemset nodeset="instance('i-project')/*">
-                                                <xf:label ref="."/>
-                                                <xf:value ref="."/>
-                                            </xf:itemset>
-                                        </xf:select1>
-                                    </td>
-                                    <td>
-                                        <xf:select1 ref="billable" appearance="minimal" incremental="true">
-                                            <xf:label>Billable</xf:label>
-                                            <xf:action ev:event="xforms-value-changed">
-                                                <xf:dispatch  name="DOMActivate" targetid="overviewTrigger"/>
-                                            </xf:action>
-                                            <xf:item>
-                                                <xf:label>yes</xf:label>
-                                                <xf:value>true</xf:value>
-                                            </xf:item>
-                                            <xf:item>
-                                                <xf:label>no</xf:label>
-                                                <xf:value>false</xf:value>
-                                            </xf:item>
-                                        </xf:select1>
-                                    </td>
-                                    <td>
-                                        <xf:select1 ref="billed" appearance="minimal" incremental="true">
-                                            <xf:label>Billed</xf:label>
-                                            <xf:action ev:event="xforms-value-changed">
-                                                <xf:dispatch  name="DOMActivate" targetid="overviewTrigger"/>
-                                            </xf:action>
-                                            <xf:item>
-                                                <xf:label>not billed yet</xf:label>
-                                                <xf:value>false</xf:value>
-                                            </xf:item>
-                                            <xf:item>
-                                                <xf:label>already billed</xf:label>
-                                                <xf:value>true</xf:value>
-                                            </xf:item>
-                                        </xf:select1>
-                                    </td>
-                                    <td>
-                                        <xf:trigger id="closeFilter">
-                                            <xf:label/>
-                                            <script type="text/javascript">
-                                                dijit.byId("filterPopup").onCancel();
-                                                fluxProcessor.dispatchEvent("overviewTrigger");
-                                            </script>
-                                        </xf:trigger>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>                    
-                
                 </div>
 
                 <img id="shadowTop" src="{$contextPath}/rest/db/configeditor/images/shad_top.jpg" alt=""/>
@@ -264,7 +204,7 @@ return
 
                 <div id="embedInline"></div>
 
-                <div id="aboutDialog" dojotype="dijit.Dialog" href="about.html" title="About" style="width:500px;height:500px;"></div>
+                <div id="aboutDialog" dojotype="dijit.Dialog" href="about.html" title="About" style="width:500px;height:350px;"></div>
 
 <!--
                 <xf:output ref="instance('i-vars')/selectedTasks">
@@ -315,14 +255,26 @@ return
                 }).play();
 
             }
+            
+            var editSubcriber = dojo.subscribe("/wf_states/edit", function(data){
+                fluxProcessor.setControlValue("currentTask",data);
+                embed('editStates','embedDialog');
 
-            var editSubcriber = dojo.subscribe("/task/edit", function(data){
+            });            
+            
+            var editSubcriber = dojo.subscribe("/wf_transitions/edit", function(data){
+                fluxProcessor.setControlValue("currentTask",data);
+                embed('editTransitions','embedDialog');
+
+            });            
+
+            var editSubcriber = dojo.subscribe("/wf/edit", function(data){
                 fluxProcessor.setControlValue("currentTask",data);
                 embed('editTask','embedDialog');
 
             });
 
-            var deleteSubscriber = dojo.subscribe("/task/delete", function(data){
+            var deleteSubscriber = dojo.subscribe("/wf/delete", function(data){
                 var check = confirm("Really delete this entry?");
                 if (check == true){
                     fluxProcessor.setControlValue("currentTask",data);
@@ -330,7 +282,7 @@ return
                 }
             });
 
-            var refreshSubcriber = dojo.subscribe("/task/refresh", function(){
+            var refreshSubcriber = dojo.subscribe("/wf/refresh", function(){
                 fluxProcessor.dispatchEvent("overviewTrigger");
             });
 

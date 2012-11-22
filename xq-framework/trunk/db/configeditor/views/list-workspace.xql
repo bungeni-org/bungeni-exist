@@ -12,7 +12,7 @@ declare function local:main() as node() * {
     for $workspace in local:getMatchingTasks()
         return
             <tr>
-                <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workspace/tags/@document-name)}" /></td>
+                <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workspace/@id)}" /></td>
                 <td>{data($workspace/@id)}</td>
                 <td>{count($workspace/state)}</td>
                 <td><a href="javascript:dojo.publish('/task/edit',['{data($workspace/tags/@document-name)}']);">edit</a></td>
@@ -29,12 +29,10 @@ declare function local:getMatchingTasks() as node() * {
     let $billed := request:get-parameter("billed","")
 
     for $workspace in collection('/db/configeditor/configs/workspace')/workspace
-        let $workspace-project := data($workspace/@id)
+        let $workspace-id := data($workspace/@id)
         let $xsl := doc('/db/configeditor/xsl/wf_split_attrs.xsl')
-        order by $workspace-project ascending
-        return transform:transform($workspace, $xsl, <parameters>
-                                                        <param name="docname" value="{util:document-name($workspace)}" />
-                                                    </parameters>)
+        order by $workspace-id ascending
+        return $workspace
 
 };
 
@@ -51,12 +49,9 @@ return
         xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
       <title>All Tasks</title>
-      <link rel="stylesheet" type="text/css"
-                href="{$contextPath}/rest/db/configeditor/styles/configeditor.css"/>
-
+      <link rel="stylesheet" type="text/css" href="{$contextPath}/rest/db/configeditor/styles/configeditor.css"/>
     </head>
     <body>
-
         <div id="contextTitle">
             <span id="durationLabel">
                 <span id="durationLabel-value" class="xfValue">Workspace</span>

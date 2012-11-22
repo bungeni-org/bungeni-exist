@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workflow title="Blank_Template" description="A Worklow template">
-    <tags originAttr="tags" document-name="blank.xml">
+<workflow document-name="blank.xml" title="Blank_Template" description="A Worklow template">
+    <tags originAttr="tags">
         <tag>draft</tag>
         <tag>private</tag>
         <tag>public</tag>

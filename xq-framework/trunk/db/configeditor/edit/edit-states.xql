@@ -45,8 +45,8 @@ return
                 <xf:model>
                     <xf:instance id="i-workflow" src="{$contextPath}/rest/db/configeditor/data/workflow.xml"/>                  
 
-                    <xf:bind nodeset="@title" type="xf:string" required="true()" />
                     <xf:bind id="documentname" nodeset="@document-name" type="xs:string" required="true()"/>
+                    <xf:bind nodeset="transition/@title" type="xs:string" required="true()"/>
                     <xf:bind id="feature" nodeset="feature/@enabled" type="xs:boolean" required="true()"/>
                     <!--xf:bind nodeset="project" required="true()" />
                     <xf:bind nodeset="duration/@hours" type="integer" />
@@ -144,44 +144,78 @@ return
         </div>
 
         <xf:group ref="." class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
-            <xf:group id="add-task-table" appearance="compact">
-            
+            <xf:group id="add-task-table" appearance="default">         
+
                 <xf:output ref="@title">
-                    <xf:label>Editing ID, Titles and Features:</xf:label>
-                </xf:output>               
-            
-                <xf:input id="document-name" ref="@document-name">
-                    <xf:label>Document ID</xf:label>
-                    <xf:alert>The convention current is file name = Document ID</xf:alert>
-                    <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
-                    <xf:alert>invalid file name</xf:alert>
-                </xf:input>            
+                    <xf:label>States:</xf:label>
+                </xf:output>                               
+                
+                <xf:group>
+                    <xf:trigger>
+                        <xf:label>insert</xf:label>
+                        <xf:action>
+                            <xf:insert nodeset="transition" at="1" position="before"></xf:insert>
+                        </xf:action>
+                    </xf:trigger>  
+                </xf:group>                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                state id
+                            </th>
+                            <th>
+                                title
+                            </th>                                  
+                            <th>
+                                trigger
+                            </th>     
+                            <th colspan="2">
+                                actions
+                            </th>                               
+                        </tr>
+                    </thead>
+                    <tbody id="r-stateattrs" xf:repeat-nodeset="state">
+                        <tr> 
+                            <td style="color:steelblue;font-weight:bold;">
+                                <xf:input ref="@id" incremental="true">
+                                    <xf:label/>
+                                    <xf:hint>State for this transition</xf:hint>
+                                    <xf:help>Type a title</xf:help>
+                                    <xf:alert>invalid title</xf:alert>
+                                </xf:input>
+                            </td>                             
+                            <td>
+                                <xf:textarea ref="@title" appearance="growing" incremental="true">
+                                    <xf:label>Title for this state</xf:label>
+                                    <xf:hint>This is a short description about this state</xf:hint>
+                                    <xf:help>Type the title information</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                </xf:textarea>
+                            </td>                                
+                            <td>
+                                <xf:output ref="@trigger"></xf:output>
+                            </td>   
+                            <td style="color:blue;">
+                                <xf:trigger>
+                                    <xf:label>insert</xf:label>
+                                    <xf:action>
+                                        <xf:insert nodeset="." at="index('r-stateattrs')" position="before"></xf:insert>
+                                    </xf:action>
+                                </xf:trigger> 
+                            </td>                                            
+                            <td style="color:red;">                                           
+                                <xf:trigger>
+                                    <xf:label>delete</xf:label>
+                                    <xf:action>
+                                        <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                    </xf:action>
+                                </xf:trigger>   
+                            </td>                            
+                        </tr>
+                    </tbody>
+                </table>                 
 
-                <xf:input id="title" ref="@title">
-                    <xf:label>Title</xf:label>
-                    <xf:alert>a Title is required</xf:alert>
-                    <xf:hint>senter Title for this workflow items</xf:hint>
-                </xf:input>
-                
-                <xf:textarea id="description" ref="@description" appearance="growing" incremental="true">
-                    <xf:label>Description</xf:label>
-                    <xf:hint>You may enter a description</xf:hint>
-                    <xf:help>short description about this workflow</xf:help>
-                    <xf:alert>invalid</xf:alert>
-                </xf:textarea>                  
-                
-                <xf:repeat id="features" nodeset="feature" appearance="compact">
-                    <xf:output ref="@name">
-                        <xf:label>Feature:</xf:label>
-                    </xf:output>
-                    <xf:input ref="@enabled" incremental="true">
-                        <xf:label>True/False</xf:label>
-                        <xf:hint>check for True</xf:hint>
-                    </xf:input> 
-
-                </xf:repeat>
-                
-                <br/>
                 <xf:group id="dialogButtons" appearance="bf:horizontalTable">
                     <xf:label/>
                     <xf:trigger>

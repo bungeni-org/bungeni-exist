@@ -368,12 +368,80 @@ declare function bun:xqy-list-membership-with-tabs($type as xs:string, $status a
                 "/ancestor::bu:ontology")
 };
 
-declare function bun:list-membership-with-tabs($type as xs:string, $status as xs:string) {
+declare function bun:list-membership($eval-query as xs:string, $sortby as xs:string) {
 
-    let $eval-query := bun:xqy-list-membership-with-tabs($type, $status)
-    return 
-        util:eval($eval-query)
+        if ($sortby = 'ln_desc') then (
+        
+            for $match in util:eval($eval-query)
+            order by $match/bu:membership/bu:lastName descending
+            return 
+                $match    
+        )
+        else if ($sortby = 'ln_asc') then (
+            for $match in util:eval($eval-query)
+            order by $match/bu:membership/bu:lastName ascending
+            return 
+                $match        
+        )                 
+        else if ($sortby = 'fn_desc') then (
+            for $match in util:eval($eval-query)
+            order by $match/bu:membership/bu:firstName descending
+            return 
+                $match       
+        )  
+        else if ($sortby = 'fn_asc') then (
+            for $match in util:eval($eval-query)
+            order by $match/bu:membership/bu:firstName ascending
+            return 
+                $match       
+        )                 
+        else  (
+            for $match in util:eval($eval-query)
+            order by $match/bu:membership/bu:lastName descending
+            return 
+                $match        
+        )
 };
+
+
+declare function bun:list-membership-with-tabs($type as xs:string, $status as xs:string, $sortby as xs:string) {
+    
+    let $eval-query := bun:xqy-list-membership-with-tabs($type, $status)
+
+    return 
+    if ($sortby = 'ln_desc') then (
+    
+        for $match in util:eval($eval-query)
+        order by $match/bu:membership/bu:lastName descending
+        return 
+            $match    
+    )
+    else if ($sortby = 'ln_asc') then (
+        for $match in util:eval($eval-query)
+        order by $match/bu:membership/bu:lastName ascending
+        return 
+            $match        
+    )                 
+    else if ($sortby = 'fn_desc') then (
+        for $match in util:eval($eval-query)
+        order by $match/bu:membership/bu:firstName descending
+        return 
+            $match       
+    )  
+    else if ($sortby = 'fn_asc') then (
+        for $match in util:eval($eval-query)
+        order by $match/bu:membership/bu:firstName ascending
+        return 
+            $match       
+    )                 
+    else  (
+        for $match in util:eval($eval-query)
+        order by $match/bu:membership/bu:lastName descending
+        return 
+            $match        
+    )
+};
+
 
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
@@ -1021,7 +1089,7 @@ declare function bun:search-membership(
     let $getqrystr := xs:string(request:get-query-string())
 
     (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else util:eval($coll_rs)
+    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else bun:list-membership($coll_rs, $sortby)
     
     (: 
         Logical offset is set to Zero but since there is no document Zero
@@ -1049,63 +1117,14 @@ declare function bun:search-membership(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'ln_asc') then (
-               (:if (fn:ni$qrystr):)
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:lastName ascending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>  
-                ) 
-            else if ($sortby = 'ln_desc') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:lastName descending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>        
-                )
-            else if ($sortby = 'fn_desc') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:firstName descending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>        
-                )    
-            else if ($sortby = 'fn_asc') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:firstName ascending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>        
-                )                 
-            else  (
-                for $match in subsequence($coll,$query-offset,$limit)
-                order by $match/child::*/bu:lastName descending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>         
-                )
-                (:ft:score($m):)
+            for $match in subsequence($coll,$query-offset,$limit)
+            return 
+                <doc>
+                    {$match}
+                    <ref>
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                    </ref>                    
+                </doc>
         } 
         </alisting>
     </docs>
@@ -1429,10 +1448,10 @@ declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tm
             
             for $orderbys in $search-orderby
             return
-                if ($orderbys/@default eq "true") then (
+                if (data($orderbys/@default) eq "true") then (
                     element option {
+                        attribute selected {"selected"},                    
                         attribute value { $orderbys/@value },
-                        attribute selected { "selected"},
                         $orderbys/text()
                     }
                 )
@@ -2985,7 +3004,7 @@ declare function bun:get-members(
     let $getqrystr := xs:string(request:get-query-string())  
     
     let $listings-filter := cmn:get-listings-config($parts/doctype) 
-    let $coll := bun:list-membership-with-tabs($parts/doctype, $listings-filter[@id eq $tab]/text())    
+    let $coll := bun:list-membership-with-tabs($parts/doctype, $listings-filter[@id eq $tab]/text(), $sortby)    
     
     (: The line below is documented in bun:get-documentitems() :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset       
@@ -2999,7 +3018,7 @@ declare function bun:get-members(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($parts/doctype, $listing/text())) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($parts/doctype, $listing/text(), $sortby)) }">{data($listing/@name)}</tag>
                     
         }
         </tags>          
@@ -3013,63 +3032,14 @@ declare function bun:get-members(
         </paginator>
         <alisting>
         {
-            if ($sortby = 'ln_desc') then (
-            
-                for $match in subsequence($coll,$offset,$limit)                
-                order by $match/bu:membership/bu:lastName descending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>  
-                )
-            else if ($sortby = 'ln_asc') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:lastName ascending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>       
-                )                 
-            else if ($sortby = 'fn_desc') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:firstName descending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>       
-                )  
-            else if ($sortby = 'fn_asc') then (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:firstName ascending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>       
-                )                 
-            else  (
-                for $match in subsequence($coll,$offset,$limit)
-                order by $match/bu:membership/bu:lastName descending
-                return 
-                    <doc>
-                        {$match}
-                        <ref>
-                        {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                        </ref>                    
-                    </doc>        
-                )
-
+            for $match in subsequence($coll,$offset,$limit)                
+            return 
+                <doc>
+                    {$match}
+                    <ref>
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                    </ref>                    
+                </doc>
         } 
         </alisting>
     </docs>

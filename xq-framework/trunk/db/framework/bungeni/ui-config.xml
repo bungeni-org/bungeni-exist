@@ -1059,9 +1059,9 @@
         <doctype category="membership" name="Membership">
             <orderbys>
                 <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last name [ascending]</orderby>
-                <orderby default="true" field="bu:membership/bu:lastName" order="descending" value="ln_desc">last name [descending]</orderby>
-                <orderby field="bu:membership/bu:lfirstName" order="ascending" value="fn_asc">first name [ascending]</orderby>
-                <orderby default="true" field="bu:membership/bu:firstName" order="descending" value="fn_desc">first name [descending]</orderby>
+                <orderby field="bu:membership/bu:lastName" order="descending" value="ln_desc" default="true">last name [descending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first name [ascending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first name [descending]</orderby>
             </orderbys>
             <searchins>
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>

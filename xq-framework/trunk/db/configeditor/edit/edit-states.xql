@@ -168,8 +168,11 @@ return
                                 title
                             </th>                                  
                             <th>
-                                trigger
-                            </th>     
+                                view
+                            </th>    
+                            <th>
+                                edit
+                            </th>                              
                             <th colspan="2">
                                 actions
                             </th>                               
@@ -196,6 +199,9 @@ return
                             <td>
                                 <xf:output ref="@trigger"></xf:output>
                             </td>   
+                            <td>
+                                <xf:output ref="@trigger"></xf:output>
+                            </td>                               
                             <td style="color:blue;">
                                 <xf:trigger>
                                     <xf:label>insert</xf:label>

@@ -11,11 +11,13 @@ import com.rabbitmq.client.Channel
 from com.xhaus.jyson import JysonCodec as json
 import java.io.IOException
 from java.lang import String
+from java.lang import Thread
+from java.util import List, ArrayList
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
 __license__ = "GNU GPL v3"
-__version__ = "0.8"
+__version__ = "1.1"
 __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
@@ -76,6 +78,16 @@ class RabbitMQClient:
             self.channel.close()
             self.conn.close()
 
+class QueueRunner(Thread):
+
+    def run(self):
+        try:
+            rmq = RabbitMQClient()
+            rmq.consume_msgs()
+        except:
+            print "There was an exception processing the queue"
+
+
 if (len(sys.argv) >= 2):
     # process input command line options
     options, params = getopt.getopt(sys.argv[1:], "c:i:")
@@ -85,10 +97,15 @@ else:
     print " config.ini and time interval file must be input parameters."
     sys.exit()
 
+thread_list = ArrayList()
+
 while True:
     time.sleep(int(__time_int__)) # of seconds to wait till next consumption of messages is done.
-    try:
-        rmq = RabbitMQClient()
-        rmq.consume_msgs()
-    except:
-        pass
+    qr_thread = QueueRunner()
+    qr_thread.start()
+    thread_list.add(qr_thread)
+    for thread in thread_list:
+        try:
+            thread.join()
+        except InterruptedException, e:
+            print "QueueRunner thread was interrupted !" , e

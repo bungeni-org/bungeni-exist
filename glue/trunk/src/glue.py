@@ -872,7 +872,6 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
             params = urllib.urlencode({'uri': ''+file_uri+'', 't': '' + file_stat_date +''})
             conn.request("GET", "/exist/apps/framework/bungeni/check-update?",params)
             response = conn.getresponse()
-            print response
             if(response.status == 200):
                 data = response.read()
                 if(self.get_sync(data) != 'ignore'):

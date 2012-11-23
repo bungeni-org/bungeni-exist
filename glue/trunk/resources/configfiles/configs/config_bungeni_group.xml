@@ -31,6 +31,7 @@
                 <parameter name="type-mappings">
                     <value>
                         <map from="committee" uri-name="Committee"  element-name="committee" />
+                        <map from="office" uri-name="Office"  element-name="office" />
                         <map from="parliament" uri-name="Parliament"  element-name="parliament" />
                         <map from="ministry" uri-name="Ministry"  element-name="ministry" />
                         <map from="political_group" uri-name="PoliticalGroup"  element-name="politicalGroup" />

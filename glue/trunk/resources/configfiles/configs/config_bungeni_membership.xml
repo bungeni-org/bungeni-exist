@@ -32,6 +32,7 @@
                 <value>
                     <map from="member_of_parliament" uri-name="Membership"  element-name="membership" />
                     <map from="committee_member" uri-name="Membership"  element-name="membership" />
+                    <map from="office_member" uri-name="Membership"  element-name="membership" />
                 </value>
             </parameter>            
         </parameters>

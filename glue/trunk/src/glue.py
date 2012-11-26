@@ -897,6 +897,7 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
             print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
             return (False, None)
         finally:
+            response.close()
             conn.close()
 
 
@@ -930,6 +931,7 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                 print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
                 sys.exit()
             finally:
+                response.close()
                 conn.close()            
 
             return (False, None)
@@ -1021,8 +1023,9 @@ class WebDavClient(object):
                 sys.exit()
             finally:
                 inputStream.close()
+                self.sardine.shutdown()
         except FileNotFoundException, e:
-            print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last synchronization. Do a re-sync before uploading" , _COLOR.ENDC
+            print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , _COLOR.ENDC
             return True
 
 class PoTranslationsConfig(Config):

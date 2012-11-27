@@ -1,121 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workflow description="Workflow for addresses" note="Used for both bungeni.models types: UserAddress, GroupAddress" title="Address Workflow">
-    <tags document-name="address.xml" originAttr="tags">
-        <tag>draft</tag>
-        <tag>private</tag>
-        <tag>public</tag>
-    </tags>
-    <permActions originAttr="permission_actions">
-        <permAction>.View</permAction>
-        <permAction>.Edit</permAction>
-        <permAction>.Add</permAction>
-        <permAction>.Delete</permAction>
-    </permActions>
-    <state id="draft" title="Draft Address">
-        <tags document-name="address.xml" originAttr="tags">
-            <tag>draft</tag>
-            <tag>private</tag>
-        </tags>
-        <deny permission="bungeni.address.View" role="bungeni.Clerk"/>
-        <deny permission="bungeni.address.View" role="bungeni.Speaker"/>
-        <grant permission="bungeni.address.View" role="bungeni.Owner"/>
-        <deny permission="bungeni.address.View" role="bungeni.Signatory"/>
-        <deny permission="bungeni.address.View" role="bungeni.MP"/>
-        <deny permission="bungeni.address.View" role="bungeni.Minister"/>
-        <deny permission="bungeni.address.View" role="bungeni.Anonymous"/>
-        <deny permission="bungeni.address.Edit" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.Edit" role="bungeni.Owner"/>
-        <deny permission="bungeni.address.Delete" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.Delete" role="bungeni.Owner"/>
+<workflow title="Address Workflow" description="Workflow for addresses" note="Used for both bungeni.models types: UserAddress, GroupAddress" tags="draft private public" permission_actions=".View .Edit .Add .Delete">
+    
+    <!-- sub-item: NO global grants -->
+    
+    
+    <!-- workflow facets -->
+    <facet name="all_Owner">
+        <allow permission=".View" roles="Owner"/>
+        <allow permission=".Edit" roles="Owner"/>
+        <allow permission=".Delete" roles="Owner"/>
+    </facet>
+    <facet name="all_internal">
+        <allow permission=".View" roles="Owner Clerk Speaker Signatory MP Minister"/>
+        <allow permission=".Edit" roles="Owner Clerk"/>
+        <allow permission=".Delete" roles="Owner Clerk"/>
+    </facet>
+    <state id="draft" title="Draft Address" tags="draft private">
+        <facet ref=".all_Owner"/>
     </state>
-    <state id="attached" permissions_from_parent="true" title="Address">
-        <tags document-name="address.xml" originAttr="tags">
-            <tag>public</tag>
-        </tags>
+    <state id="attached" title="Address" tags="public" permissions_from_parent="true"/>
+    <state id="internal" title="Published Internal" note="Visible to bungeni users">
+        <facet ref=".all_internal"/>
     </state>
-    <state id="internal" like_state="draft" note="Visible to bungeni users" title="Published Internal">
-        <grant permission="bungeni.address.View" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.View" role="bungeni.Speaker"/>
-        <grant permission="bungeni.address.View" role="bungeni.Signatory"/>
-        <grant permission="bungeni.address.View" role="bungeni.MP"/>
-        <grant permission="bungeni.address.View" role="bungeni.Minister"/>
-        <grant permission="bungeni.address.View" role="bungeni.Anonymous"/>
-        <grant permission="bungeni.address.Edit" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.Delete" role="bungeni.Clerk"/>
-    </state>
-    <state id="inactive" like_state="internal" title="Inactive address">
-        <deny permission="bungeni.address.Edit" role="bungeni.Clerk"/>
-        <deny permission="bungeni.address.Edit" role="bungeni.Owner"/>
-    </state>
-    <transition condition="context_parent_is_not_draft" title="Create" trigger="automatic">
-        <sources originAttr="source"/>
-        <destinations originAttr="destination">
-            <destination>draft</destination>
-        </destinations>
-    </transition>
-    <transition condition="context_parent_is_draft" title="Create" trigger="automatic">
-        <sources originAttr="source"/>
-        <destinations originAttr="destination">
-            <destination>attached</destination>
-        </destinations>
-    </transition>
-    <transition title="Publish" trigger="manual">
-        <sources originAttr="source">
-            <source>draft</source>
-        </sources>
-        <destinations originAttr="destination">
-            <destination>attached</destination>
-        </destinations>
-        <roles originAttr="roles">
-            <role>bungeni.Owner</role>
-        </roles>
-    </transition>
-    <transition title="Publish Internal" trigger="manual">
-        <sources originAttr="source">
-            <source>draft</source>
-        </sources>
-        <destinations originAttr="destination">
-            <destination>internal</destination>
-        </destinations>
-        <roles originAttr="roles">
-            <role>bungeni.Owner</role>
-        </roles>
-    </transition>
-    <transition title="Re-publish" trigger="manual">
-        <sources originAttr="source">
-            <source>internal</source>
-        </sources>
-        <destinations originAttr="destination">
-            <destination>attached</destination>
-        </destinations>
-        <roles originAttr="roles">
-            <role>bungeni.Clerk</role>
-            <role>bungeni.Owner</role>
-        </roles>
-    </transition>
-    <transition condition="context_parent_is_not_public" title="Publish Internal" trigger="manual">
-        <sources originAttr="source">
-            <source>attached</source>
-        </sources>
-        <destinations originAttr="destination">
-            <destination>internal</destination>
-        </destinations>
-        <roles originAttr="roles">
-            <role>bungeni.Clerk</role>
-            <role>bungeni.Owner</role>
-        </roles>
-    </transition>
-    <transition condition="context_parent_is_not_public" require_confirmation="true" title="Deactivate" trigger="manual">
-        <sources originAttr="source">
-            <source>attached</source>
-            <source>internal</source>
-        </sources>
-        <destinations originAttr="destination">
-            <destination>inactive</destination>
-        </destinations>
-        <roles originAttr="roles">
-            <role>bungeni.Clerk</role>
-            <role>bungeni.Owner</role>
-        </roles>
-    </transition>
+    
+    <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
+    -->
+    <state id="inactive" title="Inactive address" permissions_from_state="internal"/>
+    
+    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <transition title="Create" source="" destination="draft" condition="context_parent_is_not_draft" trigger="automatic"/>
+    <transition title="Create" source="" destination="attached" condition="context_parent_is_draft" trigger="automatic"/>
+    <transition title="Publish" source="draft" destination="attached" trigger="manual" roles="Owner"/>
+    <transition title="Publish Internal" source="draft" destination="internal" trigger="manual" roles="Owner"/>
+    <transition title="Re-publish" source="internal" destination="attached" trigger="manual" roles="Clerk Owner"/>
+    
+    <!-- 
+    if the parent has been published (i.e. is public, assuming that once 
+    published it is never retracted) we do not want to allow transitioning away 
+    from "attached".
+    -->
+    <transition title="Publish Internal" source="attached" destination="internal" condition="context_parent_is_not_public" trigger="manual" roles="Clerk Owner"/>
+    <transition title="Deactivate" source="attached internal" destination="inactive" condition="context_parent_is_not_public" trigger="manual" roles="Clerk Owner" require_confirmation="true"/>
 </workflow>

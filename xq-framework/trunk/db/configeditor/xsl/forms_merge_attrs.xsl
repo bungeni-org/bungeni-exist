@@ -12,43 +12,22 @@
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="workflow">
-        <workflow>
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./tags"/>
-            </xsl:call-template>
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./permActions"/>
-            </xsl:call-template>
-            <xsl:apply-templates select="@*|node()"/>
-        </workflow>
-    </xsl:template>
-    <xsl:template match="state">
-        <state>
-            <xsl:if test="./tags">
-                <xsl:call-template name="merge_tags">
-                    <xsl:with-param name="elemOriginAttr" select="./tags"/>
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:apply-templates select="@*|node()"/>
-        </state>
-    </xsl:template>
-    <xsl:template match="allow | deny">
-        <xsl:element name="{name()}">
+    <xsl:template match="ui/@name"/>
+    <xsl:template match="ui">
+        <ui>
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./roles"/>
             </xsl:call-template>
             <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
+        </ui>
     </xsl:template>
-    <xsl:template match="transition">
-        <xsl:element name="transition">
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./sources"/>
-            </xsl:call-template>
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./destinations"/>
-            </xsl:call-template>
+    <xsl:template match="show | hide">
+        <xsl:element name="{name()}">
+            <xsl:if test="./modes">
+                <xsl:call-template name="merge_tags">
+                    <xsl:with-param name="elemOriginAttr" select="./modes"/>
+                </xsl:call-template>
+            </xsl:if>
             <xsl:if test="./roles">
                 <xsl:call-template name="merge_tags">
                     <xsl:with-param name="elemOriginAttr" select="./roles"/>
@@ -57,7 +36,7 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr]"/>
+    <xsl:template match="*[@originAttr]"/>
     <xsl:template name="merge_tags">
         <xsl:param name="elemOriginAttr"/>
         <xsl:variable name="attrName" select="$elemOriginAttr/@originAttr"/>

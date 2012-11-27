@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow title="Report Workflow" description="A report" tags="public" permission_actions=".View .Edit .Add .Delete">
     
+    <!-- global grants -->
+    <allow permission=".Edit" roles="Clerk Speaker"/>
+    
+    
     <!-- features -->
     <feature name="audit" enabled="true"/>
     <feature name="version" enabled="true"/>
     <feature name="download" enabled="true"/>
     
-    <!-- global grants -->
-    <grant permission="bungeni.report.Edit" role="bungeni.Clerk"/>
-    <grant permission="bungeni.report.Edit" role="bungeni.Speaker"/>
-    <state id="published" title="Published" tags="public">
-        <grant permission="bungeni.report.View" role="bungeni.Authenticated"/>
-        <grant permission="bungeni.report.View" role="bungeni.Anonymous"/>
-        <!-- !+PERM_NOT_REG deny permission="bungeni.report.Edit" role="bungeni.Authenticated" /-->
-    </state>
+    
+    <!-- workflow facets -->
+    <facet name="all_Clerk" default="true">
+        <allow permission=".View" roles="Authenticated Anonymous"/>
+    </facet>
+    <state id="published" title="Published" tags="public"/>
     <transition title="Create Report" source="" destination="published" trigger="automatic" order="0"/>
 </workflow>

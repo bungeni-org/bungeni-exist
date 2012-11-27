@@ -10,7 +10,7 @@
         <tab id="draft" roles="bungeni.Owner"/>
     </state>
     <state id="withdrawn_signatory">
-        <tab id="archive" roles="bungeni.Owner bungeni.Clerk bungeni.Signatory"/>
+        <tab id="archive" roles="bungeni.Owner       bungeni.Clerk                     bungeni.Signatory"/>
     </state>
     <state id="submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>
@@ -30,44 +30,44 @@
     </state>
     <state id="completed">
         <tab id="inbox" roles="bungeni.Speaker"/>
-        <tab id="pending" roles="bungeni.Owner bungeni.Clerk bungeni.Signatory"/>
+        <tab id="pending" roles="bungeni.Owner       bungeni.Clerk        bungeni.Signatory"/>
     </state>
     <state id="incomplete">
         <tab id="inbox" roles="bungeni.Clerk"/>
         <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
     </state>
     <state id="withdrawn_internal">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk  bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory       bungeni.Owner       bungeni.Clerk                     bungeni.Speaker"/>
     </state>
     <state id="admissible">
         <tab id="inbox" roles="bungeni.Clerk"/>
-        <tab id="pending" roles="bungeni.Owner bungeni.Signatory bungeni.Speaker"/>
+        <tab id="pending" roles="bungeni.Owner       bungeni.Signatory       bungeni.Speaker"/>
     </state>
     <state id="schedule_pending">
-        <tab id="pending" roles="bungeni.Owner bungeni.Signatory bungeni.Speaker bungeni.Clerk"/>
+        <tab id="pending" roles="bungeni.Owner       bungeni.Signatory       bungeni.Speaker       bungeni.Clerk"/>
     </state>
     <state id="adopted">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk         bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory        bungeni.Owner       bungeni.Clerk         bungeni.Speaker"/>
     </state>
     <state id="adopted_amendments">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk                      bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory        bungeni.Owner        bungeni.Clerk                      bungeni.Speaker"/>
     </state>
     <state id="adjourned">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk                      bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory        bungeni.Owner        bungeni.Clerk                      bungeni.Speaker"/>
     </state>
     <state id="deferred">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk                     bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory       bungeni.Owner       bungeni.Clerk                     bungeni.Speaker"/>
     </state>
     <state id="elapsed">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk                     bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory       bungeni.Owner       bungeni.Clerk                     bungeni.Speaker"/>
     </state>
     <state id="dropped">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk                     bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory        bungeni.Owner        bungeni.Clerk                     bungeni.Speaker"/>
     </state>
     <state id="rejected">
-        <tab id="archive" roles="bungeni.Signatory bungeni.Owner bungeni.Clerk                      bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory        bungeni.Owner        bungeni.Clerk                      bungeni.Speaker"/>
     </state>
     <state id="withdrawn">
-        <tab id="archive" roles="bungeni.Signatory  bungeni.Owner bungeni.Clerk                     bungeni.Speaker"/>
+        <tab id="archive" roles="bungeni.Signatory       bungeni.Owner       bungeni.Clerk                     bungeni.Speaker"/>
     </state>
 </workspace>

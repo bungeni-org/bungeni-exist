@@ -15,6 +15,15 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match="workflow">
+        <xsl:copy>
+        <xsl:variable name="fname" select="tokenize(base-uri(),'/')" />
+        <xsl:variable name="wfname" select="tokenize($fname[last()],'\.')" />
+        <xsl:attribute name="name" select="$wfname[1]" />
+            <xsl:apply-templates select="@*" mode="preserve"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->

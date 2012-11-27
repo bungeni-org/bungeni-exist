@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow title="User Workflow" description="" permission_actions=".View .Edit .Add .Delete">
-    <feature name="address" enabled="true"/>
+    <feature name="address" enabled="true">
+        <facet name="all_Clerk_Owner">
+            <allow permission="address.Edit" roles="Clerk Owner"/>
+            <allow permission="address.Add" roles="Clerk Owner"/>
+            <allow permission="address.Delete" roles="Clerk Owner"/>
+        </facet>
+    </feature>
+    
+    <!-- workflow facets -->
+    <facet name="all_Owner">
+        <allow permission=".Edit" roles="Owner"/>
+        <allow permission="delegation.Edit" roles="Owner"/>
+        <allow permission="delegation.Add" roles="Owner"/>
+    </facet>
     <state id="A" title="Active User">
-        <grant permission="bungeni.delegation.Edit" role="bungeni.Owner"/>
-        <grant permission="bungeni.delegation.Add" role="bungeni.Owner"/>
-        <grant permission="bungeni.user.Edit" role="bungeni.Authenticated"/>
-        <!-- address -->
-        <grant permission="bungeni.address.Edit" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.Edit" role="bungeni.Owner"/>
-        <grant permission="bungeni.address.Add" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.Add" role="bungeni.Owner"/>
-        <grant permission="bungeni.address.Delete" role="bungeni.Clerk"/>
-        <grant permission="bungeni.address.Delete" role="bungeni.Owner"/>
+        <facet ref=".all_Owner"/>
+        <facet ref="address.all_Clerk_Owner"/>
     </state>
-    <state id="I" like_state="A" title="Inactive User">
-        <deny permission="bungeni.delegation.Edit" role="bungeni.Owner"/>
-        <deny permission="bungeni.delegation.Add" role="bungeni.Owner"/>
-        <deny permission="bungeni.user.Edit" role="bungeni.Authenticated"/>
-        <!-- address -->
-        <deny permission="bungeni.address.Edit" role="bungeni.Clerk"/>
-        <deny permission="bungeni.address.Edit" role="bungeni.Owner"/>
-        <deny permission="bungeni.address.Add" role="bungeni.Clerk"/>
-        <deny permission="bungeni.address.Add" role="bungeni.Owner"/>
-        <deny permission="bungeni.address.Delete" role="bungeni.Clerk"/>
-        <deny permission="bungeni.address.Delete" role="bungeni.Owner"/>
-    </state>
-    <state id="D" like_state="I" title="Deceased User"/>
+    <state id="I" title="Inactive User"/>
+    <state id="D" title="Deceased User"/>
     <transition title="Create" source="" destination="A" trigger="automatic"/>
-    <transition title="Deactivate" source="A" destination="I" condition="not_has_date_of_death" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
-    <transition title="Activate" source="I" destination="A" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
-    <transition title="Move to Deceased" source="A I" destination="D" condition="has_date_of_death" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
-    <transition title="Move from Deceased" source="D" destination="A" trigger="manual" roles="bungeni.Speaker" require_confirmation="true"/>
+    <transition title="Deactivate" source="A" destination="I" condition="not_has_date_of_death" trigger="manual" roles="Speaker" require_confirmation="true"/>
+    <transition title="Activate" source="I" destination="A" trigger="manual" roles="Speaker" require_confirmation="true"/>
+    <transition title="Move to Deceased" source="A I" destination="D" condition="has_date_of_death" trigger="manual" roles="Speaker" require_confirmation="true"/>
+    <transition title="Move from Deceased" source="D" destination="A" trigger="manual" roles="Speaker" require_confirmation="true"/>
 </workflow>

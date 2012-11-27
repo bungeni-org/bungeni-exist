@@ -2,6 +2,6 @@
 <data>
     <next-id>3</next-id>
     <error hasError="false"/>
-    <dbPath>/betterform/rest/db/betterform/apps/timetracker</dbPath>
+    <dbPath>/db/configeditor</dbPath>
     <timestamp/>
 </data>

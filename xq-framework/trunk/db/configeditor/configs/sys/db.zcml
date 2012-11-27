@@ -2,4 +2,5 @@
 <configure xmlns="http://namespaces.zope.org/zope" xmlns:db="http://namespaces.objectrealms.net/rdb">
     <include file="meta.zcml" package="bungeni.alchemist"/>
     <db:engine echo="false" name="bungeni-db" url="postgres://localhost/bungeni"/>
+    <db:engine echo="false" name="bungeni-test" url="postgres://localhost/bungeni-test"/>
 </configure>

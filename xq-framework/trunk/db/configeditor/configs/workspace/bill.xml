@@ -10,7 +10,7 @@
         <tab id="draft" roles="bungeni.Owner"/>
     </state>
     <state id="withdrawn_signatory">
-        <tab id="archive" roles="bungeni.Owner bungeni.Clerk bungeni.Signatory"/>
+        <tab id="archive" roles="bungeni.Owner       bungeni.Clerk                     bungeni.Signatory"/>
     </state>
     <state id="submitted">
         <tab id="inbox" roles="bungeni.Clerk"/>
@@ -86,13 +86,13 @@
         <tab id="pending" roles="bungeni.Owner bungeni.Signatory"/>
     </state>
     <state id="approved">
-        <tab id="archive" roles="bungeni.Clerk bungeni.Owner bungeni.Signatory"/>
+        <tab id="archive" roles="bungeni.Clerk                   bungeni.Owner                   bungeni.Signatory"/>
     </state>
     <state id="rejected">
-        <tab id="archive" roles="bungeni.Clerk bungeni.Owner bungeni.Signatory"/>
+        <tab id="archive" roles="bungeni.Clerk        bungeni.Owner        bungeni.Signatory"/>
     </state>
     <state id="withdrawn">
-        <tab id="archive" roles="bungeni.Clerk  bungeni.Owner bungeni.Signatory"/>
+        <tab id="archive" roles="bungeni.Clerk       bungeni.Owner                      bungeni.Signatory"/>
     </state>
     <state id="withdrawn_internal">
         <tab id="archive" roles="bungeni.Owner"/>

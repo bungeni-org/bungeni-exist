@@ -3,7 +3,7 @@
     <!--
         Ashok Hariharan
         14 Nov 2012
-        Serializes Workflow XML to a more usable form
+        Serializes Bungeni Workflow XML to a more usable XML format
         -->
     <xsl:output indent="yes"/>
     <xsl:param name="docname"/>
@@ -13,20 +13,22 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
-    
+    <xsl:template match="workflow">
+        <xsl:copy>
+            <xsl:attribute name="document-name" select="$docname"/>
+            <xsl:variable name="fname" select="tokenize(base-uri(),'/')"/>
+            <xsl:variable name="wfname" select="tokenize($fname[last()],'\.')"/>
+            <xsl:attribute name="name" select="$wfname[1]"/>
+            <xsl:apply-templates select="@*" mode="preserve"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->
     <xsl:template mode="preserve" match="@tags | @roles | @source | @destination | @permission_actions"/>
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
-    </xsl:template>
-    <xsl:template match="workflow">
-        <xsl:copy>
-            <xsl:attribute name="document-name" select="$docname"/>
-            <xsl:apply-templates select="@*" mode="preserve"/>
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:copy>
     </xsl:template>
     <xsl:template match="@tags">
         <xsl:element name="tags">

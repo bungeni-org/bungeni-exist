@@ -5,47 +5,40 @@
         Append: Append signature to a document
     -->
     
+    <!-- global grants -->
+    <allow permission=".Edit" roles="Owner"/>
+    <allow permission=".Add" roles="Owner"/>
+    <allow permission=".Delete" roles="Clerk"/>
+    <allow permission=".Act" roles="Signatory"/>
+    <allow permission=".Append" roles="MP"/>
+    
+    
     <!-- features -->
     <feature name="audit" enabled="true"/>
     <feature name="version" enabled="false"/>
     <feature name="attachment" enabled="false"/>
     
-    <!-- global grants -->
-    <grant permission="bungeni.signatory.Edit" role="bungeni.Owner"/>
-    <grant permission="bungeni.signatory.Add" role="bungeni.Owner"/>
-    <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
-    <grant permission="bungeni.signatory.Act" role="bungeni.Signatory"/>
-    <grant permission="bungeni.signatory.Append" role="bungeni.MP"/>
+    <!-- workflow facets -->
+    <facet name="all_Owner">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory MP Minister"/>
+        <allow permission=".Delete" roles="Owner"/>
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Authenticated Anonymous"/>
+    </facet>
     <state id="awaiting_consent" title="Awaiting Consent" tags="workspace">
-        <!-- signatory -->
-        <grant permission="bungeni.signatory.View" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.View" role="bungeni.Speaker"/>
-        <grant permission="bungeni.signatory.View" role="bungeni.Owner"/>
-        <grant permission="bungeni.signatory.View" role="bungeni.Signatory"/>
-        <grant permission="bungeni.signatory.View" role="bungeni.MP"/>
-        <grant permission="bungeni.signatory.View" role="bungeni.Minister"/>
-        <deny permission="bungeni.signatory.View" role="bungeni.Anonymous"/>
-        <deny permission="bungeni.signatory.Edit" role="bungeni.Clerk"/>
-        <grant permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <facet ref=".all_Owner"/>
     </state>
-    <state id="consented" title="Signature Consented" like_state="awaiting_consent" tags="workspace public">
-        <grant permission="bungeni.signatory.View" role="bungeni.Anonymous"/>
-        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+    <state id="consented" title="Signature Consented" tags="workspace public">
+        <facet ref=".public"/>
     </state>
-    <state id="rejected" title="Signature Rejected" like_state="consented" tags="terminal">
-        <deny permission="bungeni.signatory.View" role="bungeni.Speaker"/>
-        <deny permission="bungeni.signatory.View" role="bungeni.Clerk"/>
-        <deny permission="bungeni.signatory.View" role="bungeni.Signatory"/>
-        <deny permission="bungeni.signatory.View" role="bungeni.MP"/>
-        <deny permission="bungeni.signatory.View" role="bungeni.Minister"/>
-        <deny permission="bungeni.signatory.View" role="bungeni.Anonymous"/>
-    </state>
-    <state id="withdrawn" title="Signature Withdrawn" like_state="rejected" tags="terminal"/>
+    <state id="rejected" title="Signature Rejected" tags="terminal"/>
+    <state id="withdrawn" title="Signature Withdrawn" tags="terminal"/>
     <transition title="Create" source="" condition="signatory_manual_sign" destination="awaiting_consent" trigger="automatic"/>
     <transition title="Create and Sign" source="" destination="consented" trigger="automatic" condition="signatory_auto_sign"/>
-    <transition title="consent" source="awaiting_consent" destination="consented" trigger="manual" roles="bungeni.Owner" require_confirmation="true" condition="pi_allow_signature"/>
-    <transition title="reject" source="awaiting_consent" destination="rejected" trigger="manual" roles="bungeni.Owner" require_confirmation="true" condition="pi_allow_signature_actions"/>
-    <transition title="withdraw signature" source="consented" destination="withdrawn" trigger="manual" roles="bungeni.Owner" require_confirmation="true" condition="pi_allow_signature_actions"/>
+    <transition title="consent" source="awaiting_consent" destination="consented" trigger="manual" roles="Owner" require_confirmation="true" condition="pi_allow_signature"/>
+    <transition title="reject" source="awaiting_consent" destination="rejected" trigger="manual" roles="Owner" require_confirmation="true" condition="pi_allow_signature_actions"/>
+    <transition title="withdraw signature" source="consented" destination="withdrawn" trigger="manual" roles="Owner" require_confirmation="true" condition="pi_allow_signature_actions"/>
     <transition title="withdraw signature - automatic" source="awaiting_consent" destination="withdrawn" trigger="automatic" condition="pi_signature_period_expired"/>
     <transition title="unsign document - automatic" source="consented rejected withdrawn" destination="awaiting_consent" trigger="automatic" condition="pi_unsign_signature"/>
 </workflow>

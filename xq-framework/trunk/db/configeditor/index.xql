@@ -4,8 +4,10 @@ declare option exist:serialize "method=xhtml media-type=application/xhtml+html";
 let $contextPath := request:get-context-path()
 return
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:xf="http://www.w3.org/2002/xforms"
-      xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events" 
+        xmlns:zope="http://namespaces.zope.org/zope"
+        xmlns:db="http://namespaces.objectrealms.net/rdb"
       xml:lang="en">
     <head>
         <title>Bungeni Configuration Editor</title>
@@ -113,6 +115,15 @@ return
                 <xf:trigger id="overviewWorkspaceTrigger">
                     <xf:label>Overview</xf:label>
                     <xf:send submission="s-query-workspaces"/>
+                </xf:trigger>   
+                
+                <xf:trigger id="editDB">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialogDB">
+                            <xf:resource value="'{$contextPath}/rest/db/configeditor/edit/edit-database.xql#xforms'"/>
+                        </xf:load>
+                    </xf:action>
                 </xf:trigger>                
 
                 <xf:trigger id="addTask">
@@ -168,6 +179,10 @@ return
                 </div>           
  
                 <div id="toolbar" dojoType="dijit.Toolbar">
+                
+                    <div id="adddbmenu" dojoType="dijit.form.Button" onclick="embed('editDB','embedDialogDB');">
+                        <span>Database</span>
+                    </div>                   
                     
                 	<div id="workflow" dojoType="dijit.form.DropDownButton" showLabel="true" onclick="fluxProcessor.dispatchEvent('overviewTrigger');">
                 		<span>Workflows</span>
@@ -181,12 +196,12 @@ return
                 		<div id="workspaceMenu" dojoType="dijit.TooltipDialog">              		
                 			<div id="addworkspace" dojoType="dijit.form.Button" onclick="embed('addTask','embedDialog');">Add Workspace</div>                 			
                 		</div>
-                	</div>                  	
+                	</div>     
                 	
-                    <div id="addBtn" dojoType="dijit.form.Button" showLabel="true"
-                         onclick="embed('addTask','embedDialog');">
-                        <span>Database</span>
-                    </div>            
+                    <div id="editcustom" dojoType="dijit.form.Button" onclick="embed('editCustom','embedDialog');">
+                        <span>Custom</span>
+                    </div>               	
+                	         
                     <div id="fsBtn" dojoType="dijit.form.Button" showLabel="true">
                         <span>Save back to filesystem</span>
                     </div>                 
@@ -197,6 +212,10 @@ return
                 </div>
 
                 <img id="shadowTop" src="{$contextPath}/rest/db/configeditor/images/shad_top.jpg" alt=""/>
+
+                <div id="dbDialog" dojotype="dijit.Dialog" style="width:480px;height:250px !important;" title="Database" autofocus="false">
+                    <div id="embedDialogDB"></div>
+                </div>
 
                 <div id="taskDialog" dojotype="dijit.Dialog" style="width:680px;height:680px !important;" title="Workflow" autofocus="false">
                     <div id="embedDialog"></div>
@@ -229,7 +248,9 @@ return
                 console.debug("embed",targetTrigger,targetMount);
                 if(targetMount == "embedDialog"){
                     dijit.byId("taskDialog").show();
-                }
+                } else if(targetMount == "embedDialogDB") {
+                    dijit.byId("dbDialog").show();
+                }                
 
                 var targetMount =  dojo.byId(targetMount);
 

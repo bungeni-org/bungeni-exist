@@ -152,7 +152,6 @@ tr.xfRepeatHeader  td {
 
 #embedDialog{
     width:100%;
-    height:600px !important;
     overflow:auto;
 }
 
@@ -334,9 +333,6 @@ tr.xfRepeatItem  td {
     color:#ffffff;
 }
 
-#add-task-table{
-    height:400px;
-}
 #add-task-table .xfReadWrite .dijitCheckBox, .xfReadWrite .dijitCheckBoxIcon {
     -moz-border-radius:0 0 0 0 !important;
     -webkit-border-radius: 0 0 0 0 !important;

@@ -59,7 +59,37 @@ return
                         <xf:action ev:event="xforms-submit-error">
                             <xf:message>Submission failed</xf:message>
                         </xf:action>
-                    </xf:submission>                    
+                    </xf:submission>  
+                    
+                    <xf:submission id="s-query-formsui"
+                                    resource="{$contextPath}/rest/db/configeditor/views/list-formsui.xql?form-id=ui"
+                                    method="get"
+                                    replace="embedHTML"
+                                    targetid="embedInline"
+                                    ref="instance()"
+                                    validate="false">
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Request for Forms UI succedded</xf:message>
+                        </xf:action>                                    
+                        <xf:action ev:event="xforms-submit-error">
+                            <xf:message>Submission for Forms UI failed</xf:message>
+                        </xf:action>
+                    </xf:submission>    
+                    
+                    <xf:submission id="s-query-formscustom"
+                                    resource="{$contextPath}/rest/db/configeditor/views/list-formsui.xql?form-id=custom"
+                                    method="get"
+                                    replace="embedHTML"
+                                    targetid="embedInline"
+                                    ref="instance()"
+                                    validate="false">
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Request for Forms Custom succedded</xf:message>
+                        </xf:action>                                    
+                        <xf:action ev:event="xforms-submit-error">
+                            <xf:message>Request for Forms Custom failed</xf:message>
+                        </xf:action>
+                    </xf:submission>                      
 
                     <xf:submission id="s-delete-workflow"
                                     method="delete"
@@ -93,6 +123,8 @@ return
                         <data xmlns="">
                             <default-duration>120</default-duration>
                             <currentTask/>
+                            <currentDoc/>
+                            <currentNode/>
                             <selectedTasks/>
                         </data>
                     </xf:instance>
@@ -102,6 +134,7 @@ return
                         <xf:message level="ephemeral">Default: Workflow listing</xf:message>
                         <xf:action ev:event="xforms-value-changed">
                             <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
+                            <!--xf:dispatch name="DOMActivate" targetid="overviewFormsCustomTrigger"/-->
                         </xf:action>                        
                         <!--xf:setvalue ref="to" value="substring(local-date(), 1, 10)"/-->
                     </xf:action>
@@ -116,6 +149,16 @@ return
                     <xf:label>Overview</xf:label>
                     <xf:send submission="s-query-workspaces"/>
                 </xf:trigger>   
+                
+                <xf:trigger id="overviewFormsUITrigger">
+                    <xf:label>Overview</xf:label>
+                    <xf:send submission="s-query-formsui"/>
+                </xf:trigger>      
+                
+                <xf:trigger id="overviewFormsCustomTrigger">
+                    <xf:label>Overview</xf:label>
+                    <xf:send submission="s-query-formscustom"/>
+                </xf:trigger>                  
                 
                 <xf:trigger id="editDB">
                     <xf:label>new</xf:label>
@@ -161,6 +204,15 @@ return
                         </xf:load>
                     </xf:action>
                 </xf:trigger>
+                
+                <xf:trigger id="editForm">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialogForms">
+                            <xf:resource value="concat('{$contextPath}/rest/db/configeditor/edit/edit-formsui.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;node=',instance('i-vars')/currentNode)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                
 
                 <xf:trigger id="deleteTask">
                     <xf:label>delete</xf:label>
@@ -170,6 +222,12 @@ return
                 <xf:input id="currentTask" ref="instance('i-vars')/currentTask">
                     <xf:label>This is just a dummy used by JS</xf:label>
                 </xf:input>
+                <xf:input id="currentDoc" ref="instance('i-vars')/currentDoc">
+                    <xf:label>This is just an ephemeral used by JS</xf:label>
+                </xf:input>
+                <xf:input id="currentNode" ref="instance('i-vars')/currentNode">
+                    <xf:label>This is just a dummy placeholder by JS</xf:label>
+                </xf:input>                
             </div>
 
             <!-- ######################### Content here ################################## -->
@@ -196,9 +254,13 @@ return
                 		<div id="workspaceMenu" dojoType="dijit.TooltipDialog">              		
                 			<div id="addworkspace" dojoType="dijit.form.Button" onclick="embed('addTask','embedDialog');">Add Workspace</div>                 			
                 		</div>
-                	</div>     
+                	</div>    
                 	
-                    <div id="editcustom" dojoType="dijit.form.Button" onclick="embed('editCustom','embedDialog');">
+                    <div id="editui" dojoType="dijit.form.Button" onclick="fluxProcessor.dispatchEvent('overviewFormsUITrigger');">
+                        <span>UI</span>
+                    </div>                  	
+                	
+                    <div id="editcustom" dojoType="dijit.form.Button" onclick="fluxProcessor.dispatchEvent('overviewFormsCustomTrigger');">
                         <span>Custom</span>
                     </div>               	
                 	         
@@ -213,11 +275,15 @@ return
 
                 <img id="shadowTop" src="{$contextPath}/rest/db/configeditor/images/shad_top.jpg" alt=""/>
 
-                <div id="dbDialog" dojotype="dijit.Dialog" style="width:480px;height:250px !important;" title="Database" autofocus="false">
+                <div id="formsDialog" dojotype="dijit.Dialog" style="width:880px;height:680px !important;overflow:auto;" title="Forms" autofocus="false">
+                    <div id="embedDialogForms"></div>
+                </div>
+
+                <div id="dbDialog" dojotype="dijit.Dialog" style="width:480px;height:250px !important;overflow:overflow-y;" title="Database" autofocus="false">
                     <div id="embedDialogDB"></div>
                 </div>
 
-                <div id="taskDialog" dojotype="dijit.Dialog" style="width:680px;height:680px !important;" title="Workflow" autofocus="false">
+                <div id="taskDialog" dojotype="dijit.Dialog" style="width:680px;height:680px !important;overflow-y:auto;" title="Workflow" autofocus="false">
                     <div id="embedDialog"></div>
                 </div>
 
@@ -250,8 +316,9 @@ return
                     dijit.byId("taskDialog").show();
                 } else if(targetMount == "embedDialogDB") {
                     dijit.byId("dbDialog").show();
-                }                
-
+                } else if(targetMount == "embedDialogForms") {
+                    dijit.byId("formsDialog").show();
+                }
                 var targetMount =  dojo.byId(targetMount);
 
                 fluxProcessor.dispatchEvent(targetTrigger);
@@ -286,6 +353,13 @@ return
             var editSubcriber = dojo.subscribe("/wf_transitions/edit", function(data){
                 fluxProcessor.setControlValue("currentTask",data);
                 embed('editTransitions','embedDialog');
+
+            });  
+            
+            var editSubcriber = dojo.subscribe("/forms/edit", function(doc,node){
+                fluxProcessor.setControlValue("currentDoc",doc);
+                fluxProcessor.setControlValue("currentNode",node);
+                embed('editForm','embedDialogForms');
 
             });            
 

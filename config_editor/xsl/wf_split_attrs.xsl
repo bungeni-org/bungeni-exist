@@ -5,7 +5,11 @@
         Ashok Hariharan
         14 Nov 2012
         Serializes Bungeni Workflow XML to a more usable XML format
-        -->
+    -->
+    
+    <xsl:import href="split_attr_tags.xsl"/>
+    <xsl:import href="split_attr_roles.xsl"/>
+    
     <xsl:output indent="yes" />
     
     <xsl:template match="*">
@@ -35,25 +39,9 @@
         <xsl:copy/>
     </xsl:template>
     
-    <xsl:template match="@tags">
-            <xsl:element name="tags">
-                <xsl:attribute name="originAttr">tags</xsl:attribute>
-                <xsl:for-each select="tokenize(., '\s+')">
-                    <tag><xsl:value-of select="." /></tag>
-                </xsl:for-each>
-            </xsl:element>
-    </xsl:template>
+  
 
-
-    <xsl:template match="@roles">
-        <xsl:element name="roles">
-            <xsl:attribute name="originAttr">roles</xsl:attribute>
-            <xsl:for-each select="tokenize(., '\s+')">
-                <role><xsl:value-of select="." /></role>
-            </xsl:for-each>
-        </xsl:element>
-    </xsl:template>
-    
+ 
     <xsl:template match="@source">
         <xsl:element name="sources">
             <xsl:attribute name="originAttr">source</xsl:attribute>

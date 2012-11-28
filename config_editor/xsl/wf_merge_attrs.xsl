@@ -5,7 +5,8 @@
         Ashok Hariharan
         14 Nov 2012
         Deserialzes Workflow usable XML format to Bungeni XML format
-        -->
+    -->
+    <xsl:import href="merge_tags.xsl" />
     <xsl:output indent="yes" />
     <xsl:strip-space elements="*" /> 
         
@@ -73,24 +74,6 @@
     <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr]"></xsl:template>
     
     
-    <xsl:template name="merge_tags">
-        <xsl:param name="elemOriginAttr"></xsl:param>
-        <xsl:variable name="attrName" select="$elemOriginAttr/@originAttr" />
-        
-        <xsl:attribute name="{$attrName}">
-            <xsl:for-each select="$elemOriginAttr/*">
-                <xsl:choose>
-                    <xsl:when test="position() eq last()">
-                        <xsl:value-of select="concat(., '')"></xsl:value-of>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="concat(., ' ')"></xsl:value-of>
-                    </xsl:otherwise>
-                </xsl:choose> 
-                
-            </xsl:for-each>
-        </xsl:attribute>
-    
-    </xsl:template>
+   
   
   </xsl:stylesheet>

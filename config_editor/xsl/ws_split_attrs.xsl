@@ -4,7 +4,7 @@
     <!--
         Ashok Hariharan
         14 Nov 2012
-        Serializes Bungeni Form XML (ui , custom) to a more usable XML format
+        Serializes Bungeni Workspace XML to a more usable XML format
     -->
     <xsl:import href="split_attr_roles.xsl" />
     <xsl:output indent="yes" />
@@ -16,7 +16,7 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="ui">
+    <xsl:template match="workspace">
         <xsl:copy>
             <xsl:variable name="fname" select="tokenize(base-uri(),'/')" />
             <xsl:variable name="wfname" select="tokenize($fname[last()],'\.')" />
@@ -30,21 +30,11 @@
         We need to process the attributes while preserving them at the same time
     -->
     <xsl:template mode="preserve"
-        match="@modes | @roles"/>
+        match="@roles"/>
     
     
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
-    </xsl:template>
-    
-
-    <xsl:template match="@modes">
-        <xsl:element name="modes">
-            <xsl:attribute name="originAttr">modes</xsl:attribute>
-            <xsl:for-each select="tokenize(., '\s+')">
-                <mode><xsl:value-of select="." /></mode>
-            </xsl:for-each>
-        </xsl:element>
     </xsl:template>
     
    

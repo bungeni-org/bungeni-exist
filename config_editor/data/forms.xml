@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui name="formname">
+    <roles originAttr="roles">
+        <role>bungeni.Role</role>
+    </roles>
+    <descriptor name="attachment">
+        <field name="type" label="Attachment Type" required="true" value_type="vocabulary" render_type="single_select" vocabulary="attachment_type">
+            <show>
+                <modes originAttr="modes">
+                    <mode>add</mode>
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                    <mode>listing</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="title" label="Title" required="false" value_type="text" render_type="text_line">
+            <show>
+                <modes originAttr="modes">
+                    <mode>add</mode>
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                    <mode>listing</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="data" label="File" description="Upload a file" required="false" value_type="file" render_type="file">
+            <show>
+                <modes originAttr="modes">
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                    <mode>add</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="name" label="Name" required="false" value_type="text" render_type="no_input">
+            <show>
+                <modes originAttr="modes">
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                    <mode>add</mode>
+                    <mode>listing</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="mimetype" label="MIME Type" required="false" value_type="text" render_type="no_input">
+            <show>
+                <modes originAttr="modes">
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                    <mode>add</mode>
+                    <mode>listing</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="status" label="Status" required="true" value_type="status" render_type="single_select" vocabulary="workflow_states">
+            <show>
+                <modes originAttr="modes">
+                    <mode>view</mode>
+                    <mode>listing</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="status_date" label="Status Date" required="false" value_type="date" render_type="date">
+            <show>
+                <modes originAttr="modes">
+                    <mode>view</mode>
+                    <mode>listing</mode>
+                </modes>
+            </show>
+        </field>
+        <field name="language" label="Language" required="true" value_type="language" render_type="single_select" vocabulary="language_vocabulary">
+            <show>
+                <modes originAttr="modes">
+                    <mode>add</mode>
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                </modes>
+            </show>
+            <hide>
+                <modes originAttr="modes">
+                    <mode>listing</mode>
+                </modes>
+            </hide>
+        </field>
+        <field name="description" label="Description" required="false" value_type="text" render_type="rich_text">
+            <show>
+                <modes originAttr="modes">
+                    <mode>view</mode>
+                    <mode>edit</mode>
+                    <mode>add</mode>
+                </modes>
+            </show>
+        </field>
+    </descriptor>
+</ui>

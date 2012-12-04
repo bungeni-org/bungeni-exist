@@ -1941,6 +1941,7 @@ declare function local:start-end-of-week($adate as xs:date) {
 
 declare function local:old-future-sittings($range as xs:string) {
 
+    let $twk := substring-before(current-date() cast as xs:string,"+") cast as xs:date
     let $pwk := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
     let $nwk := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
     
@@ -1950,13 +1951,13 @@ declare function local:old-future-sittings($range as xs:string) {
         (: For old and fut sittings, we get 30 days before and after previous and next week sittings :)
         case 'old' return
             <range>
-                <start>{(xs:date(substring-before($pwk/start,"T")) - xs:dayTimeDuration('P30D')) || "T00:00:00"}</start>
-                <end>{substring-before($pwk/start,"T") || "T23:59:59"}</end>
+                <start>{($twk - xs:dayTimeDuration('P30D')) || "T00:00:00"}</start>
+                <end>{($twk - xs:dayTimeDuration('P1D')) || "T23:59:59"}</end>
             </range>
         case 'fut' return
             <range>
-                <start>{substring-before($nwk/end,"T") || "T00:00:00"}</start>
-                <end>{(xs:date(substring-before($nwk/end,"T")) + xs:dayTimeDuration('P30D')) || "T23:59:59"}</end>
+                <start>{($twk + xs:dayTimeDuration('P1D')) || "T00:00:00"}</start>
+                <end>{($twk + xs:dayTimeDuration('P30D')) || "T23:59:59"}</end>
             </range>
         default return
             ()

@@ -5,32 +5,28 @@ import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
+import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.xqm";
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 declare function local:fn-formsui() as xs:string {
 
     let $contextPath := request:get-context-path()
     let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=","custom.xml")
-    let $xsl := doc('/db/config_editor/xsl/forms_split_attrs.xsl')
-    let $doc := doc($path2resource)
-    let $splitted := transform:transform($doc, $xsl, <parameters>
-                                                            <param name="fname" value="custom" />
-                                                     </parameters>)
+    let $xsl := cfg:get-xslt('/xsl/forms_split_attrs.xsl')
     return $path2resource
 };
 
 declare function local:mode() as xs:string {
-    let $doc := request:get-parameter("doc", "nothing")
-
+    let $doc := request:get-parameter("doc", "none")
     let $mode := if($doc eq "undefined") then "new"
                  else "edit"
-
     return $mode
 };
 
 let $contextPath := request:get-context-path()
-let $docname := xs:string(request:get-parameter("doc","nothing"))
-let $fieldame := xs:string(request:get-parameter("field","nothing"))
+let $docname := xs:string(request:get-parameter("doc","none"))
+let $fieldname := xs:string(request:get-parameter("field","none"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -39,9 +35,9 @@ return
         xmlns:zope="http://namespaces.zope.org/zope"
         xmlns:db="http://namespaces.objectrealms.net/rdb">
    <head>
-      <title>Edit Database</title>
+      <title>Edit Field</title>
     </head>
-    <body class="tundra InlineRoundBordersAlert">
+    <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
@@ -50,9 +46,9 @@ return
                         <data>
                             <modes>
                                <mode>add</mode>
-                               <mode>edit</mode>                                 
-                               <mode>view</mode>                                                            
-                               <mode>listing</mode>
+                               <mode>edit</mode>
+                               <mode>view</mode>
+                               <mode>listing</mode>                               
                             </modes>
                         </data>
                     </xf:instance>
@@ -79,38 +75,19 @@ return
                                <valuetype>number</valuetype>
                             </valuetypes>
                         </data>
-                    </xf:instance>                      
+                    </xf:instance>               
                     
-                    <xf:instance id="i-archetypes" xmlns="">
-                        <data>
-                            <archetypes>
-                               <arche>doc</arche>
-                               <arche>group</arche>                                 
-                               <arche>group_membership</arche>
-                            </archetypes>
-                        </data>
-                    </xf:instance>      
-                    
-                    <xf:instance id="labels" xmlns="">
-                        <data>
-                            <item1>Name</item1>
-                            <item2>Label</item2>
-                            <item3>Required</item3>
-                            <item4>Value Type</item4>
-                            <item5>Render Type</item5>
-                            <item6>Modes</item6>
-                            <item7>Actions</item7>
-                        </data>
-                    </xf:instance>                    
-
-                    <xf:bind nodeset="@name" type="xf:string" required="true()" />
-                    <xf:bind id="req-field" nodeset="descriptor/field/@required" type="xs:boolean"/>
-                    <xf:bind id="modes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" />
+                    <xf:bind nodeset="descriptor[@name eq '{$docname}']">
+                        <xf:bind nodeset="field/@name" type="xf:string" required="true()" />
+                        <xf:bind nodeset="field/@label" type="xf:string" required="true()" />
+                        <xf:bind id="req-field" nodeset="field/@required" type="xs:boolean"/>  
+                        <xf:bind id="modes" nodeset="instance('i-modes')//modes/mode" type="xs:string" />                        
+                    </xf:bind>
 
                     <xf:submission id="s-get-formsui"
                         method="get"
                         resource="{local:fn-formsui()}"
-                        ref="descriptor[@name eq 'attachment']"
+                        ref="descriptor[@name eq 'formname']/field[@name eq 'type']"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
@@ -127,7 +104,7 @@ return
                                method="put"
                                replace="none"
                                ref="instance()">
-                    <xf:resource value="concat('{$contextPath}/rest/db/config_editor/bungeni_custom/forms/','custom.xml')"/>
+                    <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml'"/>
 
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -148,10 +125,10 @@ return
                     </xf:action>
 
                     <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">FORM saved successfully</xf:message>
+                        <xf:message level="ephemeral">FORM field saved successfully</xf:message>
                         <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                            dijit.byId("formsDialog").hide();
-                            dojo.publish("/wf/refresh");
+                            dojo.publish('/form/view',['{$docname}','fields']);                      
+                            dijit.byId("taskDialog").hide();
                         </script>
                         <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
                     </xf:action>
@@ -162,7 +139,7 @@ return
                     </xf:action>
 
                     <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                        <xf:message>The form has not been filled in correctly</xf:message>
+                        <xf:message>The form fields have not been filled in correctly</xf:message>
                     </xf:action>
                 </xf:submission>
 
@@ -174,7 +151,7 @@ return
                                instance="i-formsui">
                 </xf:submission>
                 <xf:action ev:event="xforms-ready" >
-                    <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
+                    <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>                   
                     <!--xf:setfocus control="date"/-->
                 </xf:action>
 
@@ -182,26 +159,24 @@ return
             
             </div>    	
             <div style="width: 100%; height: auto">
-                <xf:group ref="descriptor/field[@name eq '{$fieldame}']" appearance="compact">
+                <xf:group ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']" appearance="bf:verticalTable">
 
                        <xf:input id="field-name" ref="@name">
                            <xf:label>field title</xf:label>
-                           <xf:alert>The convention current is file name = Document ID</xf:alert>
-                           <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
-                           <xf:alert>invalid file name</xf:alert>
+                           <xf:hint>Must be an existing title</xf:hint>
+                           <xf:alert>invalid field name</xf:alert>
+                           <xf:help>help with name of field</xf:help>
                        </xf:input> 
 
                        <xf:input id="label-name" ref="@label">
                            <xf:label>label</xf:label>
-                           <xf:alert>The convention current is file name = Document ID</xf:alert>
-                           <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
-                           <xf:alert>invalid file name</xf:alert>
+                           <xf:hint>Label used for this field</xf:hint>
+                           <xf:alert>invalid label name</xf:alert>
                        </xf:input> 
                        
                        <xf:input id="input-req-field" ref="@required">
                            <xf:label>required</xf:label>
-                           <xf:alert>The convention current is file name = Document ID</xf:alert>
-                           <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
+                           <xf:hint>Enabling this means it is a required field</xf:hint>
                            <xf:alert>invalid file name</xf:alert>
                        </xf:input>  
                        
@@ -227,13 +202,13 @@ return
                             </xf:itemset>
                         </xf:select1>  
                         
-                        <xf:select ref="show/modes[@originAttr='modes']/mode" selection="closed" appearance="full" incremental="true" >  
+                        <xf:select ref="child::*/modes[@originAttr='modes']/mode" selection="closed" appearance="full" incremental="true" >  
                             <xf:label>modes</xf:label>
-                            <!--xf:itemset id="modes"nodeset="instance('i-modes')/modes/mode">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset-->
-                            <xf:item>
+                            <xf:itemset id="modes"nodeset="instance('i-modes')/modes/mode">
+                                <xf:label ref="node()"></xf:label>
+                                <xf:value ref="node()"></xf:value>
+                            </xf:itemset>
+                            <!--xf:item>
                                 <xf:label>add</xf:label>
                                 <xf:value ref=".[1]"></xf:value>
                             </xf:item>
@@ -248,7 +223,7 @@ return
                             <xf:item>
                                 <xf:label>listing</xf:label>
                                 <xf:value ref=".[4]"></xf:value>
-                            </xf:item>                            
+                            </xf:item-->                            
                         </xf:select>  
                         
                         <br/>

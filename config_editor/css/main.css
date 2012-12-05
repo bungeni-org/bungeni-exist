@@ -43,7 +43,178 @@ body {
         float:right;
         border-left:1px solid #e4e4e4;
     }    
-    
+
+/*data table (list-items.xql) styles*/
+#listingTable{
+    border:none;
+    border-collapse:collapse;
+    width:100%;
+    display:table;
+}
+#listingTable tr:hover{
+    background-color:#f4f4f4;
+}
+#listingTable th,#listingTable td{
+    padding:5px;
+    border:thin solid #35b3e9;
+}
+#listingTable th{
+    background:#2b92be;
+    color:white;
+}
+
 #embedDialogOld {
     opacity:1 !important;
+}
+
+/*
+ * STYLING XFORMS
+ */
+.InlineRoundBordersAlert table {
+    border-collapse: collapse;
+}
+
+.InlineRoundBordersAlert * {
+    /*font-size: 11pt;*/
+    font-family: sans-serif;
+    color: #666666;
+}
+
+.InlineRoundBordersAlert .dijitTextBoxFocused,
+.InlineRoundBordersAlert .dijitComboBoxFocused,
+.InlineRoundBordersAlert .dijitSpinnerFocused,
+.InlineRoundBordersAlert .dijitSpinnerUpArrowActive,
+.InlineRoundBordersAlert .dijitSpinnerDownArrowActive,
+.InlineRoundBordersAlert .dijitTextAreaFocused {
+    border-color: gray;
+}
+
+.InlineRoundBordersAlert .dijitInputField input,
+.InlineRoundBordersAlert .dijitTextBox,
+.InlineRoundBordersAlert .dijitComboBox,
+.InlineRoundBordersAlert .dijitSpinner {
+    margin: 0;
+}
+.InlineRoundBordersAlert #subtitle{
+    display:block;
+    font-size:8pt;  
+}
+
+.InlineRoundBordersAlert .bfVerticalTableLabel,
+.InlineRoundBordersAlert .caLabelColumn {
+    padding-right: 5px;
+    width: 23%;
+    text-align:right;
+}
+
+.InlineRoundBordersAlert .bfVerticalTableValue {
+    width: 24%;
+    height:29px;
+    padding-bottom:5px;
+}
+
+.InlineRoundBordersAlert .bfVerticalTableInfo {
+    width: 120px;
+	position:relative;
+
+}
+
+.InlineRoundBordersAlert .xfValue {
+    padding: 5px 0;
+}
+
+.InlineRoundBordersAlert .xfInvalid .xfValue {
+    background: white;
+}
+ .InlineRoundBordersAlert  .xfAlert,
+ .InlineRoundBordersAlert  .xfHint,
+ .InlineRoundBordersAlert  .xfHelp,
+ .InlineRoundBordersAlert  .info {
+    font-size: 9pt;
+    font-family: sans-serif;
+    width:95%;
+    padding: 6px 0px 3px 25px;
+    height:15px;
+}
+ .InlineRoundBordersAlert  .xfHelp {
+    width:10px;
+}
+ .InlineRoundBordersAlert  .bfHelpText {
+    z-index:999;
+    top:-40px;
+    right:-4px;
+    position:absolute;
+}
+.InlineRoundBordersAlert .xsdBoolean .xfValue{
+    -moz-border-radius:0;
+    -webkit-border-radius:0;
+}
+
+.InlineRoundBordersAlert .xfAlert {
+    display: block;
+    background: #FFCFCF;
+    color: #801B1B;
+    background: #FFCFCF url(../images/error.png) no-repeat scroll 2% 5px;
+    margin: 0 1px 0 0;
+    /*overflow: hidden; */
+    white-space: nowrap;
+    /*width: 100%;*/
+	border-color:#E5A3A3 !important;
+}
+
+.InlineRoundBordersAlert .xfHint {
+    display: block;
+    background: #F2F2F2 url(../images/hint.png) no-repeat 3% 5px;
+    color: #666666;
+    margin: 0;
+    /*overflow: hidden;*/
+    white-space: nowrap;
+    /*width: 100%;    */
+    border-color:#DBDBDB !important;
+
+}
+
+.InlineRoundBordersAlert .info {
+    display: block;
+    background: #F0FEE9 url(../images/ok.png) no-repeat 3% 5px;
+    color: #666666;
+    margin: 0;
+    /*overflow: hidden;*/
+    white-space: nowrap;
+   /* width: 100%;*/
+    border-color:#E1EFDB !important;
+}
+
+.InlineRoundBordersAlert .xfControl, .InlineRoundBordersAlert .xfAlert, .InlineRoundBordersAlert .xfHint, .InlineRoundBordersAlert .info {
+    width:auto;
+    margin-left:10px;
+}
+
+.InlineRoundBordersAlert .xfGroupLabel {
+    font-size: 1.5em;
+    /*border-bottom: 4px double #999999;*/
+    padding-bottom: 5px;
+    color: #333333;
+}
+
+.InlineRoundBordersAlert .xfTriggerMiddleColumnTrigger {
+    float: right;
+}
+
+
+.InlineRoundBordersAlert .dijitFocused {
+    background-color: #F2F2F2 !important;
+}
+
+.InlineRoundBordersAlert td, td span {
+    /*position: relative;*/
+}
+
+.xfLabel{
+    padding-top:6px;
+    display:block;
+}
+
+.xfControl {
+	width:100%;
 }

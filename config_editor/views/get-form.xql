@@ -21,15 +21,36 @@ declare function local:fn-formsui() as xs:string {
 
 (: creates the output for all tasks matching the query :)
 declare function local:main($doctype) as node() * {
-    for $field in local:getMatchingTasks()
+    let $count := count(local:getMatchingTasks())
+    for $field at $pos in local:getMatchingTasks()
         return
             <tr>
                 <td>{data($field/@name)}</td>
-                <td>{data($field/@name)}</td>
+                <td>{data($field/@label)}</td>
                 <td>{data($field/@required)}</td>
                 <td>{data($field/@value_type)}</td>
                 <td>{data($field/@render_type)}</td>  
-                <td>{data($field/show/modes/mode)}</td>                
+                <td>{data($field/child::*/modes/mode)}</td>    
+                <td>
+                {
+                    if($pos eq 1) then
+                        <span>
+                        &#160;&#160;&#160;
+                        &#160;&#160;&#160;
+                        <a href="javascript:dojo.publish('/field/down',['{$doctype}','{data($field/@name)}']);"><img alt="down" src="images/down.png"/></a>
+                        </span>
+                    else if ($pos eq $count) then 
+                        <a href="javascript:dojo.publish('/field/up',['{$doctype}','{data($field/@name)}']);"><img alt="up" src="images/up.png"/></a>
+                    else 
+                    (
+                        <span>
+                            <a href="javascript:dojo.publish('/field/up',['{$doctype}','{data($field/@name)}']);"><img alt="up" src="images/up.png"/></a>
+                            &#160;
+                            <a href="javascript:dojo.publish('/field/down',['{$doctype}','{data($field/@name)}']);"><img alt="down" src="images/down.png"/></a>
+                        </span>
+                    )
+                }               
+                </td>
                 <td><a href="javascript:dojo.publish('/field/edit',['{$doctype}','{data($field/@name)}']);">edit</a></td>
                 <td><a href="javascript:dojo.publish('/field/delete',['{$doctype}','{data($field/@name)}']);">delete</a></td>
             </tr>
@@ -44,9 +65,7 @@ declare function local:getMatchingTasks() as node() * {
                                                          </parameters>)
     
     for $splitted in $doc/descriptor[@name eq $form-id]/field
-        let $formsui-id := data($splitted/@name)        
-        order by $formsui-id ascending
-        return $splitted
+    return $splitted
 
 };
 
@@ -61,6 +80,7 @@ declare function local:mode() as xs:string {
 
 let $contextPath := request:get-context-path()
 let $docname := xs:string(request:get-parameter("doc","nothing"))
+let $showing := xs:string(request:get-parameter("tab","fields"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -71,21 +91,11 @@ return
    <head>
       <title>Edit Database</title>
     </head>
-    <body class="tundra InlineRoundBordersAlert">
+    <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
                     <xf:instance id="i-formsui" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>   
-                    <xf:instance id="i-modes" xmlns="">
-                        <data>
-                            <modes>
-                               <mode>add</mode>
-                               <mode>edit</mode>                                 
-                               <mode>view</mode>                                                            
-                               <mode>listing</mode>
-                            </modes>
-                        </data>
-                    </xf:instance>
                     
                     <xf:instance id="i-archetypes" xmlns="">
                         <data>
@@ -95,28 +105,18 @@ return
                                <arche>group_membership</arche>
                             </archetypes>
                         </data>
-                    </xf:instance>      
+                    </xf:instance>                        
+
+                    <xf:bind nodeset="descriptor[@name eq '{$docname}']">
+                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
+                        <xf:bind nodeset="@order" type="xf:integer" required="true()" />
+                        <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
+                    </xf:bind>
                     
-                    <xf:instance id="labels" xmlns="">
-                        <data>
-                            <item1>Name</item1>
-                            <item2>Label</item2>
-                            <item3>Required</item3>
-                            <item4>Value Type</item4>
-                            <item5>Render Type</item5>
-                            <item6>Modes</item6>
-                            <item7>Actions</item7>
-                        </data>
-                    </xf:instance>                    
-
-                    <xf:bind nodeset="@name" type="xf:string" required="true()" />
-                    <xf:bind nodeset="fields/show/modes/mode" readonly="true()" />
-                    <xf:bind id="modes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" />
-
                     <xf:submission id="s-get-formsui"
                         method="get"
                         resource="{local:fn-formsui()}"
-                        ref="descriptor[@name eq 'attachment']"
+                        ref="descriptor[@name eq 'formname']"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
@@ -133,7 +133,7 @@ return
                                method="put"
                                replace="none"
                                ref="instance()">
-                    <xf:resource value="concat('{$contextPath}/rest/db/config_editor/bungeni_custom/forms/','custom.xml')"/>
+                    <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml'"/>
 
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -154,10 +154,10 @@ return
                     </xf:action>
 
                     <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">FORM saved successfully</xf:message>
+                        <xf:message level="ephemeral">FORM details saved successfully</xf:message>
                         <script type="text/javascript" if="instance('tmp')/wantsToClose">
                             dijit.byId("formsDialog").hide();
-                            dojo.publish("/wf/refresh");
+                            dojo.publish('/form/view',['{$docname}','details']);  
                         </script>
                         <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
                     </xf:action>
@@ -168,7 +168,7 @@ return
                     </xf:action>
 
                     <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                        <xf:message>The form has not been filled in correctly</xf:message>
+                        <xf:message>The form details have not been filled in correctly</xf:message>
                     </xf:action>
                 </xf:submission>
 
@@ -181,101 +181,83 @@ return
                 </xf:submission>
                 <xf:action ev:event="xforms-ready" >
                     <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
+                    <script type="text/javascript" if="'{$showing}' = 'fields'">
+                        dijit.byId("switchDiv").selectChild("fieldsDiv");                        
+                    </script>                     
                     <!--xf:setfocus control="date"/-->
                 </xf:action>
 
             </xf:model>
             
             </div>    	
-            <div style="width: 100%; height: auto">
-                <xf:var name="hers" value="instance('labels')/item3"/>                
-                <xf:group ref="descriptor[@name eq '{$docname}']" class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
+            <div style="width: 100%; height: 660px;">
+                <div dojoType="dijit.layout.TabContainer" id="switchDiv" style="width: 100%; height: 100%;">
                     <xf:label>Types / {$docname} / forms </xf:label>
-                    <div style="display:none;">
-                        <xf:trigger id="t-case1">
-                            <xf:label>Edit Details</xf:label>
-                            <xf:toggle case="case1"></xf:toggle>
-                        </xf:trigger>
-                        <xf:trigger id="t-case2">
-                            <xf:label>Edit Fields</xf:label>
-                            <xf:toggle case="case2"></xf:toggle>
-                        </xf:trigger>
+                    <div dojoType="dijit.layout.ContentPane" title="Edit Details" id="detailsDiv" selected="true">
+                        <div class="caseContent">
+                            <xf:group ref="descriptor[@name eq '{$docname}']" class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
+                                <xf:group appearance="bf:verticalTable">
+                                    <xf:output value="'{$docname}'">
+                                        <xf:label>Form:</xf:label>
+                                    </xf:output>               
+                                 
+                                    <xf:input id="form-name" ref="@name">
+                                        <xf:label>Form Name</xf:label>
+                                        <xf:hint>Unique name given to the form</xf:hint>
+                                        <xf:alert>Invalid form name</xf:alert>
+                                    </xf:input> 
+                                    
+                                    <xf:select1 id="descriptor-archetype" ref="@archetype" appearance="minimal" incremental="true">
+                                        <xf:label>archetypes</xf:label>
+                                        <xf:hint>select parent type</xf:hint>
+                                        <xf:help>help for archtypes</xf:help>
+                                        <xf:alert>invalid</xf:alert>
+                                        <xf:itemset nodeset="instance('i-archetypes')/archetypes/arche">
+                                            <xf:label ref="."></xf:label>
+                                            <xf:value ref="."></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>                            
+                                    
+                                    <xf:input id="descriptor-order" ref="@order">
+                                        <xf:label>Order</xf:label>
+                                        <xf:alert>Invalid number.</xf:alert>
+                                        <xf:help>Enter an integer to represent the </xf:help>
+                                        <xf:hint>order of this descriptor</xf:hint>
+                                    </xf:input>                 
+                                    
+                                    <br/>
+                                    <xf:group id="dialogButtons" appearance="bf:horizontalTable">
+                                        <xf:label/>
+                                        <xf:trigger>
+                                            <xf:label>Save</xf:label>
+                                            <xf:action>
+                                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                                <xf:send submission="s-add"/>
+                                            </xf:action>
+                                        </xf:trigger>                  
+                                    </xf:group>
+                                 </xf:group>
+                            </xf:group>
+                        </div>
                     </div>
-                    <xf:switch id="switch1" appearance="dijit:TabContainer">
-                        <xf:case id="case1" selected="true">
-                            <xf:label>Edit Details</xf:label>
-                            <div class="caseContent">
-                                <xf:group id="add-task-table" appearance="compact">
-                                
-                                   <xf:output value="'{$docname}'">
-                                       <xf:label>Form:</xf:label>
-                                   </xf:output>               
-                                
-                                   <xf:input id="form-name" ref="@name">
-                                       <xf:label>Form Name</xf:label>
-                                       <xf:alert>The convention current is file name = Document ID</xf:alert>
-                                       <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
-                                       <xf:alert>invalid file name</xf:alert>
-                                   </xf:input> 
-                                   
-                                   <xf:select1 id="descriptor-archetype" ref="@archetype" appearance="minimal" incremental="true">
-                                       <xf:label>archetypes</xf:label>
-                                       <xf:hint>a Hint for this control</xf:hint>
-                                       <xf:help>help for select1</xf:help>
-                                       <xf:alert>invalid</xf:alert>
-                                       <xf:itemset nodeset="instance('i-archetypes')/archetypes/arche">
-                                           <xf:label ref="."></xf:label>
-                                           <xf:value ref="."></xf:value>
-                                       </xf:itemset>
-                                   </xf:select1>                            
-                                   
-                                   <xf:input id="descriptor-order" ref="@order">
-                                       <xf:label>Order</xf:label>
-                                       <xf:alert>The convention current is file name = Document ID</xf:alert>
-                                       <xf:hint>You cannot change this once set e.g. address.xml is immutable</xf:hint>
-                                       <xf:alert>invalid file name</xf:alert>
-                                   </xf:input>                 
-                                   
-                                   <br/>
-                                   <xf:group id="dialogButtons" appearance="bf:horizontalTable">
-                                       <xf:label/>
-                                       <xf:trigger>
-                                           <xf:label>Save</xf:label>
-                                           <xf:action>
-                                               <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                               <xf:send submission="s-add"/>
-                                           </xf:action>
-                                       </xf:trigger>
-                                       <xf:trigger>
-                                           <xf:label>Close</xf:label>
-                                           <script type="text/javascript">
-                                               dijit.byId("formsDialog").hide();
-                                           </script>
-                                       </xf:trigger>                    
-                                   </xf:group>
-                                
-                                </xf:group>
-                            </div>
-                        </xf:case>
-                        <xf:case id="case2">
-                            <xf:label>Edit Fields</xf:label>
-                            <div class="caseContent">
-                            <table id="listingTable" style="width:100%;">
-                                <tr>                      			 
-                                    <th>Name</th>
-                                    <th>Label</th>
-                                    <th>Required</th>
-                                    <th>Value Type</th>
-                                    <th>Render Type</th>
-                                    <th>Modes</th>
-                                    <th colspan="2">Actions</th>
-                                </tr>
-                                {local:main($docname)}
-                            </table> 
-                            </div>
-                        </xf:case>
-                    </xf:switch>
-                </xf:group>
+                    <div dojoType="dijit.layout.ContentPane" title="Edit fields" id="fieldsDiv">
+                        <xf:label>Edit Fields</xf:label>
+                        <div class="caseContent">
+                        <table id="listingTable" style="width:100%;">
+                            <tr>                      			 
+                                <th>Name</th>
+                                <th>Label</th>
+                                <th>Required</th>
+                                <th>Value Type</th>
+                                <th>Render Type</th>
+                                <th>Modes</th>
+                                <th colspan="3">Actions</th>
+                            </tr>
+                            {local:main($docname)}
+                        </table> 
+                        </div>
+                    </div>
+                </div>                       
             </div>                    
         </div>
     </body>

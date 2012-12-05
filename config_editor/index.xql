@@ -50,6 +50,7 @@ return
                             <currentDoc/>
                             <currentNode/>
                             <currentField/>
+                            <showTab/>
                             <selectedTasks/>
                         </data>
                     </xf:instance>
@@ -68,11 +69,11 @@ return
                     <xf:send submission="s-query-workflows"/>
                 </xf:trigger>                  
                 
-                <xf:trigger id="editDB">
+                <xf:trigger id="editFORM">
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-form.xql#xforms?doc=',instance('i-vars')/currentDoc)"/>
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-form.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;tab=',instance('i-vars')/showTab)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>                
@@ -84,7 +85,25 @@ return
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
-                </xf:trigger>              
+                </xf:trigger>
+                
+                <xf:trigger id="moveFieldUp">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=up&amp;field=',instance('i-vars')/currentField)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger> 
+                
+                <xf:trigger id="moveFieldDown">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=down&amp;field=',instance('i-vars')/currentField)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                
 
                 <xf:trigger id="deleteTask">
                     <xf:label>delete</xf:label>
@@ -102,7 +121,10 @@ return
                 </xf:input>
                 <xf:input id="currentField" ref="instance('i-vars')/currentField">
                     <xf:label>This is just a random placeholder by JS</xf:label>
-                </xf:input>                
+                </xf:input>
+                <xf:input id="showTab" ref="instance('i-vars')/showTab">
+                    <xf:label>This is just a renderlook placeholder by JS</xf:label>
+                </xf:input>                 
             </div>
 
             <div id="header">
@@ -130,7 +152,7 @@ return
                         <div id="embedDialogDB"></div>
                     </div>
     
-                    <div id="taskDialog" dojotype="dijit.Dialog" style="width:400px;" title="Add / Edit field" autofocus="false">
+                    <div id="taskDialog" dojotype="dijit.Dialog" style="width:600px;" title="Add / Edit field" autofocus="false">
                         <div id="embedDialog"></div>
                     </div>
     
@@ -185,20 +207,33 @@ return
 
             }
             
-            var editSubscriber = dojo.subscribe("/form/view", function(data){
-                fluxProcessor.setControlValue("currentDoc",data);
-                embed('editDB','embedInline');
+            var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
+                fluxProcessor.setControlValue("currentDoc",doc);
+                fluxProcessor.setControlValue("showTab",tab);
+                embed('editFORM','embedInline');
             }); 
             
             var editSubscriber = dojo.subscribe("/field/edit", function(form,field){
                 fluxProcessor.setControlValue("currentDoc",form);
                 fluxProcessor.setControlValue("currentField",field);
                 embed('editField','embedDialog');
-            }); 
+            });
+            
+            var moveUpSubscriber = dojo.subscribe("/field/up", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                fluxProcessor.dispatchEvent('moveFieldUp');
+            });
+            
+            var moveDownSubscriber = dojo.subscribe("/field/down", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                fluxProcessor.dispatchEvent('moveFieldDown');
+            });            
 
             var refreshSubcriber = dojo.subscribe("/wf/refresh", function(){
                 fluxProcessor.dispatchEvent("overviewTrigger");
-            });
+            });           
 
             function passValuesToXForms(){
                 var result="";

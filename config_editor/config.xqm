@@ -22,6 +22,13 @@ declare variable $config:admin-username := "admin";
 declare variable $config:admin-password := "";
 
 (:~
+Generic api to load a document from the application folder
+:)
+declare function local:__get_app_doc__($value as xs:string) as document-node() {
+    doc(fn:concat($config:ce-root, $value))
+};
+
+(:~
 Get the path to the bungeni configuration collection
 :)
 declare function config:get-configs-db() as xs:string {
@@ -31,3 +38,10 @@ declare function config:get-configs-db() as xs:string {
  declare function config:get-forms() as xs:string {
     $config:FORMS-COLLECTION
  };
+ 
+(:~
+Loads an XSLT file 
+:)
+declare function config:get-xslt($value as xs:string) as document-node() {
+    local:__get_app_doc__($value)
+};

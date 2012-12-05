@@ -26,7 +26,7 @@ declare function menu:get-types($active as xs:string) {
                     <xhtml:div dojoType="dijit.PopupMenuItem">
                         <xhtml:span>{data($docu/@name)}</xhtml:span>
                         <xhtml:div dojoType="dijit.Menu" id="formsMenu{data($docu/@name)}">
-                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/form/view',['{data($docu/@name)}']);">forms</xhtml:div>
+                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/form/view',['{data($docu/@name)}','details']);">forms</xhtml:div>
                             <xhtml:div dojoType="dijit.MenuItem">workflows</xhtml:div>
                             <xhtml:div dojoType="dijit.MenuItem">workspace</xhtml:div>
                         </xhtml:div>

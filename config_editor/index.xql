@@ -76,6 +76,15 @@ return
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-form.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;tab=',instance('i-vars')/showTab)"/>
                         </xf:load>
                     </xf:action>
+                </xf:trigger>        
+                
+                <xf:trigger id="addField">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/add-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField,'&amp;mode=new')"/>
+                        </xf:load>
+                    </xf:action>
                 </xf:trigger>                
 
                 <xf:trigger id="editField">
@@ -103,7 +112,16 @@ return
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=down&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
-                </xf:trigger>                
+                </xf:trigger>  
+                
+                <xf:trigger id="deleteField">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/delete-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                 
 
                 <xf:trigger id="deleteTask">
                     <xf:label>delete</xf:label>
@@ -128,7 +146,7 @@ return
             </div>
 
             <div id="header">
-                <div id="appName"><!--Bungeni Configuration Editor--></div>
+                <div id="appName">Bungeni Configuration Editor</div>
             </div>
             <!-- ######################### Content here ################################## -->
             <img id="shadowTop" src="images/shad_top.jpg" alt=""/>
@@ -142,8 +160,8 @@ return
                         <div dojoType="dijit.MenuItem" onClick="alert('OpenOFFice!')">OpenOffice</div-->
                     </div>
                 </div>
-                <div id="right-content" >
-                    <!-- ADADADA -->          
+                <div id="right-content">
+                    <!-- ######################### Views start ################################## -->        
                     <div id="formsDialog" dojotype="dijit.Dialog" style="width:400px;overflow:auto;" title="Forms" autofocus="false">
                         <div id="embedDialogForms"></div>
                     </div>
@@ -156,7 +174,8 @@ return
                         <div id="embedDialog"></div>
                     </div>
     
-                    <div id="embedInline"></div>
+                    <div id="embedInline" style="width:100%;height:660px;overflow: auto;"></div>
+                    <!-- ######################### Views end ################################## --> 
                 </div>
             </div>            
             <div id="scontent">
@@ -213,11 +232,17 @@ return
                 embed('editFORM','embedInline');
             }); 
             
+            var addSubscriber = dojo.subscribe("/field/add", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                embed('addField','embedDialog');
+            });
+            
             var editSubscriber = dojo.subscribe("/field/edit", function(form,field){
                 fluxProcessor.setControlValue("currentDoc",form);
                 fluxProcessor.setControlValue("currentField",field);
                 embed('editField','embedDialog');
-            });
+            });            
             
             var moveUpSubscriber = dojo.subscribe("/field/up", function(form,field){
                 fluxProcessor.setControlValue("currentDoc",form);
@@ -229,7 +254,16 @@ return
                 fluxProcessor.setControlValue("currentDoc",form);
                 fluxProcessor.setControlValue("currentField",field);
                 fluxProcessor.dispatchEvent('moveFieldDown');
-            });            
+            });   
+            
+            var deleteSubscriber = dojo.subscribe("/field/delete", function(form,field){
+                var check = confirm("Really delete this field?");
+                if (check == true){
+                    fluxProcessor.setControlValue("currentDoc",form);
+                    fluxProcessor.setControlValue("currentField",field);
+                    fluxProcessor.dispatchEvent('deleteField');
+                }            
+            });             
 
             var refreshSubcriber = dojo.subscribe("/wf/refresh", function(){
                 fluxProcessor.dispatchEvent("overviewTrigger");

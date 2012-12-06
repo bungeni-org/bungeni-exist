@@ -30,7 +30,10 @@ declare function local:main($doctype) as node() * {
                 <td>{data($field/@required)}</td>
                 <td>{data($field/@value_type)}</td>
                 <td>{data($field/@render_type)}</td>  
-                <td>{data($field/child::*/modes/mode)}</td>    
+                <td>
+                    <b>shown:</b> {data($field/show/modes)}
+                    <b>hidden:</b> {data($field/hide/modes)}
+                </td>    
                 <td>
                 {
                     if($pos eq 1) then
@@ -190,7 +193,7 @@ return
             </xf:model>
             
             </div>    	
-            <div style="width: 100%; height: 660px;">
+            <div style="width: 100%; height: 100%;">
                 <div dojoType="dijit.layout.TabContainer" id="switchDiv" style="width: 100%; height: 100%;">
                     <xf:label>Types / {$docname} / forms </xf:label>
                     <div dojoType="dijit.layout.ContentPane" title="Edit Details" id="detailsDiv" selected="true">
@@ -251,10 +254,14 @@ return
                                 <th>Value Type</th>
                                 <th>Render Type</th>
                                 <th>Modes</th>
-                                <th colspan="3">Actions</th>
+                                <th class="w40">Move</th>
+                                <th colspan="2">Actions</th>
                             </tr>
                             {local:main($docname)}
                         </table> 
+                        <span>
+                            <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:getMatchingTasks()[last()]/@name)}']);">add field</a>
+                        </span>
                         </div>
                     </div>
                 </div>                       

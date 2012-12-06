@@ -52,7 +52,20 @@ return
                                <mode>listing</mode>                               
                             </modes>
                         </data>
-                    </xf:instance>                 
+                    </xf:instance>       
+                    
+                    <xf:instance id="i-fieldtmpl" xmlns="">
+                        <data>
+                            <field name="" label="" required="false" value_type="text" render_type="text_line" vocabulary="">
+                                <show>
+                                    <modes originAttr="modes">add edit view listing</modes>
+                                </show>
+                                <hide>
+                                    <modes originAttr="modes">add edit view listing</modes>
+                                </hide>                                
+                            </field>
+                        </data>
+                    </xf:instance>                    
                     
                     <xf:instance id="i-rendertypes" xmlns="">
                         <data>
@@ -78,15 +91,15 @@ return
                             </valuetypes>
                         </data>
                     </xf:instance>               
-                    
-                    <xf:bind nodeset="descriptor[@name eq '{$docname}']">
-                        <xf:bind nodeset="field/@name" type="xf:string" required="true()" />
-                        <xf:bind nodeset="field/@label" type="xf:string" required="true()" />
-                        <xf:bind id="req-field" nodeset="field/@required" type="xs:boolean"/>  
-                        <xf:bind nodeset="field/@value_type" type="xs:string" required="true()"/>
-                        <xf:bind nodeset="field/@render_type" type="xs:string" required="true()"/>
+
+                    <xf:bind nodeset="instance('i-fieldtmpl')/field">
+                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
+                        <xf:bind nodeset="@label" type="xf:string" required="true()" />
+                        <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
+                        <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
+                        <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
                         <xf:bind id="showmodes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" />     
-                        <xf:bind id="hidemodes" nodeset="instance('i-modes')/hide/modes/mode" type="xs:string" /> 
+                        <xf:bind id="hidemodes" nodeset="instance('i-modes')/hide/modes/mode" type="xs:string" />                  
                     </xf:bind>
 
                     <xf:submission id="s-get-formsui"
@@ -125,8 +138,12 @@ return
                             <xf:value>exist</xf:value>
                         </xf:header>
     
+                        <xf:action ev:event="xforms-submit" if="'{local:mode()}' = 'new'">
+                            <xf:message level="ephemeral">Adding new field</xf:message>                          
+                        </xf:action>
+    
                         <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">field '{$fieldname}' saved successfully</xf:message>
+                            <xf:message level="ephemeral">field was saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dojo.publish('/form/view',['{$docname}','fields']);                      
                                 dijit.byId("taskDialog").hide();
@@ -135,6 +152,7 @@ return
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                             <xf:message level="ephemeral">error occured while saving the field</xf:message>
                             <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
                             <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
                         </xf:action>
@@ -159,8 +177,8 @@ return
             </xf:model>
             
             </div>    	
-            <div style="width: 100%; height: auto">
-                <xf:group id="g-field" ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']" appearance="bf:verticalTable">
+            <div style="width: 100%; height: auto">         
+                <xf:group id="g-field" ref="instance('i-fieldtmpl')/field" appearance="bf:verticalTable">
 
                        <xf:input id="field-name" ref="@name">
                            <xf:label>field title</xf:label>
@@ -218,17 +236,18 @@ return
                                 <xf:label ref="node()"></xf:label>
                                 <xf:value ref="node()"></xf:value>
                             </xf:itemset>                           
-                        </xf:select>                         
+                        </xf:select>  
                         
                         <br/>
                         <xf:group appearance="bf:horizontalTable">
                             <xf:label/>
                             <xf:trigger>
                                 <xf:label>Save</xf:label>
-                                <xf:action>
-                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:action if="'{$mode}' = 'new'">
+                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>                                   
+                                    <xf:insert nodeset="instance()/descriptor[@name eq '{$docname}']/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
                                     <xf:send submission="s-add"/>
-                                </xf:action>                              
+                                </xf:action>                                
                             </xf:trigger>
                             <xf:trigger>
                                 <xf:label>Close</xf:label>

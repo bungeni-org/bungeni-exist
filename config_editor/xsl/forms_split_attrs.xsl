@@ -47,9 +47,7 @@
         <xsl:element name="modes">
             <xsl:attribute name="originAttr">modes</xsl:attribute>
             <xsl:for-each select="tokenize(., '\s+')">
-                <mode>
-                    <xsl:value-of select="."/>
-                </mode>
+                <xsl:value-of select="concat(.,' ')"/>
             </xsl:for-each>
         </xsl:element>
     </xsl:template>

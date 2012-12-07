@@ -15,7 +15,7 @@ return
         <title>Bungeni Configuration Editor</title>
         <link rel="stylesheet" type="text/css" href="./css/main.css"/>
     </head>
-    <body id="workflow" class="nihilo InlineRoundBordersAlert">
+    <body class="nihilo InlineRoundBordersAlert">
         <div class="page">
 
             <!-- ***** hidden triggers ***** -->
@@ -47,6 +47,7 @@ return
                         <data xmlns="">
                             <default-duration>120</default-duration>
                             <currentTask/>
+                            <currentView/>
                             <currentDoc/>
                             <currentNode/>
                             <currentField/>
@@ -69,7 +70,7 @@ return
                     <xf:send submission="s-query-workflows"/>
                 </xf:trigger>                  
                 
-                <xf:trigger id="editFORM">
+                <xf:trigger id="viewForm">
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
@@ -77,6 +78,15 @@ return
                         </xf:load>
                     </xf:action>
                 </xf:trigger>        
+                
+                <xf:trigger id="view">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-',instance('i-vars')/currentView,'.xql#xforms?node=',instance('i-vars')/currentNode,'&amp;tab=',instance('i-vars')/showTab)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                  
                 
                 <xf:trigger id="addField">
                     <xf:label>new</xf:label>
@@ -95,6 +105,15 @@ return
                         </xf:load>
                     </xf:action>
                 </xf:trigger>
+                
+                <xf:trigger id="editRole">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/edit-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;role=',instance('i-vars')/currentNode)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                
                 
                 <xf:trigger id="moveFieldUp">
                     <xf:label>new</xf:label>
@@ -115,13 +134,22 @@ return
                 </xf:trigger>  
                 
                 <xf:trigger id="deleteField">
-                    <xf:label>new</xf:label>
+                    <xf:label>delete</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/delete-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
-                </xf:trigger>                 
+                </xf:trigger>   
+                
+                <xf:trigger id="deleteRole">
+                    <xf:label>delete</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/delete-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                    
 
                 <xf:trigger id="deleteTask">
                     <xf:label>delete</xf:label>
@@ -131,6 +159,9 @@ return
                 <xf:input id="currentTask" ref="instance('i-vars')/currentTask">
                     <xf:label>This is just a dummy used by JS</xf:label>
                 </xf:input>
+                <xf:input id="currentView" ref="instance('i-vars')/currentView">
+                    <xf:label>This is just a hidden used by JS</xf:label>
+                </xf:input>                
                 <xf:input id="currentDoc" ref="instance('i-vars')/currentDoc">
                     <xf:label>This is just an ephemeral used by JS</xf:label>
                 </xf:input>
@@ -153,11 +184,21 @@ return
             <div id="content">
                 <div id="left-content">
                     <div dojoType="dijit.Menu" id="navMenu">
-                        {menu:get-types('search')}                
+                        {menu:get-types('search')} 
+                        <div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','roles','none']);">Roles</div>                          
+                        <xhtml:div dojoType="dijit.MenuSeparator"/> 
+                        <div dojoType="dijit.PopupMenuItem"> 
+                            <span>
+                                System            
+                            </span>                        
+                            <div dojoType="dijit.Menu" id="submenusys">       
+                                <div dojoType="dijit.MenuItem" onClick="alert('A To-Do')">create a working copy</div>
+                                <div dojoType="dijit.MenuItem" onClick="alert('Another To-Do')">sync back to filesystem</div>           
+                            </div>
+                        </div>
                         <!--div dojoType="dijit.MenuSeparator"/>
-                        <div dojoType="dijit.MenuItem" onClick="alert('Roles!')">Roles</div>
-                        <div dojoType="dijit.MenuItem" onClick="alert('Le DB!')">DB</div>
-                        <div dojoType="dijit.MenuItem" onClick="alert('OpenOFFice!')">OpenOffice</div-->
+                        <div dojoType="dijit.MenuItem" onClick="alert('DB : To Do')">DB</div>
+                        <div dojoType="dijit.MenuItem" onClick="alert('OpenOFFice - To Do')">OpenOffice</div-->
                     </div>
                 </div>
                 <div id="right-content">
@@ -170,7 +211,7 @@ return
                         <div id="embedDialogDB"></div>
                     </div>
     
-                    <div id="taskDialog" dojotype="dijit.Dialog" style="width:600px;" title="Add / Edit field" autofocus="false">
+                    <div id="taskDialog" dojotype="dijit.Dialog" style="width:600px;" title="Add / Edit Dialog" autofocus="false">
                         <div id="embedDialog"></div>
                     </div>
     
@@ -227,10 +268,17 @@ return
             }
             
             var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
-                fluxProcessor.setControlValue("currentDoc",doc);
+                fluxProcessor.setControlValue("currentDoc",doc);                
                 fluxProcessor.setControlValue("showTab",tab);
-                embed('editFORM','embedInline');
+                embed('viewForm','embedInline');
             }); 
+            
+            var editSubscriber = dojo.subscribe("/view", function(view,node,tab){
+                fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
+                embed('view','embedInline');
+            });            
             
             var addSubscriber = dojo.subscribe("/field/add", function(form,field){
                 fluxProcessor.setControlValue("currentDoc",form);
@@ -263,7 +311,22 @@ return
                     fluxProcessor.setControlValue("currentField",field);
                     fluxProcessor.dispatchEvent('deleteField');
                 }            
-            });             
+            }); 
+            
+            var deleteSubscriber = dojo.subscribe("/role/delete", function(form,field){
+                var check = confirm("Really delete this role?");
+                if (check == true){
+                    fluxProcessor.setControlValue("currentDoc",form);
+                    fluxProcessor.setControlValue("currentField",field);
+                    fluxProcessor.dispatchEvent('deleteRole');
+                }            
+            });            
+
+            var editSubscriber = dojo.subscribe("/role/edit", function(form,node){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentNode",node);
+                embed('editRole','embedDialog');
+            }); 
 
             var refreshSubcriber = dojo.subscribe("/wf/refresh", function(){
                 fluxProcessor.dispatchEvent("overviewTrigger");
@@ -279,16 +342,14 @@ return
                 });
                 fluxProcessor.setControlValue("selectedTaskIds",result);
             }
+            
+            dojo.addOnLoad(function(){
+                dojo.subscribe("/xf/ready", function() {
+                    fluxProcessor.skipshutdown=true;
+                });
+            });            
 
             // -->
         </script>
-        <script type="text/javascript" defer="defer">
-        <![CDATA[
-        dojo.addOnLoad(function(){
-            dojo.subscribe("/xf/ready", function() {
-                fluxProcessor.skipshutdown=true;
-            });
-        });
-       ]]></script>        
     </body>
 </html>

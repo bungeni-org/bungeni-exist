@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui name="customname">
+    <roles originAttr="roles">
+        <role>undefined</role>
+    </roles>
     <descriptor name="formname">
-        <field name="undefined" label="" required="false" value_type="text" render_type="text_line" vocabulary="">
+        <field name="undefined" label="undefined" required="false" value_type="" render_type="" vocabulary="">
             <show>
                 <modes originAttr="modes">
                     <mode>add edit view listing</mode>
@@ -11,7 +14,7 @@
                 <modes originAttr="modes">
                     <mode>add edit view listing</mode>
                 </modes>
-            </hide>            
+            </hide>
         </field>
     </descriptor>
 </ui>

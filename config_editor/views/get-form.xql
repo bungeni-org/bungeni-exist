@@ -10,19 +10,16 @@ declare option exist:serialize "method=xhtml media-type=text/xml";
 declare function local:fn-formsui() as xs:string {
 
     let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=","custom.xml")
-    let $xsl := doc('/db/config_editor/xsl/forms_split_attrs.xsl')
-    let $doc := doc($path2resource)
-    let $splitted := transform:transform($doc, $xsl, <parameters>
-                                                            <param name="fname" value="custom" />
-                                                     </parameters>)
+    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=custom.xml")
     return $path2resource
 };
 
-(: creates the output for all tasks matching the query :)
-declare function local:main($doctype) as node() * {
-    let $count := count(local:getMatchingTasks())
-    for $field at $pos in local:getMatchingTasks()
+(: creates the output for all fields :)
+declare function local:fields($doctype) as node() * {
+    let $form-id := request:get-parameter("doc", "nothing")
+    
+    let $count := count(local:getMatchingTasks()/descriptor[@name eq $form-id]/field)
+    for $field at $pos in local:getMatchingTasks()/descriptor[@name eq $form-id]/field
         return
             <tr>
                 <td>{data($field/@name)}</td>
@@ -60,16 +57,12 @@ declare function local:main($doctype) as node() * {
 };
 
 declare function local:getMatchingTasks() as node() * {
-    let $form-id := request:get-parameter("doc", "nothing")
     let $doc := let $form := doc('/db/config_editor/bungeni_custom/forms/custom.xml')
                 let $xsl := doc('/db/config_editor/xsl/forms_split_attrs.xsl')
                 return transform:transform($form, $xsl, <parameters>
                                                             <param name="fname" value="custom" />
                                                          </parameters>)
-    
-    for $splitted in $doc/descriptor[@name eq $form-id]/field
-    return $splitted
-
+    return $doc
 };
 
 declare function local:mode() as xs:string {
@@ -112,7 +105,7 @@ return
 
                     <xf:bind nodeset="descriptor[@name eq '{$docname}']">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" />
-                        <xf:bind nodeset="@order" type="xf:integer" required="true()" />
+                        <xf:bind nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
                         <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
                     </xf:bind>
                     
@@ -186,8 +179,7 @@ return
                     <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
                     <script type="text/javascript" if="'{$showing}' = 'fields'">
                         dijit.byId("switchDiv").selectChild("fieldsDiv");                        
-                    </script>                     
-                    <!--xf:setfocus control="date"/-->
+                    </script>   
                 </xf:action>
 
             </xf:model>
@@ -195,7 +187,8 @@ return
             </div>    	
             <div style="width: 100%; height: 100%;">
                 <div dojoType="dijit.layout.TabContainer" id="switchDiv" style="width: 100%; height: 100%;">
-                    <xf:label>Types / {$docname} / forms </xf:label>
+                    <h1>Types / {$docname} / forms </h1>
+                    <br/>
                     <div dojoType="dijit.layout.ContentPane" title="Edit Details" id="detailsDiv" selected="true">
                         <div class="caseContent">
                             <xf:group ref="descriptor[@name eq '{$docname}']" class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
@@ -224,7 +217,7 @@ return
                                     <xf:input id="descriptor-order" ref="@order">
                                         <xf:label>Order</xf:label>
                                         <xf:alert>Invalid number.</xf:alert>
-                                        <xf:help>Enter an integer to represent the </xf:help>
+                                        <xf:help>Enter an integer between 1 and 100 </xf:help>
                                         <xf:hint>order of this descriptor</xf:hint>
                                     </xf:input>                 
                                     
@@ -242,26 +235,26 @@ return
                                  </xf:group>
                             </xf:group>
                         </div>
-                    </div>
+                    </div>                  
                     <div dojoType="dijit.layout.ContentPane" title="Edit fields" id="fieldsDiv">
                         <xf:label>Edit Fields</xf:label>
                         <div class="caseContent">
-                        <table id="listingTable" style="width:100%;">
-                            <tr>                      			 
-                                <th>Name</th>
-                                <th>Label</th>
-                                <th>Required</th>
-                                <th>Value Type</th>
-                                <th>Render Type</th>
-                                <th>Modes</th>
-                                <th class="w40">Move</th>
-                                <th colspan="2">Actions</th>
-                            </tr>
-                            {local:main($docname)}
-                        </table> 
-                        <span>
-                            <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:getMatchingTasks()[last()]/@name)}']);">add field</a>
-                        </span>
+                            <table class="listingTable" style="width:auto;">
+                                <tr>                      			 
+                                    <th>Name</th>
+                                    <th>Label</th>
+                                    <th>Required</th>
+                                    <th>Value Type</th>
+                                    <th>Render Type</th>
+                                    <th>Modes</th>
+                                    <th class="w40">Move</th>
+                                    <th colspan="2">Actions</th>
+                                </tr>
+                                {local:fields($docname)}
+                            </table> 
+                            <span>
+                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:getMatchingTasks()[last()]/@name)}']);">add field</a>
+                            </span>
                         </div>
                     </div>
                 </div>                       

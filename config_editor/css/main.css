@@ -45,20 +45,21 @@ body {
     }   
 
 /*listing table (list-items.xql) styles*/
-#listingTable{
+.listingTable{
     border:none;
     border-collapse:collapse;
     width:100%;
     display:table;
 }
-#listingTable tr:hover{
+.listingTable tr:hover{
     background-color:#f4f4f4;
 }
-#listingTable th,#listingTable td{
+.listingTable th,
+.listingTable td{
     padding:5px;
     border:thin solid #35b3e9;
 }
-#listingTable th{
+.listingTable th{
     background:#2b92be;
     color:white;
 }

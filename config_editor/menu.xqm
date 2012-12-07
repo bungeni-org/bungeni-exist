@@ -17,7 +17,7 @@ declare function menu:get-types($active as xs:string) {
         <xhtml:span>
             Types            
         </xhtml:span>
-        <xhtml:div dojoType="dijit.Menu" id="submenu">
+        <xhtml:div dojoType="dijit.Menu" id="submenu">       
             <xhtml:div dojoType="dijit.MenuItem" onClick="alert('new!');">add new</xhtml:div>
             <xhtml:div dojoType="dijit.MenuSeparator"/>
             {
@@ -26,12 +26,12 @@ declare function menu:get-types($active as xs:string) {
                     <xhtml:div dojoType="dijit.PopupMenuItem">
                         <xhtml:span>{data($docu/@name)}</xhtml:span>
                         <xhtml:div dojoType="dijit.Menu" id="formsMenu{data($docu/@name)}">
-                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/form/view',['{data($docu/@name)}','details']);">forms</xhtml:div>
+                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/form/view',['{data($docu/@name)}','details']);">form</xhtml:div>
                             <xhtml:div dojoType="dijit.MenuItem">workflows</xhtml:div>
                             <xhtml:div dojoType="dijit.MenuItem">workspace</xhtml:div>
                         </xhtml:div>
                     </xhtml:div>
-            }
+            }      
         </xhtml:div>
     </xhtml:div>             
 };

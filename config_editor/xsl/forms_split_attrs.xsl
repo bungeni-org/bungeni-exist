@@ -5,7 +5,7 @@
         14 Nov 2012
         Serializes Bungeni Form XML (ui , custom) to a more usable XML format
     -->
-    <xsl:import href="split_attr_roles.xsl"/>
+    <xsl:include href="split_attr_roles.xsl"/>
     <xsl:output indent="yes"/>
     <xsl:param name="fname"/>
     <xsl:template match="*">

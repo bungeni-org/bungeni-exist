@@ -360,6 +360,16 @@
             <navigation>business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
+        <route href="/report-text">
+            <title>Business | Publication Report Text</title>
+            <navigation>business</navigation>
+            <subnavigation>publications</subnavigation>
+        </route>
+        <route href="/report-timeline">
+            <title>Business | Publication Report Timeline</title>
+            <navigation>business</navigation>
+            <subnavigation>publications</subnavigation>
+        </route>
         <route href="/politicalgroups">
             <title>Business | Political Groups </title>
             <navigation>members</navigation>
@@ -482,12 +492,15 @@
             <format href="null" type="epub">Download ePUB format</format>
             <format href="null" type="akn">Download AkomaNtoso format</format>
         </rendergroup>
+        <rendergroup name="contacts">
+            <format href="null" type="xcard">Download xCard format</format>
+        </rendergroup>
         <rendergroup name="members">
             <format href="build" type="edit">Edit document. Will need to login to eXist</format>
             <format href="null" type="pdf">Download PDF format</format>
             <format href="null" type="xml">Download XML format</format>
         </rendergroup>
-    </downloadgroups> DEFAULT 
+    </downloadgroups>
     <viewgroups>
         <views name="Committee">
             <view id="listing" path="committees" tag="listing">
@@ -815,6 +828,26 @@
                 <xsl>xsl/agendaitem.xsl</xsl>
             </view>
         </views>
+        <views name="Report">
+            <view id="listing" path="publications" tag="listing">
+                <template>xml/legislativeitem-generic.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="report-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">report(nt)</i18n:text>
+                </title>
+                <template>xml/report.xml</template>
+                <xsl>xsl/report.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="report-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">timeline(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+        </views>
         <views name="Membership">
             <view id="listing" path="members" tag="listing">
                 <template>xml/members.xml</template>
@@ -887,7 +920,8 @@
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
                 <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
                 <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc No.</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1014,8 +1048,7 @@
         <doctype category="group" name="PoliticalGroup">
             <orderbys>
                 <orderby field="bu:legislature/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
-                <orderby default="true" field="bu:legislature/bu:statusDate" order="descending" value="st_date_newest">status date
-                    [newest]</orderby>
+                <orderby default="true" field="bu:legislature/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
             </orderbys>
             <searchins>
                 <searchin field="." name="all" value="all">Entire Document</searchin>
@@ -1058,15 +1091,20 @@
         </doctype>
         <doctype category="membership" name="Membership">
             <orderbys>
-                <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last name [ascending]</orderby>
+                <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last
+                    name [ascending]</orderby>
                 <orderby field="bu:membership/bu:lastName" order="descending" value="ln_desc" default="true">last name [descending]</orderby>
-                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first name [ascending]</orderby>
-                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first name [descending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first
+                    name [ascending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first
+                    name [descending]</orderby>
             </orderbys>
             <searchins>
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
-                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First Name</searchin>
-                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last Name</searchin>
+                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First
+                    Name</searchin>
+                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last
+                    Name</searchin>
                 <searchin field="bu:membership/bu:description" name="ds" value="desc">Description</searchin>
             </searchins>
             <listingfilters>
@@ -1079,7 +1117,28 @@
                 <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>
             </acl>
         </doctype>
-        <doctype category="report" name="report"/>
+        <doctype category="document" name="Report">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
     </doctypes>
     <custom>
         <whatsonviews>

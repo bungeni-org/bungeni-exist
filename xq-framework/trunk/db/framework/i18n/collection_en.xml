@@ -42,6 +42,7 @@
     <msg key="list-t-motion">Motions</msg>
     <msg key="list-t-tableddocument">Tabled Documents</msg>
     <msg key="list-t-agendaitem">Agenda Items</msg>
+    <msg key="list-t-report">Publications</msg>
     <msg key="list-t-sittings">Sittings</msg>
     <msg key="list-t-whatson">What's on</msg>
     <msg key="list-t-pubs">Publications</msg>

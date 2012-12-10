@@ -91,7 +91,8 @@
                     ] | 
                     changes |
                     audits |
-                    sa_events |
+                    sa_events | 
+                    sittingreport | 
                     versions |
                     owner" />
                 

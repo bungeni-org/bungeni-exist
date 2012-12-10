@@ -173,6 +173,11 @@ div#doc-downloads {
     width:695px;
     text-align:justify;
 }
+#report-content-area {
+    margin:10px auto 10px auto;
+    width:94%;
+    text-align:justify;
+}
 
 .doc-toggle {
     margin:0 auto 0 10px;

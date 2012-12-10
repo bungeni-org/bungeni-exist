@@ -159,7 +159,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/agendaitems")
     		 then 
                  rou:get-agendaitems($CONTROLLER-DOC)                     
-    				
+        else if ($EXIST-PATH eq "/publications")
+            then
+                rou:get-reports($CONTROLLER-DOC) 
+	
         (:~ ITEMS SEARCH :)     
  	    else if ($EXIST-PATH eq "/search-all")
     		 then 
@@ -366,7 +369,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let $views := cmn:get-views-for-type("AgendaItem"),
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
-                return $act-entries-tmpl           
+                return $act-entries-tmpl    
+    	else if ($EXIST-PATH eq "/report/epub")   
+    		 then 
+                let $views := cmn:get-views-for-type("Report"),
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $act-entries-tmpl :=  bun:gen-epub-output($EXIST-CONTROLLER,$docnumber, $views)
+                return $act-entries-tmpl                 
            
         (: PDF FO GENERATORS :)
     	else if ($EXIST-PATH eq "/bill/pdf")   
@@ -425,7 +434,12 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 rou:get-akn($CONTROLLER-DOC)
     	else if ($EXIST-PATH eq "/agendaitem/akn")   
     		 then 
-                rou:get-akn($CONTROLLER-DOC)                
+                rou:get-akn($CONTROLLER-DOC) 
+                
+        (:Get xCard XML:)
+    	else if ($EXIST-PATH eq "/membership/xcard")   
+    		 then 
+                rou:get-xcard($CONTROLLER-DOC)                
                 
     	else if ($EXIST-PATH eq "/politicalgroups")
     		 then 
@@ -1386,6 +1400,47 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									) 
+        (: REPORTS :)
+    	else if ($EXIST-PATH eq "/report-text" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,$parts),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-CONTROLLER, 
+    									   $config:DEFAULT-TEMPLATE, 
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									 )  
+    	else if ($EXIST-PATH eq "/report-timeline" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),     
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-parl-doc-timeline("public-view",$docnumber,$parts),
+    		        $act-entries-repl:= document {
+    									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    								 } 
+    								 return 
+    									template:process-tmpl(
+    									   $REL-PATH, 
+    									   $EXIST-CONTROLLER, 
+    									   $config:DEFAULT-TEMPLATE,
+    									   cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>, 
+    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									)    									 
         (: SITTINGS :)    									
     	else if ($EXIST-PATH eq "/sitting" )
     		 then 
@@ -1566,16 +1621,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 cmn:get-route($EXIST-PATH),
                 <null/>,
                 cmn:build-nav-tmpl($EXIST-PATH, "xml/politicalgroups.xml")
-               )	     	
-    	else if ($EXIST-PATH eq "/publications")
-    		 then 
-               template:process-tmpl(
-                $REL-PATH, 
-                $EXIST-CONTROLLER, 
-                $config:DEFAULT-TEMPLATE, 
-                cmn:get-route($EXIST-PATH),
-                <null/>,
-                cmn:build-nav-tmpl($EXIST-PATH, "xml/publications.xml")
                )  
        else if ($EXIST-PATH eq "/admin") 
             then
@@ -1593,20 +1638,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
        else if ($EXIST-PATH eq "/testing/blue/color") 
               then
     		 <doc>
-    		 <req>
-    		 {request:get-server-name()}
-    		 </req>
-    		 <ep> {
-    		 $EXIST-PATH}</ep>
-    		 <root>{
-                                $EXIST-ROOT}
-                                </root>
-                                <cont>{
-                                $EXIST-CONTROLLER}</cont>
-                                <res>{
-                                $EXIST-RESOURCE}</res>
-                                <relpath>{
-                                $REL-PATH}</relpath>
+                <req>{request:get-server-name()}</req>
+                <ep> {$EXIST-PATH}</ep>
+                <root>{$EXIST-ROOT}</root>
+                <cont>{$EXIST-CONTROLLER}</cont>
+                <res>{$EXIST-RESOURCE}</res>
+                <relpath>{$REL-PATH}</relpath>
+                <context-path>{request:get-context-path()}</context-path>
     		 </doc>
     	else
             fw:ignore()

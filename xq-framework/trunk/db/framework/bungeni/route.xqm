@@ -120,6 +120,10 @@ declare function rou:get-agendaitems($CONTROLLER-DOC as node()) {
     rou:listing-documentitem($CONTROLLER-DOC, "AgendaItem")
 };
 
+declare function rou:get-reports($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "Report")
+};
+
 declare function rou:get-pdf($CONTROLLER-DOC as node()) {
                             
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -136,5 +140,11 @@ declare function rou:get-xml($CONTROLLER-DOC as node()) {
 declare function rou:get-akn($CONTROLLER-DOC as node()) {
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
         $act-entries-tmpl :=  bun:get-akn-xml($docnumber)
+    return $act-entries-tmpl   
+};
+
+declare function rou:get-xcard($CONTROLLER-DOC as node()) {
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+        $act-entries-tmpl :=  bun:get-xcard-xml($docnumber)
     return $act-entries-tmpl   
 };

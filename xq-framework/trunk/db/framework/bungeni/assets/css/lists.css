@@ -16,6 +16,7 @@ ul.ls-downloads li a.rtf { margin-right:0px;background: url(../images/ico-rtf.pn
 ul.ls-downloads li a.pdf { margin-right:0px;background: url(../images/ico-pdf.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a.xml { margin-right:0px;background: url(../images/ico-xml.png) no-repeat left top; width: 15px; }
 ul.ls-downloads li a.edit { margin-right:0px;background: url(../images/ico-edit.png) no-repeat left top; width: 15px; }
+ul.ls-downloads li a.xcard { margin-right:0px;background: url(../images/ico-xcard.png) no-repeat left top; width: 23px; }
 ul.ls-downloads li a:hover { background-position: left -15px; }
 
 /* Listing of versions */

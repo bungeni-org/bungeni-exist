@@ -1761,6 +1761,45 @@ declare function bun:get-akn-xml($docid as xs:string)
 };
 
 (:~
+:  Renders xCard. vCard v4.0 output for parliamentary document
+: @param docid
+:   The URI of the document
+:
+: @return
+:   An xCard document
+:)
+declare function bun:get-xcard-xml($docid as xs:string)
+{
+    util:declare-option("exist:serialize", "media-type=application/xml method=xml indent=yes"),
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt('xsl/bu-to-xcard.xsl')
+    let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$docid][1]/ancestor::bu:ontology
+
+    (: return AN Committee document with all items assigned to it :)
+    let $doc := <doc>
+                {
+                    $user          
+                }
+                <membership>{
+                    collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$docid][1]/ancestor::bu:ontology             
+                }</membership>
+                <ref>{
+                    collection(cmn:get-lex-db())//bu:ontology[@for='address']/bu:address/bu:assignedTo[@uri eq $docid]/ancestor::bu:ontology
+                }</ref>
+                </doc> 
+    let $server-path := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps/"
+    let $transformed := transform:transform($doc,$stylesheet,   <parameters>
+                                                                    <param name="server-path" value="{$server-path}" />
+                                                                </parameters>)
+    
+    let $header := response:set-header("Content-Type" , "text/xml")    
+    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  $user/bu:user/bu:firstName || $user/bu:user/bu:lastName || ".vcf"))
+    
+    return $transformed   
+};
+
+(:~
 :   Retieves all group documents of type committee
 : @param offset
 : @param limit
@@ -1948,7 +1987,7 @@ declare function local:old-future-sittings($range as xs:string) {
     return
         switch($range)
 
-        (: For old and fut sittings, we get 30 days before and after previous and next week sittings :)
+        (: For old and fut sittings, we get 30 days before and after current-date :)
         case 'old' return
             <range>
                 <start>{($twk - xs:dayTimeDuration('P30D')) || "T00:00:00"}</start>

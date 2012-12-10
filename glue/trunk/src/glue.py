@@ -680,7 +680,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     return (out_files[0], True)
             # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
             # from queue programmatically
-            elif pipe_type == "attachment" or pipe_type == "signatory" or pipe_type == "report":
+            elif pipe_type == "attachment" or pipe_type == "signatory":
                 # Handle un-pipelined docs
                 return (None, None)
             else:

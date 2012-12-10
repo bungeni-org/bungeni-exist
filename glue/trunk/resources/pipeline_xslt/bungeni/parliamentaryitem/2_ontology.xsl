@@ -412,7 +412,33 @@
         </xsl:template -->  
     
     
-    <!-- !+BEGIN(AUDIT) AUDIT, CHANGE AND VERSION TEMPLATES -->
+    <!-- !+BEGIN(AUDIT) AUDIT, CHANGE, VERSION AND SITTINGREPORT TEMPLATES -->
+    
+    
+    <xsl:template match="sittingreport">
+        <sittingReports id="sittingReports">
+            <xsl:apply-templates />
+        </sittingReports>
+    </xsl:template>
+    
+    <xsl:template match="sittingreport[parent::sittingreport]">
+        <sittingReport>
+            <xsl:apply-templates />
+        </sittingReport>
+    </xsl:template>   
+    
+    <xsl:template match="field[@name='sitting_id']">
+        <sittingId type="xs:integer">
+            <xsl:value-of select="." />
+        </sittingId>
+    </xsl:template>   
+    
+    <xsl:template match="field[@name='report_id']">
+        <reportId type="xs:integer">
+            <xsl:value-of select="." />
+        </reportId>
+    </xsl:template>    
+    
     
     
     <xsl:template match="versions">

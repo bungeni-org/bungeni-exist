@@ -4,10 +4,14 @@
         Ashok Hariharan
         14 Nov 2012
         Deserialzes Workflow usable XML format to Bungeni XML format
+        Update: currently updated to bungeni_custom r10268
     -->
-    <xsl:import href="merge_tags.xsl"/>
-    <xsl:output indent="yes"/>
-    <xsl:strip-space elements="*"/>
+    <xsl:include href="merge_tags.xsl"/>
+    <xsl:output indent="yes" encoding="UTF-8"/>
+    <xsl:strip-space elements="*" />
+    <xsl:template match="comment()">
+        <xsl:copy />
+    </xsl:template>
     <xsl:template match="node()|@*">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>

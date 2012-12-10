@@ -4,10 +4,15 @@
         Ashok Hariharan
         14 Nov 2012
         Serializes Bungeni Workflow XML to a more usable XML format
+        Update: currently updated to bungeni_custom r10268
     -->
-    <xsl:import href="split_attr_tags.xsl"/>
-    <xsl:import href="split_attr_roles.xsl"/>
+    
+    <xsl:include href="split_attr_tags.xsl"/>
+    <xsl:include href="split_attr_roles.xsl"/> 
     <xsl:output indent="yes"/>
+    <xsl:template match="comment()">
+        <xsl:copy />
+    </xsl:template>
     <xsl:template match="*">
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="preserve"/>
@@ -59,6 +64,6 @@
                 </permAction>
             </xsl:for-each>
         </xsl:element>
-    </xsl:template>
-    <xsl:template match="@*"/>
+    </xsl:template>    
+    <xsl:template match="@*" />
 </xsl:stylesheet>

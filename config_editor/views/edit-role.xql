@@ -26,7 +26,7 @@ declare function local:mode() as xs:string {
 
 let $contextPath := request:get-context-path()
 let $docname := xs:string(request:get-parameter("doc","none"))
-let $rolename := xs:string(request:get-parameter("role","none"))
+let $roleid := xs:string(request:get-parameter("role","none"))
 let $mode := xs:string(request:get-parameter("mode","old"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
@@ -85,7 +85,7 @@ return
                         </xf:header>
     
                         <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">field '{$rolename}' saved successfully</xf:message>
+                            <xf:message level="ephemeral">field '{$roleid}' saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dojo.publish('/view',['roles','roles','none']);                      
                                 dijit.byId("taskDialog").hide();
@@ -111,7 +111,7 @@ return
             
             </div>    	
             <div style="width: 100%; height: auto">
-                <xf:group id="g-role" ref="roles/role[. eq '{$rolename}']" appearance="bf:verticalTable">
+                <xf:group id="g-role" ref="roles/role[{$roleid}]" appearance="bf:verticalTable">
 
                        <xf:input id="role-name" ref=".">
                            <xf:label>role</xf:label>

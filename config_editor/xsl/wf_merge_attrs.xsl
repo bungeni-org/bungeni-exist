@@ -8,9 +8,9 @@
     -->
     <xsl:include href="merge_tags.xsl"/>
     <xsl:output indent="yes" encoding="UTF-8"/>
-    <xsl:strip-space elements="*" />
+    <xsl:strip-space elements="*"/>
     <xsl:template match="comment()">
-        <xsl:copy />
+        <xsl:copy/>
     </xsl:template>
     <xsl:template match="node()|@*">
         <xsl:copy>

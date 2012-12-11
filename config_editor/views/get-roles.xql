@@ -14,8 +14,8 @@ declare function local:roles() as node() * {
         return
             <tr>
                 <td>{data($role)}</td>
-                <td><a href="javascript:dojo.publish('/role/edit',['role','{$role}']);">edit</a></td>
-                <td><a href="javascript:dojo.publish('/role/delete',['role','{$role}']);">delete</a></td>
+                <td><a href="javascript:dojo.publish('/role/edit',['role','{$pos}']);">edit</a></td>
+                <td><a href="javascript:dojo.publish('/role/delete',['role','{$pos}']);">delete</a></td>
             </tr>
 };
 

@@ -34,7 +34,8 @@
             <xsl:apply-templates select="@*" mode="preserve"/>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
-    </xsl:template>
+    </xsl:template> 
+    
 
     <!-- 
         We need to process the attributes while preserving them at the same time
@@ -47,7 +48,9 @@
         <xsl:element name="modes">
             <xsl:attribute name="originAttr">modes</xsl:attribute>
             <xsl:for-each select="tokenize(., '\s+')">
-                <xsl:value-of select="concat(.,' ')"/>
+                <mode>
+                    <xsl:value-of select="."/>
+                </mode>
             </xsl:for-each>
         </xsl:element>
     </xsl:template>

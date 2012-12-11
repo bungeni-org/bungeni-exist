@@ -52,7 +52,15 @@ return
                                <mode>listing</mode>                               
                             </modes>
                         </data>
-                    </xf:instance>                 
+                    </xf:instance>
+                    
+                    <xf:instance id="i-originrole" xmlns="">
+                        <data>
+                            <roles originAttr="roles">
+                               <role/>                               
+                            </roles>
+                        </data>
+                    </xf:instance>                     
                     
                     <xf:instance id="i-rendertypes" xmlns="">
                         <data>
@@ -79,13 +87,13 @@ return
                         </data>
                     </xf:instance>               
                     
-                    <xf:bind nodeset="descriptor[@name eq '{$docname}']">
-                        <xf:bind nodeset="field/@name" type="xf:string" required="true()" />
-                        <xf:bind nodeset="field/@label" type="xf:string" required="true()" />
-                        <xf:bind id="req-field" nodeset="field/@required" type="xs:boolean"/>  
-                        <xf:bind nodeset="field/@value_type" type="xs:string" required="true()"/>
-                        <xf:bind nodeset="field/@render_type" type="xs:string" required="true()"/>
-                        <xf:bind id="showmodes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" />     
+                    <xf:bind nodeset="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
+                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
+                        <xf:bind nodeset="@label" type="xf:string" required="true()" />
+                        <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
+                        <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
+                        <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
+                        <xf:bind id="showmodes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" constraint="instance()/show/modes/mode[not(.)]" />     
                         <xf:bind id="hidemodes" nodeset="instance('i-modes')/hide/modes/mode" type="xs:string" /> 
                     </xf:bind>
 
@@ -160,66 +168,157 @@ return
             
             </div>    	
             <div style="width: 100%; height: auto">
-                <xf:group id="g-field" ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']" appearance="bf:verticalTable">
+                <xf:group id="g-field" ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
 
-                       <xf:input id="field-name" ref="@name">
-                           <xf:label>field title</xf:label>
-                           <xf:hint>Must be an existing title</xf:hint>
-                           <xf:alert>invalid field name</xf:alert>
-                           <xf:help>help with name of field</xf:help>
-                       </xf:input> 
-
-                       <xf:input id="label-name" ref="@label">
-                           <xf:label>label</xf:label>
-                           <xf:hint>Label used for this field</xf:hint>
-                           <xf:alert>invalid label name</xf:alert>
-                           <xf:help>help with label of field</xf:help>
-                       </xf:input> 
-                       
-                       <xf:input id="input-req-field" ref="@required">
-                           <xf:label>required</xf:label>
-                           <xf:hint>Enabling this means it is a required field</xf:hint>
-                           <xf:alert>invalid null boolean</xf:alert>
-                       </xf:input>  
-                       
-                        <xf:select1 id="select-val-type" ref="@value_type" appearance="minimal" incremental="true">
-                            <xf:label>value type</xf:label>
-                            <xf:hint>a Hint for this control</xf:hint>
-                            <xf:help>help for select1</xf:help>
-                            <xf:alert>invalid</xf:alert>
-                            <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>  
-                        
-                        <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
-                            <xf:label>render type</xf:label>
-                            <xf:hint>a Hint for this control</xf:hint>
-                            <xf:help>help for select1</xf:help>
-                            <xf:alert>invalid</xf:alert>
-                            <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>  
-                        
+                        <xf:group appearance="bf:verticalTable">
+                            <xf:input id="field-name" ref="@name">
+                                <xf:label>field title</xf:label>
+                                <xf:hint>Must be an existing title</xf:hint>
+                                <xf:alert>invalid field name</xf:alert>
+                                <xf:help>help with name of field</xf:help>
+                            </xf:input> 
+                            
+                            <xf:input id="label-name" ref="@label">
+                                <xf:label>label</xf:label>
+                                <xf:hint>Label used for this field</xf:hint>
+                                <xf:alert>invalid label name</xf:alert>
+                                <xf:help>help with label of field</xf:help>
+                            </xf:input> 
+                            
+                            <xf:input id="input-req-field" ref="@required">
+                                <xf:label>required</xf:label>
+                                <xf:hint>Enabling this means it is a required field</xf:hint>
+                                <xf:alert>invalid null boolean</xf:alert>
+                            </xf:input>  
+                            
+                             <xf:select1 id="select-val-type" ref="@value_type" appearance="minimal" incremental="true">
+                                 <xf:label>value type</xf:label>
+                                 <xf:hint>a Hint for this control</xf:hint>
+                                 <xf:help>help for select1</xf:help>
+                                 <xf:alert>invalid</xf:alert>
+                                 <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
+                                     <xf:label ref="."></xf:label>
+                                     <xf:value ref="."></xf:value>
+                                 </xf:itemset>
+                             </xf:select1>  
+                             
+                             <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
+                                 <xf:label>render type</xf:label>
+                                 <xf:hint>a Hint for this control</xf:hint>
+                                 <xf:help>help for select1</xf:help>
+                                 <xf:alert>invalid</xf:alert>
+                                 <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
+                                     <xf:label ref="."></xf:label>
+                                     <xf:value ref="."></xf:value>
+                                 </xf:itemset>
+                             </xf:select1>  
+                        </xf:group>
+                        <!-- 
+                        !+FIX_THIS (ao, Dec 11th 2012) Roles are currently unusable
                         <xf:select ref="show/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
-                            <xf:label>show modes</xf:label>
-                            <xf:itemset id="showmodes"nodeset="instance('i-modes')/modes/mode">
-                                <xf:label ref="node()"></xf:label>
-                                <xf:value ref="node()"></xf:value>
-                            </xf:itemset>                           
-                        </xf:select> 
-                        
+                             <xf:label>show modes</xf:label>
+                             <xf:itemset id="showmodes"nodeset="instance('i-modes')/modes/mode">
+                                 <xf:label ref="."></xf:label>
+                                 <xf:value ref="."></xf:value>
+                             </xf:itemset>                           
+                        </xf:select>        
+                        <xf:group appearance="minimal">
+                           <table>
+                               <thead>
+                                   <tr>                                
+                                       <th>
+                                           role
+                                       </th>                                
+                                       <th>
+                                           actions
+                                       </th>                               
+                                   </tr>
+                               </thead>
+                               <tbody id="r-shownfieldattrs" xf:repeat-nodeset="show/roles/role" startindex="1">
+                                   <tr>                                
+                                       <td style="color:steelblue;font-weight:bold;">
+                                            <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                <xf:label>a select1 combobox</xf:label>
+                                               <xf:hint>Edit this role</xf:hint>
+                                               <xf:help>Type a Role</xf:help>
+                                               <xf:alert>invalid role</xf:alert>
+                                                <xf:itemset nodeset="instance()/roles/role">
+                                                    <xf:label ref="."></xf:label>
+                                                    <xf:value ref="."></xf:value>
+                                                </xf:itemset>
+                                            </xf:select1>                                           
+                                       </td>                                           
+                                       <td style="color:red;">                                           
+                                           <xf:trigger>
+                                               <xf:label>delete</xf:label>
+                                               <xf:action>
+                                                   <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                               </xf:action>
+                                           </xf:trigger>   
+                                       </td>                            
+                                   </tr>
+                               </tbody>
+                           </table>    
+                            <xf:trigger>
+                               <xf:label>insert</xf:label>
+                               <xf:action>
+                                   <xf:insert nodeset="show/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                               </xf:action>
+                           </xf:trigger> 
+                        </xf:group>                         
+                
                         <xf:select ref="hide/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
-                            <xf:label>hide modes</xf:label>
-                            <xf:itemset id="hidemodes"nodeset="instance('i-modes')/modes/mode">
-                                <xf:label ref="node()"></xf:label>
-                                <xf:value ref="node()"></xf:value>
-                            </xf:itemset>                           
-                        </xf:select>                         
-                        
+                             <xf:label>hide modes</xf:label>
+                             <xf:itemset id="hidemodes"nodeset="instance('i-modes')/modes/mode">
+                                 <xf:label ref="node()"></xf:label>
+                                 <xf:value ref="node()"></xf:value>
+                             </xf:itemset>                           
+                        </xf:select>                 
+                        <xf:group appearance="minimal">
+                           <table>
+                               <thead>
+                                   <tr>                                
+                                       <th>
+                                           role
+                                       </th>                                
+                                       <th>
+                                           actions
+                                       </th>                               
+                                   </tr>
+                               </thead>
+                               <tbody id="r-hiddenfieldattrs" xf:repeat-nodeset="hide/roles/role">
+                                   <tr>                                
+                                       <td style="color:steelblue;font-weight:bold;">
+                                            <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                <xf:label>a select1 combobox</xf:label>
+                                               <xf:hint>Edit this role</xf:hint>
+                                               <xf:help>Type a Role</xf:help>
+                                               <xf:alert>invalid role</xf:alert>
+                                                <xf:itemset nodeset="instance()/roles/role">
+                                                    <xf:label ref="."></xf:label>
+                                                    <xf:value ref="."></xf:value>
+                                                </xf:itemset>
+                                            </xf:select1>                                           
+                                       </td>                                           
+                                       <td style="color:red;">                                           
+                                           <xf:trigger>
+                                               <xf:label>delete</xf:label>
+                                               <xf:action>
+                                                   <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                               </xf:action>
+                                           </xf:trigger>   
+                                       </td>                            
+                                   </tr>
+                               </tbody>
+                           </table>    
+                            <xf:trigger>
+                               <xf:label>insert</xf:label>
+                               <xf:action>
+                                   <xf:insert nodeset="hide/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                               </xf:action>
+                           </xf:trigger> 
+                        </xf:group>                          
+                        -->
                         <br/>
                         <xf:group appearance="bf:horizontalTable">
                             <xf:label/>

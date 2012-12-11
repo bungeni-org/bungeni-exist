@@ -60,7 +60,7 @@ return
                     <xf:action ev:event="xforms-ready">
                         <xf:message level="ephemeral">Default: show about</xf:message>
                         <xf:action ev:event="xforms-value-changed">
-                            <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
+                            <!--xf:dispatch name="DOMActivate" targetid="overviewTrigger"/-->
                         </xf:action>
                     </xf:action>
                 </xf:model>

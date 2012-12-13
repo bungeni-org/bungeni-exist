@@ -9,6 +9,7 @@
     <xsl:include href="split_attr_tags.xsl"/>
     <xsl:include href="split_attr_roles.xsl"/>
     <xsl:output indent="yes"/>
+    <xsl:param name="docname"/>
     <xsl:template match="comment()">
         <xsl:copy/>
     </xsl:template>
@@ -20,9 +21,22 @@
     </xsl:template>
     <xsl:template match="workflow">
         <xsl:copy>
-            <xsl:variable name="fname" select="tokenize(base-uri(),'/')"/>
-            <xsl:variable name="wfname" select="tokenize($fname[last()],'\.')"/>
-            <xsl:attribute name="name" select="$wfname[1]"/>
+            <!-- Option to pass-in the form-id as a parameter from XQuery -->
+            <xsl:variable name="wfname">
+                <xsl:choose>
+                    <xsl:when test="not($docname)">
+                        <xsl:variable name="filename" select="tokenize(base-uri(),'/')"/>
+                        <xsl:variable name="wfname" select="tokenize($filename[last()],'\.')"/>
+                        <xsl:value-of select="$wfname[1]"/>
+                    </xsl:when>
+                    <!-- XQuery transform passed in a param -->
+                    <xsl:when test="$docname">
+                        <xsl:variable name="wfname" select="tokenize($docname[last()],'\.')"/>
+                        <xsl:value-of select="$wfname[1]"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:attribute name="name" select="$wfname"/>
             <xsl:apply-templates select="@*" mode="preserve"/>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
@@ -33,6 +47,21 @@
     <xsl:template mode="preserve" match="@tags | @roles | @source | @destination | @permission_actions"/>
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
+    </xsl:template>
+    <!-- 
+        !+NOTE (ao, 13th Dec 2012)
+        Adding an empty @permissions_from_state attribute for XForms
+        XForms cannot provide a control for a node/attribute that do not provide 
+        the node/attribute in the first place. This has to be replicated on entire document.
+    -->
+    <xsl:template match="state">
+        <xsl:copy>
+            <xsl:if test="not(@permissions_from_state)">
+                <xsl:attribute name="permissions_from_state"/>
+            </xsl:if>
+            <xsl:apply-templates select="@*" mode="preserve"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
     </xsl:template>
     <xsl:template match="@source">
         <xsl:element name="sources">

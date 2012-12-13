@@ -29,7 +29,7 @@ return
                     </xf:instance>
 
                     <xf:submission id="s-query-workflows"
-                                    resource="{$contextPath}/rest/db/config_editor/views/list-workflows.xql"
+                                    resource="{$contextPath}/rest/db/config_editor/views/about.html"
                                     method="get"
                                     replace="embedHTML"
                                     targetid="embedInline"
@@ -50,6 +50,7 @@ return
                             <currentView/>
                             <currentDoc/>
                             <currentNode/>
+                            <currentAttr/>
                             <currentField/>
                             <showTab/>
                             <selectedTasks/>
@@ -60,7 +61,7 @@ return
                     <xf:action ev:event="xforms-ready">
                         <xf:message level="ephemeral">Default: show about</xf:message>
                         <xf:action ev:event="xforms-value-changed">
-                            <!--xf:dispatch name="DOMActivate" targetid="overviewTrigger"/-->
+                            <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
                         </xf:action>
                     </xf:action>
                 </xf:model>
@@ -77,13 +78,22 @@ return
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-form.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;tab=',instance('i-vars')/showTab)"/>
                         </xf:load>
                     </xf:action>
-                </xf:trigger>        
+                </xf:trigger>   
+                
+                <xf:trigger id="viewWorkflow">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-workflow.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;tab=',instance('i-vars')/showTab)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                 
                 
                 <xf:trigger id="view">
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-',instance('i-vars')/currentView,'.xql#xforms?node=',instance('i-vars')/currentNode,'&amp;tab=',instance('i-vars')/showTab)"/>
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-',instance('i-vars')/currentView,'.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;node=',instance('i-vars')/currentNode,'&amp;attr=',instance('i-vars')/currentAttr,'&amp;tab=',instance('i-vars')/showTab)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>                  
@@ -168,6 +178,9 @@ return
                 <xf:input id="currentNode" ref="instance('i-vars')/currentNode">
                     <xf:label>This is just a dummy placeholder by JS</xf:label>
                 </xf:input>
+                <xf:input id="currentAttr" ref="instance('i-vars')/currentAttr">
+                    <xf:label>This is just a value placeholder by JS</xf:label>
+                </xf:input>                
                 <xf:input id="currentField" ref="instance('i-vars')/currentField">
                     <xf:label>This is just a random placeholder by JS</xf:label>
                 </xf:input>
@@ -185,7 +198,7 @@ return
                 <div id="left-content">
                     <div dojoType="dijit.Menu" id="navMenu">
                         {menu:get-types('search')} 
-                        <div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','roles','none']);">Roles</div>                          
+                        <div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','custom.xml','roles','none','none']);">Roles</div>                          
                         <xhtml:div dojoType="dijit.MenuSeparator"/> 
                         <div dojoType="dijit.PopupMenuItem"> 
                             <span>
@@ -215,7 +228,7 @@ return
                         <div id="embedDialog"></div>
                     </div>
     
-                    <div id="embedInline" style="width:100%;height:660px;overflow: auto;"></div>
+                    <div id="embedInline" style="width:100%;height:760px;overflow: auto;"></div>
                     <!-- ######################### Views end ################################## --> 
                 </div>
             </div>            
@@ -273,9 +286,18 @@ return
                 embed('viewForm','embedInline');
             }); 
             
-            var editSubscriber = dojo.subscribe("/view", function(view,node,tab){
+            var editSubscriber = dojo.subscribe("/workflow/view", function(doc,node,tab){
+                fluxProcessor.setControlValue("currentDoc",doc);       
+                fluxProcessor.setControlValue("currentNode",node);  
+                fluxProcessor.setControlValue("showTab",tab);
+                embed('viewWorkflow','embedInline');
+            });             
+            
+            var editSubscriber = dojo.subscribe("/view", function(view,doc,node,attr,tab){
                 fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
                 fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
                 fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
                 embed('view','embedInline');
             });            

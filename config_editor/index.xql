@@ -87,7 +87,25 @@ return
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-workflow.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;tab=',instance('i-vars')/showTab)"/>
                         </xf:load>
                     </xf:action>
+                </xf:trigger>         
+                
+                <xf:trigger id="addPopup">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/add-',instance('i-vars')/currentView,'.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;node=',instance('i-vars')/currentNode,'&amp;attr=',instance('i-vars')/currentAttr,'&amp;tab=',instance('i-vars')/showTab)"/>
+                        </xf:load>
+                    </xf:action>
                 </xf:trigger>                 
+                
+                <xf:trigger id="editPopup">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/edit-',instance('i-vars')/currentView,'.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;node=',instance('i-vars')/currentNode,'&amp;attr=',instance('i-vars')/currentAttr,'&amp;tab=',instance('i-vars')/showTab)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>     
                 
                 <xf:trigger id="view">
                     <xf:label>new</xf:label>
@@ -300,7 +318,25 @@ return
                 fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
                 fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
                 embed('view','embedInline');
-            });            
+            });   
+            
+            var editSubscriber = dojo.subscribe("/add", function(view,doc,node,attr,tab){
+                fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
+                fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
+                fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
+                embed('addPopup','embedDialog');
+            });              
+            
+            var editSubscriber = dojo.subscribe("/edit", function(view,doc,node,attr,tab){
+                fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
+                fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
+                fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
+                embed('editPopup','embedDialog');
+            });             
             
             var addSubscriber = dojo.subscribe("/field/add", function(form,field){
                 fluxProcessor.setControlValue("currentDoc",form);

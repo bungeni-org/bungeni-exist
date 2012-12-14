@@ -103,7 +103,7 @@ return
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
-                 <xf:model>
+                 <xf:model id="m-workflow">
                     <xf:instance id="i-workflowui" src="{local:fn-workflow()}"/>                   
 
                     <xf:bind nodeset=".">

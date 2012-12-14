@@ -41,7 +41,9 @@
         <facet ref=".none"/>
     </state>
     <transition title="Undefined Title" condition="undefined_condition" trigger="automatic" order="0">
-        <sources originAttr="source"/>
+        <sources originAttr="source">
+            <source/>
+        </sources>
         <destinations originAttr="destination">
             <destination/>
         </destinations>

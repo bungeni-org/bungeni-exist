@@ -20,9 +20,10 @@ declare function local:transition-sources($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     let $attrname := request:get-parameter("node", "nothing")
 
-    for $transition at $pos in local:getMatchingTasks()/transition[./sources/source[. = $attrname]]
-        return
-            local:render-row($doctype, $transition)
+    for $transition at $pos in local:getMatchingTasks()/transition
+    where $transition/sources/source[. = $attrname]
+    return
+        local:render-row($doctype, $attrname, $pos, $transition)
 };
 
 (: creates the output for all document transitions destinations :)
@@ -30,15 +31,16 @@ declare function local:transition-destinations($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     let $attrname := request:get-parameter("node", "nothing")
 
-    for $transition at $pos in local:getMatchingTasks()/transition[./destinations/destination[. = $attrname]]
-        return
-            local:render-row($doctype, $transition)
+    for $transition at $pos in local:getMatchingTasks()/transition
+    where $transition/destinations/destination[. = $attrname]
+    return
+        local:render-row($doctype, $attrname, $pos, $transition)
 };
 
 (: reused to render the destination and source transition tables below :)
-declare function local:render-row($doctype as xs:string, $transition as node()) as node() * {
+declare function local:render-row($doctype as xs:string, $nodename as xs:string, $pos as xs:integer, $transition as node()) as node() * {
     <tr>
-        <td><a href="javascript:dojo.publish('/view',['feature','{$doctype}','none','{data($transition/@title)}']);">{data($transition/@title)}</a></td>
+        <td><a href="javascript:dojo.publish('/edit',['transition','{$doctype}','{$nodename}','{$pos}','none']);">{data($transition/@title)}</a></td>
         <td>{data($transition/@trigger)}</td>
         <td>{data($transition/@order)}</td>
     </tr>
@@ -190,7 +192,7 @@ return
                                             </tr>
                                             {local:transition-sources($docname)}
                                         </table> 
-                                        <a href="#">add transition</a>                                 
+                                        <a href="javascript:dojo.publish('/add',['transition','{$docname}','{$nodename}','{$attr}','none']);">add transition</a>                                 
                                     </div>
                                     <div style="float:right;width:49%;">
                                         <h3>Destinations</h3>
@@ -202,7 +204,6 @@ return
                                             </tr>
                                             {local:transition-destinations($docname)}
                                         </table>     
-                                        <a href="#">add transition</a>
                                     </div>                                    
                                 </div>
                                 

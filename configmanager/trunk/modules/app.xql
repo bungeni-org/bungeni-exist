@@ -4,6 +4,8 @@ module namespace app="http://exist-db.org/apps/configmanager/templates";
 declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
+import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
+import module namespace config = "http://exist-db.org/xquery/apps/config" at "config.xqm";
 
 (:~
  : This is a sample templating function. It will be called by the templating module if
@@ -20,8 +22,8 @@ declare function app:test($node as node(), $model as map(*)) {
 
 declare 
     %templates:wrap %templates:default("active", "search") 
-function app:menu-get($node as node(), $model as map(*), $active as xs:string) {
-      <xhtml:div dojoType="dijit.PopupMenuItem"> 
+function app:get-types-menu($node as node(), $model as map(*), $active as xs:string) {
+     <xhtml:div dojoType="dijit.PopupMenuItem"> 
         <xhtml:span>
             Types            
         </xhtml:span>
@@ -29,23 +31,34 @@ function app:menu-get($node as node(), $model as map(*), $active as xs:string) {
             <xhtml:div dojoType="dijit.MenuItem" onClick="alert('new!');">add new</xhtml:div>
             <xhtml:div dojoType="dijit.MenuSeparator"/>
             {
-                for $docu in doc(concat($cfg:CONFIGS-COLLECTION,'/types.xml'))/types/*
+                for $docu in doc(concat($appconfig:CONFIGS-FOLDER,'/types.xml'))/types/*
                 return    
                     <xhtml:div dojoType="dijit.PopupMenuItem">
                         <xhtml:span>{data($docu/@name)}</xhtml:span>
                         <xhtml:div dojoType="dijit.Menu" id="formsMenu{data($docu/@name)}">
                             <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/form/view',['{data($docu/@name)}','details']);">form</xhtml:div>
-                            <xhtml:div dojoType="dijit.MenuItem">workflows</xhtml:div>
+                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/workflow/view',['{data($docu/@name)}.xml','workflow','documentDiv']);">workflow</xhtml:div>
                             <xhtml:div dojoType="dijit.MenuItem">workspace</xhtml:div>
                         </xhtml:div>
                     </xhtml:div>
             }      
         </xhtml:div>
-    </xhtml:div>              
+     </xhtml:div>      
 };
 
+(:
+
+This is the main XFOrms declaration in index.html 
+
+:)
 declare function app:xforms-declare($node as node(), $model as map(*)) {
-        <div style="display:none;" xmlns="http://www.w3.org/1999/xhtml">
+     let $contextPath := request:get-context-path()
+     return      
+        <div style="display:none;" 
+            xmlns="http://www.w3.org/1999/xhtml"  
+            xmlns:xf="http://www.w3.org/2002/xforms"
+            xmlns:ev="http://www.w3.org/2001/xml-events" 
+            >
              <xf:model id="modelone">
                     <xf:instance>
                         <data xmlns="">
@@ -54,21 +67,6 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
 
-                    <xf:submission id="s-query-workflows"
-                                    resource="{$contextPath}/rest/db/config_editor/views/list-workflows.xql"
-                                    method="get"
-                                    replace="embedHTML"
-                                    targetid="embedInline"
-                                    ref="instance()"
-                                    validate="false">
-                        <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">Request for about page successful</xf:message>
-                        </xf:action>                                    
-                        <xf:action ev:event="xforms-submit-error">
-                            <xf:message>Submission failed</xf:message>
-                        </xf:action>
-                    </xf:submission>                        
-                    
                     <xf:instance id="i-vars">
                         <data xmlns="">
                             <default-duration>120</default-duration>
@@ -85,17 +83,17 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
 
                     <xf:action ev:event="xforms-ready">
                         <xf:message level="ephemeral">Default: show about</xf:message>
-                        <xf:action ev:event="xforms-value-changed">
+                        <!--<xf:action ev:event="xforms-value-changed">
                             <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
-                        </xf:action>
+                        </xf:action>-->
                     </xf:action>
                 </xf:model>
-
+                <!--
                 <xf:trigger id="overviewTrigger">
                     <xf:label>Overview</xf:label>
                     <xf:send submission="s-query-workflows"/>
                 </xf:trigger>                  
-                
+                -->
                 <xf:trigger id="viewForm">
                     <xf:label>new</xf:label>
                     <xf:action>
@@ -203,3 +201,137 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
             </div>
 };
 
+declare function app:inject-footer($node as node(), $model as map(*)) {
+        <script type="text/javascript" defer="defer">
+            <!--
+            var xfReadySubscribers;
+
+            function embed(targetTrigger,targetMount){
+                console.debug("embed",targetTrigger,targetMount);
+                if(targetMount == "embedDialog"){
+                    dijit.byId("taskDialog").show();
+                } else if(targetMount == "embedDialogDB") {
+                    dijit.byId("dbDialog").show();
+                } else if(targetMount == "embedDialogForms") {
+                    dijit.byId("formsDialog").show();
+                }
+                var targetMount =  dojo.byId(targetMount);
+
+                fluxProcessor.dispatchEvent(targetTrigger);
+
+                if(xfReadySubscribers != undefined) {
+                    dojo.unsubscribe(xfReadySubscribers);
+                    xfReadySubscribers = null;
+                }
+
+                xfReadySubscribers = dojo.subscribe("/xf/ready", function(data) {
+                    dojo.fadeIn({
+                        node: targetMount,
+                        duration:100
+                    }).play();
+                });
+                dojo.fadeOut({
+                    node: targetMount,
+                    duration:100,
+                    onBegin: function() {
+                        fluxProcessor.dispatchEvent(targetTrigger);
+                    }
+                }).play();
+
+            }
+            
+            var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
+                fluxProcessor.setControlValue("currentDoc",doc);                
+                fluxProcessor.setControlValue("showTab",tab);
+                embed('viewForm','embedInline');
+            }); 
+            
+            var editSubscriber = dojo.subscribe("/workflow/view", function(doc,node,tab){
+                fluxProcessor.setControlValue("currentDoc",doc);       
+                fluxProcessor.setControlValue("currentNode",node);  
+                fluxProcessor.setControlValue("showTab",tab);
+                embed('viewWorkflow','embedInline');
+            });             
+            
+            var editSubscriber = dojo.subscribe("/view", function(view,doc,node,attr,tab){
+                fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
+                fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
+                fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
+                embed('view','embedInline');
+            });            
+            
+            var addSubscriber = dojo.subscribe("/field/add", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                embed('addField','embedDialog');
+            });
+            
+            var editSubscriber = dojo.subscribe("/field/edit", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                embed('editField','embedDialog');
+            });            
+            
+            var moveUpSubscriber = dojo.subscribe("/field/up", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                fluxProcessor.dispatchEvent('moveFieldUp');
+            });
+            
+            var moveDownSubscriber = dojo.subscribe("/field/down", function(form,field){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentField",field);
+                fluxProcessor.dispatchEvent('moveFieldDown');
+            });   
+            
+            var deleteSubscriber = dojo.subscribe("/field/delete", function(form,field){
+                var check = confirm("Really delete this field?");
+                if (check == true){
+                    fluxProcessor.setControlValue("currentDoc",form);
+                    fluxProcessor.setControlValue("currentField",field);
+                    fluxProcessor.dispatchEvent('deleteField');
+                }            
+            }); 
+            
+            var deleteSubscriber = dojo.subscribe("/role/delete", function(form,field){
+                var check = confirm("Really delete this role?");
+                if (check == true){
+                    fluxProcessor.setControlValue("currentDoc",form);
+                    fluxProcessor.setControlValue("currentField",field);
+                    fluxProcessor.dispatchEvent('deleteRole');
+                }            
+            });            
+
+            var editSubscriber = dojo.subscribe("/role/edit", function(form,node){
+                fluxProcessor.setControlValue("currentDoc",form);
+                fluxProcessor.setControlValue("currentNode",node);
+                embed('editRole','embedDialog');
+            }); 
+
+            var refreshSubcriber = dojo.subscribe("/wf/refresh", function(){
+                fluxProcessor.dispatchEvent("overviewTrigger");
+            });           
+
+            function passValuesToXForms(){
+                var result="";
+                dojo.query("input",dojo.byId("listingTable")).forEach(
+                function (node){
+                    if(dijit.byId(node.id).checked && node.value != undefined){
+                        result = result + " " + node.value;
+                    }
+                });
+                fluxProcessor.setControlValue("selectedTaskIds",result);
+            }
+            
+            dojo.addOnLoad(function(){
+                dojo.subscribe("/xf/ready", function() {
+                    fluxProcessor.skipshutdown=true;
+                });
+            });            
+
+            // -->
+        </script>
+
+};

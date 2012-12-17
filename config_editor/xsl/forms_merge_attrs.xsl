@@ -21,6 +21,7 @@
     
     <xsl:template match="ui">
         <ui>
+            
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./roles" />
             </xsl:call-template>
@@ -30,24 +31,40 @@
         </ui>
     </xsl:template>
     
-    <xsl:template match="show | hide">
-        <xsl:element name="{name()}">
-            <xsl:if test="./modes">
-                <xsl:call-template name="merge_tags">
-                    <xsl:with-param name="elemOriginAttr" select="./modes" />
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:if test="./roles">
-                <xsl:call-template name="merge_tags">
-                    <xsl:with-param name="elemOriginAttr" select="./roles" />
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
+    <xsl:template match="field">
+        <xsl:copy>
+        <xsl:apply-templates select="@*"/>
+        <xsl:variable name="show-modes" select="data(./*[@show='true']/local-name())" />     
+        <xsl:variable name="show-roles" select="data(distinct-values(./*[@show='true']/roles/role))" />     
+        <xsl:variable name="hide-modes" select="data(./*[@show='false']/local-name())" />     
+        <xsl:variable name="hide-roles" select="data(distinct-values(./*[@show='false']/roles/role))" />
+        <xsl:if test="$show-modes != ''">
+            <show modes="{$show-modes}">
+                <xsl:choose>
+                    <xsl:when test="contains($show-roles, 'ALL')">
+                        
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="roles" select="$show-roles" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </show>
+        </xsl:if>
+        <xsl:if test="$hide-modes != ''">
+            <hide modes="{$hide-modes}">
+                <xsl:choose>
+                    <xsl:when test="contains($hide-roles, 'ALL')">
+                        
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="roles" select="$hide-roles" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </hide>
+        </xsl:if>
+        </xsl:copy>
+        
     </xsl:template>
-    
     <xsl:template match="*[@originAttr]"></xsl:template>
-    
-    
     
 </xsl:stylesheet>

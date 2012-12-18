@@ -103,7 +103,18 @@
     </xsl:variable>
     
     <xsl:variable name="internal-doc-uri">
-        <xsl:variable name="doc-number" select="data(/ontology/document/docId)" />
+        <xsl:variable name="doc-number">
+            <xsl:choose>
+                <!-- attachments do not have doc_id but have the same structure as parliamentaryitems
+                     so, this condition makes it possible to build valid URL -->
+                <xsl:when test="/ontology/document/docType/value eq 'Attachment'">
+                    <xsl:value-of select="data(/ontology/document/attachmentId)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="data(/ontology/document/docId)"/>
+                </xsl:otherwise>
+            </xsl:choose>    
+        </xsl:variable>
         <xsl:sequence  
             select="bctypes:get_doc_uri(
             $country,

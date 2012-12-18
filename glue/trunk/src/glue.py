@@ -680,7 +680,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     return (out_files[0], True)
             # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
             # from queue programmatically
-            elif pipe_type == "attachment" or pipe_type == "signatory":
+            elif pipe_type == "signatory":
                 # Handle un-pipelined docs
                 return (None, None)
             else:
@@ -703,7 +703,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     on_xml_file = "on_" + truncated_prefix
                     out_files = self.input_params["transformer"].run(
                          input_file_path,
-                         self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
+                         self.input_pazrams["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                          pipe_path
                          )
                 else:

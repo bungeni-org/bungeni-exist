@@ -549,11 +549,21 @@
     </xsl:template>
     
     <xsl:template match="head">
-       <eventOf isA="TLCObject">
-            <refersTo href="!+FIX_THIS_PUT_SOURCE_URI_HERE" />
-            <xsl:apply-templates />
-       </eventOf>    
-    </xsl:template>
+        <xsl:choose>
+            <xsl:when test=".[parent::document[docType/value eq 'Attachment']]">
+                <attachmentOf isA="TLCObject">
+                    <refersTo href="!+FIX_THIS_PUT_SOURCE_URI_HERE" />
+                    <xsl:apply-templates />
+                </attachmentOf>                    
+            </xsl:when>
+            <xsl:otherwise>
+                <eventOf isA="TLCObject">
+                    <refersTo href="!+FIX_THIS_PUT_SOURCE_URI_HERE" />
+                    <xsl:apply-templates />
+                </eventOf>                   
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template> 
     
     
     

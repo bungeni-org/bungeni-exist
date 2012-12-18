@@ -190,6 +190,7 @@
     
     <xsl:template match="field[@name='status']">
         <status isA="TLCTerm">
+            <xsl:attribute name="showAs" select="@displayAs"/>
             <value type="xs:string">
                 <xsl:value-of select="." />
             </value>

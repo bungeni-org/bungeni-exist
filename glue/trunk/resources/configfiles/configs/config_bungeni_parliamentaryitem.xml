@@ -30,6 +30,7 @@
                 <parameter name="for-parliament" />
                 <parameter name="type-mappings">
                     <value>
+                        <map from="annex" uri-name="Attachment" element-name="annex" />
                         <map from="question" uri-name="Question" element-name="question" />
                         <map from="bill" uri-name="Bill" element-name="bill" />
                         <map from="agenda_item" uri-name="AgendaItem" element-name="agendaItem" />

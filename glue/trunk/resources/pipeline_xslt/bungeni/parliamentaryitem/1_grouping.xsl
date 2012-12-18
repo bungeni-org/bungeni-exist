@@ -97,16 +97,18 @@
                     owner" />
                 
                 
-                <!-- for <event> -->
+                <!-- for <event> and <attachment> -->
                 <xsl:copy-of select="head" />    
                 
                 <xsl:copy-of select="field[
                     @name='status' or 
+                    @name='mimetype' or 
                     @name='title' or 
                     @name='long_title' or 
                     @name='body' or 
                     @name='language'  or 
-                    @name='owner_id' or
+                    @name='owner_id' or 
+                    @name='attachment_id' or 
                     @name='type'
                     ]" />
                 

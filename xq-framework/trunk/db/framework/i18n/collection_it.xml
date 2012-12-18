@@ -87,6 +87,7 @@
     <msg key="listing-search">ricerca a testo</msg>
     <msg key="sort-by">ordinamento</msg>
     <msg key="filter-by">filtrare</msg>
+    <msg key="meeting-type">tipo di reunione</msg>
     <msg key="btn-search">ricerca</msg>
     <msg key="btn-adv-search">ricerca avanzata »</msg>
     <msg key="doc-question">interpellanze</msg>
@@ -98,6 +99,7 @@
     <msg key="doc-groupsitting">seduta</msg>
     <msg key="doc-calendar">calendario sedute</msg>
     <msg key="doc-event">evento</msg>
+    <msg key="doc-attachment">attaccamento</msg>
     <msg key="doc-political-group">gruppo politico</msg>
     <msg key="doc-office">ufficio</msg>
     <msg key="doc-ministry">ministero</msg>
@@ -134,7 +136,7 @@
     <msg key="tab-history">storia</msg>
     <msg key="tab-details">dettagli</msg>
     <msg key="tab-assigned">assegnato gruppi</msg>
-    <msg key="tab-documents">appendice</msg>
+    <msg key="tab-documents">documentazione</msg>
     <msg key="tab-type">tipo</msg>
     <msg key="tab-desc">descrizione</msg>
     <msg key="tab-date">data</msg>
@@ -147,7 +149,8 @@
     <msg key="addr-country">paese</msg>
     <msg key="addr-phone">numero/i di telefono</msg>
     <msg key="addr-fax">numero/i di fax</msg>
-    <msg key="addr-email">e-mail</msg>     
+    <msg key="addr-email">e-mail</msg>
+    <msg key="notes">note</msg>    
     <!-- PAGINATION -->
     <msg key="page">Pagina</msg>
     <msg key="pageof">di</msg>
@@ -185,6 +188,10 @@
     <msg key="date-from">da</msg>
     <msg key="date-to">al</msg>
     <msg key="btn-filter">filtrare</msg>
+    <msg key="any">-- qualsiasi --</msg>
+    <msg key="plenary">plenario</msg>
+    <msg key="committee">comitato</msg>
+    <msg key="joint_committee">comitato misto</msg>    
     <!-- PARLIAMENT INFO -->
     <msg key="parl-fullname">parlamento nome</msg>
     <msg key="parl-shortname">nome breve</msg>

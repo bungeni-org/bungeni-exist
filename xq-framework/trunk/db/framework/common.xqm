@@ -423,6 +423,14 @@ declare function cmn:get-acl-permission-as-attr($doctype as xs:string, $filter-n
     return cmn:get-acl-permission-attr($acl-perm)
 };
 
+(:
+    similar to cmn:get-acl-permission-as-attr() only that it returns a node
+:)
+declare function cmn:get-acl-permission-as-node($doctype as xs:string, $filter-name as xs:string) {
+    let $acl-perm := cmn:get-acl-doctype-permissions($doctype,$filter-name)
+    return $acl-perm
+};
+
 (:~
 : Returns the input filters corresponding permission as a attribute condition string
 : given the @role

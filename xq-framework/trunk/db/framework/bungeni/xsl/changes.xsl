@@ -103,7 +103,9 @@
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:when test="bu:type/bu:value eq 'annex'">
-                                                    <xsl:value-of select="bu:title"/>:
+                                                    <a href="{lower-case($doc-type)}-attachment?uri={$doc-uri}@/{bu:auditFor/bu:value}{bu:attachmentId}">
+                                                        <xsl:value-of select="bu:title"/>
+                                                    </a>:
                                                     <i18n:text key="download">download(nt)</i18n:text>&#160;<a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
                                                         <xsl:value-of select="bu:name"/>
                                                     </a>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -43,6 +43,7 @@
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
     <xsl:param name="sortby"/>
     <xsl:param name="listing-tab"/>
+    <xsl:param name="meeting-type"/>
     <xsl:param name="whatson-view"/>
     
     <!-- CONVENIENCE VARIABLES -->
@@ -74,7 +75,7 @@
                             <xsl:if test="@id eq $whatson-view">
                                 <xsl:attribute name="class">selected</xsl:attribute>
                             </xsl:if>
-                            <a href="whatson?tab={$listing-tab}&amp;showing={@id}">
+                            <a href="whatson?tab={$listing-tab}&amp;showing={@id}&amp;mtype={$meeting-type}">
                                 <i18n:text key="{@id}">whatsonview(nt)</i18n:text>
                             </a>
                         </li>
@@ -105,14 +106,32 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">             
                 <!-- container for holding listings -->
                 <div id="doc-listing" class="acts">
-                    <div class="list-header">
-                        <i18n:text key="filter-by">filter by(nt)</i18n:text>: 
-                        <!-- call the filters -->
-                        <select>
-                            <option value="plenary">plenary</option>
-                            <option value="comm">committee</option>
-                            <option value="jcomm">joint committee</option>
-                        </select>
+                    <div class="list-header whatson-filter">
+                        <form method="GET" action="whatson" id="ui_search" name="search_sort" autocomplete="off">
+                            <i18n:text key="meeting-type">meeting type(nt)</i18n:text>: 
+                            <!-- call the filters -->
+                            <input name="tab" type="hidden" value="{$listing-tab}"/>
+                            <input name="showing" type="hidden" value="{$whatson-view}"/>
+                            <select name="mtype" id="mtype">
+                                <xsl:for-each select="/docs/paginator/meetingtypes/meetingtype">
+                                    <xsl:choose>
+                                        <xsl:when test=". eq $meeting-type">
+                                            <option value="{.}" selected="selected">
+                                                <i18n:text key="{.}">
+                                                    <xsl:value-of select="."/>(nt)</i18n:text>
+                                            </option>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <option value="{.}">
+                                                <i18n:text key="{.}">
+                                                    <xsl:value-of select="."/>(nt)</i18n:text>
+                                            </option>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:for-each>
+                            </select>
+                            <!--input value="i18n(btn-submit,submit)" type="submit"/-->
+                        </form>
                     </div>
                     <!-- 
                         !+LISTING_GENERATOR
@@ -141,6 +160,7 @@
                             <p id="range-cal"/>
                             <form class="whatson-form" id="whatson-filter-form" name="whatson_filter_form" method="GET" action="whatson">
                                 <input type="hidden" value="{$listing-tab}" name="tab"/>
+                                <input type="hidden" value="{$meeting-type}" name="mtype"/>
                                 <input type="hidden" value="none" name="showing"/>
                                 <input type="hidden" value="{substring-before(//range/start,'T')}" name="f" id="hidden-start"/>
                                 <input type="hidden" value="{substring-before(//range/end,'T')}" name="t" id="hidden-end"/>

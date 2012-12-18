@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -31,40 +31,116 @@
             <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div class="mem-profile">
-                        <div class="doc-table-wrapper">
-                            <table class="listing">
-                                <tr>
-                                    <th class="fbtd">office</th>
-                                    <th class="fbtd">type</th>
-                                    <th class="fbtd">title</th>
-                                    <th class="fbtd">from</th>
-                                    <th class="fbtd">to</th>
-                                </tr>
-                                <tr class="items">
-                                    <td class="fbt bclr">XIV-PARL - Bungeni Parliament</td>
-                                    <td class="fbt bclr">parliament</td>
-                                    <td class="fbt bclr">member</td>
-                                    <td class="fbt bclr">February 23, 2011</td>
-                                    <td class="fbt bclr">March 14, 2012</td>
-                                </tr>
-                                <tr class="items">
-                                    <td class="fbt bclr">Com_02 - Parliamentary Committee P1_02</td>
-                                    <td class="fbt bclr">committee</td>
-                                    <td class="fbt bclr">chairperson</td>
-                                    <td class="fbt bclr">February 23, 2011</td>
-                                    <td class="fbt bclr">March 14, 2012</td>
-                                </tr>
-                                <tr class="items">
-                                    <td class="fbt bclr">PolGrup_02 - Political Group P1_02 </td>
-                                    <td class="fbt bclr">political-group</td>
-                                    <td class="fbt bclr">secretary</td>
-                                    <td class="fbt bclr">February 23, 2011</td>
-                                    <td class="fbt bclr">March 14, 2012</td>
-                                </tr>
-                            </table>
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div id="toggle-i18n" class="hide">
+                            <span id="i-compress">
+                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
                         </div>
                     </div>
+                    <ul id="list-toggle" class="ls-row clear">
+                        <li>
+                            XIV-PARL - Bungeni Parliament
+                            <div class="struct-ib">&#160;/ parliament
+                            </div>
+                            <span class="tgl-pad-right">▼</span>
+                            <div class="doc-toggle">
+                                <div style="min-height:50px;">
+                                    <div class="block">
+                                        <span class="labels">
+                                            from:</span>
+                                        <span>
+                                            February 23, 2011
+                                        </span>
+                                    </div>
+                                    <div class="block">
+                                        <span class="labels">
+                                            to:</span>
+                                        <span>
+                                            March 14, 2012
+                                        </span>
+                                    </div>
+                                    <div class="block">
+                                        <span class="labels">
+                                            title:</span>
+                                        <span>
+                                            Chairperson
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clear"/>
+                            </div>
+                        </li>
+                        <li>
+                            Com_02 - Parliamentary Committee P1_02
+                            <div class="struct-ib">&#160;/ committee
+                            </div>
+                            <span class="tgl-pad-right">▼</span>
+                            <div class="doc-toggle">
+                                <div style="min-height:50px;">
+                                    <div class="block">
+                                        <span class="labels">
+                                            from:</span>
+                                        <span>
+                                            February 23, 2011
+                                        </span>
+                                    </div>
+                                    <div class="block">
+                                        <span class="labels">
+                                            to:</span>
+                                        <span>
+                                            March 14, 2012
+                                        </span>
+                                    </div>
+                                    <div class="block">
+                                        <span class="labels">
+                                            title:</span>
+                                        <span>
+                                            Chairperson
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clear"/>
+                            </div>
+                        </li>
+                        <li>
+                            Com_02 - Parliamentary Committee P1_02
+                            <div class="struct-ib">&#160;/ committee
+                            </div>
+                            <span class="tgl-pad-right">▼</span>
+                            <div class="doc-toggle">
+                                <div style="min-height:50px;">
+                                    <div class="block">
+                                        <span class="labels">
+                                            from:</span>
+                                        <span>
+                                            February 23, 2011
+                                        </span>
+                                    </div>
+                                    <div class="block">
+                                        <span class="labels">
+                                            to:</span>
+                                        <span>
+                                            March 14, 2012
+                                        </span>
+                                    </div>
+                                    <div class="block">
+                                        <span class="labels">
+                                            title:</span>
+                                        <span>
+                                            Chairperson
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clear"/>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

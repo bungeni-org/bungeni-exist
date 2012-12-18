@@ -363,7 +363,7 @@ p.inline-centered {
 /* Versions, Event View feature this on the top-right section of the document */
 .hanging-menu {
     clear:both;
-    width:110px !important;
+    width:100px !important;
     height:auto;
     float:left !important;
     display:inline;

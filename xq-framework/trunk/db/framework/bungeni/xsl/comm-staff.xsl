@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -34,36 +34,49 @@
             <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div class="doc-table-wrapper">
-                        <table class="listing">
-                            <tr>
-                                <th class="fbtd">name</th>
-                                <th class="fbtd">start</th>
-                                <th class="fbtd">end</th>
-                                <th class="fbtd">status</th>
-                            </tr>
-                            <xsl:for-each select="bu:ontology/bu:members/bu:member/bu:membershipType[bu:value eq 'committee_staff']/ancestor::bu:member">
-                                <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
-                                <tr class="items">
-                                    <td class="fbt bclr">
-                                        <!--a href="member?uri={bu:person/@href}">
-                                            <xsl:value-of select="bu:person/@showAs"/>
-                                        </a-->
-                                        <xsl:value-of select="bu:person/@showAs"/>
-                                    </td>
-                                    <td class="fbt bclr">
-                                        <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
-                                    </td>
-                                    <td class="fbt bclr">
-                                        <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
-                                    </td>
-                                    <td class="fbt bclr">
-                                        <xsl:value-of select="bu:activeP"/>
-                                    </td>
-                                </tr>
-                            </xsl:for-each>
-                        </table>
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div id="toggle-i18n" class="hide">
+                            <span id="i-compress">
+                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
                     </div>
+                    <ul id="list-toggle" class="ls-row clear">
+                        <xsl:for-each select="bu:ontology/bu:members/bu:member/bu:membershipType[bu:value eq 'committee_staff']/ancestor::bu:member">
+                            <xsl:sort select="bu:statusDate" order="descending"/>
+                            <li>
+                                <xsl:value-of select="bu:person/@showAs"/>
+                                <div class="struct-ib">&#160;/ <i18n:text key="member-status">
+                                        <xsl:value-of select="bu:activeP"/>(nt)</i18n:text>
+                                </div>
+                                <span class="tgl-pad-right">▼</span>
+                                <div class="doc-toggle">
+                                    <div style="min-height:110px;">
+                                        <div class="block">
+                                            <span class="labels">
+                                                <i18n:text key="date-start">start date(nt)</i18n:text>:</span>
+                                            <span>
+                                                <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
+                                            </span>
+                                        </div>
+                                        <div class="block">
+                                            <span class="labels">
+                                                <i18n:text key="date-end">end date(nt)</i18n:text>:</span>
+                                            <span>
+                                                <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="clear"/>
+                                </div>
+                            </li>
+                        </xsl:for-each>
+                    </ul>
                 </div>
             </div>
         </div>

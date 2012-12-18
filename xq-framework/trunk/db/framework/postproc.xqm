@@ -109,6 +109,34 @@ declare function pproc:update-events() {
     
 };
 
+(:~
+    This method replaces place-holder for referenced document within an Attachment: First get all non-Attachment documents, if 
+    they contain Attachment nodes, we use the attachmentIds to locate the Attachment documents being referred to and update 
+    the refersTo href attributes. Consequently, attachments in the non-Attachment documents are also updated with 
+    the URI of the gotten Attachment.
+    
+    !+NOTE (ao, 18th Dec 2012) Work-in-Progress, not yet tested to be working
+:)
+declare function pproc:update-attachments() {
+
+    try {
+        for $attnode in collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value ne 'Attachment']/ancestor::bu:document/bu:attachments/bu:attachment
+        let $doc-node := $attnode/ancestor::bu:document
+        let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
+        let $attdoc := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Attachment']/ancestor::bu:document[bu:attachmentId eq $attnode/bu:attachmentId]
+        return (
+                update replace $attdoc/bu:attachmentOf/bu:refersTo/@href with $docuri,
+                update insert attribute href { concat(xs:string($docuri),"@/attachment",$attnode/bu:attachmentId) } into $doc-node/bu:attachments/bu:attachment[bu:attachmentId=$attnode/bu:attachmentId]
+               )
+    } catch * {
+        <response type="error">
+           <code>{$err:code}</code>
+           <desc>{$err:description}</desc>
+        </response>
+    }
+    
+};
+
 
 (:
     This method updates itemSchedules with with item URI as reference to the 
@@ -163,6 +191,16 @@ declare function pproc:update-document($uri as xs:string) {
            update replace $event/bu:eventOf/bu:refersTo/@href with $docuri,
            update replace $doc-node/bu:workflowEvents/bu:workflowEvent[bu:docId=$wfe/bu:docId]/@href with if($event/@uri) then $event/@uri else "E_DOC_NOT_FOUND"
                    ),
+        (: it's attachments :)
+        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else  (@internal-uri=$uri)]/ancestor::bu:ontology
+        for $attnode in $doc/bu:attachments/bu:attachment
+        let $doc-node := $attnode/ancestor::bu:ontology
+        let $docuri := if ($doc-node/bu:document/@uri) then data($doc-node/bu:document/@uri) else data($doc-node/bu:document/@internal-uri)
+        let $attdoc := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Attachment']/ancestor::bu:document[bu:attachmentId eq $attnode/bu:attachmentId]
+        return (
+                update replace $attdoc/bu:attachmentOf/bu:refersTo/@href with xs:string($docuri),
+                update insert attribute href { xs:string($docuri) || "@/attachment" || $attnode/bu:attachmentId } into $doc-node/bu:attachments/bu:attachment[bu:attachmentId=$attnode/bu:attachmentId]
+               ),                   
         (: it's sittings :)
         let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[@uri=$uri]/ancestor::bu:ontology
         for $anItem in $doc/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule

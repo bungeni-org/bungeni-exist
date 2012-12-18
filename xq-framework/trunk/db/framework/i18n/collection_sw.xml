@@ -87,6 +87,7 @@
     <msg key="listing-search">tafuta maandiko</msg>
     <msg key="sort-by">namna hii</msg>
     <msg key="filter-by">chuja kwa</msg>
+    <msg key="meeting-type">aina ya mkutano</msg>
     <msg key="btn-search">tafuta</msg>
     <msg key="btn-adv-search">tafuta kwa hali ya juu »</msg>
     <msg key="doc-question">swali</msg>
@@ -98,6 +99,7 @@
     <msg key="doc-groupsitting">kikao</msg>
     <msg key="doc-calendar">kalenda ya vikao</msg>
     <msg key="doc-event">tukio</msg>
+    <msg key="doc-attachment">kiambatisho</msg>
     <msg key="doc-political-group">kundi la kisiasa</msg>
     <msg key="doc-office">ofisi</msg>
     <msg key="doc-ministry">wizara</msg>
@@ -134,7 +136,7 @@
     <msg key="tab-history">historia</msg>
     <msg key="tab-details">vipengele</msg>
     <msg key="tab-assigned">vikundi vilivyo awazwa</msg>
-    <msg key="tab-documents">nyongeza</msg>
+    <msg key="tab-documents">nyaraka</msg>
     <msg key="tab-type">aina</msg>
     <msg key="tab-desc">elezo</msg>
     <msg key="tab-date">tarehe</msg>
@@ -147,7 +149,8 @@
     <msg key="addr-country">nchi</msg>
     <msg key="addr-phone">namba ya(za) simu</msg>
     <msg key="addr-fax">namba ya(za) kipepesi</msg>
-    <msg key="addr-email">barua pepe</msg>     
+    <msg key="addr-email">barua pepe</msg>
+    <msg key="notes">maelezo</msg>  
     <!-- PAGINATION -->
     <msg key="page">Ukurasa</msg>
     <msg key="pageof">kwa</msg>
@@ -185,6 +188,10 @@
     <msg key="date-from">kutoka</msg>
     <msg key="date-to">hadi</msg>
     <msg key="btn-filter">chuja</msg>
+    <msg key="any">-- yoyote --</msg>
+    <msg key="plenary">kikao</msg>
+    <msg key="committee">kamati</msg>
+    <msg key="joint_committee">kamati muungo</msg>    
     <!-- PARLIAMENT INFO -->
     <msg key="parl-fullname">jina la bunge</msg>
     <msg key="parl-shortname">jina fupi</msg>

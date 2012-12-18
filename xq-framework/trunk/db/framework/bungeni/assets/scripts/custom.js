@@ -217,7 +217,12 @@ $(document).ready(function () {
 	$('#startdate, #enddate').click(function() {
         $(this).focus();
         $(this).select();		
-	});    
+	});   
+	
+    $('#mtype').change(
+    function(){
+         $(this).closest('form').trigger('submit');
+    });	
     
     /*
 	$(".tab_content").hide(); //Hide all content
@@ -280,8 +285,8 @@ $(document).ready(function () {
     });
     
     var fullDate = new Date();
-    var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
-    var currentDate = fullDate.getFullYear() + "/" + twoDigitMonth + "-" + fullDate.getDate();
+    var twoDigitMonth = ("0" + (fullDate.getMonth() + 1)).slice(-2);
+    var currentDate = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
     
     /* Whatson calendar */
     $('#range-cal').DatePicker({
@@ -297,7 +302,7 @@ $(document).ready(function () {
     		}
     	},    	
     	starts: 1   	
-    });    
+    });
     
     // DHTMLX
     doOnLoad();    

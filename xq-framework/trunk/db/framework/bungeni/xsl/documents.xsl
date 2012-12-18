@@ -91,66 +91,12 @@
                     <i18n:text key="events">events(nt)</i18n:text>
                 </span>
                 <span id="i18n-atts">
-                    <i18n:text key="attachedfiles">attached files(nt)</i18n:text>
+                    <i18n:text key="attachedfiles">attachments(nt)</i18n:text>
                 </span>
             </div>
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="blocks">
-                        <a id="mTagProfile" href="#" class="togglers" onClick="toggleOnly('profile-info',this.id,'profile');return false;">
-                            ▼profile
-                        </a>
-                        <div id="profile-info" class="toggle">
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="docid">Registry #(nt)</i18n:text>&#160;
-                                </div>
-                                <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>&#160;
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="progressiveno">progressive #(nt)</i18n:text>
-                                </div>
-                                <xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>&#160;
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="docuri">URI(nt)</i18n:text>
-                                </div>
-                                <xsl:value-of select="$doc-uri"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="parliament">parliament(nt)</i18n:text>
-                                </div>
-                                <xsl:value-of select="bu:ontology/bu:legislature/@href"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="session-yr">session year(nt)</i18n:text>
-                                </div>
-                                <xsl:value-of select="substring-before(bu:ontology/bu:legislature/bu:electionDate/@select,'-')"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="session-no">session number(nt)</i18n:text>
-                                </div>
-                                <xsl:value-of select="bu:ontology/bu:legislature/bu:parliamentId/@select"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="submit-date">submission date(nt)</i18n:text>
-                                </div>
-                                <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <xsl:value-of select="bu:ontology/child::*/bu:group/bu:type/bu:value"/>
-                                </div>
-                                <xsl:value-of select="bu:ontology/child::*/bu:group/bu:fullName"/>
-                            </div>
-                        </div>
-                        <br/>
                         <xsl:if test="$version ne 'true'">
                             <a id="mTagVersions" href="#" class="togglers" onClick="toggleAndChangeFullText('versions-info',this.id,'i18n-versions');return false;">
                                 ▼<i18n:text key="versions">versions(nt)</i18n:text>
@@ -210,22 +156,79 @@
                             <br/>
                         </xsl:if>
                         <a id="mTagAtts" href="#" class="togglers" onClick="toggleAndChangeFullText('atts-info',this.id,'i18n-atts');return false;">
-                            ▼<i18n:text key="attachedfiles">attached files(nt)</i18n:text>
+                            ▼<i18n:text key="attachedfiles">attachments(nt)</i18n:text>
                         </a>
                         <div id="atts-info" class="toggle">
                             <ul class="ls-row">
                                 <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
                                     <li>
+                                        <a href="{lower-case($doc-type)}-attachment?uri={@href}">
+                                            <xsl:value-of select="bu:title"/>
+                                        </a>&#160; /      
+                                        download:&#160;
                                         <a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
                                             <xsl:value-of select="bu:name"/>
                                         </a>
-                                        <div class="struct-ib"> (<xsl:value-of select="bu:mimetype/bu:value"/>) / <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                        <div class="struct-ib"> / <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </div>
                                     </li>
                                 </xsl:for-each>
                             </ul>
                         </div>
                         <br/>
+                        <a id="mTagProfile" href="#" class="togglers" onClick="toggleOnly('profile-info',this.id,'metadata');return false;">
+                            ▼metadata
+                        </a>
+                        <div id="profile-info" class="toggle">
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="docid">Registry #(nt)</i18n:text>&#160;
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>&#160;
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="progressiveno">progressive #(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>&#160;
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="docuri">URI(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="$doc-uri"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="parliament">parliament(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:legislature/@href"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="session-yr">session year(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="substring-before(bu:ontology/bu:legislature/bu:electionDate/@select,'-')"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="session-no">session number(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="bu:ontology/bu:legislature/bu:parliamentId/@select"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <i18n:text key="submit-date">submission date(nt)</i18n:text>
+                                </div>
+                                <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                            </div>
+                            <div class="list-block">
+                                <div class="block-label">
+                                    <xsl:value-of select="bu:ontology/child::*/bu:group/bu:type/bu:value"/>
+                                </div>
+                                <xsl:value-of select="bu:ontology/child::*/bu:group/bu:fullName"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

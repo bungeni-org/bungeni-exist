@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -44,6 +44,7 @@
             </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
+                    <xsl:call-template name="doc-item-emblem"/>
                     <!-- The header information on the group documents -->
                     <xsl:call-template name="doc-item-preface"/>
                     
@@ -53,6 +54,11 @@
             </div>
         </div>
     </xsl:template>
+    
+    <!-- DOC-ITEM-EMBLEM -->
+    <xsl:template name="doc-item-emblem">
+        <img class="parl-emblem" src="assets/images/emblem.png" alt="emblem"/>
+    </xsl:template>      
 
     <!-- DOC_ITEM-TITLE -->
     <xsl:template name="doc-item-title">
@@ -70,7 +76,7 @@
             BUNGENI PARLIAMENT
         </h3>
         <h4 id="doc-item-desc" class="doc-headers">
-            <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
+            <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
         </h4>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="language">language(nt)</i18n:text>: 
@@ -86,14 +92,14 @@
         <h4 class="doc-status">
             <span>
                 <b>
-                    <i18n:text key="acronym">acronym(nt)</i18n:text>:</b>
+                    <i18n:text key="acronym">acronym(nt)</i18n:text>:&#160;</b>
             </span>
             <span>
-                <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
+                <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>&#160;
             </span>
             <span>
                 <b>
-                    <i18n:text key="date-start">start date(nt)</i18n:text>:</b>
+                    <i18n:text key="date-start">start date(nt)</i18n:text>:&#160;</b>
             </span>
             <span>
                 <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>

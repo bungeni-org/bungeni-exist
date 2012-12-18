@@ -392,7 +392,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 rou:get-pdf($CONTROLLER-DOC)  
     	else if ($EXIST-PATH eq "/agendaitem/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)                             
+                rou:get-pdf($CONTROLLER-DOC)   
+    	else if ($EXIST-PATH eq "/report/pdf")   
+    		 then 
+                rou:get-pdf($CONTROLLER-DOC)                 
     	else if ($EXIST-PATH eq "/member/pdf")   
     		 then 
                 let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -414,7 +417,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 rou:get-xml($CONTROLLER-DOC)
     	else if ($EXIST-PATH eq "/agendaitem/xml")   
     		 then 
-                rou:get-xml($CONTROLLER-DOC)                
+                rou:get-xml($CONTROLLER-DOC)    
+    	else if ($EXIST-PATH eq "/report/xml")   
+    		 then 
+                rou:get-xml($CONTROLLER-DOC)                 
     	else if ($EXIST-PATH eq "/member/xml")   
     		 then 
                 rou:get-xml($CONTROLLER-DOC)  
@@ -435,6 +441,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($EXIST-PATH eq "/agendaitem/akn")   
     		 then 
                 rou:get-akn($CONTROLLER-DOC) 
+    	else if ($EXIST-PATH eq "/report/akn")   
+    		 then 
+                rou:get-akn($CONTROLLER-DOC)                 
                 
         (:Get xCard XML:)
     	else if ($EXIST-PATH eq "/membership/xcard")   
@@ -785,7 +794,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)     	
+    									)         									
     	else if ($EXIST-PATH eq "/bill-event" )
     		 then 
                 let 
@@ -806,6 +815,26 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>,
                                             cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
                                         )    
+    	else if ($EXIST-PATH eq "/bill-attachment" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-repl:= document {
+                                        template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+                                    }
+                                    return
+                                        template:process-tmpl(
+                                            $REL-PATH,
+                                            $EXIST-CONTROLLER,
+                                            $config:DEFAULT-TEMPLATE,
+                                            cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>,
+                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                        )                                         
     	else if ($EXIST-PATH eq "/question-text" )
     		 then 
                 let 
@@ -947,7 +976,26 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    									
-    									
+    	else if ($EXIST-PATH eq "/question-attachment" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-repl:= document {
+                                        template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+                                    }
+                                    return
+                                        template:process-tmpl(
+                                            $REL-PATH,
+                                            $EXIST-CONTROLLER,
+                                            $config:DEFAULT-TEMPLATE,
+                                            cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>,
+                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                        )     									
     									
     	else if ($EXIST-PATH eq "/motion-text" )
     		 then 
@@ -1111,7 +1159,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
-    									)       									
+    									)   
+    	else if ($EXIST-PATH eq "/motion-attachment" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-repl:= document {
+                                        template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+                                    }
+                                    return
+                                        template:process-tmpl(
+                                            $REL-PATH,
+                                            $EXIST-CONTROLLER,
+                                            $config:DEFAULT-TEMPLATE,
+                                            cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>,
+                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                        )     									
     									
     	else if ($EXIST-PATH eq "/tableddocument-text" )
     		 then 
@@ -1256,6 +1324,26 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)  
+    	else if ($EXIST-PATH eq "/tableddocument-attachment" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-repl:= document {
+                                        template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+                                    }
+                                    return
+                                        template:process-tmpl(
+                                            $REL-PATH,
+                                            $EXIST-CONTROLLER,
+                                            $config:DEFAULT-TEMPLATE,
+                                            cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>,
+                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                        )     									
         (: AGENDA ITEMS :)
     	else if ($EXIST-PATH eq "/agendaitem-text" )
     		 then 
@@ -1400,6 +1488,26 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									) 
+    	else if ($EXIST-PATH eq "/agendaitem-attachment" )
+    		 then 
+                let 
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $parts := cmn:get-view-parts($EXIST-PATH),
+                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-repl:= document {
+                                        template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+                                    }
+                                    return
+                                        template:process-tmpl(
+                                            $REL-PATH,
+                                            $EXIST-CONTROLLER,
+                                            $config:DEFAULT-TEMPLATE,
+                                            cmn:get-route($EXIST-PATH),
+                                            <route-override>
+                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                            </route-override>,
+                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                        )     									
         (: REPORTS :)
     	else if ($EXIST-PATH eq "/report-text" )
     		 then 
@@ -1566,7 +1674,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $parts := cmn:get-view-parts($EXIST-PATH),
                     $woview := xs:string(request:get-parameter("showing",'twk')),   
                     $tab := xs:string(request:get-parameter("tab",'sittings')),  
-                    $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$parts),
+                    $mtype := xs:string(request:get-parameter("mtype",'any')), 
+                    $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$mtype,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

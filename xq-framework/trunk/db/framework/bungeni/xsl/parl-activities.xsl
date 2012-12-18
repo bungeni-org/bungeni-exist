@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -34,41 +34,25 @@
                     <div class="mem-table-wrapper">
                         <xsl:choose>
                             <xsl:when test="ref/bu:ontology">
-                                <table class="listing">
-                                    <tr>
-                                        <th class="fbtd">
-                                            <i18n:text key="tab-type">type(nt)</i18n:text>
-                                        </th>
-                                        <th class="fbtd">
-                                            <i18n:text key="relation">relation(nt)</i18n:text>
-                                        </th>
-                                        <th class="fbtd">
-                                            <i18n:text key="title">title(nt)</i18n:text>
-                                        </th>
-                                        <th class="fbtd">
-                                            <i18n:text key="status">status(nt)</i18n:text>
-                                        </th>
-                                        <th class="fbtd">
-                                            <i18n:text key="submit-date">submission date(nt)</i18n:text>
-                                        </th>
-                                    </tr>
+                                <div id="toggle-wrapper" class="clear toggle-wrapper">
+                                    <div id="toggle-i18n" class="hide">
+                                        <span id="i-compress">
+                                            <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
+                                        </span>
+                                        <span id="i-expand">
+                                            <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
+                                        </span>
+                                    </div>
+                                    <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                                    </div>
+                                </div>
+                                <ul id="list-toggle" class="ls-row clear">
                                     <xsl:for-each select="ref/bu:ontology">
                                         <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
-                                        <tr class="items">
-                                            <td class="fbt bclr">
-                                                <xsl:value-of select="bu:document/bu:docType/bu:value"/>
-                                            </td>
-                                            <td class="fbt bclr">
-                                                <xsl:choose>
-                                                    <xsl:when test="$doc-uri = data(bu:document/bu:owner/bu:person/@href)">
-                                                        owner
-                                                    </xsl:when>
-                                                    <xsl:otherwise>
-                                                        sponsor
-                                                    </xsl:otherwise>
-                                                </xsl:choose>
-                                            </td>
-                                            <td class="fbt bclr">
+                                        <li>
+                                            <xsl:value-of select="format-dateTime(bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
+                                            <div class="struct-ib">&#160;/ 
+                                                
                                                 <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
                                                 <xsl:variable name="doc-uri">
                                                     <xsl:choose>
@@ -93,17 +77,39 @@
                                                             <xsl:value-of select="bu:document/bu:title"/>
                                                         </a>
                                                     </xsl:otherwise>
-                                                </xsl:choose>
-                                            </td>
-                                            <td class="fbt bclr">
-                                                <xsl:value-of select="if (data(bu:document/bu:status/@showAs)) then data(bu:document/bu:status/@showAs) else bu:document/bu:status/bu:value"/>
-                                            </td>
-                                            <td class="fbt bclr">
-                                                <xsl:value-of select="format-dateTime(bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
-                                            </td>
-                                        </tr>
+                                                </xsl:choose> / 
+                                                <xsl:value-of select="bu:document/bu:docType/bu:value"/>
+                                            </div>
+                                            <span class="tgl-pad-right">▼</span>
+                                            <div class="doc-toggle">
+                                                <div style="min-height:50px;">
+                                                    <div class="block grey-full">
+                                                        <span class="labels">
+                                                            <i18n:text key="relation">relation(nt)</i18n:text>:</span>
+                                                        <span>
+                                                            <xsl:choose>
+                                                                <xsl:when test="$doc-uri = data(bu:document/bu:owner/bu:person/@href)">
+                                                                    owner
+                                                                </xsl:when>
+                                                                <xsl:otherwise>
+                                                                    sponsor
+                                                                </xsl:otherwise>
+                                                            </xsl:choose>
+                                                        </span>
+                                                    </div>
+                                                    <div class="block grey-full">
+                                                        <span class="labels">
+                                                            <i18n:text key="status">status(nt)</i18n:text>:</span>
+                                                        <span>
+                                                            <xsl:value-of select="if (data(bu:document/bu:status/@showAs)) then data(bu:document/bu:status/@showAs) else bu:document/bu:status/bu:value"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="clear"/>
+                                            </div>
+                                        </li>
                                     </xsl:for-each>
-                                </table>
+                                </ul>
                             </xsl:when>
                             <xsl:otherwise>
                                 <i18n:text key="none">none(nt)</i18n:text>

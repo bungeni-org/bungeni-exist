@@ -150,21 +150,29 @@ declare function bun:gen-pdf-output($docid as xs:string)
 declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string, $views as node())
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
+    (: for timeline :)
+    let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
     
     let $pages := <pages>{
         for $view in $views/view[@tag eq 'tab']
             return
-                <page id="i18n({$view/title/i18n:text/@key},chapter)">{
-                    transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
-                                            <parameters>
-                                                <param name="epub" value="true" />
-                                            </parameters>)
-                 }</page>
+                if (data($view/@id) eq 'timeline') then (
+                    <page id="i18n({$view/title/i18n:text/@key},chapter)">{
+                        transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                </parameters>)
+                     }</page>
+                 )
+                 else (
+                    <page id="i18n({$view/title/i18n:text/@key},chapter)">{
+                        transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                </parameters>)
+                     }</page>                 
+                 )
          }</pages>
-    
-    (: for timeline
-        let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
-    :)  
     
     let $lang := template:set-lang()
     (: creating unique output filename based on URI and active LANGUAGE :)
@@ -2059,6 +2067,17 @@ declare function local:grouped-sitting-items-by-date($sittings) {
         </doc>
 };
 
+declare function local:grouped-sitting-meeting-type($dates-range,$mtype as xs:string) {
+    if ($mtype eq 'any') then (
+        for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+        return $sittings
+    ) else (
+       for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+       where $sittings/bu:groupsitting/bu:meetingType[bu:value eq $mtype] 
+       return $sittings    
+    )
+};
+
 
 (:~
 :   Retieves all group documents of type sittings
@@ -2073,6 +2092,7 @@ declare function local:grouped-sitting-items-by-date($sittings) {
 declare function bun:get-whatson(
         $whatsonview as xs:string, 
         $tab as xs:string,
+        $mtype as xs:string,
         $parts as node()
         ) as element() {
     
@@ -2101,7 +2121,14 @@ declare function bun:get-whatson(
                     <tag id="{$listing/@id}" name="{$listing/@name}" count="20">{data($listing/@name)}</tag>
          }
          </tags>   
-        { cmn:get-whatsonviews() }       
+        { cmn:get-whatsonviews() }      
+        <meetingtypes>
+            <meetingtype>any</meetingtype>
+        { 
+            for $node in distinct-values(collection("/db/bungeni-xml")/bu:ontology/bu:groupsitting/bu:meetingType/bu:value)
+            return <meetingtype>{string($node)}</meetingtype>
+        } 
+        </meetingtypes>
         <listingUrlPrefix>sittings/profile</listingUrlPrefix>
         </paginator>
         <alisting>
@@ -2111,7 +2138,7 @@ declare function bun:get-whatson(
             case 'old' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
                 return             
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2124,7 +2151,7 @@ declare function bun:get-whatson(
                 
             case 'pwk' return 
                 let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2138,7 +2165,7 @@ declare function bun:get-whatson(
             case 'twk' return
                 (: !+FIX_THIS (ao, 21-May-2012) Somehow current-date() returns like this 2012-05-21+03:00, we remove the timezone :)
                 let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype)              
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2151,7 +2178,7 @@ declare function bun:get-whatson(
   
             case 'nwk' return 
                 let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2164,7 +2191,7 @@ declare function bun:get-whatson(
              
             case 'fut' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2177,7 +2204,7 @@ declare function bun:get-whatson(
                     
             case 'custom' return 
                 let $dates-range := local:validate-custom-date($f, $t)
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology 
+                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype)
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2216,6 +2243,7 @@ declare function bun:get-whatson(
             <parameters>
                 <param name="filter" value="{$listings-filter}" />
                 <param name="listing-tab" value="{$tab}" />
+                <param name="meeting-type" value="{$mtype}" />
                 <param name="whatson-view" value="{$whatsonview}" />
             </parameters>
            )
@@ -2810,6 +2838,19 @@ declare function bun:xqy-list-events-with-acl($parent-uri as xs:string, $acl-fil
         util:eval($events-qry)
 };
 
+declare function bun:xqy-list-attachments-with-acl($parent-uri as xs:string, $acl-filter as xs:string) {
+
+    let $attachments-qry := fn:concat("collection('",cmn:get-lex-db() ,"')",
+        "/bu:ontology[@for='document']",
+        "/bu:document[bu:docType/bu:value eq 'Attachment']",
+        "[bu:attachmentOf/bu:refersTo[@href eq '",$parent-uri,"']]",
+        "/(bu:permissions except bu:versions)",
+        "/bu:control[",$acl-filter,"]",
+        "/ancestor::bu:ontology")
+     return 
+        util:eval($attachments-qry)
+};
+
 (:~
 :   Retrives all the items to be display on timeline from work-flow in the input document-node.
 :
@@ -2974,6 +3015,34 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
 };
 
 
+
+declare function bun:get-doc-attachment($attid as xs:string, $parts as node()) as element()* {
+
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $docitem := collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:attachments/bu:attachment[@href = $attid][1]/ancestor::bu:ontology
+    let $acl-filter := cmn:get-acl-permission-as-attr('Attachment','public-view')    
+    let $acl-filter-node := cmn:get-acl-permission-as-node('Attachment','public-view')
+    
+    let $doc := <doc>      
+            { bun:treewalker-acl($acl-filter-node,<doc>{$docitem}</doc>) }
+            <ref>
+            {
+                let $uri := data(if ($docitem/bu:document/@uri) then ($docitem/bu:document/@uri) else ($docitem/bu:document/@internal-uri) )
+                return
+                    bun:xqy-list-attachments-with-acl($uri, $acl-filter)         
+            }            
+            </ref>
+            <attachment>{$attid}</attachment>
+        </doc>  
+    
+    return
+        transform:transform($doc, 
+                            $stylesheet, 
+                            <parameters>
+                                <param name="version" value="true" />
+                                <param name="attachment-uri" value="$attid" />
+                            </parameters>)
+};
 
 declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as element()* {
 

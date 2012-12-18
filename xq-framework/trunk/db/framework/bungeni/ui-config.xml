@@ -170,6 +170,11 @@
             <navigation>business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
+        <route href="/bill-attachment">
+            <title>Business | Bill Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
         <route href="/bills/rss">
             <title>Business | Bill</title>
             <navigation>business</navigation>
@@ -215,6 +220,11 @@
             <navigation>business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
+        <route href="/question-attachment">
+            <title>Business | Question Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
         <route href="/motions">
             <title>Business | Motions </title>
             <navigation>business</navigation>
@@ -252,6 +262,11 @@
         </route>
         <route href="/motion-event">
             <title>Business | Motion Event</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-attachment">
+            <title>Business | Motion Attachment</title>
             <navigation>business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
@@ -295,6 +310,11 @@
             <navigation>business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
+        <route href="/tableddocument-attachment">
+            <title>Business | Tabled Document Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
         <route href="/agendaitems">
             <title>Business | Agenda items </title>
             <navigation>business</navigation>
@@ -332,6 +352,11 @@
         </route>
         <route href="/agendaitem-event">
             <title>Business | Agenda item Event</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-attachment">
+            <title>Business | AgendaItem Attachment</title>
             <navigation>business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
@@ -625,6 +650,10 @@
                 <template>xml/documents.xml</template>
                 <xsl>xsl/event.xsl</xsl>
             </view>
+            <view path="bill-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
         </views>
         <views name="Bill-ver">
             <view id="text" path="bill-version/text" tag="tab">
@@ -671,6 +700,10 @@
             <view path="question-event">
                 <template>xml/documents.xml</template>
                 <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="question-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
             </view>
         </views>
         <views name="Question-ver">
@@ -723,6 +756,10 @@
                 <template>xml/documents.xml</template>
                 <xsl>xsl/event.xsl</xsl>
             </view>
+            <view path="motion-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
         </views>
         <views name="Motion-ver">
             <view id="text" path="motion-version/text" tag="tab">
@@ -774,6 +811,10 @@
                 <template>xml/documents.xml</template>
                 <xsl>xsl/event.xsl</xsl>
             </view>
+            <view path="tableddocument-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
         </views>
         <views name="TabledDocument-ver">
             <view id="text" path="tableddocument-version/text" tag="tab">
@@ -817,6 +858,10 @@
             <view path="agendaitem-event">
                 <template>xml/documents.xml</template>
                 <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="agendaitem-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
             </view>
         </views>
         <views name="AgendaItem-ver">
@@ -1020,6 +1065,11 @@
             </acl>
         </doctype>
         <doctype category="document" name="Event">
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Attachment">
             <acl name="public-view">
                 <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
             </acl>

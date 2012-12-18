@@ -6,6 +6,9 @@ ul.scheduling li {
     display: block;
     margin: 0; }
 
+.whatson-filter {
+    text-align:left;
+}
 .whatson-wrapper {
     margin:0 auto;
     width:98%;
@@ -25,7 +28,7 @@ ul.scheduling li {
             
         .schedule-block .left {
             display:inline-block;
-            width:25%;
+            width:15%;
             white-space:nowrap;
             float:left }
             .schedule-block .left a {
@@ -33,7 +36,7 @@ ul.scheduling li {
         
         .schedule-block .right {
             display:inline-block;
-            width:75%;
+            width:85%;
             float:right } 
         
     .whatson-wrapper > .right {

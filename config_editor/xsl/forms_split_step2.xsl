@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:custom="http://bungeni-exist.googlecode.com/custom_functions"
+    exclude-result-prefixes="xsl custom"
     version="2.0">
     <!--
         Ashok Hariharan
@@ -16,7 +18,11 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
-    
+
+   
+    <!--
+        Specifies all the valid modes
+        -->
     <xsl:variable name="modes">
         <mode name="view" />
         <mode name="edit" />
@@ -24,29 +30,31 @@
         <mode name="listing" />
     </xsl:variable>
     
-    <xsl:variable name="global-roles" select="data(//ui/@roles)"></xsl:variable>
     <!--
-    <xsl:template match="ui">
-        <xsl:copy>
-            <xsl:variable name="wfname">
-                <xsl:choose>
-                    <xsl:when test="not($fname)">
-                        <xsl:variable name="filename" select="tokenize(base-uri(),'/')"/>
-                        <xsl:variable name="wfname" select="tokenize($filename[last()],'\.')"/>
-                        <xsl:value-of select="$wfname[1]"/>
-                    </xsl:when>
-                    <xsl:when test="$fname">
-                        <xsl:value-of select="$fname"/>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:attribute name="name" select="$wfname"/>
-            <xsl:apply-templates select="@*" mode="preserve"/>
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:copy>
-    </xsl:template> 
-    -->
-
+        All the valid roles 
+        -->
+    <xsl:variable name="global-roles" select="data(//ui/@roles)"></xsl:variable>
+   
+   
+    <!-- 
+        Specialized functions to merge mode attributes since 
+        multiple show elements are allowed in a field
+        -->
+   
+    <xsl:function name="custom:__get_modes">
+        <xsl:param name="nodes" />
+        <xsl:for-each select="$nodes">
+            <xsl:value-of select="@modes"></xsl:value-of>
+        </xsl:for-each>
+    </xsl:function>
+    
+    <xsl:function name="custom:get_modes">
+        <xsl:param name="nodes"></xsl:param>
+        <xsl:value-of select="string-join(custom:__get_modes($nodes), ' ')" />
+    </xsl:function>
+    
+    
+   
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->
@@ -68,7 +76,7 @@
 
 
     <xsl:template match="modes">
-        <xsl:variable name="declared-modes" select="concat(data(./show/@modes), ' ', data(./hide/@modes))" />
+        <xsl:variable name="declared-modes" select="concat(custom:get_modes(./show), custom:get_modes(./hide))" />
         <xsl:variable name="modes-element" select="." />
         
         <!-- output the current show/hide in a comment -->

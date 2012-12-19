@@ -45,12 +45,26 @@ return
                     <xf:instance id="i-field" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>   
                     <xf:instance id="i-modes" xmlns="">
                         <data>
-                            <modes>
-                               <mode>add</mode>
-                               <mode>edit</mode>
-                               <mode>view</mode>
-                               <mode>listing</mode>                               
-                            </modes>
+                            <view show="true">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </view>
+                            <edit show="false">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </edit>
+                            <add show="false">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </add>
+                            <listing show="true">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </listing>                            
                         </data>
                     </xf:instance>       
                     
@@ -222,11 +236,11 @@ return
                             </xf:itemset>
                         </xf:select1>  
                         
-                        <xf:select ref="show/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
+                        <xf:select ref="view" selection="closed" appearance="full" incremental="true" >  
                             <xf:label>show modes</xf:label>
-                            <xf:itemset id="showmodes"nodeset="instance('i-modes')/modes/mode">
-                                <xf:label ref="node()"></xf:label>
-                                <xf:value ref="node()"></xf:value>
+                            <xf:itemset id="showmodes"nodeset="instance('i-modes')/view">
+                                <xf:label ref="."></xf:label>
+                                <xf:value ref="."></xf:value>
                             </xf:itemset>                           
                         </xf:select> 
                         

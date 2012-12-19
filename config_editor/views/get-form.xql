@@ -5,6 +5,8 @@ import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
+import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.xqm";
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 declare function local:fn-formsui() as xs:string {
@@ -28,8 +30,10 @@ declare function local:fields($doctype) as node() * {
                 <td>{data($field/@value_type)}</td>
                 <td>{data($field/@render_type)}</td>  
                 <td>
-                    <b>shown:</b> {data($field/show/modes)}
-                    <b>hidden:</b> {data($field/hide/modes)}
+                    <b>view:</b> {$field/view/roles/role} 
+                    <b>edit:</b> {$field/edit/roles/role} 
+                    <b>add:</b> {$field/add/roles/role} 
+                    <b>listing:</b> {$field/listing/roles/role}
                 </td>    
                 <td>
                 {
@@ -57,12 +61,15 @@ declare function local:fields($doctype) as node() * {
 };
 
 declare function local:getMatchingTasks() as node() * {
-    let $doc := let $form := doc('/db/config_editor/bungeni_custom/forms/custom.xml')
-                let $xsl := doc('/db/config_editor/xsl/forms_split_attrs.xsl')
-                return transform:transform($form, $xsl, <parameters>
-                                                            <param name="fname" value="custom" />
-                                                         </parameters>)
-    return $doc
+    let $fname := "custom"
+    let $input_doc := doc(concat($cfg:FORMS-COLLECTION,"/",$fname,".xml"))
+    let $step1 := cfg:get-xslt("/xsl/forms_split_step1.xsl")
+    let $step2 := cfg:get-xslt("/xsl/forms_split_step2.xsl")
+    let $step1_doc := transform:transform($input_doc, $step1,   <parameters>
+                                                                    <param name="fname" value="{$fname}" />
+                                                                </parameters>)
+    return 
+        transform:transform($step1_doc, $step2,())
 };
 
 declare function local:mode() as xs:string {

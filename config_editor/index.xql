@@ -69,7 +69,16 @@ return
                 <xf:trigger id="overviewTrigger">
                     <xf:label>Overview</xf:label>
                     <xf:send submission="s-query-workflows"/>
-                </xf:trigger>                  
+                </xf:trigger>
+                
+                <xf:trigger id="viewSys">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/sys-store-custom.xql#xforms?fs_path=',instance('i-vars')/currentDoc)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                   
                 
                 <xf:trigger id="viewForm">
                     <xf:label>new</xf:label>
@@ -222,7 +231,9 @@ return
                             <span>
                                 System            
                             </span>                        
-                            <div dojoType="dijit.Menu" id="submenusys">       
+                            <div dojoType="dijit.Menu" id="submenusys">
+                                <div dojoType="dijit.MenuItem" onClick="showDialogAb()">store from file-system</div>
+                                <!--div dojoType="dijit.MenuItem" onClick="javascript:dojo.publish('/sys');">store from file-system</div-->
                                 <div dojoType="dijit.MenuItem" onClick="alert('A To-Do')">create a working copy</div>
                                 <div dojoType="dijit.MenuItem" onClick="alert('Another To-Do')">sync back to filesystem</div>           
                             </div>
@@ -233,7 +244,24 @@ return
                     </div>
                 </div>
                 <div id="right-content">
-                    <!-- ######################### Views start ################################## -->        
+                    <!-- ######################### Views start ################################## -->    
+                    <div id="sysDialog" dojotype="dijit.Dialog" style="width:500px;overflow:auto;" title="Dialog for Bungeni Custom" autofocus="false">
+                        <div id="embedDialogSys">
+                    		<table>
+                    			<tr>
+                    				<td><label for="name">Path: </label></td>
+                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:98%;" id="fs_path" name="fs_path" value="/home/undesa/bungeni_apps/bungeni/src/bungeni_custom" /></td>
+                    			</tr>
+                    			<tr>
+                    				<td colspan="2">This action will overrite existing bungeni_custom. You are warned</td>
+                    			</tr>
+                    		</table>
+                        	<div class="dijitDialogPaneActionBar">
+                        		<button dojoType="dijit.form.Button" type="submit" onClick="javascript:dojo.publish('/sys');" id="ABdialog1button1">Load</button>
+                        	</div> 
+                        </div>
+                    </div>                    
+                    
                     <div id="formsDialog" dojotype="dijit.Dialog" style="width:400px;overflow:auto;" title="Forms" autofocus="false">
                         <div id="embedDialogForms"></div>
                     </div>
@@ -263,6 +291,12 @@ return
         <script type="text/javascript" defer="defer">
             <!--
             var xfReadySubscribers;
+            
+            
+			showDialogAb = function(){
+				var dlg = dijit.byId('sysDialog');
+				dlg.show();
+			};              
 
             function embed(targetTrigger,targetMount){
                 console.debug("embed",targetTrigger,targetMount);
@@ -296,7 +330,14 @@ return
                     }
                 }).play();
 
-            }
+            }          
+            
+            var viewSubscriber = dojo.subscribe("/sys", function(){
+                
+                var fsPath = dijit.byId("fs_path");
+                fluxProcessor.setControlValue("currentDoc",fsPath.get("value")); 
+                embed('viewSys','embedInline');
+            });             
             
             var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
                 fluxProcessor.setControlValue("currentDoc",doc);                

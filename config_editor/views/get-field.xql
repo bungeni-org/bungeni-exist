@@ -45,18 +45,32 @@ return
                     <xf:instance id="i-field" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>   
                     <xf:instance id="i-modes" xmlns="">
                         <data>
-                            <modes>
-                               <mode>add</mode>
-                               <mode>edit</mode>
-                               <mode>view</mode>
-                               <mode>listing</mode>                               
-                            </modes>
+                            <view show="true">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </view>
+                            <edit show="true">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </edit>
+                            <add show="true">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </add>
+                            <listing show="true">
+                                <roles>
+                                    <role>ALL</role>
+                                </roles>
+                            </listing> 
                         </data>
                     </xf:instance>
                     
                     <xf:instance id="i-originrole" xmlns="">
                         <data>
-                            <roles originAttr="roles">
+                            <roles>
                                <role/>                               
                             </roles>
                         </data>
@@ -93,8 +107,12 @@ return
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
                         <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
-                        <xf:bind id="showmodes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" constraint="instance()/show/modes/mode[not(.)]" />     
-                        <xf:bind id="hidemodes" nodeset="instance('i-modes')/hide/modes/mode" type="xs:string" /> 
+                        <xf:bind nodeset="view/@show" type="xs:boolean"/>  
+                        <xf:bind nodeset="edit/@show" type="xs:boolean"/>
+                        <xf:bind nodeset="add/@show" type="xs:boolean"/>
+                        <xf:bind nodeset="listing/@show" type="xs:boolean"/>
+                        <xf:bind id="view" nodeset="instance('i-modes')/view/roles/role" type="xs:string" constraint="instance()/view/roles/role[not(.)]" />     
+                        <xf:bind id="edit" nodeset="instance('i-modes')/edit/roles/role" type="xs:string" /> 
                     </xf:bind>
 
                     <xf:submission id="s-get-formsui"
@@ -212,113 +230,181 @@ return
                                      <xf:value ref="."></xf:value>
                                  </xf:itemset>
                              </xf:select1>  
-                        </xf:group>
-                        <!-- 
-                        !+FIX_THIS (ao, Dec 11th 2012) Roles are currently unusable
-                        <xf:select ref="show/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
-                             <xf:label>show modes</xf:label>
-                             <xf:itemset id="showmodes"nodeset="instance('i-modes')/modes/mode">
-                                 <xf:label ref="."></xf:label>
-                                 <xf:value ref="."></xf:value>
-                             </xf:itemset>                           
-                        </xf:select>        
-                        <xf:group appearance="minimal">
-                           <table>
-                               <thead>
-                                   <tr>                                
-                                       <th>
-                                           role
-                                       </th>                                
-                                       <th>
-                                           actions
-                                       </th>                               
-                                   </tr>
-                               </thead>
-                               <tbody id="r-shownfieldattrs" xf:repeat-nodeset="show/roles/role" startindex="1">
-                                   <tr>                                
-                                       <td style="color:steelblue;font-weight:bold;">
-                                            <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                <xf:label>a select1 combobox</xf:label>
-                                               <xf:hint>Edit this role</xf:hint>
-                                               <xf:help>Type a Role</xf:help>
-                                               <xf:alert>invalid role</xf:alert>
-                                                <xf:itemset nodeset="instance()/roles/role">
-                                                    <xf:label ref="."></xf:label>
-                                                    <xf:value ref="."></xf:value>
-                                                </xf:itemset>
-                                            </xf:select1>                                           
-                                       </td>                                           
-                                       <td style="color:red;">                                           
-                                           <xf:trigger>
-                                               <xf:label>delete</xf:label>
-                                               <xf:action>
-                                                   <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
-                                               </xf:action>
-                                           </xf:trigger>   
-                                       </td>                            
-                                   </tr>
-                               </tbody>
-                           </table>    
-                            <xf:trigger>
-                               <xf:label>insert</xf:label>
-                               <xf:action>
-                                   <xf:insert nodeset="show/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                               </xf:action>
-                           </xf:trigger> 
+                             
+                            <xf:group appearance="compact">
+                                <xf:label>Modes</xf:label>
+                                <xf:group appearance="bf:verticalTable">
+                                    <xf:label>view</xf:label>
+                                    <xf:input id="input-viewshow" ref="view/@show">
+                                        <xf:label>show/hide</xf:label>
+                                    </xf:input>                                        
+                                    <table>
+                                       <thead>
+                                           <tr>                                
+                                               <th colspan="2"/>                               
+                                           </tr>
+                                       </thead>                                    
+                                       <tbody id="r-viewfieldattrs" xf:repeat-nodeset="view/roles/role" startindex="1">
+                                           <tr>                                
+                                               <td style="color:steelblue;font-weight:bold;">
+                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                        <xf:label>a select1 combobox</xf:label>
+                                                       <xf:alert>invalid role</xf:alert>
+                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                            <xf:label ref="."></xf:label>
+                                                            <xf:value ref="."></xf:value>
+                                                        </xf:itemset>
+                                                    </xf:select1>                                           
+                                               </td>                                           
+                                               <td style="color:red;">                                           
+                                                   <xf:trigger>
+                                                       <xf:label>delete</xf:label>
+                                                       <xf:action>
+                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                                       </xf:action>
+                                                   </xf:trigger>   
+                                               </td>                            
+                                           </tr>
+                                       </tbody>
+                                    </table>    
+                                    <xf:trigger>
+                                       <xf:label>insert</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger> 
+                                </xf:group>
+                                
+                                <xf:group appearance="bf:verticalTable">
+                                   <xf:label>edit</xf:label>
+                                    <xf:input id="input-editshow" ref="edit/@show">
+                                        <xf:label>show/hide</xf:label>
+                                    </xf:input>                                
+                                   <table>
+                                       <thead>
+                                           <tr>                                
+                                               <th colspan="2"/>                               
+                                           </tr>
+                                       </thead>
+                                       <tbody id="r-editfieldattrs" appearance="minimal" xf:repeat-nodeset="edit/roles/role" startindex="1">
+                                           <tr>                                
+                                               <td style="color:steelblue;font-weight:bold;">
+                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                        <xf:label>a select1 combobox</xf:label>
+                                                       <xf:alert>invalid role</xf:alert>
+                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                            <xf:label ref="."></xf:label>
+                                                            <xf:value ref="."></xf:value>
+                                                        </xf:itemset>
+                                                    </xf:select1>                                           
+                                               </td>                                           
+                                               <td style="color:red;">                                           
+                                                   <xf:trigger>
+                                                       <xf:label>delete</xf:label>
+                                                       <xf:action>
+                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                                       </xf:action>
+                                                   </xf:trigger>   
+                                               </td>                            
+                                           </tr>
+                                       </tbody>
+                                   </table>    
+                                    <xf:trigger>
+                                       <xf:label>insert</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                   </xf:trigger> 
+                                </xf:group>
+                            </xf:group>                             
+                        
+                            <xf:group appearance="compact">
+                                <xf:group appearance="bf:verticalTable">
+                                    <xf:label>add</xf:label>
+                                    <xf:input id="input-addshow" ref="add/@show">
+                                        <xf:label>show/hide</xf:label>
+                                    </xf:input>                                        
+                                    <table>
+                                       <thead>
+                                           <tr>                                
+                                               <th colspan="2"/>                               
+                                           </tr>
+                                       </thead>                                    
+                                       <tbody id="r-addfieldattrs" xf:repeat-nodeset="add/roles/role" startindex="1">
+                                           <tr>                                
+                                               <td style="color:steelblue;font-weight:bold;">
+                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                        <xf:label>a select1 combobox</xf:label>
+                                                       <xf:alert>invalid role</xf:alert>
+                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                            <xf:label ref="."></xf:label>
+                                                            <xf:value ref="."></xf:value>
+                                                        </xf:itemset>
+                                                    </xf:select1>                                           
+                                               </td>                                           
+                                               <td style="color:red;">                                           
+                                                   <xf:trigger>
+                                                       <xf:label>delete</xf:label>
+                                                       <xf:action>
+                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                                       </xf:action>
+                                                   </xf:trigger>   
+                                               </td>                            
+                                           </tr>
+                                       </tbody>
+                                    </table>    
+                                    <xf:trigger>
+                                       <xf:label>insert</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger> 
+                                </xf:group>
+                                
+                                <xf:group appearance="bf:verticalTable">
+                                   <xf:label>listing</xf:label>
+                                    <xf:input id="input-listingshow" ref="listing/@show">
+                                        <xf:label>show/hide</xf:label>
+                                    </xf:input>                                
+                                   <table>
+                                       <thead>
+                                           <tr>                                
+                                               <th colspan="2"/>                               
+                                           </tr>
+                                       </thead>
+                                       <tbody id="r-listingfieldattrs" appearance="minimal" xf:repeat-nodeset="listing/roles/role" startindex="1">
+                                           <tr>                                
+                                               <td style="color:steelblue;font-weight:bold;">
+                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                        <xf:label>a select1 combobox</xf:label>
+                                                       <xf:alert>invalid role</xf:alert>
+                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                            <xf:label ref="."></xf:label>
+                                                            <xf:value ref="."></xf:value>
+                                                        </xf:itemset>
+                                                    </xf:select1>                                           
+                                               </td>                                           
+                                               <td style="color:red;">                                           
+                                                   <xf:trigger>
+                                                       <xf:label>delete</xf:label>
+                                                       <xf:action>
+                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
+                                                       </xf:action>
+                                                   </xf:trigger>   
+                                               </td>                            
+                                           </tr>
+                                       </tbody>
+                                   </table>    
+                                    <xf:trigger>
+                                       <xf:label>insert</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                   </xf:trigger> 
+                                </xf:group>
+                            </xf:group>                        
                         </xf:group>                         
-                
-                        <xf:select ref="hide/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
-                             <xf:label>hide modes</xf:label>
-                             <xf:itemset id="hidemodes"nodeset="instance('i-modes')/modes/mode">
-                                 <xf:label ref="node()"></xf:label>
-                                 <xf:value ref="node()"></xf:value>
-                             </xf:itemset>                           
-                        </xf:select>                 
-                        <xf:group appearance="minimal">
-                           <table>
-                               <thead>
-                                   <tr>                                
-                                       <th>
-                                           role
-                                       </th>                                
-                                       <th>
-                                           actions
-                                       </th>                               
-                                   </tr>
-                               </thead>
-                               <tbody id="r-hiddenfieldattrs" xf:repeat-nodeset="hide/roles/role">
-                                   <tr>                                
-                                       <td style="color:steelblue;font-weight:bold;">
-                                            <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                <xf:label>a select1 combobox</xf:label>
-                                               <xf:hint>Edit this role</xf:hint>
-                                               <xf:help>Type a Role</xf:help>
-                                               <xf:alert>invalid role</xf:alert>
-                                                <xf:itemset nodeset="instance()/roles/role">
-                                                    <xf:label ref="."></xf:label>
-                                                    <xf:value ref="."></xf:value>
-                                                </xf:itemset>
-                                            </xf:select1>                                           
-                                       </td>                                           
-                                       <td style="color:red;">                                           
-                                           <xf:trigger>
-                                               <xf:label>delete</xf:label>
-                                               <xf:action>
-                                                   <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
-                                               </xf:action>
-                                           </xf:trigger>   
-                                       </td>                            
-                                   </tr>
-                               </tbody>
-                           </table>    
-                            <xf:trigger>
-                               <xf:label>insert</xf:label>
-                               <xf:action>
-                                   <xf:insert nodeset="hide/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                               </xf:action>
-                           </xf:trigger> 
-                        </xf:group>                          
-                        -->
+                        
                         <br/>
                         <xf:group appearance="bf:horizontalTable">
                             <xf:label/>

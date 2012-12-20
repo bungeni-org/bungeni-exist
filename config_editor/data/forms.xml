@@ -5,16 +5,26 @@
     </roles>
     <descriptor name="formname">
         <field name="undefined" label="undefined" required="false" value_type="" render_type="" vocabulary="">
-            <show>
-                <modes originAttr="modes">
-                    <mode>add edit view listing</mode>
-                </modes>
-            </show>
-            <hide>
-                <modes originAttr="modes">
-                    <mode>add edit view listing</mode>
-                </modes>
-            </hide>
+            <view show="true">
+                <roles>
+                    <role>ALL</role>
+                </roles>
+            </view>
+            <edit show="true">
+                <roles>
+                    <role>ALL</role>
+                </roles>
+            </edit>
+            <add show="true">
+                <roles>
+                    <role>ALL</role>
+                </roles>
+            </add>
+            <listing show="true">
+                <roles>
+                    <role>ALL</role>
+                </roles>
+            </listing>
         </field>
     </descriptor>
 </ui>

@@ -1,6 +1,8 @@
 xquery version "3.0";
 
 module namespace config = "http://bungeni.org/xquery/config";
+import module namespace functx = "http://www.functx.com" at "functx.xqm";
+
 (: The db root :)
 
 declare variable $config:db-root-collection := "/db";
@@ -44,4 +46,29 @@ Loads an XSLT file
 :)
 declare function config:get-xslt($value as xs:string) as document-node() {
     local:__get_app_doc__($value)
+};
+
+declare function config:transform-configs($file-paths) {
+    for $store in $file-paths
+    let $login := xmldb:login("/db", "admin", "")
+    let $resource := functx:substring-after-last($store, '/')
+    let $collection := functx:substring-before-last($store, '/')
+    return
+        if (contains($store,"/forms/")) then (
+            xmldb:store($collection, $resource, local:split-form($store), "application/xml")            
+        )
+        else
+            ()
+};
+
+declare function local:split-form($form-path as xs:string) {
+    let $fname := "custom"
+    let $input_doc := doc($form-path)
+    let $step1 := config:get-xslt("/xsl/forms_split_step1.xsl")
+    let $step2 := config:get-xslt("/xsl/forms_split_step2.xsl")
+    let $step1_doc := transform:transform($input_doc, $step1,   <parameters>
+                                                                    <param name="fname" value="{$fname}" />
+                                                                </parameters>)
+    return 
+        transform:transform($step1_doc, $step2,())
 };

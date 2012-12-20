@@ -9,19 +9,14 @@ import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.x
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-formsui() as xs:string {
-
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=custom.xml")
-    return $path2resource
-};
-
 (: creates the output for all fields :)
 declare function local:fields($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "nothing")
     
-    let $count := count(local:getMatchingTasks()/descriptor[@name eq $form-id]/field)
-    for $field at $pos in local:getMatchingTasks()/descriptor[@name eq $form-id]/field
+    let $form := doc(concat($cfg:FORMS-COLLECTION,"/custom.xml"))/ui
+    
+    let $count := count($form/descriptor[@name eq $form-id]/field)
+    for $field at $pos in $form/descriptor[@name eq $form-id]/field
         return
             <tr>
                 <td>{data($field/@name)}</td>
@@ -60,16 +55,8 @@ declare function local:fields($doctype) as node() * {
             </tr>
 };
 
-declare function local:getMatchingTasks() as node() * {
-    let $fname := "custom"
-    let $input_doc := doc(concat($cfg:FORMS-COLLECTION,"/",$fname,".xml"))
-    let $step1 := cfg:get-xslt("/xsl/forms_split_step1.xsl")
-    let $step2 := cfg:get-xslt("/xsl/forms_split_step2.xsl")
-    let $step1_doc := transform:transform($input_doc, $step1,   <parameters>
-                                                                    <param name="fname" value="{$fname}" />
-                                                                </parameters>)
-    return 
-        transform:transform($step1_doc, $step2,())
+declare function local:get-form() as node() * {
+    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))
 };
 
 declare function local:mode() as xs:string {
@@ -118,7 +105,7 @@ return
                     
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{local:fn-formsui()}"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
                         ref="descriptor[@name eq 'formname']"
                         replace="instance"
                         serialization="none">
@@ -260,7 +247,7 @@ return
                                 {local:fields($docname)}
                             </table> 
                             <span>
-                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:getMatchingTasks()[last()]/@name)}']);">add field</a>
+                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:get-form()//descriptor/field[last()]/@name)}']);">add field</a>
                             </span>
                         </div>
                     </div>

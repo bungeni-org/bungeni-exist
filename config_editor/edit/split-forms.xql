@@ -24,12 +24,3 @@ let $step1_doc := transform:transform($input_doc, $step1,   <parameters>
                                                             </parameters>)
 return 
     transform:transform($step1_doc, $step2,())
-
-(:let $fname := "custom"
-let $doctype := xs:string(request:get-parameter("doc","none"))
-let $path2resource := concat($cfg:FORMS-COLLECTION,"/",$fname,".xml")
-let $xsl := cfg:get-xslt('/xsl/forms_split_attrs.xsl')
-let $doc := doc($path2resource)
-return transform:transform($doc, $xsl, <parameters>
-                                            <param name="fname" value="{$fname}" />
-                                       </parameters>):)

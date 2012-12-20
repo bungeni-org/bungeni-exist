@@ -233,8 +233,7 @@ return
                             </span>                        
                             <div dojoType="dijit.Menu" id="submenusys">
                                 <div dojoType="dijit.MenuItem" onClick="showDialogAb()">store from file-system</div>
-                                <!--div dojoType="dijit.MenuItem" onClick="javascript:dojo.publish('/sys');">store from file-system</div-->
-                                <div dojoType="dijit.MenuItem" onClick="alert('A To-Do')">create a working copy</div>
+                                <!--div dojoType="dijit.MenuItem" onClick="alert('A To-Do')">create a working copy</div-->
                                 <div dojoType="dijit.MenuItem" onClick="alert('Another To-Do')">sync back to filesystem</div>           
                             </div>
                         </div>
@@ -250,8 +249,8 @@ return
                     		<table>
                     			<tr>
                     				<td><label for="name">Path: </label></td>
-                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:98%;" id="fs_path" name="fs_path" value="/home/undesa/bungeni_apps/bungeni/src/bungeni_custom" /></td>
-                    			</tr>
+                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:130%;" id="fs_path" name="fs_path" value="/home/undesa/bungeni_apps/bungeni/src/bungeni_custom" /></td>
+                    			</tr>                    			
                     			<tr>
                     				<td colspan="2">This action will overrite existing bungeni_custom. You are warned</td>
                     			</tr>
@@ -270,7 +269,7 @@ return
                         <div id="embedDialogDB"></div>
                     </div>
     
-                    <div id="taskDialog" dojotype="dijit.Dialog" style="width:600px;" title="Add / Edit Dialog" autofocus="false">
+                    <div id="taskDialog" dojotype="dijit.Dialog" style="width:860px;" title="Add / Edit Dialog" autofocus="false">
                         <div id="embedDialog"></div>
                     </div>
     

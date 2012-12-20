@@ -9,14 +9,6 @@ import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.x
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-formsui() as xs:string {
-
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=","custom.xml")
-    let $xsl := cfg:get-xslt('/xsl/forms_split_attrs.xsl')
-    return $path2resource
-};
-
 declare function local:mode() as xs:string {
     let $field := request:get-parameter("field", "none")
     let $mode := if($field eq "undefined") then "new"
@@ -117,7 +109,7 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{local:fn-formsui()}"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
                         ref="descriptor[@name eq 'formname']/field[@name eq 'undefined']"
                         replace="instance"
                         serialization="none">
@@ -244,7 +236,7 @@ return
                                                <th colspan="2"/>                               
                                            </tr>
                                        </thead>                                    
-                                       <tbody id="r-viewfieldattrs" xf:repeat-nodeset="view/roles/role" startindex="1">
+                                       <tbody id="r-viewfieldattrs" xf:repeat-nodeset="view/roles/role[position()!=last()]" startindex="1">
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
@@ -256,23 +248,42 @@ return
                                                         </xf:itemset>
                                                     </xf:select1>                                           
                                                </td>                                           
-                                               <td style="color:red;">                                           
-                                                   <xf:trigger>
-                                                       <xf:label>delete</xf:label>
-                                                       <xf:action>
-                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
-                                                       </xf:action>
-                                                   </xf:trigger>   
-                                               </td>                            
+                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                            
                                            </tr>
                                        </tbody>
                                     </table>    
-                                    <xf:trigger>
-                                       <xf:label>insert</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                       </xf:action>
-                                    </xf:trigger> 
+                                    <xf:group appearance="minimal">
+                                        <table>                              
+                                           <tbody>
+                                               <tr>                                
+                                                   <td style="color:steelblue;font-weight:bold;">
+                                                        <xf:trigger>
+                                                           <xf:label>insert</xf:label>
+                                                           <xf:action>
+                                                               <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                                           </xf:action>
+                                                        </xf:trigger>                                       
+                                                   </td>                                           
+                                                   <td style="color:red;">                                           
+                                                        <xf:trigger>
+                                                            <xf:label>delete</xf:label>
+                                                            <xf:action ev:event="DOMActivate">
+                                                                <!--    For known reason you cannot delete the nodeset.
+                                                                        http://en.wikibooks.org/wiki/XForms/Delete
+                                                                        http://www.w3.org/TR/xforms/#action-insert
+                                                                        Solution:
+                                                                        http://publib.boulder.ibm.com/infocenter/forms/v3r5m1/index.jsp?topic=%2Fcom.ibm.form.designer.xfdl.doc%2Fi_xfdl_g_xforms_actions_xforms_delete.html
+                                                                -->
+                                                                <xf:delete nodeset="view/roles/role[last()>1]" at="index('r-viewfieldattrs')"/>
+                                                                <xf:insert nodeset="view/roles/role[last()=1]" at="1" position="before"/>
+                                                                <xf:setfocus control="r-viewfieldattrs"/>
+                                                            </xf:action> 
+                                                        </xf:trigger>  
+                                                   </td>                            
+                                               </tr>
+                                           </tbody>
+                                        </table>
+                                    </xf:group>
                                 </xf:group>
                                 
                                 <xf:group appearance="bf:verticalTable">
@@ -286,7 +297,7 @@ return
                                                <th colspan="2"/>                               
                                            </tr>
                                        </thead>
-                                       <tbody id="r-editfieldattrs" appearance="minimal" xf:repeat-nodeset="edit/roles/role" startindex="1">
+                                       <tbody id="r-editfieldattrs" appearance="minimal" xf:repeat-nodeset="edit/roles/role[position()!=last()]" startindex="1">
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
@@ -298,27 +309,38 @@ return
                                                         </xf:itemset>
                                                     </xf:select1>                                           
                                                </td>                                           
-                                               <td style="color:red;">                                           
-                                                   <xf:trigger>
-                                                       <xf:label>delete</xf:label>
-                                                       <xf:action>
-                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
-                                                       </xf:action>
-                                                   </xf:trigger>   
-                                               </td>                            
+                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                           
                                            </tr>
                                        </tbody>
                                    </table>    
-                                    <xf:trigger>
-                                       <xf:label>insert</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                       </xf:action>
-                                   </xf:trigger> 
+                                    <xf:group appearance="minimal">
+                                        <table>                              
+                                           <tbody>
+                                               <tr>                                
+                                                   <td style="color:steelblue;font-weight:bold;">
+                                                        <xf:trigger>
+                                                           <xf:label>insert</xf:label>
+                                                           <xf:action>
+                                                               <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                                           </xf:action>
+                                                        </xf:trigger>                                       
+                                                   </td>                                           
+                                                   <td style="color:red;">                                           
+                                                        <xf:trigger>
+                                                            <xf:label>delete</xf:label>
+                                                            <xf:action ev:event="DOMActivate">
+                                                                <xf:delete nodeset="edit/roles/role[last()>1]" at="index('r-editfieldattrs')"/>
+                                                                <xf:insert nodeset="edit/roles/role[last()=1]" at="1" position="before"/>
+                                                                <xf:setfocus control="r-editfieldattrs"/>
+                                                            </xf:action> 
+                                                        </xf:trigger>  
+                                                   </td>                            
+                                               </tr>
+                                           </tbody>
+                                        </table>
+                                    </xf:group>
                                 </xf:group>
-                            </xf:group>                             
-                        
-                            <xf:group appearance="compact">
+                            
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>add</xf:label>
                                     <xf:input id="input-addshow" ref="add/@show">
@@ -330,7 +352,7 @@ return
                                                <th colspan="2"/>                               
                                            </tr>
                                        </thead>                                    
-                                       <tbody id="r-addfieldattrs" xf:repeat-nodeset="add/roles/role" startindex="1">
+                                       <tbody id="r-addfieldattrs" xf:repeat-nodeset="add/roles/role[position()!=last()]" startindex="1">
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
@@ -342,25 +364,38 @@ return
                                                         </xf:itemset>
                                                     </xf:select1>                                           
                                                </td>                                           
-                                               <td style="color:red;">                                           
-                                                   <xf:trigger>
-                                                       <xf:label>delete</xf:label>
-                                                       <xf:action>
-                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
-                                                       </xf:action>
-                                                   </xf:trigger>   
-                                               </td>                            
+                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                            
                                            </tr>
                                        </tbody>
                                     </table>    
-                                    <xf:trigger>
-                                       <xf:label>insert</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                       </xf:action>
-                                    </xf:trigger> 
+                                    <xf:group appearance="minimal">
+                                        <table>                              
+                                           <tbody>
+                                               <tr>                                
+                                                   <td style="color:steelblue;font-weight:bold;">
+                                                        <xf:trigger>
+                                                           <xf:label>insert</xf:label>
+                                                           <xf:action>
+                                                               <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                                           </xf:action>
+                                                        </xf:trigger>                                       
+                                                   </td>                                           
+                                                   <td style="color:red;">                                           
+                                                        <xf:trigger>
+                                                            <xf:label>delete</xf:label>
+                                                            <xf:action ev:event="DOMActivate">
+                                                                <xf:delete nodeset="add/roles/role[last()>1]" at="index('r-addfieldattrs')"/>
+                                                                <xf:insert nodeset="add/roles/role[last()=1]" at="1" position="before"/>
+                                                                <xf:setfocus control="r-addfieldattrs"/>
+                                                            </xf:action> 
+                                                        </xf:trigger>  
+                                                   </td>                            
+                                               </tr>
+                                           </tbody>
+                                        </table>
+                                    </xf:group>
                                 </xf:group>
-                                
+                                      
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>listing</xf:label>
                                     <xf:input id="input-listingshow" ref="listing/@show">
@@ -372,7 +407,7 @@ return
                                                <th colspan="2"/>                               
                                            </tr>
                                        </thead>
-                                       <tbody id="r-listingfieldattrs" appearance="minimal" xf:repeat-nodeset="listing/roles/role" startindex="1">
+                                       <tbody id="r-listingfieldattrs" appearance="minimal" xf:repeat-nodeset="listing/roles/role[position()!=last()]" startindex="1">
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
@@ -384,25 +419,40 @@ return
                                                         </xf:itemset>
                                                     </xf:select1>                                           
                                                </td>                                           
-                                               <td style="color:red;">                                           
-                                                   <xf:trigger>
-                                                       <xf:label>delete</xf:label>
-                                                       <xf:action>
-                                                           <xf:delete nodeset="." ev:event="DOMActivate"></xf:delete>
-                                                       </xf:action>
-                                                   </xf:trigger>   
-                                               </td>                            
+                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                           
                                            </tr>
                                        </tbody>
                                    </table>    
-                                    <xf:trigger>
-                                       <xf:label>insert</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                       </xf:action>
-                                   </xf:trigger> 
+                                    <xf:group appearance="minimal">
+                                        <table>                              
+                                           <tbody>
+                                               <tr>                                
+                                                   <td style="color:steelblue;font-weight:bold;">
+                                                        <xf:trigger>
+                                                           <xf:label>insert</xf:label>
+                                                           <xf:action>
+                                                               <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                                           </xf:action>
+                                                        </xf:trigger>                                       
+                                                   </td>                                           
+                                                   <td style="color:red;">                                           
+                                                        <xf:trigger>
+                                                            <xf:label>delete</xf:label>           
+                                                            <xf:action ev:event="DOMActivate">
+                                                                <xf:delete nodeset="listing/roles/role[last()>1]" at="index('r-listingfieldattrs')"/>
+                                                                <xf:insert nodeset="listing/roles/role[last()=1]" at="1" position="before"/>
+                                                                <xf:setfocus control="r-listingfieldattrs"/>
+                                                            </xf:action>                                                            
+                                                        </xf:trigger>  
+                                                   </td>                            
+                                               </tr>
+                                           </tbody>
+                                        </table>
+                                    </xf:group>
                                 </xf:group>
-                            </xf:group>                        
+                                                                  
+                            </xf:group>                             
+                                              
                         </xf:group>                         
                         
                         <br/>

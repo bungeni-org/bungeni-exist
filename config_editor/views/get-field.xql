@@ -9,13 +9,6 @@ import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.x
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:mode() as xs:string {
-    let $field := request:get-parameter("field", "none")
-    let $mode := if($field eq "undefined") then "new"
-                 else "edit"
-    return $mode
-};
-
 let $contextPath := request:get-context-path()
 let $docname := xs:string(request:get-parameter("doc","none"))
 let $fieldname := xs:string(request:get-parameter("field","none"))
@@ -63,7 +56,7 @@ return
                     <xf:instance id="i-originrole" xmlns="">
                         <data>
                             <roles>
-                               <role/>                               
+                               <role>ALL</role>                               
                             </roles>
                         </data>
                     </xf:instance>                     
@@ -99,12 +92,22 @@ return
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
                         <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
+                        
                         <xf:bind nodeset="view/@show" type="xs:boolean"/>  
                         <xf:bind nodeset="edit/@show" type="xs:boolean"/>
                         <xf:bind nodeset="add/@show" type="xs:boolean"/>
                         <xf:bind nodeset="listing/@show" type="xs:boolean"/>
-                        <xf:bind id="view" nodeset="instance('i-modes')/view/roles/role" type="xs:string" constraint="instance()/view/roles/role[not(.)]" />     
-                        <xf:bind id="edit" nodeset="instance('i-modes')/edit/roles/role" type="xs:string" /> 
+                        
+                        <!-- ensure the roles are not empty -->
+                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]"/>
+                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq count(distinct-values(role))]"/>
+                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq count(distinct-values(role))]"/>
+                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role))]"/>
+                        
+                        <!--xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role))+1]" /-->
+                        <!--xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[(contains(role,'ALL') and (count(role) = 1)) or (not(contains(role,'ALL')) and count(role) gt 1)]" /--> 
+                        <!--xf:bind id="view" nodeset="instance('i-modes')/view/roles/role" type="xs:string" constraint="instance()/view/roles/role[not(.)]" />     
+                        <xf:bind id="edit" nodeset="instance('i-modes')/edit/roles/role" type="xs:string" /--> 
                     </xf:bind>
 
                     <xf:submission id="s-get-formsui"
@@ -149,7 +152,6 @@ return
                                 dojo.publish('/form/view',['{$docname}','fields']);                      
                                 dijit.byId("taskDialog").hide();
                             </script>
-                            <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
@@ -161,16 +163,9 @@ return
                             <xf:message>The form fields have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
-    
-                    <xf:submission id="s-clean"
-                                   ref="instance('i-field')/descriptor/field"
-                                   resource="{$contextPath}/rest/db/config_editor/bungeni_custom/custom.xml"
-                                   method="get"
-                                   replace="instance"
-                                   instance="i-field">
-                    </xf:submission>
+
                     <xf:action ev:event="xforms-ready" >
-                        <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
+                        <xf:send submission="s-get-formsui"/>
                         <xf:setfocus control="field-name"/>
                     </xf:action>
 
@@ -178,7 +173,7 @@ return
             
             </div>    	
             <div style="width: 100%; height: auto">
-                <xf:group id="g-field" ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
+                <xf:group id="g-field" ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']" class="fieldEdit">
 
                         <xf:group appearance="bf:verticalTable">
                             <xf:input id="field-name" ref="@name">
@@ -225,6 +220,7 @@ return
                              
                             <xf:group appearance="compact">
                                 <xf:label>Modes</xf:label>
+                                <!-- view mode -->
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>view</xf:label>
                                     <xf:input id="input-viewshow" ref="view/@show">
@@ -241,7 +237,7 @@ return
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
                                                         <xf:label>a select1 combobox</xf:label>
-                                                       <xf:alert>invalid role</xf:alert>
+                                                       <xf:alert>duplicate role or empty role</xf:alert>
                                                         <xf:itemset nodeset="instance()/roles/role">
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>
@@ -286,6 +282,7 @@ return
                                     </xf:group>
                                 </xf:group>
                                 
+                                <!-- edit mode -->
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>edit</xf:label>
                                     <xf:input id="input-editshow" ref="edit/@show">
@@ -340,7 +337,8 @@ return
                                         </table>
                                     </xf:group>
                                 </xf:group>
-                            
+                                
+                                <!-- add -->
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>add</xf:label>
                                     <xf:input id="input-addshow" ref="add/@show">
@@ -395,7 +393,8 @@ return
                                         </table>
                                     </xf:group>
                                 </xf:group>
-                                      
+                                     
+                                <!-- listing -->
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>listing</xf:label>
                                     <xf:input id="input-listingshow" ref="listing/@show">
@@ -412,7 +411,7 @@ return
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
                                                         <xf:label>a select1 combobox</xf:label>
-                                                       <xf:alert>invalid role</xf:alert>
+                                                       <xf:alert>invalid listing role(s)</xf:alert>
                                                         <xf:itemset nodeset="instance()/roles/role">
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>

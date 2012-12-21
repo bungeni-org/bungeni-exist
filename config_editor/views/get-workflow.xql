@@ -5,22 +5,24 @@ import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
+import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.xqm";
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-workflow() as xs:string {
-
+declare function local:get-workflow() as node() * {
+    
     let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-workflow.xql?doc=",$doc)
-    return $path2resource
+    let $workflow := doc($cfg:WORKFLOWS-COLLECTION || "/" || $doc)/workflow
+    
+    return $workflow
 };
 
 (: creates the output for all document features :)
 declare function local:features($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     
-    let $count := count(local:getMatchingTasks()/feature)
-    for $feature at $pos in local:getMatchingTasks()/feature
+    let $count := count(local:get-workflow()/feature)
+    for $feature at $pos in local:get-workflow()/feature
         return
             <tr>
                 <td><a href="javascript:dojo.publish('/view',['feature','{$doctype}','feature','{$pos}','none']);">{data($feature/@name)}</a></td>
@@ -33,8 +35,8 @@ declare function local:features($doctype) as node() * {
 declare function local:facets($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     
-    let $count := count(local:getMatchingTasks()/facet)
-    for $facet at $pos in local:getMatchingTasks()/facet
+    let $count := count(local:get-workflow()/facet)
+    for $facet at $pos in local:get-workflow()/facet
         return
             <tr>
                 <td>{data($facet/@name)}</td>
@@ -45,10 +47,11 @@ declare function local:facets($doctype) as node() * {
 
 (: creates the output for all document states :)
 declare function local:states($doctype) as node() * {
+    let $contextPath := request:get-context-path()
     let $form-id := request:get-parameter("doc", "workflow.xml")
     
-    let $count := count(local:getMatchingTasks()/state)
-    for $state at $pos in local:getMatchingTasks()/state
+    let $count := count(local:get-workflow()/state)
+    for $state at $pos in local:get-workflow()/state
         return
             <tr>
                 <td><a href="javascript:dojo.publish('/view',['state','{$doctype}','{data($state/@id)}','{$pos}','none']);">{data($state/@id)}</a></td>
@@ -63,8 +66,8 @@ declare function local:states($doctype) as node() * {
 declare function local:transitions($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     
-    let $count := count(local:getMatchingTasks()/transition)
-    for $transition at $pos in local:getMatchingTasks()/transition
+    let $count := count(local:get-workflow()/transition)
+    for $transition at $pos in local:get-workflow()/transition
         return
             <tr>
                 <td>{data($transition/@title)}</td>
@@ -74,17 +77,6 @@ declare function local:transitions($doctype) as node() * {
                 <td><a href="javascript:dojo.publish('/transition/edit',['{$doctype}','{data($transition/@id)}']);">edit</a></td>
                 <td><a href="javascript:dojo.publish('/transition/delete',['{$doctype}','{data($transition/@id)}']);">delete</a></td>
             </tr>
-};
-
-declare function local:getMatchingTasks() as node() * {
-    
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $doc := let $form := doc(concat('/db/config_editor/bungeni_custom/workflows/',$doc))
-                let $xsl := doc('/db/config_editor/xsl/wf_split_attrs.xsl')
-                return transform:transform($form, $xsl, <parameters>
-                                                            <param name="docname" value="{util:document-name($form)}" />
-                                                         </parameters>)
-    return $doc
 };
 
 let $contextPath := request:get-context-path()
@@ -104,7 +96,7 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model id="m-workflow">
-                    <xf:instance id="i-workflowui" src="{local:fn-workflow()}"/>                   
+                    <xf:instance id="i-workflowui" src="{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}"/>                   
 
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@name" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />

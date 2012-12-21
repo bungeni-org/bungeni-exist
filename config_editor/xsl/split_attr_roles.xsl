@@ -8,6 +8,8 @@
                     <xsl:value-of select="."/>
                 </role>
             </xsl:for-each>
+            <!-- !+NOTE blank role not shown but used as template node in XForms -->
+            <role>ALL</role>
         </xsl:element>
     </xsl:template>
 </xsl:stylesheet>

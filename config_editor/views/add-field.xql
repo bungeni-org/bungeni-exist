@@ -9,14 +9,6 @@ import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.x
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-formsui() as xs:string {
-
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=","custom.xml")
-    let $xsl := cfg:get-xslt('/xsl/forms_split_attrs.xsl')
-    return $path2resource
-};
-
 declare function local:mode() as xs:string {
     let $field := request:get-parameter("field", "none")
     let $mode := if($field eq "undefined") then "new"
@@ -71,12 +63,26 @@ return
                     <xf:instance id="i-fieldtmpl" xmlns="">
                         <data>
                             <field name="" label="" required="false" value_type="text" render_type="text_line" vocabulary="">
-                                <show>
-                                    <modes originAttr="modes">add edit view listing</modes>
-                                </show>
-                                <hide>
-                                    <modes originAttr="modes">add edit view listing</modes>
-                                </hide>                                
+                                <view show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </view>
+                                <edit show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </edit>
+                                <add show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </add>
+                                <listing show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </listing>                             
                             </field>
                         </data>
                     </xf:instance>                    
@@ -118,7 +124,7 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{local:fn-formsui()}"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
                         ref="descriptor[@name eq 'formname']/field[@name eq 'undefined']"
                         replace="instance"
                         serialization="none">

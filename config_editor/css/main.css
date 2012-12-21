@@ -246,3 +246,9 @@ h1 {
 .xfControl {
 	width:100%;
 }
+
+/* fieldEdit Form*/
+.InlineRoundBordersAlert .fieldEdit .xfAlert {
+	margin-top:-27px !important;
+	margin-left:-5px !important;
+}

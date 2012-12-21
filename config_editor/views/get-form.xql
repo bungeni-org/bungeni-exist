@@ -13,7 +13,7 @@ declare option exist:serialize "method=xhtml media-type=text/xml";
 declare function local:fields($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "nothing")
     
-    let $form := doc(concat($cfg:FORMS-COLLECTION,"/custom.xml"))/ui
+    let $form := local:get-form()
     
     let $count := count($form/descriptor[@name eq $form-id]/field)
     for $field at $pos in $form/descriptor[@name eq $form-id]/field
@@ -25,10 +25,10 @@ declare function local:fields($doctype) as node() * {
                 <td>{data($field/@value_type)}</td>
                 <td>{data($field/@render_type)}</td>  
                 <td>
-                    <b>view:</b> {$field/view/roles/role} 
-                    <b>edit:</b> {$field/edit/roles/role} 
-                    <b>add:</b> {$field/add/roles/role} 
-                    <b>listing:</b> {$field/listing/roles/role}
+                    <b>view:</b> {$field/view/roles/role[position()!=last()]} 
+                    <b>edit:</b> {$field/edit/roles/role[position()!=last()]} 
+                    <b>add:</b> {$field/add/roles/role[position()!=last()]} 
+                    <b>listing:</b> {$field/listing/roles/role[position()!=last()]}
                 </td>    
                 <td>
                 {
@@ -56,7 +56,7 @@ declare function local:fields($doctype) as node() * {
 };
 
 declare function local:get-form() as node() * {
-    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))
+    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))/ui
 };
 
 declare function local:mode() as xs:string {

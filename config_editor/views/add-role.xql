@@ -9,14 +9,6 @@ import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.x
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-formsui() as xs:string {
-
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=","custom.xml")
-    let $xsl := cfg:get-xslt('/xsl/forms_split_attrs.xsl')
-    return $path2resource
-};
-
 declare function local:mode() as xs:string {
     let $field := request:get-parameter("field", "none")
     let $mode := if($field eq "undefined") then "new"
@@ -26,7 +18,7 @@ declare function local:mode() as xs:string {
 
 let $contextPath := request:get-context-path()
 let $docname := xs:string(request:get-parameter("doc","none"))
-let $fieldname := xs:string(request:get-parameter("field","none"))
+let $roleid := xs:string(request:get-parameter("role","none"))
 let $mode := xs:string(request:get-parameter("mode","old"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
@@ -36,76 +28,30 @@ return
         xmlns:zope="http://namespaces.zope.org/zope"
         xmlns:db="http://namespaces.objectrealms.net/rdb">
    <head>
-      <title>Edit Field</title>
+      <title>Edit Role</title>
     </head>
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-field" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>   
-                    <xf:instance id="i-modes" xmlns="">
+                    <xf:instance id="i-field" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>               
+ 
+                    <xf:instance id="i-roletmpl" xmlns="">
                         <data>
-                            <modes>
-                               <mode>add</mode>
-                               <mode>edit</mode>
-                               <mode>view</mode>
-                               <mode>listing</mode>                               
-                            </modes>
+                            <roles>
+                                <role/>
+                            </roles>
                         </data>
-                    </xf:instance>       
-                    
-                    <xf:instance id="i-fieldtmpl" xmlns="">
-                        <data>
-                            <field name="" label="" required="false" value_type="text" render_type="text_line" vocabulary="">
-                                <show>
-                                    <modes originAttr="modes">add edit view listing</modes>
-                                </show>
-                                <hide>
-                                    <modes originAttr="modes">add edit view listing</modes>
-                                </hide>                                
-                            </field>
-                        </data>
-                    </xf:instance>                    
-                    
-                    <xf:instance id="i-rendertypes" xmlns="">
-                        <data>
-                            <rendertypes>
-                               <rendertype>text_line</rendertype>
-                               <rendertype>rich_text</rendertype>      
-                               <rendertype>single_select</rendertype> 
-                               <rendertype>number</rendertype> 
-                               <rendertype>text_box</rendertype> 
-                               <rendertype>date</rendertype>
-                            </rendertypes>
-                        </data>
-                    </xf:instance>     
-                    
-                    <xf:instance id="i-valuetypes" xmlns="">
-                        <data>
-                            <valuetypes>
-                               <valuetype>text</valuetype>
-                               <valuetype>language</valuetype>
-                               <valuetype>vocabulary</valuetype>                                 
-                               <valuetype>date</valuetype>
-                               <valuetype>number</valuetype>
-                            </valuetypes>
-                        </data>
-                    </xf:instance>               
-
-                    <xf:bind nodeset="instance('i-fieldtmpl')/field">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
-                        <xf:bind nodeset="@label" type="xf:string" required="true()" />
-                        <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
-                        <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
-                        <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
-                        <xf:bind id="showmodes" nodeset="instance('i-modes')/show/modes/mode" type="xs:string" />     
-                        <xf:bind id="hidemodes" nodeset="instance('i-modes')/hide/modes/mode" type="xs:string" />                  
+                    </xf:instance> 
+ 
+                    <xf:bind nodeset="roles/role[. eq '{$docname}']">
+                        <xf:bind nodeset="" type="xf:string" required="true" />
                     </xf:bind>
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{local:fn-formsui()}"
-                        ref="descriptor[@name eq 'formname']/field[@name eq 'undefined']"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
+                        ref="roles/role[. eq 'undefined']"
                         replace="instance"
                         serialization="none">
                     </xf:submission>                   
@@ -138,21 +84,15 @@ return
                             <xf:value>exist</xf:value>
                         </xf:header>
     
-                        <xf:action ev:event="xforms-submit" if="'{local:mode()}' = 'new'">
-                            <xf:message level="ephemeral">Adding new field</xf:message>                          
-                        </xf:action>
-    
                         <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">field was saved successfully</xf:message>
+                            <xf:message level="ephemeral">field '{$roleid}' saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                                dojo.publish('/form/view',['{$docname}','fields']);                      
+                                dojo.publish('/view',['roles','roles','none','none','none']);                      
                                 dijit.byId("taskDialog").hide();
                             </script>
-                            <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
-                             <xf:message level="ephemeral">error occured while saving the field</xf:message>
                             <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
                             <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
                         </xf:action>
@@ -161,93 +101,35 @@ return
                             <xf:message>The form fields have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
-    
-                    <xf:submission id="s-clean"
-                                   ref="instance('i-field')/descriptor/field"
-                                   resource="{$contextPath}/rest/db/config_editor/bungeni_custom/custom.xml"
-                                   method="get"
-                                   replace="instance"
-                                   instance="i-field">
-                    </xf:submission>
+
                     <xf:action ev:event="xforms-ready" >
                         <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
-                        <xf:setfocus control="field-name"/>
+                        <xf:setfocus control="role-name"/>
                     </xf:action>
 
             </xf:model>
             
             </div>    	
-            <div style="width: 100%; height: auto">         
-                <xf:group id="g-field" ref="instance('i-fieldtmpl')/field" appearance="bf:verticalTable">
+            <div style="width: 100%; height: auto">
+                <xf:group id="g-role" ref="instance('i-roletmpl')/roles" appearance="bf:verticalTable">
 
-                       <xf:input id="field-name" ref="@name">
-                           <xf:label>field title</xf:label>
-                           <xf:hint>Must be an existing title</xf:hint>
-                           <xf:alert>invalid field name</xf:alert>
-                           <xf:help>help with name of field</xf:help>
-                       </xf:input> 
-
-                       <xf:input id="label-name" ref="@label">
-                           <xf:label>label</xf:label>
-                           <xf:hint>Label used for this field</xf:hint>
-                           <xf:alert>invalid label name</xf:alert>
-                           <xf:help>help with label of field</xf:help>
-                       </xf:input> 
-                       
-                       <xf:input id="input-req-field" ref="@required">
-                           <xf:label>required</xf:label>
-                           <xf:hint>Enabling this means it is a required field</xf:hint>
-                           <xf:alert>invalid null boolean</xf:alert>
-                       </xf:input>  
-                       
-                        <xf:select1 id="select-val-type" ref="@value_type" appearance="minimal" incremental="true">
-                            <xf:label>value type</xf:label>
-                            <xf:hint>a Hint for this control</xf:hint>
-                            <xf:help>help for select1</xf:help>
-                            <xf:alert>invalid</xf:alert>
-                            <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>  
-                        
-                        <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
-                            <xf:label>render type</xf:label>
-                            <xf:hint>a Hint for this control</xf:hint>
-                            <xf:help>help for select1</xf:help>
-                            <xf:alert>invalid</xf:alert>
-                            <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>  
-                        
-                        <xf:select ref="show/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
-                            <xf:label>show modes</xf:label>
-                            <xf:itemset id="showmodes"nodeset="instance('i-modes')/modes/mode">
-                                <xf:label ref="node()"></xf:label>
-                                <xf:value ref="node()"></xf:value>
-                            </xf:itemset>                           
-                        </xf:select> 
-                        
-                        <xf:select ref="hide/modes[@originAttr='modes']" selection="closed" appearance="full" incremental="true" >  
-                            <xf:label>hide modes</xf:label>
-                            <xf:itemset id="hidemodes"nodeset="instance('i-modes')/modes/mode">
-                                <xf:label ref="node()"></xf:label>
-                                <xf:value ref="node()"></xf:value>
-                            </xf:itemset>                           
-                        </xf:select>  
+                       <xf:input id="role-name" ref="role">
+                           <xf:label>role</xf:label>
+                           <xf:hint>Should be a defined role</xf:hint>
+                           <xf:alert>invalid role</xf:alert>
+                           <xf:help>help with name of role</xf:help>
+                       </xf:input>                         
                         
                         <br/>
                         <xf:group appearance="bf:horizontalTable">
                             <xf:label/>
                             <xf:trigger>
                                 <xf:label>Save</xf:label>
-                                <xf:action if="'{$mode}' = 'new'">
-                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>                                   
-                                    <xf:insert nodeset="instance()/descriptor[@name eq '{$docname}']/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
+                                <xf:action>
+                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>                                 
+                                    <xf:insert nodeset="instance()/roles/child::*" at="last()" position="after" origin="instance('i-roletmpl')/roles/role" />                                    
                                     <xf:send submission="s-add"/>
-                                </xf:action>                                
+                                </xf:action>                              
                             </xf:trigger>
                             <xf:trigger>
                                 <xf:label>Close</xf:label>

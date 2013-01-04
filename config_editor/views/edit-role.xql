@@ -9,14 +9,6 @@ import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.x
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-formsui() as xs:string {
-
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-forms.xql?doc=custom.xml")
-    let $xsl := cfg:get-xslt('/xsl/forms_split_attrs.xsl')
-    return $path2resource
-};
-
 declare function local:mode() as xs:string {
     let $field := request:get-parameter("field", "none")
     let $mode := if($field eq "undefined") then "new"
@@ -50,7 +42,7 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{local:fn-formsui()}"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
                         ref="roles/role[. eq 'undefined']"
                         replace="instance"
                         serialization="none">
@@ -87,7 +79,7 @@ return
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">field '{$roleid}' saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                                dojo.publish('/view',['roles','roles','none']);                      
+                                dojo.publish('/view',['roles','roles','none','none','none']);                      
                                 dijit.byId("taskDialog").hide();
                             </script>
                         </xf:action>

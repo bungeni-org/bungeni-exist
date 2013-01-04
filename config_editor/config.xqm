@@ -102,3 +102,13 @@ declare function local:split-workflow($wf-path as xs:string) {
                                                 <param name="docname" value="{util:document-name($doc)}" />
                                            </parameters>)        
 };
+
+(:
+: Stores the path that successfully loads bungeni_custom files into eXist-db
+:)
+declare function config:update-fs-path($fs-bu-custom-path as xs:string) {
+    
+    let $config-doc := doc('config.xml')
+    return 
+        update replace $config-doc//bungeni-custom-fs-path/text() with $fs-bu-custom-path
+};

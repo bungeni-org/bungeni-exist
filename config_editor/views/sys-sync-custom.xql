@@ -21,14 +21,7 @@ let $ex-editor-coll := $root-coll || "/" || "config_editor"
 let $ex-working-copy :=$ex-editor-coll || "/" || $ex-bu-custom
 
 let $login := xmldb:login($root-coll, "admin", "")
-let $created_bu_wc := if (xmldb:collection-available($ex-working-copy)) then () else xmldb:create-collection($ex-editor-coll,$ex-bu-custom)
-let $storing := xmldb:store-files-from-pattern($ex-working-copy, $fs-bu-custom, "**/*.xml",'application/xml',true())
-(: types.xml is the arch document. Its important to find it as guaranttee that the correct folder path was given :)
-let $uploadstate := if (contains($storing,"types.xml")) then true() else false()
-let $update-fs-path-in-config := if ($uploadstate eq true()) then cfg:update-fs-path($fs-bu-custom) else ()
-(: copying the original copy before we tranform the working copy :)
-let $store-new-original := xmldb:copy($ex-working-copy,$root-coll)
-let $transform-working-copy := cfg:transform-configs($storing)
+(:let file:serialize($node-set* as node(), $path as item(), $parameters* as xs:string):) 
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -46,26 +39,26 @@ return
                 
                         case true() return
                             <div>
-                                <h2>Upload was successful: <a href="javascript:location.reload();">reload page</a></h2>
+                                <h2>Sync was successful: written back to file-system
                                 <br/>
                                 <div style="float:left">
-                                    <h1>uploaded</h1>
+                                    <h1>written</h1>
                                     <ol>{
                                     for $one in $storing    
                                         return <li>{$one}</li>
                                      }</ol>   
                                 </div>
                                 <div style="float:right">
-                                    <h1>transformed</h1>
+                                    <h1>transformed back</h1>
                                     <ol>{for $entry in $transform-working-copy
                                     return <li>{$entry}</li> }</ol>
                                 </div>                               
                             </div>
                         case false() return
                             <div>
-                                <h2>Upload was unsuccessful</h2>
+                                <h2>Sync was unsuccessful</h2>
                                 <span>
-                                    Ensure you put the correct absolute-path to the <i>bungeni_custom</i> folder of your Bungeni application
+                                    Ensure the <i>bungeni_custom</i> folder of your Bungeni application on the file-system is writable. 
                                 </span>                            
                             </div>
                         default return

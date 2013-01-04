@@ -11,8 +11,11 @@ declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all roles :)
 declare function local:roles() as node() * {
-    let $count := count(local:getMatchingTasks()/roles/role)
-    for $role at $pos in local:getMatchingTasks()/roles/role
+
+    let $form := local:get-form()
+    
+    let $count := count($form/roles/role)
+    for $role at $pos in $form/roles/role
         return
             <tr>
                 <td>{data($role)}</td>
@@ -21,16 +24,8 @@ declare function local:roles() as node() * {
             </tr>
 };
 
-declare function local:getMatchingTasks() as node() * {
-    let $fname := "custom"
-    let $input_doc := doc(concat($cfg:FORMS-COLLECTION,"/",$fname,".xml"))
-    let $step1 := cfg:get-xslt("/xsl/forms_split_step1.xsl")
-    let $step2 := cfg:get-xslt("/xsl/forms_split_step2.xsl")
-    let $step1_doc := transform:transform($input_doc, $step1,   <parameters>
-                                                                    <param name="fname" value="{$fname}" />
-                                                                </parameters>)
-    return 
-        transform:transform($step1_doc, $step2,())
+declare function local:get-form() as node() * {
+    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))/ui
 };
 
 let $contextPath := request:get-context-path()
@@ -59,7 +54,7 @@ return
                         {local:roles()}
                     </table>
                     <span>
-                        <a href="javascript:dojo.publish('/role/add',['role','new']);">add role</a>
+                        <a href="javascript:dojo.publish('/add',['role','custom.xml','roles','role','none']);">add role</a>
                     </span>  
             </div>                    
         </div>

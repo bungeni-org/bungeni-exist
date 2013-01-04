@@ -4,6 +4,7 @@ declare option exist:serialize "method=xhtml media-type=application/xhtml+html";
 import module namespace menu = "http://exist.bungeni.org/adm" at "menu.xqm";
 
 let $contextPath := request:get-context-path()
+let $fs-bungeni-custom-path := doc('config.xml')//bungeni-custom-fs-path/text()
 return
 <html xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -41,7 +42,7 @@ return
                         <xf:action ev:event="xforms-submit-error">
                             <xf:message>Submission failed</xf:message>
                         </xf:action>
-                    </xf:submission>                        
+                    </xf:submission>
                     
                     <xf:instance id="i-vars">
                         <data xmlns="">
@@ -71,14 +72,23 @@ return
                     <xf:send submission="s-query-workflows"/>
                 </xf:trigger>
                 
-                <xf:trigger id="viewSys">
+                <xf:trigger id="storeSys">
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
                             <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/sys-store-custom.xql#xforms?fs_path=',instance('i-vars')/currentDoc)"/>
                         </xf:load>
                     </xf:action>
-                </xf:trigger>                   
+                </xf:trigger> 
+                
+                <xf:trigger id="writeSys">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/sys-sync-custom.xql#xforms?fs_path=',instance('i-vars')/currentDoc)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                
                 
                 <xf:trigger id="viewForm">
                     <xf:label>new</xf:label>
@@ -232,7 +242,7 @@ return
                                 System            
                             </span>                        
                             <div dojoType="dijit.Menu" id="submenusys">
-                                <div dojoType="dijit.MenuItem" onClick="showDialogAb()">store from file-system</div>
+                                <div dojoType="dijit.MenuItem" onClick="showDialogAb();document.getElementById('fs_path').focus();">store from file-system</div>
                                 <!--div dojoType="dijit.MenuItem" onClick="alert('A To-Do')">create a working copy</div-->
                                 <div dojoType="dijit.MenuItem" onClick="alert('Another To-Do')">sync back to filesystem</div>           
                             </div>
@@ -248,11 +258,14 @@ return
                         <div id="embedDialogSys">
                     		<table>
                     			<tr>
-                    				<td><label for="name">Path: </label></td>
-                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:130%;" id="fs_path" name="fs_path" value="/home/undesa/bungeni_apps/bungeni/src/bungeni_custom" /></td>
+                    				<td><label for="name">Absolute Path: </label></td>
+                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:130%;" id="fs_path" name="fs_path" value="{$fs-bungeni-custom-path}" /></td>
                     			</tr>                    			
                     			<tr>
-                    				<td colspan="2">This action will overrite existing bungeni_custom. You are warned</td>
+                    				<td colspan="2">
+                    				    NOTE: This action will overwrite existing bungeni_custom.<br/>
+                    				    e.g. <i>/home/undesa/bungeni_apps/bungeni/src/bungeni_custom</i>
+                    				</td>
                     			</tr>
                     		</table>
                         	<div class="dijitDialogPaneActionBar">
@@ -334,9 +347,30 @@ return
             var viewSubscriber = dojo.subscribe("/sys", function(){
                 
                 var fsPath = dijit.byId("fs_path");
-                fluxProcessor.setControlValue("currentDoc",fsPath.get("value")); 
-                embed('viewSys','embedInline');
-            });             
+                if (fsPath.get("value") == "" || fsPath.get("value").length < 10) {
+                    alert("Invalid: Empty path or path less than 10 characters");
+                    location.reload();
+                }else{
+                    validatedFsPath = fsPath.get("value").replace(/^\s+|\s+$/g, '');
+                    console.log(validatedFsPath);
+                    fluxProcessor.setControlValue("currentDoc",validatedFsPath); 
+                    embed('storeSys','embedInline');
+                }                 
+            });     
+            
+            var viewSubscriber = dojo.subscribe("/sys", function(){
+                
+                var fsPath = dijit.byId("fs_path");
+                if (fsPath.get("value") == "" || fsPath.get("value").length < 10) {
+                    alert("Invalid: Empty path or path less than 10 characters");
+                    location.reload();
+                }else{
+                    validatedFsPath = fsPath.get("value").replace(/^\s+|\s+$/g, '');
+                    console.log(validatedFsPath);
+                    fluxProcessor.setControlValue("currentDoc",validatedFsPath); 
+                    embed('writeSys','embedInline');
+                }                 
+            });               
             
             var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
                 fluxProcessor.setControlValue("currentDoc",doc);                

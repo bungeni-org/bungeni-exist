@@ -41,7 +41,7 @@ return
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <script type="text/javascript">
-                dojo.publish('/view',['roles','roles','none']);
+                dojo.publish('/view',['roles','roles','none','none','none']);
             </script>
         </div>
     </body>

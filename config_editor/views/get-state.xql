@@ -7,14 +7,6 @@ import module namespace transform = "http://exist-db.org/xquery/transform";
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-workflow() as xs:string {
-
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-workflow.xql?doc=",$doc)
-    return $path2resource
-};
-
 (: creates the output for all document transitions sources :)
 declare function local:transition-sources($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
@@ -77,7 +69,7 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-workflowui" src="{local:fn-workflow()}"/>                   
+                    <xf:instance id="i-workflowui" src="{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}"/>                   
 
                     <xf:bind nodeset="./state">
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />

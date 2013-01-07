@@ -19,6 +19,7 @@ declare variable $config:APP-NAME := data($config:doc/ce-config/@app-name);
 declare variable $config:CONFIGS-COLLECTION := $config:doc/ce-config/configs-collection/text();
 declare variable $config:FORMS-COLLECTION := $config:doc/ce-config/config-forms/text();
 declare variable $config:WORKFLOWS-COLLECTION := $config:doc/ce-config/config-workflows/text();
+declare variable $config:BUNGENI-CUSTOM-DIR := $config:doc/ce-config/bungeni-custom-fs-path/text();
 
 (: THis may be used internally to sudo to admin :)
 declare variable $config:admin-username := "admin";
@@ -111,4 +112,37 @@ declare function config:update-fs-path($fs-bu-custom-path as xs:string) {
     let $config-doc := doc('config.xml')
     return 
         update replace $config-doc//bungeni-custom-fs-path/text() with $fs-bu-custom-path
+};
+
+(:
+: write the CONFIGS-COLLECTION back to the file-system location they were retrieved from.
+:)
+declare function config:reverse-transform-configs() {
+
+    for $doc in collection($config:CONFIGS-COLLECTION)
+    let $login := xmldb:login("/db", "admin", "")
+    let $path := document-uri($doc)
+    (: form XSLTs:)
+    let $step1forms := config:get-xslt("/xsl/forms_merge_step1.xsl")
+    let $step2forms := config:get-xslt("/xsl/forms_merge_step2.xsl")
+    (: workflow XSLTs:)
+    let $xslworkflow := config:get-xslt("/xsl/wf_merge_attrs.xsl")
+    
+    let $filename := functx:substring-after-last($path, '/')
+    return
+            if (contains($path,"/forms/")) then (
+                $filename || " written? " || file:serialize(transform:transform(
+                                                transform:transform($doc, $step1forms,()), $step2forms,()), 
+                                                $config:BUNGENI-CUSTOM-DIR || "/forms/" || $filename,
+                                                "media-type=application/xml method=xml")         
+            ) 
+            else if (contains($path,"/workflows/")) then (
+               $filename || " written? " || file:serialize(transform:transform(
+                                                $doc, $xslworkflow, ()),
+                                                $config:BUNGENI-CUSTOM-DIR || "/workflows/" || $filename,
+                                                "media-type=application/xml method=xml")
+            )
+            else
+                ()
+
 };

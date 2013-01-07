@@ -13,7 +13,7 @@ declare option exist:serialize "method=xhtml media-type=text/xml";
 declare function local:fields($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "nothing")
     
-    let $form := local:get-form()
+    let $form := local:get-form($form-id)
     
     let $count := count($form/descriptor[@name eq $form-id]/field)
     for $field at $pos in $form/descriptor[@name eq $form-id]/field
@@ -55,8 +55,8 @@ declare function local:fields($doctype) as node() * {
             </tr>
 };
 
-declare function local:get-form() as node() * {
-    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))/ui
+declare function local:get-form($docname as xs:string) as node() * {
+    doc($cfg:FORMS-COLLECTION || '/' || $docname || '.xml')
 };
 
 declare function local:mode() as xs:string {
@@ -97,7 +97,7 @@ return
                         </data>
                     </xf:instance>                        
 
-                    <xf:bind nodeset="descriptor[@name eq '{$docname}']">
+                    <xf:bind nodeset=".[@name eq '{$docname}']">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
                         <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
@@ -105,8 +105,7 @@ return
                     
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
-                        ref="descriptor[@name eq 'formname']"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
@@ -123,7 +122,7 @@ return
                                method="put"
                                replace="none"
                                ref="instance()">
-                    <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml'"/>
+                    <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml'"/>
 
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -185,7 +184,7 @@ return
                     <br/>
                     <div dojoType="dijit.layout.ContentPane" title="Edit Details" id="detailsDiv" selected="true">
                         <div class="caseContent">
-                            <xf:group ref="descriptor[@name eq '{$docname}']" class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
+                            <xf:group ref=".[@name eq '{$docname}']" class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:output value="'{$docname}'">
                                         <xf:label>Form:</xf:label>
@@ -247,7 +246,7 @@ return
                                 {local:fields($docname)}
                             </table> 
                             <span>
-                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:get-form()//descriptor/field[last()]/@name)}']);">add field</a>
+                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:get-form($docname)//descriptor/field[last()]/@name)}']);">add field</a>
                             </span>
                         </div>
                     </div>

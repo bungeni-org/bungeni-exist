@@ -6,6 +6,8 @@
         <xsl:attribute name="{$attrName}">
             <xsl:for-each select="$elemOriginAttr/*">
                 <xsl:choose>
+                    <!-- Remove 'ALL' role which does not have to be written back -->
+                    <xsl:when test=". eq 'ALL'"/>
                     <xsl:when test="position() eq last()">
                         <xsl:value-of select="concat(., '')"/>
                     </xsl:when>

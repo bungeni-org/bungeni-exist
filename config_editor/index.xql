@@ -244,7 +244,7 @@ return
                             <div dojoType="dijit.Menu" id="submenusys">
                                 <div dojoType="dijit.MenuItem" onClick="showDialogAb();document.getElementById('fs_path').focus();">store from file-system</div>
                                 <!--div dojoType="dijit.MenuItem" onClick="alert('A To-Do')">create a working copy</div-->
-                                <div dojoType="dijit.MenuItem" onClick="alert('Another To-Do')">sync back to filesystem</div>           
+                                <div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/sys/write');">sync back to filesystem</div>           
                             </div>
                         </div>
                         <!--div dojoType="dijit.MenuSeparator"/>
@@ -258,13 +258,17 @@ return
                         <div id="embedDialogSys">
                     		<table>
                     			<tr>
-                    				<td><label for="name">Absolute Path: </label></td>
-                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:130%;" id="fs_path" name="fs_path" value="{$fs-bungeni-custom-path}" /></td>
+                    				<td style="width: 90px;"><label for="name">Absolute Path: </label></td>
+                    				<td><input dojoType="dijit.form.TextBox" type="text" style="width:120%;" id="fs_path" name="fs_path" value="{$fs-bungeni-custom-path}" /></td>
                     			</tr>                    			
                     			<tr>
                     				<td colspan="2">
-                    				    NOTE: This action will overwrite existing bungeni_custom.<br/>
                     				    e.g. <i>/home/undesa/bungeni_apps/bungeni/src/bungeni_custom</i>
+                    				    <br />
+                    				    <br />
+                    				    NOTE: This action will overwrite existing bungeni_custom. Unless the<br/>
+                    				    structure of the configuration files has changed, this process is prefererably<br />
+                    				    done once.<br/>
                     				</td>
                     			</tr>
                     		</table>
@@ -358,16 +362,9 @@ return
                 }                 
             });     
             
-            var viewSubscriber = dojo.subscribe("/sys", function(){
-                
-                var fsPath = dijit.byId("fs_path");
-                if (fsPath.get("value") == "" || fsPath.get("value").length < 10) {
-                    alert("Invalid: Empty path or path less than 10 characters");
-                    location.reload();
-                }else{
-                    validatedFsPath = fsPath.get("value").replace(/^\s+|\s+$/g, '');
-                    console.log(validatedFsPath);
-                    fluxProcessor.setControlValue("currentDoc",validatedFsPath); 
+            var writeSubscriber = dojo.subscribe("/sys/write", function(){
+                var check = confirm("This will overwrite contents of your existing bungeni_custom folder");
+                if (check == true){
                     embed('writeSys','embedInline');
                 }                 
             });               

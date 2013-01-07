@@ -53,6 +53,29 @@ return
                         </data>
                     </xf:instance>
                     
+                    <xf:instance id="i-globalroles" xmlns="">
+                        <data>
+                            <roles originAttr="roles">
+                                <role>CommitteeMember</role>
+                                <role>Minister</role>
+                                <role>Owner</role>
+                                <role>Clerk.HeadClerk</role>
+                                <role>Signatory</role>
+                                <role>Anonymous</role>
+                                <role>MP</role>
+                                <role>Authenticated</role>
+                                <role>Speaker</role>
+                                <role>PoliticalGroupMember</role>
+                                <role>Admin</role>
+                                <role>Government</role>
+                                <role>Clerk.QuestionClerk</role>
+                                <role>Translator</role>
+                                <role>Clerk</role>
+                                <role>ALL</role>
+                            </roles>                        
+                        </data>
+                    </xf:instance>
+                    
                     <xf:instance id="i-originrole" xmlns="">
                         <data>
                             <roles>
@@ -86,7 +109,7 @@ return
                         </data>
                     </xf:instance>               
                     
-                    <xf:bind nodeset="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
+                    <xf:bind nodeset=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
@@ -99,10 +122,22 @@ return
                         <xf:bind nodeset="listing/@show" type="xs:boolean"/>
                         
                         <!-- ensure the roles are not empty -->
-                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]"/>
-                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq count(distinct-values(role))]"/>
-                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq count(distinct-values(role))]"/>
-                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role))]"/>
+                        <!-- THE RULES BELOW, explained 
+                            1) role ALL exists exclusively, you cannot allow it with something else e.g.
+                                <roles>
+                                    <role>ALL</role>
+                                    <role>Clerk</role>
+                                </roles>
+                            2) You cannot allow duplicate role, e.g.
+                                <roles>
+                                    <role>Clerk</role>
+                                    <role>Clerk</role>
+                                </roles>
+                        -->
+                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
                         
                         <!--xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role))+1]" /-->
                         <!--xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="instance()/descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[(contains(role,'ALL') and (count(role) = 1)) or (not(contains(role,'ALL')) and count(role) gt 1)]" /--> 
@@ -112,8 +147,7 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
-                        ref="descriptor[@name eq 'formname']/field[@name eq 'undefined']"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission>                   
@@ -131,7 +165,7 @@ return
                                    replace="none"
                                    ref="instance()">
                                    
-                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml'"/>
+                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -173,7 +207,7 @@ return
             
             </div>    	
             <div style="width: 100%; height: auto">
-                <xf:group id="g-field" ref="descriptor[@name eq '{$docname}']/field[@name eq '{$fieldname}']" class="fieldEdit">
+                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']" class="fieldEdit">
 
                         <xf:group appearance="bf:verticalTable">
                             <xf:input id="field-name" ref="@name">
@@ -220,6 +254,7 @@ return
                              
                             <xf:group appearance="compact">
                                 <xf:label>Modes</xf:label>
+                                
                                 <!-- view mode -->
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>view</xf:label>
@@ -237,8 +272,8 @@ return
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
                                                         <xf:label>a select1 combobox</xf:label>
-                                                       <xf:alert>duplicate role or empty role</xf:alert>
-                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                        <xf:alert>duplicates or invalid role options</xf:alert>
+                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>
                                                         </xf:itemset>
@@ -299,8 +334,8 @@ return
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
                                                         <xf:label>a select1 combobox</xf:label>
-                                                       <xf:alert>invalid role</xf:alert>
-                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                        <xf:alert>duplicates or invalid role options</xf:alert>
+                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>
                                                         </xf:itemset>
@@ -355,8 +390,8 @@ return
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
                                                         <xf:label>a select1 combobox</xf:label>
-                                                       <xf:alert>invalid role</xf:alert>
-                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                        <xf:alert>duplicates or invalid role options</xf:alert>
+                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>
                                                         </xf:itemset>
@@ -411,8 +446,8 @@ return
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
                                                         <xf:label>a select1 combobox</xf:label>
-                                                       <xf:alert>invalid listing role(s)</xf:alert>
-                                                        <xf:itemset nodeset="instance()/roles/role">
+                                                        <xf:alert>duplicates or invalid role options</xf:alert>
+                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>
                                                         </xf:itemset>

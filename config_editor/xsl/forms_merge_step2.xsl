@@ -5,7 +5,7 @@
         14 Nov 2012
         Deserialzes Workflow usable XML format to Bungeni XML format
     -->
-    <xsl:output indent="yes"/>
+    <xsl:output indent="yes" omit-xml-declaration="no"/>
     <xsl:template match="node()|@*">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>
@@ -29,7 +29,7 @@
     </xsl:function>
     <xsl:function name="custom:get_roles_from_group">
         <xsl:param name="cur-group"/>
-        <xsl:value-of select="normalize-space(             string-join(             distinct-values(custom:__get_roles_from_group($cur-group)),              ' '             )             )"/>
+        <xsl:value-of select="replace(normalize-space(             string-join(             distinct-values(custom:__get_roles_from_group($cur-group)),              ' '             )             ),' ALL','')"/>
     </xsl:function>
     
     

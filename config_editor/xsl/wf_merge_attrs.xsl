@@ -19,9 +19,16 @@
     </xsl:template>
     <xsl:template match="workflow">
         <workflow>
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./tags"/>
-            </xsl:call-template>
+            <!-- 
+                !+NOTE (ao, 7th Jan 2013) Without the below <xsl:if/> the wf_merge_attrs 
+                failed on documents like group_assignment that didn't have <tags/> in the
+                root node.
+            -->
+            <xsl:if test="./tags">
+                <xsl:call-template name="merge_tags">
+                    <xsl:with-param name="elemOriginAttr" select="./tags"/>
+                </xsl:call-template>
+            </xsl:if>
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./permActions"/>
             </xsl:call-template>

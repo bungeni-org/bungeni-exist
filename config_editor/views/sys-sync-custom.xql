@@ -21,7 +21,9 @@ let $ex-editor-coll := $root-coll || "/" || "config_editor"
 let $ex-working-copy :=$ex-editor-coll || "/" || $ex-bu-custom
 
 let $login := xmldb:login($root-coll, "admin", "")
-(:let file:serialize($node-set* as node(), $path as item(), $parameters* as xs:string):) 
+let $storing := cfg:reverse-transform-configs()
+(: check for something that definitely has to be there in the sequence :)
+let $uploadstate := if (contains($storing,"ui.xml")) then true() else false()
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -39,7 +41,7 @@ return
                 
                         case true() return
                             <div>
-                                <h2>Sync was successful: written back to file-system
+                                <h2>Sync was successful: written back to file-system</h2>
                                 <br/>
                                 <div style="float:left">
                                     <h1>written</h1>
@@ -47,12 +49,7 @@ return
                                     for $one in $storing    
                                         return <li>{$one}</li>
                                      }</ol>   
-                                </div>
-                                <div style="float:right">
-                                    <h1>transformed back</h1>
-                                    <ol>{for $entry in $transform-working-copy
-                                    return <li>{$entry}</li> }</ol>
-                                </div>                               
+                                </div>                              
                             </div>
                         case false() return
                             <div>

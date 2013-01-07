@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui name="customname">
-    <roles originAttr="roles">
-        <role>undefined</role>
-    </roles>
-    <descriptor name="formname">
-        <field name="undefined" label="undefined" required="false" value_type="" render_type="" vocabulary="">
-            <view show="true">
-                <roles>
-                    <role>ALL</role>
-                </roles>
-            </view>
-            <edit show="true">
-                <roles>
-                    <role>ALL</role>
-                </roles>
-            </edit>
-            <add show="true">
-                <roles>
-                    <role>ALL</role>
-                </roles>
-            </add>
-            <listing show="true">
-                <roles>
-                    <role>ALL</role>
-                </roles>
-            </listing>
-        </field>
-    </descriptor>
-</ui>
+<descriptor name="formname">
+    <field name="undefined" label="undefined" required="false" value_type="" render_type="" vocabulary="">
+        <view show="true">
+            <roles>
+                <role>ALL</role>
+            </roles>
+        </view>
+        <edit show="true">
+            <roles>
+                <role>ALL</role>
+            </roles>
+        </edit>
+        <add show="true">
+            <roles>
+                <role>ALL</role>
+            </roles>
+        </add>
+        <listing show="true">
+            <roles>
+                <role>ALL</role>
+            </roles>
+        </listing>
+    </field>
+</descriptor>

@@ -6,7 +6,7 @@
         Serializes Bungeni Form XML (ui , custom) to a more usable XML format
     -->
     <xsl:include href="split_attr_roles.xsl"/>
-    <xsl:output indent="yes"/>
+    <xsl:output indent="yes" omit-xml-declaration="no"/>
     <xsl:template match="*">
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="preserve"/>
@@ -110,6 +110,7 @@
                                             <xsl:value-of select="."/>
                                         </role>
                                     </xsl:for-each>
+                                    <role>ALL</role>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <!-- the below template imports all the global roles locally -->

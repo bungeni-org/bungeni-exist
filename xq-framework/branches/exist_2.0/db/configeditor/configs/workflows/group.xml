@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Group Workflow" description="Workflow for Parliamentary Groups" tags="public" permission_actions=".View .Edit .Add .Delete">
+    
+    <!-- global grants -->
+    <allow permission=".Edit" roles="Clerk"/>
+    <allow permission=".Add" roles="Clerk"/>
+    <allow permission=".Delete" roles="Clerk"/>
+    <feature name="address" enabled="true">
+        <facet name="all_Clerk_Owner">
+            <allow permission="address.Edit" roles="Clerk Owner"/>
+            <allow permission="address.Add" roles="Clerk Owner"/>
+            <allow permission="address.Delete" roles="Clerk Owner"/>
+        </facet>
+        <facet name="public_all_Clerk_Owner">
+            <allow permission="address.View" roles="Authenticated Anonymous"/>
+            <allow permission="address.Edit" roles="Clerk Owner"/>
+            <allow permission="address.Add" roles="Clerk Owner"/>
+            <allow permission="address.Delete" roles="Clerk Owner"/>
+        </facet>
+        <facet name="public">
+            <allow permission="address.View" roles="Authenticated Anonymous"/>
+        </facet>
+    </feature>
+    
+    <!-- workflow facets -->
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="Clerk"/>
+    </facet>
+    <facet name="public_all_Clerk">
+        <allow permission=".View" roles="Authenticated Anonymous"/>
+        <allow permission="group_membership.View" roles="Authenticated Anonymous"/>
+        <allow permission="group_membership.Edit" roles="Clerk"/>
+        <allow permission="group_membership.Add" roles="Clerk"/>
+        <allow permission="group_membership.Delete" roles="Clerk"/>
+        <!-- !+NO_REDEFINE_PERMISSION redefine of political_group_member permissions 
+            to group_membership to fails here (and this is the workflow used by 
+            political_group_member). Work around options for this is are:
+            a) do NOT use redefinePermission, so to not get false confidence that 
+               it might work, and know to then call each desired permission explicitly.
+            b) give political_group_member its own workflow (an option if (a) is
+               adopted, with other option being to pile-up any political_group_member
+               permissions into teh "shared" group workflow, as done below).
+            c) determine from with each workflow/state whether any given permission 
+               has been redefined to something else, and "add" the redefined version
+               to granted permissions for the state/role
+        -->
+        <allow permission="political_group_member.View" roles="Authenticated Anonymous"/>
+        <allow permission="political_group_member.Edit" roles="Clerk"/>
+        <allow permission="political_group_member.Add" roles="Clerk"/>
+        <allow permission="political_group_member.Delete" roles="Clerk"/>
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Authenticated Anonymous"/>
+        <allow permission="group_membership.View" roles="Authenticated Anonymous"/>
+        <!-- !+REDEFINE_FAIL -->
+        <allow permission="political_group_member.View" roles="Authenticated Anonymous"/>
+    </facet>
+    <state id="draft" title="Draft - Group not yet Active">
+        <facet ref=".view_Clerk"/>
+        <facet ref="address.all_Clerk_Owner"/>
+    </state>
+    <state id="active" title="Active Group" tags="public">
+        <facet ref=".public_all_Clerk"/>
+        <facet ref="address.public_all_Clerk_Owner"/>
+    </state>
+    <state id="dissolved" title="Group is Dissolved" tags="public">
+        <facet ref=".public"/>
+        <facet ref="address.public"/>
+    </state>
+    <transition title="Create" source="" destination="draft" trigger="automatic"/>
+    <transition title="Activate" source="draft dissolved" destination="active" trigger="manual" roles="Clerk Speaker" require_confirmation="true"/>
+    <transition title="Dissolve" source="active" destination="dissolved" condition="has_end_date" trigger="manual" roles="Clerk Speaker" require_confirmation="true"/>
+    
+    <!-- !+ why back to "draft"? -->
+    <transition title="Deactivate" source="active" destination="draft" trigger="manual" roles="Clerk Speaker" require_confirmation="true"/>
+</workflow>

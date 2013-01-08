@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow document-name="blank.xml" title="Blank_Template" description="A Worklow template">
+    <tags originAttr="tags">
+        <tag>draft</tag>
+        <tag>private</tag>
+        <tag>public</tag>
+        <tag>approved</tag>
+        <tag>tobescheduled</tag>
+        <tag>scheduled</tag>
+        <tag>actionclerk</tag>
+        <tag>actionmp</tag>
+        <tag>terminal</tag>
+        <tag>succeed</tag>
+        <tag>fail</tag>
+        <tag/>
+    </tags>
+    <permActions originAttr="permission_actions">
+        <permAction>.View</permAction>
+        <permAction>.Edit</permAction>
+        <permAction>.Add</permAction>
+        <permAction>.Delete</permAction>
+    </permActions>
+    <feature name="audit" enabled="true"/>
+    <feature name="version" enabled="true"/>
+    <feature name="attachment" enabled="true"/>
+    <feature name="event" enabled="true"/>
+    <feature name="signatory" enabled="true"/>
+    <feature name="schedule" enabled="true"/>
+    <feature name="workspace" enabled="true"/>
+    <feature name="notification" enabled="true"/>
+    <feature name="download" enabled="true"/>
+    <grant permission="bungeni.bill.Edit" role="bungeni.Speaker"/>
+    <grant permission="bungeni.bill.Add" role="bungeni.Clerk"/>
+    <grant permission="bungeni.bill.Add" role="bungeni.MP"/>
+    <state id="working_draft" title="Working Draft">
+        <tags originAttr="tags">
+            <tag>draft</tag>
+            <tag>private</tag>
+        </tags>
+        <grant permission="bungeni.bill.View" role="bungeni.Clerk"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Speaker"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Owner"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Signatory"/>
+        <deny permission="bungeni.bill.View" role="bungeni.MP"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Minister"/>
+        <deny permission="bungeni.bill.View" role="bungeni.Anonymous"/>
+        <grant permission="bungeni.bill.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.bill.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.bill.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.bill.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.signatory.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.signatory.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Edit" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Edit" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Add" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Add" role="bungeni.Owner"/>
+        <grant permission="bungeni.attachment.Delete" role="bungeni.Clerk"/>
+        <deny permission="bungeni.attachment.Delete" role="bungeni.Owner"/>
+        <grant permission="bungeni.event.View" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.View" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.View" role="bungeni.Signatory"/>
+        <grant permission="bungeni.event.View" role="bungeni.MP"/>
+        <grant permission="bungeni.event.View" role="bungeni.Minister"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Edit" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.Add" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Add" role="bungeni.Speaker"/>
+        <grant permission="bungeni.event.Delete" role="bungeni.Clerk"/>
+        <grant permission="bungeni.event.Delete" role="bungeni.Speaker"/>
+    </state>
+    <transition title="Create Bill" condition="user_is_not_context_owner" trigger="automatic">
+        <sources originAttr="source"/>
+        <destinations originAttr="destination">
+            <destination>working_draft</destination>
+        </destinations>
+    </transition>
+</workflow>

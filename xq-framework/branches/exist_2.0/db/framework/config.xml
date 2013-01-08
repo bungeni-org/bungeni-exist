@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Switch default application of framework by switching the default-app attribute -->
+<fw-config default-app="bungeni">
+    <apps>
+        <app name="lexapp">
+            <default-tmpl>template.xhtml</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/kenyalex</xml-collection>
+            <i18n-messages/>
+        </app>
+        <app name="bungeni">
+            <default-tmpl>portal.html</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/bungeni-xml</xml-collection>
+            <att-collection>/db/bungeni-atts</att-collection>
+            <!-- relative path from framework root -->
+            <i18n-messages>i18n</i18n-messages>
+            <vdex>bungeni/vocabularies</vdex>
+            <default-lang>en</default-lang>
+        </app>
+        <app name="anapp">
+            <default-tmpl>anapp.html</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/bungeni-an</xml-collection>
+            <!-- relative path from framework root -->
+            <i18n-messages>i18n</i18n-messages>
+            <default-lang>en</default-lang>
+        </app>
+    </apps>
+</fw-config>

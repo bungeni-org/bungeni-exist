@@ -1,0 +1,11 @@
+# Various tests for RESTXQ API on Bungeni eXIst-db
+
+curl -i -X POST --data "group=document&type=*&search=Clerk cosignatory \"oduor anthony\" \"scheduling first reading\"&offset=1&limit=25" http://localhost:8088/exist/restxq/ontology
+
+curl -i -X POST --data "group=document&type=*&search=Clerk cosignatory&offset=1&limit=25" http://localhost:8088/exist/restxq/ontology -v
+
+curl -i -X POST --data "group=document&type=*&offset=1&limit=25" http://localhost:8088/exist/restxq/ontology -v
+
+curl -i -X POST --data "group=document&type=*&offset=1&limit=1" http://localhost:8088/exist/restxq/ontology -v
+
+curl -i -X POST --data "&offset=1&limit=1" http://localhost:8088/exist/restxq/ontology -v

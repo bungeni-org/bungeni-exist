@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:bf="http://betterform.sourceforge.net/xforms" xmlns:xf="http://www.w3.org/2002/xforms" bf:toaster-position="tl-down">
+    <head>
+        <title>Embedding a subform with the load action</title>
+        <meta name="author" content="aowino at googlemail.com"/>
+        <meta name="description" content="XForms for default page"/>
+        <link rel="stylesheet" type="text/css" href="styles/configeditor.css"/>
+    </head>
+    <body class="soria" style="margin:30px;">
+        <div style="display:none">
+            <xf:model id="master">
+                <xf:instance xmlns="" id="contact" src="contacts.xml"/>
+                <xf:submission id="update-masterchief" resource="contacts.xml" method="put" replace="none">
+                    <xf:message ev:event="xforms-submit-done" level="ephemeral">Masterform has updated Subform.</xf:message>
+                    <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral">Masterform has been updated.</xf:message>
+                    </xf:action>
+                    <xf:action ev:event="xforms-submit-error">
+                        <xf:message level="ephemeral">Masterform has not been updated.</xf:message>
+                    </xf:action>
+                </xf:submission>
+            </xf:model>
+        </div>
+        <div id="wrap">
+            <xi:include href="menus.xml"/>
+            <div id="xforms">
+                <div class="Section" dojotype="dijit.layout.ContentPane">
+                    <xf:group appearance="minimal" id="contact" class="configsFullGroup">
+                        <xf:action ev:event="unload-subforms">
+                            <xf:message level="ephemeral">unloading subform...</xf:message>
+                            <xf:load show="none" targetid="address"/>
+                        </xf:action>
+                        <div class="Headline">Collection with a Subform</div>
+                        
+                        <!--
+                            <div class="description">
+                            <p>This Demo shows  a simple address collection form. It uses subforms for edting single entries.</p>
+                            <p>Demonstrates exchange of data between models with a model submission.</p>
+                            </div>
+                        -->
+                        <xf:repeat id="addresses" nodeset="address" appearance="compact" class="configsRepeat">
+                            <xf:output ref="title">
+                                <xf:label class="orderListHeader">Title</xf:label>
+                            </xf:output>
+                            <xf:output ref="firstNames">
+                                <xf:label class="orderListHeader">First names</xf:label>
+                            </xf:output>
+                            <xf:output ref="name">
+                                <xf:label class="orderListHeader">Name</xf:label>
+                            </xf:output>
+                            <xf:output ref="street">
+                                <xf:label class="orderListHeader">Street</xf:label>
+                            </xf:output>
+                            <xf:output ref="zip">
+                                <xf:label class="orderListHeader">ZIP Code</xf:label>
+                            </xf:output>
+                            <xf:output ref="city">
+                                <xf:label class="orderListHeader">City</xf:label>
+                            </xf:output>
+                            <xf:output ref="country">
+                                <xf:label class="orderListHeader">Country</xf:label>
+                            </xf:output>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group appearance="compact" class="configsTriggerGroup">
+                        <xf:trigger class="configsSubTrigger">
+                            <xf:label>edit selected</xf:label>
+                            <xf:hint>This button will push the selected data into the subform.</xf:hint>
+                            <xf:action>
+                                <xf:message level="ephemeral">loading subform...</xf:message>
+                                <xf:load show="embed" targetid="address">
+                                    <xf:resource value="'./contacts_subform_2.xml'"/>
+                                </xf:load>
+                            </xf:action>
+                        </xf:trigger>
+                    </xf:group>
+                    <xf:group appearance="full" class="configsFullGroup">
+                        <div class="configsSubForm">
+                            <div id="address"/>
+                        </div>
+                    </xf:group>
+                    <xf:group appearance="compact" class="configsTriggerGroup">
+                        <xf:trigger class="configsUpdateMasterTrigger">
+                            <xf:label>save changes</xf:label>
+                            <xf:hint>Save all your changes back to the configuratiuon document</xf:hint>
+                            <xf:action>
+                                <xf:message level="ephemeral">Saving to Document...</xf:message>
+                                <xf:send submission="update-masterchief"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </xf:group>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" defer="defer">
+        <![CDATA[
+        dojo.addOnLoad(function(){
+            dojo.subscribe("/xf/ready", function() {
+                fluxProcessor.skipshutdown=true;
+            });
+        });
+       ]]></script>
+    </body>
+</html>

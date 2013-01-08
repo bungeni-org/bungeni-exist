@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" id="sidebar">
+    <xf:model>
+        <xf:instance xmlns="" id="workflow-items" src="workflows.xql?return=docs"/>
+    </xf:model>
+    <ul>
+        <li>
+            <a href="database.xhtml">Database</a>
+        </li>
+        <li>
+            <a href="workflows.xhtml">Workflows</a>
+            <xf:repeat nodeset="name" appearance="compact">
+                <xf:trigger>
+                    <script type="text/javascript">
+                        alert('trigger was clicked, script action executed');
+                    </script>
+                    <xf:label>
+                        <xf:output value="."/>
+                    </xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:message level="ephemeral">loading subform...</xf:message>
+                        <xf:load show="embed" targetid="address">
+                            <xf:resource value="'./contacts_subform_2.xml'"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>
+            </xf:repeat>
+        </li>
+        <li>
+            <a href="workspace.xhtml">Workspace</a>
+        </li>
+        <li>
+            <a href="vocabularies.xhtml">Vocabularies</a>
+        </li>
+        <li>
+            <a href="/">OpenOffice</a>
+        </li>
+        <li>
+            <a href="/">Roles</a>
+        </li>
+        <li>
+            <a href="/">Content Types</a>
+        </li>
+    </ul>
+    <!--div id="address">ola</div-->
+    <xf:trigger>
+        <xf:label>View One</xf:label>
+        <xf:toggle case="case-1" ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>View Two</xf:label>
+        <xf:toggle case="case-2" ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>View Three</xf:label>
+        <xf:toggle case="case-3" ev:event="DOMActivate"/>
+    </xf:trigger>
+    <br/>
+    <br/>
+    <xf:switch>
+        <xf:case id="case-1">
+            <xf:group>
+                <xf:label>View One</xf:label>
+                <p>One One One One One One One One One One One One One One One One One One</p>
+            </xf:group>
+        </xf:case>
+        <xf:case id="case-2">
+            <xf:group>
+                <xf:label>View Two</xf:label>
+                <p>Two Two Two Two Two Two Two Two Two Two Two Two Two Two Two Two Two</p>
+            </xf:group>
+        </xf:case>
+        <xf:case id="case-3">
+            <xf:group>
+                <xf:label>View Three</xf:label>
+                <p>Three Three Three Three Three Three Three Three Three Three Three Three Three Three Three Three Three</p>
+            </xf:group>
+        </xf:case>
+    </xf:switch>
+</div>

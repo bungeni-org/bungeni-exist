@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xhtml="http://www.w3.org/1999/xhtml/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" elementFormDefault="qualified" targetNamespace="http://portal.bungeni.org/1.0/">
+    <xs:element name="bu:ontology" abstract="false" nillable="false">
+        <xs:annotation>
+            <xs:documentation>Main node defining this custom ontology used by Bungeni</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="bu:legislature">
+                    <xs:annotation>
+                        <xs:documentation>The parent requirement.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="bu:parliamentId"/>
+                            <xs:element name="bu:electionDate"/>
+                            <xs:element name="bu:country"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="bu:bungeni">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                    <xs:element name="bu:tags">
+                        <xs:annotation>
+                            <xs:documentation>Document tags.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="bu:tag"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:element>
+                <xs:element name="bu:document" nillable="false">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bu:RequirementDescriptionText" nillable="false" minOccurs="0"/>
+                <xs:element name="bu:country" nillable="false" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bu:refersToChange" default="3" nillable="false" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="1"/>
+                            <xs:enumeration value="2"/>
+                            <xs:enumeration value="3"/>
+                            <xs:enumeration value="4"/>
+                            <xs:enumeration value="5"/>
+                            <xs:enumeration value="6"/>
+                            <xs:enumeration value="7"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="bu:RequirementCode" default="medium" nillable="false">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="internal"/>
+                            <xs:enumeration value="under-review"/>
+                            <xs:enumeration value="approved"/>
+                            <xs:enumeration value="public"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="bu:RequirementCompletionStatusCode" nillable="false">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="internal"/>
+                            <xs:enumeration value="under-review"/>
+                            <xs:enumeration value="approved"/>
+                            <xs:enumeration value="public"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="bu:RequirementTerms" nillable="false" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bu:RequirementDataElementID" nillable="false" minOccurs="0" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bu:RequirmentRuleID" nillable="false" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="bu:RequirmentAnalists" nillable="false" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>description.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

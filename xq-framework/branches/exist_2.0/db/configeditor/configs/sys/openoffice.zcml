@@ -1,0 +1,7 @@
+<!-- Specify the path to a Python interpreter that is UNO-enabled.
+     Openoffice ships with a suitable Python interpreter.
+  -->
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:bungeni="http://namespaces.bungeni.org">
+    <bungeni:openoffice path="/usr/bin/python" port="2002" maxConnections="5"/>
+</configure>

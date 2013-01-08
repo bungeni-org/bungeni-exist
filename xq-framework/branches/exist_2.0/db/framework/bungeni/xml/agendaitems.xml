@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" id="portal-column-content">
+    <div id="main-wrapper">
+        <div id="title-holder" class="theme-lev-1-only">
+            <h1 id="doc-title-blue">Agenda Items</h1>
+        </div>
+        <div id="region-content" class="rounded-eigh tab_container" role="main"/>
+    </div>
+</div>

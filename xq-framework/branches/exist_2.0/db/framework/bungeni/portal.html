@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://www.w3.org/1999/xhtml http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd" version="-//W3C//DTD XHTML 1.1//EN">
+    <head>
+        <title>Ephemeral Bungeni Title</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta name="description" content=""/>
+        <meta name="author" content="Bungeni"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <link rel="stylesheet" href="assets/css/boilerplate.css"/>
+        <link rel="stylesheet" href="assets/css/bungeni.css"/>
+        <script src="assets/scripts/modernizr-2.0.6.min.js"/>
+        <script src="assets/scripts/jquery.min.js"/>
+        <script src="assets/scripts/jquery.qtip.min.js"/>
+        <script src="assets/scripts/fullcalendar.js"/>
+        <script src="assets/scripts/datepicker.src.js"/>
+        <script src="assets/scripts/whatson-datepicker.js"/>
+        <script src="assets/scripts/expand.js"/>
+        <script src="assets/scripts/custom.js"/>        
+        
+        <!-- DHTMLX CALENDAR RESOURCES -->
+        <script src="assets/dhtmlx/dhtmlxscheduler.js"/>
+        <script src="assets/dhtmlx/ext/dhtmlxscheduler_tooltip.js"/>
+        <script src="assets/dhtmlx/ext/dhtmlxscheduler_year_view.js"/>
+        <script src="assets/dhtmlx/ext/dhtmlxscheduler_dhx_terrace.js"/>
+        <link rel="stylesheet" type="text/css" href="assets/dhtmlx/dhtmlxscheduler.css"/>
+        <link rel="stylesheet" type="text/css" href="assets/dhtmlx/dhtmlxscheduler_dhx_terrace.css" media="screen"/>
+    </head>
+    <body class="template-portal-eXist">
+        <div id="container">
+            <div id="header">
+                <div id="pre-banner">
+                    <div id="global-language">
+                        <ul id="portal-languageselector">
+                            <li>
+                                <a href="switch?language=ar" id="ar" title="العربية"> العربية</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=en" id="en" title="English">English</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=es" id="es" title="Español">Español</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=es-do" id="es-do" title="Español (República Dominicana)">Español (República Dominicana)</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=fr" id="fr" title="Français">Français</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=it" id="it" title="Italiano">Italiano</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=nl" id="nl" title="Nederlands">Nederlands</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=pt" id="pt" title="Português">Português</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=ru" id="ru" title="Русский">Русский</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=sw" id="sw" title="Swahili">Swahili</a>
+                            </li>
+                            <li>
+                                <a href="switch?language=tk" title="түркmенче">түркmенче</a>
+                            </li>
+                        </ul>
+                        <ul id="portal-personaltools" style="float:right;">
+                            <li/>
+                        </ul>
+                    </div>
+                </div>
+                <div style="clear:both"/>
+                <div id="banner-wrapper">
+                    <div class="repeat-left"/>
+                    <div class="custom-banner">
+                        <div id="header-banner"/>
+                        <div style="clear:both"/>
+                    </div>
+                </div>
+                <div class="clear"/>
+                <div class="header-nav">
+                    <div id="mainnav" class="menu">
+                        <!--
+                            <ul>
+                                <li><a href="home">home</a></li>
+                                <li><a href="business">business</a></li>
+                                <li><a href="members">members</a></li>
+                            </ul>  
+                        -->
+                    </div>
+                    <div class="lev-1-search" id="portal-search">
+                        <form class="section-form" id="alchemist-form" method="GET" action="search-all">
+                            <input type="text" value="" name="q" id="global-search" class="text search_for" placeholder="i18n(ph-searchall,Search all Bungeni documents...)"/>
+                            <input type="submit" value="i18n(btn-search,search)" id="global-srch-btn"/>
+                        </form>
+                        <!--
+                            <a href="search-settings" class="header-links" id="srch-settings">
+                                <i18n:text key="search-settings">search settings(nt)</i18n:text>
+                            </a>
+                            <br/>
+                        -->
+                        <a href="advanced-search" class="header-links" id="adv-srch">
+                            <i18n:text key="adv-search">Advanced Search(nt)</i18n:text>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="sub-header">
+                <div class="header-nav">
+                    <div id="subnav" class="submenu">
+                        <!--
+                            <ul>
+                                <li><a href="whatson">what's on</a></li>
+                                <li><a href="committees">committees</a></li>
+                                <li><a href="bills">bills</a></li>
+                            </ul> 
+                        -->
+                    </div>
+                </div>
+            </div>
+            <div style="clear:both"/>
+            <div id="portal-breadcrumbs">
+                <!--
+                    <ul>
+                        <li><a class="first" href="home" title="Home">Home</a></li>
+                        <li><a href="business" title="Business">Business</a></li>
+                        <li><a class="last" href="committees" title="Committees">Committees</a></li>
+                    </ul>
+                -->
+            </div>
+            <div id="portal-column-content">
+                <div id="main-wrapper">
+                    <div id="title-holder">
+                        <h1 class="title">List</h1>
+                    </div>
+                    <div id="region-content" class="rounded-eigh tab_container"/>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

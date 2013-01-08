@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Address Workflow" description="Workflow for addresses" note="Used for both bungeni.models types: UserAddress, GroupAddress" tags="draft private public" permission_actions=".View .Edit .Add .Delete">
+    
+    <!-- sub-item: NO global grants -->
+    
+    
+    <!-- workflow facets -->
+    <facet name="all_Owner">
+        <allow permission=".View" roles="Owner"/>
+        <allow permission=".Edit" roles="Owner"/>
+        <allow permission=".Delete" roles="Owner"/>
+    </facet>
+    <facet name="all_internal">
+        <allow permission=".View" roles="Owner Clerk Speaker Signatory MP Minister"/>
+        <allow permission=".Edit" roles="Owner Clerk"/>
+        <allow permission=".Delete" roles="Owner Clerk"/>
+    </facet>
+    <state id="draft" title="Draft Address" tags="draft private">
+        <facet ref=".all_Owner"/>
+    </state>
+    <state id="attached" title="Address" tags="public" permissions_from_parent="true"/>
+    <state id="internal" title="Published Internal" note="Visible to bungeni users">
+        <facet ref=".all_internal"/>
+    </state>
+    
+    <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
+    -->
+    <state id="inactive" title="Inactive address" permissions_from_state="internal"/>
+    
+    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <transition title="Create" source="" destination="draft" condition="context_parent_is_not_draft" trigger="automatic"/>
+    <transition title="Create" source="" destination="attached" condition="context_parent_is_draft" trigger="automatic"/>
+    <transition title="Publish" source="draft" destination="attached" trigger="manual" roles="Owner"/>
+    <transition title="Publish Internal" source="draft" destination="internal" trigger="manual" roles="Owner"/>
+    <transition title="Re-publish" source="internal" destination="attached" trigger="manual" roles="Clerk Owner"/>
+    
+    <!-- 
+    if the parent has been published (i.e. is public, assuming that once 
+    published it is never retracted) we do not want to allow transitioning away 
+    from "attached".
+    -->
+    <transition title="Publish Internal" source="attached" destination="internal" condition="context_parent_is_not_public" trigger="manual" roles="Clerk Owner"/>
+    <transition title="Deactivate" source="attached internal" destination="inactive" condition="context_parent_is_not_public" trigger="manual" roles="Clerk Owner" require_confirmation="true"/>
+</workflow>

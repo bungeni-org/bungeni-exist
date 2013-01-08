@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <triggers>
+        <trigger class="org.exist.extensions.exquery.restxq.impl.RestXqTrigger"/>
+    </triggers>    
+    <index xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/">
+        <!-- Range Indexes by qname -->
+        <create qname="@href" type="xs:string"/>
+        <create qname="@name" type="xs:string"/>
+        <create qname="route" type="xs:string"/>
+        <create path="//tabs/@name" type="xs:string"/>
+        <create path="//tab/@path" type="xs:string"/>
+        <create path="//tab/@id" type="xs:string"/>
+        <create path="//doctype/@category" type="xs:string"/>
+        <create path="//acl/@axis" type="xs:string"/>
+    </index>
+</collection>

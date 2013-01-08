@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Membership Workflow" description="Workflow for group membership" note="">
+    
+    
+    <!-- workflow facets -->
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated"/>
+    </facet>
+    <state id="attached" title="Member" permissions_from_parent="true"/>
+    <state id="internal" title="Published Internal" note="Visible to bungeni users">
+        <facet ref=".view"/>
+    </state>
+    
+    <!-- !+inactive(mr, aug-2011) review usage and rename across the board 
+    <state id="inactive" title="Inactive address" permissions_from_state="internal" />
+    -->
+    
+    
+    <!-- !+IDENTICAL_TRANSITIONS(mr, sep-2011) attachment, address, event -->
+    <transition title="Create" source="" destination="attached" trigger="automatic"/>
+    <transition title="Publish Internal" source="attached" destination="internal" condition="user_may_edit_context_parent" trigger="manual" roles="Clerk Owner"/>
+    <transition title="Re-publish" source="internal" destination="attached" condition="user_may_edit_context_parent" trigger="manual" roles="Clerk Owner"/>
+    
+    <!--
+    <transition title="Deactivate"
+        source="attached internal"
+        destination="inactive"
+        condition="user_may_edit_context_parent"
+        trigger="manual"
+        roles="Clerk Owner"
+        require_confirmation="true"
+    />
+    -->
+</workflow>

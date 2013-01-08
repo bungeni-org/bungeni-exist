@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+XForm for editing Route configurations    
+This is loaded by admin-route.xql
+-->
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="route" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance xmlns="" id="default">
+            <route href="/">
+                <navigation>home</navigation>
+                <subnavigation>sub-home</subnavigation>
+                <title>Home</title>
+            </route>
+        </xf:instance>
+        <xf:bind id="b-route-href" nodeset="@href" type="string"/>
+        <xf:bind id="b-route-nav" nodeset="navigation" type="string"/>
+        <xf:bind id="b-route-subnav" nodeset="subnavigation" type="string"/>
+        <xf:bind id="b-route-title" nodeset="title" type="string"/>
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/routes/route[index('routes')]" replace="instance" method="get">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Route editor loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/routes/route[index('routes')]" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Route saved</xf:message>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to edit loaded route -->
+    <xf:group appearance="full">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-config"/>
+        <xf:label id="editing-subform">Routes Subform</xf:label>
+        <xf:input ref="@href">
+            <xf:label id="lbl-b-route-href">Route Path</xf:label>
+        </xf:input>
+        <xf:input ref="title">
+            <xf:label id="lbl-b-route-title">Route Title</xf:label>
+        </xf:input>
+        <xf:input ref="navigation">
+            <xf:label id="lbl-b-route-nav">Navigation</xf:label>
+        </xf:input>
+        <xf:input ref="subnavigation">
+            <xf:label id="lbl-b-route-subnav">Sub-Navigation</xf:label>
+        </xf:input>
+        <xf:trigger appearance="triggerMiddleColumn">
+            <xf:label>update routes configuration</xf:label>
+            <xf:hint>Click apply to update the document configuration</xf:hint>
+            <xf:send submission="s-update-master"/>
+        </xf:trigger>
+    </xf:group>
+</div>

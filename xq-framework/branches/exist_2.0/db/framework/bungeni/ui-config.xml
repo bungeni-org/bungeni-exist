@@ -1,0 +1,1202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/">
+    <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
+    <format type="date">[D1o] [MNn,*-3], [Y]</format>
+    <system-parameters>
+        <parliament election-date="2011-02-01" id="2"> PARLIAMENT XVMII </parliament>
+    </system-parameters>
+    <listings>
+        <limit>15</limit>
+        <visiblePages>3</visiblePages>
+        <max-range message="maximum range fetchable in days exceeeded">30</max-range>
+    </listings>
+    <routes>
+        <route href="/">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        <route href="/home">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        <route href="/search-all">
+            <navigation>home</navigation>
+            <title>Search</title>
+        </route>
+        <route href="/advanced-search">
+            <navigation>home</navigation>
+            <title>Advanced Search</title>
+        </route>
+        <route href="/search-adv">
+            <navigation>home</navigation>
+            <title>Advanced Search Results</title>
+        </route>
+        <route href="/search-settings">
+            <navigation>home</navigation>
+            <title>Search Settings</title>
+        </route>
+        <route href="/search">
+            <navigation>business</navigation>
+            <title>Search</title>
+        </route>
+        <route href="/business">
+            <title>Business</title>
+            <navigation>business</navigation>
+        </route>
+        <route href="/members">
+            <title>Members</title>
+            <navigation>members</navigation>
+        </route>
+        <route href="/member">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>members</subnavigation>
+        </route>
+        <route href="/member-officesheld">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member-parlactivities">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/member-contacts">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        <route href="/committee-text">
+            <title>Business | Committee's Profile</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee-members">
+            <title>Business | Committee's Members</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee-assigneditems">
+            <title>Business | Committee's Assigned Items</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee-sittings">
+            <title>Business | Committee's Sittings</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee-staff">
+            <title>Business | Committee's Staff</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/committee-contacts">
+            <title>Business | Committee's Staff</title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/politicalgroup-text">
+            <title>Business | Political Group's Profile</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/politicalgroup-members">
+            <title>Business | Political Group's Members</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/politicalgroup-contacts">
+            <title>Business | Political Group's Staff</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/government-text">
+            <title>Business | Government's Profile</title>
+            <navigation>home</navigation>
+        </route>
+        <route href="/ministry-text">
+            <title>Business | Ministry's Profile</title>
+            <navigation>home</navigation>
+        </route>
+        <route href="/ministry-members">
+            <title>Business | Ministry's Members</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/ministry/contacts">
+            <title>Business | Ministry's Staff</title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/bills">
+            <title>Business | Bills</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-text">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-version/text">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-timeline">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-assignedgroups">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-documents">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-version/documents">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-event">
+            <title>Business | Bill Event</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bill-attachment">
+            <title>Business | Bill Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/bills/rss">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>bills</subnavigation>
+        </route>
+        <route href="/questions">
+            <title>Business | Questions </title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-text">
+            <title>Business | Question Text</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-version/text">
+            <title>Business | Question Version Text</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-timeline">
+            <title>Business | Question Timeline</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-assignedgroups">
+            <title>Business | Bill</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-documents">
+            <title>Business | Attachments</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-version/documents">
+            <title>Business | Question Version Attachments</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-event">
+            <title>Business | Question Event</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/question-attachment">
+            <title>Business | Question Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>questions</subnavigation>
+        </route>
+        <route href="/motions">
+            <title>Business | Motions </title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-text">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-version/text">
+            <title>Business | Motion Version Text</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-timeline">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-assignedgroups">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-documents">
+            <title>Business | Motion</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-version/documents">
+            <title>Business | Motion Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-event">
+            <title>Business | Motion Event</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/motion-attachment">
+            <title>Business | Motion Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>motions</subnavigation>
+        </route>
+        <route href="/tableddocuments">
+            <title>Business | Tabled Documents </title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-text">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-version/text">
+            <title>Business | Tabled document Version Document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-timeline">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-assignedgroups">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-documents">
+            <title>Business | Tabled document</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-version/documents">
+            <title>Business | Tabled document Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-event">
+            <title>Business | Tabled document Event</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/tableddocument-attachment">
+            <title>Business | Tabled Document Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/agendaitems">
+            <title>Business | Agenda items </title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-text">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-version/text">
+            <title>Business | Agenda item Version Document</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-timeline">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-assignedgroups">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-documents">
+            <title>Business | Agenda item</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-version/documents">
+            <title>Business | Agenda item Version Documents</title>
+            <navigation>business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+        </route>
+        <route href="/agendaitem-event">
+            <title>Business | Agenda item Event</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/agendaitem-attachment">
+            <title>Business | AgendaItem Attachment</title>
+            <navigation>business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+        </route>
+        <route href="/committees">
+            <title>Business | Committees </title>
+            <navigation>business</navigation>
+            <subnavigation>committees</subnavigation>
+        </route>
+        <route href="/whatson">
+            <title>Business | What's on </title>
+            <navigation>business</navigation>
+            <subnavigation>whatson</subnavigation>
+        </route>
+        <route href="/calendar">
+            <title>Business | Sittings </title>
+            <navigation>business</navigation>
+            <subnavigation>calendar</subnavigation>
+        </route>
+        <route href="/sitting">
+            <title>Business | Sitting Session</title>
+            <navigation>business</navigation>
+            <subnavigation>calendar</subnavigation>
+        </route>
+        <route href="/publications">
+            <title>Business | Publications </title>
+            <navigation>business</navigation>
+            <subnavigation>publications</subnavigation>
+        </route>
+        <route href="/report-text">
+            <title>Business | Publication Report Text</title>
+            <navigation>business</navigation>
+            <subnavigation>publications</subnavigation>
+        </route>
+        <route href="/report-timeline">
+            <title>Business | Publication Report Timeline</title>
+            <navigation>business</navigation>
+            <subnavigation>publications</subnavigation>
+        </route>
+        <route href="/politicalgroups">
+            <title>Business | Political Groups </title>
+            <navigation>members</navigation>
+            <subnavigation>politicalgroups</subnavigation>
+        </route>
+        <route href="/admin">
+            <title>Admin Section</title>
+            <navigation>admin</navigation>
+        </route>
+        <route href="/admin/navigation">
+            <title>Navigation Preferences</title>
+            <navigation>admin</navigation>
+            <subnavigation>navigation</subnavigation>
+        </route>
+    </routes>
+    <menugroups>
+        <menu for="/" name="mainnav">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="menu" id="mainnav">
+                <ul id="portal-globalnav">
+                    <li>
+                        <a href="home" name="home">
+                            <i18n:text key="home">home</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="whatson" name="business">
+                            <i18n:text key="business">business</i18n:text>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="members" name="members">
+                            <i18n:text key="members">members</i18n:text>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+        <menu for="home" name="home">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+                <ul id="portal-personaltools">
+                    <li/>
+                </ul>
+            </div>
+        </menu>
+        <menu for="business" name="business">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+                <ul id="portal-personaltools">
+                    <li>
+                        <a href="whatson" name="whatson">
+                            <i18n:text key="whatson">what's on(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="committees" name="committees">
+                            <i18n:text key="committees">committees(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="bills" name="bills">
+                            <i18n:text key="bills">bills(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="questions" name="questions">
+                            <i18n:text key="questions">questions(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="motions" name="motions">
+                            <i18n:text key="motions">motions(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="tableddocuments" name="tableddocuments">
+                            <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="agendaitems" name="agendaitems">
+                            <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="calendar" name="calendar">
+                            <i18n:text key="calendar">calendar(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="publications" name="publications">
+                            <i18n:text key="publications">publications(nt)</i18n:text>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+        <menu for="members" name="members">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+                <ul id="portal-personaltools">
+                    <li class="navigation">
+                        <a href="members" name="current">
+                            <i18n:text key="members">current(nt)</i18n:text>
+                        </a>
+                    </li>
+                    <li class="navigation">
+                        <a href="politicalgroups" name="politicalgroups">
+                            <i18n:text key="politicalgroups">political groups(nt)</i18n:text>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </menu>
+    </menugroups>
+    <downloadgroups>
+        <rendergroup name="listings">
+            <format href="null" type="rss">Subscribe to Atom RSS feed</format>
+        </rendergroup>
+        <rendergroup name="parl-doc">
+            <format href="null" type="pdf">Download PDF format</format>
+            <format href="null" type="xml">Download XML format</format>
+            <format href="null" type="epub">Download ePUB format</format>
+            <format href="null" type="akn">Download AkomaNtoso format</format>
+        </rendergroup>
+        <rendergroup name="contacts">
+            <format href="null" type="xcard">Download xCard format</format>
+        </rendergroup>
+        <rendergroup name="members">
+            <format href="build" type="edit">Edit document. Will need to login to eXist</format>
+            <format href="null" type="pdf">Download PDF format</format>
+            <format href="null" type="xml">Download XML format</format>
+        </rendergroup>
+    </downloadgroups>
+    <viewgroups>
+        <views name="Committee">
+            <view id="listing" path="committees" tag="listing">
+                <template>xml/committees.xml</template>
+                <xsl>xsl/committees.xsl</xsl>
+            </view>
+            <view id="profile" path="committee-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/committee.xsl</xsl>
+            </view>
+            <view check-for="[bu:member/bu:membershipType[bu:value eq 'committee_member']/child::node()]" id="members" path="committee-members" tag="tab">
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/comm-members.xsl</xsl>
+            </view>
+            <view id="sittings" path="committee-sittings" tag="tab">
+                <title>
+                    <i18n:text key="tab-sittings">sittings(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/comm-sittings.xsl</xsl>
+            </view>
+            <view check-for="[bu:member/bu:membershipType[bu:value eq 'committee_staff']/child::node()]" id="staff" path="committee-staff" tag="tab">
+                <title>
+                    <i18n:text key="tab-staff">staff(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/comm-staff.xsl</xsl>
+            </view>
+            <view id="contacts" path="committee-contacts" tag="tab">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/comm-contacts.xsl</xsl>
+            </view>
+        </views>
+        <views name="PoliticalGroup">
+            <view id="listing" path="politicalgroups" tag="listing">
+                <template>xml/committees.xml</template>
+                <xsl>xsl/politicalgroups.xsl</xsl>
+            </view>
+            <view id="profile" path="politicalgroup-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/political-group.xsl</xsl>
+            </view>
+            <view id="members" path="politicalgroup-members" tag="tab">
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/poli-members.xsl</xsl>
+            </view>
+            <view id="contacts" path="politicalgroup-contacts" tag="tab">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/contacts.xsl</xsl>
+            </view>
+        </views>
+        <views name="Ministry">
+            <view id="profile" path="ministry-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/ministry.xsl</xsl>
+            </view>
+        </views>
+        <views name="government">
+            <view id="profile" path="home" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/home.xsl</xsl>
+            </view>
+            <view id="profile" path="government-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/home.xsl</xsl>
+            </view>
+        </views>
+        <views name="Bill">
+            <view id="listing" path="bills" tag="listing">
+                <template>xml/bills.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="bill-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/bill.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="bill-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="bill-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view path="bill-event">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="bill-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+        </views>
+        <views name="Bill-ver">
+            <view id="text" path="bill-version/text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/bill.xsl</xsl>
+            </view>
+            <view id="attachments" path="bill-version/documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+        </views>
+        <views name="Question">
+            <view id="listing" path="questions" tag="listing">
+                <template>xml/questions.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="question-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/question.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="question-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="question-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view path="question-event">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="question-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+        </views>
+        <views name="Question-ver">
+            <view id="text" path="question-version/text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/question.xsl</xsl>
+            </view>
+            <view id="attachments" path="question-version/documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+        </views>
+        <views name="Motion">
+            <view id="listing" path="motions" tag="listing">
+                <template>xml/motions.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="motion-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/motion.xml</template>
+                <xsl>xsl/motion.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="motion-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view path="motion-version">
+                <template>xml/version.xml</template>
+                <xsl>xsl/version.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="motion-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view path="motion-event">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="motion-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+        </views>
+        <views name="Motion-ver">
+            <view id="text" path="motion-version/text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/motion.xml</template>
+                <xsl>xsl/motion.xsl</xsl>
+            </view>
+            <view id="attachments" path="motion-version/documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+        </views>
+        <views name="TabledDocument">
+            <view id="listing" path="tableddocuments" tag="listing">
+                <template>xml/tableddocuments.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="tableddocument-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/tableddocument.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="tableddocument-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="tableddocument-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view path="tableddocument-version">
+                <template>xml/version.xml</template>
+                <xsl>xsl/version.xsl</xsl>
+            </view>
+            <view path="tableddocument-event">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="tableddocument-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+        </views>
+        <views name="TabledDocument-ver">
+            <view id="text" path="tableddocument-version/text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/tableddocument.xsl</xsl>
+            </view>
+        </views>
+        <views name="AgendaItem">
+            <view id="listing" path="agendaitems" tag="listing">
+                <template>xml/agendaitems.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="agendaitem-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/agendaitem.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="agendaitem-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="agendaitem-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view path="agendaitem-version">
+                <template>xml/version.xml</template>
+                <xsl>xsl/version.xsl</xsl>
+            </view>
+            <view path="agendaitem-event">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="agendaitem-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+        </views>
+        <views name="AgendaItem-ver">
+            <view id="text" path="agendaitem-version/text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/agendaitem.xsl</xsl>
+            </view>
+        </views>
+        <views name="Report">
+            <view id="listing" path="publications" tag="listing">
+                <template>xml/legislativeitem-generic.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="text" path="report-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">report(nt)</i18n:text>
+                </title>
+                <template>xml/report.xml</template>
+                <xsl>xsl/report.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="report-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">timeline(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+        </views>
+        <views name="Membership">
+            <view id="listing" path="members" tag="listing">
+                <template>xml/members.xml</template>
+                <xsl>xsl/members.xsl</xsl>
+            </view>
+            <view id="member" path="member" tag="tab">
+                <title>
+                    <i18n:text key="tab-member">member(nt)</i18n:text>
+                </title>
+                <template>xml/member.xml</template>
+                <xsl>xsl/member.xsl</xsl>
+            </view>
+            <view id="offices" path="member-officesheld" tag="tab">
+                <title>
+                    <i18n:text key="tab-offices">offices held(nt)</i18n:text>
+                </title>
+                <template>xml/member.xml</template>
+                <xsl>xsl/offices-held.xsl</xsl>
+            </view>
+            <view id="activities" path="member-parlactivities" tag="tab">
+                <title>
+                    <i18n:text key="tab-parlacts">parliament activities(nt)</i18n:text>
+                </title>
+                <template>xml/member.xml</template>
+                <xsl>xsl/parl-activities.xsl</xsl>
+            </view>
+            <view id="contacts" path="member-contacts" tag="tab">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
+                <template>xml/member.xml</template>
+                <xsl>xsl/contacts.xsl</xsl>
+            </view>
+        </views>
+        <views name="Popout">
+            <view id="n/a" path="whatson">
+                <template>xml/whatson.xml</template>
+                <xsl>xsl/whatson.xsl</xsl>
+            </view>
+        </views>
+        <views name="Popout">
+            <view id="n/a" path="popout">
+                <template>xml/popout.xml</template>
+                <xsl>xsl/popout.xsl</xsl>
+            </view>
+        </views>
+        <views name="AdvancedSearch">
+            <view id="searchadv" path="search-adv">
+                <template>xml/questions.xml</template>
+                <xsl>xsl/advanced-search.xsl</xsl>
+            </view>
+        </views>
+    </viewgroups>
+    <acl-groups>
+        <acl axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission" name="public-view">
+            <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+        </acl>
+        <acl name="role-view">
+            <bu:control name="View" role="$role" setting="Allow"/>
+        </acl>
+        <acl axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'" name="authenticated-view"/>
+    </acl-groups>
+    <doctypes>
+        <doctype category="document" name="Bill">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Question">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Motion">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">All</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="TabledDocument">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="AgendaItem">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Event">
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Attachment">
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="group" name="Committee">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin field="." name="all" value="all">Entire Document</searchin>
+                <searchin default="true" field="bu:group/bu:fullName" name="fn" value="fname">Full
+                    Name</searchin>
+                <searchin field="bu:group/bu:shortName" name="sn" value="sname">Short
+                    Name</searchin>
+                <searchin field="bu:group/bu:description" name="ds" value="desc">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
+                <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'dissolved')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="group" name="PoliticalGroup">
+            <orderbys>
+                <orderby field="bu:legislature/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:legislature/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin field="." name="all" value="all">Entire Document</searchin>
+                <searchin default="true" field="bu:group/bu:fullName" name="fn" value="fname">Full
+                    Name</searchin>
+                <searchin field="bu:group/bu:shortName" name="sn" value="sname">Short
+                    Name</searchin>
+                <searchin field="bu:group/bu:description" name="ds" value="desc">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
+                <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'draft')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="group" name="ministry">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin field="." name="all" value="all">Entire Document</searchin>
+                <searchin default="true" field="bu:group/bu:fullName" name="fn" value="fname">Full
+                    Name</searchin>
+                <searchin field="bu:group/bu:shortName" name="sn" value="sname">Short
+                    Name</searchin>
+                <searchin field="bu:group/bu:description" name="ds" value="desc">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="ar" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="group" name="office"/>
+        <doctype category="group" name="government"/>
+        <doctype category="document" name="Groupsitting">
+            <listingfilters>
+                <listingfilter id="sittings" name="sittings">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="schedule" name="scheduled items">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="membership" name="Membership">
+            <orderbys>
+                <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last
+                    name [ascending]</orderby>
+                <orderby field="bu:membership/bu:lastName" order="descending" value="ln_desc" default="true">last name [descending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first
+                    name [ascending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first
+                    name [descending]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First
+                    Name</searchin>
+                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last
+                    Name</searchin>
+                <searchin field="bu:membership/bu:description" name="ds" value="desc">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="current" name="current">empty(bu:endDate)</listingfilter>
+                <listingfilter id="former" name="former">not(empty(bu:endDate))</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="address" name="address">
+            <acl name="public-view">
+                <permission name="zope.View" role="bungeni.Anonymous" setting="Deny"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Report">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
+                    No.</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+    </doctypes>
+    <custom>
+        <whatsonviews>
+            <whatsonview id="old">past sittings</whatsonview>
+            <whatsonview id="pwk">previous week</whatsonview>
+            <whatsonview id="twk">this week</whatsonview>
+            <whatsonview id="nwk">next week</whatsonview>
+            <whatsonview id="fut">future sittings</whatsonview>
+        </whatsonviews>
+    </custom>
+</ui>

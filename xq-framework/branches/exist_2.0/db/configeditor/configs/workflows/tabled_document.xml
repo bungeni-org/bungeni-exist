@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Tabled Document Workflow" description="A tabled document" tags="draft private public         approved tobescheduled scheduled         actionclerk actionmp         terminal succeed fail     " permission_actions=".View .Edit .Add .Delete">
+    
+    <!-- global grants -->
+    <allow permission=".Add" roles="Clerk MP"/>
+    
+    
+    <!-- features -->
+    <feature name="audit" enabled="true"/>
+    <feature name="version" enabled="true"/>
+    <feature name="attachment" enabled="true">
+        <facet name="all_Clerk">
+            <allow permission="attachment.Edit" roles="Clerk"/>
+            <allow permission="attachment.Add" roles="Clerk"/>
+            <allow permission="attachment.Delete" roles="Clerk"/>
+        </facet>
+        <facet name="all_Owner">
+            <allow permission="attachment.Edit" roles="Owner"/>
+            <allow permission="attachment.Add" roles="Owner"/>
+            <allow permission="attachment.Delete" roles="Owner"/>
+        </facet>
+        <facet name="all_Speaker">
+            <allow permission="attachment.Edit" roles="Speaker"/>
+            <allow permission="attachment.Add" roles="Speaker"/>
+            <allow permission="attachment.Delete" roles="Speaker"/>
+        </facet>
+    </feature>
+    <feature name="event" enabled="true">
+        <facet name="all_internal" default="true">
+            <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister"/>
+            <allow permission="event.Edit" roles="Clerk Speaker"/>
+            <allow permission="event.Add" roles="Clerk Speaker"/>
+            <allow permission="event.Delete" roles="Clerk Speaker"/>
+        </facet>
+        <facet name="view_internal">
+            <allow permission="event.View" roles="Clerk Speaker Signatory MP Minister"/>
+        </facet>
+    </feature>
+    <feature name="signatory" enabled="true">
+        <facet name="all_Clerk">
+            <allow permission="signatory.Add" roles="Clerk"/>
+            <allow permission="signatory.Delete" roles="Clerk"/>
+        </facet>
+        <facet name="all_Owner">
+            <allow permission="signatory.Add" roles="Owner"/>
+            <allow permission="signatory.Delete" roles="Owner"/>
+        </facet>
+        <facet name="add_Owner">
+            <allow permission="signatory.Add" roles="Owner"/>
+        </facet>
+    </feature>
+    <feature name="schedule" enabled="true"/>
+    <feature name="workspace" enabled="true"/>
+    <feature name="notification" enabled="true"/>
+    <feature name="download" enabled="true"/>
+    
+    
+    <!-- workflow facets -->
+    <facet name="all_Clerk">
+        <allow permission=".View" roles="Clerk"/>
+        <allow permission=".Edit" roles="Clerk"/>
+        <allow permission=".Delete" roles="Clerk"/>
+    </facet>
+    <facet name="all_Owner">
+        <allow permission=".View" roles="Owner"/>
+        <allow permission=".Edit" roles="Owner"/>
+        <allow permission=".Delete" roles="Owner"/>
+    </facet>
+    <facet name="view_Signatory">
+        <allow permission=".View" roles="Owner Signatory"/>
+    </facet>
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory"/>
+    </facet>
+    <facet name="edit_Clerk">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory"/>
+        <allow permission=".Edit" roles="Clerk"/>
+    </facet>
+    <facet name="edit_Owner">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory"/>
+        <allow permission=".Edit" roles="Owner"/>
+    </facet>
+    <facet name="edit_Speaker">
+        <allow permission=".View" roles="Clerk Speaker Owner Signatory"/>
+        <allow permission=".Edit" roles="Speaker"/>
+    </facet>
+    <facet name="public">
+        <allow permission=".View" roles="Authenticated Anonymous"/>
+    </facet>
+    <state id="working_draft" title="Working Draft" tags="draft private">
+        <facet ref=".all_Clerk"/>
+        <facet ref="attachment.all_Clerk"/>
+        <facet ref="signatory.all_Clerk"/>
+    </state>
+    <state id="draft" title="Draft" tags="draft private">
+        <facet ref=".all_Owner"/>
+        <facet ref="attachment.all_Owner"/>
+        <facet ref="signatory.all_Owner"/>
+    </state>
+    <state id="submitted_signatories" title="Submitted to Signatories" version="true">
+        <facet ref=".view_Signatory"/>
+        <facet ref="signatory.add_Owner"/>
+    </state>
+    <state id="redraft" title="Redraft" version="true" note="document under review before resubmission">
+        <facet ref=".edit_Owner"/>
+        <facet ref="attachment.all_Owner"/>
+        <facet ref="signatory.all_Owner"/>
+    </state>
+    <state id="withdrawn_signatory" title="Dropped">
+        <facet ref=".view_Signatory"/>
+    </state>
+    <state id="submitted" title="Submitted" version="true" tags="actionclerk">
+        <facet ref=".view_Clerk"/>
+        <facet ref="event.view_internal"/>
+    </state>
+    <state id="received" title="Received by Clerks Office" tags="actionclerk">
+        <facet ref=".edit_Clerk"/>
+        <facet ref="attachment.all_Clerk"/>
+    </state>
+    <state id="completed" title="Submitted to the Speaker" version="true">
+        <facet ref=".edit_Speaker"/>
+        <facet ref="attachment.all_Speaker"/>
+    </state>
+    <state id="admissible" title="Admissible" version="true" tags="public approved">
+        <facet ref=".public"/>
+    </state>
+    <state id="schedule_pending" title="Schedule pending" permissions_from_state="admissible" tags="public tobescheduled"/>
+    <state id="inadmissible" title="Inadmissible" permissions_from_state="submitted" tags="terminal fail"/>
+    <state id="incomplete" title="Requires Clarification to Approve" version="true" permissions_from_state="received" tags="actionclerk"/>
+    <state id="clarification_required" title="Requires Clarification to Receive" version="true" tags="actionmp">
+        <facet ref=".edit_Owner"/>
+        <facet ref="attachment.all_Owner"/>
+        <facet ref="event.view_internal"/>
+    </state>
+    <state id="scheduled" title="Scheduled" permissions_from_state="admissible" tags="public scheduled"/>
+    <state id="adjourned" title="Adjourn" permissions_from_state="admissible" tags="public approved"/>
+    
+    <!-- only after it has been tabled does a tabled_document become public -->
+    <state id="tabled" title="Tabled" tags="public terminal succeed">
+        <facet ref=".public"/>
+    </state>
+    <state id="withdrawn_internal" title="Withdrawn" permissions_from_state="submitted" tags="terminal fail"/>
+    <state id="withdrawn" title="Withdrawn" permissions_from_state="admissible" tags="public terminal fail"/>
+    <transition title="Create Tabled Document" source="" destination="draft" condition="user_is_context_owner" trigger="automatic"/>
+    <transition title="Create Tabled Document (On behalf of)" source="" destination="working_draft" condition="user_is_not_context_owner" trigger="automatic"/>
+    <transition title="Submit" source="redraft draft submitted_signatories" destination="submitted" condition="pi_signatories_check" trigger="manual" roles="Owner"/>
+    <transition title="Submit" source="working_draft" destination="submitted" condition="pi_signatories_check" trigger="manual" roles="Clerk"/>
+    <transition title="Submit to Signatories" source="draft redraft" destination="submitted_signatories" condition="pi_has_signatories" roles="Owner" trigger="manual"/>
+    <transition title="Redraft" source="submitted_signatories" destination="redraft" condition="user_is_context_owner" roles="Owner" trigger="manual"/>
+    <transition title="Drop" source="redraft submitted_signatories" destination="withdrawn_signatory" condition="user_is_context_owner" roles="Owner" trigger="manual"/>
+    <transition title="Receive" source="submitted" destination="received" condition="" trigger="manual" roles="Clerk"/>
+    <transition title="Require Clarification to Receive" source="received incomplete" destination="clarification_required" condition="" trigger="manual" roles="Clerk" require_confirmation="true"/>
+    <transition title="Complete" source="received" destination="completed" condition="" trigger="manual" roles="Clerk"/>
+    <transition title="Approve" source="completed" destination="admissible" condition="" trigger="manual" roles="Speaker"/>
+    <transition title="Make available for scheduling" source="admissible adjourned" destination="schedule_pending" trigger="manual" roles="Clerk"/>
+    <transition title="Disapprove" source="completed scheduled" destination="inadmissible" condition="" trigger="manual" roles="Speaker" require_confirmation="true"/>
+    <transition title="Needs Recomplete to Approve" source="completed" destination="incomplete" condition="" trigger="manual" roles="Speaker" require_confirmation="true"/>
+    <transition title="Redraft (Automatic)" source="incomplete" destination="redraft" condition="pi_has_signatories" trigger="automatic" note="incomplete document needs to be resubmitted to signatories"/>
+    <transition title="Recomplete" source="incomplete" destination="completed" condition="" trigger="manual" roles="Clerk"/>
+    <transition title="Resubmit" source="clarification_required" destination="submitted" condition="" trigger="manual" roles="Owner"/>
+    <transition title="Revert to admissible" source="schedule_pending" destination="admissible" trigger="manual" roles="Clerk"/>
+    <transition title="Schedule" source="schedule_pending" destination="scheduled" condition="is_scheduled" trigger="system" roles="Clerk"/>
+    <transition title="Reschedule" source="scheduled" destination="schedule_pending" trigger="system" roles="Clerk"/>
+    <transition title="Adjourn" source="scheduled" destination="adjourned" trigger="manual" roles="Clerk" condition=""/>
+    <transition title="Table" source="working_draft" destination="tabled" condition="pi_signatories_check" trigger="manual" roles="Clerk Speaker MP Minister"/>
+    <transition title="Table" source="scheduled" destination="tabled" condition="" trigger="manual" roles="Clerk Speaker MP Minister"/>
+    <transition title="Withdraw" source="submitted received completed clarification_required" destination="withdrawn_internal" grouping_unique_sources="withdrawn" condition="" trigger="manual" roles="Clerk Owner" order="26" require_confirmation="true" note="The MP can withdraw his question at any stage where it can              still be presented to the ministry/house."/>
+    <transition title="Withdraw" source="admissible schedule_pending scheduled adjourned" destination="withdrawn" grouping_unique_sources="withdrawn" condition="" trigger="manual" roles="Clerk Owner" order="27" require_confirmation="true"/>
+</workflow>

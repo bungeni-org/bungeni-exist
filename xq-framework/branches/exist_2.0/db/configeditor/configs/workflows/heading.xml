@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="Heading Workflow" description="Workflow for headings" tags="public tobescheduled" permission_actions=".View .Edit .Add .Delete">
+
+    <!-- global grants -->
+    <allow permission=".Edit" roles="Clerk Speaker"/>
+    <allow permission=".Add" roles="Clerk Speaker"/>
+    
+    
+    <!-- workflow facets -->
+    <facet name="view_Clerk">
+        <allow permission=".View" roles="Clerk Speaker"/>
+    </facet>
+    <facet name="view">
+        <allow permission=".View" roles="Authenticated Anonymous"/>
+    </facet>
+    <state id="inactive" title="Inactive heading obsolete">
+        <facet ref=".view_Clerk"/>
+    </state>
+    <state id="public" title="Public" tags="public tobescheduled">
+        <facet ref=".view"/>
+    </state>
+    <transition title="Create" source="" destination="public" trigger="automatic"/>
+    <transition title="Deactivate" source="public" destination="inactive" trigger="manual" roles="Clerk Speaker" require_confirmation="true"/>
+    <transition title="Reactivate" source="inactive" destination="public" trigger="manual" roles="Clerk Speaker" require_confirmation="true"/>
+</workflow>

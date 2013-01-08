@@ -17,8 +17,14 @@ declare function menu:get-types($active as xs:string) {
         <xhtml:span>
             Types            
         </xhtml:span>
-        <xhtml:div dojoType="dijit.Menu" id="submenu">       
-            <xhtml:div dojoType="dijit.MenuItem" onClick="alert('new!');">add new</xhtml:div>
+        <xhtml:div dojoType="dijit.Menu" id="submenu">
+            <xhtml:div dojoType="dijit.PopupMenuItem">
+                <xhtml:span>add new</xhtml:span>
+                <xhtml:div dojoType="dijit.Menu" id="typesMenuAdd">
+                    <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/add',['type','types','doc','none','none']);">doc</xhtml:div>
+                    <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/add',['type','types','group','none','none']);">group</xhtml:div>
+                </xhtml:div>
+            </xhtml:div>            
             <xhtml:div dojoType="dijit.MenuSeparator"/>
             {
                 for $docu in doc(concat($cfg:CONFIGS-COLLECTION,'/types.xml'))/types/*

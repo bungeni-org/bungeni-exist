@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -15,11 +14,11 @@
     </xd:doc>
     
     <!-- THE BELOW SETTINGS DONT WORK CORRECTLY YET -->
-    <xsl:variable name="fw-config" select="document('/exist/rest/db/framework/config.xml')"/>
+    <xsl:variable name="fw-config" select="document('/exist/rest/db/apps/framework/config.xml')"/>
     <xsl:variable name="default-app" select="data($fw-config//fw-config/@default-app)"/>
     <!-- <xsl:variable name="ui-config" select="$fw-config//fw-config/apps/app[@name eq $default-app]/ui-config/text()" /> -->
     <!-- !+FIX_THIS hardcoded config file name , maybe OK since we are within the application and the application knows about its config -->
-    <xsl:variable name="ui-config" select="string('/db/framework/bungeni/ui-config.xml')"/>
+    <xsl:variable name="ui-config" select="string('/db/apps/framework/bungeni/ui-config.xml')"/>
     <xsl:variable name="date-format" select="document($ui-config)/ui/format[@type='date']/text()"/>
     <xsl:variable name="datetime-format" select="document($ui-config)/ui/format[@type='datetime']/text()"/>
     

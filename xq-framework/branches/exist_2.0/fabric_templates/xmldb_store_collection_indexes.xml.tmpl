@@ -1,0 +1,36 @@
+<project xmlns:xdb="http://exist-db.org/ant" default="upload-exist-collection-indexes" name="eXist XQFramework">
+ 
+    <!-- this is where we set our exist-home, user, password and the place that we will load the docs -->
+    <property file="xmldb.properties"/>
+ 
+    <!-- this tells us where to find the key jar files relative to the ${exist-home} property -->
+    <path id="classpath.core">
+        <fileset dir="${exist-home}/lib/core">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${exist-home}/exist.jar"/>
+        <pathelement path="${exist-home}/exist-optional.jar"/>
+    </path>
+    <typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+        <classpath refid="classpath.core"/>
+    </typedef>
+ 
+    <!-- upload app and xml collection indexes -->
+    <!-- !+NOTE(ao, Oct 12 2012)This has to be installed prior to installing framework. Otherwise we had to install framework twice when 
+         installing eXist for the first time. The error message implied not being able to read any config files. 
+         config.xml and ui-config.xml. -->
+    <target name="upload-exist-collection-indexes">
+        <echo message="Loading index file for bungeni-collection to eXist."/>
+        <xdb:store uri="${sys-uri}/config/db/apps/framework" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/system/config/db/framework">
+                <include name="*.xconf"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store uri="${sys-uri}/config/db/bungeni-xml" createcollection="true" createsubcollections="true" user="${user}" password="${password}">
+            <fileset dir="${exist-docs}/system/config/db/bungeni-xml">
+                <include name="*.xconf"/>
+            </fileset>
+        </xdb:store>
+    </target>
+
+</project>

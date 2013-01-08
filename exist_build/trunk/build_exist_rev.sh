@@ -1,3 +1,4 @@
+echo on
 
 function scriba_build {
     echo "Setting up Scriba epub plugin"
@@ -75,6 +76,7 @@ if [ -z "$2" ]; then
   if [ ! -d "$EXIST_FOLDER" ]; then
       svn co $EXIST_REPO $EXIST_FOLDER -r$EXIST_REV
   else
+      echo "XXX Updating exist to $EXIST_REV"
       svn up -r$EXIST_REV $EXIST_FOLDER
   fi
 else
@@ -82,6 +84,9 @@ else
   if [ ! -d "$EXIST_FOLDER" ]; then
       echo " Folder for exist source $EXIST_FOLDER does not exist ! "
       exit 98
+  else
+      echo "XXX Updating exist to $EXIST_REV"
+      svn up -r$EXIST_REV $EXIST_FOLDER
   fi
 fi
 
@@ -89,7 +94,7 @@ if [ -z "$3" ]; then
   echo "Scriba will not be built"
   SCRIBA_BUILD="NO"
 else
-  if [$3 == "scriba" ]; then
+  if [ $3 == "scriba" ]; then
     SCRIBA_BUILD="YES"
   else
     SCRIBA_BUILD="NO"
@@ -123,10 +128,17 @@ echo "Setting db-connection cache size to 96M"
 sed -i 's/<db-connection cacheSize="48M"/<db-connection cacheSize="96M"/g' ./conf.xml.tmpl
 echo "Enabling datetime module"
 sed -i 's|</builtin-modules>|<module uri="http://exist-db.org/xquery/datetime" class="org.exist.xquery.modules.datetime.DateTimeModule" /></builtin-modules>|g' ./conf.xml.tmpl
-echo "Enabling epub module in configuration"
-sed -i 's|</builtin-modules>|<module uri="http://exist-db.org/xquery/epub" class="org.exist.xquery.modules.epub.EpubModule" /></builtin-modules>|g' ./conf.xml.tmpl
+
+if [ $SCRIBA_BUILD == "YES" ]; then
+    echo "Enabling epub module in configuration"
+    sed -i 's|</builtin-modules>|<module uri="http://exist-db.org/xquery/epub" class="org.exist.xquery.modules.epub.EpubModule" /></builtin-modules>|g' ./conf.xml.tmpl
+else
+  echo "Scriba is not included in this build"
+fi
+
 echo "Enabling xslfo module"
 sed -i 's/include.module.xslfo = false/include.module.xslfo = true/g' ./extensions/build.properties
+sed -i 's|</builtin-modules>|<module uri="http://exist-db.org/xquery/xslfo" class="org.exist.xquery.modules.xslfo.XSLFOModule"><parameter name="processorAdapter" value="org.exist.xquery.modules.xslfo.ApacheFopProcessorAdapter"/></module></builtin-modules>|g' ./conf.xml.tmpl
 
 if [ $SCRIBA_BUILD == "YES" ]; then
   echo "Enabling Scriba build"

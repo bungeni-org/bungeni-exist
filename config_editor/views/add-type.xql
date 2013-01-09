@@ -30,7 +30,7 @@ return
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
-                 <xf:model>
+                 <xf:model id="default">
                     <xf:instance id="i-type" src="{$contextPath}/rest/db/config_editor/bungeni_custom/types.xml"/>   
 
                     <xf:instance id="i-typedoc" xmlns="">
@@ -47,9 +47,9 @@ return
                         </data>
                     </xf:instance>                        
 
-                    <xf:bind nodeset=".">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
-                        <xf:bind nodeset="@enabled" type="xf:boolean" required="true()"/>
+                    <xf:bind nodeset="instance()/{$nodename}[last()]">
+                        <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) > 0 and string-length(replace(.,' ','')) = string-length(.) and count(instance()/{$nodename}/@name) eq count(distinct-values(instance()/{$nodename}/@name))" />
+                        <xf:bind id="typenable" nodeset="@enabled" type="xf:boolean" required="true()"/>
                     </xf:bind>
 
                     <xf:instance id="i-controller" src="{$contextPath}/rest/db/config_editor/data/controller.xml"/>
@@ -59,6 +59,32 @@ return
                             <wantsToClose>false</wantsToClose>
                         </data>
                     </xf:instance>
+                    
+                <xf:submission id="s-controller"
+                               method="put"
+                               replace="none"
+                               ref="instance('i-controller')">
+                    <xf:resource value="'{$contextPath}/rest/db/config_editor/data/controller.xml'"/>
+
+                    <xf:header>
+                        <xf:name>username</xf:name>
+                        <xf:value>admin</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>password</xf:name>
+                        <xf:value></xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>realm</xf:name>
+                        <xf:value>exist</xf:value>
+                    </xf:header>
+
+                    <xf:action ev:event="xforms-submit">
+                        <xf:message level="ephemeral">Record the Type name to controller</xf:message>
+                        <xf:setvalue ref="instance('i-controller')/lastAddedType" value="instance()/doc[last()]/@name" />
+                        <xf:recalculate/>
+                    </xf:action>
+                </xf:submission>                    
 
                 <xf:submission id="s-add"
                                method="put"
@@ -83,7 +109,7 @@ return
                         <xf:message level="ephemeral">Type details saved successfully</xf:message>
                         <script type="text/javascript" if="instance('tmp')/wantsToClose">
                             dijit.byId("taskDialog").hide();
-                            //dojo.publish('/add',['form','types','doc','none','none']);  
+                            dojo.publish('/form/view',['new','details']);
                         </script>
                     </xf:action>
 
@@ -97,40 +123,50 @@ return
                     </xf:action>
                 </xf:submission>
                 
-                <xf:action ev:event="xforms-ready"/>
+                <xf:action ev:event="xforms-ready">
+                    <xf:action if="'{$nodename}' = 'doc'">
+                        <xf:insert nodeset="instance()/doc" at="last()" position="after" origin="instance('i-typedoc')/doc" />
+                    </xf:action>
+                    <xf:action if="'{$nodename}' = 'group'">
+                        <xf:insert nodeset="instance()/group" at="last()" position="after" origin="instance('i-typegroup')/group" />
+                    </xf:action>  
+                    <xf:setfocus control="type-name"/>
+                </xf:action>                 
 
             </xf:model>
             
             </div>    	
             <div style="width: 100%; height: 100%;">
                 <h1>New Type: {$nodename} </h1>
-                <xf:group ref="instance('i-type{$nodename}')">
+                <xf:group ref="instance('i-type{$nodename}')/{$nodename}">
                     <xf:group appearance="bf:verticalTable">
-                        <xf:input id="form-name" ref="child::node()/@name">
+                        <xf:input bind="typename" id="type-name">
                             <xf:label>name</xf:label>
-                            <xf:hint>Unique name given to the form</xf:hint>
-                            <xf:alert>Invalid form name</xf:alert>
+                            <xf:hint>Unique name</xf:hint>
+                            <xf:help>Neither are spaces allowed in between</xf:help>
+                            <xf:alert>invalid form name / duplicate / empty space(s)</xf:alert>
                         </xf:input>                           
                         
-                        <xf:input id="descriptor-order" ref="child::node()/@enabled">
+                        <xf:input bind="typenable" id="type-enabled">
                             <xf:label>enabled</xf:label>
-                            <xf:hint>check to enable</xf:hint>
+                            <xf:hint>check to enable this</xf:hint>
                         </xf:input>                 
                         
                         <br/>
-                        <xf:group id="dialogButtons" appearance="bf:horizontalTable">
+                        <xf:group id="typeButtons" appearance="bf:horizontalTable">
                             <xf:label/>
                             <xf:trigger>
                                 <xf:label>Add</xf:label>
                                 <xf:action if="'{$nodename}' = 'doc'">
                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                    <xf:insert nodeset="instance()/doc" at="last()" position="after" origin="instance('i-typedoc')/doc" />
+                                    <xf:revalidate ev:event="DOMActivate" model="default"/>
                                     <xf:send submission="s-add"/>
+                                    <xf:send submission="s-controller"/>
                                 </xf:action>
                                 <xf:action if="'{$nodename}' = 'group'">
                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                    <xf:insert nodeset="instance()/group" at="last()" position="after" origin="instance('i-typegroup')/group" />
                                     <xf:send submission="s-add"/>
+                                    <xf:send submission="s-controller"/>
                                 </xf:action>                                
                             </xf:trigger>                  
                         </xf:group>

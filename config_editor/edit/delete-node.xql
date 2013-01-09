@@ -19,8 +19,8 @@ declare function local:delete-field() as xs:string {
 
     let $docname := request:get-parameter("doc", "none")
     let $fieldname := request:get-parameter("field", "none")
-    let $path2resource := concat($cfg:FORMS-COLLECTION,"/custom.xml")
-    let $doc := doc($path2resource)/ui/descriptor[@name = $docname]
+    let $path2resource := $cfg:FORMS-COLLECTION || "/" || $docname || ".xml"
+    let $doc := doc($path2resource)/descriptor[@name = $docname]
     return (
         update delete $doc/field[@name eq $fieldname],
         $doc

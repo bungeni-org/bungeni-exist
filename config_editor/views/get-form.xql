@@ -15,8 +15,8 @@ declare function local:fields($doctype) as node() * {
     
     let $form := local:get-form($form-id)
     
-    let $count := count($form/descriptor[@name eq $form-id]/field)
-    for $field at $pos in $form/descriptor[@name eq $form-id]/field
+    let $count := count($form/descriptor/field)
+    for $field at $pos in $form/descriptor/field
         return
             <tr>
                 <td>{data($field/@name)}</td>
@@ -70,6 +70,7 @@ declare function local:mode() as xs:string {
 
 let $contextPath := request:get-context-path()
 let $docname := xs:string(request:get-parameter("doc","nothing"))
+let $lastfield := data(local:get-form($docname)/descriptor/field[last()]/@name)
 let $showing := xs:string(request:get-parameter("tab","fields"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
@@ -79,12 +80,12 @@ return
         xmlns:zope="http://namespaces.zope.org/zope"
         xmlns:db="http://namespaces.objectrealms.net/rdb">
    <head>
-      <title>Edit Database</title>
+      <title>Add/Edit Descriptor</title>
     </head>
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
-                 <xf:model>
+                <xf:model>
                     <xf:instance id="i-formsui" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>   
                     
                     <xf:instance id="i-archetypes" xmlns="">
@@ -98,7 +99,6 @@ return
                     </xf:instance>                        
 
                     <xf:bind nodeset=".[@name eq '{$docname}']">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
                         <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
                     </xf:bind>
@@ -118,62 +118,103 @@ return
                         </data>
                     </xf:instance>
 
-                <xf:submission id="s-add"
-                               method="put"
-                               replace="none"
-                               ref="instance()">
-                    <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml'"/>
+                    <xf:submission id="s-add"
+                                   method="put"
+                                   replace="none"
+                                   ref="instance()">
+                        <xf:resource value="concat('{$contextPath}/rest/db/config_editor/bungeni_custom/forms/',instance('i-controller')/lastAddedType,'.xml')"/>
+    
+                        <xf:header>
+                            <xf:name>username</xf:name>
+                            <xf:value>admin</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>password</xf:name>
+                            <xf:value></xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>realm</xf:name>
+                            <xf:value>exist</xf:value>
+                        </xf:header>
+    
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">new form details saved successfully</xf:message>
+                            <script type="text/javascript" if="instance('tmp')/wantsToClose">
+                                dijit.byId("formsDialog").hide();
+                                dojo.publish('/form/view',['{$docname}','details']);  
+                            </script>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                            <xf:message>The form details have not been filled in correctly</xf:message>
+                        </xf:action>
+                    </xf:submission>
 
-                    <xf:header>
-                        <xf:name>username</xf:name>
-                        <xf:value>admin</xf:value>
-                    </xf:header>
-                    <xf:header>
-                        <xf:name>password</xf:name>
-                        <xf:value></xf:value>
-                    </xf:header>
-                    <xf:header>
-                        <xf:name>realm</xf:name>
-                        <xf:value>exist</xf:value>
-                    </xf:header>
+                    <xf:submission id="s-save"
+                                   method="put"
+                                   replace="none"
+                                   ref="instance()">
+                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml'"/>
+    
+                        <xf:header>
+                            <xf:name>username</xf:name>
+                            <xf:value>admin</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>password</xf:name>
+                            <xf:value></xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>realm</xf:name>
+                            <xf:value>exist</xf:value>
+                        </xf:header>
+    
+                        <xf:action ev:event="xforms-submit" if="'{local:mode()}' = 'new'">
+                            <xf:message level="ephemeral">Creating timestamp as name</xf:message>
+                            <!--xf:setvalue ref="instance('i-formsui')/@name" value="now()" /-->
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">FORM details saved successfully</xf:message>
+                            <script type="text/javascript" if="instance('tmp')/wantsToClose">
+                                dijit.byId("formsDialog").hide();
+                                dojo.publish('/form/view',['{$docname}','details']);  
+                            </script>
+                            <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                            <xf:message>The form details have not been filled in correctly</xf:message>
+                        </xf:action>
+                    </xf:submission>
 
-                    <xf:action ev:event="xforms-submit" if="'{local:mode()}' = 'new'">
-                        <xf:message level="ephemeral">Creating timestamp as name</xf:message>
-                        <!--xf:setvalue ref="instance('i-formsui')/@name" value="now()" /-->
+                    <xf:submission id="s-clean"
+                                   ref="instance('i-formsui')"
+                                   resource="{$contextPath}/rest/db/config_editor/data/forms.xml"
+                                   method="get"
+                                   replace="instance"
+                                   instance="i-formsui">
+                    </xf:submission>
+                    
+                    <xf:action ev:event="xforms-ready" >
+                        <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
+                        <xf:action if="'{$docname}' = 'new'">
+                            <xf:setvalue ref="instance()/@name" value="instance('i-controller')/lastAddedType"/>
+                        </xf:action>
+                        <script type="text/javascript" if="'{$showing}' = 'fields'">
+                            dijit.byId("switchDiv").selectChild("fieldsDiv");                        
+                        </script>   
                     </xf:action>
-
-                    <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">FORM details saved successfully</xf:message>
-                        <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                            dijit.byId("formsDialog").hide();
-                            dojo.publish('/form/view',['{$docname}','details']);  
-                        </script>
-                        <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
-                    </xf:action>
-
-                    <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
-                        <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
-                        <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
-                    </xf:action>
-
-                    <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                        <xf:message>The form details have not been filled in correctly</xf:message>
-                    </xf:action>
-                </xf:submission>
-
-                <xf:submission id="s-clean"
-                               ref="instance('i-formsui')"
-                               resource="{$contextPath}/rest/db/config_editor/data/forms.xml"
-                               method="get"
-                               replace="instance"
-                               instance="i-formsui">
-                </xf:submission>
-                <xf:action ev:event="xforms-ready" >
-                    <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
-                    <script type="text/javascript" if="'{$showing}' = 'fields'">
-                        dijit.byId("switchDiv").selectChild("fieldsDiv");                        
-                    </script>   
-                </xf:action>
 
             </xf:model>
             
@@ -184,17 +225,11 @@ return
                     <br/>
                     <div dojoType="dijit.layout.ContentPane" title="Edit Details" id="detailsDiv" selected="true">
                         <div class="caseContent">
-                            <xf:group ref=".[@name eq '{$docname}']" class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
+                            <xf:group ref="." class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
                                 <xf:group appearance="bf:verticalTable">
-                                    <xf:output value="'{$docname}'">
+                                    <xf:output ref="@name">
                                         <xf:label>Form:</xf:label>
-                                    </xf:output>               
-                                 
-                                    <xf:input id="form-name" ref="@name">
-                                        <xf:label>Form Name</xf:label>
-                                        <xf:hint>Unique name given to the form</xf:hint>
-                                        <xf:alert>Invalid form name</xf:alert>
-                                    </xf:input> 
+                                    </xf:output>
                                     
                                     <xf:select1 id="descriptor-archetype" ref="@archetype" appearance="minimal" incremental="true">
                                         <xf:label>archetypes</xf:label>
@@ -212,6 +247,7 @@ return
                                         <xf:alert>Invalid number.</xf:alert>
                                         <xf:help>Enter an integer between 1 and 100 </xf:help>
                                         <xf:hint>order of this descriptor</xf:hint>
+                                        <xf:message ev:event="xforms-readonly" level="ephemeral">NOTE: That number is taken already.</xf:message>
                                     </xf:input>                 
                                     
                                     <br/>
@@ -219,9 +255,14 @@ return
                                         <xf:label/>
                                         <xf:trigger>
                                             <xf:label>Save</xf:label>
-                                            <xf:action>
+                                            <xf:action if="'{$docname}' = 'new'">
                                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                                <xf:setvalue ref="./@name" value="instance('i-controller')/lastAddedType"/>
                                                 <xf:send submission="s-add"/>
+                                            </xf:action>                                            
+                                            <xf:action if="'{$docname}' != 'new'">
+                                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                                <xf:send submission="s-save"/>
                                             </xf:action>
                                         </xf:trigger>                  
                                     </xf:group>
@@ -246,7 +287,7 @@ return
                                 {local:fields($docname)}
                             </table> 
                             <span>
-                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{data(local:get-form($docname)//descriptor/field[last()]/@name)}']);">add field</a>
+                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{$lastfield}']);">add field</a>
                             </span>
                         </div>
                     </div>

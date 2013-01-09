@@ -4,21 +4,51 @@
 
 <wiki:toc max_depth="3" />
 
-= Reference = 
+= Introduction = 
 
-[http://exist.sourceforge.net/building.html http://exist.sourceforge.net/building.html]
+This page documents how to build [http://www.exist-db.org eXist XML db] for Bungeni deployment. 
 
 = Pre-requisites =
 
  * Working JDK installation (1.6)
- * Ant
 
-= Building eXist =
+
+= Build using the shell script = 
+
+Check-out the eXist source from svn :
+{{{
+svn co https://svn.code.sf.net/p/exist/code/stable/eXist-2.0.x/ exist-2.0
+}}}
+
+We use the 2.0 stable branch for Bungeni deployment.
+
+Now get the shell script to build eXist for Bungeni :
+{{{
+svn export http://bungeni-exist.googlecode.com/svn/exist_build/trunk/build_exist_rev.sh
+}}}
+
+To run it, it takes 3 parameters : 
+{{{
+./build_exist_rev.sh HEAD ./exist-2.0 scriba
+}}}
+
+*parameter 1* - the revision number of eXist - this can be a number or HEAD
+*parameter 2* - the path to the folder where the eXist source code has been checked out
+*parameter 3* - this is optional - and takes only the value `scriba`, indicating it builds scriba and enables the scriba module
+
+Once the script has finished running - it will create a tar archive with the built exist in the form `exist_r<rev no>.tar.gz`
+
+= Building from Source Manually = 
+
+== Building eXist ==
+
+First, read these instructions [http://exist-db.org/exist/building.xml http://exist-db.org/exist/building.xml]
+
 
 Checkout source of eXist into a separate folder 
 
 {{{
-svn co http://svn.code.sf.net/p/exist/code/trunk/eXist ~/eXist
+svn co http://svn.code.sf.net/p/exist/code/stable/eXist-2.0.x/ ~/eXist
 }}}
 
 Configure extensions, by enabling XSLFO module, edit ~/eXist/extensions/build.properties and enable the xslfo module :
@@ -28,7 +58,6 @@ include.module.xslfo = true
 }}}
 
 == Adding ePUB module ==
-
 
 === Installing Ebook Maker ===
 
@@ -59,7 +88,7 @@ JAVA_HOME=/path/to/java/home ./build.sh all
 }}}
 
 
-= Configuring the Installation =
+== Configuring the Installation ==
 
  * Activate the compression, datetime, ePUB and XSLFOModule modules in conf.xml :
 {{{

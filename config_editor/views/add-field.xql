@@ -124,8 +124,7 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
-                        ref="descriptor[@name eq 'formname']/field[@name eq 'undefined']"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission>                   
@@ -143,7 +142,7 @@ return
                                    replace="none"
                                    ref="instance()">
                                    
-                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml'"/>
+                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -168,7 +167,6 @@ return
                                 dojo.publish('/form/view',['{$docname}','fields']);                      
                                 dijit.byId("taskDialog").hide();
                             </script>
-                            <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
@@ -181,14 +179,7 @@ return
                             <xf:message>The form fields have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
-    
-                    <xf:submission id="s-clean"
-                                   ref="instance('i-field')/descriptor/field"
-                                   resource="{$contextPath}/rest/db/config_editor/bungeni_custom/custom.xml"
-                                   method="get"
-                                   replace="instance"
-                                   instance="i-field">
-                    </xf:submission>
+                    
                     <xf:action ev:event="xforms-ready" >
                         <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
                         <xf:setfocus control="field-name"/>
@@ -265,7 +256,7 @@ return
                                 <xf:label>Save</xf:label>
                                 <xf:action if="'{$mode}' = 'new'">
                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>                                   
-                                    <xf:insert nodeset="instance()/descriptor[@name eq '{$docname}']/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
+                                    <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
                                     <xf:send submission="s-add"/>
                                 </xf:action>                                
                             </xf:trigger>

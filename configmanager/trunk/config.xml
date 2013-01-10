@@ -2,6 +2,7 @@
 <!-- Edit configuration for config_editor -->
 <ce-config app-name="config-editor">
     <name>Bungeni Configuration Editor</name>
-    <configs-collection>/db/config_editor/bungeni_custom</configs-collection>
-    <config-forms>/db/config_editor/bungeni_custom/forms</config-forms>
+    <configs collection="bungeni_custom" form="forms" notif="notifications" sys="sys" vocab="vocabularies" wf="workflows" ws="workspace">
+        <fs-path>&#160;</fs-path>
+    </configs>
 </ce-config>

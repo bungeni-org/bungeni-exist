@@ -7,31 +7,37 @@ import module namespace config="http://exist-db.org/xquery/apps/config" at "conf
 (: Application files :)
 declare variable $appconfig:doc := fn:doc(fn:concat($config:app-root, "/config.xml"));
 
+declare variable $appconfig:ROOT := $config:app-root
+
 declare variable $appconfig:CONFIGS-FOLDER := fn:concat(
     $config:app-root, "/" , 
     $appconfig:doc/ce-config/configs/@collection/text()
 );
 
-declare variable $appconfig:FORMS-FOLDER := fn:concat(
+declare variable $appconfig:FORM-FOLDER := fn:concat(
     $appconfig:CONFIGS-FOLDER, "/",
-    $appconfig:doc/ce-config/configs/forms/text()
+    $appconfig:doc/ce-config/configs/@form/text()
 );
 
 declare variable $appconfig:WF-FOLDER := fn:concat(
     $appconfig:CONFIGS-FOLDER, "/", 
-    $appconfig:doc/ce-config/configs/workflows/text()
+    $appconfig:doc/ce-config/configs/@wf/text()
 );
 
 declare variable $appconfig:WS-FOLDER := fn:concat(
     $appconfig:CONFIGS-FOLDER, "/",
-    $appconfig:doc/ce-config/configs/workspaces/text()
+    $appconfig:doc/ce-config/configs/@ws/text()
 );
 
 declare variable $appconfig:NOTIF-FOLDER := fn:concat(
     $appconfig:CONFIGS-FOLDER, "/",
-    $appconfig:doc/ce-config/configs/notifications/text()
+    $appconfig:doc/ce-config/configs/@notif/text()
 );
 
+declare variable $appconfig:TYPES_XML := fn:concat(
+    $appconfig:CONFIGS-FOLDER, "/",
+    "types.xml"
+);
 
 (: THis may be used internally to sudo to admin :)
 declare variable $appconfig:admin-username := "admin";
@@ -47,6 +53,6 @@ declare function local:__get_app_doc__($value as xs:string) as document-node() {
 (:~
 Loads an XSLT file 
 :)
-declare function config:get-xslt($value as xs:string) as document-node() {
+declare function appconfig:get-xslt($value as xs:string) as document-node() {
     local:__get_app_doc__($value)
 };

@@ -20,8 +20,44 @@ declare function app:test($node as node(), $model as map(*)) {
         function was triggered by the class attribute <code>class="app:test"</code>.</p>
 };
 
+
 declare 
-    %templates:wrap %templates:default("active", "search") 
+function app:get-roles-menu($node as node(), $model as map(*)) {
+    <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','custom.xml','roles','none','none']);">
+    Roles
+    </xhtml:div>
+};
+
+declare 
+function app:get-separator($node as node(), $model as map(*)) {
+   <xhtml:div dojoType="dijit.MenuSeparator"/> 
+};
+
+declare 
+function app:get-system-menu($node as node(), $model as map(*)) {
+    <xhtml:div dojoType="dijit.PopupMenuItem"> 
+        <xhtml:span>
+            System            
+        </xhtml:span>                        
+        <xhtml:div dojoType="dijit.Menu" id="submenusys">
+            <xhtml:div dojoType="dijit.MenuItem" 
+                onClick="showDialogAb();document.getElementById('fs_path').focus();">
+                store from file-system
+            </xhtml:div>
+            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/sys/write');">sync back to filesystem</xhtml:div>           
+        </xhtml:div>
+    </xhtml:div>
+};
+
+declare 
+function app:input-path($node as node(), $model as map(*)) {
+    <xhtml:input dojoType="dijit.form.TextBox" type="text" style="width:120%;"
+        id="fs_path" name="fs_path" 
+        value="{$appconfig:doc/ce-config/configs[@collection eq 'bungeni_custom']/fs-path/text()}"/>
+}
+
+declare 
+  %templates:default("active", "search") 
 function app:get-types-menu($node as node(), $model as map(*), $active as xs:string) {
      <xhtml:div dojoType="dijit.PopupMenuItem"> 
         <xhtml:span>
@@ -52,14 +88,12 @@ This is the main XFOrms declaration in index.html
 
 :)
 declare function app:xforms-declare($node as node(), $model as map(*)) {
-     let $contextPath := request:get-context-path()
+     let $CXT := request:get-context-path()
+     let $REST-CXT-VIEWS :=  $CXT || "/rest" || $config:app-root || "/views"
+     let $REST-CXT-ACTNS :=  $CXT || "/rest" || $config:app-root || "/doc_actions"
      return      
-        <div style="display:none;" 
-            xmlns="http://www.w3.org/1999/xhtml"  
-            xmlns:xf="http://www.w3.org/2002/xforms"
-            xmlns:ev="http://www.w3.org/2001/xml-events" 
-            >
-             <xf:model id="modelone">
+            <div style="display:none;">
+                <xf:model id="modelone">
                     <xf:instance>
                         <data xmlns="">
                             <lastupdate>2000-01-01</lastupdate>
@@ -67,6 +101,21 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
 
+                    <xf:submission id="s-query-workflows"
+                                    resource="{$REST-CXT-VIEWS}/about.html"
+                                    method="get"
+                                    replace="embedHTML"
+                                    targetid="embedInline"
+                                    ref="instance()"
+                                    validate="false">
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Request for about page successful</xf:message>
+                        </xf:action>                                    
+                        <xf:action ev:event="xforms-submit-error">
+                            <xf:message>Submission failed</xf:message>
+                        </xf:action>
+                    </xf:submission>
+                    
                     <xf:instance id="i-vars">
                         <data xmlns="">
                             <default-duration>120</default-duration>
@@ -74,6 +123,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                             <currentView/>
                             <currentDoc/>
                             <currentNode/>
+                            <currentAttr/>
                             <currentField/>
                             <showTab/>
                             <selectedTasks/>
@@ -83,31 +133,108 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
 
                     <xf:action ev:event="xforms-ready">
                         <xf:message level="ephemeral">Default: show about</xf:message>
-                        <!--<xf:action ev:event="xforms-value-changed">
+                        <xf:action ev:event="xforms-value-changed">
                             <xf:dispatch name="DOMActivate" targetid="overviewTrigger"/>
-                        </xf:action>-->
+                        </xf:action>
                     </xf:action>
                 </xf:model>
-                <!--
+
                 <xf:trigger id="overviewTrigger">
                     <xf:label>Overview</xf:label>
                     <xf:send submission="s-query-workflows"/>
-                </xf:trigger>                  
-                -->
+                </xf:trigger>
+                
+                <xf:trigger id="storeSys">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat(
+                            '{$REST-CXT-VIEWS}/sys-store-custom.xql#xforms?fs_path=',
+                            instance('i-vars')/currentDoc
+                            )"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger> 
+                
+                <xf:trigger id="writeSys">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat(
+                            '{$REST-CXT-VIEWS}/sys-sync-custom.xql#xforms?fs_path=',
+                            instance('i-vars')/currentDoc
+                            )"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                
+                
                 <xf:trigger id="viewForm">
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-form.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;tab=',instance('i-vars')/showTab)"/>
+                            <xf:resource value="concat(
+                            '{$REST-CXT-VIEWS}/get-form.xql#xforms?doc=',
+                            instance('i-vars')/currentDoc,
+                            '&amp;tab=',instance('i-vars')/showTab
+                            )"/>
                         </xf:load>
                     </xf:action>
-                </xf:trigger>        
+                </xf:trigger>   
+                
+                <xf:trigger id="viewWorkflow">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedInline">
+                            <xf:resource value="concat(
+                            '{$REST-CXT-VIEWS}/get-workflow.xql#xforms?doc=',
+                            instance('i-vars')/currentDoc,
+                            '&amp;tab=',instance('i-vars')/showTab
+                            )"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>         
+                
+                <xf:trigger id="addPopup">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat(
+                            '{$REST-CXT-VIEWS}/add-',
+                            instance('i-vars')/currentView,
+                            '.xql#xforms?doc=',
+                            instance('i-vars')/currentDoc,
+                            '&amp;node=',instance('i-vars')/currentNode,
+                            '&amp;attr=',instance('i-vars')/currentAttr,
+                            '&amp;tab=',instance('i-vars')/showTab
+                            )"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>                 
+                
+                <xf:trigger id="editPopup">
+                    <xf:label>new</xf:label>
+                    <xf:action>
+                        <xf:load show="embed" targetid="embedDialog">
+                            <xf:resource value="concat(
+                            '{$REST-CXT-VIEWS}/edit-',
+                            instance('i-vars')/currentView,
+                            '.xql#xforms?doc=',
+                            instance('i-vars')/currentDoc,
+                            '&amp;node=',
+                            instance('i-vars')/currentNode,
+                            '&amp;attr=',
+                            instance('i-vars')/currentAttr,
+                            '&amp;tab=',
+                            instance('i-vars')/showTab)"/>
+                        </xf:load>
+                    </xf:action>
+                </xf:trigger>     
                 
                 <xf:trigger id="view">
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-',instance('i-vars')/currentView,'.xql#xforms?node=',instance('i-vars')/currentNode,'&amp;tab=',instance('i-vars')/showTab)"/>
+                            <xf:resource value="concat('{$REST-CXT-VIEWS}/get-',instance('i-vars')/currentView,'.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;node=',instance('i-vars')/currentNode,'&amp;attr=',instance('i-vars')/currentAttr,'&amp;tab=',instance('i-vars')/showTab)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>                  
@@ -116,7 +243,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/add-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField,'&amp;mode=new')"/>
+                            <xf:resource value="concat('{$REST-CXT-VIEWS}/add-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField,'&amp;mode=new')"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>                
@@ -125,7 +252,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/get-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
+                            <xf:resource value="concat('{$REST-CXT-VIEWS}/get-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>
@@ -134,7 +261,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/views/edit-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;role=',instance('i-vars')/currentNode)"/>
+                            <xf:resource value="concat('{$REST-CXT-VIEWS}/edit-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;role=',instance('i-vars')/currentNode)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>                
@@ -143,7 +270,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=up&amp;field=',instance('i-vars')/currentField)"/>
+                            <xf:resource value="concat('{$REST-CXT-ACTNS}/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=up&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger> 
@@ -152,7 +279,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>new</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=down&amp;field=',instance('i-vars')/currentField)"/>
+                            <xf:resource value="concat('{$REST-CXT-ACTNS}/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=down&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>  
@@ -161,7 +288,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>delete</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/delete-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
+                            <xf:resource value="concat('{$REST-CXT-ACTNS}/delete-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>   
@@ -170,7 +297,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>delete</xf:label>
                     <xf:action>
                         <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$contextPath}/rest/db/config_editor/edit/delete-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
+                            <xf:resource value="concat('{$REST-CXT-ACTNS}/delete-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
                         </xf:load>
                     </xf:action>
                 </xf:trigger>                    
@@ -192,6 +319,9 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                 <xf:input id="currentNode" ref="instance('i-vars')/currentNode">
                     <xf:label>This is just a dummy placeholder by JS</xf:label>
                 </xf:input>
+                <xf:input id="currentAttr" ref="instance('i-vars')/currentAttr">
+                    <xf:label>This is just a value placeholder by JS</xf:label>
+                </xf:input>                
                 <xf:input id="currentField" ref="instance('i-vars')/currentField">
                     <xf:label>This is just a random placeholder by JS</xf:label>
                 </xf:input>
@@ -201,10 +331,16 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
             </div>
 };
 
-declare function app:inject-footer($node as node(), $model as map(*)) {
+declare function app:script-inject-footer($node as node(), $model as map(*)) {
         <script type="text/javascript" defer="defer">
             <!--
             var xfReadySubscribers;
+            
+            
+			showDialogAb = function(){
+				var dlg = dijit.byId('sysDialog');
+				dlg.show();
+			};              
 
             function embed(targetTrigger,targetMount){
                 console.debug("embed",targetTrigger,targetMount);
@@ -238,7 +374,28 @@ declare function app:inject-footer($node as node(), $model as map(*)) {
                     }
                 }).play();
 
-            }
+            }          
+            
+            var viewSubscriber = dojo.subscribe("/sys", function(){
+                
+                var fsPath = dijit.byId("fs_path");
+                if (fsPath.get("value") == "" || fsPath.get("value").length < 10) {
+                    alert("Invalid: Empty path or path less than 10 characters");
+                    location.reload();
+                }else{
+                    validatedFsPath = fsPath.get("value").replace(/^\s+|\s+$/g, '');
+                    console.log(validatedFsPath);
+                    fluxProcessor.setControlValue("currentDoc",validatedFsPath); 
+                    embed('storeSys','embedInline');
+                }                 
+            });     
+            
+            var writeSubscriber = dojo.subscribe("/sys/write", function(){
+                var check = confirm("This will overwrite contents of your existing bungeni_custom folder");
+                if (check == true){
+                    embed('writeSys','embedInline');
+                }                 
+            });               
             
             var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
                 fluxProcessor.setControlValue("currentDoc",doc);                
@@ -260,7 +417,25 @@ declare function app:inject-footer($node as node(), $model as map(*)) {
                 fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
                 fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
                 embed('view','embedInline');
-            });            
+            });   
+            
+            var editSubscriber = dojo.subscribe("/add", function(view,doc,node,attr,tab){
+                fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
+                fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
+                fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
+                embed('addPopup','embedDialog');
+            });              
+            
+            var editSubscriber = dojo.subscribe("/edit", function(view,doc,node,attr,tab){
+                fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
+                fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
+                fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
+                fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
+                fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
+                embed('editPopup','embedDialog');
+            });             
             
             var addSubscriber = dojo.subscribe("/field/add", function(form,field){
                 fluxProcessor.setControlValue("currentDoc",form);
@@ -335,3 +510,5 @@ declare function app:inject-footer($node as node(), $model as map(*)) {
         </script>
 
 };
+
+

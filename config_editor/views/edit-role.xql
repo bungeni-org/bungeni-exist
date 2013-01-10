@@ -42,7 +42,7 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml"
+                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/ui.xml"
                         ref="roles/role[. eq 'undefined']"
                         replace="instance"
                         serialization="none">
@@ -61,7 +61,7 @@ return
                                    replace="none"
                                    ref="instance()">
                                    
-                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/custom.xml'"/>
+                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/ui.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>

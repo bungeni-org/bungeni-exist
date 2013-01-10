@@ -34,7 +34,11 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-field" src="{$contextPath}/rest/db/config_editor/data/forms.xml"/>   
+                    
+                    <xf:instance id="i-field" src="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml"/>   
+                    
+                    <xf:instance id="i-controller" src="{$contextPath}/rest/db/config_editor/data/controller.xml"/>                    
+                    
                     <xf:instance id="i-modes" xmlns="">
                         <data>
                             <view show="true">
@@ -128,8 +132,6 @@ return
                         replace="instance"
                         serialization="none">
                     </xf:submission>                   
-
-                    <xf:instance id="i-controller" src="{$contextPath}/rest/db/config_editor/data/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">

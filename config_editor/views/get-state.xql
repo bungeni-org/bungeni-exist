@@ -5,6 +5,8 @@ import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
+import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.xqm";
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all document transitions sources :)
@@ -12,7 +14,7 @@ declare function local:transition-sources($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     let $attrname := request:get-parameter("node", "nothing")
 
-    for $transition at $pos in local:getMatchingTasks()/transition
+    for $transition at $pos in local:get-workflow($form-id)/workflow/transition
     where $transition/sources/source[. = $attrname]
     return
         local:render-row($doctype, $attrname, $pos, $transition)
@@ -23,7 +25,7 @@ declare function local:transition-destinations($doctype) as node() * {
     let $form-id := request:get-parameter("doc", "workflow.xml")
     let $attrname := request:get-parameter("node", "nothing")
 
-    for $transition at $pos in local:getMatchingTasks()/transition
+    for $transition at $pos in local:get-workflow($form-id)/workflow/transition
     where $transition/destinations/destination[. = $attrname]
     return
         local:render-row($doctype, $attrname, $pos, $transition)
@@ -38,16 +40,8 @@ declare function local:render-row($doctype as xs:string, $nodename as xs:string,
     </tr>
 };
 
-
-declare function local:getMatchingTasks() as node() * {
-    
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $doc := let $form := doc(concat('/db/config_editor/bungeni_custom/workflows/',$doc))
-                let $xsl := doc('/db/config_editor/xsl/wf_split_attrs.xsl')
-                return transform:transform($form, $xsl, <parameters>
-                                                            <param name="docname" value="{util:document-name($form)}" />
-                                                         </parameters>)
-    return $doc
+declare function local:get-workflow($docname as xs:string) as node() * {
+    doc($cfg:WORKFLOWS-COLLECTION || '/' || $docname)
 };
 
 let $contextPath := request:get-context-path()

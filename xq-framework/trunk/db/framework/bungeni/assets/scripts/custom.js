@@ -360,10 +360,50 @@ function doOnLoad() {
         scheduler.config.readonly = true;
     	scheduler.config.multi_day = true;
     	scheduler.config.xml_date="%Y-%m-%d %H:%i";
+        scheduler.config.show_loading=true;	
+
+        scheduler.locale.labels.venues_tab = "Venues";    	
+        scheduler.locale.labels.committees_tab = "Committees";   
+        
+        //create timeline view for venues
+        scheduler.createTimelineView({
+            name : "venues",
+            x_unit: "hour",
+            x_date: "%d %M %h%a",
+            x_step: 6,
+            x_size: 7,
+            x_start: 1,
+            y_unit:[	
+              {key:1, label:"Plenary"},
+              {key:2, label:"Green Room"},
+              {key:3, label:"Blue Room"},
+              {key:4, label:"Red Room"}	
+            ],
+            y_property:"venue",
+            render:	"bar"
+        });
+        
+        //create timeline view for committees
+        scheduler.createTimelineView({
+            name : "committees",
+            x_unit: "hour",
+            x_date: "%d %M %h%a",
+            x_step: 6,
+            x_size: 7,
+            x_start: 0,
+            x_length: 1,
+            y_unit:[	
+              {key:1, label:"Parliamentrary Comm p101"},
+              {key:2, label:"Parliamentrary Comm p201"}
+            ],
+            y_property: "group_id",
+            render: "bar"
+        });     
     	
     	scheduler.init('scheduler_here',new Date(),"week");
     	scheduler.load("get-sittings-xml");
     	scheduler.setCurrentView(scheduler._date, scheduler._mode);
+    	
     }
 }
 

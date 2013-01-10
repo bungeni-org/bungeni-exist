@@ -569,3 +569,9 @@ table tr td.labels {
 tbody tr.items:hover {
   background: #eee;
 }
+
+/* DHTMLX Calendar
+-------------------------------------------------------------- */
+.dhx_cal_navline .dhx_cal_date {
+    font-size: 14px !important;
+}

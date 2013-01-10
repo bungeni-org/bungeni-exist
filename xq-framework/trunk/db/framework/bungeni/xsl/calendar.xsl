@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -36,11 +36,14 @@
                             <div class="dhx_cal_prev_button">&#160;</div>
                             <div class="dhx_cal_next_button">&#160;</div>
                             <div class="dhx_cal_today_button"/>
-                            <div class="dhx_cal_date"/>
+                            <div class="dhx_cal_date" style="left:175px;"/>
                             <div class="dhx_cal_tab" name="day_tab" style="right:204px;"/>
                             <div class="dhx_cal_tab" name="week_tab" style="right:140px;"/>
                             <div class="dhx_cal_tab" name="month_tab" style="right:76px;"/>
                             <div class="dhx_cal_tab" name="year_tab" style="right:280px;"/>
+                            <div class="dhx_cal_tab" name="week_agenda_tab" style="right:76px;"/>
+                            <div class="dhx_cal_tab" name="venues_tab" style="right:76px;"/>
+                            <div class="dhx_cal_tab" name="committees_tab" style="width:80px;right:106px;"/>
                         </div>
                         <div class="dhx_cal_header"/>
                         <div class="dhx_cal_data"/>

@@ -1,13 +1,13 @@
 xquery version "3.0";
 
+declare option exist:serialize "method=xhtml media-type=text/xml";
+
 import module namespace request="http://exist-db.org/xquery/request";
 import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
 import module namespace cfg = "http://bungeni.org/xquery/config" at "../config.xqm";
-
-declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all fields :)
 declare function local:fields($doctype) as node() * {
@@ -78,9 +78,11 @@ return
         xmlns:exist="http://exist.sourceforge.net/NS/exist"
         xmlns:ev="http://www.w3.org/2001/xml-events" 
         xmlns:zope="http://namespaces.zope.org/zope"
-        xmlns:db="http://namespaces.objectrealms.net/rdb">
+        xmlns:db="http://namespaces.objectrealms.net/rdb"
+         xml:lang="en">
    <head>
       <title>Add/Edit Descriptor</title>
+        <link rel="stylesheet" type="text/css" href="./css/main.css"/>      
     </head>
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">

@@ -25,7 +25,7 @@ declare function local:roles() as node() * {
 };
 
 declare function local:get-form() as node() * {
-    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))/ui
+    doc(concat($cfg:FORMS-COLLECTION,'/ui.xml'))/ui
 };
 
 let $contextPath := request:get-context-path()
@@ -44,7 +44,7 @@ return
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">  	
             <div style="width: 100%; height: auto;">
-                    <h1>Custom / Roles / {$docname} </h1>
+                    <h1>UI / Roles / {$docname} </h1>
                     <br/>
                     <table class="listingTable" style="width:auto;">
                         <tr>                      			 
@@ -54,7 +54,7 @@ return
                         {local:roles()}
                     </table>
                     <span>
-                        <a href="javascript:dojo.publish('/add',['role','custom.xml','roles','role','none']);">add role</a>
+                        <a href="javascript:dojo.publish('/add',['role','ui.xml','roles','role','none']);">add role</a>
                     </span>  
             </div>                    
         </div>

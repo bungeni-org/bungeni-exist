@@ -7,14 +7,6 @@ import module namespace transform = "http://exist-db.org/xquery/transform";
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-workflow() as xs:string {
-
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $contextPath := request:get-context-path()
-    let $path2resource := concat($contextPath,"/apps/config_editor/edit/split-workflow.xql?doc=",$doc)
-    return $path2resource
-};
-
 let $contextPath := request:get-context-path()
 let $docname := xs:string(request:get-parameter("doc","workflow.xml"))
 let $nodename := xs:string(request:get-parameter("node","nothing"))
@@ -34,7 +26,7 @@ return
     	<div id="xforms">
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-workflowui" src="{local:fn-workflow()}"/>                   
+                    <xf:instance id="i-workflowui" src="{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}"/>                   
 
                     <xf:instance id="i-conditions" xmlns="">
                         <data>

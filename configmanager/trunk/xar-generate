@@ -1,0 +1,2 @@
+zip  -r --exclude="*.svn*" configmanager-0.1.xar ./*
+

@@ -17,10 +17,10 @@ declare function local:mode() as xs:string {
 };
 
 let $CXT := request:get-context-path()
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
-let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER 
 let $DOCNAME := xs:string(request:get-parameter("doc","none"))
 let $FIELDNAME := xs:string(request:get-parameter("field","none"))
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
+let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER
 let $MODE := xs:string(request:get-parameter("mode","old"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
@@ -36,8 +36,12 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
+                    
                     <xf:instance id="i-field" 
-                    src="{$REST-CXT-MODELTMPL}/forms.xml"/>   
+                        src="{$REST-CXT-CONFIGFORMS}/{$DOCNAME}.xml"/>   
+                    
+                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>                    
+                    
                     <xf:instance id="i-modes" xmlns="">
                         <data>
                             <view show="true">
@@ -132,8 +136,6 @@ return
                         serialization="none">
                     </xf:submission>                   
 
-                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>
-
                     <xf:instance id="tmp">
                         <data xmlns="">
                             <wantsToClose>false</wantsToClose>
@@ -145,8 +147,7 @@ return
                                    replace="none"
                                    ref="instance()">
                                    
-                        <xf:resource 
-                        value="'{$REST-CXT-CONFIGFORMS}/{$DOCNAME}.xml'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGFORMS}/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -168,7 +169,7 @@ return
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">field was saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                                dojo.publish('/form/view',['{$docname}','fields']);                      
+                                dojo.publish('/form/view',['{$DOCNAME}','fields']);                      
                                 dijit.byId("taskDialog").hide();
                             </script>
                         </xf:action>
@@ -258,7 +259,7 @@ return
                             <xf:label/>
                             <xf:trigger>
                                 <xf:label>Save</xf:label>
-                                <xf:action if="'{$mode}' = 'new'">
+                                <xf:action if="'{$MODE}' = 'new'">
                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>                                   
                                     <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
                                     <xf:send submission="s-add"/>

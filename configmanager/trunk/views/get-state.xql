@@ -5,28 +5,30 @@ import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
+import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all document transitions sources :)
-declare function local:transition-sources($doctype) as node() * {
-    let $form-id := request:get-parameter("doc", "workflow.xml")
-    let $attrname := request:get-parameter("node", "nothing")
+declare function local:transition-sources($doctype, $nodename) as node() * {
+    (:let $form-id := request:get-parameter("doc", "workflow.xml")
+    let $attrname := request:get-parameter("node", "nothing"):)
 
-    for $transition at $pos in local:getMatchingTasks()/transition
-    where $transition/sources/source[. = $attrname]
+    for $transition at $pos in local:get-workflow($doctype)/workflow/transition
+    where $transition/sources/source[. = $nodename]
     return
-        local:render-row($doctype, $attrname, $pos, $transition)
+        local:render-row($doctype, $nodename, $pos, $transition)
 };
 
 (: creates the output for all document transitions destinations :)
-declare function local:transition-destinations($doctype) as node() * {
-    let $form-id := request:get-parameter("doc", "workflow.xml")
-    let $attrname := request:get-parameter("node", "nothing")
-
-    for $transition at $pos in local:getMatchingTasks()/transition
-    where $transition/destinations/destination[. = $attrname]
+declare function local:transition-destinations($doctype, $nodename) as node() * {
+    (:let $form-id := request:get-parameter("doc", "workflow.xml")
+    let $attrname := request:get-parameter("node", "nothing"):)
+    (:form-id is same as doctype !:)
+    for $transition at $pos in local:get-workflow($doctype)/workflow/transition
+    where $transition/destinations/destination[. = $nodename]
     return
-        local:render-row($doctype, $attrname, $pos, $transition)
+        local:render-row($doctype, $nodename, $pos, $transition)
 };
 
 (: reused to render the destination and source transition tables below :)
@@ -38,23 +40,15 @@ declare function local:render-row($doctype as xs:string, $nodename as xs:string,
     </tr>
 };
 
-
-declare function local:getMatchingTasks() as node() * {
-    
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $doc := let $form := doc(concat('/db/config_editor/bungeni_custom/workflows/',$doc))
-                let $xsl := doc('/db/config_editor/xsl/wf_split_attrs.xsl')
-                return transform:transform($form, $xsl, <parameters>
-                                                            <param name="docname" value="{util:document-name($form)}" />
-                                                         </parameters>)
-    return $doc
+declare function local:get-workflow($docname as xs:string) as node() * {
+    doc($appconfig:WF-FOLDER || '/' || $docname)
 };
 
-let $contextPath := request:get-context-path()
-let $docname := xs:string(request:get-parameter("doc","workflow.xml"))
-let $nodename := xs:string(request:get-parameter("node","nothing"))
-let $attr := xs:string(request:get-parameter("attr","nothing"))
-let $showing := xs:string(request:get-parameter("tab","fields"))
+let $CXT := request:get-context-path()
+let $DOCNAME := xs:string(request:get-parameter("doc","workflow.xml"))
+let $NODENAME := xs:string(request:get-parameter("node","nothing"))
+let $ATTR := xs:string(request:get-parameter("attr","nothing"))
+let $SHOWING := xs:string(request:get-parameter("tab","fields"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -69,14 +63,14 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-workflowui" src="{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}"/>                   
+                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
 
                     <xf:bind nodeset="./state">
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                     </xf:bind>
 
-                    <xf:instance id="i-controller" src="{$contextPath}/rest/db/config_editor/data/controller.xml"/>
+                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -88,7 +82,7 @@ return
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGWF}/{$DOCNAME}'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -107,7 +101,7 @@ return
                             <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dijit.byId("formsDialog").hide();
-                                dojo.publish('/workflow/view',['{$docname}','workflow','statesDiv']);  
+                                dojo.publish('/workflow/view',['{$DOCNAME}','workflow','statesDiv']);  
                             </script>
                         </xf:action>
     
@@ -122,17 +116,17 @@ return
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready" >
-                        <script type="text/javascript" if="'{$showing}' != 'none'">
-                            dijit.byId("switchDiv").selectChild("{$showing}");                        
+                        <script type="text/javascript" if="'{$SHOWING}' != 'none'">
+                            dijit.byId("switchDiv").selectChild("{$SHOWING}");                        
                         </script>   
                     </xf:action>
             </xf:model>
             
             </div>    	
             <div style="width: 100%; height: 100%;">
-                <h1>Types / {$docname} / workflow / state</h1>
+                <h1>Types / {$DOCNAME} / workflow / state</h1>
                 <br/>
-                <a href="javascript:dojo.publish('/workflow/view',['{$docname}','workflow','statesDiv']);">
+                <a href="javascript:dojo.publish('/workflow/view',['{$DOCNAME}','workflow','statesDiv']);">
                     <img src="images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
                 </a>
                 <div style="width: 100%;">
@@ -182,9 +176,9 @@ return
                                                 <th>trigger</th>
                                                 <th>order</th>
                                             </tr>
-                                            {local:transition-sources($docname)}
+                                            {local:transition-sources($DOCNAME, $NODENAME)}
                                         </table> 
-                                        <a href="javascript:dojo.publish('/add',['transition','{$docname}','{$nodename}','{$attr}','none']);">add transition</a>                                 
+                                        <a href="javascript:dojo.publish('/add',['transition','{$DOCNAME}','{$NODENAME}','{$attr}','none']);">add transition</a>                                 
                                     </div>
                                     <div style="float:right;width:49%;">
                                         <h3>Destinations</h3>
@@ -194,7 +188,7 @@ return
                                                 <th>trigger</th>
                                                 <th>order</th>
                                             </tr>
-                                            {local:transition-destinations($docname)}
+                                            {local:transition-destinations($DOCNAME, $NODENAME)}
                                         </table>     
                                     </div>                                    
                                 </div>
@@ -208,7 +202,7 @@ return
                                             <th>...</th> 
                                         </tr>
                                     </thead>
-                                    <tbody id="r-attrs" xf:repeat-nodeset="./state[{$attr}]/tags/tag">
+                                    <tbody id="r-attrs" xf:repeat-nodeset="./state[{$ATTR}]/tags/tag">
                                         <tr>
                                             <td id="foo" class="one" style="color:steelblue;font-weight:bold;">
                                                 <xf:select1 ref="." appearance="minimal" incremental="true">
@@ -230,7 +224,7 @@ return
                                 <xf:trigger>
                                     <xf:label>add</xf:label>
                                     <xf:action>
-                                        <xf:insert nodeset="./state[{$attr}]/tags/tag"></xf:insert>
+                                        <xf:insert nodeset="./state[{$ATTR}]/tags/tag"></xf:insert>
                                     </xf:action>
                                 </xf:trigger> 
                             </div>

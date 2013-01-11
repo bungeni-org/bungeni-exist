@@ -10,7 +10,7 @@ import module namespace appconfig = "http://exist-db.org/apps/configmanager/conf
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 let $CXT := request:get-context-path()
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
 let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER 
 let $DOCNAME := xs:string(request:get-parameter("doc","none"))
 let $FIELDNAME := xs:string(request:get-parameter("field","none"))

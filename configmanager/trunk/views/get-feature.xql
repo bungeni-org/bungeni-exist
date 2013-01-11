@@ -9,16 +9,12 @@ import module namespace appconfig = "http://exist-db.org/apps/configmanager/conf
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:fn-workflow($docname, $doc_actions) as xs:string {
-    let $path2resource := concat($doc_actions, "/split-workflow.xql?doc=",$docname)
-    return $path2resource
-};
-
 (: creates the output for all document features :)
 declare function local:features($doctype) as node() * {
-    let $features := local:get-matching-tasks()/feature
-    let $count := count($features)
-    for $feature at $pos in $features
+    let $form-id := request:get-parameter("doc", "workflow.xml")
+    
+    let $count := count(local:get-workflow($form-id)/feature)
+    for $feature at $pos in local:get-workflow($form-id)/feature
         return
             <tr>
                 <td><a href="javascript:dojo.publish('/view',['feature','{$doctype}','none','{data($feature/@name)}']);">{data($feature/@name)}</a></td>
@@ -27,26 +23,17 @@ declare function local:features($doctype) as node() * {
             </tr>
 };
 
-declare function local:get-matching-tasks() as node() * {
-    
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $doc := let $form := doc(concat('/db/config_editor/bungeni_custom/workflows/',$doc))
-                let $xsl := doc('/db/config_editor/xsl/wf_split_attrs.xsl')
-                return transform:transform($form, $xsl, <parameters>
-                                                            <param name="docname" value="{util:document-name($form)}" />
-                                                         </parameters>)
-    return $doc
+declare function local:get-workflow($DOCNAME as xs:string) as node() * {
+    doc($appconfig:WF-FOLDER || '/' || $DOCNAME)
 };
 
 let $CXT := request:get-context-path()
-let $DOCNAME := xs:string(request:get-parameter("doc","workflow.xml"))
-(:let $NODENAME := xs:string(request:get-parameter("node","nothing")) :)
+let $DOCNAME := xs:string(request:get-parameter("doc","none"))
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
+let $REST-CXT-CONFIGWF := $CXT || "/rest" || $appconfig:WF-FOLDER
+let $NODENAME := xs:string(request:get-parameter("node","nothing"))
 let $ATTR := xs:string(request:get-parameter("attr","nothing"))
 let $SHOWING := xs:string(request:get-parameter("tab","fields"))
-let $REST-CXT-ACTNS :=  $CXT || "/rest" || $appconfig:app-root || "/doc_actions"
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
-let $REST-CXT-CONFIGWF := $CXT || "/rest" || $appconfig:WF-FOLDER 
-
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -61,16 +48,14 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-workflowui" 
-                        src="{local:fn-workflow($REST-CXT-ACTNS)}"/>                   
+                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
 
                     <xf:bind nodeset="./feature">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@enabled" type="xf:boolean" required="true()" />
                     </xf:bind>
 
-                    <xf:instance id="i-controller" 
-                        src="{$REST-CXT-MODELTMPL}/controller.xml"/>
+                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -82,8 +67,7 @@ return
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource 
-                            value="'{$REST-CXT-CONFIGWF}/{$DOCNAME}'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGWF}/{$DOCNAME}'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -117,8 +101,8 @@ return
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready" >
-                        <script type="text/javascript" if="'{$showing}' != 'none'">
-                            dijit.byId("switchDiv").selectChild("{$showing}");                        
+                        <script type="text/javascript" if="'{$SHOWING}' != 'none'">
+                            dijit.byId("switchDiv").selectChild("{$SHOWING}");                        
                         </script>   
                     </xf:action>
             </xf:model>

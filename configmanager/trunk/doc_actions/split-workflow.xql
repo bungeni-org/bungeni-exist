@@ -16,7 +16,7 @@ declare option exist:serialize "method=xml media-type=text/xml omit-xml-declarat
 let $DOCTYPE := xs:string(request:get-parameter("doc","workflow.xml"))
 let $PATH2RESOURCE := $appconfig:WF-FOLDER || $doctype
 let $DOC_WF := doc($PATH2RESOURCE)
-let $XSL := $appconfig:get-xslt("wf_split_attrs.xsl")
+let $XSL := appconfig:get-xslt("wf_split_attrs.xsl")
 return transform:transform($DOC_WF, 
         $XSL, 
         <parameters>

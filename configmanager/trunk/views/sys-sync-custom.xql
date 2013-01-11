@@ -12,9 +12,42 @@ import module namespace transform = "http://exist-db.org/xquery/transform";
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
-(: !+PENDING :)
-let $login := xmldb:login($root-coll, "admin", "")
-let $storing := cfg:reverse-transform-configs()
+
+(:
+: write the CONFIGS-COLLECTION back to the file-system location they were retrieved from.
+:)
+declare function local:reverse-transform-configs() {
+
+    for $doc in collection($appconfig:CONFIGS-FOLDER)
+    let $login := xmldb:login($appconfig:ROOT, "admin", "")
+    let $path := document-uri($doc)
+    (: form XSLTs:)
+    let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
+    let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")
+    (: workflow XSLTs:)
+    let $xslworkflow := appconfig:get-xslt("wf_merge_attrs.xsl")
+    
+    let $filename := functx:substring-after-last($path, '/')
+    return
+            if (contains($path,"/forms/")) then (
+                $filename || " written? " || file:serialize(transform:transform(
+                                                transform:transform($doc, $step1forms,()), $step2forms,()), 
+                                                $appconfig:CONFIGS-FOLDER || "/forms/" || $filename,
+                                                "media-type=application/xml method=xml")         
+            ) 
+            else if (contains($path,"/workflows/")) then (
+               $filename || " written? " || file:serialize(transform:transform(
+                                                $doc, $xslworkflow, ()),
+                                                $appconfig:CONFIGS-FOLDER || "/workflows/" || $filename,
+                                                "media-type=application/xml method=xml")
+            )
+            else
+                ()
+
+};
+
+let $login := xmldb:login($appconfig:ROOT, "admin", "")
+let $storing := local:reverse-transform-configs()
 (: check for something that definitely has to be there in the sequence :)
 let $uploadstate := if (contains($storing,"ui.xml")) then true() else false()
 return

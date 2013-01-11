@@ -1,13 +1,13 @@
 xquery version "3.0";
 
+declare option exist:serialize "method=xhtml media-type=text/xml";
+
 import module namespace request="http://exist-db.org/xquery/request";
 import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
-
-declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all fields :)
 declare function local:fields($doctype) as node() * {
@@ -68,28 +68,27 @@ declare function local:mode() as xs:string {
     return $mode
 };
 
-let $CXTR:= request:get-context-path()
+let $CXT := request:get-context-path()
 let $DOCNAME := xs:string(request:get-parameter("doc","nothing"))
 let $LASTFIELD := data(local:get-form($DOCNAME)/descriptor/field[last()]/@name)
 let $SHOWING := xs:string(request:get-parameter("tab","fields"))
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
-let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER 
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:exist="http://exist.sourceforge.net/NS/exist"
         xmlns:ev="http://www.w3.org/2001/xml-events" 
         xmlns:zope="http://namespaces.zope.org/zope"
-        xmlns:db="http://namespaces.objectrealms.net/rdb">
+        xmlns:db="http://namespaces.objectrealms.net/rdb"
+         xml:lang="en">
    <head>
       <title>Add/Edit Descriptor</title>
+        <link rel="stylesheet" type="text/css" href="./css/main.css"/>      
     </head>
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-formsui" 
-                        src="{$}/forms.xml"/>   
+                    <xf:instance id="i-formsui" src="{$REST-CXT-MODELTMPL}/forms.xml"/>   
                     
                     <xf:instance id="i-archetypes" xmlns="">
                         <data>
@@ -101,19 +100,19 @@ return
                         </data>
                     </xf:instance>                        
 
-                    <xf:bind nodeset=".[@name eq '{$docname}']">
+                    <xf:bind nodeset=".[@name eq '{$DOCNAME}']">
                         <xf:bind nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
                         <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
                     </xf:bind>
                     
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml"
+                        resource="{$REST-CXT-CONFIGFORMS}/{$DOCNAME}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
 
-                    <xf:instance id="i-controller" src="{$contextPath}/rest/db/config_editor/data/controller.xml"/>
+                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -125,7 +124,7 @@ return
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="concat('{$contextPath}/rest/db/config_editor/bungeni_custom/forms/',instance('i-controller')/lastAddedType,'.xml')"/>
+                        <xf:resource value="concat('{$REST-CXT-CONFIGFORMS}/',instance('i-controller')/lastAddedType,'.xml')"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -144,7 +143,7 @@ return
                             <xf:message level="ephemeral">new form details saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dijit.byId("formsDialog").hide();
-                                dojo.publish('/form/view',['{$docname}','details']);  
+                                dojo.publish('/form/view',['{$DOCNAME}','details']);  
                             </script>
                         </xf:action>
     
@@ -162,7 +161,7 @@ return
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/forms/{$docname}.xml'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGFORMS}/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -186,7 +185,7 @@ return
                             <xf:message level="ephemeral">FORM details saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dijit.byId("formsDialog").hide();
-                                dojo.publish('/form/view',['{$docname}','details']);  
+                                dojo.publish('/form/view',['{$DOCNAME}','details']);  
                             </script>
                             <xf:send submission="s-clean" if="'{local:mode()}' = 'new'"/>
                         </xf:action>
@@ -203,7 +202,7 @@ return
 
                     <xf:submission id="s-clean"
                                    ref="instance('i-formsui')"
-                                   resource="{$contextPath}/rest/db/config_editor/data/forms.xml"
+                                   resource="{$REST-CXT-MODELTMPL}/forms.xml"
                                    method="get"
                                    replace="instance"
                                    instance="i-formsui">
@@ -211,10 +210,10 @@ return
                     
                     <xf:action ev:event="xforms-ready" >
                         <xf:send submission="s-get-formsui" if="'{local:mode()}' = 'edit'"/>
-                        <xf:action if="'{$docname}' = 'new'">
+                        <xf:action if="'{$DOCNAME}' = 'new'">
                             <xf:setvalue ref="instance()/@name" value="instance('i-controller')/lastAddedType"/>
                         </xf:action>
-                        <script type="text/javascript" if="'{$showing}' = 'fields'">
+                        <script type="text/javascript" if="'{$SHOWING}' = 'fields'">
                             dijit.byId("switchDiv").selectChild("fieldsDiv");                        
                         </script>   
                     </xf:action>
@@ -224,7 +223,7 @@ return
             </div>    	
             <div style="width: 100%; height: 100%;">
                 <div dojoType="dijit.layout.TabContainer" id="switchDiv" style="width: 100%; height: 100%;">
-                    <h1>Types / {$docname} / forms </h1>
+                    <h1>Types / {$DOCNAME} / forms </h1>
                     <br/>
                     <div dojoType="dijit.layout.ContentPane" title="Edit Details" id="detailsDiv" selected="true">
                         <div class="caseContent">
@@ -258,12 +257,12 @@ return
                                         <xf:label/>
                                         <xf:trigger>
                                             <xf:label>Save</xf:label>
-                                            <xf:action if="'{$docname}' = 'new'">
+                                            <xf:action if="'{$DOCNAME}' = 'new'">
                                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                                 <xf:setvalue ref="./@name" value="instance('i-controller')/lastAddedType"/>
                                                 <xf:send submission="s-add"/>
                                             </xf:action>                                            
-                                            <xf:action if="'{$docname}' != 'new'">
+                                            <xf:action if="'{$DOCNAME}' != 'new'">
                                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                                 <xf:send submission="s-save"/>
                                             </xf:action>
@@ -287,10 +286,10 @@ return
                                     <th class="w40">Move</th>
                                     <th colspan="2">Actions</th>
                                 </tr>
-                                {local:fields($docname)}
+                                {local:fields($DOCNAME)}
                             </table> 
                             <span>
-                                <a href="javascript:dojo.publish('/field/add',['{$docname}','{$lastfield}']);">add field</a>
+                                <a href="javascript:dojo.publish('/field/add',['{$DOCNAME}','{$LASTFIELD}']);">add field</a>
                             </span>
                         </div>
                     </div>

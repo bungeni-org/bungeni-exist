@@ -5,24 +5,20 @@ import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
-import module namespace cfg = "http://bungeni.org/xquery/config" at "../modules/config.xqm";
+import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
 
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
-declare function local:get-workflow() as node() * {
-    
-    let $doc := xs:string(request:get-parameter("doc","workflow.xml"))
-    let $workflow := doc($cfg:WORKFLOWS-COLLECTION || "/" || $doc)/workflow
-    
+declare function local:get-workflow($doctype) as node() * {
+    let $workflow := doc($appconfig:WF-FOLDER || "/" || $doctype)/workflow
     return $workflow
 };
 
 (: creates the output for all document features :)
 declare function local:features($doctype) as node() * {
-    let $form-id := request:get-parameter("doc", "workflow.xml")
-    
-    let $count := count(local:get-workflow()/feature)
-    for $feature at $pos in local:get-workflow()/feature
+    let $features := local:get-workflow($doctype)/feature
+    let $count := count($features)
+    for $feature at $pos in $features
         return
             <tr>
                 <td><a href="javascript:dojo.publish('/view',['feature','{$doctype}','feature','{$pos}','none']);">{data($feature/@name)}</a></td>
@@ -33,10 +29,9 @@ declare function local:features($doctype) as node() * {
 
 (: creates the output for all document facets :)
 declare function local:facets($doctype) as node() * {
-    let $form-id := request:get-parameter("doc", "workflow.xml")
-    
-    let $count := count(local:get-workflow()/facet)
-    for $facet at $pos in local:get-workflow()/facet
+    let $facets := local:get-workflow($doctype)/facet
+    let $count := count($facets)
+    for $facet at $pos in $facets
         return
             <tr>
                 <td>{data($facet/@name)}</td>
@@ -47,11 +42,9 @@ declare function local:facets($doctype) as node() * {
 
 (: creates the output for all document states :)
 declare function local:states($doctype) as node() * {
-    let $contextPath := request:get-context-path()
-    let $form-id := request:get-parameter("doc", "workflow.xml")
-    
-    let $count := count(local:get-workflow()/state)
-    for $state at $pos in local:get-workflow()/state
+    let $states := local:get-workflow($doctype)/state
+    let $count := count($states)
+    for $state at $pos in $states
         return
             <tr>
                 <td><a href="javascript:dojo.publish('/view',['state','{$doctype}','{data($state/@id)}','{$pos}','none']);">{data($state/@id)}</a></td>
@@ -64,10 +57,9 @@ declare function local:states($doctype) as node() * {
 
 (: creates the output for all document transitions :)
 declare function local:transitions($doctype) as node() * {
-    let $form-id := request:get-parameter("doc", "workflow.xml")
-    
-    let $count := count(local:get-workflow()/transition)
-    for $transition at $pos in local:get-workflow()/transition
+    let $transitions := local:get-workflow()/transition
+    let $count := count($transitions)
+    for $transition at $pos in $transitions
         return
             <tr>
                 <td>{data($transition/@title)}</td>
@@ -79,9 +71,9 @@ declare function local:transitions($doctype) as node() * {
             </tr>
 };
 
-let $contextPath := request:get-context-path()
-let $docname := xs:string(request:get-parameter("doc","nothing"))
-let $showing := xs:string(request:get-parameter("tab","fields"))
+let $CXT := request:get-context-path()
+let $DOCNAME := xs:string(request:get-parameter("doc","nothing"))
+let $SHOWING := xs:string(request:get-parameter("tab","fields"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -96,14 +88,14 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model id="m-workflow">
-                    <xf:instance id="i-workflowui" src="{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}"/>                   
+                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
 
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@name" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@title" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />
                     </xf:bind>
 
-                    <xf:instance id="i-controller" src="{$contextPath}/rest/db/config_editor/data/controller.xml"/>
+                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -115,7 +107,7 @@ return
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$contextPath}/rest/db/config_editor/bungeni_custom/workflows/{$docname}'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGWF}/{$DOCNAME}'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -134,7 +126,7 @@ return
                             <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dijit.byId("formsDialog").hide();
-                                dojo.publish('/workflow/view',['{$docname}','workflow','documentDiv']);  
+                                dojo.publish('/workflow/view',['{$DOCNAME}','workflow','documentDiv']);  
                             </script>
                         </xf:action>
     
@@ -149,8 +141,8 @@ return
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready" >
-                        <script type="text/javascript" if="'{$showing}' != 'none'">
-                            dijit.byId("switchDiv").selectChild("{$showing}");                        
+                        <script type="text/javascript" if="'{$SHOWING}' != 'none'">
+                            dijit.byId("switchDiv").selectChild("{$SHOWING}");                        
                         </script>   
                     </xf:action>
             </xf:model>
@@ -160,7 +152,7 @@ return
                 <div dojoType="dijit.layout.TabContainer" id="switchDiv" style="width: 100%; height: 100%;">             
                     <div dojoType="dijit.layout.ContentPane" title="Document" id="documentDiv" selected="true">
                         <div>
-                            <h1>Types / {$docname} / workflow </h1>
+                            <h1>Types / {$DOCNAME} / workflow </h1>
                             <br/>                           
                             <xf:group ref="." appearance="bf:verticalTable">       
                                 <xf:input id="wf-name" ref="@name">
@@ -190,7 +182,7 @@ return
                     </div>
                     <div dojoType="dijit.layout.ContentPane" title="Edit States" id="statesDiv" selected="true">
                         <div>
-                            <h1>Types / {$docname} / workflow / states</h1>
+                            <h1>Types / {$DOCNAME} / workflow / states</h1>
                             <br/>                       
                             <table class="listingTable" style="width:auto;">
                                 <tr>                      			 
@@ -200,13 +192,13 @@ return
                                     <th>permissions_from_state</th>
                                     <th>...</th>
                                 </tr>
-                                {local:states($docname)}
+                                {local:states($DOCNAME)}
                             </table>
                         </div>
                     </div>                    
                     <div dojoType="dijit.layout.ContentPane" title="Workflow Features" id="featuresDiv" selected="true">
                         <div>
-                            <h1>Types / {$docname} / workflow / features </h1>
+                            <h1>Types / {$DOCNAME} / workflow / features </h1>
                             <br/>   
                             <table class="listingTable" style="width:auto;">
                                 <tr>                      			 
@@ -214,26 +206,26 @@ return
                                     <th>enabled</th>
                                     <th>...</th>
                                 </tr>
-                                {local:features($docname)}
+                                {local:features($DOCNAME)}
                             </table>  
                          </div>
                     </div>
                     <div dojoType="dijit.layout.ContentPane" title="Workflow Facets" id="facetsDiv" selected="true">
                         <div>
-                            <h1>Types / {$docname} / workflow / facets</h1>
+                            <h1>Types / {$DOCNAME} / workflow / facets</h1>
                             <br/>   
                             <table class="listingTable" style="width:auto;">
                                 <tr>                      			 
                                     <th>facet name</th>
                                     <th colspan="2">...</th>
                                 </tr>
-                                {local:facets($docname)}
+                                {local:facets($DOCNAME)}
                             </table>
                         </div>
                     </div>
                     <div dojoType="dijit.layout.ContentPane" title="Edit Transitions" id="detailsDiv" selected="true">
                         <div>
-                            <h1>Types / {$docname} / workflow / transitions</h1>
+                            <h1>Types / {$DOCNAME} / workflow / transitions</h1>
                             <br/>                       
                             <table class="listingTable" style="width:auto;">
                                 <tr>                      			 
@@ -243,7 +235,7 @@ return
                                     <th>order</th>
                                     <th colspan="2">...</th>
                                 </tr>
-                                {local:transitions($docname)}
+                                {local:transitions($DOCNAME)}
                             </table>
                         </div>                        
                     </div>

@@ -18,11 +18,10 @@ declare function local:mode() as xs:string {
 
 let $CXT := request:get-context-path()
 let $DOCNAME := xs:string(request:get-parameter("doc","none"))
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
+let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER
 let $ROLEID := xs:string(request:get-parameter("role","none"))
 let $MODE := xs:string(request:get-parameter("mode","old"))
-let $REST-CXT-ACTNS :=  $CXT || "/rest" || $appconfig:app-root || "/doc_actions"
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
-let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER 
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -37,8 +36,7 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-field" 
-                    src="{$REST-CXT-MODELTMPL}/forms.xml"/>               
+                    <xf:instance id="i-field" src="{$REST-CXT-MODELTMPL}/forms.xml"/>               
  
                     <xf:bind nodeset="roles/role[. eq '{$DOCNAME}']">
                         <xf:bind nodeset="" type="xf:string" required="true" />
@@ -46,14 +44,13 @@ return
 
                     <xf:submission id="s-get-formsui"
                         method="get"
-                        resource="{$REST-CXT-CONFIGFORMS}/custom.xml"
+                        resource="{$REST-CXT-CONFIGFORMS}/ui.xml"
                         ref="roles/role[. eq 'undefined']"
                         replace="instance"
                         serialization="none">
                     </xf:submission>                   
 
-                    <xf:instance id="i-controller" 
-                    src="{$REST-CXT-MODELTMPL}/controller.xml"/>
+                    <xf:instance id="i-controller" src="{$REST-CXT-MODELTMPL}/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -66,8 +63,7 @@ return
                                    replace="none"
                                    ref="instance()">
                                    
-                        <xf:resource 
-                            value="'{$REST-CXT-CONFIGFORMS}/custom.xml'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGFORMS}/ui.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>

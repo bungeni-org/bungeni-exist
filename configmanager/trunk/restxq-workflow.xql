@@ -21,7 +21,7 @@ declare
     %rest:GET
     %rest:path("/workflows")
     %rest:produces("application/xml", "text/xml")
-function ce:workflows() {
+function cerest:workflows() {
     <workflows>
     {
         for $workflow in collection($appconfig:WF-FOLDER)/workflow
@@ -37,7 +37,7 @@ function ce:workflows() {
 declare 
     %rest:GET
     %rest:path("/workflow/{$name}")
-function ce:get-workflow($name as xs:string) {
+function cerest:get-workflow($name as xs:string) {
     collection($appconfig:WF-FOLDER)/workflow[@name = $name]
 };
 
@@ -48,7 +48,7 @@ function ce:get-workflow($name as xs:string) {
 declare
     %rest:PUT("{$content}")
     %rest:path("/workflow")
-function ce:create-or-edit-address($content as node()) {
+function cerest:create-or-edit-address($content as node()) {
     let $id := ($content/workflow/@name, util:uuid())[1]
     let $data :=
         <workflow name="{$name}">
@@ -66,7 +66,7 @@ function ce:create-or-edit-address($content as node()) {
 declare
     %rest:DELETE
     %rest:path("/workflow/{$name}")
-function ce:delete-workflow($name as xs:string) {
+function cerest:delete-workflow($name as xs:string) {
     xmldb:remove($appconfig:WF-FOLDER, $name || ".xml"),
-    ce:workflows()
+    cerest:workflows()
 };

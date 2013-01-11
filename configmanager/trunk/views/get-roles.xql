@@ -7,6 +7,7 @@ import module namespace transform = "http://exist-db.org/xquery/transform";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
 
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all roles :)
@@ -25,12 +26,12 @@ declare function local:roles() as node() * {
 };
 
 declare function local:get-form() as node() * {
-    doc(concat($cfg:FORMS-COLLECTION,'/custom.xml'))/ui
+    doc(concat($appconfig:FORM-FOLDER,'/ui.xml'))/ui
 };
 
-let $contextPath := request:get-context-path()
-let $docname := xs:string(request:get-parameter("doc","all"))
-let $showing := xs:string(request:get-parameter("tab","fields"))
+let $CXT := request:get-context-path()
+let $DOCNAME := xs:string(request:get-parameter("doc","all"))
+let $SHOWING := xs:string(request:get-parameter("tab","fields"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
@@ -44,7 +45,7 @@ return
     <body class="nihilo InlineBordersAlert">
     	<div id="xforms">  	
             <div style="width: 100%; height: auto;">
-                    <h1>Custom / Roles / {$docname} </h1>
+                    <h1>UI / Roles / {$DOCNAME} </h1>
                     <br/>
                     <table class="listingTable" style="width:auto;">
                         <tr>                      			 
@@ -54,7 +55,7 @@ return
                         {local:roles()}
                     </table>
                     <span>
-                        <a href="javascript:dojo.publish('/add',['role','custom.xml','roles','role','none']);">add role</a>
+                        <a href="javascript:dojo.publish('/add',['role','ui.xml','roles','role','none']);">add role</a>
                     </span>  
             </div>                    
         </div>

@@ -1,15 +1,19 @@
-xquery version "1.0";
+xquery version "3.0";
 
 import module namespace request="http://exist-db.org/xquery/request";
 import module namespace session="http://exist-db.org/xquery/session";
 import module namespace util="http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
+
+import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
+
+
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 (: creates the output for all tasks matching the query :)
 declare function local:main() as node() * {
-    for $workflow in local:getMatchingTasks()
+    for $workflow in local:get-matching-tasks()
         return
             <tr>
                 <td class="selectorCol"><input type="checkbox" dojotype="dijit.form.CheckBox" value="{data($workflow/@document-name)}" /></td>
@@ -25,38 +29,28 @@ declare function local:main() as node() * {
 };
 
 (: fetch all tasks matching the query params passed from the search submission :)
-declare function local:getMatchingTasks() as node() * {
-    let $from := request:get-parameter("from", "1970-01-01")
-    let $to := request:get-parameter("to", "2020-01-01")
-    let $project := request:get-parameter("project","")
-    let $billable := request:get-parameter("billable","")
-    let $billed := request:get-parameter("billed","")
-
-    for $workflow in collection('/db/configeditor/configs/workflows')/workflow
-        let $workflow-project := data($workflow/@title)
-        let $xsl := doc('/db/configeditor/xsl/wf_split_attrs.xsl')
+declare function local:get-matching-tasks() as node() * {
+    let $xsl := appconfig:get-xslt("wf_split_attrs.xsl")
+    for $workflow in collection($appconfig:WF-FOLDER)/workflow
+        let $workflow-project := data($workflow/@title) 
         order by $workflow-project ascending
-        return transform:transform($workflow, $xsl, <parameters>
-                                                        <param name="docname" value="{util:document-name($workflow)}" />
-                                                    </parameters>)
+        return transform:transform($workflow, 
+                $xsl, 
+                <parameters>
+                    <param name="docname" value="{util:document-name($workflow)}" />
+                </parameters>)
 
 };
 
-(: convert all hours to minutes :)
-declare function local:hours-in-minutes($workflows as node()*) as xs:integer
-{
-  let $sum := sum($workflows//duration/@hours)
-  return  $sum * 60
-};
 
-let $contextPath := request:get-context-path()
+let $CXT := request:get-context-path()
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
       <title>All Tasks</title>
       <link rel="stylesheet" type="text/css"
-                href="{$contextPath}/rest/db/configeditor/styles/configeditor.css"/>
+                href="{$appconfig:rest-css($CXT, 'main.css')}"/>
 
     </head>
     <body>

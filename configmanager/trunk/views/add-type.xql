@@ -17,8 +17,8 @@ let $CXT := request:get-context-path()
 let $DOCNAME := xs:string(request:get-parameter("doc","nothing"))
 let $NODENAME := xs:string(request:get-parameter("node","nothing"))
 let $SHOWING := xs:string(request:get-parameter("tab","fields"))
-let $REST-CXT-ACTNS :=  $CXT || "/rest" || $appconfig:app-root || "/doc_actions"
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
+let $REST-CXT-ACTNS :=  $CXT || "/rest" || $appconfig:ROOT || "/doc_actions"
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
 let $REST-CXT-CONFIGTYPESXML := $CXT || "/rest" || $appconfig:TYPES_XML 
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"

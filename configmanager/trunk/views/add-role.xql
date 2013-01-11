@@ -18,7 +18,7 @@ declare function local:mode() as xs:string {
 
 let $CXT := request:get-context-path()
 let $DOCNAME := xs:string(request:get-parameter("doc","none"))
-let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:app-root || "/model_templates"
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
 let $REST-CXT-CONFIGFORMS := $CXT || "/rest" || $appconfig:FORM-FOLDER 
 let $ROLEID := xs:string(request:get-parameter("role","none"))
 let $MODE := xs:string(request:get-parameter("mode","old"))

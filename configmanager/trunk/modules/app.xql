@@ -2,6 +2,9 @@ xquery version "3.0";
 
 module namespace app="http://exist-db.org/apps/configmanager/templates";
 declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
+declare namespace xf="http://www.w3.org/2002/xforms";
+declare namespace ev="http://www.w3.org/2001/xml-events" ;
+
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
@@ -54,7 +57,7 @@ function app:input-path($node as node(), $model as map(*)) {
     <xhtml:input dojoType="dijit.form.TextBox" type="text" style="width:120%;"
         id="fs_path" name="fs_path" 
         value="{$appconfig:doc/ce-config/configs[@collection eq 'bungeni_custom']/fs-path/text()}"/>
-}
+};
 
 declare 
   %templates:default("active", "search") 

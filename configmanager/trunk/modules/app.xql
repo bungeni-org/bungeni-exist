@@ -28,63 +28,95 @@ function app:test($node as node(), $model as map(*)) {
 
 declare 
 function app:get-roles-menu($node as node(), $model as map(*)) {
-    <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','custom.xml','roles','none','none']);">
+    <xhtml:div data-dojo-type="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','custom.xml','roles','none','none']);">
     Roles
     </xhtml:div>
 };
 
 declare 
 function app:get-separator($node as node(), $model as map(*)) {
-   <xhtml:div dojoType="dijit.MenuSeparator"/> 
+   <xhtml:div data-dojo-type="dijit.MenuSeparator"/> 
 };
 
 declare 
 function app:get-system-menu($node as node(), $model as map(*)) {
-    <xhtml:div dojoType="dijit.PopupMenuItem"> 
+    <xhtml:div data-dojo-type="dijit.PopupMenuItem"> 
         <xhtml:span>
             System            
         </xhtml:span>                        
-        <xhtml:div dojoType="dijit.Menu" id="submenusys">
-            <xhtml:div dojoType="dijit.MenuItem" 
+        <xhtml:div data-dojo-type="dijit.Menu" id="submenusys">
+            <xhtml:div data-dojo-type="dijit.MenuItem" 
                 onClick="showDialogAb();document.getElementById('fs_path').focus();">
                 store from file-system
             </xhtml:div>
-            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/sys/write');">sync back to filesystem</xhtml:div>           
+            <xhtml:div data-dojo-type="dijit.MenuItem" onclick="javascript:dojo.publish('/sys/write');">sync back to filesystem</xhtml:div>           
         </xhtml:div>
     </xhtml:div>
 };
 
 declare 
 function app:input-path($node as node(), $model as map(*)) {
-    <xhtml:input dojoType="dijit.form.TextBox" type="text" style="width:120%;"
+    <xhtml:input data-dojo-type="dijit.form.TextBox" type="text" style="width:120%;"
         id="fs_path" name="fs_path" 
         value="{$appconfig:doc/ce-config/configs[@collection eq 'bungeni_custom']/fs-path/text()}"/>
 };
 
 declare 
-  %templates:default("active", "search") 
-function app:get-types-menu($node as node(), $model as map(*), $active as xs:string) {
-     <xhtml:div dojoType="dijit.PopupMenuItem"> 
-        <xhtml:span>
-            Types            
-        </xhtml:span>
-        <xhtml:div dojoType="dijit.Menu" id="submenu">       
-            <xhtml:div dojoType="dijit.MenuItem" onClick="alert('new!');">add new</xhtml:div>
-            <xhtml:div dojoType="dijit.MenuSeparator"/>
-            {
-                for $docu in doc(concat($appconfig:CONFIGS-FOLDER,'/types.xml'))/types/*
-                return    
-                    <xhtml:div dojoType="dijit.PopupMenuItem">
-                        <xhtml:span>{data($docu/@name)}</xhtml:span>
-                        <xhtml:div dojoType="dijit.Menu" id="formsMenu{data($docu/@name)}">
-                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/form/view',['{data($docu/@name)}','details']);">form</xhtml:div>
-                            <xhtml:div dojoType="dijit.MenuItem" onclick="javascript:dojo.publish('/workflow/view',['{data($docu/@name)}.xml','workflow','documentDiv']);">workflow</xhtml:div>
-                            <xhtml:div dojoType="dijit.MenuItem">workspace</xhtml:div>
-                        </xhtml:div>
-                    </xhtml:div>
-            }      
-        </xhtml:div>
-     </xhtml:div>      
+    %templates:default("active", "search") 
+function app:get-main-nav($node as node(), $model as map(*), $active as xs:string) {
+    <div id="menu">
+        <ul class="tabs">
+            <li>
+                <h4><a href="#">Main Nav &#187;</a></h4>
+            </li>
+            <li class="hasmore">
+                <a href="#"><span>Types</span></a>
+                <ul class="dropdown">
+                    {
+                        for $docu at $pos in doc($appconfig:TYPES-XML)/types/*
+                        let $count := count(doc($appconfig:TYPES-XML)/types/*)
+                        return    
+                            if ($pos ne $count) then (
+                                <li><a href="type.html?type={node-name($docu)}&amp;name={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
+                            )
+                            else ( 
+                                <li class="last"><a href="type.html?type={node-name($docu)}&amp;name={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
+                            )
+                    }
+                </ul>
+            </li>
+            <li><a href="#"><span>Roles</span></a></li>
+            <li class="hasmore"><a href="/about/#networks"><span>Configuration</span></a>
+                <ul class="dropdown">
+                    <li><a href="#">Upload</a></li>
+                    <li><a href="#">Save</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+};
+
+declare 
+    %templates:default("active", "form") 
+function app:get-secondary-menu($node as node(), $model as map(*), $active as xs:string) {
+    <div id="secondary-menu">
+        <ul class="secondary">
+            <li><a href="#">add new type</a></li>
+        </ul>
+    </div>
+};
+
+declare 
+    %templates:default("active", "form") 
+function app:get-type-parts($node as node(), $model as map(*), $active as xs:string) {
+    <div id="secondary-menu">
+        <ul class="secondary">
+            <li><a href="#">form</a></li>
+            <li><a href="#">worklow &#187;</a></li>
+            <li><a href="#">workspace &#187;</a></li>
+            <li><a href="#">notification &#187;</a></li>
+        </ul>
+    </div>
 };
 
 (:
@@ -334,9 +366,6 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>This is just a renderlook placeholder by JS</xf:label>
                 </xf:input>                 
             </div>
-};
-
-
 };
 
 

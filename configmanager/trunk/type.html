@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms" class="templates:surround?with=templates/page.html&amp;at=content">
+
+    <!-- ***** hidden triggers ***** -->
+    <!--div class="app:xforms-declare"/-->
+    <!-- **** end hidden triggers -->
+    <div class="row-fluid">
+        <div id="left-content" class="span4">
+            <div class="app:get-type-parts"/>
+        </div>
+        <div id="right-content" class="span8">
+            <xf:model>
+                <xf:instance id="i-type" src="/exist/db/apps/configmanager/working/live/bungeni_custom/types.xml"/>
+                <xf:instance xmlns="" id="i-typedoc">
+                    <data>
+                        <doc name="" enabled="false"/>
+                    </data>
+                </xf:instance>
+                <xf:instance xmlns="" id="i-typegroup">
+                    <data>
+                        <group name="" workflow="group" enabled="false">
+                            <member name="member_member" workflow="group_membership" enabled="false"/>
+                        </group>
+                    </data>
+                </xf:instance>
+                <xf:instance id="tmp">
+                    <data xmlns="">
+                        <wantsToClose>false</wantsToClose>
+                    </data>
+                </xf:instance>
+                <xf:bind nodeset="instance()/doc[last()]">
+                    <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 0 and string-length(replace(.,' ','')) = string-length(.) and count(instance()/doc/@name) eq count(distinct-values(instance()/doc/@name))"/>
+                    <xf:bind id="typenable" nodeset="@enabled" type="xf:boolean" required="true()"/>
+                </xf:bind>
+            </xf:model>           
+            <!-- ######################### Views start ################################## -->
+            <p>Edit the type information</p>
+            <xf:group ref="instance()/doc[last()]">
+                <xf:group>
+                    <xf:label>{$name}</xf:label>
+                    <xf:input bind="typename" id="type-name">
+                        <xf:label>name</xf:label>
+                        <xf:hint>Unique name</xf:hint>
+                        <xf:help>Neither are spaces allowed in between</xf:help>
+                        <xf:alert>invalid form name / duplicate / empty space(s)</xf:alert>
+                    </xf:input>
+                    <xf:input bind="typenable" id="type-enabled">
+                        <xf:label>enabled</xf:label>
+                        <xf:hint>check to enable this</xf:hint>
+                    </xf:input>
+                    <br/>
+                    <xf:group id="typeButtons">
+                        <xf:trigger>
+                            <xf:label>Add</xf:label>
+                            <xf:action if="'doc' = 'doc'">
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                            </xf:action>
+                            <xf:action if="'group' = 'group'">
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </xf:group>
+                </xf:group>
+            </xf:group>
+            <!-- ######################### Views end ################################## -->
+        </div>
+    </div>
+</div>

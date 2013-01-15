@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
         <link rel="stylesheet" type="text/css" href="resources/css/main.css"/>
+        <link rel="stylesheet" href="resources/css/fancydropdown.css"/>
     </head>
     <body id="body" class="nihilo InlineRoundBordersAlert">
         <div class="navbar">
@@ -15,203 +16,15 @@
                     <a class="config:app-title brand" href="./index.html">App Title</a>
                 </div>
             </div>
+            <div class="app:get-main-nav?current=none"/>
         </div>
         <div id="content" class="container"/>
+        <script type="text/javascript" src="resources/js/jquery-1.8.1.min.js"/>
+        <script type="text/javascript" src="resources/js/fancydropdown.js"/>
         <script type="text/javascript" defer="defer">
-            <!--
-
-                require(["dojo/ready", 
-                "dijit/dijit-all",
-			    "dojo/parser",
-                "dijit/Menu", 
-                "dijit/MenuItem", 
-                "dijit/CheckedMenuItem", 
-                "dijit/MenuSeparator", 
-                "dijit/PopupMenuItem"],
-                    function (ready, dojo, dijit, Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem) {
-              
-                        var openPlugin = null;
-                        var openPopup = null;
-                        var login = null;
-                        var callbackFunction = null;
-                        var updating = false;
-                
-                
-                        ready(function() {
-                            console.debug("ready");
-                            
-                            var xfReadySubscribers;                            
-                            fluxProcessor.skipshutdown=true;
-                            
-                			showDialogAb = function(){
-                				var dlg = dijit.byId('sysDialog');
-                				dlg.show();
-                			};                            
-                            
-                            function embed(targetTrigger,targetMount){
-                             console.debug("embed",targetTrigger,targetMount);
-                             if(targetMount == "embedDialog"){
-                                 dijit.byId("taskDialog").show();
-                             } else if(targetMount == "embedDialogDB") {
-                                 dijit.byId("dbDialog").show();
-                             } else if(targetMount == "embedDialogForms") {
-                                 dijit.byId("formsDialog").show();
-                             }
-                             var targetMount =  dojo.byId(targetMount);
-                            
-                             fluxProcessor.dispatchEvent(targetTrigger);
-                            
-                             if(xfReadySubscribers != undefined) {
-                                 dojo.unsubscribe(xfReadySubscribers);
-                                 xfReadySubscribers = null;
-                             }
-                            
-                             xfReadySubscribers = dojo.subscribe("/xf/ready", function(data) {
-                                 dojo.fadeIn({
-                                     node: targetMount,
-                                     duration:100
-                                 }).play();
-                             });
-                             dojo.fadeOut({
-                                 node: targetMount,
-                                 duration:100,
-                                 onBegin: function() {
-                                     fluxProcessor.dispatchEvent(targetTrigger);
-                                 }
-                             }).play();
-                            
-                            }          
-                            
-                            var viewSubscriber = dojo.subscribe("/sys", function(){
-                             
-                             /*var fsPath = dijit.byId("fs_path");
-                             if (fsPath.get("value") == "" || fsPath.get("value").length < 10) {
-                                 alert("Invalid: Empty path or path less than 10 characters");
-                                 location.reload();
-                             }else{
-                                 validatedFsPath = fsPath.get("value").replace(/^\s+|\s+$/g, '');
-                                 console.log(validatedFsPath);
-                                 fluxProcessor.setControlValue("currentDoc",validatedFsPath); 
-                                 embed('storeSys','embedInline');
-                             } */                
-                            });     
-                            
-                            var writeSubscriber = dojo.subscribe("/sys/write", function(){
-                             var check = confirm("This will overwrite contents of your existing bungeni_custom folder");
-                             if (check == true){
-                                 embed('writeSys','embedInline');
-                             }                 
-                            });               
-                            
-                            var editSubscriber = dojo.subscribe("/form/view", function(doc,tab){
-                             fluxProcessor.setControlValue("currentDoc",doc);                
-                             fluxProcessor.setControlValue("showTab",tab);
-                             embed('viewForm','embedInline');
-                            }); 
-                            
-                            var editSubscriber = dojo.subscribe("/workflow/view", function(doc,node,tab){
-                             fluxProcessor.setControlValue("currentDoc",doc);       
-                             fluxProcessor.setControlValue("currentNode",node);  
-                             fluxProcessor.setControlValue("showTab",tab);
-                             embed('viewWorkflow','embedInline');
-                            });             
-                            
-                            var editSubscriber = dojo.subscribe("/view", function(view,doc,node,attr,tab){
-                             fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
-                             fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
-                             fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
-                             fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
-                             fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
-                             embed('view','embedInline');
-                            });   
-                            
-                            var editSubscriber = dojo.subscribe("/add", function(view,doc,node,attr,tab){
-                             fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
-                             fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
-                             fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
-                             fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
-                             fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
-                             embed('addPopup','embedDialog');
-                            });              
-                            
-                            var editSubscriber = dojo.subscribe("/edit", function(view,doc,node,attr,tab){
-                             fluxProcessor.setControlValue("currentView",view);  // ~/views/get-{view}.xql  
-                             fluxProcessor.setControlValue("currentDoc",doc);    // document in the query                
-                             fluxProcessor.setControlValue("currentNode",node);  // parent node in the query
-                             fluxProcessor.setControlValue("currentAttr",attr);  // attribute selector for node in the query                
-                             fluxProcessor.setControlValue("showTab",tab);       // tab to switch to, if any, in the view
-                             embed('editPopup','embedDialog');
-                            });             
-                            
-                            var addSubscriber = dojo.subscribe("/field/add", function(form,field){
-                             fluxProcessor.setControlValue("currentDoc",form);
-                             fluxProcessor.setControlValue("currentField",field);
-                             embed('addField','embedDialog');
-                            });
-                            
-                            var editSubscriber = dojo.subscribe("/field/edit", function(form,field){
-                             fluxProcessor.setControlValue("currentDoc",form);
-                             fluxProcessor.setControlValue("currentField",field);
-                             embed('editField','embedDialog');
-                            });            
-                            
-                            var moveUpSubscriber = dojo.subscribe("/field/up", function(form,field){
-                             fluxProcessor.setControlValue("currentDoc",form);
-                             fluxProcessor.setControlValue("currentField",field);
-                             fluxProcessor.dispatchEvent('moveFieldUp');
-                            });
-                            
-                            var moveDownSubscriber = dojo.subscribe("/field/down", function(form,field){
-                             fluxProcessor.setControlValue("currentDoc",form);
-                             fluxProcessor.setControlValue("currentField",field);
-                             fluxProcessor.dispatchEvent('moveFieldDown');
-                            });   
-                            
-                            var deleteSubscriber = dojo.subscribe("/field/delete", function(form,field){
-                             var check = confirm("Really delete this field?");
-                             if (check == true){
-                                 fluxProcessor.setControlValue("currentDoc",form);
-                                 fluxProcessor.setControlValue("currentField",field);
-                                 fluxProcessor.dispatchEvent('deleteField');
-                             }            
-                            }); 
-                            
-                            var deleteSubscriber = dojo.subscribe("/role/delete", function(form,field){
-                             var check = confirm("Really delete this role?");
-                             if (check == true){
-                                 fluxProcessor.setControlValue("currentDoc",form);
-                                 fluxProcessor.setControlValue("currentField",field);
-                                 fluxProcessor.dispatchEvent('deleteRole');
-                             }            
-                            });            
-                            
-                            var editSubscriber = dojo.subscribe("/role/edit", function(form,node){
-                             fluxProcessor.setControlValue("currentDoc",form);
-                             fluxProcessor.setControlValue("currentNode",node);
-                             embed('editRole','embedDialog');
-                            }); 
-                            
-                            var refreshSubcriber = dojo.subscribe("/wf/refresh", function(){
-                             fluxProcessor.dispatchEvent("overviewTrigger");
-                            });           
-                            
-                            function passValuesToXForms(){
-                             var result="";
-                             dojo.query("input",dojo.byId("listingTable")).forEach(
-                             function (node){
-                                 if(dijit.byId(node.id).checked && node.value != undefined){
-                                     result = result + " " + node.value;
-                                 }
-                             });
-                             fluxProcessor.setControlValue("selectedTaskIds",result);
-                            }                         
-                
-                
-                        });
-              
-                    });                         
-
-            // -->
+        <!--
+        
+        -->
         </script>
     </body>
 </html>

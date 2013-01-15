@@ -24,13 +24,13 @@ declare variable $appconfig:CONFIGS-IMPORT := $appconfig:CONFIGS-ROOT-IMPORT || 
 (: app/working/live/bungeni_custom :)
 declare variable $appconfig:CONFIGS-FOLDER := $appconfig:CONFIGS-ROOT-LIVE || "/" || $appconfig:CONFIGS-FOLDER-NAME;
 
-declare variable $appconfig:FORM-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || $appconfig:doc/ce-config/configs/@form/text();
+declare variable $appconfig:FORM-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@form);
 
-declare variable $appconfig:WF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || $appconfig:doc/ce-config/configs/@wf/text();
+declare variable $appconfig:WF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@wf);
 
-declare variable $appconfig:WS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || $appconfig:doc/ce-config/configs/@ws/text();
+declare variable $appconfig:WS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@ws);
 
-declare variable $appconfig:NOTIF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || $appconfig:doc/ce-config/configs/@notif/text();
+declare variable $appconfig:NOTIF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@notif);
 
 declare variable $appconfig:TYPES-XML := $appconfig:CONFIGS-FOLDER || "/" || "types.xml";
 

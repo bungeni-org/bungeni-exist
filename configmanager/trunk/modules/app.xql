@@ -10,6 +10,9 @@ import module namespace templates="http://exist-db.org/xquery/templates" at "tem
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
 import module namespace config = "http://exist-db.org/xquery/apps/config" at "config.xqm";
 
+declare variable $app:CXT := request:get-context-path();
+declare variable $app:REST-CXT-APP :=  $app:CXT || "/rest" || $config:app-root;
+
 (:~
  : This is a sample templating function. It will be called by the templating module if
  : it encounters an HTML element with a class attribute: class="app:test". The function
@@ -88,8 +91,8 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li><a href="#"><span>Roles</span></a></li>
             <li class="hasmore"><a href="/about/#networks"><span>Configuration</span></a>
                 <ul class="dropdown">
-                    <li><a href="#">Upload</a></li>
-                    <li><a href="#">Save</a></li>
+                    <li><a href="upload.html">Upload</a></li>
+                    <li><a href="save.html">Save</a></li>
                 </ul>
             </li>
         </ul>
@@ -109,14 +112,20 @@ function app:get-secondary-menu($node as node(), $model as map(*), $active as xs
 declare 
     %templates:default("active", "form") 
 function app:get-type-parts($node as node(), $model as map(*), $active as xs:string) {
-    <div id="secondary-menu">
-        <ul class="secondary">
-            <li><a href="#">form</a></li>
-            <li><a href="#">worklow &#187;</a></li>
-            <li><a href="#">workspace &#187;</a></li>
-            <li><a href="#">notification &#187;</a></li>
-        </ul>
-    </div>
+    
+    let $type := request:get-parameter("type", "none")
+    let $name := request:get-parameter("name", "none")
+    let $pos := request:get-parameter("pos", "none")
+    return
+        <div id="secondary-menu">
+            <ul class="secondary">
+                <li><a href="type.html?type={$type}&amp;name={$name}&amp;pos={$pos}">{$name}</a></li>
+                <li><a href="form.html?type={$type}&amp;name={$name}&amp;pos={$pos}">form &#187;</a></li>
+                <li><a href="workflow.html?type={$type}&amp;name={$name}&amp;pos={$pos}">worklow &#187;</a></li>
+                <li><a href="workspace.html?type={$type}&amp;name={$name}&amp;pos={$pos}">workspace &#187;</a></li>
+                <li><a href="notification.html?type={$type}&amp;name={$name}&amp;pos={$pos}">notification &#187;</a></li>
+            </ul>
+        </div>
 };
 
 (:

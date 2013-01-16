@@ -14,6 +14,8 @@ import module namespace templates="http://exist-db.org/xquery/templates" at "tem
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 import module namespace app="http://exist-db.org/apps/configmanager/templates" at "app.xql";
 import module namespace type="http://exist.bungeni.org/types" at "type.xql";
+import module namespace sysmanager="http://exist.bungeni.org/systemfunctions" at "system.xql";
+import module namespace form="http://exist.bungeni.org/formfunctions" at "form.xql";
 
 declare option exist:serialize "method=html5 media-type=text/html";
 

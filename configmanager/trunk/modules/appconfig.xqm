@@ -55,7 +55,7 @@ declare function local:__get_app_doc__($value as xs:string) as document-node() {
 Loads an XSLT file 
 :)
 declare function appconfig:get-xslt($value as xs:string) as document-node() {
-    local:__get_app_doc__($appconfig:XSL || "/" || $value)
+    doc($appconfig:XSL || "/" || $value)
 };
 
 declare function appconfig:rest-css($cxt-path as xs:string, $value as xs:string) {

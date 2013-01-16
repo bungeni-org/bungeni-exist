@@ -122,7 +122,7 @@ ul.dropdown li a
 
 #menu ul li a
 {
-	color: #ffffff;
+	color: #444;
 	padding-left: 4px;
 }
 
@@ -150,9 +150,9 @@ ul.dropdown li a
 #menu ul.dropdown
 {
 	padding: 10px;
-	background: #DC902F;
+	background: #FFB35A ;
 	overflow:hidden;
-	border-bottom: 1px solid #dc902f;
+	border-bottom: 1px solid #FFB35A ;
 	width: 120px;
 }
 

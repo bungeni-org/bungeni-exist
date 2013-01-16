@@ -5,7 +5,7 @@ xquery version "3.0";
  :)
 module namespace cerest = "http://exist-db.org/apps/configmanager/rest";
 
-import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "./modules/appconfig.xqm";
+import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "modules/appconfig.xqm";
 
 declare namespace rest="http://exquery.org/ns/restxq";
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";

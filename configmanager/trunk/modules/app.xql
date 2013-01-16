@@ -89,10 +89,10 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
                 </ul>
             </li>
             <li><a href="#"><span>Roles</span></a></li>
-            <li class="hasmore"><a href="/about/#networks"><span>Configuration</span></a>
+            <li class="hasmore"><a href="#config"><span>Configuration</span></a>
                 <ul class="dropdown">
-                    <li><a href="upload.html">Upload</a></li>
-                    <li><a href="save.html">Save</a></li>
+                    <li><a id="show-popup" href="upload.html">Upload</a></li>
+                    <li class="last"><a href="save.html">Save</a></li>
                 </ul>
             </li>
         </ul>
@@ -110,22 +110,24 @@ function app:get-secondary-menu($node as node(), $model as map(*), $active as xs
 };
 
 declare 
-    %templates:default("active", "form") 
+    %templates:default("active", "")
 function app:get-type-parts($node as node(), $model as map(*), $active as xs:string) {
     
-    let $type := request:get-parameter("type", "none")
-    let $name := request:get-parameter("name", "none")
-    let $pos := request:get-parameter("pos", "none")
-    return
-        <div id="secondary-menu">
-            <ul class="secondary">
-                <li><a href="type.html?type={$type}&amp;name={$name}&amp;pos={$pos}">{$name}</a></li>
-                <li><a href="form.html?type={$type}&amp;name={$name}&amp;pos={$pos}">form &#187;</a></li>
-                <li><a href="workflow.html?type={$type}&amp;name={$name}&amp;pos={$pos}">worklow &#187;</a></li>
-                <li><a href="workspace.html?type={$type}&amp;name={$name}&amp;pos={$pos}">workspace &#187;</a></li>
-                <li><a href="notification.html?type={$type}&amp;name={$name}&amp;pos={$pos}">notification &#187;</a></li>
-            </ul>
-        </div>
+    <div id="secondary-menu">
+        <ul class="secondary"> 
+            {
+            for $part in ('type', 'form', 'workflow', 'workspace', 'notification')
+            let $type := request:get-parameter("type", "none")
+            let $name := request:get-parameter("name", "none")
+            let $pos := request:get-parameter("pos", "none")
+            return 
+                if ($active eq $part) then 
+                    <li><a class="sec-active" href="{$part}.html?type={$type}&amp;name={$name}&amp;pos={$pos}">{$part}</a></li> 
+                else 
+                    <li><a href="{$part}.html?type={$type}&amp;name={$name}&amp;pos={$pos}">{$part} &#187;</a></li>
+            }
+        </ul> 
+    </div>
 };
 
 (:

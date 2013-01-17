@@ -40,6 +40,8 @@ declare variable $appconfig:CSS := $appconfig:ROOT || "/" || "resources/css";
 
 declare variable $appconfig:IMAGES := $appconfig:ROOT || "/" || "resources/images";
 
+declare variable $appconfig:FS-PATH := $appconfig:doc/ce-config/configs/fs-path/text();
+
 (: THis may be used internally to sudo to admin :)
 declare variable $appconfig:admin-username := "admin";
 declare variable $appconfig:admin-password := "";

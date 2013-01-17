@@ -44,6 +44,39 @@ declare function local:transform-configs($file-paths) {
             ()
 };
 
+(:
+: write the CONFIGS-COLLECTION back to the file-system location they were retrieved from.
+:)
+declare function local:reverse-transform-configs() {
+
+    for $doc in collection($appconfig:CONFIGS-FOLDER)
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $path := document-uri($doc)
+    (: form XSLTs:)
+    let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
+    let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")
+    (: workflow XSLTs:)
+    let $xslworkflow := appconfig:get-xslt("wf_merge_attrs.xsl")
+    
+    let $filename := functx:substring-after-last($path, '/')
+    return
+            if (contains($path,"/forms/")) then (
+                $filename || " written? " || file:serialize(transform:transform(
+                                                transform:transform($doc, $step1forms,()), $step2forms,()), 
+                                                $appconfig:FS-PATH || "/forms/" || $filename,
+                                                "media-type=application/xml method=xml")         
+            ) 
+            else if (contains($path,"/workflows/")) then (
+               $filename || " written? " || file:serialize(transform:transform(
+                                                $doc, $xslworkflow, ()),
+                                                $appconfig:FS-PATH || "/workflows/" || $filename,
+                                                "media-type=application/xml method=xml")
+            )
+            else
+                ()
+
+};
+
 declare function local:split-form($form-path as xs:string) {
     let $here := util:log('info', appconfig:get-xslt("forms_split_step1.xsl")) 
     let $input_doc := doc($form-path)    
@@ -75,7 +108,7 @@ function sysmanager:upload-form($node as node(), $model as map(*)) {
                 <table>
                     <tr>
                         <td style="width: 90px;"><label for="name">Absolute Path: </label></td>
-                        <td><input type="text" style="width:90%;" id="fs_path" name="fs_path" value="" /></td>
+                        <td><input type="text" style="width:90%;" id="fs_path" name="fs_path" value="{$appconfig:FS-PATH}" /></td>
                     </tr>                    			
                     <tr>
                         <td colspan="2">
@@ -172,6 +205,49 @@ function sysmanager:store($node as node(), $model as map(*)) {
                         <h2>Upload was unsuccessful</h2>
                         <span>
                             Ensure you put the correct absolute-path to the <i>bungeni_custom</i> folder of your Bungeni application
+                        </span>                            
+                    </div>
+                default return
+                    ()
+            }
+        </div>
+};
+
+(:
+    Saving back bungeni_custom to file-system
+:)
+declare 
+function sysmanager:save($node as node(), $model as map(*)) {
+
+    let $contextPath := request:get-context-path()
+    
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $storing := local:reverse-transform-configs()
+    (: check for something that definitely has to be there in the sequence :)
+    let $uploadstate := if (contains($storing,"ui.xml")) then true() else false()
+    
+    return
+        <div style="font-size:0.8em;">
+            {
+                switch($uploadstate)
+        
+                case true() return
+                    <div>
+                        <h2>Sync was successful: written back to file-system</h2>
+                        <br/>
+                        <div style="float:left">
+                            <h1>written</h1>
+                            <ol>{
+                            for $one in $storing    
+                                return <li>{$one}</li>
+                             }</ol>   
+                        </div>                              
+                    </div>
+                case false() return
+                    <div>
+                        <h2>Sync was unsuccessful</h2>
+                        <span>
+                            Ensure the <i>bungeni_custom</i> folder of your Bungeni application on the file-system is writable. 
                         </span>                            
                     </div>
                 default return

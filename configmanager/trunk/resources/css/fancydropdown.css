@@ -140,6 +140,8 @@ ul.dropdown li a
 {
 	display: block;
 	padding: 0 15px 0 11px;
+	color:#000;
+	font-weight:bold;
 }
 
 #menu ul li a:hover span

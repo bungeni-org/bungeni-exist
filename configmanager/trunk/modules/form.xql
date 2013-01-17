@@ -21,7 +21,8 @@ declare variable $form:REST-CXT-APP :=  $form:CXT || "/rest" || $config:app-root
 
 (: creates the output for all fields :)
 declare function local:fields($doctype) as node() * {
-    let $form-id := request:get-parameter("name", "nothing")
+    let $type := request:get-parameter("type", "")
+    let $form-id := request:get-parameter("doc", "")
     
     let $form := local:get-form($form-id)
     
@@ -59,8 +60,8 @@ declare function local:fields($doctype) as node() * {
                     )
                 }               
                 </td>
-                <td><a href="field-edit.html?doc={$doctype}&amp;node=field&amp;id={$pos}">edit</a></td>
-                <td><a href="field-delete.html?doc={$doctype}&amp;node=field&amp;id={$pos}">delete</a></td>
+                <td><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;node=field&amp;id={$pos}">edit</a></td>
+                <td><a href="field-delete.html?type={$type}&amp;doc={$doctype}&amp;node=field&amp;id={$pos}">delete</a></td>
             </tr>
 };
 
@@ -69,7 +70,7 @@ declare function local:get-form($docname as xs:string) as node() * {
 };
 
 declare function local:mode() as xs:string {
-    let $doc := request:get-parameter("name", "nothing")
+    let $doc := request:get-parameter("doc", "nothing")
 
     let $mode := if($doc eq "undefined") then "new"
                  else "edit"
@@ -80,7 +81,7 @@ declare function local:mode() as xs:string {
 declare
 function form:edit($node as node(), $model as map(*)) {
 
-    let $docname := xs:string(request:get-parameter("name","none"))
+    let $docname := xs:string(request:get-parameter("doc","none"))
     let $lastfield := data(local:get-form($docname)/descriptor/field[last()]/@name)
     let $showing := xs:string(request:get-parameter("tab","fields"))
     return 
@@ -224,13 +225,13 @@ function form:edit($node as node(), $model as map(*)) {
             
             <div id="tabs_container">
                 <ul id="tabs">
-                    <li class="active"><a href="#tab1">Form details</a></li>
-                    <li><a href="#tab2">Fields</a></li>
+                    <li id="tabdetails" class="active"><a href="#details">Form details</a></li>
+                    <li id="tabfields" ><a href="#fields">Fields</a></li>
                 </ul>
             </div>
             
             <div id="tabs_content_container">
-                <div id="tab1" class="tab_content" style="display: block;">
+                <div id="details" class="tab_content" style="display: block;">
                     <xf:group ref="." class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
                         <xf:group appearance="bf:verticalTable">
                             <xf:output ref="@name">
@@ -275,7 +276,7 @@ function form:edit($node as node(), $model as map(*)) {
                          </xf:group>
                     </xf:group>
                 </div>
-                <div id="tab2" class="tab_content">
+                <div id="fields" class="tab_content">
                     <table class="listingTable" style="width:auto;">
                         <tr>                      			 
                             <th>Name</th>
@@ -303,13 +304,17 @@ function form:field-edit($node as node(), $model as map(*)) {
     let $docname := xs:string(request:get-parameter("doc",""))
     let $node := xs:string(request:get-parameter("node",""))
     let $fieldid := xs:string(request:get-parameter("id",""))
-    (:let $lastfield := data(local:get-form($docname)/descriptor/field[last()]/@name):)
     return 
         (: Element to pop up :)
-    	<div>
+    	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms">
+            <a href="#">
+                <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
+            </a>
+            <br/>
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-field" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/>   
+                    <xf:instance id="i-field" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/> 
+                    
                     <xf:instance id="i-modes" xmlns="">
                         <data>
                             <view show="true">
@@ -333,7 +338,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 </roles>
                             </listing> 
                         </data>
-                    </xf:instance>
+                    </xf:instance>     
                     
                     <xf:instance id="i-globalroles" xmlns="">
                         <data>
@@ -357,7 +362,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                             </roles>                        
                         </data>
                     </xf:instance>
-                    
+
                     <xf:instance id="i-originrole" xmlns="">
                         <data>
                             <roles>
@@ -377,7 +382,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                <rendertype>date</rendertype>
                             </rendertypes>
                         </data>
-                    </xf:instance>     
+                    </xf:instance>    
                     
                     <xf:instance id="i-valuetypes" xmlns="">
                         <data>
@@ -389,9 +394,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                <valuetype>number</valuetype>
                             </valuetypes>
                         </data>
-                    </xf:instance>               
-                    
-                    <xf:bind nodeset=".[@name eq '{$docname}']/field[$fieldid]">
+                    </xf:instance>   
+
+                    <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
@@ -416,19 +421,20 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <role>Clerk</role>
                                 </roles>
                         -->
-                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[$fieldid]/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[$fieldid]/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[$fieldid]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[$fieldid]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[$fieldid]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[$fieldid]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[$fieldid]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[$fieldid]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        
                     </xf:bind>
-
+                    
                     <xf:submission id="s-get-form"
                         method="get"
                         resource="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
-                    </xf:submission>                   
-
+                    </xf:submission> 
+                    
                     <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>
 
                     <xf:instance id="tmp">
@@ -436,7 +442,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                             <wantsToClose>false</wantsToClose>
                         </data>
                     </xf:instance>
-
+                    
                     <xf:submission id="s-add"
                                    method="put"
                                    replace="none"
@@ -472,7 +478,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
                             <xf:message>The form fields have not been filled in correctly</xf:message>
                         </xf:action>
-                    </xf:submission>
+                    </xf:submission>                    
 
                     <xf:action ev:event="xforms-ready" >
                         <xf:send submission="s-get-form"/>
@@ -483,8 +489,7 @@ function form:field-edit($node as node(), $model as map(*)) {
             </div>
             
             <div>
-                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[$fieldid]" class="fieldEdit">
-
+                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[{$fieldid}]" class="fieldEdit">               
                         <xf:group appearance="bf:verticalTable">
                             <xf:input id="field-name" ref="@name">
                                 <xf:label>field title</xf:label>
@@ -526,7 +531,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                      <xf:label ref="."></xf:label>
                                      <xf:value ref="."></xf:value>
                                  </xf:itemset>
-                             </xf:select1>  
+                             </xf:select1>
                              
                             <xf:group appearance="compact">
                                 <xf:label>Modes</xf:label>
@@ -537,7 +542,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:input id="input-viewshow" ref="view/@show">
                                         <xf:label>show/hide</xf:label>
                                     </xf:input>                                        
-                                    <table>
+                                    <table class="fieldModes">
                                        <thead>
                                            <tr>                                
                                                <th colspan="2"/>                               
@@ -545,9 +550,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                        </thead>                                    
                                        <tbody id="r-viewfieldattrs" xf:repeat-nodeset="view/roles/role[position()!=last()]" startindex="1">
                                            <tr>                                
-                                               <td style="color:steelblue;font-weight:bold;">
+                                               <td>
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>a select1 combobox</xf:label>
+                                                        <xf:label>select a role</xf:label>
                                                         <xf:alert>duplicates or invalid role options</xf:alert>
                                                         <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
@@ -559,11 +564,11 @@ function form:field-edit($node as node(), $model as map(*)) {
                                            </tr>
                                        </tbody>
                                     </table>    
-                                    <xf:group appearance="minimal">
+                                    <xf:group appearance="minimal">                                   
                                         <table>                              
                                            <tbody>
                                                <tr>                                
-                                                   <td style="color:steelblue;font-weight:bold;">
+                                                   <td>
                                                         <xf:trigger>
                                                            <xf:label>insert</xf:label>
                                                            <xf:action>
@@ -571,7 +576,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                                            </xf:action>
                                                         </xf:trigger>                                       
                                                    </td>                                           
-                                                   <td style="color:red;">                                           
+                                                   <td>                                           
                                                         <xf:trigger>
                                                             <xf:label>delete</xf:label>
                                                             <xf:action ev:event="DOMActivate">
@@ -599,7 +604,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:input id="input-editshow" ref="edit/@show">
                                         <xf:label>show/hide</xf:label>
                                     </xf:input>                                
-                                   <table>
+                                   <table class="fieldModes">
                                        <thead>
                                            <tr>                                
                                                <th colspan="2"/>                               
@@ -609,7 +614,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>a select1 combobox</xf:label>
+                                                        <xf:label>select a role</xf:label>
                                                         <xf:alert>duplicates or invalid role options</xf:alert>
                                                         <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
@@ -655,7 +660,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:input id="input-addshow" ref="add/@show">
                                         <xf:label>show/hide</xf:label>
                                     </xf:input>                                        
-                                    <table>
+                                    <table class="fieldModes">
                                        <thead>
                                            <tr>                                
                                                <th colspan="2"/>                               
@@ -665,7 +670,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>a select1 combobox</xf:label>
+                                                        <xf:label>select a role</xf:label>
                                                         <xf:alert>duplicates or invalid role options</xf:alert>
                                                         <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
@@ -711,7 +716,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:input id="input-listingshow" ref="listing/@show">
                                         <xf:label>show/hide</xf:label>
                                     </xf:input>                                
-                                   <table>
+                                   <table class="fieldModes">
                                        <thead>
                                            <tr>                                
                                                <th colspan="2"/>                               
@@ -721,7 +726,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                            <tr>                                
                                                <td style="color:steelblue;font-weight:bold;">
                                                     <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>a select1 combobox</xf:label>
+                                                        <xf:label>select a role</xf:label>
                                                         <xf:alert>duplicates or invalid role options</xf:alert>
                                                         <xf:itemset nodeset="instance('i-globalroles')/roles/role">
                                                             <xf:label ref="."></xf:label>
@@ -760,11 +765,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                         </table>
                                     </xf:group>
                                 </xf:group>
-                                                                  
-                            </xf:group>                             
-                                              
-                        </xf:group>                         
-                        
+                                                                       
+                            </xf:group>                                
+                        </xf:group>
                         <br/>
                         <xf:group appearance="bf:horizontalTable">
                             <xf:label/>
@@ -776,12 +779,11 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 </xf:action>                              
                             </xf:trigger>
                             <xf:trigger>
-                                <xf:label>Close</xf:label>
+                                <xf:label>Cancel</xf:label>
                             </xf:trigger>                    
                         </xf:group>   
                         
-                        <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>
-                                   
+                        <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>                        
                 </xf:group>                
             
             </div>                 

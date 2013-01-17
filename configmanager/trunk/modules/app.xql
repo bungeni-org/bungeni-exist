@@ -28,42 +28,6 @@ function app:test($node as node(), $model as map(*)) {
         function was triggered by the class attribute <code>class="app:test"</code>.</p>
 };
 
-
-declare 
-function app:get-roles-menu($node as node(), $model as map(*)) {
-    <xhtml:div data-dojo-type="dijit.MenuItem" onclick="javascript:dojo.publish('/view',['roles','custom.xml','roles','none','none']);">
-    Roles
-    </xhtml:div>
-};
-
-declare 
-function app:get-separator($node as node(), $model as map(*)) {
-   <xhtml:div data-dojo-type="dijit.MenuSeparator"/> 
-};
-
-declare 
-function app:get-system-menu($node as node(), $model as map(*)) {
-    <xhtml:div data-dojo-type="dijit.PopupMenuItem"> 
-        <xhtml:span>
-            System            
-        </xhtml:span>                        
-        <xhtml:div data-dojo-type="dijit.Menu" id="submenusys">
-            <xhtml:div data-dojo-type="dijit.MenuItem" 
-                onClick="showDialogAb();document.getElementById('fs_path').focus();">
-                store from file-system
-            </xhtml:div>
-            <xhtml:div data-dojo-type="dijit.MenuItem" onclick="javascript:dojo.publish('/sys/write');">sync back to filesystem</xhtml:div>           
-        </xhtml:div>
-    </xhtml:div>
-};
-
-declare 
-function app:input-path($node as node(), $model as map(*)) {
-    <xhtml:input data-dojo-type="dijit.form.TextBox" type="text" style="width:120%;"
-        id="fs_path" name="fs_path" 
-        value="{$appconfig:doc/ce-config/configs[@collection eq 'bungeni_custom']/fs-path/text()}"/>
-};
-
 declare 
     %templates:default("active", "search") 
 function app:get-main-nav($node as node(), $model as map(*), $active as xs:string) {
@@ -80,10 +44,10 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
                         let $count := count(doc($appconfig:TYPES-XML)/types/*)
                         return    
                             if ($pos ne $count) then (
-                                <li><a href="type.html?type={node-name($docu)}&amp;name={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
+                                <li><a href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
                             )
                             else ( 
-                                <li class="last"><a href="type.html?type={node-name($docu)}&amp;name={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
+                                <li class="last"><a href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
                             )
                     }
                 </ul>
@@ -114,17 +78,26 @@ declare
 function app:get-type-parts($node as node(), $model as map(*), $active as xs:string) {
     
     <div id="secondary-menu">
+        {
+            let $type := request:get-parameter("type", "none")
+            let $name := request:get-parameter("doc", "none")
+            let $pos := xs:integer(request:get-parameter("pos", 0))         
+            let $typename := data(doc($appconfig:TYPES-XML)/types/doc[$pos]/@name)
+            return 
+                <h3><a href="type.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$typename}</a></h3>
+        }    
         <ul class="secondary"> 
             {
-            for $part in ('type', 'form', 'workflow', 'workspace', 'notification')
             let $type := request:get-parameter("type", "none")
-            let $name := request:get-parameter("name", "none")
-            let $pos := request:get-parameter("pos", "none")
+            let $name := request:get-parameter("doc", "none")
+            let $pos := xs:integer(request:get-parameter("pos", 0))            
+            
+            for $part in ('form', 'workflow', 'workspace', 'notification')
             return 
                 if ($active eq $part) then 
-                    <li><a class="sec-active" href="{$part}.html?type={$type}&amp;name={$name}&amp;pos={$pos}">{$part}</a></li> 
+                    <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$part}</a></li>
                 else 
-                    <li><a href="{$part}.html?type={$type}&amp;name={$name}&amp;pos={$pos}">{$part} &#187;</a></li>
+                    <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$part} &#187;</a></li>
             }
         </ul> 
     </div>

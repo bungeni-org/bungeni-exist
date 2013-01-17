@@ -27,7 +27,7 @@ function type:edit($node as node(), $model as map(*)) {
 
     let $contextPath := request:get-context-path()
     let $type := request:get-parameter("type", "none")
-    let $name := request:get-parameter("name", "none")
+    let $name := request:get-parameter("doc", "none")
     let $pos := request:get-parameter("pos", "none")
     return
         <div>
@@ -75,7 +75,7 @@ function type:edit($node as node(), $model as map(*)) {
                     </xf:header>
                     <xf:header>
                         <xf:name>password</xf:name>
-                        <xf:value>$appconfig:admin-password</xf:value>
+                        <xf:value>{$appconfig:admin-password}</xf:value>
                     </xf:header>
                     <xf:header>
                         <xf:name>realm</xf:name>
@@ -94,11 +94,11 @@ function type:edit($node as node(), $model as map(*)) {
                     
                     <xf:header>
                         <xf:name>username</xf:name>
-                        <xf:value>admin</xf:value>
+                        <xf:value>{$appconfig:admin-username}</xf:value>
                     </xf:header>
                     <xf:header>
                         <xf:name>password</xf:name>
-                        <xf:value></xf:value>
+                        <xf:value>{$appconfig:admin-password}</xf:value>
                     </xf:header>
                     <xf:header>
                         <xf:name>realm</xf:name>
@@ -160,8 +160,8 @@ function type:edit($node as node(), $model as map(*)) {
                             </xf:action>
                             <xf:action>
                                 <xf:setvalue ref="instance('i-vars')/renameDoc" value="concat(instance()/{$type}[{$pos}]/@name,'.xml')"/>
-                                <xf:load show="embed" targetid="secondary-menu">
-                                    <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc)"/>
+                                <xf:load show="none" targetid="secondary-menu">
+                                    <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc,'')"/>
                                 </xf:load>
                             </xf:action>                            
                         </xf:trigger>

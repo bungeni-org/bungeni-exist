@@ -22,15 +22,20 @@ let $CXT := request:get-context-path()
 let $DOCNAME := xs:string(request:get-parameter("doc","none"))
 let $NEWNAME := xs:string(request:get-parameter("rename","none"))
 let $login := xmldb:login('/db', $appconfig:admin-username, $appconfig:admin-password)
-let $log := util:log('info',"AOLAA" || $appconfig:FORM-FOLDER || $DOCNAME || $NEWNAME)
-let $form := xmldb:rename($appconfig:FORM-FOLDER, $DOCNAME, $NEWNAME)
-let $workflow := xmldb:rename($appconfig:WF-FOLDER, $DOCNAME, $NEWNAME)
-let $workspace := xmldb:rename($appconfig:WS-FOLDER, $DOCNAME, $NEWNAME)
+
+let $rename :=  switch ($DOCNAME)
+                    (: if not renamed to the same name :)
+                    case $NEWNAME return 
+                        let $log := util:log('info',"LOGGING NOCHANGE - " || $appconfig:FORM-FOLDER || $DOCNAME || $NEWNAME)     
+                        return ()
+                            
+                    default return   
+                        let $log := util:log('info',"LOGGING - " || $appconfig:FORM-FOLDER || $DOCNAME || $NEWNAME)    
+                        let $form := xmldb:rename($appconfig:FORM-FOLDER, $DOCNAME, $NEWNAME)
+                        let $workflow := xmldb:rename($appconfig:WF-FOLDER, $DOCNAME, $NEWNAME)
+                        let $workspace := xmldb:rename($appconfig:WS-FOLDER, $DOCNAME, $NEWNAME)
+                        return 
+                            ($form, $workflow, $workspace)
+
 return
-    <ul class="secondary">
-        <li><a href="#">{$DOCNAME}</a></li>
-        <li><a href="#">form &#187;</a></li>
-        <li><a href="#">worklow &#187;</a></li>
-        <li><a href="#">workspace &#187;</a></li>
-        <li><a href="#">notification &#187;</a></li>
-    </ul>
+    ()

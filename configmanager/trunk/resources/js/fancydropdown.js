@@ -52,7 +52,7 @@ $(function () {
 	});
 	
 	$('.dropdown a').hover(function () {
-		$(this).stop(true).animate({paddingLeft: '35px'}, {speed: 100, easing: 'easeOutBack'});
+		$(this).stop(true).animate({paddingLeft: '10px'}, {speed: 100, easing: 'easeOutBack'});
 	}, function () {
 		$(this).stop(true).animate({paddingLeft: '0'}, {speed: 100, easing: 'easeOutBounce'});
 	});

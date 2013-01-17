@@ -16,11 +16,11 @@ let $DOCNAME := xs:string(request:get-parameter("doc","none"))
 let $FIELDNAME := xs:string(request:get-parameter("field","none"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:xf="http://www.w3.org/2002/xforms"
-        xmlns:exist="http://exist.sourceforge.net/NS/exist"
-        xmlns:ev="http://www.w3.org/2001/xml-events" 
-        xmlns:zope="http://namespaces.zope.org/zope"
-        xmlns:db="http://namespaces.objectrealms.net/rdb">
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:exist="http://exist.sourceforge.net/NS/exist"
+    xmlns:ev="http://www.w3.org/2001/xml-events" 
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:db="http://namespaces.objectrealms.net/rdb">
    <head>
       <title>Edit Field</title>
     </head>
@@ -209,8 +209,7 @@ return
             
             </div>    	
             <div style="width: 100%; height: auto">
-                <xf:group id="g-field" 
-                    ref=".[@name eq '{$DOCNAME}']/field[@name eq '{$FIELDNAME}']" class="fieldEdit">
+                <xf:group id="g-field" ref=".[@name eq '{$DOCNAME}']/field[@name eq '{$FIELDNAME}']" class="fieldEdit">
 
                         <xf:group appearance="bf:verticalTable">
                             <xf:input id="field-name" ref="@name">

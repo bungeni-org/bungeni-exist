@@ -246,6 +246,10 @@ h1 {
 	width:100%;
 }
 
+.fieldModes {
+    width:100px;
+}
+
 ul.secondary {
     list-style-type: square;
 }

@@ -3,6 +3,11 @@ body {
     margin: 0;
     padding: 0;
 }
+br {
+   display: block;
+   margin: 0;
+   content: " ";
+}
 
 #header{
     width:100%;
@@ -244,6 +249,24 @@ h1 {
 
 .xfControl {
 	width:100%;
+}
+
+.linkButtonWrap {
+    margin-top:10px;
+}
+    .linkButtonWrap a.linkButton {
+        padding:3px;
+        background-color:#a0def8;
+    }
+    .linkButtonWrap a.linkButton:hover {
+        padding:3px;
+        background-color:#d5eef8;
+    }
+
+.modesWrapper table {
+    top:0;
+    vertical-align:top;
+    padding-left:10px;
 }
 
 .fieldModes {

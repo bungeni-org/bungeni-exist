@@ -31,6 +31,9 @@ function app:test($node as node(), $model as map(*)) {
 declare 
     %templates:default("active", "search") 
 function app:get-main-nav($node as node(), $model as map(*), $active as xs:string) {
+    (: timestamp appended to page links to prevent caching :)
+    let $timestamp := current-time()
+    return 
     <div id="menu">
         <ul class="tabs">
             <li>
@@ -55,8 +58,8 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li><a href="#"><span>Roles</span></a></li>
             <li class="hasmore"><a href="#config"><span>Configuration</span></a>
                 <ul class="dropdown">
-                    <li><a id="show-popup" href="upload.html">Upload</a></li>
-                    <li class="last"><a href="save.html">Save</a></li>
+                    <li><a id="show-popup" href="upload.html?t={$timestamp}">Upload</a></li>
+                    <li class="last"><a href="save.html?t={$timestamp}">Save</a></li>
                 </ul>
             </li>
         </ul>
@@ -100,6 +103,15 @@ function app:get-type-parts($node as node(), $model as map(*), $active as xs:str
                     <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$part} &#187;</a></li>
             }
         </ul> 
+    </div>
+};
+
+declare 
+    %templates:default("active", "")
+function app:get-action-state($node as node(), $model as map(*), $active as xs:string) {
+    
+    <div id="secondary-menu">
+        default
     </div>
 };
 

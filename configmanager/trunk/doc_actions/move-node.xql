@@ -50,9 +50,8 @@ return
       <title>Move Field</title>
     </head>
     <body class="nihilo InlineBordersAlert">
-    	<div id="xforms">
             <script type="text/javascript">
-                dojo.publish('/form/view',['{$DOCNAME}','fields']);
+                location.reload();
             </script>
         </div>
     </body>

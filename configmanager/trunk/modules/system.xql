@@ -233,7 +233,7 @@ function sysmanager:save($node as node(), $model as map(*)) {
         
                 case true() return
                     <div>
-                        <h2>Sync was successful: written back to file-system</h2>
+                        <h2>Save was successful</h2>
                         <br/>
                         <div style="float:left">
                             <h1>written</h1>

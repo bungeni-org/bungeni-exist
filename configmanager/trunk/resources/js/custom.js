@@ -32,6 +32,12 @@
 })(jQuery);
 
 $(document).ready(function(){
+    if(window.location.hash) {
+        //get the index from URL hash
+        tabSelect = document.location.hash.substr(1,document.location.hash.length);
+        $('#tabs li#tabfields').trigger('click');
+    }
+
     //  When user clicks on tab, this code will be executed
     $("#tabs li").click(function() {
         //  First remove class "active" from currently active tab
@@ -52,4 +58,58 @@ $(document).ready(function(){
         //  At the end, we add return false so that the click on the link is not executed
         return false;
     });
+    
+    $("table.listingTable tbody tr:first .up,table.listingTable tbody tr:last .down").hide();
+    $(".up, .down").click(function(){
+        var row = $(this).parents("tr:first");
+        var href = $(this).attr('href');
+        if ($(this).is(".up")) {
+            $("table.listingTable tbody tr:first .up").show();
+            $.get(href,function(data,status) {
+                if (status == "success")
+                    row.insertBefore(row.prev());
+                    row.find(".down").show();
+                    $("table.listingTable tbody tr:first .up,table.listingTable tbody tr:last .down").hide();
+            });        
+            
+        } else {        
+            $.get(href,function(data,status){             
+                if (status == "success") {                
+                    row.insertAfter(row.next());   
+                    row.find(".up").show();
+                    $("table.listingTable tbody tr:first .up,table.listingTable tbody tr:last .down").hide();
+                }
+            });
+        }
+        return false;
+    });  
+    
+    $(".delete").click(function() {
+        var row = $(this).parents("tr:first");
+        var href = $(this).attr('href');
+
+        if ($(this).is(".delete")) {   
+            if (confirm('Are you sure to delete this field?')) {
+                $.get(href,function(data,status){             
+                    if (status == "success") {
+                        $(row).remove();
+                    }
+                });            
+            }        
+        }
+        return false;
+        
+    });     
+    
+    /*$(".nodeMove a").click (function () {
+      $.ajax({
+        type: "POST", // or GET
+        url: $(this).getAttr('href'),
+        data: "nothing",
+        success: function(data){
+         $("#someElement").doSomething().
+        }
+      });
+      return false; // stop the browser following the link
+    }; */   
 });

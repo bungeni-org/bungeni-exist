@@ -1,11 +1,11 @@
 xquery version "3.0";
+
 module namespace appconfig = "http://exist-db.org/apps/configmanager/config";
 
 import module namespace config="http://exist-db.org/xquery/apps/config" at "config.xqm";
 
-
 (: Application files :)
-declare variable $appconfig:doc := fn:doc($config:app-root || "/config.xml");
+declare variable $appconfig:doc := doc($config:app-root || "/config.xml");
 
 declare variable $appconfig:ROOT := $config:app-root;
 

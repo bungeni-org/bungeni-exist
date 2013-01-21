@@ -3,7 +3,7 @@ xquery version "3.0";
 (: 
  : Defines all the RestXQ endpoints used by the XForms.
  :)
-module namespace cerest = "http://exist-db.org/apps/configmanager/rest";
+module namespace cmrest = "http://exist-db.org/apps/configmanager/rest";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
 
@@ -21,7 +21,7 @@ declare
     %rest:GET
     %rest:path("/workflows")
     %rest:produces("application/xml", "text/xml")
-function cerest:workflows() {
+function cmrest:workflows() {
     <workflows>
     {
         for $workflow in collection($appconfig:WF-FOLDER)/workflow
@@ -37,7 +37,7 @@ function cerest:workflows() {
 declare 
     %rest:GET
     %rest:path("/form/{$doc}/{$field}/{$dir}")
-function cerest:move-field($doc as xs:string,
+function cmrest:move-field($doc as xs:string,
     $field as xs:string,
     $dir as xs:string) {
 
@@ -62,9 +62,23 @@ function cerest:move-field($doc as xs:string,
                 )           
                     
             default return           
-                ()
+                () 
+};
 
-    
+(:~
+ : DELETE a field in a form descriptor
+ :)
+declare 
+    %rest:DELETE
+    %rest:path("/form/{$doc}/{$field}")
+function cmrest:delete-field($doc as xs:string,$field as xs:string) {
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $doc := doc($appconfig:FORM-FOLDER || "/" || $doc || ".xml")/descriptor
+    return (
+        update delete $doc/field[@name eq $field],
+        $doc
+    )
 };
 
 (:~
@@ -73,7 +87,7 @@ function cerest:move-field($doc as xs:string,
 declare 
     %rest:GET
     %rest:path("/workflow/{$name}")
-function cerest:get-workflow($name as xs:string) {
+function cmrest:get-workflow($name as xs:string) {
     collection($appconfig:FORM-FOLDER)/descriptor[@name = $name]
 };
 
@@ -83,7 +97,7 @@ function cerest:get-workflow($name as xs:string) {
 declare
     %rest:DELETE
     %rest:path("/workflow/{$name}")
-function cerest:delete-workflow($name as xs:string) {
+function cmrest:delete-workflow($name as xs:string) {
     xmldb:remove($appconfig:WF-FOLDER, $name || ".xml"),
-    cerest:workflows()
+    cmrest:workflows()
 };

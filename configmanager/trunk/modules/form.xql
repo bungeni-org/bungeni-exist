@@ -50,7 +50,7 @@ declare function local:fields($doctype) as node() * {
                     </span>
                 </td>
                 <td><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={$pos}">edit</a></td>
-                <td><a class="delete" href="field-delete.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={$pos}">delete</a></td>
+                <td><a class="delete" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}">delete</a></td>
             </tr>
 };
 
@@ -804,13 +804,11 @@ function form:field-add($node as node(), $model as map(*)) {
     let $fieldid := xs:string(request:get-parameter("id",""))
     return 
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms">
-            <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
-                <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
-            </a>
-            <br/>
             <div style="display:none">
-                 <xf:model>
-                    <xf:instance id="i-field" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/> 
+                 <xf:model id="fieldadd">
+                    <xf:instance id="i-field" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"/> 
+                    
+                    <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>                    
                     
                     <xf:instance id="i-modes" xmlns="">
                         <data>
@@ -837,6 +835,33 @@ function form:field-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>     
                     
+                    <xf:instance id="i-fieldtmpl" xmlns="">
+                        <data>
+                            <field name="" label="" required="false" value_type="" render_type="" vocabulary="">
+                                <view show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </view>
+                                <edit show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </edit>
+                                <add show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </add>
+                                <listing show="true">
+                                    <roles>
+                                        <role>ALL</role>
+                                    </roles>
+                                </listing>                             
+                            </field>
+                        </data>
+                    </xf:instance>                    
+ 
                     <xf:instance id="i-globalroles" xmlns="">
                         <data>
                             <roles originAttr="roles">
@@ -893,8 +918,8 @@ function form:field-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>   
 
-                    <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
+                    <xf:bind nodeset="./field[last()]">
+                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
@@ -904,24 +929,11 @@ function form:field-add($node as node(), $model as map(*)) {
                         <xf:bind nodeset="edit/@show" type="xs:boolean"/>
                         <xf:bind nodeset="add/@show" type="xs:boolean"/>
                         <xf:bind nodeset="listing/@show" type="xs:boolean"/>
-                        
-                        <!-- ensure the roles are not empty -->
-                        <!-- THE RULES BELOW, explained 
-                            1) role ALL exists exclusively, you cannot allow it with something else e.g.
-                                <roles>
-                                    <role>ALL</role>
-                                    <role>Clerk</role>
-                                </roles>
-                            2) You cannot allow duplicate role, e.g.
-                                <roles>
-                                    <role>Clerk</role>
-                                    <role>Clerk</role>
-                                </roles>
-                        -->
-                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                     
+                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/field[last()]/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/field[last()]/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/field[last()]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/field[last()]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/field[last()]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/field[last()]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/field[last()]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/field[last()]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
                         
                     </xf:bind>
                     
@@ -931,8 +943,6 @@ function form:field-add($node as node(), $model as map(*)) {
                         replace="instance"
                         serialization="none">
                     </xf:submission> 
-                    
-                    <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -943,7 +953,8 @@ function form:field-add($node as node(), $model as map(*)) {
                     <xf:submission id="s-add"
                                    method="put"
                                    replace="none"
-                                   ref="instance()">
+                                   ref="instance()" 
+                                   validate="true">
                                    
                         <xf:resource value="'{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml'"/>
     
@@ -979,6 +990,7 @@ function form:field-add($node as node(), $model as map(*)) {
 
                     <xf:action ev:event="xforms-ready" >
                         <xf:send submission="s-get-form"/>
+                        <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
                         <xf:setfocus control="field-name"/>
                     </xf:action>
                 </xf:model>
@@ -986,49 +998,60 @@ function form:field-add($node as node(), $model as map(*)) {
             </div>
             
             <div>
-                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[{$fieldid}]" class="fieldEdit">               
+                <xf:group id="g-field" ref="instance()/field[last()]" class="fieldAdd">               
+                       <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
+                            <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
+                        </a>
+                        <h1><xf:output bind="b-fieldname"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
-                            <xf:input id="field-name" ref="@name">
-                                <xf:label>field title</xf:label>
-                                <xf:hint>Must be an existing title</xf:hint>
-                                <xf:alert>invalid field name</xf:alert>
-                                <xf:help>help with name of field</xf:help>
-                            </xf:input> 
+                            <xf:group appearance="bf:horizontalTable">
+                                <xf:input id="field-name" ref="@name">
+                                    <xf:label>field title</xf:label>
+                                    <xf:hint>Enter be the field title</xf:hint>
+                                    <xf:alert>invalid field name</xf:alert>
+                                    <xf:help>help with name of field</xf:help>
+                                </xf:input> 
+                                
+                                <xf:input id="label-name" ref="@label">
+                                    <xf:label>label</xf:label>
+                                    <xf:hint>Label used for this field</xf:hint>
+                                    <xf:alert>invalid label name</xf:alert>
+                                    <xf:help>help with label of field</xf:help>
+                                </xf:input> 
+                                
+                                <xf:input id="input-req-field" ref="@required">
+                                    <xf:label>required</xf:label>
+                                    <xf:hint>Enabling this means it is a required field</xf:hint>
+                                    <xf:alert>invalid null boolean</xf:alert>
+                                </xf:input>                                
+                            </xf:group>
+                            <div style="margin-bottom:10px;"/>                            
                             
-                            <xf:input id="label-name" ref="@label">
-                                <xf:label>label</xf:label>
-                                <xf:hint>Label used for this field</xf:hint>
-                                <xf:alert>invalid label name</xf:alert>
-                                <xf:help>help with label of field</xf:help>
-                            </xf:input> 
-                            
-                            <xf:input id="input-req-field" ref="@required">
-                                <xf:label>required</xf:label>
-                                <xf:hint>Enabling this means it is a required field</xf:hint>
-                                <xf:alert>invalid null boolean</xf:alert>
-                            </xf:input>  
-                            
-                             <xf:select1 id="select-val-type" ref="@value_type" appearance="minimal" incremental="true">
-                                 <xf:label>value type</xf:label>
-                                 <xf:hint>a Hint for this control</xf:hint>
-                                 <xf:help>help for select1</xf:help>
-                                 <xf:alert>invalid</xf:alert>
-                                 <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
-                                     <xf:label ref="."></xf:label>
-                                     <xf:value ref="."></xf:value>
-                                 </xf:itemset>
-                             </xf:select1>  
-                             
-                             <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
-                                 <xf:label>render type</xf:label>
-                                 <xf:hint>a Hint for this control</xf:hint>
-                                 <xf:help>help for select1</xf:help>
-                                 <xf:alert>invalid</xf:alert>
-                                 <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
-                                     <xf:label ref="."></xf:label>
-                                     <xf:value ref="."></xf:value>
-                                 </xf:itemset>
-                             </xf:select1>
+                            <xf:group appearance="bf:horizontalTable">
+                                <xf:label>Input types</xf:label>
+                                <xf:select1 id="select-val-type" ref="@value_type" appearance="minimal" incremental="true">
+                                    <xf:label>value type</xf:label>
+                                    <xf:hint>internal value</xf:hint>
+                                    <xf:help>help for select1</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="."></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>  
+                                
+                                <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
+                                    <xf:label>render type</xf:label>
+                                    <xf:hint>external value show on input forms</xf:hint>
+                                    <xf:help>help for select1</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="."></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xf:group>
+                            <div style="margin-bottom:10px;"/>
                              
                             <xf:group appearance="compact" class="modesWrapper">
                                 <xf:label>Modes</xf:label>
@@ -1055,7 +1078,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                             <xf:label ref="."></xf:label>
                                                             <xf:value ref="."></xf:value>
                                                         </xf:itemset>
-                                                    </xf:select1>                                           
+                                                    </xf:select1>                                                         
                                                </td>                                           
                                                <td style="color:red;width:50px;height:30px;">&#160;</td>                            
                                            </tr>
@@ -1067,7 +1090,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                <tr>                                
                                                    <td>
                                                         <xf:trigger>
-                                                           <xf:label>insert</xf:label>
+                                                           <xf:label>add role</xf:label>
                                                            <xf:action>
                                                                <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
                                                            </xf:action>
@@ -1075,14 +1098,8 @@ function form:field-add($node as node(), $model as map(*)) {
                                                    </td>                                           
                                                    <td>                                           
                                                         <xf:trigger>
-                                                            <xf:label>delete</xf:label>
+                                                            <xf:label>remove</xf:label>
                                                             <xf:action ev:event="DOMActivate">
-                                                                <!--    For known reason you cannot delete the nodeset.
-                                                                        http://en.wikibooks.org/wiki/XForms/Delete
-                                                                        http://www.w3.org/TR/xforms/#action-insert
-                                                                        Solution:
-                                                                        http://publib.boulder.ibm.com/infocenter/forms/v3r5m1/index.jsp?topic=%2Fcom.ibm.form.designer.xfdl.doc%2Fi_xfdl_g_xforms_actions_xforms_delete.html
-                                                                -->
                                                                 <xf:delete nodeset="view/roles/role[last()>1]" at="index('r-viewfieldattrs')"/>
                                                                 <xf:insert nodeset="view/roles/role[last()=1]" at="1" position="before"/>
                                                                 <xf:setfocus control="r-viewfieldattrs"/>
@@ -1129,7 +1146,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                <tr>                                
                                                    <td style="color:steelblue;font-weight:bold;">
                                                         <xf:trigger>
-                                                           <xf:label>insert</xf:label>
+                                                           <xf:label>add role</xf:label>
                                                            <xf:action>
                                                                <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
                                                            </xf:action>
@@ -1137,7 +1154,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                    </td>                                           
                                                    <td style="color:red;">                                           
                                                         <xf:trigger>
-                                                            <xf:label>delete</xf:label>
+                                                            <xf:label>remove</xf:label>
                                                             <xf:action ev:event="DOMActivate">
                                                                 <xf:delete nodeset="edit/roles/role[last()>1]" at="index('r-editfieldattrs')"/>
                                                                 <xf:insert nodeset="edit/roles/role[last()=1]" at="1" position="before"/>
@@ -1185,7 +1202,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                <tr>                                
                                                    <td style="color:steelblue;font-weight:bold;">
                                                         <xf:trigger>
-                                                           <xf:label>insert</xf:label>
+                                                           <xf:label>add role</xf:label>
                                                            <xf:action>
                                                                <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
                                                            </xf:action>
@@ -1193,7 +1210,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                    </td>                                           
                                                    <td style="color:red;">                                           
                                                         <xf:trigger>
-                                                            <xf:label>delete</xf:label>
+                                                            <xf:label>remove</xf:label>
                                                             <xf:action ev:event="DOMActivate">
                                                                 <xf:delete nodeset="add/roles/role[last()>1]" at="index('r-addfieldattrs')"/>
                                                                 <xf:insert nodeset="add/roles/role[last()=1]" at="1" position="before"/>
@@ -1241,7 +1258,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                <tr>                                
                                                    <td style="color:steelblue;font-weight:bold;">
                                                         <xf:trigger>
-                                                           <xf:label>insert</xf:label>
+                                                           <xf:label>add role</xf:label>
                                                            <xf:action>
                                                                <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
                                                            </xf:action>
@@ -1249,7 +1266,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                                    </td>                                           
                                                    <td style="color:red;">                                           
                                                         <xf:trigger>
-                                                            <xf:label>delete</xf:label>           
+                                                            <xf:label>remove</xf:label>           
                                                             <xf:action ev:event="DOMActivate">
                                                                 <xf:delete nodeset="listing/roles/role[last()>1]" at="index('r-listingfieldattrs')"/>
                                                                 <xf:insert nodeset="listing/roles/role[last()=1]" at="1" position="before"/>
@@ -1264,6 +1281,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                 </xf:group>
                                                                        
                             </xf:group>                                
+                        
                         </xf:group>
                         <br/>
                         <xf:group appearance="bf:horizontalTable">
@@ -1280,7 +1298,7 @@ function form:field-add($node as node(), $model as map(*)) {
                             </xf:trigger>                    
                         </xf:group>   
                         
-                        <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>                        
+                        <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>                      
                 </xf:group>                
             
             </div>                 

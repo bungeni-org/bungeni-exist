@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <descriptor archetype="doc" name="new" order="99" note="">
-    <field name="undefined" label="undefined" required="false" value_type="" render_type="" vocabulary="">
+    <field name=" " label="" required="false" value_type="" render_type="" vocabulary="">
         <view show="true">
             <roles>
                 <role>ALL</role>

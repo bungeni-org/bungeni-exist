@@ -71,6 +71,16 @@ br {
     background:#2b92be;
     color:white;
 }
+
+.listingTable td a.editlink {
+    font-weight:bold;
+}
+
+.listingTable td a.editlink:hover {
+    color:#888;
+    text-decoration:underline;
+}
+
  .w40 {
      width:40px;
  }
@@ -286,6 +296,7 @@ ul.secondary {
 	margin-top:-27px !important;
 	margin-left:-5px !important;
 }
+
 
 /* POPUP */
 #popup { display:none; }

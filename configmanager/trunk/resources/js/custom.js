@@ -90,11 +90,14 @@ $(document).ready(function(){
 
         if ($(this).is(".delete")) {   
             if (confirm('Are you sure to delete this field?')) {
-                $.get(href,function(data,status){             
-                    if (status == "success") {
+                $.ajax({
+                    type: "DELETE",
+                    url: href,
+                    data: "nothing",
+                    success: function(data){
                         $(row).remove();
                     }
-                });            
+                });        
             }        
         }
         return false;

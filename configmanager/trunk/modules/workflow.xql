@@ -328,8 +328,24 @@ function workflow:state($node as node(), $model as map(*)) {
     return
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none">
-                 <xf:model>
-                    <xf:instance id="-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>                   
+                 <xf:model id="master">
+                    <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>                   
+
+                    <xf:instance id='i-transition' xmlns="">
+                        <data>
+                           <transition title="Set a Title" condition="" require_confirmation="false" trigger="manual" order=""  note="Add a note">
+                              <sources originAttr="source">
+                                 <source/>
+                              </sources>
+                              <destinations originAttr="destination">
+                                 <destination/>
+                              </destinations>
+                              <roles originAttr="roles">
+                                 <role/>
+                              </roles>
+                           </transition>                        
+                        </data>
+                    </xf:instance>
 
                     <xf:bind nodeset="./state">
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
@@ -393,41 +409,78 @@ function workflow:state($node as node(), $model as map(*)) {
                     <br/>
                     <div style="width: 100%;">
                         <div style="width:90%;">
-                            <div style="float:left;width:60%;">
-                                <xf:group ref="./state[{$ATTR}]" appearance="bf:verticalTable">   
-                                    <xf:output ref="@id" incremental="true">
-                                        <xf:label>state:</xf:label>
-                                    </xf:output>                                
-                                    <xf:input id="state-id" ref="@id">
-                                        <xf:label>ID</xf:label>
-                                        <xf:hint>edit id of the workflow</xf:hint>
-                                        <xf:help>... and no spaces in between words</xf:help>
-                                        <xf:alert>enter more than 3 characters...</xf:alert>
-                                    </xf:input> 
-                                    <xf:input id="state-title" ref="@title">
-                                        <xf:label>Title</xf:label>
-                                        <xf:hint>edit title of the workflow</xf:hint>
-                                        <xf:help>... and no spaces in between words</xf:help>
-                                        <xf:alert>enter more than 3 characters...</xf:alert>
-                                    </xf:input>                                     
-                                    <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
-                                        <xf:label>Permission from state</xf:label>
-                                       <xf:hint>where to derive permissions for state</xf:hint>
-                                       <xf:help>select one</xf:help>
-                                        <xf:itemset nodeset="instance()/state/@id">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
-                                        </xf:itemset>
-                                    </xf:select1>   
-                                    <xf:input id="state-version" ref="@version">
-                                        <xf:label>Version</xf:label>
-                                        <xf:hint>support versioning</xf:hint>
-                                    </xf:input>                                    
+                            <div style="width:100%;">
+                                <xf:group ref="./state[{$ATTR}]" appearance="bf:horizontalTable"> 
+                                    <xf:group appearance="bf:verticalTable">
+                                        <xf:output ref="@id" incremental="true">
+                                            <xf:label>state:</xf:label>
+                                        </xf:output>                                
+                                        <xf:input id="state-id" ref="@id">
+                                            <xf:label>ID</xf:label>
+                                            <xf:hint>edit id of the workflow</xf:hint>
+                                            <xf:help>... and no spaces in between words</xf:help>
+                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                        </xf:input> 
+                                        <xf:input id="state-title" ref="@title">
+                                            <xf:label>Title</xf:label>
+                                            <xf:hint>edit title of the workflow</xf:hint>
+                                            <xf:help>... and no spaces in between words</xf:help>
+                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                        </xf:input>                                     
+                                        <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
+                                            <xf:label>Permission from state</xf:label>
+                                           <xf:hint>where to derive permissions for state</xf:hint>
+                                           <xf:help>select one</xf:help>
+                                            <xf:itemset nodeset="instance()/state/@id">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>   
+                                        <xf:input id="state-version" ref="@version">
+                                            <xf:label>Version</xf:label>
+                                            <xf:hint>support versioning</xf:hint>
+                                        </xf:input>   
+                                    </xf:group>
+                                    <xf:group appearance="bf:verticalTable">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>add/delete tags</th>   
+                                                    <th>...</th> 
+                                                </tr>
+                                            </thead>
+                                            <tbody id="r-attrs" xf:repeat-nodeset="./tags/tag">
+                                                <tr>
+                                                    <td id="state-tags" class="one" style="color:steelblue;font-weight:bold;">
+                                                        <xf:select1 ref="." appearance="minimal" incremental="true">
+                                                            <xf:itemset nodeset="instance()/tags/tag">
+                                                                <xf:label ref="."></xf:label>
+                                                                <xf:value ref="."></xf:value>
+                                                            </xf:itemset>
+                                                        </xf:select1> 
+                                                    </td>
+                                                    <td>
+                                                        <xf:trigger>
+                                                            <xf:label>delete</xf:label>
+                                                            <xf:delete ev:event="DOMActivate" nodeset="." at="index('r-attrs')"></xf:delete>
+                                                        </xf:trigger>
+                                                    </td> 
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <xf:trigger>
+                                            <xf:label>add</xf:label>
+                                            <xf:action>
+                                                <xf:insert nodeset="./tags/tag"></xf:insert>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </xf:group>
+                                    
                                 </xf:group>
                                 
                                 <br/>
                                 <h1>Manage Transitions</h1>
-                                <div style="width:100%;height:200px">
+                                <div style="width:100%;height:200px;">
                                     <div style="float:left;width:49%;">
                                         <h3>Sources</h3>
                                         <table class="listingTable" style="width:100%;">
@@ -438,7 +491,29 @@ function workflow:state($node as node(), $model as map(*)) {
                                             </tr>
                                             {local:transition-sources($DOCNAME, $NODENAME)}
                                         </table> 
-                                        <a href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;from={$NODENAME}">add transition</a>                                 
+                                        <div id="pop"/>  
+                                        <div style="margin-top:5px;"/>
+                                        <xf:trigger class="configsSubTrigger">
+                                            <xf:label>add transition</xf:label>
+                                            <xf:hint>Add a new transition for this.</xf:hint>
+                                            <xf:action>
+                                                <xf:message level="ephemeral">Loading Transition Sub-Form...</xf:message>
+                                                <!--xf:insert nodeset="transition" at="last()" ev:event="DOMActivate" origin="instance('i-transition')"/-->
+                                                <xf:load show="embed" targetid="pop">
+                                                    <xf:resource value="'transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;from={$NODENAME}'"/>
+                                                </xf:load>
+                                                <script type="text/javascript">
+                                                <![CDATA[                                           
+                                                        $('#popup').bPopup({
+                                                            modalClose: true,
+                                                            opacity: 0.2,
+                                                            positionStyle: 'fixed'
+                                                        });                                                      
+                                                ]]>                                                    
+                                                </script>
+                                            </xf:action>
+                                        </xf:trigger>                                            
+                                        <!--a class="popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;from={$NODENAME}">add transition</a-->                                 
                                     </div>
                                     <div style="float:right;width:49%;">
                                         <h3>Destinations</h3>
@@ -453,41 +528,10 @@ function workflow:state($node as node(), $model as map(*)) {
                                     </div>                                    
                                 </div>
                                 
-                            </div>
-                            <div style="float:right">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>add/delete tags</th>   
-                                            <th>...</th> 
-                                        </tr>
-                                    </thead>
-                                    <tbody id="r-attrs" xf:repeat-nodeset="./state[{$ATTR}]/tags/tag">
-                                        <tr>
-                                            <td id="state-tags" class="one" style="color:steelblue;font-weight:bold;">
-                                                <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                    <xf:itemset nodeset="instance()/tags/tag">
-                                                        <xf:label ref="."></xf:label>
-                                                        <xf:value ref="."></xf:value>
-                                                    </xf:itemset>
-                                                </xf:select1> 
-                                            </td>
-                                            <td>
-                                                <xf:trigger>
-                                                    <xf:label>delete</xf:label>
-                                                    <xf:delete ev:event="DOMActivate" nodeset="."></xf:delete>
-                                                </xf:trigger>
-                                            </td> 
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <xf:trigger>
-                                    <xf:label>add</xf:label>
-                                    <xf:action>
-                                        <xf:insert nodeset="./state[{$ATTR}]/tags/tag"></xf:insert>
-                                    </xf:action>
-                                </xf:trigger> 
-                            </div>
+                            </div>                         
+                            <!--div id="popup" style="z-index:99999 !important;">
+                                <div id="popupcontent" class="popupcontent"></div>
+                            </div-->                            
                             <xf:trigger>
                                 <xf:label>Save</xf:label>
                                 <xf:action>
@@ -500,4 +544,189 @@ function workflow:state($node as node(), $model as map(*)) {
                 </div>              
             </div>                    
         </div>        
+};
+
+declare
+function workflow:transition-add($node as node(), $model as map(*)) {
+    let $TYPE := xs:string(request:get-parameter("type",""))
+    let $DOCNAME := xs:string(request:get-parameter("doc",""))
+    let $DOCPOS := xs:integer(request:get-parameter("pos",0))
+    let $NODENAME := xs:string(request:get-parameter("node",""))
+    let $ATTR := xs:string(request:get-parameter("attr",""))
+    return
+    	<div>
+            <div style="display:none;">
+                <xf:model>                 
+
+                    <xf:instance id="i-conditions" xmlns="">
+                        <data>
+                            <conditions>
+                               <condition>pi_has_signatories</condition>
+                               <condition>user_is_context_owner</condition>    
+                               <condition>is_scheduled</condition>
+                               <condition>is_written_response</condition>
+                               <condition>response_allow_submit</condition>
+                               <condition>pi_signatories_check</condition>
+                            </conditions>
+                        </data>
+                    </xf:instance>
+
+                    <xf:instance id='i-transition' xmlns="">
+                        <data>
+                           <transition title="Set a Title" condition="" require_confirmation="false" trigger="manual" order=""  note="Add a note">
+                              <sources originAttr="source">
+                                 <source/>
+                              </sources>
+                              <destinations originAttr="destination">
+                                 <destination/>
+                              </destinations>
+                              <roles originAttr="roles">
+                                 <role/>
+                              </roles>
+                           </transition>                        
+                        </data>
+                    </xf:instance>
+
+                    <xf:bind nodeset="instance('i-transition')/transition">
+                        <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
+                        <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
+                        <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
+                        <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
+                    </xf:bind>
+
+                    <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
+
+                    <xf:instance id="tmp">
+                        <data xmlns="">
+                            <wantsToClose>false</wantsToClose>
+                        </data>
+                    </xf:instance>
+                    
+                    <xf:submission id="s-add" method="put" replace="none" ref="instance('i-workflow')">
+                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+    
+                        <xf:header>
+                            <xf:name>username</xf:name>
+                            <xf:value>admin</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>password</xf:name>
+                            <xf:value></xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>realm</xf:name>
+                            <xf:value>exist</xf:value>
+                        </xf:header>                      
+    
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                            <xf:message>The workflow information have not been filled in correctly</xf:message>
+                        </xf:action>
+                    </xf:submission>
+
+                    <xf:submission id="s-load-from-master" resource="model:master#instance('i-workflow')" replace="instance" method="get">
+                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Route editor loaded</xf:message>
+                    </xf:submission>
+                    <xf:action ev:event="xforms-ready" submission="s-load-from-master" >  
+                    </xf:action>
+                </xf:model>
+            </div>
+            <xf:group ref="instance('i-transition')/transition" appearance="compact" style="padding-top:10px;">
+                <xf:input id="transition-id" bind="b-title">
+                    <xf:label>Transition Title</xf:label>
+                    <xf:hint>edit id of the workflow</xf:hint>
+                    <xf:help>... and no spaces in between words</xf:help>
+                    <xf:alert>enter more than 3 characters...</xf:alert>
+                </xf:input> 
+                <xf:input bind="b-order" start="1" step="1">
+                    <xf:label>Order</xf:label>
+                    <xf:hint>ordering used on display</xf:hint>
+                    <xf:alert>Invalid number.</xf:alert>
+                    <xf:help>Enter an integer between 1 and 100 </xf:help>    
+                    <xf:message ev:event="xforms-valid" level="ephemeral">Order is valid.</xf:message>                                
+                </xf:input>                              
+                <xf:select1 ref="@condition" appearance="minimal" incremental="true">
+                    <xf:label>Condition</xf:label>
+                   <xf:hint>where to derive permissions for state</xf:hint>
+                   <xf:help>select one</xf:help>
+                    <xf:itemset nodeset="instance('i-conditions')/conditions/condition">
+                        <xf:label ref="."></xf:label>
+                        <xf:value ref="."></xf:value>
+                    </xf:itemset>
+                </xf:select1>                              
+                <xf:input id="transition-confirm" ref="@require_confirmation">
+                    <xf:label>Require confirmation</xf:label>
+                    <xf:hint>support confirmation when making a transition</xf:hint>
+                </xf:input>   
+                <xf:select1 ref="@trigger" appearance="minimal" incremental="true">
+                    <xf:label>Triggered</xf:label>
+                    <xf:hint>how this transition is triggered</xf:hint>
+                    <xf:help>select one</xf:help>
+                    <xf:item>
+                        <xf:label>by system</xf:label>
+                        <xf:value>system</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>manually</xf:label>
+                        <xf:value>manual</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>automatically</xf:label>
+                        <xf:value>automatic</xf:value>
+                    </xf:item>                                
+                </xf:select1>                             
+                <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
+                    <xf:label>Permission from state</xf:label>
+                   <xf:hint>where to derive permissions for state</xf:hint>
+                   <xf:help>select one</xf:help>
+                    <xf:itemset nodeset="instance()/state/@id">
+                        <xf:label ref="."></xf:label>
+                        <xf:value ref="."></xf:value>
+                    </xf:itemset>
+                </xf:select1>           
+
+                <xf:group appearance="bf:verticalTable">
+                    <xf:label>destinations</xf:label>
+                    <xf:repeat id="r-destinations" nodeset="destinations/destination" appearance="compact">
+                        <xf:select1 ref="." appearance="minimal" incremental="true">
+                            <xf:itemset nodeset="instance()/state/@id">
+                                <xf:label ref="."></xf:label>
+                                <xf:value ref="."></xf:value>
+                            </xf:itemset>
+                        </xf:select1> 
+                        <xf:trigger>
+                            <xf:label>insert</xf:label>
+                            <xf:action>
+                                <xf:insert nodeset="."></xf:insert>
+                            </xf:action>
+                        </xf:trigger>
+                        <xf:trigger>
+                            <xf:label>delete</xf:label>
+                            <xf:action>
+                                <xf:delete nodeset="."  ev:event="DOMActivate"></xf:delete>
+                            </xf:action>
+                        </xf:trigger>                                        
+                    </xf:repeat>
+                </xf:group>                           
+                
+                <xf:trigger>
+                    <xf:label>Save</xf:label>
+                    <xf:action>
+                        <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                        <xf:setvalue ref="instance('i-transition')/transition/sources/source" value="'{$NODENAME}'"/>
+                        <xf:insert nodeset="instance()/transition" at="last()" position="after" origin="instance('i-transition')/transition" />
+                        <xf:send submission="s-add"/>
+                    </xf:action>                                
+                </xf:trigger>                            
+            </xf:group>
+        
+        </div>
 };

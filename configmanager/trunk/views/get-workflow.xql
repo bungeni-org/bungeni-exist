@@ -10,7 +10,7 @@ import module namespace appconfig = "http://exist-db.org/apps/configmanager/conf
 declare option exist:serialize "method=xhtml media-type=text/xml";
 
 declare function local:get-workflow($doctype) as node() * {
-    let $workflow := doc($appconfig:WF-FOLDER || "/" || $doctype)/workflow
+    let $workflow := doc($appconfig:WF-FOLDER || "/" || $doctype || ".xml")/workflow
     return $workflow
 };
 
@@ -57,7 +57,7 @@ declare function local:states($doctype) as node() * {
 
 (: creates the output for all document transitions :)
 declare function local:transitions($doctype) as node() * {
-    let $transitions := local:get-workflow()/transition
+    let $transitions := local:get-workflow($doctype)/transition
     let $count := count($transitions)
     for $transition at $pos in $transitions
         return
@@ -72,7 +72,9 @@ declare function local:transitions($doctype) as node() * {
 };
 
 let $CXT := request:get-context-path()
-let $DOCNAME := xs:string(request:get-parameter("doc","nothing"))
+let $REST-CXT-CONFIGWF := $CXT || "/rest" || $appconfig:ROOT || "/working/live/bungeni_custom/forms"
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
+let $DOCNAME := xs:string(request:get-parameter("doc","bill"))
 let $SHOWING := xs:string(request:get-parameter("tab","fields"))
 return
 <html   xmlns="http://www.w3.org/1999/xhtml"
@@ -88,7 +90,7 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model id="m-workflow">
-                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
+                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>                   
 
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@name" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />

@@ -14,6 +14,29 @@
           alert('Handler for .submit() called.');
           //return false;
         });  */
+        
+        $('.popup').click(function(e) {
+            // Prevents the default action to be triggered. 
+            e.preventDefault();
+            
+            // Triggering bPopup when click event is fired
+            $('#popup').bPopup({
+                modalClose: true,
+                opacity: 0.2,
+                positionStyle: 'fixed' //'fixed' or 'absolute'
+            });
+        });          
+    
+        /*$('.popup').click(function(e) {
+            // Prevents the default action to be triggered. 
+            e.preventDefault();
+            
+            // Triggering bPopup when click event is fired
+            $('#popup').bPopup({
+                contentContainer:'.popupcontent',
+                loadUrl: 'http://localhost:8088/exist/apps/configmanager/views/edit-transition.xql?doc=question&node=submitted&attr=29'
+            });
+        }); */   
     
         // Binding a click event
         // From jQuery v.1.7.0 use .on() instead of .bind()
@@ -102,7 +125,30 @@ $(document).ready(function(){
         }
         return false;
         
-    });     
+    });  
+    
+
+    
+    /*$(".popup").click(function() {
+        var href = $(this).attr('href');
+        
+        $('.').bPopup({
+            contentContainer:'.content',
+            loadUrl: 'http://localhost:8088/exist/apps/configmanager/views/edit-transition.xql?doc=question&node=submitted&attr=29'
+        });
+            
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:8088/exist/apps/configmanager/views/edit-transition.xql?doc=question&node=submitted&attr=29',
+            data: "nothing",
+            success: function(data){
+                //$(row).remove();
+            }
+        });        
+
+        return false;
+        
+    }); */   
     
     /*$(".nodeMove a").click (function () {
       $.ajax({

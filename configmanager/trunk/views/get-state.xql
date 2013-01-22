@@ -12,7 +12,7 @@ declare option exist:serialize "method=xhtml media-type=text/xml";
 (: creates the output for all document transitions sources :)
 declare function local:transition-sources($doctype, $nodename) as node() * {
     (:let $form-id := request:get-parameter("doc", "workflow.xml")
-    let $attrname := request:get-parameter("node", "nothing"):)
+    let $ATTRname := request:get-parameter("node", "nothing"):)
 
     for $transition at $pos in local:get-workflow($doctype)/workflow/transition
     where $transition/sources/source[. = $nodename]
@@ -23,7 +23,7 @@ declare function local:transition-sources($doctype, $nodename) as node() * {
 (: creates the output for all document transitions destinations :)
 declare function local:transition-destinations($doctype, $nodename) as node() * {
     (:let $form-id := request:get-parameter("doc", "workflow.xml")
-    let $attrname := request:get-parameter("node", "nothing"):)
+    let $ATTRname := request:get-parameter("node", "nothing"):)
     (:form-id is same as doctype !:)
     for $transition at $pos in local:get-workflow($doctype)/workflow/transition
     where $transition/destinations/destination[. = $nodename]
@@ -45,6 +45,8 @@ declare function local:get-workflow($docname as xs:string) as node() * {
 };
 
 let $CXT := request:get-context-path()
+let $REST-CXT-CONFIGWF := $CXT || "/rest" || $appconfig:ROOT || "/working/live/bungeni_custom/forms"
+let $REST-CXT-MODELTMPL := $CXT || "/rest" || $appconfig:ROOT || "/model_templates"
 let $DOCNAME := xs:string(request:get-parameter("doc","workflow.xml"))
 let $NODENAME := xs:string(request:get-parameter("node","nothing"))
 let $ATTR := xs:string(request:get-parameter("attr","nothing"))
@@ -63,7 +65,7 @@ return
     	<div id="xforms">
             <div style="display:none">
                  <xf:model>
-                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
+                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>                   
 
                     <xf:bind nodeset="./state">
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
@@ -82,7 +84,7 @@ return
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$REST-CXT-CONFIGWF}/{$DOCNAME}'"/>
+                        <xf:resource value="'{$REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -134,7 +136,7 @@ return
                     <div style="width: 100%;">
                         <div style="width:90%;">
                             <div style="float:left;width:60%;">
-                                <xf:group ref="./state[{$attr}]" appearance="bf:verticalTable">   
+                                <xf:group ref="./state[{$ATTR}]" appearance="bf:verticalTable">   
                                     <xf:output ref="@id" incremental="true">
                                         <xf:label>state:</xf:label>
                                     </xf:output>                                
@@ -178,7 +180,7 @@ return
                                             </tr>
                                             {local:transition-sources($DOCNAME, $NODENAME)}
                                         </table> 
-                                        <a href="javascript:dojo.publish('/add',['transition','{$DOCNAME}','{$NODENAME}','{$attr}','none']);">add transition</a>                                 
+                                        <a href="javascript:dojo.publish('/add',['transition','{$DOCNAME}','{$NODENAME}','{$ATTR}','none']);">add transition</a>                                 
                                     </div>
                                     <div style="float:right;width:49%;">
                                         <h3>Destinations</h3>

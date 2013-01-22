@@ -364,37 +364,16 @@ function form:field-edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>                     
                     
-                    <xf:instance id="i-rendertypes" xmlns="">
-                        <data>
-                            <rendertypes>
-                               <rendertype>text_line</rendertype>
-                               <rendertype>rich_text</rendertype>      
-                               <rendertype>single_select</rendertype> 
-                               <rendertype>number</rendertype> 
-                               <rendertype>text_box</rendertype> 
-                               <rendertype>date</rendertype>
-                            </rendertypes>
-                        </data>
-                    </xf:instance>    
+                    <xf:instance id="i-valuetypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_valuetypes.xml"/> 
                     
-                    <xf:instance id="i-valuetypes" xmlns="">
-                        <data>
-                            <valuetypes>
-                               <valuetype>text</valuetype>
-                               <valuetype>language</valuetype>
-                               <valuetype>vocabulary</valuetype>                                 
-                               <valuetype>date</valuetype>
-                               <valuetype>number</valuetype>
-                            </valuetypes>
-                        </data>
-                    </xf:instance>   
+                    <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
-                        <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
-                        <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
+                        <xf:bind nodeset="@value_type" type="xs:string" required="true()" />
+                        <xf:bind id="b-rendertype" nodeset="@render_type" type="xs:string" required="true()"/>
                         
                         <xf:bind nodeset="view/@show" type="xs:boolean"/>  
                         <xf:bind nodeset="edit/@show" type="xs:boolean"/>
@@ -518,20 +497,21 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:hint>internal value</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
+                                    <!-- get only unique values -->
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[not(./@name = preceding-sibling::node()/@name)]">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
                                     </xf:itemset>
                                 </xf:select1>  
                                 
-                                <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
+                                <xf:select1 bind="b-rendertype" appearance="minimal" incremental="true">
                                     <xf:label>render type</xf:label>
                                     <xf:hint>external value show on input forms</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[@name eq instance()[@name eq '{$docname}']/field[{$fieldid}]/@value_type]">
+                                        <xf:label ref="@rendertype"></xf:label>
+                                        <xf:value ref="@rendertype"></xf:value>
                                     </xf:itemset>
                                 </xf:select1>
                             </xf:group>
@@ -893,37 +873,16 @@ function form:field-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>                     
                     
-                    <xf:instance id="i-rendertypes" xmlns="">
-                        <data>
-                            <rendertypes>
-                               <rendertype>text_line</rendertype>
-                               <rendertype>rich_text</rendertype>      
-                               <rendertype>single_select</rendertype> 
-                               <rendertype>number</rendertype> 
-                               <rendertype>text_box</rendertype> 
-                               <rendertype>date</rendertype>
-                            </rendertypes>
-                        </data>
-                    </xf:instance>    
+                    <xf:instance id="i-valuetypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_valuetypes.xml"/> 
                     
-                    <xf:instance id="i-valuetypes" xmlns="">
-                        <data>
-                            <valuetypes>
-                               <valuetype>text</valuetype>
-                               <valuetype>language</valuetype>
-                               <valuetype>vocabulary</valuetype>                                 
-                               <valuetype>date</valuetype>
-                               <valuetype>number</valuetype>
-                            </valuetypes>
-                        </data>
-                    </xf:instance>   
+                    <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset="./field[last()]">
                         <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
-                        <xf:bind nodeset="@render_type" type="xs:string" required="true()"/>
+                        <xf:bind id="b-rendertype" nodeset="@render_type" type="xs:string" required="true()"/>
                         
                         <xf:bind nodeset="view/@show" type="xs:boolean"/>  
                         <xf:bind nodeset="edit/@show" type="xs:boolean"/>
@@ -1034,20 +993,20 @@ function form:field-add($node as node(), $model as map(*)) {
                                     <xf:hint>internal value</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-valuetypes')/valuetypes/valuetype">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[not(./@name = preceding-sibling::node()/@name)]">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
                                     </xf:itemset>
                                 </xf:select1>  
                                 
-                                <xf:select1 id="select-ren-type" ref="@render_type" appearance="minimal" incremental="true">
+                                <xf:select1 bind="b-rendertype" appearance="minimal" incremental="true">
                                     <xf:label>render type</xf:label>
                                     <xf:hint>external value show on input forms</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-rendertypes')/rendertypes/rendertype">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[@name eq instance()/field[last()]/@value_type]">
+                                        <xf:label ref="@rendertype"></xf:label>
+                                        <xf:value ref="@rendertype"></xf:value>
                                     </xf:itemset>
                                 </xf:select1>
                             </xf:group>

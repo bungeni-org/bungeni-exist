@@ -31,8 +31,8 @@ return
     	<div id="xforms">
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-workflowui" 
-                        src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
+                    <xf:instance id="i-workflow" 
+                        src="{$REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>                   
 
                     <xf:instance id="i-conditions" xmlns="">
                         <data>
@@ -97,10 +97,6 @@ return
     
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
-                            <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                                dijit.byId("taskDialog").hide();  
-                                dojo.publish('/view',['state','{$DOCNAME}','{$NODENAME}','{$ATTR}','none']);
-                            </script>
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
@@ -113,10 +109,7 @@ return
                         </xf:action>
                     </xf:submission>
 
-                    <xf:action ev:event="xforms-ready" >
-                        <script type="text/javascript" if="'{$SHOWING}' != 'none'">
-                            dijit.byId("switchDiv").selectChild("{$SHOWING}");                        
-                        </script>   
+                    <xf:action ev:event="xforms-ready" >  
                     </xf:action>
                 </xf:model>
             </div>    	
@@ -217,6 +210,7 @@ return
                                 </xf:action>                                
                             </xf:trigger>                            
                         </xf:group>
+                    
                     </div>
                 </div>
             </div>                    

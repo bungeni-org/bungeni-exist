@@ -7,9 +7,7 @@ import module namespace transform = "http://exist-db.org/xquery/transform";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "../modules/appconfig.xqm";
 
-
-
-declare option exist:serialize "method=xhtml media-type=text/xml";
+declare option exist:serialize "method=xml media-type=text/xml";
 
 let $CXT := request:get-context-path()
 let $DOCNAME := xs:string(request:get-parameter("doc","none"))
@@ -19,20 +17,15 @@ let $NODENAME := xs:string(request:get-parameter("node","nothing"))
 let $ATTR := xs:string(request:get-parameter("attr","nothing"))
 let $SHOWING := xs:string(request:get-parameter("tab","fields"))
 return
-<html   xmlns="http://www.w3.org/1999/xhtml"
+    	<div id="xforms" xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:exist="http://exist.sourceforge.net/NS/exist"
         xmlns:ev="http://www.w3.org/2001/xml-events" 
         xmlns:zope="http://namespaces.zope.org/zope"
         xmlns:db="http://namespaces.objectrealms.net/rdb">
-   <head>
-      <title>Edit Database</title>
-    </head>
-    <body class="nihilo InlineBordersAlert">
-    	<div id="xforms">
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-workflowui" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}"/>                   
+                    <xf:instance id="i-workflow" src="{$REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>                   
 
                     <xf:instance id="i-conditions" xmlns="">
                         <data>
@@ -80,10 +73,10 @@ return
     
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
-                            <script type="text/javascript" if="instance('tmp')/wantsToClose">
+                            <!--script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 dijit.byId("taskDialog").hide();  
                                 dojo.publish('/view',['state','{$DOCNAME}','{$NODENAME}','{$ATTR}','none']);
-                            </script>
+                            </script-->
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
@@ -97,9 +90,9 @@ return
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready" >
-                        <script type="text/javascript" if="'{$SHOWING}' != 'none'">
+                        <!--script type="text/javascript" if="'{$SHOWING}' != 'none'">
                             dijit.byId("switchDiv").selectChild("{$SHOWING}");                        
-                        </script>   
+                        </script-->   
                     </xf:action>
                 </xf:model>
             </div>    	
@@ -203,5 +196,3 @@ return
                 </div>
             </div>                    
         </div>
-    </body>
-</html>

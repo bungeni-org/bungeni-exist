@@ -703,7 +703,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     on_xml_file = "on_" + truncated_prefix
                     out_files = self.input_params["transformer"].run(
                          input_file_path,
-                         self.input_pazrams["main_config"].get_ontoxml_output_folder() + on_xml_file ,
+                         self.input_params["main_config"].get_ontoxml_output_folder() + on_xml_file ,
                          pipe_path
                          )
                 else:

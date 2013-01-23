@@ -15,18 +15,25 @@
           //return false;
         });  */
         
-        $('.popup').click(function(e) {
+        $('#submitname').on('click', function(e) {
+            $("#f-transition-popup").submit();
+        });             
+        
+         $('.popup').on('click', function(e) {
             // Prevents the default action to be triggered. 
             e.preventDefault();
+            var href = $(this).attr('href');
             
             // Triggering bPopup when click event is fired
             $('#popup').bPopup({
+                contentContainer:'.popupcontent',
+                loadUrl: 'transition-add-popup.html?doc=question&node=submitted&attr=29',            
                 modalClose: true,
                 opacity: 0.2,
                 positionStyle: 'fixed' //'fixed' or 'absolute'
             });
-        });          
-    
+         });    
+         
         /*$('.popup').click(function(e) {
             // Prevents the default action to be triggered. 
             e.preventDefault();
@@ -59,7 +66,7 @@ $(document).ready(function(){
         //get the index from URL hash
         tabSelect = document.location.hash.substr(1,document.location.hash.length);
         $('#tabs li#tabfields').trigger('click');
-    }
+    }       
 
     //  When user clicks on tab, this code will be executed
     $("#tabs li").click(function() {
@@ -125,9 +132,7 @@ $(document).ready(function(){
         }
         return false;
         
-    });  
-    
-
+    });        
     
     /*$(".popup").click(function() {
         var href = $(this).attr('href');

@@ -347,9 +347,29 @@ function workflow:state($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
 
+                    <xf:instance id="i-conditions" xmlns="">
+                        <data>
+                            <conditions>
+                               <condition>pi_has_signatories</condition>
+                               <condition>user_is_context_owner</condition>    
+                               <condition>is_scheduled</condition>
+                               <condition>is_written_response</condition>
+                               <condition>response_allow_submit</condition>
+                               <condition>pi_signatories_check</condition>
+                            </conditions>
+                        </data>
+                    </xf:instance>
+                    
                     <xf:bind nodeset="./state">
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
+                    </xf:bind>
+
+                    <xf:bind nodeset="instance('i-transition')/transition">
+                        <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
+                        <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
+                        <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
+                        <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
                     </xf:bind>
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
@@ -478,6 +498,14 @@ function workflow:state($node as node(), $model as map(*)) {
                                     
                                 </xf:group>
                                 
+                                <xf:trigger>
+                                    <xf:label>Save</xf:label>
+                                    <xf:action>
+                                        <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                        <xf:send submission="s-add"/>
+                                    </xf:action>                                
+                                </xf:trigger>   
+                                <hr/>
                                 <br/>
                                 <h1>Manage Transitions</h1>
                                 <div style="width:100%;height:200px;">
@@ -491,29 +519,11 @@ function workflow:state($node as node(), $model as map(*)) {
                                             </tr>
                                             {local:transition-sources($DOCNAME, $NODENAME)}
                                         </table> 
-                                        <div id="pop"/>  
-                                        <div style="margin-top:5px;"/>
-                                        <xf:trigger class="configsSubTrigger">
-                                            <xf:label>add transition</xf:label>
-                                            <xf:hint>Add a new transition for this.</xf:hint>
-                                            <xf:action>
-                                                <xf:message level="ephemeral">Loading Transition Sub-Form...</xf:message>
-                                                <!--xf:insert nodeset="transition" at="last()" ev:event="DOMActivate" origin="instance('i-transition')"/-->
-                                                <xf:load show="embed" targetid="pop">
-                                                    <xf:resource value="'transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;from={$NODENAME}'"/>
-                                                </xf:load>
-                                                <script type="text/javascript">
-                                                <![CDATA[                                           
-                                                        $('#popup').bPopup({
-                                                            modalClose: true,
-                                                            opacity: 0.2,
-                                                            positionStyle: 'fixed'
-                                                        });                                                      
-                                                ]]>                                                    
-                                                </script>
-                                            </xf:action>
-                                        </xf:trigger>                                            
-                                        <!--a class="popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;from={$NODENAME}">add transition</a-->                                 
+                                        <div id="popup" style="display:none;">
+                                            <div id="popupcontent" class="popupcontent"></div>
+                                        </div>                                           
+                                        <div style="margin-top:15px;"/>                                           
+                                        <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;from={$NODENAME}">add transition</a>                                 
                                     </div>
                                     <div style="float:right;width:49%;">
                                         <h3>Destinations</h3>
@@ -528,17 +538,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                     </div>                                    
                                 </div>
                                 
-                            </div>                         
-                            <!--div id="popup" style="z-index:99999 !important;">
-                                <div id="popupcontent" class="popupcontent"></div>
-                            </div-->                            
-                            <xf:trigger>
-                                <xf:label>Save</xf:label>
-                                <xf:action>
-                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                    <xf:send submission="s-add"/>
-                                </xf:action>                                
-                            </xf:trigger>                           
+                            </div>                       
                         </div>
                     </div>
                 </div>              
@@ -551,48 +551,26 @@ function workflow:transition-add($node as node(), $model as map(*)) {
     let $TYPE := xs:string(request:get-parameter("type",""))
     let $DOCNAME := xs:string(request:get-parameter("doc",""))
     let $DOCPOS := xs:integer(request:get-parameter("pos",0))
-    let $NODENAME := xs:string(request:get-parameter("node",""))
+    let $NODENAME := xs:string(request:get-parameter("from",""))
     let $ATTR := xs:string(request:get-parameter("attr",""))
     return
-    	<div>
+    	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none;">
-                <xf:model>                 
-
-                    <xf:instance id="i-conditions" xmlns="">
-                        <data>
-                            <conditions>
-                               <condition>pi_has_signatories</condition>
-                               <condition>user_is_context_owner</condition>    
-                               <condition>is_scheduled</condition>
-                               <condition>is_written_response</condition>
-                               <condition>response_allow_submit</condition>
-                               <condition>pi_signatories_check</condition>
-                            </conditions>
-                        </data>
-                    </xf:instance>
+                <xf:model>         
 
                     <xf:instance id='i-transition' xmlns="">
-                        <data>
-                           <transition title="Set a Title" condition="" require_confirmation="false" trigger="manual" order=""  note="Add a note">
-                              <sources originAttr="source">
-                                 <source/>
-                              </sources>
-                              <destinations originAttr="destination">
-                                 <destination/>
-                              </destinations>
-                              <roles originAttr="roles">
-                                 <role/>
-                              </roles>
-                           </transition>                        
-                        </data>
+                       <transition title="Set a Title" condition="" require_confirmation="false" trigger="manual" order=""  note="Add a note">
+                          <sources originAttr="source">
+                             <source/>
+                          </sources>
+                          <destinations originAttr="destination">
+                             <destination/>
+                          </destinations>
+                          <roles originAttr="roles">
+                             <role/>
+                          </roles>
+                       </transition>                        
                     </xf:instance>
-
-                    <xf:bind nodeset="instance('i-transition')/transition">
-                        <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
-                        <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
-                        <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
-                        <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
-                    </xf:bind>
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
@@ -602,22 +580,12 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
                     
-                    <xf:submission id="s-add" method="put" replace="none" ref="instance('i-workflow')">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
-    
-                        <xf:header>
-                            <xf:name>username</xf:name>
-                            <xf:value>admin</xf:value>
-                        </xf:header>
-                        <xf:header>
-                            <xf:name>password</xf:name>
-                            <xf:value></xf:value>
-                        </xf:header>
-                        <xf:header>
-                            <xf:name>realm</xf:name>
-                            <xf:value>exist</xf:value>
-                        </xf:header>                      
-    
+                    <xf:submission id="s-load-from-master" resource="model:master#instance('i-workflow')/workflow" replace="instance" method="get">
+                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Transition add editor loaded</xf:message>
+                    </xf:submission>
+                    <xf:submission id="s-update-master" resource="model:master#instance('i-workflow')/workflow/transition[last()]" replace="none" method="post">
+                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Transition updated</xf:message>
+                        
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
                         </xf:action>
@@ -629,17 +597,15 @@ function workflow:transition-add($node as node(), $model as map(*)) {
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
                             <xf:message>The workflow information have not been filled in correctly</xf:message>
-                        </xf:action>
-                    </xf:submission>
-
-                    <xf:submission id="s-load-from-master" resource="model:master#instance('i-workflow')" replace="instance" method="get">
-                        <xf:message ev:event="xforms-submit-done" level="ephemeral">Route editor loaded</xf:message>
-                    </xf:submission>
-                    <xf:action ev:event="xforms-ready" submission="s-load-from-master" >  
+                        </xf:action>                        
+                    </xf:submission>                    
+                    <xf:action ev:event="xforms-ready" submission="s-load-from-master" ev:observer="master">  
+                        <!--xf:send submission="s-load-from-master"/-->
+                        <xf:insert nodeset="instance()" at="last()" position="after" origin="instance('i-transition')"/>                         
                     </xf:action>
                 </xf:model>
             </div>
-            <xf:group ref="instance('i-transition')/transition" appearance="compact" style="padding-top:10px;">
+            <xf:group model="master" ref="." appearance="compact" style="padding-top:10px;">
                 <xf:input id="transition-id" bind="b-title">
                     <xf:label>Transition Title</xf:label>
                     <xf:hint>edit id of the workflow</xf:hint>
@@ -666,7 +632,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                     <xf:label>Require confirmation</xf:label>
                     <xf:hint>support confirmation when making a transition</xf:hint>
                 </xf:input>   
-                <xf:select1 ref="@trigger" appearance="minimal" incremental="true">
+                <!--xf:select1 ref="@trigger" appearance="minimal" incremental="true">
                     <xf:label>Triggered</xf:label>
                     <xf:hint>how this transition is triggered</xf:hint>
                     <xf:help>select one</xf:help>
@@ -682,22 +648,22 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                         <xf:label>automatically</xf:label>
                         <xf:value>automatic</xf:value>
                     </xf:item>                                
-                </xf:select1>                             
-                <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
+                </xf:select1-->                             
+                <!--xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
                     <xf:label>Permission from state</xf:label>
                    <xf:hint>where to derive permissions for state</xf:hint>
                    <xf:help>select one</xf:help>
-                    <xf:itemset nodeset="instance()/state/@id">
+                    <xf:itemset nodeset="instance('i-workflow')/state/@id">
                         <xf:label ref="."></xf:label>
                         <xf:value ref="."></xf:value>
                     </xf:itemset>
-                </xf:select1>           
+                </xf:select1-->           
 
-                <xf:group appearance="bf:verticalTable">
+                <xf:group model="master" appearance="bf:verticalTable">
                     <xf:label>destinations</xf:label>
                     <xf:repeat id="r-destinations" nodeset="destinations/destination" appearance="compact">
                         <xf:select1 ref="." appearance="minimal" incremental="true">
-                            <xf:itemset nodeset="instance()/state/@id">
+                            <xf:itemset nodeset="instance('i-workflow')/state/@id">
                                 <xf:label ref="."></xf:label>
                                 <xf:value ref="."></xf:value>
                             </xf:itemset>
@@ -721,9 +687,9 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                     <xf:label>Save</xf:label>
                     <xf:action>
                         <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                        <xf:setvalue ref="instance('i-transition')/transition/sources/source" value="'{$NODENAME}'"/>
-                        <xf:insert nodeset="instance()/transition" at="last()" position="after" origin="instance('i-transition')/transition" />
-                        <xf:send submission="s-add"/>
+                        <!--xf:setvalue ref="instance()/transition/sources/source" value="Walal"/>
+                        <xf:insert nodeset="instance('i-workflow')/transition" at="last()" position="after" origin="transition" /-->
+                        <xf:send submission="s-update-master"/>
                     </xf:action>                                
                 </xf:trigger>                            
             </xf:group>

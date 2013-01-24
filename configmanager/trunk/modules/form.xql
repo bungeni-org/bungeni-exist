@@ -524,7 +524,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>view</xf:label>
                                     <xf:input id="input-viewshow" ref="view/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                        
                                     <table class="fieldModes">
                                        <thead>
@@ -586,7 +586,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>edit</xf:label>
                                     <xf:input id="input-editshow" ref="edit/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                
                                    <table class="fieldModes">
                                        <thead>
@@ -642,7 +642,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>add</xf:label>
                                     <xf:input id="input-addshow" ref="add/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                        
                                     <table class="fieldModes">
                                        <thead>
@@ -698,7 +698,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>listing</xf:label>
                                     <xf:input id="input-listingshow" ref="listing/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                
                                    <table class="fieldModes">
                                        <thead>
@@ -1019,7 +1019,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>view</xf:label>
                                     <xf:input id="input-viewshow" ref="view/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                        
                                     <table class="fieldModes">
                                        <thead>
@@ -1075,7 +1075,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>edit</xf:label>
                                     <xf:input id="input-editshow" ref="edit/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                
                                    <table class="fieldModes">
                                        <thead>
@@ -1131,7 +1131,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                     <xf:label>add</xf:label>
                                     <xf:input id="input-addshow" ref="add/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                        
                                     <table class="fieldModes">
                                        <thead>
@@ -1187,7 +1187,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                 <xf:group appearance="bf:verticalTable">
                                    <xf:label>listing</xf:label>
                                     <xf:input id="input-listingshow" ref="listing/@show">
-                                        <xf:label>show/hide</xf:label>
+                                        <xf:label>show</xf:label>
                                     </xf:input>                                
                                    <table class="fieldModes">
                                        <thead>

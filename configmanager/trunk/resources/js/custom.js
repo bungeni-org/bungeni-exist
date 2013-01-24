@@ -1,73 +1,32 @@
-// Semicolon (;) to ensure closing of earlier scripting
-// Encapsulation
-// $ is assigned to jQuery
-;(function($) {
-     // DOM Ready
-    $(function() {
-    
-        /*$("#submit-btn").click(function() {
-            $('#store_config').submit();
-            alert("Handler for .click() called.");
-        });
-        
-        $('#store_config').submit(function() {
-          alert('Handler for .submit() called.');
-          //return false;
-        });  */
-        
-        $('#submitname').on('click', function(e) {
-            $("#f-transition-popup").submit();
-        });             
-        
-         $('.popup').on('click', function(e) {
-            // Prevents the default action to be triggered. 
-            e.preventDefault();
-            var href = $(this).attr('href');
-            
-            // Triggering bPopup when click event is fired
-            $('#popup').bPopup({
-                contentContainer:'.popupcontent',
-                loadUrl: 'transition-add-popup.html?doc=question&node=submitted&attr=29',            
-                modalClose: true,
-                opacity: 0.2,
-                positionStyle: 'fixed' //'fixed' or 'absolute'
-            });
-         });    
-         
-        /*$('.popup').click(function(e) {
-            // Prevents the default action to be triggered. 
-            e.preventDefault();
-            
-            // Triggering bPopup when click event is fired
-            $('#popup').bPopup({
-                contentContainer:'.popupcontent',
-                loadUrl: 'http://localhost:8088/exist/apps/configmanager/views/edit-transition.xql?doc=question&node=submitted&attr=29'
-            });
-        }); */   
-    
-        // Binding a click event
-        // From jQuery v.1.7.0 use .on() instead of .bind()
-        /*$('#show-popup').on('click', function(e) {
-            // Prevents the default action to be triggered. 
-            e.preventDefault();
-
-            // Triggering bPopup when click event is fired
-            $('#popup').bPopup({
-                modalClose: true,
-                opacity: 0.2,
-                positionStyle: 'fixed' //'fixed' or 'absolute'
-            });  
-        });*/
-    });
-})(jQuery);
-
 $(document).ready(function(){
     if(window.location.hash) {
         //get the index from URL hash
         tabSelect = document.location.hash.substr(1,document.location.hash.length);
         $('#tabs li#tabfields').trigger('click');
-    }       
-
+    }  
+    /*
+    $('#submitname').bind('click', function(e) {
+        e.preventDefault();
+        alert("aasas");
+        //$("#f-transition-popup").submit();
+    });             
+    
+     $('.popup').on('click', function(e) {
+        // Prevents the default action to be triggered. 
+        e.preventDefault();
+        var href = $(this).attr('href');
+        
+        // Triggering bPopup when click event is fired
+        $('#popup').bPopup({
+            contentContainer:'.popupcontent',
+            loadUrl: 'transition-add-popup.html?doc=question&node=submitted&attr=29',            
+            modalClose: true,
+            opacity: 0.2,
+            positionStyle: 'fixed' //'fixed' or 'absolute'
+        });
+     });
+    */
+    
     //  When user clicks on tab, this code will be executed
     $("#tabs li").click(function() {
         //  First remove class "active" from currently active tab

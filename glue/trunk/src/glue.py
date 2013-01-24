@@ -111,6 +111,19 @@ class TransformerConfig(Config):
         return self.dict_pipes
 
 
+def close_quietly(handle):
+    """
+    Always use this close to close any File, Stream or Response Handles
+    This closes all handles in a exception safe manner
+    """
+    try:
+        if (handle is not None):
+            handle.close()
+    except Exception, ex:
+        LOG.error("Error while closing handle", ex)
+        
+
+
 class Transformer(object):
     """
     Access the Transformer via this class
@@ -217,7 +230,7 @@ class Transformer(object):
                 outFile = File(str(output) + uri_name.decode('iso-8859-1') + ".xml")
                 #copy transformed file to disk
                 FileUtility.getInstance().copyFile(fis, outFile)
-                fis.close()
+                close_quietly(fis)
                 return [outFile, None]
         except SAXParseException, saE:
             print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
@@ -234,6 +247,7 @@ class Transformer(object):
         except RuntimeException, ruE:
             print _COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, _COLOR.ENDC
             return [None, None]
+            
 
 
 class ParseXML(object):
@@ -285,9 +299,14 @@ class ParseXML(object):
     def write_to_disk(self):
         format = OutputFormat.createPrettyPrint()
         writer = XMLWriter(FileWriter(self.xmlfile), format)
-        writer.write(self.xmldoc)
-        writer.flush()
-        writer.close()
+        try:
+            writer.write(self.xmldoc)
+            writer.flush()
+        except Exception, ex:
+            LOG.error("Error while writing %s to disk" % self.xmlfile, ex)
+        finally:
+            close_quietly(writer)
+            
 
 class ParseBungeniXML(ParseXML):
     """
@@ -847,9 +866,13 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
     def close_sync_file(self):
         self.format = OutputFormat.createPrettyPrint()
         self.writer = XMLWriter(FileWriter(self.main_cfg.get_temp_files_folder()+"reposync.xml"), self.format)
-        self.writer.write(self.document)
-        self.writer.flush()
-        self.writer.close()
+        try:
+            self.writer.write(self.document)
+            self.writer.flush()
+        except Exception, ex:
+            LOG.error("Error while writing sync file reposync.xml", ex)
+        finally:
+            close_quietly(self.writer)
 
     def get_params(self, input_file):
         return self.transformer.get_doc_params(input_file)
@@ -897,8 +920,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
             print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
             return (False, None)
         finally:
-            response.close()
-            conn.close()
+            close_quietly(response)
+            close_quietly(conn)
 
 
     def fn_callback(self, input_file_path):
@@ -931,8 +954,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                 print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
                 sys.exit()
             finally:
-                response.close()
-                conn.close()            
+                close_quietly(response)
+                close_quietly(conn)
 
             return (False, None)
         else:
@@ -1022,7 +1045,7 @@ class WebDavClient(object):
                 print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
                 sys.exit()
             finally:
-                inputStream.close()
+                close_quietly(inputStream)
                 self.sardine.shutdown()
         except FileNotFoundException, e:
             print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , _COLOR.ENDC
@@ -1087,7 +1110,7 @@ class PostTransform(object):
             print _COLOR.FAIL, err.code, err.msg, ': ERROR: While running PostTransform', _COLOR.ENDC
             return False
         finally:
-            response.close()
+            close_quietly(response)
 
 class POFilesTranslator(object):
     """
@@ -1120,7 +1143,7 @@ class POFilesTranslator(object):
                 print iso_name + "-downloading from " + uri
                 local_file = open(self.po_cfg.get_po_files_folder()+iso_name+".po", "wb")
                 local_file.write(f.read())
-                local_file.close()
+                close_quietly(local_file)
             except HTTPError, e:
                 print _COLOR.FAIL, "HTTP Error: ", e.code , uri, _COLOR.ENDC
             except URLError, e:
@@ -1183,9 +1206,13 @@ class POFilesTranslator(object):
     def close_catalogue_file(self, lang):
         self.format = OutputFormat.createPrettyPrint()
         self.writer = XMLWriter(FileWriter(self.po_cfg.get_i18n_catalogues_folder()+"po_collection_"+lang+".xml"), self.format)
-        self.writer.write(self.document)
-        self.writer.flush()
-        self.writer.close()
+        try:
+            self.writer.write(self.document)
+            self.writer.flush()
+        except Exception,ex:
+            LOG.error("Error while writing catalog file", ex)
+        finally:
+            close_quietly(self.writer)
 
     def po_to_xml_catalogue(self):
         po_files = os.listdir(os.path.join(self.po_cfg.get_po_files_folder()))

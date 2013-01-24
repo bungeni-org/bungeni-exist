@@ -75,8 +75,16 @@ class RabbitMQClient:
                         # Reject file, requeue for investigation or future attempts
                         self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
         finally:
-            self.channel.close()
-            self.conn.close()
+            try:
+                if self.channel is not None:
+                    self.channel.close()
+            except Exception, ex:
+                    LOG.error("Error while closing channel", ex)
+            try:
+                if self.conn is not None:
+                    self.conn.close()
+            except Exception, ex:
+                    LOG.error("Error while closing connection", ex)
 
 class QueueRunner(Thread):
 

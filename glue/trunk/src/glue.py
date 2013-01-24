@@ -889,6 +889,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         file_uri = self.get_params(input_file_path)['uri']
         file_stat_date = self.get_params(input_file_path)['status_date']
         import urllib2, urllib
+        conn = None
+        response = None
         try:
             socket.setdefaulttimeout(60)
             conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),60)
@@ -935,6 +937,8 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
             file_stat_date = self.get_params(input_file_path)['status_date']
             #statinfo = os.stat(input_file_path)
             #headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "application/xml"}
+            conn = None
+            response = None
             try:
                 conn = httplib.HTTPConnection(self.webdav_cfg.get_server(),self.webdav_cfg.get_port(),50)
                 conn.request("GET", "/exist/apps/framework/bungeni/check-update?uri=" + file_uri+"&t=" + file_stat_date)
@@ -1001,7 +1005,15 @@ class WebDavClient(object):
     """
     def __init__(self, username, password, put_folder = None):
         self.put_folder = put_folder
+        print "OPENSESAME: Opening sardine"
         self.sardine = SardineFactory.begin(username, password)
+
+    def shutdown(self):
+        try:
+            print "ABRADABRA : closing sardine"
+            self.sardine.shutdown()
+        except Exception,e:
+            print "Error closing sardine" 
 
     def reset_remote_folder(self, put_folder):
         try:
@@ -1046,7 +1058,8 @@ class WebDavClient(object):
                 sys.exit()
             finally:
                 close_quietly(inputStream)
-                self.sardine.shutdown()
+                self.shutdown()
+                 
         except FileNotFoundException, e:
             print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , _COLOR.ENDC
             return True
@@ -1084,6 +1097,7 @@ class PostTransform(object):
         #socket.setblocking(0) #set to non-blocking mode
         socket.setdefaulttimeout(60) #timeout of 30 seconds
         import urllib2
+        response = None
         try:
             xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+str(uri)
             username = self.webdav_cfg.get_username()
@@ -1133,7 +1147,11 @@ class POFilesTranslator(object):
         for translation to xml i18n catalogue
         """
         socket.setdefaulttimeout(20)
-        from urllib2 import Request, urlopen, URLError, HTTPError
+        from urllib2 import (
+            urlopen, 
+            URLError, 
+            HTTPError
+            )
         print _COLOR.OKGREEN + "Downloading .po files..." + _COLOR.ENDC
         #return list of po link in the messages configuration
         msgs_list = self.po_cfg.get_po_listing()
@@ -1143,6 +1161,7 @@ class POFilesTranslator(object):
                 print iso_name + "-downloading from " + uri
                 local_file = open(self.po_cfg.get_po_files_folder()+iso_name+".po", "wb")
                 local_file.write(f.read())
+                close_quietly(f)
                 close_quietly(local_file)
             except HTTPError, e:
                 print _COLOR.FAIL, "HTTP Error: ", e.code , uri, _COLOR.ENDC
@@ -1151,7 +1170,6 @@ class POFilesTranslator(object):
         print _COLOR.OKGREEN + "Downloads finished... Now translating" + _COLOR.ENDC
 
     def pescape_key(self, orig):
-        import string
         result = ""
         if orig[0] == '#' or orig[0] == '!':
             result = result + "\\"
@@ -1339,13 +1357,16 @@ def webdav_upload(cfg, wd_cfg):
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
+    webdaver.shutdown()
     # upload xmls at this juncture
     rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
     rsu.upload_files()
     print _COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + _COLOR.ENDC
     """ now uploading found attachments """
     # first reset attachments folder
+    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
+    webdaver.shutdown()
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pafw.walk(cfg.get_attachments_output_folder())
@@ -1578,6 +1599,7 @@ def main_queue(config_file, afile):
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
+    webdaver.shutdown()
     rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
     print "[checkpoint] uploading XML file"
     if in_queue == True:
@@ -1587,7 +1609,10 @@ def main_queue(config_file, afile):
         return in_queue
 
     print _COLOR.OKGREEN + "Uploading ATTACHMENT file(s) to eXist via WebDav..." + _COLOR.ENDC
+    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
+    webdaver.shutdown()
+    
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     info_obj = pafw.process_atts(cfg.get_attachments_output_folder())

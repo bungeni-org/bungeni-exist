@@ -47,6 +47,14 @@ from com.googlecode.sardine.impl import SardineException
 from org.apache.http.conn import HttpHostConnectException
 from com.googlecode.sardine import SardineFactory
 
+from java.io import InputStream
+from java.io import InputStreamReader
+from java.net import MalformedURLException
+from java.net import URL
+from java.net import URLConnection
+from org.apache.commons.codec.binary import Base64
+from java.lang import String
+
 from net.sf.saxon.trans import *
 from org.xml.sax import *
 from org.bungeni.translators.translator import OATranslator
@@ -1087,44 +1095,47 @@ class PostTransform(object):
     """
     
     Updates signatories, workflowEvents and groupsitting items in the eXist repository
-    
-    http://www.voidspace.org.uk/python/articles/authentication.shtml
     """
     def __init__(self, input_params = None):
         self.webdav_cfg = input_params["webdav_config"]
 
     def update(self, uri = None):
-        #socket.setblocking(0) #set to non-blocking mode
-        socket.setdefaulttimeout(60) #timeout of 30 seconds
-        import urllib2
-        response = None
         try:
-            xqyurl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+str(uri)
-            username = self.webdav_cfg.get_username()
+            # http://www.avajava.com/tutorials/lessons/how-do-i-connect-to-a-url-using-basic-authentication.html
+            scriptUrl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+str(uri)
+            name = self.webdav_cfg.get_username()
             password = self.webdav_cfg.get_password()
 
-            #conjure a password manager
-            passmngr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            passmngr.add_password(None, xqyurl, username, password)
-            # create the AuthHandler
-            authhandler = urllib2.HTTPBasicAuthHandler(passmngr)
-            opener = urllib2.build_opener(authhandler)
-            urllib2.install_opener(opener)
+            authString = String(name + ":" + password)
+            authEncBytes = Base64.encodeBase64(authString.getBytes())
+            authStringEnc = String(authEncBytes)
+            LOG.debug("Base64 encoded auth string: " + authStringEnc.toString())
 
-            response = urllib2.urlopen(xqyurl)
-            print _COLOR.OKGREEN + response.read() + _COLOR.ENDC
+            url = URL(scriptUrl)
+            urlConnection = url.openConnection()
+            urlConnection.setRequestProperty("Authorization", "Basic " + str(authStringEnc))
+            iS = urlConnection.getInputStream()
+            isr = InputStreamReader(iS)
+
+            length = urlConnection.getContentLength()
+            bytes = jarray.zeros(length,'c')
+            #Read in the bytes
+            offset = 0
+            numRead = 0
+            while offset<length:
+                if numRead>= 0:
+                    numRead=isr.read(bytes, offset, length-offset)
+                    offset = offset + numRead
+            print _COLOR.OKGREEN, String(bytes), _COLOR.ENDC
             return True
-        except urllib2.URLError, e:
-            print _COLOR.FAIL, e, '\nERROR: eXist timedout URLError', _COLOR.ENDC
+        except MalformedURLException, e:
+            print _COLOR.FAIL, e, '\nERROR: MalformedURLException', _COLOR.ENDC
             return False
-        except socket.timeout:
-            print _COLOR.FAIL, '\nERROR: eXist timedout TIMEOUTError', _COLOR.ENDC
-            return False
-        except urllib2.HTTPError, err:
-            print _COLOR.FAIL, err.code, err.msg, ': ERROR: While running PostTransform', _COLOR.ENDC
+        except IOException, e:
+            print _COLOR.FAIL, e, '\nERROR: IOException', _COLOR.ENDC
             return False
         finally:
-            close_quietly(response)
+            isr.close()
 
 class POFilesTranslator(object):
     """

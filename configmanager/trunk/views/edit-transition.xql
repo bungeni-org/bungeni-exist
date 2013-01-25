@@ -17,6 +17,16 @@ let $NODENAME := xs:string(request:get-parameter("node","nothing"))
 let $ATTR := xs:string(request:get-parameter("attr","nothing"))
 let $SHOWING := xs:string(request:get-parameter("tab","fields"))
 return
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:exist="http://exist.sourceforge.net/NS/exist"
+        xmlns:ev="http://www.w3.org/2001/xml-events" 
+        xmlns:zope="http://namespaces.zope.org/zope"
+        xmlns:db="http://namespaces.objectrealms.net/rdb">
+   <head>
+      <title>Edit Database</title>
+    </head>
+    <body class="nihilo InlineBordersAlert">
     	<div id="xforms" xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:exist="http://exist.sourceforge.net/NS/exist"
@@ -196,3 +206,5 @@ return
                 </div>
             </div>                    
         </div>
+    </body>
+</html>        

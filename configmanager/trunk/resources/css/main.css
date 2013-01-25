@@ -52,6 +52,17 @@ br {
         border-left:1px solid #e4e4e4;
     }   
 
+.transition-inline.xfOutput {
+    display:inline;
+} 
+.transition-inline.xfOutput span {
+    color:black;
+}
+.transition-inline.xfOutput label{
+    display:none;
+    
+} 
+
 /*listing table (list-items.xql) styles*/
 .listingTable{
     border:none;

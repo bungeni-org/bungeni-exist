@@ -39,23 +39,9 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li>
                 <h4><a href="#">Main Nav &#187;</a></h4>
             </li>
-            <li class="hasmore">
-                <a href="#"><span>Types</span></a>
-                <ul class="dropdown">
-                    {
-                        for $docu at $pos in doc($appconfig:TYPES-XML)/types/*
-                        let $count := count(doc($appconfig:TYPES-XML)/types/*)
-                        return    
-                            if ($pos ne $count) then (
-                                <li><a href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
-                            )
-                            else ( 
-                                <li class="last"><a href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></li>
-                            )
-                    }
-                </ul>
-            </li>
-            <li><a href="#"><span>Roles</span></a></li>
+            <li><a href="types.html"><span>Types</span></a></li>
+            <li><a href="roles.html"><span>Roles</span></a></li>
+            <li><a href="vocabularies.html"><span>Vocabularies</span></a></li>
             <li class="hasmore"><a href="#config"><span>Configuration</span></a>
                 <ul class="dropdown">
                     <li><a id="show-popup" href="upload.html?t={$timestamp}">Upload</a></li>
@@ -113,6 +99,32 @@ function app:get-action-state($node as node(), $model as map(*), $active as xs:s
     <div id="secondary-menu">
         default
     </div>
+};
+
+declare function local:get-roles() {
+    for $role at $pos in doc($appconfig:UI-XML)/ui/roles/role
+    let $count := count(doc($appconfig:UI-XML)/ui/roles/role)
+    return  
+        <tr>
+            <td><a class="editlink" href="role.html?name={$role}&amp;pos={$pos}">{$role/text()}</a></td>
+            <td><a class="removeRole" href="role.html?name={$role}&amp;pos={$pos}">remove</a></td>
+        </tr> 
+};
+
+declare 
+function app:roles($node as node(), $model as map(*)) { 
+        <div>
+            <h3>All Roles</h3>
+            <table class="listingTable" style="width:auto;">
+                <tr>                      			 
+                    <th>role</th>
+                    <th>enabled</th>
+                </tr>
+                {local:get-roles()}
+            </table>     
+            <div style="margin-top:15px;"/> 
+            <a class="button-link" href="role-add.html?type=none&amp;doc=none&amp;pos=0">add role</a>  
+        </div>   
 };
 
 (:

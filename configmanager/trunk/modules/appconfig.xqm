@@ -30,9 +30,13 @@ declare variable $appconfig:WF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || dat
 
 declare variable $appconfig:WS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@ws);
 
+declare variable $appconfig:VOCABS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@vocab);
+
 declare variable $appconfig:NOTIF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@notif);
 
 declare variable $appconfig:TYPES-XML := $appconfig:CONFIGS-FOLDER || "/" || "types.xml";
+
+declare variable $appconfig:UI-XML := $appconfig:FORM-FOLDER || "/" || "ui.xml";
 
 declare variable $appconfig:XSL := $appconfig:ROOT || "/" || "xsl";
 

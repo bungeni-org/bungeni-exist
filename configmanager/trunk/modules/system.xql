@@ -158,6 +158,20 @@ function sysmanager:store($node as node(), $model as map(*)) {
     (: check if the live working folder exists, if not, create it :)
     let $created_bu_wc := if (xmldb:collection-available($appconfig:CONFIGS-FOLDER)) then () else xmldb:create-collection($appconfig:CONFIGS-ROOT-LIVE,$appconfig:CONFIGS-FOLDER-NAME)
     (: import the files from the file system into the live folder :)
+    let $storing-vdex := xmldb:store-files-from-pattern(
+        $appconfig:CONFIGS-FOLDER, 
+        $FS-BU-CUSTOM, 
+        "**/*.vdex",
+        'application/xml',
+        true()
+        )         
+    let $storing-.zcml := xmldb:store-files-from-pattern(
+        $appconfig:CONFIGS-FOLDER, 
+        $FS-BU-CUSTOM, 
+        "**/*.zcml",
+        'application/xml',
+        true()
+        )      
     let $storing := xmldb:store-files-from-pattern(
         $appconfig:CONFIGS-FOLDER, 
         $FS-BU-CUSTOM, 

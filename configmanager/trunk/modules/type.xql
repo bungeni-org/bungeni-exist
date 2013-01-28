@@ -23,6 +23,17 @@ declare variable $type:CXT := request:get-context-path();
 declare variable $type:REST-CXT-APP :=  $type:CXT || "/rest" || $config:app-root;
 
 declare 
+function local:get-types() {
+    for $docu at $pos in doc($appconfig:TYPES-XML)/types/*
+    let $count := count(doc($appconfig:TYPES-XML)/types/*)
+    return    
+        <tr>
+            <td><a class="editlink" href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></td>
+            <td><a class="deleteLink" href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@enabled)}</a></td>
+        </tr>    
+};
+
+declare 
 function type:edit($node as node(), $model as map(*)) {
 
     let $contextPath := request:get-context-path()
@@ -169,5 +180,27 @@ function type:edit($node as node(), $model as map(*)) {
                 </xf:group>
             </xf:group>
             <!-- ######################### Views end ################################## -->  
+        </div>
+};
+
+declare 
+function type:types($node as node(), $model as map(*)) {
+
+    let $contextPath := request:get-context-path()
+    let $type := request:get-parameter("type", "none")
+    let $name := request:get-parameter("doc", "none")
+    let $pos := request:get-parameter("pos", "none")
+    return
+        <div>
+            <h3>All Types</h3>
+            <table class="listingTable" style="width:auto;">
+                <tr>                      			 
+                    <th>type</th>
+                    <th>enabled</th>
+                </tr>
+                {local:get-types()}
+            </table>     
+            <div style="margin-top:15px;"/> 
+            <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add type</a>  
         </div>
 };

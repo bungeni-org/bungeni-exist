@@ -38,10 +38,33 @@ declare function local:fields($doctype) as node() * {
                 <td>{data($field/@value_type)}</td>
                 <td>{data($field/@render_type)}</td>  
                 <td>
-                    <b>view:</b> {$field/view/roles/role[position()!=last()]} <br/>
-                    <b>edit:</b> {$field/edit/roles/role[position()!=last()]} <br/>
-                    <b>add:</b> {$field/add/roles/role[position()!=last()]} <br/>
-                    <b>listing:</b> {$field/listing/roles/role[position()!=last()]}
+                    {
+                     (: Showing only with @show = true :)
+                     if($field/view[@show = 'true']) then (
+                        <span>
+                            <b>view:</b> {$field/view/roles/role[position()!=last()]} <br/>
+                        </span>
+                     ) else (),
+                     
+                     if (data($field/edit/@show) = 'true') then (
+                        <span>
+                            <b>edit:</b> {$field/edit/roles/role[position()!=last()]} <br/>
+                        </span>                     
+                     ) else (),
+                     
+                     if (data($field/add/@show) = 'true') then (
+                        <span>
+                            <b>add:</b> {$field/add/roles/role[position()!=last()]} <br/>
+                        </span>                     
+                     ) else (),
+                     
+                     if (data($field/listing/@show) = 'true') then (
+                        <span>
+                            <b>listing:</b> {$field/listing/roles/role[position()!=last()]} <br/>
+                        </span>                     
+                     )                     
+                     else ()
+                    }
                 </td>    
                 <td class="nodeMove">
                     <span>

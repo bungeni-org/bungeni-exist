@@ -200,6 +200,30 @@ h1 {
     -webkit-border-radius:0;
 }
 
+.hideRepeatHeader .xfRepeatHeader {
+    display:none;
+}
+
+.xposeGreen {
+    color:#000;
+    font-weight:bold;
+    font-style: italic;
+}
+
+.noOffSet {
+    margin-left:0 !important;
+}
+.xshortestWidth select {
+    width:50px;
+}
+
+.xLongwidth {
+    margin-left:0 !important;
+}
+.xLongwidth .xfValue {
+    width:450px;
+}
+
 .InlineRoundBordersAlert .xfAlert {
     display: block;
     background: #FFCFCF;
@@ -467,4 +491,69 @@ ul.secondary {
     box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
     background: #2682a9;
     border: solid 1px #203E5F;
+}
+
+/* LISTING */
+div.ulisting {
+  width: 90%;
+  margin: 0 20px;
+}
+
+div.ulisting ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.ulisting li {
+  font: 200 20px/1.5 sans-serif;
+  border-bottom: 1px solid #ccc;
+}
+
+div.ulisting li:last-child {
+  border: none;
+}
+div.ulisting li a.delete {
+  font-size:15px;
+  color:#888;
+}
+
+div.ulisting li a:first-child {
+  text-decoration: none;
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+  display: inline;
+  width: 90%;
+}
+
+div.ulisting li:hover {
+  background: #f6f6f6;
+}
+div.ulisting li a:first-child:hover {
+  font-size: 22px;
+}
+
+.clearfix {
+	display: inline-block;
+}
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    margin-bottom:10px;
+    visibility: hidden;
+}
+
+div.ulisting a.greyed {
+    color:#aaa;
 }

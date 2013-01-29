@@ -37,7 +37,7 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
     <div id="menu">
         <ul class="tabs">
             <li>
-                <h4><a href="#">Main Nav &#187;</a></h4>
+                <h4>&#160; Main Navigation &#187;</h4>
             </li>
             <li><a href="types.html"><span>Types</span></a></li>
             <li><a href="roles.html"><span>Roles</span></a></li>

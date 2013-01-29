@@ -26,11 +26,11 @@ declare
 function local:get-types() {
     for $docu at $pos in doc($appconfig:TYPES-XML)/types/*
     let $count := count(doc($appconfig:TYPES-XML)/types/*)
+    order by $docu/@name ascending
     return    
-        <tr>
-            <td><a class="editlink" href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a></td>
-            <td><a class="deleteLink" href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@enabled)}</a></td>
-        </tr>    
+        <li>
+            <a class="{if(data($docu/@enabled) = 'true') then 'deep' else 'greyed' }" title="enabled? {data($docu/@enabled)}" href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a>
+        </li>    
 };
 
 declare 
@@ -147,12 +147,6 @@ function type:edit($node as node(), $model as map(*)) {
             <p>Edit the type information || Click on the left to update parts</p>
             <xf:group appearance="compact">
                 <xf:group>
-                    <xf:input bind="typename" id="type-name">
-                        <xf:label>name</xf:label>
-                        <xf:hint>Unique name</xf:hint>
-                        <xf:help>Neither are spaces allowed in between</xf:help>
-                        <xf:alert>invalid form name / duplicate / empty space(s)</xf:alert>
-                    </xf:input>
                     <xf:input bind="typenable" id="type-enabled">
                         <xf:label>enabled</xf:label>
                         <xf:hint>check to enable this</xf:hint>
@@ -192,15 +186,12 @@ function type:types($node as node(), $model as map(*)) {
     let $pos := request:get-parameter("pos", "none")
     return
         <div>
-            <h3>All Types</h3>
-            <table class="listingTable" style="width:auto;">
-                <tr>                      			 
-                    <th>type</th>
-                    <th>enabled</th>
-                </tr>
-                {local:get-types()}
-            </table>     
-            <div style="margin-top:15px;"/> 
-            <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add type</a>  
+            <div class="ulisting">
+                <h2>All Types</h2>            
+                <ul class="clearfix">                      			 
+                    {local:get-types()}
+                </ul>
+                <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add type</a>                 
+            </div>      
         </div>
 };

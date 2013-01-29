@@ -50,7 +50,7 @@
     </xsl:template>
     <!-- 
         !+NOTE (ao, 13th Dec 2012)
-        Adding an empty @permissions_from_state attribute for XForms
+        Adding an empty @permissions_from_state and @order attributes for XForms
         XForms cannot provide a control for a node/attribute that do not provide 
         the node/attribute in the first place. This has to be replicated on entire document.
     -->
@@ -58,6 +58,18 @@
         <xsl:copy>
             <xsl:if test="not(@permissions_from_state)">
                 <xsl:attribute name="permissions_from_state"/>
+            </xsl:if>
+            <xsl:apply-templates select="@*" mode="preserve"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="transition">
+        <xsl:copy>
+            <xsl:if test="not(@order)">
+                <xsl:attribute name="order">0</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not(@require_confirmation)">
+                <xsl:attribute name="require_confirmation">false</xsl:attribute>
             </xsl:if>
             <xsl:apply-templates select="@*" mode="preserve"/>
             <xsl:apply-templates select="@*|node()"/>

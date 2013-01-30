@@ -22,15 +22,77 @@ import module namespace config = "http://exist-db.org/xquery/apps/config" at "co
 declare variable $type:CXT := request:get-context-path();
 declare variable $type:REST-CXT-APP :=  $type:CXT || "/rest" || $config:app-root;
 
-declare 
-function local:get-types() {
-    for $docu at $pos in doc($appconfig:TYPES-XML)/types/*
-    let $count := count(doc($appconfig:TYPES-XML)/types/*)
-    order by $docu/@name ascending
-    return    
-        <li>
-            <a class="{if(data($docu/@enabled) = 'true') then 'deep' else 'greyed' }" title="enabled? {data($docu/@enabled)}" href="type.html?type={node-name($docu)}&amp;doc={data($docu/@name)}&amp;pos={$pos}">{data($docu/@name)}</a>
-        </li>    
+(:~
+:   "Flattens" the types.xml structure to get all the 3 archtypes somehow.
+: @param e
+: @param pID
+: @return 
+:   3 nodes representing the 3 archtypes of bungeni
+:)
+declare function local:getChildren($e as node(), $pID as xs:string?) as element()*
+{
+  for $i at $p in $e/(child::*)
+  let $ID := if ($pID) then concat($pID,".",$p) else "1"
+  return $i | local:getChildren($i,$ID)
+};
+
+(:
+:   Groups the 'flattened' types.xml ready for presentation
+: @param flattend
+: @return 
+:   <types>
+        <archetype key="doc"/>
+        <archetype key="member"/>
+        <archetype key="group"/>
+:   </types>
+:)
+declare function local:ThreeInOne($flattened as node()) {
+    <types> 
+    {
+        for $doc in $flattened/child::*
+        group by $key := node-name($doc)
+        return 
+            <archetype key="{$key}">
+             {$doc}
+            </archetype>
+    }
+    </types>
+};
+
+(:
+    Renders the Types
+:)
+declare function local:get-types() {
+    let $d := doc($appconfig:TYPES-XML)/types
+    let $flattened := <grouped>{local:getChildren($d,())}</grouped>
+    for $archetype at $pos in local:ThreeInOne($flattened)/child::*
+    let $count := count(local:ThreeInOne($flattened)/child::*)
+    order by $archetype/@key ascending
+    return  
+        local:wrap-type($archetype)
+};
+
+(:
+    Encapsulates each of the 3 archtypes into their own column for rendering
+  @param archetype
+  @return
+    HTML <div/>
+:)
+declare function local:wrap-type($archetype as node()) {
+    <div class="ulisting">
+        <h2>{data($archetype/@key)}</h2>            
+        <ul class="clearfix">                      			 
+            {
+            for $type at $pos in $archetype/child::*
+            let $count := count($archetype/child::*)
+            order by $type/@name ascending
+            return  <li>
+                        <a class="{if(data($type/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($type/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($type)}&amp;doc={data($type/@name)}&amp;pos={$pos}">{data($type/@name)}</a>
+                    </li>
+            }
+        </ul>  
+        <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add {data($archetype/@key)} type</a>
+    </div>  
 };
 
 declare 
@@ -185,13 +247,12 @@ function type:types($node as node(), $model as map(*)) {
     let $name := request:get-parameter("doc", "none")
     let $pos := request:get-parameter("pos", "none")
     return
-        <div>
-            <div class="ulisting">
-                <h2>All Types</h2>            
-                <ul class="clearfix">                      			 
-                    {local:get-types()}
-                </ul>
-                <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add type</a>                 
-            </div>      
+        <div class="allTypes">
+            {local:get-types()}
+            <br/>
+            <div style="clear:both;"/>
+            <div style="margin-top:20px;float:left;">
+                <h2>supported types - todo</h2>   
+            </div>
         </div>
 };

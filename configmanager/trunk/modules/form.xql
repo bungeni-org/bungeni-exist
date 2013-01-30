@@ -392,7 +392,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                     <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" />
+                        <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()" />
@@ -491,10 +491,10 @@ function form:field-edit($node as node(), $model as map(*)) {
                         <h1><xf:output ref="@name"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
-                                <xf:input id="field-name" ref="@name">
+                                <xf:input id="field-name" ref="@name" incremental="true">
                                     <xf:label>field title</xf:label>
                                     <xf:hint>Must be an existing title</xf:hint>
-                                    <xf:alert>invalid field name</xf:alert>
+                                    <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
                                     <xf:help>help with name of field</xf:help>
                                 </xf:input> 
                                 
@@ -901,7 +901,7 @@ function form:field-add($node as node(), $model as map(*)) {
                     <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset="./field[last()]">
-                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" />
+                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
@@ -987,11 +987,11 @@ function form:field-add($node as node(), $model as map(*)) {
                         <h1><xf:output bind="b-fieldname"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
-                                <xf:input id="field-name" ref="@name">
+                                <xf:input id="field-name" ref="@name" incremental="true">
                                     <xf:label>field title</xf:label>
                                     <xf:hint>Enter be the field title</xf:hint>
-                                    <xf:alert>invalid field name</xf:alert>
-                                    <xf:help>help with name of field</xf:help>
+                                    <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
+                                    <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
                                 </xf:input> 
                                 
                                 <xf:input id="label-name" ref="@label">

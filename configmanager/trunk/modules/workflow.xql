@@ -41,14 +41,16 @@ declare function local:features($doctype) as node() * {
 (: creates the output for all document facets :)
 declare function local:facets($doctype) as node() * {
     let $facets := local:get-workflow($doctype)/facet
+    let $type := xs:string(request:get-parameter("type",""))
+    let $docpos := xs:integer(request:get-parameter("pos",""))
     let $count := count($facets)
     for $facet at $pos in $facets
         return
-            <tr>
-                <td>{data($facet/@name)}</td>
-                <td><a href="javascript:dojo.publish('/facet/edit',['{$doctype}','{data($facet/@name)}']);">edit</a></td>
-                <td><a href="javascript:dojo.publish('/facet/delete',['{$doctype}','{data($facet/@name)}']);">delete</a></td>
-            </tr>
+            <li>
+                <a class="editlink" href="facet.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;attr={$pos}&amp;node={data($facet/@name)}">{data($facet/@name)}</a>
+                &#160;<a class="edit" href="#">[edit]</a>
+                &#160;<a class="delete" href="#">[delete]</a>
+            </li>
 };
 
 (: creates the output for all document states :)
@@ -63,22 +65,6 @@ declare function local:states($doctype) as node() * {
                 <a class="editlink" href="state.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;attr={$pos}&amp;node={data($state/@id)}">{data($state/@title)}</a>
                 &#160;<a class="delete" href="#">[delete]</a>
             </li>
-};
-
-(: creates the output for all document transitions :)
-declare function local:transitions($doctype) as node() * {
-    let $transitions := local:get-workflow($doctype)/transition
-    let $count := count($transitions)
-    for $transition at $pos in $transitions
-        return
-            <tr>
-                <td>{data($transition/@title)}</td>
-                <td>{data($transition/@condition)}</td>
-                <td>{data($transition/@trigger)}</td>                
-                <td>{data($transition/@order)}</td>
-                <td><a href="javascript:dojo.publish('/transition/edit',['{$doctype}','{data($transition/@id)}']);">edit</a></td>
-                <td><a href="javascript:dojo.publish('/transition/delete',['{$doctype}','{data($transition/@id)}']);">delete</a></td>
-            </tr>
 };
 
 declare function local:get-form($docname as xs:string) as node() * {
@@ -218,7 +204,6 @@ function workflow:edit($node as node(), $model as map(*)) {
                     <li id="tabstates" ><a href="#states">States</a></li>
                     <li id="tabfeatures" ><a href="#features">Features</a></li>
                     <li id="tabfacets" ><a href="#facets">Facets</a></li>
-                    <li id="tabtransitions" ><a href="#transitions">Transitions</a></li>
                 </ul>
             </div>
             
@@ -253,7 +238,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <ul class="clearfix">
                             {local:states($docname)}
                         </ul>
-                        <a class="button-link" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">add state</a>                 
+                        <a class="button-link" href="state-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}">add state</a>                 
                     </div> 
                  </div>
                 <div id="features" class="tab_content">
@@ -267,40 +252,15 @@ function workflow:edit($node as node(), $model as map(*)) {
                     </div>
                 </div>  
                 <div id="facets" class="tab_content">
-                    <table class="listingTable" style="width:auto;">
-                        <thead>
-                            <tr>                      			 
-                                <th>facet name</th>
-                                <th colspan="2">...</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="ulisting">
+                        <h2>Facets</h2>
+                        <ul class="clearfix">
                             {local:facets($docname)}
-                        </tbody>
-                    </table> 
-                    <div class="linkButtonWrap">
-                        <a class="linkButton" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">+ add facet</a>
+                        </ul>
+                        
+                        <a class="button-link" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">add facet</a>
                     </div>
-                </div>      
-                <div id="transitions" class="tab_content">
-                    <table class="listingTable" style="width:auto;">
-                        <thead>
-                            <tr>                      			 
-                                <th>title</th>
-                                <th>condition</th>
-                                <th>trigger</th>
-                                <th>order</th>
-                                <th colspan="2">...</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {local:transitions($docname)}
-                        </tbody>
-                    </table> 
-                    <div class="linkButtonWrap">
-                        <a class="linkButton" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">+ add facet</a>
-                    </div>
-                </div>                 
+                </div>               
             </div>                 
         </div>
 };
@@ -319,8 +279,8 @@ function workflow:state($node as node(), $model as map(*)) {
                     <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>
 
                     <xf:bind nodeset="./state">
-                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
-                        <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag))" />
+                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
+                        <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag)) and string-length(.) &gt; 1" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                     </xf:bind>
 
@@ -375,7 +335,7 @@ function workflow:state($node as node(), $model as map(*)) {
                     <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
                 </a>
                 <br/>              
-                <h1>state | {$NODENAME}</h1>
+                <h1>state | <xf:output value="./state[{$ATTR}]/@id" class="transition-inline"/></h1>
                 <br/>                
                 <div style="width: 100%;">
                     <br/>
@@ -383,15 +343,12 @@ function workflow:state($node as node(), $model as map(*)) {
                         <div style="width:90%;">
                             <div style="width:100%;">
                                 <xf:group ref="./state[{$ATTR}]" appearance="bf:horizontalTable"> 
-                                    <xf:group appearance="bf:verticalTable">
-                                        <xf:output ref="@id" incremental="true">
-                                            <xf:label>state:</xf:label>
-                                        </xf:output>                                
-                                        <xf:input id="state-id" ref="@id">
+                                    <xf:group appearance="bf:verticalTable">                               
+                                        <xf:input id="state-id" ref="@id" incremental="true">
                                             <xf:label>ID</xf:label>
                                             <xf:hint>edit id of the workflow</xf:hint>
-                                            <xf:help>... and no spaces in between words</xf:help>
-                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                            <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
+                                            <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
                                         </xf:input> 
                                         <xf:input id="state-title" ref="@title">
                                             <xf:label>Title</xf:label>
@@ -418,7 +375,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                         <xf:select1 ref="." appearance="minimal" incremental="true">
                                             <xf:label>tags</xf:label>
                                             <xf:hint>a Hint for this control</xf:hint>
-                                            <xf:alert>invalid: non-unique tags</xf:alert>
+                                            <xf:alert>invalid: emtpy or non-unique tags</xf:alert>
                                             <xf:hint>tags should be unique</xf:hint>   
                                             <xf:itemset nodeset="instance()/tags/tag">
                                                 <xf:label ref="."></xf:label>                                       
@@ -478,6 +435,188 @@ function workflow:state($node as node(), $model as map(*)) {
             </div>                    
         </div>        
 };
+
+declare
+function workflow:state-add($node as node(), $model as map(*)) {
+    let $TYPE := xs:string(request:get-parameter("type",""))
+    let $DOCNAME := xs:string(request:get-parameter("doc",""))
+    let $DOCPOS := xs:integer(request:get-parameter("pos",0))
+    return
+    	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+            <div style="display:none">
+                 <xf:model id="master">
+                    <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>
+
+                    <xf:instance id="i-state" xmlns="">
+                        <data>
+                            <state permissions_from_state="" id="" title="" version="false">
+                                <tags originAttr="tags">
+                                    <tag/>
+                                </tags>
+                                <facet ref=""/>
+                            </state>                        
+                        </data>
+                    </xf:instance>
+
+                    <xf:bind nodeset="instance()/state[last()]">
+                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
+                        <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[last()]/tags/tag) eq count(distinct-values(instance()/state[last()]/tags/tag)) and string-length(.) &gt; 1" />
+                        <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
+                    </xf:bind>
+
+                    <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
+
+                    <xf:instance id="tmp">
+                        <data xmlns="">
+                            <wantsToClose>false</wantsToClose>
+                        </data>
+                    </xf:instance>
+
+                    <xf:submission id="s-add"
+                                   method="put"
+                                   replace="none"
+                                   ref="instance()">
+                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+    
+                        <xf:header>
+                            <xf:name>username</xf:name>
+                            <xf:value>{$appconfig:admin-username}</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>password</xf:name>
+                            <xf:value>{$appconfig:admin-password}</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>realm</xf:name>
+                            <xf:value>exist</xf:value>
+                        </xf:header>
+    
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Workflow state added successfully</xf:message>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                            <xf:message>The workflow information have not been filled in correctly</xf:message>
+                        </xf:action>
+                    </xf:submission>
+
+                    <xf:action ev:event="xforms-ready" >  
+                        <xf:insert nodeset="instance()/state" at="last()" position="after" origin="instance('i-state')/state" />   
+                    </xf:action>
+            </xf:model>
+            
+            </div>    	
+            <div style="width: 100%; height: 100%;">
+                <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}">
+                    <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
+                </a>
+                <br/>              
+                <h1>state | <xf:output value="instance()/state[last()]/@id" class="transition-inline"/></h1>
+                <br/>                
+                <div style="width: 100%;">
+                    <br/>
+                    <div style="width: 100%;">
+                        <div style="width:90%;">
+                            <div style="width:100%;">
+                                <xf:group ref="instance()/state[last()]" appearance="bf:horizontalTable"> 
+                                    <xf:group appearance="bf:verticalTable">                               
+                                        <xf:input id="state-id" ref="@id" incremental="true">
+                                            <xf:label>state ID</xf:label>
+                                            <xf:hint>enter id of the new state</xf:hint>
+                                            <xf:help>... and no spaces in between words or non-alphabets other than _</xf:help>
+                                            <xf:alert>must be 3+ characters A-Z and underscore character allowed</xf:alert>
+                                        </xf:input> 
+                                        <xf:input id="state-title" ref="@title">
+                                            <xf:label>Title</xf:label>
+                                            <xf:hint>enter title of the state</xf:hint>
+                                            <xf:help>... and no spaces in between words</xf:help>
+                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                        </xf:input>                                     
+                                        <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
+                                            <xf:label>Permission from state</xf:label>
+                                           <xf:hint>where to derive permissions for state</xf:hint>
+                                           <xf:help>select one</xf:help>
+                                            <xf:itemset nodeset="instance()/state[xs:string(data(./@id)) ne xs:string(data(instance()/state[last()]/@id))]/@id">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>   
+                                        <xf:input id="state-version" ref="@version">
+                                            <xf:label>Version</xf:label>
+                                            <xf:hint>support versioning</xf:hint>
+                                        </xf:input>   
+                                    </xf:group>
+                                    <xf:group appearance="bf:verticalTable">
+                                    <xf:repeat id="r-statetags" nodeset="./tags/tag" appearance="compact">
+                                        <xf:select1 ref="." appearance="minimal" incremental="true">
+                                            <xf:label>tags</xf:label>
+                                            <xf:hint>a Hint for this control</xf:hint>
+                                            <xf:alert>invalid: empty or non-unique tags</xf:alert>
+                                            <xf:hint>tags should be unique</xf:hint>   
+                                            <xf:itemset nodeset="instance()/tags/tag">
+                                                <xf:label ref="."></xf:label>                                       
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        &#160;
+                                        <xf:trigger>
+                                            <xf:label>delete</xf:label>
+                                            <xf:action>
+                                                <xf:delete at="index('r-statetags')[position()]"></xf:delete>                                 
+                                            </xf:action>
+                                        </xf:trigger>                                  
+                                    </xf:repeat>                                       
+                                        <xf:trigger>
+                                            <xf:label>add tag</xf:label>
+                                            <xf:action>
+                                                <xf:insert nodeset="./tags/tag"></xf:insert>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </xf:group>
+                                    
+                                </xf:group>
+                                
+                                <xf:trigger>
+                                    <xf:label>Save</xf:label>
+                                    <xf:action>
+                                        <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                        <xf:send submission="s-add"/>
+                                    </xf:action>                                
+                                </xf:trigger>   
+                                <hr/>
+                                <br/>
+                                <h1>Manage Transitions</h1>
+                                <div style="width:100%;height:200px;">
+                                    <div style="float:left;width:60%;">
+                                        <table class="listingTable" style="width:100%;">
+                                            <tr>                      			 
+                                                <th>transition name</th>
+                                                <th>source</th>
+                                                <th>destination</th>
+                                            </tr>
+                                            {local:transition-to-from($DOCNAME, "NULL")}
+                                        </table> 
+                                        <div id="popup" style="display:none;">
+                                            <div id="popupcontent" class="popupcontent"></div>
+                                        </div>                                           
+                                        <div style="margin-top:15px;"/>                                           
+                                        <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr=ONE&amp;from=TWO">add transition</a>                                 
+                                    </div>                                   
+                                </div>
+                                
+                            </div>                       
+                        </div>
+                    </div>
+                </div>              
+            </div>                    
+        </div>        
+};
+
 
 declare
 function workflow:transition-add($node as node(), $model as map(*)) {

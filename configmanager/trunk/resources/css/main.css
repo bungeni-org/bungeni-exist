@@ -494,6 +494,15 @@ ul.secondary {
 }
 
 /* LISTING */
+div.allTypes {
+    width:90%;
+}
+div.allTypes > div {
+    width:29%;
+    float:left;
+    display:inline;
+}
+
 div.ulisting {
   width: 90%;
   margin: 0 20px;
@@ -513,6 +522,7 @@ div.ulisting li {
 div.ulisting li:last-child {
   border: none;
 }
+div.ulisting li a.edit,
 div.ulisting li a.delete {
   font-size:15px;
   color:#888;

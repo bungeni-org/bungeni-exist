@@ -31,13 +31,9 @@ declare function local:fields($doctype) as node() * {
     let $count := count($form/descriptor/field)
     for $field at $pos in $form/descriptor/field
         return
-            <tr>
-                <td>{data($field/@name)}</td>
-                <td>{data($field/@label)}</td>
-                <td>{data($field/@required)}</td>
-                <td>{data($field/@value_type)}</td>
-                <td>{data($field/@render_type)}</td>  
-                <td>
+            <li>
+                <span><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={$pos}">{data($field/@label)}</a></span>
+                 <div style="padding-left:20px;">
                     {
                      (: Showing only with @show = true :)
                      if($field/view[@show = 'true']) then (
@@ -65,16 +61,15 @@ declare function local:fields($doctype) as node() * {
                      )                     
                      else ()
                     }
-                </td>    
-                <td class="nodeMove">
+                </div>    
+                <span class="nodeMove">
                     <span>
-                        <a class="up" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/up"><img alt="up" src="resources/images/up.png"/></a>
-                        &#160;<a class="down" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/down"><img alt="down" src="resources/images/down.png"/></a>
+                        <a class="up edit" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/up"><img alt="up" src="resources/images/up.png"/></a>
+                        &#160;<a class="down edit" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/down"><img alt="down" src="resources/images/down.png"/></a>
                     </span>
-                </td>
-                <td><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={$pos}">edit</a></td>
-                <td><a class="delete" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}">delete</a></td>
-            </tr>
+                </span>
+                &#160;<a class="delete" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}">[delete]</a>
+            </li>
 };
 
 declare function local:get-form($docname as xs:string) as node() * {
@@ -291,25 +286,11 @@ function form:edit($node as node(), $model as map(*)) {
                     </xf:group>
                 </div>
                 <div id="fields" class="tab_content">
-                    <table class="listingTable" style="width:auto;">
-                        <thead>
-                            <tr>                      			 
-                                <th>Name</th>
-                                <th>Label</th>
-                                <th>Required</th>
-                                <th>Value Type</th>
-                                <th>Render Type</th>
-                                <th>Modes</th>
-                                <th class="w40">Move</th>
-                                <th colspan="2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="ulisting">
+                        <ul class="clearfix">
                             {local:fields($docname)}
-                        </tbody>
-                    </table> 
-                    <div class="linkButtonWrap">
-                        <a class="linkButton" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">+ add field</a>
+                        </ul>
+                        <a class="button-link" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">add field</a>
                     </div>
                 </div>
             </div>                 

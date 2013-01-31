@@ -282,6 +282,7 @@ function workflow:state($node as node(), $model as map(*)) {
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag)) and string-length(.) &gt; 1" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
+                        <!--xf:bind nodeset="../facet/allow/roles/role" type="xf:string" required="true()" /-->
                     </xf:bind>
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
@@ -290,7 +291,7 @@ function workflow:state($node as node(), $model as map(*)) {
                         <data xmlns="">
                             <wantsToClose>false</wantsToClose>
                         </data>
-                    </xf:instance>
+                    </xf:instance>                   
 
                     <xf:submission id="s-add"
                                    method="put"
@@ -410,7 +411,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                 <hr/>
                                 <br/>
                                 <h1>Manage Transitions</h1>
-                                <div style="width:100%;height:200px;">
+                                <div style="width:100%;" class="clearfix">
                                     <div style="float:left;width:60%;">
                                         <table class="listingTable" style="width:100%;">
                                             <tr>                      			 
@@ -427,6 +428,68 @@ function workflow:state($node as node(), $model as map(*)) {
                                         <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}">add transition</a>                                 
                                     </div>                                   
                                 </div>
+                                <hr/>
+                                <br/>
+                                <h1>Manage Permissions</h1>
+                                <div style="width:100%;" class="clearfix">
+                                    <div style="float:left;width:60%;">
+
+                                        <table class="listingTable" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Roles</th>        
+                                                    <th>View</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                    <th>Add</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="r-attrs" xf:repeat-nodeset="instance()/facet[@name eq 'public']/allow/roles/role">
+                                                <tr>
+                                                    <td id="foo" class="one" style="color:steelblue;font-weight:bold;">
+                                                        <xf:output ref="."></xf:output>
+                                                    </td>
+                                                    <td class="permView">
+                                                        <xf:input id="input1" ref="input1/value" incremental="true">
+                                                            <xf:label>a checkbox</xf:label>
+                                                            <xf:hint>a Hint for this control</xf:hint>
+                                                            <xf:help>help for input1</xf:help>
+                                                            <xf:alert>invalid</xf:alert>
+                                                        </xf:input>
+                                                    </td>
+                                                    <td class="three" style="color:blue;">
+                                                        <xf:output ref="item3"></xf:output>
+                                                    </td>
+                                                    <td class="four" style="color:blue;">
+                                                        <xf:output ref="item4"></xf:output>
+                                                    </td>
+                                                    <td class="five" style="color:blue;">
+                                                        <xf:output ref="item5"></xf:output>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        
+                                        </table>   
+                                        <xf:group appearance="bf:horizontalTable">
+                                            <xf:trigger>
+                                                <xf:label>insert</xf:label>
+                                                <xf:action>
+                                                    <xf:insert nodeset="instance('i-items')/items"></xf:insert>
+                                                </xf:action>
+                                            </xf:trigger>
+                                            
+                                            <xf:trigger>
+                                                <xf:label>delete</xf:label>
+                                                <xf:action>
+                                                    <xf:delete nodeset="instance('i-items')/items[index('r-attrs')]"></xf:delete>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </xf:group>
+                                        
+                                        <div style="margin-top:15px;"/>                                           
+                                        <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}">add permission</a>                                 
+                                    </div>                                   
+                                </div>                                
                                 
                             </div>                       
                         </div>

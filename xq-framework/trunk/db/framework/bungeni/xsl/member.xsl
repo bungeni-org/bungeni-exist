@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -65,16 +65,9 @@
                     <div id="membership-info" class="toggle">
                         <div class="mem-profile">
                             <div class="mem-photo mem-top-left">
-                                <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
                                 <p class="imgonlywrap">
-                                    <xsl:choose>
-                                        <xsl:when test="ref/bu:ontology/bu:image and doc-available(concat('../../../bungeni-atts/',$img_hash))">
-                                            <img src="../../bungeni-atts/{$img_hash}" alt="Place Holder for M.P Photo" align="left"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <img src="assets/images/placeholder.jpg" alt="Place Holder for M.P Photo" align="left"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
+                                    <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
+                                    <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:lastName,'_', bu:ontology/bu:membership/bu:firstName)}" alt="Photo of M.P" align="left"/>
                                 </p>
                             </div>
                             <div class="mem-top-right">

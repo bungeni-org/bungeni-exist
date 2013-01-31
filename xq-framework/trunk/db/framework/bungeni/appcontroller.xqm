@@ -76,6 +76,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $attid := xs:string(request:get-parameter("att",$bun:DOCNO)),
                     $act-entries-tmpl :=  bun:get-attachment("public-view",$docuri,$attid)
                 return $act-entries-tmpl
+                
+        (: for images :)
+    	else if ($EXIST-PATH eq "/image" )
+    		 then 
+                let $hash := xs:string(request:get-parameter("hash",'none')), 
+                    $name := xs:string(request:get-parameter("name",'unnamed')), 
+                    $act-entries-tmpl :=  bun:get-image($hash,$name)
+                return $act-entries-tmpl                
                     
     	(: Now we process application requests :)
     	else if ($EXIST-PATH eq "/business")

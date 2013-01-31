@@ -230,6 +230,25 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
         else () 
 };
 
+declare function bun:get-image($hash as xs:string, $name as xs:string) {
+
+    (: get the image with the given hash from the bungeni-atts folder :)
+    let $imgpath := cmn:get-att-db() || "/" || $hash
+    let $placeholder := $config:fw-root || "/bungeni/assets/images/placeholder.jpg"
+    return
+        if($hash ne 'none') then (
+            response:stream-binary(util:binary-doc($imgpath) cast as xs:base64Binary, "media-type=image/jpeg"),
+            response:set-header("Content-Disposition" , concat("inline; filename=",  $name)),
+            <xml/>
+        )
+        else
+        (
+            response:stream-binary(util:binary-doc($placeholder) cast as xs:base64Binary, "media-type=image/jpeg"),
+            response:set-header("Content-Disposition" , concat("inline; filename=",  "placeholder.jpg")),
+            <xml/>
+        )
+};
+
 (:~
 :  Renders PDF output for MP profile using xslfo module
 : @param memberid

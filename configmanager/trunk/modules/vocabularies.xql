@@ -31,26 +31,23 @@ function local:get-vocabs() {
     let $count := count(doc($appconfig:VOCABS-FOLDER))
     order by $vdex/vdex:vdex/vdex:vocabName ascending
     return    
-        <tr>
-            <td><a class="editlink" href="vocab.html?doc={util:document-name($vdex)}">{data($vdex/vdex:vdex/vdex:vocabName/vdex:langstring[@language eq 'en'])}</a></td>
-            <td><a class="deleteLink" href="vocab.html?doc={util:document-name($vdex)}">{data($vdex/vdex:vdex/@orderSignificant)}</a></td>
-        </tr>    
+        <li>
+            <a class="editlink" href="vocab.html?doc={util:document-name($vdex)}">{data($vdex/vdex:vdex/vdex:vocabName/vdex:langstring[@language eq 'en'])}</a>
+        </li>     
 };
 
 declare 
 function vocab:list($node as node(), $model as map(*)) {
 
     <div>
-        <h3>All Vocabularies</h3>
-        <table class="listingTable" style="width:auto;">
-            <tr>                      			 
-                <th title="Showing default strings">name(en)</th>
-                <th>ordered</th>
-            </tr>
-            {local:get-vocabs()}
-        </table>     
-        <div style="margin-top:15px;"/> 
-        <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add vocabulary</a>  
+        <div class="ulisting">
+            <h2>All Vocabularies</h2>
+            <ul class="clearfix">
+                {local:get-vocabs()}
+            </ul>
+            
+            <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add vocabulary</a>
+        </div>    
     </div>
 };
 
@@ -75,9 +72,21 @@ function vocab:edit($node as node(), $model as map(*)) {
                                 <language>fr</language>
                                 <language>pt</language>
                                 <language>sw</language>
+                                <language>it</language>
                             </languages>                        
                         </data>
                     </xf:instance> 
+                    
+                    <xf:instance id="i-term" xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0">
+                        <data>
+                            <term>
+                                <termIdentifier></termIdentifier>
+                                <caption>
+                                    <langstring language="en"></langstring>
+                                </caption>
+                            </term>                     
+                        </data>
+                    </xf:instance>                     
                     
                     <xf:instance id="i-langstring" xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0">
                         <data>
@@ -86,9 +95,11 @@ function vocab:edit($node as node(), $model as map(*)) {
                     </xf:instance>
                     
                     <xf:bind nodeset="instance()">
-                        <xf:bind nodeset="//vdex:vocabName/vdex:langstring/@language" type="xf:string" required="true()" constraint="string-length(.) &gt; 1" />                    
-                        <xf:bind nodeset="//vdex:vocabName/vdex:langstring" type="xf:string" required="true()" constraint="string-length(.) &gt; 3 and xs:string(node-name(.)) eq 'langstrings'" />
-                        <xf:bind nodeset="@title" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />
+                        <xf:bind nodeset="//vdex:vocabName/vdex:langstring/@language" type="xf:string" required="true()" constraint="string-length(.) &gt; 1 and (count(instance()//vdex:vocabName/vdex:langstring) eq count(distinct-values(instance()//vdex:vocabName/vdex:langstring/@language)))" />                    
+                        <xf:bind nodeset="//vdex:vocabName/vdex:langstring" type="xf:string" required="true()" constraint="string-length(.) &gt; 3 and xs:string(node-name(.)) eq 'langstring'" />
+                        <xf:bind nodeset="@orderSignificant" type="xf:boolean" required="true()" />
+                        <xf:bind nodeset="//vdex:caption/vdex:langstring/@language" type="xf:string" required="true()" constraint="string-length(.) &gt; 1" /> 
+                        <!--xf:bind nodeset="//vdex:caption/vdex:langstring/@language" type="xf:string" required="true()" constraint="count(instance()//vdex:caption/vdex:langstring) eq count(instance()//vdex:vocabName/vdex:langstring)" /-->                          
                     </xf:bind>
                     
                     <xf:submission id="s-get-form"
@@ -153,16 +164,16 @@ function vocab:edit($node as node(), $model as map(*)) {
                     <h1>Vocabulary: <xf:output ref="./vdex:vocabName/vdex:langstring" class="transition-inline"/></h1>
                     <xf:group appearance="bf:verticalTable">                                    
                         <xf:group appearance="bf:GroupLabelLeft">
-                            <xf:label>Name(s)</xf:label>                        
+                            <xf:label>Name(s)</xf:label>                              
                             <xf:repeat id="r-vocabs" nodeset="./vdex:vocabName/vdex:langstring[position() != last()]" appearance="compact">
                                 <xf:input ref="." incremental="true">
                                     <xf:label>string</xf:label>
                                 </xf:input>
                                 <xf:select1 ref="./@language" appearance="minimal" incremental="true" class="xshortestWidth">
                                     <xf:label>language</xf:label>
-                                    <xf:hint>a Hint for this control</xf:hint>
+                                    <xf:hint>select a supported language from the dropdown</xf:hint>
                                     <xf:help>help for select1</xf:help>
-                                    <xf:alert>invalid</xf:alert>
+                                    <xf:alert>invalid: duplicate language or empty</xf:alert>
                                     <xf:itemset nodeset="instance('i-langs')/languages/language">
                                         <xf:label ref="."></xf:label>
                                         <xf:value ref="."></xf:value>
@@ -177,11 +188,17 @@ function vocab:edit($node as node(), $model as map(*)) {
                                 </xf:trigger>                                  
                             </xf:repeat>                           
                         </xf:group>
+                        <xf:input ref="@orderSignificant" incremental="true">
+                            <xf:label>order significance?</xf:label>
+                            <xf:hint>order the terms below</xf:hint>
+                            <xf:help>if the ordering of terms below have to be specified</xf:help>                            
+                        </xf:input>                         
                         <br/>
                         <xf:trigger class="noOffSet">
                             <xf:label>add language</xf:label>
                             <xf:action>
                                 <xf:insert nodeset="./vdex:vocabName/vdex:langstring"></xf:insert>
+                                <xf:insert ev:event="DOMActivate" nodeset="./vdex:term/vdex:caption/child::*" at="last()" position="after" origin="instance('i-langstring')/vdex:langstring"/>
                             </xf:action>
                         </xf:trigger>                                        
                         
@@ -191,18 +208,18 @@ function vocab:edit($node as node(), $model as map(*)) {
                         <hr/>
                         <xf:group appearance="compact"> 
                             <xf:label><h1>Vocabulary list</h1></xf:label>
-                            <xf:repeat id="repeat2" nodeset="./vdex:term" appearance="compact">
+                            <xf:repeat id="r-terms" nodeset="./vdex:term" appearance="compact">
                                 <xf:input ref="./vdex:termIdentifier">
                                     <xf:label>Term ID</xf:label>
                                 </xf:input>
-                                <xf:group appearance="bf:verticalTable" class="hideRepeatHeader">
+                                <xf:group ref="." appearance="bf:verticalTable" class="hideRepeatHeader">
                                     <xf:label>Label(s)</xf:label>     
                                     <xf:repeat id="r-captions" nodeset="./vdex:caption/vdex:langstring" appearance="compact">
                                         <xf:input ref="." incremental="true"></xf:input>
                                         <xf:select1 ref="./@language" appearance="minimal" incremental="true" class="xshortestWidth">
-                                            <xf:hint>a Hint for this control</xf:hint>
+                                            <xf:hint>select a supported language from the dropdown</xf:hint>
                                             <xf:help>help for select1</xf:help>
-                                            <xf:alert>invalid</xf:alert>
+                                            <xf:alert>invalid: cannot be empty</xf:alert>
                                             <xf:itemset nodeset="instance('i-langs')/languages/language">
                                                 <xf:label ref="."></xf:label>
                                                 <xf:value ref="."></xf:value>
@@ -217,17 +234,26 @@ function vocab:edit($node as node(), $model as map(*)) {
                                     </xf:repeat>
                                     <br/>
                                     <xf:trigger>
-                                        <xf:label>insert new label</xf:label>
+                                        <xf:label>add new label</xf:label>
                                         <xf:action>
-                                            <xf:insert nodeset="./vdex:caption/vdex:langstring"></xf:insert>
+                                            <xf:insert ev:event="DOMActivate" nodeset=".[position()]/vdex:caption/child::*" at="last()" position="after" origin="instance('i-langstring')/vdex:langstring"/>
                                         </xf:action>
                                     </xf:trigger>
                                 </xf:group> 
                             </xf:repeat>
+                            <br/>
+                            <xf:trigger class="noOffSet">
+                                <xf:label>add term</xf:label>
+                                <xf:action>
+                                    <xf:insert nodeset="./vdex:vocabName/vdex:langstring"></xf:insert>
+                                    <xf:insert ev:event="DOMActivate" nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-term')/vdex:term"/>
+                                </xf:action>
+                            </xf:trigger>                                
                         </xf:group>                        
                     </xf:group>
+                    <hr/>
                     <xf:trigger>
-                        <xf:label>Save</xf:label>
+                        <xf:label>Save Changes</xf:label>
                         <xf:action>
                             <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                             <!-- remove all the template added at XForms ready with missing language! -->

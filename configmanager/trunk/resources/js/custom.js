@@ -74,7 +74,6 @@ $(document).ready(function(){
     });  
     
     $(".delete").click(function() {
-        var row = $(this).parents("tr:first");
         var href = $(this).attr('href');
 
         if ($(this).is(".delete")) {   
@@ -84,11 +83,15 @@ $(document).ready(function(){
                     url: href,
                     data: "nothing",
                     success: function(data){
-                        $(row).remove();
+                        var li = $(this).closest('li');
+                        li.fadeOut('slow', function() { li.remove(); });
                     }
                 });        
             }        
         }
+        var li = $(this).closest('li');
+        li.fadeOut('slow', function() { li.remove(); });   
+        
         return false;
         
     });        

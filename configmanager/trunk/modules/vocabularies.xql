@@ -188,19 +188,19 @@ function vocab:edit($node as node(), $model as map(*)) {
                                 </xf:trigger>                                  
                             </xf:repeat>                           
                         </xf:group>
-                        <xf:input ref="@orderSignificant" incremental="true">
-                            <xf:label>order significance?</xf:label>
-                            <xf:hint>order the terms below</xf:hint>
-                            <xf:help>if the ordering of terms below have to be specified</xf:help>                            
-                        </xf:input>                         
                         <br/>
                         <xf:trigger class="noOffSet">
                             <xf:label>add language</xf:label>
                             <xf:action>
                                 <xf:insert nodeset="./vdex:vocabName/vdex:langstring"></xf:insert>
-                                <xf:insert ev:event="DOMActivate" nodeset="./vdex:term/vdex:caption/child::*" at="last()" position="after" origin="instance('i-langstring')/vdex:langstring"/>
                             </xf:action>
-                        </xf:trigger>                                        
+                        </xf:trigger>   
+                        <br/>
+                        <xf:input ref="@orderSignificant" incremental="true">
+                            <xf:label>order significance?</xf:label>
+                            <xf:hint>order the terms below</xf:hint>
+                            <xf:help>if the ordering of terms below have to be specified</xf:help>                            
+                        </xf:input>                                                               
                         
                         <xf:output ref="./vdex:vocabIdentifier" incremental="true" class="xLongwidth">
                             <xf:label>vocabulary ID</xf:label>

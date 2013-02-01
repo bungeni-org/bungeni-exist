@@ -72,3 +72,39 @@ declare function appconfig:rest-images($cxt-path as xs:string, $value as xs:stri
     $cxt-path || "/rest" || $appconfig:IMAGES || "/" || $value
 };
 
+(:~
+: "Flattens" the types.xml structure to get all the 3 archtypes somehow.
+: @param e
+: @param pID
+: @return 
+:   3 nodes representing the 3 archtypes of bungeni
+:)
+declare function appconfig:flatten($e as node()) as element()*
+{
+  for $i at $p in $e/(child::*)
+  return $i | appconfig:flatten($i)
+};
+
+
+(:
+: Groups the 'flattened' types.xml ready for presentation
+: @param flattend
+: @return 
+:   <types>
+        <archetype key="doc"/>
+        <archetype key="member"/>
+        <archetype key="group"/>
+:   </types>
+:)
+declare function appconfig:three-in-one($flattened as node()) {
+    <types> 
+    {
+        for $doc in $flattened/child::*
+        group by $key := node-name($doc)
+        return 
+            <archetype key="{$key}">
+             {$doc}
+            </archetype>
+    }
+    </types>
+};

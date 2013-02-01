@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'contact';
+  src: url("../font/contact.eot");
+  src: url("../font/contact.eot?#iefix") format('embedded-opentype'), url("../font/contact.woff") format('woff'), url("../font/contact.ttf") format('truetype'), url("../font/contact.svg#contact") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: 'contact';
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: 0.2em;
+  text-align: center;
+  opacity: 0.8;
+/* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+/* Animation center compensation - magrins should be symmetric */
+/* remove if not needed */
+  margin-left: 0.2em;
+/* you can be more comfortable with increased icons size */
+/* font-size: 120%; */
+/* Uncomment for 3D effect */
+/* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.icon-cancel:before { content: '\2715'; } /* '✕' */
+.icon-cancel-circled:before { color:red; content: '\2716'; } /* '✖' */
+.icon-up:before { content: '\2b06'; } /* '⬆' */
+.icon-down:before { content: '\2b07'; } /* '⬇' */
+.icon-odnoklassniki-rect:before { content: '\f30d'; } /* '' */
+
+i:hover {
+    opacity: 1;
+    color:#000;
+    -ms-filter: none;
+    filter: none;
+}

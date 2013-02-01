@@ -1013,15 +1013,13 @@ class WebDavClient(object):
     """
     def __init__(self, username, password, put_folder = None):
         self.put_folder = put_folder
-        print "OPENSESAME: Opening sardine"
         self.sardine = SardineFactory.begin(username, password)
 
     def shutdown(self):
         try:
-            print "ABRADABRA : closing sardine"
             self.sardine.shutdown()
         except Exception,e:
-            print "Error closing sardine" 
+            print _COLOR.FAIL, e, '\nERROR Closing sardine ', _COLOR.ENDC
 
     def reset_remote_folder(self, put_folder):
         try:

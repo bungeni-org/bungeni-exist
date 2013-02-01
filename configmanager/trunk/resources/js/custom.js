@@ -48,17 +48,17 @@ $(document).ready(function(){
         return false;
     });
     
-    $("table.listingTable tbody tr:first .up,table.listingTable tbody tr:last .down").hide();
+    $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
     $(".up, .down").click(function(){
-        var row = $(this).parents("tr:first");
+        var row = $(this).parents("li:first");
         var href = $(this).attr('href');
         if ($(this).is(".up")) {
-            $("table.listingTable tbody tr:first .up").show();
+            $("ul.ulfields li:first .up").show();
             $.get(href,function(data,status) {
                 if (status == "success")
                     row.insertBefore(row.prev());
                     row.find(".down").show();
-                    $("table.listingTable tbody tr:first .up,table.listingTable tbody tr:last .down").hide();
+                    $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
             });        
             
         } else {        
@@ -66,15 +66,17 @@ $(document).ready(function(){
                 if (status == "success") {                
                     row.insertAfter(row.next());   
                     row.find(".up").show();
-                    $("table.listingTable tbody tr:first .up,table.listingTable tbody tr:last .down").hide();
+                    $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
                 }
             });
         }
         return false;
     });  
     
-    $(".delete").click(function() {
+    //$(".delete").click(function() {
+    $(".delete").live('click', function() {
         var href = $(this).attr('href');
+        var li = $(this).closest('li');          
 
         if ($(this).is(".delete")) {   
             if (confirm('Are you sure to delete this field?')) {
@@ -82,15 +84,12 @@ $(document).ready(function(){
                     type: "DELETE",
                     url: href,
                     data: "nothing",
-                    success: function(data){
-                        var li = $(this).closest('li');
+                    success: function(data) {                      
                         li.fadeOut('slow', function() { li.remove(); });
                     }
                 });        
             }        
-        }
-        var li = $(this).closest('li');
-        li.fadeOut('slow', function() { li.remove(); });   
+        }  
         
         return false;
         

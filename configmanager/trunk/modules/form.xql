@@ -63,12 +63,12 @@ declare function local:fields($doctype) as node() * {
                     }
                 </div>    
                 <span class="nodeMove">
-                    <span>
-                        <a class="up edit" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/up"><img alt="up" src="resources/images/up.png"/></a>
-                        &#160;<a class="down edit" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/down"><img alt="down" src="resources/images/down.png"/></a>
+                    <span style="float:right;">
+                        <a class="up edit" title="Move up" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/up"><i class="icon-up"></i></a>
+                        &#160;<a class="down edit" title="Move down" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}/down"><i class="icon-down"></i></a>
                     </span>
                 </span>
-                &#160;<a class="delete" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}">[delete]</a>
+                &#160;<a class="delete" title="Delete field" href="{$form:RESTXQ}/form/{$doctype}/{data($field/@name)}"><i class="icon-cancel-circled"></i></a>
             </li>
 };
 
@@ -99,6 +99,16 @@ function form:edit($node as node(), $model as map(*)) {
             <div style="display:none">
                 <xf:model>
                     <xf:instance id="i-form" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/>   
+                    
+                    <xf:instance id="i-constraints" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_constraints.xml"/> 
+                    
+                    <xf:instance id="i-validations" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_validations.xml"/>
+                    
+                    <xf:instance id="i-integrity" xmlns="">
+                        <data>
+                            <integrity constraints="" validations=""/>                        
+                        </data>
+                    </xf:instance>
                     
                     <xf:instance id="i-archetypes" xmlns="">
                         <data>
@@ -223,6 +233,10 @@ function form:edit($node as node(), $model as map(*)) {
                         <xf:action if="'{$docname}' = 'new'">
                             <xf:setvalue ref="instance()/@name" value="instance('i-controller')/lastAddedType"/>
                         </xf:action>
+                        <xf:action if="empty(instance()/integrity)">
+                            <xf:message level="ephemeral">added optional integrity contraints and validations</xf:message>
+                            <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-integrity')/integrity" />
+                        </xf:action>                        
                         <script type="text/javascript" if="'{$showing}' = 'fields'">
                             dijit.byId("switchDiv").selectChild("fieldsDiv");                        
                         </script>   
@@ -264,30 +278,55 @@ function form:edit($node as node(), $model as map(*)) {
                                 <xf:help>Enter an integer between 1 and 100 </xf:help>
                                 <xf:hint>order of this descriptor</xf:hint>
                                 <xf:message ev:event="xforms-readonly" level="ephemeral">NOTE: That number is taken already.</xf:message>
-                            </xf:input>                 
-                            
-                            <br/>
-                            <xf:group id="dialogButtons" appearance="bf:horizontalTable">
-                                <xf:label/>
-                                <xf:trigger>
-                                    <xf:label>Save</xf:label>
-                                    <xf:action if="'{$docname}' = 'new'">
-                                        <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                        <xf:setvalue ref="./@name" value="instance('i-controller')/lastAddedType"/>
-                                        <xf:send submission="s-add"/>
-                                    </xf:action>                                            
-                                    <xf:action if="'{$docname}' != 'new'">
-                                        <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                        <xf:send submission="s-save"/>
-                                    </xf:action>
-                                </xf:trigger>                  
-                            </xf:group>
+                            </xf:input>
                          </xf:group>
                     </xf:group>
+                   
+                    <xf:group>
+                        <xf:label><h3>Manage integrity checks</h3></xf:label>
+                        <xf:group appearance="bf:horizontalTable">   
+                            <xf:label>constraints</xf:label>
+                            <xf:select id="c-contraints" ref="integrity/@constraints" appearance="full" incremental="true" class="inlineCheckbox">
+                                <xf:hint>set restrictions to be enforced on this form</xf:hint>
+                                <xf:itemset nodeset="instance('i-constraints')/constraint">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="@name"></xf:value>
+                                </xf:itemset>
+                            </xf:select>  
+                        </xf:group>
+                        
+                        <xf:group appearance="bf:horizontalTable">
+                            <xf:label>validations</xf:label>
+                            <xf:select id="c-validations" ref="integrity/@validations" appearance="full" incremental="true" class="inlineCheckbox">
+                                <xf:hint>validate data entries to this form</xf:hint>
+                                <xf:itemset nodeset="instance('i-validations')/validation">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="@name"></xf:value>
+                                </xf:itemset>
+                            </xf:select>  
+                        </xf:group>                    
+                    </xf:group>
+                    
+                    <xf:group id="dialogButtons" appearance="bf:horizontalTable">
+                        <xf:label/>
+                        <xf:trigger>
+                            <xf:label>Save</xf:label>
+                            <xf:action if="'{$docname}' = 'new'">
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:setvalue ref="./@name" value="instance('i-controller')/lastAddedType"/>
+                                <xf:send submission="s-add"/>
+                            </xf:action>                                            
+                            <xf:action if="'{$docname}' != 'new'">
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:delete nodeset="instance()/integrity[@constraints = '' and @validations = '']"/>
+                                <xf:send submission="s-save"/>
+                            </xf:action>
+                        </xf:trigger>                  
+                    </xf:group>                    
                 </div>
                 <div id="fields" class="tab_content">
                     <div class="ulisting">
-                        <ul class="clearfix">
+                        <ul class="ulfields clearfix">
                             {local:fields($docname)}
                         </ul>
                         <a class="button-link" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">add field</a>
@@ -369,11 +408,11 @@ function form:field-edit($node as node(), $model as map(*)) {
                     </xf:instance>                     
                     
                     <xf:instance id="i-valuetypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_valuetypes.xml"/> 
-                    
+ 
                     <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
+                        <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()" />
@@ -469,21 +508,21 @@ function form:field-edit($node as node(), $model as map(*)) {
                         <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
                             <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
                         </a>
-                        <h1><xf:output ref="@name"/></h1>                    
+                        <h1><xf:output ref="@label"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
-                                <xf:input id="field-name" ref="@name" incremental="true">
-                                    <xf:label>field title</xf:label>
-                                    <xf:hint>Must be an existing title</xf:hint>
-                                    <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
-                                    <xf:help>help with name of field</xf:help>
-                                </xf:input> 
-                                
-                                <xf:input id="label-name" ref="@label">
+                                <xf:input id="label-name" ref="@label" incremental="true">
                                     <xf:label>label</xf:label>
                                     <xf:hint>Label used for this field</xf:hint>
                                     <xf:alert>invalid label name</xf:alert>
                                     <xf:help>help with label of field</xf:help>
+                                </xf:input> 
+                                
+                                <xf:input id="field-name" ref="@name" incremental="true">
+                                    <xf:label>field name</xf:label>
+                                    <xf:hint>Unique field name</xf:hint>
+                                    <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
+                                    <xf:help>help with name of field</xf:help>
                                 </xf:input> 
                                 
                                 <xf:input id="input-req-field" ref="@required">
@@ -509,7 +548,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 </xf:select1>  
                                 
                                 <xf:select1 bind="b-rendertype" appearance="minimal" incremental="true">
-                                    <xf:label>render type</xf:label>
+                                    <xf:label>widget</xf:label>
                                     <xf:hint>external value show on input forms</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
@@ -882,7 +921,7 @@ function form:field-add($node as node(), $model as map(*)) {
                     <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset="./field[last()]">
-                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
+                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
@@ -965,23 +1004,22 @@ function form:field-add($node as node(), $model as map(*)) {
                        <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
                             <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
                         </a>
-                        <h1><xf:output bind="b-fieldname"/></h1>                    
+                        <h1><xf:output ref="@label"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
-                                <xf:input id="field-name" ref="@name" incremental="true">
-                                    <xf:label>field title</xf:label>
-                                    <xf:hint>Enter be the field title</xf:hint>
-                                    <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
-                                    <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
-                                </xf:input> 
-                                
-                                <xf:input id="label-name" ref="@label">
+                                <xf:input id="label-name" ref="@label" incremental="true">
                                     <xf:label>label</xf:label>
                                     <xf:hint>Label used for this field</xf:hint>
                                     <xf:alert>invalid label name</xf:alert>
                                     <xf:help>help with label of field</xf:help>
                                 </xf:input> 
                                 
+                                <xf:input id="field-name" ref="@name" incremental="true">
+                                    <xf:label>field name</xf:label>
+                                    <xf:hint>Enter be the field title</xf:hint>
+                                    <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
+                                    <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
+                                </xf:input>                                 
                                 <xf:input id="input-req-field" ref="@required">
                                     <xf:label>required</xf:label>
                                     <xf:hint>Enabling this means it is a required field</xf:hint>
@@ -1004,7 +1042,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                 </xf:select1>  
                                 
                                 <xf:select1 bind="b-rendertype" appearance="minimal" incremental="true">
-                                    <xf:label>render type</xf:label>
+                                    <xf:label>widget</xf:label>
                                     <xf:hint>external value show on input forms</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>

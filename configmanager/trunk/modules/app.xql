@@ -39,13 +39,13 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li>
                 <h4>&#160; Main Navigation &#187;</h4>
             </li>
-            <li><a href="types.html"><span>Types</span></a></li>
-            <li><a href="roles.html"><span>Roles</span></a></li>
-            <li><a href="vocabularies.html"><span>Vocabularies</span></a></li>
-            <li class="hasmore"><a href="#config"><span>Configuration</span></a>
+            <li><a href="types.html"><span>types</span></a></li>
+            <li><a href="roles.html"><span>roles</span></a></li>
+            <li><a href="vocabularies.html"><span>vocabularies</span></a></li>
+            <li class="hasmore"><a href="#config"><span>configuration</span></a>
                 <ul class="dropdown">
-                    <li><a id="show-popup" href="upload.html?t={$timestamp}">Upload</a></li>
-                    <li class="last"><a href="save.html?t={$timestamp}">Save</a></li>
+                    <li><a id="show-popup" href="upload.html?t={$timestamp}">upload</a></li>
+                    <li class="last"><a href="save.html?t={$timestamp}">save</a></li>
                 </ul>
             </li>
         </ul>
@@ -63,18 +63,43 @@ function app:get-secondary-menu($node as node(), $model as map(*), $active as xs
 };
 
 declare 
+    %templates:default("primary", "types")
+    %templates:default("secondary", "form")
+    %templates:default("tmpl", "")
+    %templates:default("eol", "edit")
+    %templates:default("level", 3)
+function app:breadcrumb($node as node(), $model as map(*), 
+    $primary as xs:string,
+    $secondary as xs:string,
+    $tmpl as xs:string,
+    $eol as xs:string,
+    $level as xs:integer) {
+
+    let $type := request:get-parameter("type", "none")
+    let $name := request:get-parameter("doc", "none")
+    let $pos := xs:integer(request:get-parameter("pos", 0))    
+    let $d := doc($appconfig:TYPES-XML)/types
+    let $flattened := <grouped>{appconfig:flatten($d)}</grouped>            
+    let $typename := data(appconfig:three-in-one($flattened)/archetype[@key eq $type]/child::*[$pos]/@name)    
+    return
+        <p id="breadcrumb">
+            <a href="{$primary}.html">{$primary}</a>
+            <a href="{$secondary}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$name}</a>
+            {
+                if($level > 2) then 
+                    <a href="{$tmpl}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$tmpl}</a>
+                else
+                    ()
+            }
+            <span class="eol">{$eol}</span>
+        </p>  
+};
+
+declare 
     %templates:default("active", "")
 function app:get-type-parts($node as node(), $model as map(*), $active as xs:string) {
     
-    <div id="secondary-menu">
-        {
-            let $type := request:get-parameter("type", "none")
-            let $name := request:get-parameter("doc", "none")
-            let $pos := xs:integer(request:get-parameter("pos", 0))         
-            let $typename := data(doc($appconfig:TYPES-XML)/types/doc[$pos]/@name)
-            return 
-                <h3><a href="type.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$typename}</a></h3>
-        }    
+    <div id="secondary-menu"> 
         <ul class="secondary"> 
             {
             let $type := request:get-parameter("type", "none")
@@ -105,25 +130,22 @@ declare function local:get-roles() {
     for $role at $pos in doc($appconfig:UI-XML)/ui/roles/role
     let $count := count(doc($appconfig:UI-XML)/ui/roles/role)
     return  
-        <tr>
-            <td><a class="editlink" href="role.html?name={$role}&amp;pos={$pos}">{$role/text()}</a></td>
-            <td><a class="removeRole" href="role.html?name={$role}&amp;pos={$pos}">remove</a></td>
-        </tr> 
+        <li>
+            <a class="editlink" href="role.html?name={$role}&amp;pos={$pos}">{$role/text()}</a>
+        </li>
 };
 
 declare 
 function app:roles($node as node(), $model as map(*)) { 
         <div>
-            <h3>All Roles</h3>
-            <table class="listingTable" style="width:auto;">
-                <tr>                      			 
-                    <th>role</th>
-                    <th>enabled</th>
-                </tr>
-                {local:get-roles()}
-            </table>     
-            <div style="margin-top:15px;"/> 
-            <a class="button-link" href="role-add.html?type=none&amp;doc=none&amp;pos=0">add role</a>  
+            <div class="ulisting">
+                <h2>All Roles</h2>
+                <ul class="clearfix">
+                    {local:get-roles()}
+                </ul>
+                
+                <a class="button-link" href="role-add.html?type=none&amp;doc=none&amp;pos=0">add role</a>
+            </div> 
         </div>   
 };
 

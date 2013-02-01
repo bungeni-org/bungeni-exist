@@ -22,51 +22,14 @@ import module namespace config = "http://exist-db.org/xquery/apps/config" at "co
 declare variable $type:CXT := request:get-context-path();
 declare variable $type:REST-CXT-APP :=  $type:CXT || "/rest" || $config:app-root;
 
-(:~
-:   "Flattens" the types.xml structure to get all the 3 archtypes somehow.
-: @param e
-: @param pID
-: @return 
-:   3 nodes representing the 3 archtypes of bungeni
-:)
-declare function local:getChildren($e as node(), $pID as xs:string?) as element()*
-{
-  for $i at $p in $e/(child::*)
-  let $ID := if ($pID) then concat($pID,".",$p) else "1"
-  return $i | local:getChildren($i,$ID)
-};
-
-(:
-:   Groups the 'flattened' types.xml ready for presentation
-: @param flattend
-: @return 
-:   <types>
-        <archetype key="doc"/>
-        <archetype key="member"/>
-        <archetype key="group"/>
-:   </types>
-:)
-declare function local:ThreeInOne($flattened as node()) {
-    <types> 
-    {
-        for $doc in $flattened/child::*
-        group by $key := node-name($doc)
-        return 
-            <archetype key="{$key}">
-             {$doc}
-            </archetype>
-    }
-    </types>
-};
-
 (:
     Renders the Types
 :)
 declare function local:get-types() {
     let $d := doc($appconfig:TYPES-XML)/types
-    let $flattened := <grouped>{local:getChildren($d,())}</grouped>
-    for $archetype at $pos in local:ThreeInOne($flattened)/child::*
-    let $count := count(local:ThreeInOne($flattened)/child::*)
+    let $flattened := <grouped>{appconfig:flatten($d)}</grouped>
+    for $archetype at $pos in appconfig:three-in-one($flattened)/child::*
+    let $count := count(appconfig:three-in-one($flattened)/child::*)
     order by $archetype/@key ascending
     return  
         local:wrap-type($archetype)

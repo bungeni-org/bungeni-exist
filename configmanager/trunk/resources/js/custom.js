@@ -27,6 +27,11 @@ $(document).ready(function(){
      });
     */
     
+    // Adding confirmation dialog for Saving configuration back to File-System
+    $("a.confirm-delete").click(function() {
+        return confirm('This action overwrites your custom configuration for bungeni, proceed?');
+    });    
+    
     //  When user clicks on tab, this code will be executed
     $("#tabs li").click(function() {
         //  First remove class "active" from currently active tab
@@ -58,7 +63,7 @@ $(document).ready(function(){
                 if (status == "success")
                     row.insertBefore(row.prev());
                     row.find(".down").show();
-                    $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
+                    $("ul.ulfields li:first .up, ul.ulfields li:last .down").hide();
             });        
             
         } else {        

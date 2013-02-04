@@ -45,7 +45,7 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li class="hasmore"><a href="#config"><span>configuration</span></a>
                 <ul class="dropdown">
                     <li><a id="show-popup" href="upload.html?t={$timestamp}">upload</a></li>
-                    <li class="last"><a href="save.html?t={$timestamp}">save</a></li>
+                    <li class="last"><a class="confirm-delete" href="save.html?t={$timestamp}">save</a></li>
                 </ul>
             </li>
         </ul>

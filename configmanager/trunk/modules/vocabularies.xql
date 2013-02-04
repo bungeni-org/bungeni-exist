@@ -21,8 +21,8 @@ import module namespace config = "http://exist-db.org/xquery/apps/config" at "co
  :)
 
 declare variable $vocab:CXT := request:get-context-path();
-declare variable $vocab:REST-CXT-APP :=  $vocab:CXT || "/rest" || $config:app-root;
-declare variable $vocab:REST-CXT-CONFIGVOCABS := $vocab:REST-CXT-APP || "/working/live/bungeni_custom/vocabularies";
+declare variable $vocab:REST-CXT-APP :=  $vocab:CXT || $appconfig:REST-APP-ROOT;
+declare variable $vocab:REST-BC-LIVE :=  $vocab:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 declare variable $vocab:REST-CXT-MODELTMPL := $vocab:REST-CXT-APP || "/model_templates";
 
 declare 
@@ -32,7 +32,7 @@ function local:get-vocabs() {
     order by $vdex/vdex:vdex/vdex:vocabName ascending
     return    
         <li>
-            <a class="editlink" href="vocab.html?doc={util:document-name($vdex)}">{data($vdex/vdex:vdex/vdex:vocabName/vdex:langstring[@language eq 'en'])}</a>
+            <a class="editlink" href="vocab-edit.html?doc={util:document-name($vdex)}">{data($vdex/vdex:vdex/vdex:vocabName/vdex:langstring[@language eq 'en'])}</a>
         </li>     
 };
 
@@ -60,7 +60,7 @@ function vocab:edit($node as node(), $model as map(*)) {
     	<div xmlns:vdex="http://www.imsglobal.org/xsd/imsvdex_v1p0">
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-vocab" src="{$vocab:REST-CXT-CONFIGVOCABS}/{$docname}" xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"/>                      
+                    <xf:instance id="i-vocab" src="{$vocab:REST-BC-LIVE}/vocabularies/{$docname}" xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"/>                      
 
                     <xf:instance id="i-controller" src="{$vocab:REST-CXT-MODELTMPL}/controller.xml"/>
                     
@@ -104,7 +104,7 @@ function vocab:edit($node as node(), $model as map(*)) {
                     
                     <xf:submission id="s-get-form"
                         method="get"
-                        resource="{$vocab:REST-CXT-CONFIGVOCABS}/{$docname}"
+                        resource="{$vocab:REST-BC-LIVE}/vovabularies/{$docname}"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
@@ -121,7 +121,7 @@ function vocab:edit($node as node(), $model as map(*)) {
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$vocab:REST-CXT-CONFIGVOCABS}/{$docname}'"/>
+                        <xf:resource value="'{$vocab:REST-BC-LIVE}/vocabularies/{$docname}'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -245,7 +245,7 @@ function vocab:edit($node as node(), $model as map(*)) {
                             <xf:trigger class="noOffSet">
                                 <xf:label>add term</xf:label>
                                 <xf:action>
-                                    <xf:insert nodeset="./vdex:vocabName/vdex:langstring"></xf:insert>
+                                    <!--xf:insert nodeset="./vdex:vocabName/vdex:langstring"></xf:insert-->
                                     <xf:insert ev:event="DOMActivate" nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-term')/vdex:term"/>
                                 </xf:action>
                             </xf:trigger>                                

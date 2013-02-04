@@ -11,17 +11,19 @@ declare variable $appconfig:ROOT := $config:app-root;
 
 declare variable $appconfig:CONFIGS-FOLDER-NAME := data($appconfig:doc/ce-config/configs/@collection) ;
 
-(: app/working :)
-declare variable $appconfig:CONFIGS-ROOT := $appconfig:ROOT || "/working" ; 
+(: app/bungeni-custom :)
+declare variable $appconfig:CONFIGS-COLLECTION-NAME := $appconfig:doc/ce-config/configs-collection/text() ;
 
-declare variable $appconfig:CONFIGS-ROOT-IMPORT := $appconfig:CONFIGS-ROOT || "/import" ; 
+declare variable $appconfig:CONFIGS-COLLECTION := $config:db-root-collection || "/" || $appconfig:CONFIGS-COLLECTION-NAME ;
 
-declare variable $appconfig:CONFIGS-ROOT-LIVE := $appconfig:CONFIGS-ROOT || "/live" ; 
+declare variable $appconfig:CONFIGS-ROOT-IMPORT := $appconfig:CONFIGS-COLLECTION || "/import" ; 
 
-(: app/working/import/bungeni_custom :)
+declare variable $appconfig:CONFIGS-ROOT-LIVE := $appconfig:CONFIGS-COLLECTION || "/live" ; 
+
+(: app/bungeni-configuration/import/bungeni_custom :)
 declare variable $appconfig:CONFIGS-IMPORT := $appconfig:CONFIGS-ROOT-IMPORT || "/" || $appconfig:CONFIGS-FOLDER-NAME ;
 
-(: app/working/live/bungeni_custom :)
+(: app/bungeni-configuration/live/bungeni_custom :)
 declare variable $appconfig:CONFIGS-FOLDER := $appconfig:CONFIGS-ROOT-LIVE || "/" || $appconfig:CONFIGS-FOLDER-NAME;
 
 declare variable $appconfig:FORM-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@form);
@@ -45,6 +47,13 @@ declare variable $appconfig:CSS := $appconfig:ROOT || "/" || "resources/css";
 declare variable $appconfig:IMAGES := $appconfig:ROOT || "/" || "resources/images";
 
 declare variable $appconfig:FS-PATH := $appconfig:doc/ce-config/configs/fs-path/text();
+
+(: REST Paths :)
+declare variable $appconfig:REST-CONFIGS-COLLECTION-LIVE :=  "/rest/" ||$appconfig:CONFIGS-COLLECTION-NAME || "/live" ;
+
+declare variable $appconfig:REST-BUNGENI-CUSTOM-LIVE :=  $appconfig:REST-CONFIGS-COLLECTION-LIVE || "/bungeni_custom" ;
+
+declare variable $appconfig:REST-APP-ROOT := "/rest" || $config:app-root ;
 
 (: THis may be used internally to sudo to admin :)
 declare variable $appconfig:admin-username := "admin";

@@ -17,8 +17,8 @@ import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
 declare variable $workflow:CXT := request:get-context-path();
 declare variable $workflow:RESTXQ := request:get-context-path() || "/restxq";
-declare variable $workflow:REST-CXT-APP :=  $workflow:CXT || "/rest" || $config:app-root;
-declare variable $workflow:REST-CXT-CONFIGWF := $workflow:REST-CXT-APP || "/working/live/bungeni_custom/workflows";
+declare variable $workflow:REST-CXT-APP :=  $workflow:CXT || $appconfig:REST-APP-ROOT;
+declare variable $workflow:REST-BC-LIVE :=  $workflow:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 declare variable $workflow:REST-CXT-MODELTMPL := $workflow:REST-CXT-APP || "/model_templates";
 
 
@@ -107,6 +107,25 @@ declare function local:render-row($doctype as xs:string, $nodename as xs:string,
     </tr>
 };
 
+(: creates the output for all document transitions sources :)
+declare function local:arrow-direction($doctype as xs:string, $nodepos as xs:integer, $nodename as xs:string) as node() * {
+
+    let $workflow := local:get-workflow($doctype)
+    let $state := data($workflow/transition[$nodepos]/@title)
+    
+    let $source-state-ids := $workflow/transition[$nodepos]/sources/source/text()
+    let $source-state-titles := for $id in $source-state-ids return data($workflow/state[@id eq $id]/@title)
+    
+    let $title := data($workflow/state[@id eq $nodename]/@title)
+    return
+        if (empty($workflow/transition[$nodepos]/sources/source[. = $nodename])) then 
+            (: <- :)
+            <h4 title="Arrow points to the source(s)">{string-join($source-state-titles,", ")} &#8592; {$title}</h4>
+        else 
+            (: -> :)
+            <h4 title="Arrow points to the destination">{$title} &#8594; {$state}</h4>
+};
+
 declare function local:mode() as xs:string {
     let $doc := request:get-parameter("doc", "nothing")
 
@@ -129,7 +148,7 @@ function workflow:edit($node as node(), $model as map(*)) {
     	<div>
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-form" src="{$workflow:REST-CXT-CONFIGWF}/{$docname}.xml"/>                      
+                    <xf:instance id="i-form" src="{$workflow:REST-BC-LIVE}/workflows/{$docname}.xml"/>                      
 
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@name" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />
@@ -140,7 +159,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                     
                     <xf:submission id="s-get-form"
                         method="get"
-                        resource="{$workflow:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"
+                        resource="{$workflow:REST-BC-LIVE}/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
@@ -157,7 +176,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$docname}.xml'"/>
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$docname}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -266,7 +285,7 @@ function workflow:edit($node as node(), $model as map(*)) {
 };
 
 declare
-function workflow:state($node as node(), $model as map(*)) {
+function workflow:state-edit($node as node(), $model as map(*)) {
     let $TYPE := xs:string(request:get-parameter("type",""))
     let $DOCNAME := xs:string(request:get-parameter("doc",""))
     let $DOCPOS := xs:integer(request:get-parameter("pos",0))
@@ -276,11 +295,20 @@ function workflow:state($node as node(), $model as map(*)) {
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none">
                  <xf:model id="master">
-                    <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>
+                    <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
+
+                    <xf:instance id="i-tags" xmlns="">
+                        <data>
+                            <tags originAttr="tags">
+                                <tag/>
+                            </tags>                        
+                        </data>
+                    </xf:instance>
 
                     <xf:bind nodeset="./state">
+                        <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
-                        <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag)) and string-length(.) &gt; 1" />
+                        <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag))" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                         <!--xf:bind nodeset="../facet/allow/roles/role" type="xf:string" required="true()" /-->
                     </xf:bind>
@@ -297,7 +325,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -327,6 +355,14 @@ function workflow:state($node as node(), $model as map(*)) {
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready" >  
+                        <xf:action if="not(empty(instance()/state[{$ATTR}]/tags))">
+                            <xf:message level="ephemeral">added optional integrity contraints and validations</xf:message>
+                            <xf:insert nodeset="instance()/state[{$ATTR}]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" /> 
+                        </xf:action>                       
+                        <xf:action if="empty(instance()/state[{$ATTR}]/tags)">
+                            <xf:message level="ephemeral">added optional integrity contraints and validations</xf:message>
+                            <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-tags')/tags" />
+                        </xf:action>                       
                     </xf:action>
             </xf:model>
             
@@ -336,7 +372,7 @@ function workflow:state($node as node(), $model as map(*)) {
                     <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
                 </a>
                 <br/>              
-                <h1>state | <xf:output value="./state[{$ATTR}]/@id" class="transition-inline"/></h1>
+                <h1>state | <xf:output value="./state[{$ATTR}]/@title" class="transition-inline"/></h1>
                 <br/>                
                 <div style="width: 100%;">
                     <br/>
@@ -344,19 +380,19 @@ function workflow:state($node as node(), $model as map(*)) {
                         <div style="width:90%;">
                             <div style="width:100%;">
                                 <xf:group ref="./state[{$ATTR}]" appearance="bf:horizontalTable"> 
-                                    <xf:group appearance="bf:verticalTable">                               
+                                    <xf:group appearance="bf:verticalTable">
+                                        <xf:input id="state-title" ref="@title" incremental="true">
+                                            <xf:label>Title</xf:label>
+                                            <xf:hint>edit title of the workflow</xf:hint>
+                                            <xf:help>... and no spaces in between words</xf:help>
+                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                        </xf:input>                                       
                                         <xf:input id="state-id" ref="@id" incremental="true">
                                             <xf:label>ID</xf:label>
                                             <xf:hint>edit id of the workflow</xf:hint>
                                             <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
                                             <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
-                                        </xf:input> 
-                                        <xf:input id="state-title" ref="@title">
-                                            <xf:label>Title</xf:label>
-                                            <xf:hint>edit title of the workflow</xf:hint>
-                                            <xf:help>... and no spaces in between words</xf:help>
-                                            <xf:alert>enter more than 3 characters...</xf:alert>
-                                        </xf:input>                                     
+                                        </xf:input>                                   
                                         <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
                                             <xf:label>Permission from state</xf:label>
                                            <xf:hint>where to derive permissions for state</xf:hint>
@@ -372,7 +408,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                         </xf:input>   
                                     </xf:group>
                                     <xf:group appearance="bf:verticalTable">
-                                    <xf:repeat id="r-statetags" nodeset="./tags/tag" appearance="compact">
+                                    <xf:repeat id="r-statetags" nodeset="./tags/tag[position() != last()]" appearance="compact">
                                         <xf:select1 ref="." appearance="minimal" incremental="true">
                                             <xf:label>tags</xf:label>
                                             <xf:hint>a Hint for this control</xf:hint>
@@ -394,7 +430,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                         <xf:trigger>
                                             <xf:label>add tag</xf:label>
                                             <xf:action>
-                                                <xf:insert nodeset="./tags/tag"></xf:insert>
+                                                <xf:insert ev:event="DOMActivate" nodeset="./tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag"/>
                                             </xf:action>
                                         </xf:trigger>
                                     </xf:group>
@@ -405,7 +441,11 @@ function workflow:state($node as node(), $model as map(*)) {
                                     <xf:label>Save</xf:label>
                                     <xf:action>
                                         <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                        <xf:delete nodeset="instance()/state[{$ATTR}]/tags/tag[last() > 1]" at="last()" />
+                                        <!-- remove the tags node if there is jus the template tag we insert -->
+                                        <xf:delete nodeset="instance()/state[{$ATTR}]/tags[string-length(tag/text()) &lt; 2]" />
                                         <xf:send submission="s-add"/>
+                                        <xf:insert nodeset="instance()/state[{$ATTR}]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" />
                                     </xf:action>                                
                                 </xf:trigger>   
                                 <hr/>
@@ -416,7 +456,7 @@ function workflow:state($node as node(), $model as map(*)) {
                                         <table class="listingTable" style="width:100%;">
                                             <tr>                      			 
                                                 <th>transition name</th>
-                                                <th>source</th>
+                                                <th>source(s)</th>
                                                 <th>destination</th>
                                             </tr>
                                             {local:transition-to-from($DOCNAME, $NODENAME)}
@@ -508,7 +548,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none">
                  <xf:model id="master">
-                    <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>
+                    <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
 
                     <xf:instance id="i-state" xmlns="">
                         <data>
@@ -539,7 +579,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -692,9 +732,9 @@ function workflow:transition-add($node as node(), $model as map(*)) {
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none;">
                 <xf:model>         
-                    <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>
+                    <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
                     
-                    <xf:instance id="i-conditions" src="{$workflow:REST-CXT-CONFIGWF}/_conditions.xml"/>                     
+                    <xf:instance id="i-conditions" src="{$workflow:REST-BC-LIVE}/workflows/_conditions.xml"/>                     
 
                     <xf:instance id='i-transition' xmlns="">
                         <data>
@@ -759,7 +799,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                     </xf:instance>
                     
                     <xf:submission id="s-add" method="put" replace="none" ref="instance()">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -805,7 +845,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                 <div style="width:100%;margin-top:10px;">               
                     <xf:group ref="instance()/transition[last()]" appearance="bf:horizontalTable">                    
                         <xf:label><h1>transition | <xf:output value="@title" class="transition-inline"/></h1></xf:label>
-                        <xf:label><h3>&#8594; state | {$NODENAME}</h3></xf:label>
+                        <xf:label><h3>{$NODENAME} &#8594; </h3></xf:label>
                         <xf:group appearance="bf:verticalTable" style="width:70%">
                             <xf:label><h3>properties</h3></xf:label>
                             <xf:input id="transition-id" bind="b-title" incremental="true">
@@ -953,9 +993,9 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none;">
                 <xf:model>         
-                    <xf:instance id="i-workflow" src="{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml"/>
+                    <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
                     
-                    <xf:instance id="i-conditions" src="{$workflow:REST-CXT-CONFIGWF}/_conditions.xml"/>                     
+                    <xf:instance id="i-conditions" src="{$workflow:REST-BC-LIVE}/workflows/_conditions.xml"/>                     
 
                     <xf:instance id='i-transition' xmlns="">
                         <data>
@@ -1006,7 +1046,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                     
                     <xf:bind nodeset="instance()/transition[{$NODEPOS}]">
                         <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
-                        <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
+                        <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="((. &lt; 100) and (. &gt; 0)) or (. = 0)" />
                         <xf:bind id="b-destination" nodeset="destinations/destination" type="xf:string" required="true()" constraint="xs:string(.) ne '{$NODENAME}'" />                        
                         <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
                         <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
@@ -1021,7 +1061,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                     </xf:instance>
                     
                     <xf:submission id="s-add" method="put" replace="none" ref="instance()">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -1054,7 +1094,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                     </xf:submission>
                     
                     <xf:submission id="s-delete" method="put" replace="none" ref="instance()">
-                        <xf:resource value="'{$workflow:REST-CXT-CONFIGWF}/{$DOCNAME}.xml'"/>
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -1098,7 +1138,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                 <div style="width:100%;margin-top:10px;">               
                     <xf:group ref="instance()/transition[{$NODEPOS}]" appearance="bf:horizontalTable">                    
                         <xf:label><h1>transition | <xf:output value="@title" class="transition-inline"/></h1></xf:label>
-                        <xf:label><h3>&#8594; state | {$NODENAME}</h3></xf:label>
+                        <xf:label>{local:arrow-direction($DOCNAME,$NODEPOS,$NODENAME)}</xf:label>
                         <xf:group appearance="bf:verticalTable" style="width:70%">
                             <xf:label><h3>properties</h3></xf:label>
                             <xf:input id="transition-id" bind="b-title" incremental="true">
@@ -1228,15 +1268,41 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:send submission="s-add"/>
                             </xf:action>                                
-                        </xf:trigger>  
-                        <xf:trigger>
-                            <xf:label>delete transition</xf:label>
-                            <xf:action>
-                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                <xf:delete nodeset="instance()/transition[{$NODEPOS}]"/>
-                                <xf:send submission="s-delete"/>
-                            </xf:action>                                
                         </xf:trigger>
+                        <xf:group appearance="bf:verticalTable">                      
+                             <xf:switch>
+                                <xf:case id="delete">
+                                   <!-- don't display the delete trigger unless we have at lease one person -->
+                                   <xf:trigger ref="instance()/transition[{$NODEPOS}]">
+                                      <xf:label>delete transition</xf:label>
+                                      <xf:action ev:event="DOMActivate">
+                                         <xf:toggle case="confirm" />
+                                      </xf:action>
+                                   </xf:trigger>
+                                </xf:case>
+                                <xf:case id="confirm">
+                                   <h2>Are you sure you want to delete this transition?</h2>
+                                   <!--div id="content-for-deletion">
+                                      <p>transition name: <xf:output ref="instance()/transition[{$NODEPOS}]/@title" /></p>
+                                   </div-->
+                                   <xf:group appearance="bf:horizontalTable">
+                                       <xf:trigger>
+                                          <xf:label>Delete</xf:label>
+                                          <xf:action ev:event="DOMActivate">
+                                            <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                            <xf:delete nodeset="instance()/transition[{$NODEPOS}]"/>
+                                            <xf:send submission="s-delete"/>
+                                            <xf:toggle case="delete" />
+                                          </xf:action>
+                                       </xf:trigger>
+                                       <xf:trigger>
+                                            <xf:label>Cancel</xf:label>
+                                            <xf:toggle case="delete" ev:event="DOMActivate" />
+                                       </xf:trigger>
+                                    </xf:group>
+                                </xf:case>
+                             </xf:switch>   
+                        </xf:group>
                     </xf:group>
                 </div>
             </div>

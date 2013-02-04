@@ -17,7 +17,8 @@ import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
 declare variable $form:CXT := request:get-context-path();
 declare variable $form:RESTXQ := request:get-context-path() || "/restxq";
-declare variable $form:REST-CXT-APP :=  $form:CXT || "/rest" || $config:app-root;
+declare variable $form:REST-CXT-APP :=  $form:CXT || $appconfig:REST-APP-ROOT;
+declare variable $form:REST-BC-LIVE :=  $form:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 
 
 (: creates the output for all fields :)
@@ -100,9 +101,9 @@ function form:edit($node as node(), $model as map(*)) {
                 <xf:model>
                     <xf:instance id="i-form" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/>   
                     
-                    <xf:instance id="i-constraints" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_constraints.xml"/> 
+                    <xf:instance id="i-constraints" src="{$form:REST-BC-LIVE}/forms/_constraints.xml"/> 
                     
-                    <xf:instance id="i-validations" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_validations.xml"/>
+                    <xf:instance id="i-validations" src="{$form:REST-BC-LIVE}/forms/_validations.xml"/>
                     
                     <xf:instance id="i-integrity" xmlns="">
                         <data>
@@ -127,7 +128,7 @@ function form:edit($node as node(), $model as map(*)) {
                     
                     <xf:submission id="s-get-form"
                         method="get"
-                        resource="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"
+                        resource="{$form:REST-BC-LIVE}/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission>
@@ -144,7 +145,7 @@ function form:edit($node as node(), $model as map(*)) {
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="concat('{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/',instance('i-controller')/lastAddedType,'.xml')"/>
+                        <xf:resource value="concat('{$form:REST-BC-LIVE}/forms/',instance('i-controller')/lastAddedType,'.xml')"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -181,7 +182,7 @@ function form:edit($node as node(), $model as map(*)) {
                                    method="put"
                                    replace="none"
                                    ref="instance()">
-                        <xf:resource value="'{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml'"/>
+                        <xf:resource value="'{$form:REST-BC-LIVE}/forms/{$docname}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -407,9 +408,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>                     
                     
-                    <xf:instance id="i-valuetypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_valuetypes.xml"/> 
+                    <xf:instance id="i-valuetypes" src="{$form:REST-BC-LIVE}/forms/_valuetypes.xml"/> 
  
-                    <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
+                    <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
@@ -445,7 +446,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                     
                     <xf:submission id="s-get-form"
                         method="get"
-                        resource="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"
+                        resource="{$form:REST-BC-LIVE}/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission> 
@@ -463,7 +464,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                    replace="none"
                                    ref="instance()">
                                    
-                        <xf:resource value="'{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml'"/>
+                        <xf:resource value="'{$form:REST-BC-LIVE}/forms/{$docname}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>
@@ -829,7 +830,7 @@ function form:field-add($node as node(), $model as map(*)) {
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none">
                  <xf:model id="fieldadd">
-                    <xf:instance id="i-field" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"/> 
+                    <xf:instance id="i-field" src="{$form:REST-BC-LIVE}/forms/{$docname}.xml"/> 
                     
                     <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>                    
                     
@@ -916,9 +917,9 @@ function form:field-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>                     
                     
-                    <xf:instance id="i-valuetypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_valuetypes.xml"/> 
+                    <xf:instance id="i-valuetypes" src="{$form:REST-BC-LIVE}/forms/_valuetypes.xml"/> 
                     
-                    <xf:instance id="i-rendertypes" src="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/_rendertypes.xml"/>
+                    <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/_rendertypes.xml"/>
 
                     <xf:bind nodeset="./field[last()]">
                         <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
@@ -941,7 +942,7 @@ function form:field-add($node as node(), $model as map(*)) {
                     
                     <xf:submission id="s-get-form"
                         method="get"
-                        resource="{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml"
+                        resource="{$form:REST-BC-LIVE}/forms/{$docname}.xml"
                         replace="instance"
                         serialization="none">
                     </xf:submission> 
@@ -958,7 +959,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                    ref="instance()" 
                                    validate="true">
                                    
-                        <xf:resource value="'{$form:REST-CXT-APP}/working/live/bungeni_custom/forms/{$docname}.xml'"/>
+                        <xf:resource value="'{$form:REST-BC-LIVE}/forms/{$docname}.xml'"/>
     
                         <xf:header>
                             <xf:name>username</xf:name>

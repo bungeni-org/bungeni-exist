@@ -52,6 +52,7 @@ declare function local:reverse-transform-configs() {
     for $doc in collection($appconfig:CONFIGS-FOLDER)
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $path := document-uri($doc)
+    let $log := util:log("INFO",$path)
     (: form XSLTs:)
     let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
     let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")
@@ -155,7 +156,14 @@ function sysmanager:store($node as node(), $model as map(*)) {
     import - is a backup of the folder imported from the file system
     :)
     
-    (: check if the live working folder exists, if not, create it :)
+    (: Creating the root collection for bungeni configurations :)
+    let $created_configs_coll := if (xmldb:collection-available($appconfig:CONFIGS-COLLECTION)) then () else xmldb:create-collection($config:db-root-collection,$appconfig:CONFIGS-COLLECTION-NAME)
+    
+    (: Creating both import and live sub-collections within the the root bungeni configurations create above :)
+    let $created_import_subcoll := if (xmldb:collection-available($appconfig:CONFIGS-ROOT-IMPORT)) then () else xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'import')
+    let $created_live_subcoll := if (xmldb:collection-available($appconfig:CONFIGS-ROOT-LIVE)) then () else xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'live')        
+    
+    (: check if the live configs-collections folder exists, if not, create it :)
     let $created_bu_wc := if (xmldb:collection-available($appconfig:CONFIGS-FOLDER)) then () else xmldb:create-collection($appconfig:CONFIGS-ROOT-LIVE,$appconfig:CONFIGS-FOLDER-NAME)
     (: import the files from the file system into the live folder :)
     let $storing-vdex := xmldb:store-files-from-pattern(

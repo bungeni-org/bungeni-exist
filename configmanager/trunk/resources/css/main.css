@@ -84,10 +84,11 @@ br {
 
 .listingTable td a.editlink {
     font-weight:bold;
+    color:#0492be;
 }
 
 .listingTable td a.editlink:hover {
-    color:#888;
+    color:#05aadd;
     text-decoration:underline;
 }
 
@@ -210,7 +211,6 @@ h1 {
 
 .xposeGreen {
     color:#000;
-    font-weight:bold;
     font-style: italic;
 }
 

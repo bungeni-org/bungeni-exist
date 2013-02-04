@@ -20,7 +20,8 @@ import module namespace config = "http://exist-db.org/xquery/apps/config" at "co
  :)
 
 declare variable $type:CXT := request:get-context-path();
-declare variable $type:REST-CXT-APP :=  $type:CXT || "/rest" || $config:app-root;
+declare variable $type:REST-CXT-APP :=  $type:CXT || $appconfig:REST-APP-ROOT;
+declare variable $type:REST-BC-LIVE :=  $type:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 
 (:
     Renders the Types
@@ -68,7 +69,7 @@ function type:edit($node as node(), $model as map(*)) {
     return
         <div>
             <xf:model>
-                <xf:instance id="i-type" src="{$type:REST-CXT-APP}/working/live/bungeni_custom/types.xml"/>
+                <xf:instance id="i-type" src="{$type:REST-BC-LIVE}/types.xml"/>
                 
                 <xf:instance xmlns="" id="i-typedoc">
                     <data>
@@ -126,7 +127,7 @@ function type:edit($node as node(), $model as map(*)) {
                 </xf:submission> 
                 
                 <xf:submission id="s-add" method="put" replace="none" ref="instance()">
-                    <xf:resource value="'{$type:REST-CXT-APP}/working/live/bungeni_custom/types.xml'"/>
+                    <xf:resource value="'{$type:REST-BC-LIVE}/types.xml'"/>
                     
                     <xf:header>
                         <xf:name>username</xf:name>

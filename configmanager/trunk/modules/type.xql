@@ -49,13 +49,20 @@ declare function local:wrap-type($archetype as node()) {
             {
             for $type at $pos in $archetype/child::*
             let $count := count($archetype/child::*)
+            let $type-added := xs:string(request:get-parameter("type", ""))
             order by $type/@name ascending
-            return  <li>
+            return  
+                <li>
+                {
+                    if($type-added eq xs:string(node-name($type)) and $pos eq $count) then 
+                        <a class="{if(data($type/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($type/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($type)}&amp;doc={data($type/@name)}&amp;pos={$pos}">{data($type/@name)}<i class="icon-plus new"></i></a>
+                    else                     
                         <a class="{if(data($type/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($type/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($type)}&amp;doc={data($type/@name)}&amp;pos={$pos}">{data($type/@name)}</a>
-                    </li>
+                }
+                </li>
             }
         </ul>  
-        <a class="button-link" href="type-add.html?type=none&amp;doc=none&amp;pos=0">add {data($archetype/@key)} type</a>
+        <a class="button-link" href="type-add.html?type={data($archetype/@key)}&amp;doc=new">add {data($archetype/@key)} type</a>
     </div>  
 };
 
@@ -159,6 +166,39 @@ function type:edit($node as node(), $model as map(*)) {
                     </xf:action>
                 </xf:submission>    
                 
+                <xf:submission id="s-delete" method="put" replace="none" ref="instance()">
+                    <xf:resource value="'{$type:REST-BC-LIVE}/types.xml'"/>
+
+                    <xf:header>
+                        <xf:name>username</xf:name>
+                        <xf:value>{$appconfig:admin-username}</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>password</xf:name>
+                        <xf:value>{$appconfig:admin-password}</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>realm</xf:name>
+                        <xf:value>exist</xf:value>
+                    </xf:header>
+                    
+                    <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral">Type deleted successfully</xf:message>
+                        <script type="text/javascript">
+                            document.location.href = 'types.html?rand={current-time()}';
+                        </script> 
+                    </xf:action>
+
+                    <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                        <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                        <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                    </xf:action>
+
+                    <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                        <xf:message>Transition information have not been filled in correctly</xf:message>
+                    </xf:action>
+                </xf:submission>                 
+                
                 <xf:action ev:event="xforms-ready">
                     <!--xf:action if="'{$type}' = 'doc'">
                         <xf:insert nodeset="instance()/doc" at="last()" position="after" origin="instance('i-typedoc')/doc" />
@@ -178,14 +218,14 @@ function type:edit($node as node(), $model as map(*)) {
                         <xf:hint>check to enable this</xf:hint>
                     </xf:input>
                     <br/>
-                    <xf:group id="typeButtons">
+                    <xf:group id="typeButtons" appearance="bf:horizontalTable">
                         <xf:trigger>
-                            <xf:label>Update</xf:label>
-                            <xf:action if="'doc' = 'doc'">
+                            <xf:label>update</xf:label>
+                            <xf:action if="'{$type}' = 'doc'">
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:send submission="s-add"/>
                             </xf:action>
-                            <xf:action if="'group' = 'group'">
+                            <xf:action if="'{$type}' = 'group'">
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:send submission="s-add"/>
                             </xf:action>
@@ -195,6 +235,184 @@ function type:edit($node as node(), $model as map(*)) {
                                     <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc,'')"/>
                                 </xf:load>
                             </xf:action>                            
+                        </xf:trigger>
+                        <xf:group appearance="bf:verticalTable">                      
+                             <xf:switch>
+                                <xf:case id="delete">
+                                   <xf:trigger ref="instance()/{$type}">
+                                      <xf:label>delete</xf:label>
+                                      <xf:action ev:event="DOMActivate">
+                                         <xf:toggle case="confirm" />
+                                      </xf:action>
+                                   </xf:trigger>
+                                </xf:case>
+                                <xf:case id="confirm">
+                                   <h2>Are you sure you want to delete this doctype?</h2>
+                                   <xf:group appearance="bf:horizontalTable">
+                                       <xf:trigger>
+                                          <xf:label>Delete</xf:label>
+                                          <xf:action ev:event="DOMActivate">
+                                            <xf:delete nodeset="instance()/descendant-or-self::*[data(@name) eq '{$name}']"/>
+                                            <xf:send submission="s-delete"/>
+                                            <xf:toggle case="delete" />
+                                          </xf:action>
+                                       </xf:trigger>
+                                       <xf:trigger>
+                                            <xf:label>Cancel</xf:label>
+                                            <xf:toggle case="delete" ev:event="DOMActivate" />
+                                       </xf:trigger>
+                                    </xf:group>
+                                </xf:case>
+                             </xf:switch>   
+                        </xf:group>                        
+                    </xf:group>
+                </xf:group>
+            </xf:group>
+            <!-- ######################### Views end ################################## -->  
+        </div>
+};
+
+declare 
+function type:add($node as node(), $model as map(*)) {
+
+    let $contextPath := request:get-context-path()
+    let $type := request:get-parameter("type", "none")
+    let $name := request:get-parameter("doc", "none")
+    let $pos := request:get-parameter("pos", "none")
+    return
+        <div>
+            <xf:model>
+                <xf:instance id="i-type" src="{$type:REST-BC-LIVE}/types.xml"/>
+                
+                <xf:instance xmlns="" id="i-typedoc">
+                    <data>
+                        <doc name="" enabled="false"/>
+                    </data>
+                </xf:instance>
+                
+                <xf:instance xmlns="" id="i-typegroup">
+                    <data>
+                        <group name="" workflow="group" enabled="false">
+                            <member name="member_member" workflow="group_membership" enabled="false"/>
+                        </group>
+                    </data>
+                </xf:instance>
+                
+                <xf:instance id="i-vars" src="{$type:REST-CXT-APP}/model_templates/vars.xml"/>
+                
+                <xf:instance id="tmp">
+                    <data xmlns="">
+                        <wantsToClose>false</wantsToClose>
+                    </data>
+                </xf:instance>
+                
+                <xf:instance id="i-controller" src="{$type:REST-CXT-APP}/model_templates/controller.xml"/>        
+                
+                <xf:bind nodeset="instance()/{$type}[last()]">
+                    <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$')" />
+                    <xf:bind id="typenable" nodeset="@enabled" type="xf:boolean" required="true()"/>
+                </xf:bind>
+                
+                <xf:submission id="s-controller"
+                               method="put"
+                               replace="none"
+                               ref="instance('i-controller')">
+                    <xf:resource value="'{$type:REST-CXT-APP}/model_templates/controller.xml'"/>
+        
+                    <xf:header>
+                        <xf:name>username</xf:name>
+                        <xf:value>{$appconfig:admin-username}</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>password</xf:name>
+                        <xf:value>{$appconfig:admin-password}</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>realm</xf:name>
+                        <xf:value>exist</xf:value>
+                    </xf:header>
+        
+                    <xf:action ev:event="xforms-submit">
+                        <xf:message level="ephemeral">Record the Type name to controller</xf:message>
+                        <xf:setvalue ref="instance('i-controller')/lastAddedType" value="instance()/doc[last()]/@name" />
+                        <xf:recalculate/>
+                    </xf:action>
+                </xf:submission> 
+                
+                <xf:submission id="s-add" method="put" replace="none" ref="instance()">
+                    <xf:resource value="'{$type:REST-BC-LIVE}/types.xml'"/>
+                    
+                    <xf:header>
+                        <xf:name>username</xf:name>
+                        <xf:value>{$appconfig:admin-username}</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>password</xf:name>
+                        <xf:value>{$appconfig:admin-password}</xf:value>
+                    </xf:header>
+                    <xf:header>
+                        <xf:name>realm</xf:name>
+                        <xf:value>exist</xf:value>
+                    </xf:header>
+                    
+                    <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral">New type added successfully</xf:message>
+                        <script type="text/javascript">
+                            document.location.href = 'types.html?rand={current-time()}&#38;amp;type={$type}';
+                        </script> 
+                    </xf:action>
+                    
+                    <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                        <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                        <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                    </xf:action>
+                    
+                    <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                        <xf:message>The form details have not been filled in correctly</xf:message>
+                    </xf:action>
+                </xf:submission>    
+                
+                <xf:action ev:event="xforms-ready">
+                    <xf:action if="'{$type}' = 'doc'">
+                        <xf:insert nodeset="instance()/doc" at="last()" position="after" origin="instance('i-typedoc')/doc" />
+                    </xf:action>
+                    <xf:action if="'{$type}' = 'group'">
+                        <xf:insert nodeset="instance()/group" at="last()" position="after" origin="instance('i-typegroup')/group" />
+                    </xf:action>  
+                    <xf:setfocus control="type-name"/>
+                </xf:action>        
+            </xf:model>
+            <!-- ######################### Views start ################################## -->
+            <p>Enter {$type}-type information || Click on the left to update parts</p>
+            <xf:group appearance="compact" ref="instance()/doc[last()]">
+                <xf:group>
+                    <xf:input bind="typename" id="type-name" incremental="true">
+                        <xf:label>name</xf:label>
+                        <xf:hint>Unique / no spaces / lower-case alphabets only</xf:hint>
+                        <xf:alert>invalid type name / duplicate / empty space(s)</xf:alert>
+                    </xf:input>                  
+                    <xf:input bind="typenable" id="type-enabled">
+                        <xf:label>enabled</xf:label>
+                        <xf:hint>check to enable this doc/group/membership type</xf:hint>
+                    </xf:input>
+                    <br/>
+                    <xf:group id="typeButtons">
+                        <xf:trigger>
+                            <xf:label>Add</xf:label>
+                            <xf:action if="'doc' = 'doc'">
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:send submission="s-add"/>
+                            </xf:action>
+                            <xf:action if="'group' = 'group'">
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:send submission="s-add"/>
+                            </xf:action>
+                            <!--xf:action>
+                                <xf:setvalue ref="instance('i-vars')/renameDoc" value="concat(instance()/{$type}[{$pos}]/@name,'.xml')"/>
+                                <xf:load show="none" targetid="secondary-menu">
+                                    <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc,'')"/>
+                                </xf:load>
+                            </xf:action-->                            
                         </xf:trigger>
                     </xf:group>
                 </xf:group>

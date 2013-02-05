@@ -122,6 +122,14 @@ h1 {
     margin-right:10px;
 }
 
+.blockCheckbox input {
+    float:left;
+    margin-right:10px;
+}
+.blockCheckbox .widgetContainer {
+    width:200px;
+}
+
 .InlineRoundBordersAlert .dijitTextBoxFocused,
 .InlineRoundBordersAlert .dijitComboBoxFocused,
 .InlineRoundBordersAlert .dijitSpinnerFocused,
@@ -170,7 +178,7 @@ h1 {
 .InlineRoundBordersAlert .info {
     font-size: 9pt;
     font-family: sans-serif;
-    width:95%;
+    width:auto;
     padding: 6px 0px 3px 25px;
     height:15px;
 }
@@ -180,7 +188,7 @@ h1 {
 .InlineRoundBordersAlert .xfMinimalGroup .info {
     font-size: 9pt;
     font-family: sans-serif;
-    width:95%;
+    width:auto;
     padding: 6px 0px 3px 25px;
     height:15px;
     margin-left:180px;
@@ -219,6 +227,9 @@ h1 {
 }
 .xshortestWidth select {
     width:50px;
+}
+.xmediumWidth select {
+    width:150px;
 }
 
 .xLongwidth {
@@ -321,11 +332,21 @@ h1 {
 .fieldModes {
     width:100px;
 }
-
+#secondary-menu {
+    margin-top:30px;
+}
 ul.secondary {
-    list-style-type: square;
+    margin-left:10px;
+    list-style-type: none;
 }
 
+ul.secondary i.add {
+    color: #0492BE;
+}
+
+i.new {
+    color:#fac437;
+}
 .sec-active {
     font-weight:bold;
 }

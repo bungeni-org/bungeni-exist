@@ -11,7 +11,8 @@ import module namespace appconfig = "http://exist-db.org/apps/configmanager/conf
 import module namespace config = "http://exist-db.org/xquery/apps/config" at "config.xqm";
 
 declare variable $app:CXT := request:get-context-path();
-declare variable $app:REST-CXT-APP :=  $app:CXT || "/rest" || $config:app-root;
+declare variable $app:REST-CXT-APP :=  $app:CXT || $appconfig:REST-APP-ROOT;
+declare variable $app:REST-BC-LIVE :=  $app:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 
 (:~
  : This is a sample templating function. It will be called by the templating module if
@@ -106,12 +107,39 @@ function app:get-type-parts($node as node(), $model as map(*), $active as xs:str
             let $name := request:get-parameter("doc", "none")
             let $pos := xs:integer(request:get-parameter("pos", 0))            
             
-            for $part in ('form', 'workflow', 'workspace', 'notification')
+            for $part in ('workflow', 'form', 'workspace', 'notification')
             return 
-                if ($active eq $part) then 
-                    <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$part}</a></li>
-                else 
-                    <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}">{$part} &#187;</a></li>
+                switch ($part)
+                    case 'form' return 
+                        let $doc-path := $appconfig:CONFIGS-FOLDER || "/forms/" || $name || ".xml"
+                        return 
+                            if (doc-available($doc-path) or $active eq $part) then 
+                                <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
+                            else 
+                                <li><a class=" {$doc-path}" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>
+                        
+                    case 'workflow' return 
+                        let $doc-path := $appconfig:CONFIGS-FOLDER || "/workflows/" || $name || ".xml"
+                        return 
+                            if (doc-available($doc-path) or $active eq $part) then
+                                <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
+                            else 
+                                <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>
+                    case 'workspace' return 
+                        let $doc-path := $appconfig:CONFIGS-FOLDER || "/workspace/" || $name || ".xml"
+                        return 
+                            if (doc-available($doc-path) or $active eq $part) then
+                                <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
+                            else
+                                <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>      
+                    case 'notification' return 
+                        let $doc-path := $appconfig:CONFIGS-FOLDER || "/notifications/" || $name || ".xml"
+                        return 
+                            if (doc-available($doc-path) or $active eq $part) then 
+                                <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
+                            else 
+                                <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>                         
+                   default return "(::)"
             }
         </ul> 
     </div>

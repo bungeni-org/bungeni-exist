@@ -569,60 +569,32 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:label>view</xf:label>
                                     <xf:input id="input-viewshow" ref="view/@show">
                                         <xf:label>show</xf:label>
-                                    </xf:input>                                        
-                                    <table class="fieldModes">
-                                       <thead>
-                                           <tr>                                
-                                               <th colspan="2"/>                               
-                                           </tr>
-                                       </thead>                                    
-                                       <tbody id="r-viewfieldattrs" xf:repeat-nodeset="view/roles/role[position()!=last()]" startindex="1">
-                                           <tr>                                
-                                               <td>
-                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>select a role</xf:label>
-                                                        <xf:alert>duplicates or invalid role options</xf:alert>
-                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                            <xf:label ref="."></xf:label>
-                                                            <xf:value ref="."></xf:value>
-                                                        </xf:itemset>
-                                                    </xf:select1>                                                         
-                                               </td>                                           
-                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                            
-                                           </tr>
-                                       </tbody>
-                                    </table>    
-                                    <xf:group appearance="minimal">                                   
-                                        <table>                              
-                                           <tbody>
-                                               <tr>                                
-                                                   <td>
-                                                        <xf:trigger>
-                                                           <xf:label>add role</xf:label>
-                                                           <xf:action>
-                                                               <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                                           </xf:action>
-                                                        </xf:trigger>                                       
-                                                   </td>                                           
-                                                   <td>                                           
-                                                        <xf:trigger>
-                                                            <xf:label>remove</xf:label>
-                                                            <xf:action ev:event="DOMActivate">
-                                                                <!--    For known reason you cannot delete the nodeset.
-                                                                        http://en.wikibooks.org/wiki/XForms/Delete
-                                                                        http://www.w3.org/TR/xforms/#action-insert
-                                                                        Solution:
-                                                                        http://publib.boulder.ibm.com/infocenter/forms/v3r5m1/index.jsp?topic=%2Fcom.ibm.form.designer.xfdl.doc%2Fi_xfdl_g_xforms_actions_xforms_delete.html
-                                                                -->
-                                                                <xf:delete nodeset="view/roles/role[last()>1]" at="index('r-viewfieldattrs')"/>
-                                                                <xf:insert nodeset="view/roles/role[last()=1]" at="1" position="before"/>
-                                                                <xf:setfocus control="r-viewfieldattrs"/>
-                                                            </xf:action> 
-                                                        </xf:trigger>  
-                                                   </td>                            
-                                               </tr>
-                                           </tbody>
-                                        </table>
+                                    </xf:input>     
+                                    <xf:repeat id="r-viewfieldattrs" nodeset="view/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                            <xf:label>select a role</xf:label>
+                                            <xf:help>help for select1</xf:help>
+                                            <xf:alert>invalid: cannot be empty</xf:alert>
+                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:trigger>
+                                            <xf:label>delete</xf:label>
+                                            <xf:action>
+                                                <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
+                                            </xf:action>
+                                        </xf:trigger>                                         
+                                    </xf:repeat>
+                                    <br/>
+                                    <xf:group appearance="minimal">
+                                        <xf:trigger>
+                                           <xf:label>add role</xf:label>
+                                           <xf:action>
+                                               <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                           </xf:action>
+                                        </xf:trigger>     
                                     </xf:group>
                                 </xf:group>
                                 
@@ -631,54 +603,32 @@ function form:field-edit($node as node(), $model as map(*)) {
                                    <xf:label>edit</xf:label>
                                     <xf:input id="input-editshow" ref="edit/@show">
                                         <xf:label>show</xf:label>
-                                    </xf:input>                                
-                                   <table class="fieldModes">
-                                       <thead>
-                                           <tr>                                
-                                               <th colspan="2"/>                               
-                                           </tr>
-                                       </thead>
-                                       <tbody id="r-editfieldattrs" appearance="minimal" xf:repeat-nodeset="edit/roles/role[position()!=last()]" startindex="1">
-                                           <tr>                                
-                                               <td style="color:steelblue;font-weight:bold;">
-                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>select a role</xf:label>
-                                                        <xf:alert>duplicates or invalid role options</xf:alert>
-                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                            <xf:label ref="."></xf:label>
-                                                            <xf:value ref="."></xf:value>
-                                                        </xf:itemset>
-                                                    </xf:select1>                                           
-                                               </td>                                           
-                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                           
-                                           </tr>
-                                       </tbody>
-                                   </table>    
+                                    </xf:input>  
+                                    <xf:repeat id="r-editfieldattrs" nodeset="edit/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                            <xf:label>select a role</xf:label>
+                                            <xf:help>help for select1</xf:help>
+                                            <xf:alert>invalid: cannot be empty</xf:alert>
+                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:trigger>
+                                            <xf:label>delete</xf:label>
+                                            <xf:action>
+                                                <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
+                                            </xf:action>
+                                        </xf:trigger>                                         
+                                    </xf:repeat>
+                                    <br/>
                                     <xf:group appearance="minimal">
-                                        <table>                              
-                                           <tbody>
-                                               <tr>                                
-                                                   <td style="color:steelblue;font-weight:bold;">
-                                                        <xf:trigger>
-                                                           <xf:label>add role</xf:label>
-                                                           <xf:action>
-                                                               <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                                           </xf:action>
-                                                        </xf:trigger>                                       
-                                                   </td>                                           
-                                                   <td style="color:red;">                                           
-                                                        <xf:trigger>
-                                                            <xf:label>remove</xf:label>
-                                                            <xf:action ev:event="DOMActivate">
-                                                                <xf:delete nodeset="edit/roles/role[last()>1]" at="index('r-editfieldattrs')"/>
-                                                                <xf:insert nodeset="edit/roles/role[last()=1]" at="1" position="before"/>
-                                                                <xf:setfocus control="r-editfieldattrs"/>
-                                                            </xf:action> 
-                                                        </xf:trigger>  
-                                                   </td>                            
-                                               </tr>
-                                           </tbody>
-                                        </table>
+                                        <xf:trigger>
+                                           <xf:label>add role</xf:label>
+                                           <xf:action>
+                                               <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                           </xf:action>
+                                        </xf:trigger>     
                                     </xf:group>
                                 </xf:group>
                                 
@@ -687,54 +637,32 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:label>add</xf:label>
                                     <xf:input id="input-addshow" ref="add/@show">
                                         <xf:label>show</xf:label>
-                                    </xf:input>                                        
-                                    <table class="fieldModes">
-                                       <thead>
-                                           <tr>                                
-                                               <th colspan="2"/>                               
-                                           </tr>
-                                       </thead>                                    
-                                       <tbody id="r-addfieldattrs" xf:repeat-nodeset="add/roles/role[position()!=last()]" startindex="1">
-                                           <tr>                                
-                                               <td style="color:steelblue;font-weight:bold;">
-                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>select a role</xf:label>
-                                                        <xf:alert>duplicates or invalid role options</xf:alert>
-                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                            <xf:label ref="."></xf:label>
-                                                            <xf:value ref="."></xf:value>
-                                                        </xf:itemset>
-                                                    </xf:select1>                                           
-                                               </td>                                           
-                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                            
-                                           </tr>
-                                       </tbody>
-                                    </table>    
+                                    </xf:input>   
+                                    <xf:repeat id="r-addfieldattrs" nodeset="add/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                            <xf:label>select a role</xf:label>
+                                            <xf:help>help for select1</xf:help>
+                                            <xf:alert>invalid: cannot be empty</xf:alert>
+                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:trigger>
+                                            <xf:label>delete</xf:label>
+                                            <xf:action>
+                                                <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
+                                            </xf:action>
+                                        </xf:trigger>                                         
+                                    </xf:repeat>
+                                    <br/>
                                     <xf:group appearance="minimal">
-                                        <table>                              
-                                           <tbody>
-                                               <tr>                                
-                                                   <td style="color:steelblue;font-weight:bold;">
-                                                        <xf:trigger>
-                                                           <xf:label>add role</xf:label>
-                                                           <xf:action>
-                                                               <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                                           </xf:action>
-                                                        </xf:trigger>                                       
-                                                   </td>                                           
-                                                   <td style="color:red;">                                           
-                                                        <xf:trigger>
-                                                            <xf:label>remove</xf:label>
-                                                            <xf:action ev:event="DOMActivate">
-                                                                <xf:delete nodeset="add/roles/role[last()>1]" at="index('r-addfieldattrs')"/>
-                                                                <xf:insert nodeset="add/roles/role[last()=1]" at="1" position="before"/>
-                                                                <xf:setfocus control="r-addfieldattrs"/>
-                                                            </xf:action> 
-                                                        </xf:trigger>  
-                                                   </td>                            
-                                               </tr>
-                                           </tbody>
-                                        </table>
+                                        <xf:trigger>
+                                           <xf:label>add role</xf:label>
+                                           <xf:action>
+                                               <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                           </xf:action>
+                                        </xf:trigger>     
                                     </xf:group>
                                 </xf:group>
                                      
@@ -743,54 +671,32 @@ function form:field-edit($node as node(), $model as map(*)) {
                                    <xf:label>listing</xf:label>
                                     <xf:input id="input-listingshow" ref="listing/@show">
                                         <xf:label>show</xf:label>
-                                    </xf:input>                                
-                                   <table class="fieldModes">
-                                       <thead>
-                                           <tr>                                
-                                               <th colspan="2"/>                               
-                                           </tr>
-                                       </thead>
-                                       <tbody id="r-listingfieldattrs" appearance="minimal" xf:repeat-nodeset="listing/roles/role[position()!=last()]" startindex="1">
-                                           <tr>                                
-                                               <td style="color:steelblue;font-weight:bold;">
-                                                    <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                        <xf:label>select a role</xf:label>
-                                                        <xf:alert>duplicates or invalid role options</xf:alert>
-                                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                            <xf:label ref="."></xf:label>
-                                                            <xf:value ref="."></xf:value>
-                                                        </xf:itemset>
-                                                    </xf:select1>                                           
-                                               </td>                                           
-                                               <td style="color:red;width:50px;height:30px;">&#160;</td>                           
-                                           </tr>
-                                       </tbody>
-                                   </table>    
+                                    </xf:input>  
+                                    <xf:repeat id="r-listingfieldattrs" nodeset="listing/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                            <xf:label>select a role</xf:label>
+                                            <xf:help>help for select1</xf:help>
+                                            <xf:alert>invalid: cannot be empty</xf:alert>
+                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:trigger>
+                                            <xf:label>delete</xf:label>
+                                            <xf:action>
+                                                <xf:delete at="index('r-listingfieldattrs')[position()]"></xf:delete>
+                                            </xf:action>
+                                        </xf:trigger>                                         
+                                    </xf:repeat>
+                                    <br/>
                                     <xf:group appearance="minimal">
-                                        <table>                              
-                                           <tbody>
-                                               <tr>                                
-                                                   <td style="color:steelblue;font-weight:bold;">
-                                                        <xf:trigger>
-                                                           <xf:label>add role</xf:label>
-                                                           <xf:action>
-                                                               <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                                           </xf:action>
-                                                        </xf:trigger>                                       
-                                                   </td>                                           
-                                                   <td style="color:red;">                                           
-                                                        <xf:trigger>
-                                                            <xf:label>remove</xf:label>           
-                                                            <xf:action ev:event="DOMActivate">
-                                                                <xf:delete nodeset="listing/roles/role[last()>1]" at="index('r-listingfieldattrs')"/>
-                                                                <xf:insert nodeset="listing/roles/role[last()=1]" at="1" position="before"/>
-                                                                <xf:setfocus control="r-listingfieldattrs"/>
-                                                            </xf:action>                                                            
-                                                        </xf:trigger>  
-                                                   </td>                            
-                                               </tr>
-                                           </tbody>
-                                        </table>
+                                        <xf:trigger>
+                                           <xf:label>add role</xf:label>
+                                           <xf:action>
+                                               <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                           </xf:action>
+                                        </xf:trigger>     
                                     </xf:group>
                                 </xf:group>
                                                                        
@@ -808,6 +714,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                             </xf:trigger>
                             <xf:trigger>
                                 <xf:label>Cancel</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:reset/>
+                                </xf:action>
                             </xf:trigger>                    
                         </xf:group>   
                         

@@ -1,31 +1,14 @@
 $(document).ready(function(){
+
     if(window.location.hash) {
         //get the index from URL hash
         tabSelect = document.location.hash.substr(1,document.location.hash.length);
-        $('#tabs li#tabfields').trigger('click');
-    }  
-    /*
-    $('#submitname').bind('click', function(e) {
-        e.preventDefault();
-        alert("aasas");
-        //$("#f-transition-popup").submit();
-    });             
-    
-     $('.popup').on('click', function(e) {
-        // Prevents the default action to be triggered. 
-        e.preventDefault();
-        var href = $(this).attr('href');
+        // timeout because of http://stackoverflow.com/questions/2060019/how-to-trigger-click-on-page-load
+        setTimeout(function() {
+            $("#tabs li#"+tabSelect).trigger('click');
+        },10);        
         
-        // Triggering bPopup when click event is fired
-        $('#popup').bPopup({
-            contentContainer:'.popupcontent',
-            loadUrl: 'transition-add-popup.html?doc=question&node=submitted&attr=29',            
-            modalClose: true,
-            opacity: 0.2,
-            positionStyle: 'fixed' //'fixed' or 'absolute'
-        });
-     });
-    */
+    }
     
     // Adding confirmation dialog for Saving configuration back to File-System
     $("a.confirm-delete").click(function() {
@@ -53,6 +36,7 @@ $(document).ready(function(){
         return false;
     });
     
+    // moving nodes up and down (reordering)
     $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
     $(".up, .down").click(function(){
         var row = $(this).parents("li:first");
@@ -78,7 +62,7 @@ $(document).ready(function(){
         return false;
     });  
     
-    //$(".delete").click(function() {
+    // deleting a node
     $(".delete").live('click', function() {
         var href = $(this).attr('href');
         var li = $(this).closest('li');          
@@ -98,38 +82,5 @@ $(document).ready(function(){
         
         return false;
         
-    });        
-    
-    /*$(".popup").click(function() {
-        var href = $(this).attr('href');
-        
-        $('.').bPopup({
-            contentContainer:'.content',
-            loadUrl: 'http://localhost:8088/exist/apps/configmanager/views/edit-transition.xql?doc=question&node=submitted&attr=29'
-        });
-            
-        $.ajax({
-            type: "GET",
-            url: 'http://localhost:8088/exist/apps/configmanager/views/edit-transition.xql?doc=question&node=submitted&attr=29',
-            data: "nothing",
-            success: function(data){
-                //$(row).remove();
-            }
-        });        
-
-        return false;
-        
-    }); */   
-    
-    /*$(".nodeMove a").click (function () {
-      $.ajax({
-        type: "POST", // or GET
-        url: $(this).getAttr('href'),
-        data: "nothing",
-        success: function(data){
-         $("#someElement").doSomething().
-        }
-      });
-      return false; // stop the browser following the link
-    }; */   
+    });  
 });

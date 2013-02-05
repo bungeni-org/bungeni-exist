@@ -44,4 +44,7 @@ let $lookup := function($functionName as xs:string, $arity as xs:int) {
  :)
 let $content := request:get-data()
 return
-    templates:apply($content, $lookup, (), $config)
+    templates:apply($content, $lookup, (), $config),
+    (: !+NOTE (ao, 5th Feb 2013) added this to show updated pages on the HTML views :)
+    response:set-header( "Cache-Control", 'no-cache, no-store, max-age=0, must-revalidate' ),
+    response:set-header( "Expires", "0" )

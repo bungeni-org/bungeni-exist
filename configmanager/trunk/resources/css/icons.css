@@ -28,6 +28,8 @@
 /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
+.icon-plus:before { content: '\2b'; } /* '+' */
+.icon-edit:before { content: '\270d'; } /* '✍' */
 .icon-cancel:before { content: '\2715'; } /* '✕' */
 .icon-cancel-circled:before { color:red; content: '\2716'; } /* '✖' */
 .icon-up:before { content: '\2b06'; } /* '⬆' */

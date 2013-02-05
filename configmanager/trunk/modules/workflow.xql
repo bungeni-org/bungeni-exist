@@ -141,6 +141,7 @@ function workflow:edit($node as node(), $model as map(*)) {
     let $type := xs:string(request:get-parameter("type",""))
     let $docname := xs:string(request:get-parameter("doc","none"))    
     let $pos := xs:string(request:get-parameter("pos",""))
+    let $init := xs:string(request:get-parameter("init",""))
     let $lastfield := data(local:get-form($docname)/descriptor/field[last()]/@name)
     let $showing := xs:string(request:get-parameter("tab","fields"))
     return 
@@ -148,11 +149,30 @@ function workflow:edit($node as node(), $model as map(*)) {
     	<div>
             <div style="display:none">
                 <xf:model>
-                    <xf:instance id="i-form" src="{$workflow:REST-BC-LIVE}/workflows/{$docname}.xml"/>                      
+                    {
+                        (: if adding a new workflow is true :)
+                        if($init eq "true") then 
+                            <xf:instance id="i-form" src="{$workflow:REST-CXT-MODELTMPL}/workflow.xml"/>
+                        else
+                            <xf:instance id="i-form" src="{$workflow:REST-BC-LIVE}/workflows/{$docname}.xml"/> 
+                    }
+
+                    <xf:instance id="i-allroles" src="{$workflow:REST-BC-LIVE}/sys/_roles.xml"/> 
+                    
+                    <xf:instance id="i-features" src="{$workflow:REST-BC-LIVE}/workflows/_features.xml"/>
+
+                    <xf:instance id="i-tmplrole" xmlns="">
+                        <data>
+                            <roles>
+                               <role/>                               
+                            </roles>
+                        </data>
+                    </xf:instance> 
 
                     <xf:bind nodeset=".">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />
-                        <xf:bind nodeset="@title" type="xf:string" required="true()"constraint="string-length(.) &gt; 3" />
+                        <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
+                        <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
+                        <xf:bind nodeset="feature/@enabled" type="xf:boolean" required="true()" />
                     </xf:bind>
                     
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
@@ -193,10 +213,6 @@ function workflow:edit($node as node(), $model as map(*)) {
     
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">Workflow changes updated successfully</xf:message>
-                            <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                                dijit.byId("formsDialog").hide();
-                                dojo.publish('/workflow/view',['{$docname}','workflow','documentDiv']);  
-                            </script>
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
@@ -210,7 +226,9 @@ function workflow:edit($node as node(), $model as map(*)) {
                     </xf:submission>
                     
                     <xf:action ev:event="xforms-ready" >
-
+                        <xf:action if="'{$init}' eq 'true'">
+                            <xf:setvalue ref="instance()/@name" value="'{$docname}'"/>
+                        </xf:action>                    
                     </xf:action>
 
             </xf:model>
@@ -228,28 +246,173 @@ function workflow:edit($node as node(), $model as map(*)) {
             
             <div id="tabs_content_container">
                 <div id="details" class="tab_content" style="display: block;">
-                    <xf:group ref=".">                   
-                        <h1><xf:output ref="@name"/></h1>
+                    <xf:group ref="." appearance="bf:horizontalTable">
+                        <xf:label>Workflow Details</xf:label>
                         <xf:group appearance="bf:verticalTable">
-                            <xf:input id="wf-title" ref="@title">
+                            <xf:input id="wf-title" ref="@title" incremental="true">
                                 <xf:label>Title</xf:label>
                                 <xf:hint>edit title of the workflow</xf:hint>
                                 <xf:alert>enter more than 3 characters</xf:alert>
                             </xf:input>   
                             <xf:textarea id="wf-description" ref="@description" appearance="growing" incremental="true">
                                 <xf:label>Description</xf:label>
-                                <xf:hint>lengthy description for the workflow</xf:hint>
+                                <xf:hint>lengthy description of the workflow</xf:hint>
                                 <xf:alert>invalid</xf:alert>
                             </xf:textarea>
-                            <xf:trigger>
-                                <xf:label>Save</xf:label>
-                                <xf:action>
-                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                    <xf:send submission="s-add"/>
-                                </xf:action>                                
-                            </xf:trigger> 
                         </xf:group>
+                        <xf:group appearance="bf:verticalTable">
+                            <xf:label>Workflow features</xf:label>
+                            <xf:select id="c-features" ref="feature/@enabled" appearance="full" incremental="true" class="blockCheckbox">
+                                <xf:hint>enabled/disabled features on this workflow</xf:hint>
+                                <xf:itemset nodeset="instance()/feature">
+                                    <xf:label ref="@name"></xf:label>
+                                    <xf:value ref="@enabled"></xf:value>
+                                </xf:itemset>
+                            </xf:select>  
+                        </xf:group>                        
                     </xf:group>
+                    <hr/>
+                    <xf:group ref=".">
+                        <xf:group appearance="compact" class="modesWrapper">
+                            <xf:label>Global Grants</xf:label>
+                            
+                            <!-- view mode -->
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>View</xf:label>    
+                                <xf:repeat id="r-viewfieldattrs" nodeset="allow[@permission eq '.View']/roles/role" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>grant view on roles...</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="allow[@permission eq '.View']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                            
+                            <!-- edit mode -->
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>Edit</xf:label>    
+                                <xf:repeat id="r-editwfieldattrs" nodeset="allow[@permission eq '.Edit']/roles/role" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>grant edit on roles...</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="allow[@permission eq '.Edit']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                            
+                            <!-- add -->
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>Add</xf:label>    
+                                <xf:repeat id="r-addwfieldattrs" nodeset="allow[@permission eq '.Add']/roles/role" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>grant add on roles...</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="allow[@permission eq '.Add']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                                 
+                            <!-- delete -->
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>Delete</xf:label>    
+                                <xf:repeat id="r-deletewfieldattrs" nodeset="allow[@permission eq '.Delete']/roles/role" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>grant delete on roles...</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-deletefieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="allow[@permission eq '.Delete']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                                                                   
+                        </xf:group>             
+                    </xf:group>
+                    <hr/>
+                    <xf:group>
+                        <xf:trigger>
+                            <xf:label>Save</xf:label>
+                            <xf:action>
+                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:send submission="s-add"/>
+                            </xf:action>                                
+                        </xf:trigger>                         
+                    </xf:group>                    
+                    
                 </div>
                 <div id="states" class="tab_content">
                     <div class="ulisting">
@@ -297,13 +460,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                  <xf:model id="master">
                     <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
 
-                    <xf:instance id="i-tags" xmlns="">
-                        <data>
-                            <tags originAttr="tags">
-                                <tag/>
-                            </tags>                        
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>
 
                     <xf:bind nodeset="./state">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
@@ -368,7 +525,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
             
             </div>    	
             <div style="width: 100%; height: 100%;">
-                <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}">
+                <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}#tabstates">
                     <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
                 </a>
                 <br/>              
@@ -997,6 +1154,8 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-conditions" src="{$workflow:REST-BC-LIVE}/workflows/_conditions.xml"/>                     
 
+                    <xf:instance id="i-originrole" src="{$workflow:REST-CXT-MODELTMPL}/roles.xml"/>
+
                     <xf:instance id='i-transition' xmlns="">
                         <data>
                            <transition title="" condition="" require_confirmation="false" trigger="manual" order="0"  note="Add a note">
@@ -1034,20 +1193,13 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                 <role>ALL</role>
                             </roles>                        
                         </data>
-                    </xf:instance>
-
-                    <xf:instance id="i-originrole" xmlns="">
-                        <data>
-                            <roles>
-                               <role>ALL</role>                               
-                            </roles>
-                        </data>
-                    </xf:instance>                     
+                    </xf:instance>                   
                     
                     <xf:bind nodeset="instance()/transition[{$NODEPOS}]">
                         <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="((. &lt; 100) and (. &gt; 0)) or (. = 0)" />
-                        <xf:bind id="b-destination" nodeset="destinations/destination" type="xf:string" required="true()" constraint="xs:string(.) ne '{$NODENAME}'" />                        
+                        <xf:bind id="b-destination" nodeset="destinations/destination" type="xf:string" required="true()" constraint="xs:string(.) ne '{$NODENAME}'" />
+                        <xf:bind nodeset="roles/role" type="xf:string" required="true()" constraint="count(instance()/transition[{$NODEPOS}]/roles/role) eq count(distinct-values(instance()/transition[{$NODEPOS}]/roles/role))" />
                         <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
                         <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
                     </xf:bind>
@@ -1126,7 +1278,15 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                         </xf:action>
                     </xf:submission>                    
 
-                    <xf:action ev:event="xforms-ready" >                    
+                    <xf:action ev:event="xforms-ready" >    
+                        <xf:action if="not(empty(instance()/transition[{$NODEPOS}]/roles))">
+                            <xf:message level="ephemeral">appended a template &lt;role/&gt; node</xf:message>
+                            <xf:insert nodeset="instance()/transition[{$ATTR}]/roles/child::*" at="last()" position="after" origin="instance('i-originrole')/roles/role" /> 
+                        </xf:action>                       
+                        <xf:action if="empty(instance()/transition[{$NODEPOS}]/tags)">
+                            <xf:message level="ephemeral">added &lt;roles/&gt; node</xf:message>
+                            <xf:insert nodeset="instance()/transition[{$NODEPOS}]/child::*" at="last()" position="after" origin="instance('i-originrole')/roles" />
+                        </xf:action>                      
                     </xf:action>
                 </xf:model>
             </div>
@@ -1208,54 +1368,32 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                         </xf:group>    
 
                         <xf:group appearance="bf:verticalTable" style="width:20%">
-                            <xf:label><h3>roles</h3></xf:label>                                     
-                            <table class="fieldModes">
-                               <thead>
-                                   <tr>                                
-                                       <th colspan="2"/>                               
-                                   </tr>
-                               </thead>                                    
-                               <tbody id="r-transitionattrs" xf:repeat-nodeset="roles/role[position()!=last()]" startindex="1">
-                                   <tr>                                
-                                       <td>
-                                            <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                <xf:label>select a role</xf:label>
-                                                <xf:alert>duplicates or invalid role options</xf:alert>
-                                                <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                    <xf:label ref="."></xf:label>
-                                                    <xf:value ref="."></xf:value>
-                                                </xf:itemset>
-                                            </xf:select1>                                                         
-                                       </td>                                           
-                                       <td style="color:red;width:50px;height:30px;">&#160;</td>                            
-                                   </tr>
-                               </tbody>
-                            </table>    
-                            <xf:group appearance="minimal">                                   
-                                <table>                              
-                                   <tbody>
-                                       <tr>                                
-                                           <td>
-                                                <xf:trigger>
-                                                   <xf:label>add role</xf:label>
-                                                   <xf:action>
-                                                       <xf:insert nodeset="roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                                   </xf:action>
-                                                </xf:trigger>                                       
-                                           </td>                                           
-                                           <td>                                           
-                                                <xf:trigger>
-                                                    <xf:label>remove</xf:label>
-                                                    <xf:action ev:event="DOMActivate">
-                                                        <xf:delete nodeset="roles/role[last()>1]" at="index('r-transitionattrs')"/>
-                                                        <xf:insert nodeset="roles/role[last()=1]" at="1" position="before"/>
-                                                        <xf:setfocus control="r-viewfieldattrs"/>
-                                                    </xf:action> 
-                                                </xf:trigger>  
-                                           </td>                            
-                                       </tr>
-                                   </tbody>
-                                </table>
+                            <xf:label><h3>roles</h3></xf:label>  
+                            <xf:repeat id="r-transitionattrs" nodeset="roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                    <xf:label>select a role</xf:label>
+                                    <xf:help>help for roles</xf:help>
+                                    <xf:alert>invalid: cannot have duplicates</xf:alert>
+                                    <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="."></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <xf:trigger>
+                                    <xf:label>delete</xf:label>
+                                    <xf:action>
+                                        <xf:delete at="index('r-transitionattrs')[position()]"></xf:delete>
+                                    </xf:action>
+                                </xf:trigger>                                         
+                            </xf:repeat>
+                            <br/>
+                            <xf:group appearance="minimal">
+                                <xf:trigger>
+                                   <xf:label>add role</xf:label>
+                                   <xf:action>
+                                       <xf:insert nodeset="roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                   </xf:action>
+                                </xf:trigger>     
                             </xf:group>
                         </xf:group>                                                
                     </xf:group>

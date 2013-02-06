@@ -116,7 +116,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								                          bun:get-listing-search-context(
     								                            $EXIST-PATH,
     								                            "xml/listing-search-form.xml",
-    								                            'membership'
+    								                            'Membership'
     								                            )
     								                        )
     								                   )

@@ -380,8 +380,7 @@ declare function bun:xqy-search-group() {
 declare function bun:xqy-list-membership($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='",$type,"']",
-                "/bu:membership/bu:membershipType[bu:value eq 'member_of_parliament']",
+                "/bu:ontology/bu:membership/bu:membershipType[bu:value eq 'member_of_parliament']",
                 "/ancestor::bu:ontology")
 };
 
@@ -389,7 +388,7 @@ declare function bun:xqy-list-membership($type as xs:string) {
 declare function bun:xqy-list-membership-with-tabs($type as xs:string, $status as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='membership']/bu:membership[bu:docType/bu:value eq '",$type,"'", 
+                "/bu:ontology/bu:membership[bu:docType/bu:value eq '",$type,"'", 
                 " and ",$status,"]",
                 "/bu:membershipType[bu:value eq 'member_of_parliament']",
                 "/ancestor::bu:ontology")
@@ -472,7 +471,8 @@ declare function bun:list-membership-with-tabs($type as xs:string, $status as xs
 
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-            "/bu:ontology[@for='membership']")
+            "/bu:ontology/bu:membership/bu:docType[bu:value eq 'Membership']",
+            "/ancestor::bu:ontology")
 };
 
 (:~ !+FIXED(ah,05-01-2012) 
@@ -635,9 +635,9 @@ declare function bun:search-criteria(
         $sortby as xs:string,
         $typeofdoc as xs:string) as element() {
         
-        if ($typeofdoc eq "committee" or $typeofdoc eq "political-group") then
+        if ($typeofdoc eq "Committee" or $typeofdoc eq "political-group") then
             bun:search-groupitems($acl, $typeofdoc, "committee-text", "xsl/committees.xsl", $offset, $limit, $querystr, $sortby)
-        else if ($typeofdoc eq "membership") then
+        else if ($typeofdoc eq "Membership") then
             bun:search-membership($acl, $typeofdoc, "member-text", "xsl/members.xsl", $offset, $limit, $querystr, $sortby)
         else
             bun:search-documentitems($acl, $typeofdoc, "bill-text", "xsl/search-listing.xsl", $offset, $limit, $querystr, $sortby)
@@ -1193,14 +1193,14 @@ declare function bun:ft-search(
 
         let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
             $ultimate-path := local:build-search-objects($type),
-            $eval-query := concat($coll-query,"[ft:query((",$ultimate-path,"), '",$escaped,"')]")
+            $eval-query := concat($coll-query,"[ft:query((",$ultimate-path,"), '",$escaped,"*')]")
             
         let $coll :=  util:eval($eval-query)
         let $sortord := xs:string(request:get-parameter("s","none"))
         let $orderby := cmn:get-orderby-config-name($type, $sortord)
         return 
             util:eval(fn:concat("for $match in $coll ",
-                                "order by xs:dateTime($match/",data($orderby/@field),") ",data($orderby/@order)," ",
+                                "order by $match/",data($orderby/@field)," ",data($orderby/@order)," ",
                                 "return $match"))
         (: We want to use user's sort order instead of ft:score engine :)
         (:     

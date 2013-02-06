@@ -125,6 +125,7 @@ function app:get-type-parts($node as node(), $model as map(*), $active as xs:str
                                 <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
                             else 
                                 <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>
+                    (:
                     case 'workspace' return 
                         let $doc-path := $appconfig:CONFIGS-FOLDER || "/workspace/" || $name || ".xml"
                         return 
@@ -139,7 +140,9 @@ function app:get-type-parts($node as node(), $model as map(*), $active as xs:str
                                 <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
                             else 
                                 <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>                         
-                   default return "(::)"
+                   :)
+                   default return ()
+                   
             }
         </ul> 
     </div>

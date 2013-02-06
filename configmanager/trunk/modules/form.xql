@@ -34,30 +34,30 @@ declare function local:fields($doctype) as node() * {
         return
             <li>
                 <span><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={$pos}">{data($field/@label)}</a></span>
-                 <div style="padding-left:20px;">
+                 <div class="roles-wrapper clearfix">
                     {
                      (: Showing only with @show = true :)
                      if($field/view[@show = 'true']) then (
                         <span>
-                            <b>view:</b> {$field/view/roles/role[position()!=last()]} <br/>
+                            <b>view</b> <tt class="roles-inline">({string-join($field/view/roles/role[position()!=last()],", ")})</tt> <br/>
                         </span>
                      ) else (),
                      
                      if (data($field/edit/@show) = 'true') then (
                         <span>
-                            <b>edit:</b> {$field/edit/roles/role[position()!=last()]} <br/>
+                            <b>edit</b> <tt class="roles-inline">({string-join($field/edit/roles/role[position()!=last()],", ")})</tt> <br/> 
                         </span>                     
                      ) else (),
                      
                      if (data($field/add/@show) = 'true') then (
                         <span>
-                            <b>add:</b> {$field/add/roles/role[position()!=last()]} <br/>
+                            <b>add</b> <tt class="roles-inline">({string-join($field/add/roles/role[position()!=last()],", ")})</tt> <br/>
                         </span>                     
                      ) else (),
                      
                      if (data($field/listing/@show) = 'true') then (
                         <span>
-                            <b>listing:</b> {$field/listing/roles/role[position()!=last()]} <br/>
+                            <b>listing</b> <tt class="roles-inline">({string-join($field/listing/roles/role[position()!=last()],", ")})</tt> <br/>
                         </span>                     
                      )                     
                      else ()

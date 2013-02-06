@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tags>
+    <tag>actionclerk</tag>
+    <tag>actionmp</tag>
+    <tag>agendaprivate</tag>
+    <tag>approved</tag>
+    <tag>draft</tag>
+    <tag>fail</tag>
+    <tag>oral</tag>
+    <tag>private</tag>
+    <tag>public</tag>
+    <tag>published</tag>
+    <tag>publishedminutes</tag>
+    <tag>scheduled</tag>
+    <tag>succeed</tag>
+    <tag>terminal</tag>
+    <tag>tobescheduled</tag>
+    <tag>workspace</tag>
+    <tag>written</tag>
+</tags>

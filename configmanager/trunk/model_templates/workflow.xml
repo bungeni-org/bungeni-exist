@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow name="" title="" description="">
-    <tags originAttr="tags">
-        <tag/>
-    </tags>
     <permActions originAttr="permission_actions">
         <permAction>.View</permAction>
         <permAction>.Edit</permAction>
@@ -52,13 +49,7 @@
             </roles>
         </allow>
     </facet>
-    <state id="undefined_draft" title="Undefined Draft">
-        <tags originAttr="tags">
-            <tag/>
-        </tags>
-        <facet ref=".none"/>
-    </state>
-    <transition title="Undefined Title" condition="undefined_condition" trigger="automatic" order="0">
+    <transition title="" condition="" trigger="automatic" order="0">
         <sources originAttr="source">
             <source/>
         </sources>

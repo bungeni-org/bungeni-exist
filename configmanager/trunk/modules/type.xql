@@ -78,6 +78,14 @@ function type:edit($node as node(), $model as map(*)) {
             <xf:model>
                 <xf:instance id="i-type" src="{$type:REST-BC-LIVE}/types.xml"/>
                 
+
+                 <xf:instance id="i-boolean" xmlns="">
+                    <data>
+                       <bool name="enabled">true</bool>
+                       <bool name="disabled">false</bool>
+                    </data>
+                 </xf:instance>                
+                
                 <xf:instance xmlns="" id="i-typedoc">
                     <data>
                         <doc name="" enabled="false"/>
@@ -213,10 +221,18 @@ function type:edit($node as node(), $model as map(*)) {
             <p>Edit the type information || Click on the left to update parts</p>
             <xf:group appearance="compact">
                 <xf:group>
-                    <xf:input bind="typenable" id="type-enabled">
-                        <xf:label>enabled</xf:label>
-                        <xf:hint>check to enable this</xf:hint>
-                    </xf:input>
+                    <xf:group appearance="bf:verticalTable">
+                        <xf:select1 id="c-enabled" bind="typenable" appearance="minimal" class="xsmallWidth" incremental="true">
+                            <xf:label>type status:</xf:label>
+                            <xf:hint>a Hint for this control</xf:hint>
+                            <xf:help>help for select1</xf:help>
+                            <xf:alert>invalid</xf:alert>
+                            <xf:itemset nodeset="instance('i-boolean')/bool">
+                                <xf:label ref="@name"></xf:label>
+                                <xf:value ref="."></xf:value>
+                            </xf:itemset>
+                        </xf:select1>
+                    </xf:group>
                     <br/>
                     <xf:group id="typeButtons" appearance="bf:horizontalTable">
                         <xf:trigger>

@@ -207,7 +207,7 @@ function sysmanager:store($node as node(), $model as map(*)) {
         
                 case true() return
                     <div>
-                        <h2>Upload was successful: <a href="index.html">reload page</a></h2>
+                        <h2>Upload was successful!</h2>
                         <br/>
                         <div style="float:left">
                             <h1>uploaded</h1>

@@ -559,150 +559,149 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     </xf:itemset>
                                 </xf:select1>
                             </xf:group>
-                            <div style="margin-bottom:10px;"/>
-                             
-                            <xf:group appearance="compact" class="modesWrapper">
-                                <xf:label>Modes</xf:label>
-                                
-                                <!-- view mode -->
-                                <xf:group appearance="bf:verticalTable">
-                                    <xf:label>view</xf:label>
-                                    <xf:input id="input-viewshow" ref="view/@show">
-                                        <xf:label>show</xf:label>
-                                    </xf:input>     
-                                    <xf:repeat id="r-viewfieldattrs" nodeset="view/roles/role[position()!=last()]" startindex="1" appearance="compact">
-                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                            <xf:label>select a role</xf:label>
-                                            <xf:help>help for select1</xf:help>
-                                            <xf:alert>invalid: cannot be empty</xf:alert>
-                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                <xf:label ref="."></xf:label>
-                                                <xf:value ref="."></xf:value>
-                                            </xf:itemset>
-                                        </xf:select1>
-                                        <xf:trigger>
-                                            <xf:label>delete</xf:label>
-                                            <xf:action>
-                                                <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
-                                            </xf:action>
-                                        </xf:trigger>                                         
-                                    </xf:repeat>
-                                    <br/>
-                                    <xf:group appearance="minimal">
-                                        <xf:trigger>
-                                           <xf:label>add role</xf:label>
-                                           <xf:action>
-                                               <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                           </xf:action>
-                                        </xf:trigger>     
-                                    </xf:group>
-                                </xf:group>
-                                
-                                <!-- edit mode -->
-                                <xf:group appearance="bf:verticalTable">
-                                   <xf:label>edit</xf:label>
-                                    <xf:input id="input-editshow" ref="edit/@show">
-                                        <xf:label>show</xf:label>
-                                    </xf:input>  
-                                    <xf:repeat id="r-editfieldattrs" nodeset="edit/roles/role[position()!=last()]" startindex="1" appearance="compact">
-                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                            <xf:label>select a role</xf:label>
-                                            <xf:help>help for select1</xf:help>
-                                            <xf:alert>invalid: cannot be empty</xf:alert>
-                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                <xf:label ref="."></xf:label>
-                                                <xf:value ref="."></xf:value>
-                                            </xf:itemset>
-                                        </xf:select1>
-                                        <xf:trigger>
-                                            <xf:label>delete</xf:label>
-                                            <xf:action>
-                                                <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
-                                            </xf:action>
-                                        </xf:trigger>                                         
-                                    </xf:repeat>
-                                    <br/>
-                                    <xf:group appearance="minimal">
-                                        <xf:trigger>
-                                           <xf:label>add role</xf:label>
-                                           <xf:action>
-                                               <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                           </xf:action>
-                                        </xf:trigger>     
-                                    </xf:group>
-                                </xf:group>
-                                
-                                <!-- add -->
-                                <xf:group appearance="bf:verticalTable">
-                                    <xf:label>add</xf:label>
-                                    <xf:input id="input-addshow" ref="add/@show">
-                                        <xf:label>show</xf:label>
-                                    </xf:input>   
-                                    <xf:repeat id="r-addfieldattrs" nodeset="add/roles/role[position()!=last()]" startindex="1" appearance="compact">
-                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                            <xf:label>select a role</xf:label>
-                                            <xf:help>help for select1</xf:help>
-                                            <xf:alert>invalid: cannot be empty</xf:alert>
-                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                <xf:label ref="."></xf:label>
-                                                <xf:value ref="."></xf:value>
-                                            </xf:itemset>
-                                        </xf:select1>
-                                        <xf:trigger>
-                                            <xf:label>delete</xf:label>
-                                            <xf:action>
-                                                <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
-                                            </xf:action>
-                                        </xf:trigger>                                         
-                                    </xf:repeat>
-                                    <br/>
-                                    <xf:group appearance="minimal">
-                                        <xf:trigger>
-                                           <xf:label>add role</xf:label>
-                                           <xf:action>
-                                               <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                           </xf:action>
-                                        </xf:trigger>     
-                                    </xf:group>
-                                </xf:group>
-                                     
-                                <!-- listing -->
-                                <xf:group appearance="bf:verticalTable">
-                                   <xf:label>listing</xf:label>
-                                    <xf:input id="input-listingshow" ref="listing/@show">
-                                        <xf:label>show</xf:label>
-                                    </xf:input>  
-                                    <xf:repeat id="r-listingfieldattrs" nodeset="listing/roles/role[position()!=last()]" startindex="1" appearance="compact">
-                                        <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                            <xf:label>select a role</xf:label>
-                                            <xf:help>help for select1</xf:help>
-                                            <xf:alert>invalid: cannot be empty</xf:alert>
-                                            <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                                <xf:label ref="."></xf:label>
-                                                <xf:value ref="."></xf:value>
-                                            </xf:itemset>
-                                        </xf:select1>
-                                        <xf:trigger>
-                                            <xf:label>delete</xf:label>
-                                            <xf:action>
-                                                <xf:delete at="index('r-listingfieldattrs')[position()]"></xf:delete>
-                                            </xf:action>
-                                        </xf:trigger>                                         
-                                    </xf:repeat>
-                                    <br/>
-                                    <xf:group appearance="minimal">
-                                        <xf:trigger>
-                                           <xf:label>add role</xf:label>
-                                           <xf:action>
-                                               <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
-                                           </xf:action>
-                                        </xf:trigger>     
-                                    </xf:group>
-                                </xf:group>
-                                                                       
-                            </xf:group>                                
                         </xf:group>
-                        <br/>
+                        <hr/>
+                        <xf:group appearance="compact" class="modesWrapper">
+                            <xf:label>Modes</xf:label>
+                            
+                            <!-- view mode -->
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>view</xf:label>
+                                <xf:input id="input-viewshow" ref="view/@show">
+                                    <xf:label>show</xf:label>
+                                </xf:input>     
+                                <xf:repeat id="r-viewfieldattrs" nodeset="view/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>select a role</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                            <xf:label ref="."></xf:label>
+                                            <xf:value ref="."></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="view/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                            
+                            <!-- edit mode -->
+                            <xf:group appearance="bf:verticalTable">
+                               <xf:label>edit</xf:label>
+                                <xf:input id="input-editshow" ref="edit/@show">
+                                    <xf:label>show</xf:label>
+                                </xf:input>  
+                                <xf:repeat id="r-editfieldattrs" nodeset="edit/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>select a role</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                            <xf:label ref="."></xf:label>
+                                            <xf:value ref="."></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="edit/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                            
+                            <!-- add -->
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>add</xf:label>
+                                <xf:input id="input-addshow" ref="add/@show">
+                                    <xf:label>show</xf:label>
+                                </xf:input>   
+                                <xf:repeat id="r-addfieldattrs" nodeset="add/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>select a role</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                            <xf:label ref="."></xf:label>
+                                            <xf:value ref="."></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="add/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                                 
+                            <!-- listing -->
+                            <xf:group appearance="bf:verticalTable">
+                               <xf:label>listing</xf:label>
+                                <xf:input id="input-listingshow" ref="listing/@show">
+                                    <xf:label>show</xf:label>
+                                </xf:input>  
+                                <xf:repeat id="r-listingfieldattrs" nodeset="listing/roles/role[position()!=last()]" startindex="1" appearance="compact">
+                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
+                                        <xf:label>select a role</xf:label>
+                                        <xf:help>help for select1</xf:help>
+                                        <xf:alert>invalid: cannot be empty</xf:alert>
+                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
+                                            <xf:label ref="."></xf:label>
+                                            <xf:value ref="."></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:trigger>
+                                        <xf:label>delete</xf:label>
+                                        <xf:action>
+                                            <xf:delete at="index('r-listingfieldattrs')[position()]"></xf:delete>
+                                        </xf:action>
+                                    </xf:trigger>                                         
+                                </xf:repeat>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add role</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="listing/roles/role" at="last()" position="after" origin="instance('i-originrole')/roles/role"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>
+                            </xf:group>
+                                                                   
+                        </xf:group>                        
+                        <hr/>
                         <xf:group appearance="bf:horizontalTable">
                             <xf:label/>
                             <xf:trigger>

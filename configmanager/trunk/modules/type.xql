@@ -77,14 +77,8 @@ function type:edit($node as node(), $model as map(*)) {
         <div>
             <xf:model>
                 <xf:instance id="i-type" src="{$type:REST-BC-LIVE}/types.xml"/>
-                
-
-                 <xf:instance id="i-boolean" xmlns="">
-                    <data>
-                       <bool name="enabled">true</bool>
-                       <bool name="disabled">false</bool>
-                    </data>
-                 </xf:instance>                
+                  
+                 <xf:instance id="i-boolean" src="{$type:REST-CXT-APP}/model_templates/boolean.xml"/>
                 
                 <xf:instance xmlns="" id="i-typedoc">
                     <data>
@@ -300,6 +294,8 @@ function type:add($node as node(), $model as map(*)) {
             <xf:model>
                 <xf:instance id="i-type" src="{$type:REST-BC-LIVE}/types.xml"/>
                 
+                 <xf:instance id="i-boolean" src="{$type:REST-CXT-APP}/model_templates/boolean.xml"/>                
+                
                 <xf:instance xmlns="" id="i-typedoc">
                     <data>
                         <doc name="" enabled="false"/>
@@ -401,16 +397,22 @@ function type:add($node as node(), $model as map(*)) {
             <!-- ######################### Views start ################################## -->
             <p>Enter {$type}-type information || Click on the left to update parts</p>
             <xf:group appearance="compact" ref="instance()/doc[last()]">
-                <xf:group>
+                <xf:group appearance="bf:verticalTable">
                     <xf:input bind="typename" id="type-name" incremental="true">
                         <xf:label>name</xf:label>
                         <xf:hint>Unique / no spaces / lower-case alphabets only</xf:hint>
                         <xf:alert>invalid type name / duplicate / empty space(s)</xf:alert>
                     </xf:input>                  
-                    <xf:input bind="typenable" id="type-enabled">
-                        <xf:label>enabled</xf:label>
-                        <xf:hint>check to enable this doc/group/membership type</xf:hint>
-                    </xf:input>
+                    <xf:select1 id="c-enabled" bind="typenable" appearance="minimal" class="xsmallWidth" incremental="true">
+                        <xf:label>type status:</xf:label>
+                        <xf:hint>a Hint for this control</xf:hint>
+                        <xf:help>help for select1</xf:help>
+                        <xf:alert>invalid</xf:alert>
+                        <xf:itemset nodeset="instance('i-boolean')/bool">
+                            <xf:label ref="@name"></xf:label>
+                            <xf:value ref="."></xf:value>
+                        </xf:itemset>
+                    </xf:select1>
                     <br/>
                     <xf:group id="typeButtons">
                         <xf:trigger>
@@ -446,11 +448,12 @@ function type:types($node as node(), $model as map(*)) {
     let $pos := request:get-parameter("pos", "none")
     return
         <div class="allTypes">
+            <h1>arche-types</h1>
             {local:get-types()}
             <br/>
             <div style="clear:both;"/>
             <div style="margin-top:20px;float:left;">
-                <h2>supported types - todo</h2>   
+                <h1>supported-types</h1>   
             </div>
         </div>
 };

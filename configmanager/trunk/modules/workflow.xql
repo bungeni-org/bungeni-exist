@@ -124,11 +124,40 @@ declare function local:mode() as xs:string {
     return $mode
 };
 
+declare function local:all-feature() {
+    <features> 
+    {
+        let $type := xs:string(request:get-parameter("type",""))
+        let $docname := xs:string(request:get-parameter("doc","none"))
+        let $wf-doc := $appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml"
+        let $featurename :=if (doc-available($wf-doc)) then $docname else $type
+        let $feats-tmpl := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || "_features.xml")//features[@for eq $featurename]
+        let $feats-wf := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")//feature   
+        for $feature in $feats-tmpl/feature    
+        return 
+            if($feats-wf[@name eq data($feature/@name)]) then 
+                element feature {
+                    attribute name { data($feature/@name) },
+                    attribute workflow { data($feature/@workflow) },
+                    attribute enabled { if(data($feats-wf[@name eq data($feature/@name)]/@enabled)) then xs:string(data($feats-wf[@name eq data($feature/@name)]/@enabled)) else "false" }
+                }
+            else 
+                element feature {
+                    attribute name { data($feature/@name) },
+                    attribute workflow { data($feature/@workflow) },
+                    attribute enabled { "false" }
+                } 
+    }
+    </features>
+};
+
 declare
 function workflow:edit($node as node(), $model as map(*)) {
 
     let $type := xs:string(request:get-parameter("type",""))
-    let $docname := xs:string(request:get-parameter("doc","none"))    
+    let $docname := xs:string(request:get-parameter("doc","none"))   
+    let $wf-doc := $appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml"
+    let $featuregroupname :=if (doc-available($wf-doc)) then $docname else $type
     let $pos := xs:string(request:get-parameter("pos",""))
     let $init := xs:string(request:get-parameter("init",""))
     let $lastfield := data(local:get-form($docname)/descriptor/field[last()]/@name)
@@ -177,7 +206,11 @@ function workflow:edit($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-allroles" src="{$workflow:REST-BC-LIVE}/sys/_roles.xml"/> 
                     
-                    <xf:instance id="i-features" src="{$workflow:REST-BC-LIVE}/workflows/_features.xml"/>
+                    <xf:instance id="i-features" xmlns="">
+                        <data>
+                            {local:all-feature()}                        
+                        </data>
+                    </xf:instance>
 
                     <xf:instance id="i-tmplrole" xmlns="">
                         <data>
@@ -192,8 +225,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="feature/@enabled" type="xf:boolean" required="true()" />
                         
-                        <!--xf:bind id="view" nodeset="allow[@permission eq '.View']/roles/role" required="true()" type="xs:string" constraint="(instance()/allow[@permission eq '.View']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()allow[@permission eq '.View']/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="edit" nodeset="allow[@permission eq '.Edit']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <!--xf:bind id="view" nodeset="allow[@permission eq '.View']/roles/role" required="true()" type="xs:string" constraint="(instance()/allow[@permission eq '.View']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
+                        <!xf:bind id="edit" nodeset="allow[@permission eq '.Edit']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
                         <xf:bind id="add" nodeset="allow[@permission eq '.Add']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
                         <xf:bind id="delete" nodeset="allow[@permission eq '.Delete']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/-->                        
                     </xf:bind>
@@ -248,6 +281,12 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <!-- remove the tags node if there is jus the template tag we insert -->
                         <xf:delete nodeset="instance()/tags[string-length(tag/text()) &lt; 1]" />   
                         
+                        <!-- drop and add workflow features -->
+                        <xf:message level="ephemeral">drop all &lt;xmp&gt;&lt;feature&gt;&lt;/xmp&gt; nodes on workflow</xf:message>
+                        <xf:delete nodeset="instance()/feature"/>
+                        <xf:insert nodeset="instance()/allow[last()]" at="1" position="after" origin="instance('i-features')/features/feature" />                       
+                        
+                        <!-- add workflow permissions -->
                         <xf:action if="empty(instance()/allow[@permission eq '.View'])">
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;allow permission=".View"&gt;&lt;/xmp&gt; node on workflow</xf:message>
                             <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-grants')/allow[@permission eq '.View']" />
@@ -287,27 +326,42 @@ function workflow:edit($node as node(), $model as map(*)) {
                 <div id="details" class="tab_content" style="display: block;">
                     <xf:group ref="." appearance="bf:horizontalTable">
                         <xf:label>Workflow Properties</xf:label>
-                        <xf:group appearance="bf:verticalTable">
-                            <xf:input id="wf-title" ref="@title" incremental="true">
-                                <xf:label>Title</xf:label>
-                                <xf:hint>edit title of the workflow</xf:hint>
-                                <xf:alert>enter more than 3 characters</xf:alert>
-                            </xf:input>   
-                            <xf:textarea id="wf-description" ref="@description" appearance="growing" incremental="true">
-                                <xf:label>Description</xf:label>
-                                <xf:hint>lengthy description of the workflow</xf:hint>
-                                <xf:alert>invalid</xf:alert>
-                            </xf:textarea>
-                        </xf:group>
-                        <xf:group appearance="bf:verticalTable">
-                            <xf:label>Workflow features</xf:label>
-                            <xf:select id="c-features" ref="feature/@enabled" appearance="full" incremental="true" class="blockCheckbox">
-                                <xf:hint>enabled/disabled features on this workflow</xf:hint>
-                                <xf:itemset nodeset="instance()/feature">
-                                    <xf:label ref="@name"></xf:label>
-                                    <xf:value ref="@enabled"></xf:value>
-                                </xf:itemset>
-                            </xf:select>  
+                        <xf:input id="wf-title" ref="@title" incremental="true">
+                            <xf:label>Title</xf:label>
+                            <xf:hint>edit title of the workflow</xf:hint>
+                            <xf:alert>enter more than 3 characters</xf:alert>
+                        </xf:input>   
+                        <xf:textarea id="wf-description" ref="@description" appearance="growing" class="xLongwidthMax" incremental="true">
+                            <xf:label>Description</xf:label>
+                            <xf:hint>lengthy description of the workflow</xf:hint>
+                            <xf:alert>invalid</xf:alert>
+                        </xf:textarea>
+                    </xf:group>
+                    <hr/>
+                    <xf:group ref="." appearance="bf:horizontalTable">
+                        <xf:label>Features &amp; Tags</xf:label>
+                        <xf:group appearance="bf:horizontalTable">
+                            <xf:label>features</xf:label>
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>Workflowed</xf:label>
+                                <xf:select id="c-wfeatures" ref="feature/@enabled" appearance="full" incremental="true" class="blockCheckbox">
+                                    <xf:hint>enabled/disabled features on this workflow</xf:hint>
+                                    <xf:itemset nodeset="instance()/feature[@workflow eq 'True']">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@enabled"></xf:value>
+                                    </xf:itemset>
+                                </xf:select>  
+                            </xf:group>
+                            <xf:group appearance="bf:verticalTable">
+                                <xf:label>Non-workflowed</xf:label>
+                                <xf:select id="c-nwfeatures" ref="feature/@enabled" appearance="full" incremental="true" class="blockCheckbox">
+                                    <xf:hint>enabled/disabled features on this workflow</xf:hint>
+                                    <xf:itemset nodeset="instance()/feature[@workflow eq 'False']">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@enabled"></xf:value>
+                                    </xf:itemset>
+                                </xf:select>  
+                            </xf:group>
                         </xf:group>
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Workflow tags</xf:label>
@@ -335,8 +389,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                                     <xf:insert nodeset="./tags/tag"></xf:insert>
                                 </xf:action>
                             </xf:trigger>
-                        </xf:group>                         
-                    </xf:group>
+                        </xf:group>  
+                    </xf:group>                    
                     <hr/>
                     <xf:group ref=".">
                         <xf:group appearance="compact" class="modesWrapper">

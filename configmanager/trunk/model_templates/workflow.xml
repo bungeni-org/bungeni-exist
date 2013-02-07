@@ -28,18 +28,7 @@
             <role/>
         </roles>
     </allow>    
-    <!-- singleton feature -->
-    <feature name="" enabled="false"/>
-    <!-- "faceted" feature -->
-    <feature name="" enabled="false">
-        <facet name="">
-            <allow permission="undefined.Undefined">
-                <roles originAttr="roles">
-                    <role/>
-                </roles>
-            </allow>
-        </facet>
-    </feature>
+    <!-- features -->
 
     <!-- workflow facets -->
     <facet name="un_Defined">

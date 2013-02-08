@@ -92,6 +92,9 @@ class TransformerConfig(Config):
     def using_queue(self):
         return self.get("general", "message_queue")
 
+    def get_country_code(self):
+        return self.get("general","country_code")
+
     def get_input_folder(self):
         return self.get("general", "bungeni_docs_folder")
 
@@ -328,7 +331,7 @@ class ParseBungeniXML(ParseXML):
 
         return self.__global_path__ + "field[@name]"  
         
-    def get_parliament_info(self):
+    def get_parliament_info(self, cc):
         parl_params = HashMap()
         
         parliament_doc = self.xmldoc.selectSingleNode(self.xpath_parl_item("type"))
@@ -341,7 +344,8 @@ class ParseBungeniXML(ParseXML):
             """
             # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
             # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
-            # parl_params['country-code'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("language")).getText()
+            # !+NOTE (ao, 8th Feb 2013) country-code added from glue.ini config file
+            parl_params['country-code'] = cc
             parl_params['parliament-id'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("parliament_id")).getText()
             parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
             parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()
@@ -537,17 +541,18 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     """
     Walker that retrieves the info about the parliament
     """
+    
     def get_from_cache(self, input_file_path):
         bunparse = ParseBungeniXML(input_file_path)
         bunparse.doc_parse()
-        the_parl_doc = bunparse.get_parliament_info()
+        the_parl_doc = bunparse.get_parliament_info(self.input_params["main_config"].get_country_code())
         return the_parl_doc
 
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseBungeniXML(input_file_path)
             bunparse.doc_parse()
-            the_parl_doc = bunparse.get_parliament_info()
+            the_parl_doc = bunparse.get_parliament_info(self.input_params["main_config"].get_country_code())
             if the_parl_doc is not None:
                 """
                 Create a cached copy in tmp folder defined in config.ini for quick access 
@@ -704,6 +709,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                         # to remain upto date.
                         tmp_folder = self.input_params["main_config"].get_temp_files_folder()
                         shutil.copyfile(input_file_path, tmp_folder + __parl_info__)
+                        print _COLOR.WARNING, "[checkpoint] - Updated parliament info !", _COLOR.ENDC
                     return (out_files[0], True)
             # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
             # from queue programmatically
@@ -1124,7 +1130,7 @@ class PostTransform(object):
                 if numRead>= 0:
                     numRead=isr.read(bytes, offset, length-offset)
                     offset = offset + numRead
-            print _COLOR.OKGREEN, String(bytes), _COLOR.ENDC
+            print _COLOR.WARNING, String(bytes), _COLOR.ENDC
             return True
         except MalformedURLException, e:
             print _COLOR.FAIL, e, '\nERROR: MalformedURLException', _COLOR.ENDC

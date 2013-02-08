@@ -133,7 +133,8 @@
                 </xsl:element>
             -->
             
-            <xsl:copy-of select="members"></xsl:copy-of>
+            <xsl:copy-of select="members"/>
+            <xsl:copy-of select="titletypes"/>
             <xsl:copy-of select="committee_type"></xsl:copy-of>  
         </ontology>
     </xsl:template>

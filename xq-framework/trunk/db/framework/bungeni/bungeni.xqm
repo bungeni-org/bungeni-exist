@@ -2067,22 +2067,24 @@ declare function local:get-sitting-subset($sittings) {
         )
 };
 
+(: !+EXIST_20_UPG :)
 declare function local:grouped-sitting-items-by-itemtype($sittings) {
     for $item in local:get-sitting-subset($sittings)
-    group $item as $partition by $item/bu:itemSchedule/bu:itemType/bu:value as $key
+    group by $key := $item/bu:itemSchedule/bu:itemType/bu:value
     return 
         <doc title="{$key}">
-            {$partition}
+            {$item}
         </doc>
 };
 
+(: !+EXIST_20_UPG :)
 declare function local:grouped-sitting-items-by-date($sittings) {
     for $item in local:get-sitting-subset($sittings)
-    group $item as $partition by <date>{substring-before($item/bu:startDate,"T")}</date> as $key
+    group by $key := <date>{substring-before($item/bu:startDate,"T")}</date>
     order by $key ascending
     return 
         <doc title="{$key}">
-            {$partition}
+            {$key}
         </doc>
 };
 

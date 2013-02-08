@@ -15,11 +15,11 @@
     </xd:doc>
     
     <!-- THE BELOW SETTINGS DONT WORK CORRECTLY YET -->
-    <xsl:variable name="fw-config" select="document('/exist/rest/db/framework/config.xml')"/>
+    <xsl:variable name="fw-config" select="document('/exist/rest/db/apps/framework/config.xml')"/>
     <xsl:variable name="default-app" select="data($fw-config//fw-config/@default-app)"/>
     <!-- <xsl:variable name="ui-config" select="$fw-config//fw-config/apps/app[@name eq $default-app]/ui-config/text()" /> -->
     <!-- !+FIX_THIS hardcoded config file name , maybe OK since we are within the application and the application knows about its config -->
-    <xsl:variable name="ui-config" select="string('/db/framework/bungeni/ui-config.xml')"/>
+    <xsl:variable name="ui-config" select="string('/db/apps/framework/bungeni/ui-config.xml')"/>
     <xsl:variable name="date-format" select="document($ui-config)/ui/format[@type='date']/text()"/>
     <xsl:variable name="datetime-format" select="document($ui-config)/ui/format[@type='datetime']/text()"/>
     

@@ -318,6 +318,12 @@
         </fullName>
     </xsl:template>
     
+    <xsl:template match="field[@name='combined_name']">
+        <combinedName type="xs:string">
+            <xsl:value-of select="." />
+        </combinedName>
+    </xsl:template>    
+    
     <xsl:template match="field[@name='description']">
         <description>
             <xsl:value-of select="." />
@@ -384,6 +390,57 @@
             </value>
         </officeRole>
     </xsl:template>
+    
+    <xsl:template match="field[@name='committee_id']">
+        <committeeId type="xs:integer">
+            <xsl:value-of select="." />
+        </committeeId>
+    </xsl:template>    
+    
+    <xsl:template match="field[@name='proportional_representation']">
+        <proportionalRepresentation  type="xs:boolean">
+            <xsl:value-of select="." />
+        </proportionalRepresentation>
+    </xsl:template>  
+    
+    <xsl:template match="field[@name='acronym']">
+        <acronym type="xs:string">
+            <xsl:value-of select="." />
+        </acronym>
+    </xsl:template>  
+    
+    <xsl:template match="field[@name='member_election_type']">
+        <memberElectionType isA="TLCObject">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm">
+                <xsl:value-of select="." />                
+            </value>
+        </memberElectionType>
+    </xsl:template>  
+    
+    <xsl:template match="field[@name='group_continuity']">
+        <groupContinuity isA="TLCObject">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm">
+                <xsl:value-of select="." />                
+            </value>
+        </groupContinuity>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='sub_type']">
+        <subType isA="TLCObject">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm">
+                <xsl:value-of select="." />                
+            </value>
+        </subType>
+    </xsl:template>     
+    
+    <xsl:template match="field[@name='num_clerks']">
+        <numClerks type="xs:integer">
+            <xsl:value-of select="." />
+        </numClerks>
+    </xsl:template>      
     
     <xsl:template match="field[@name='office_id']">
         <officeId type="xs:integer">

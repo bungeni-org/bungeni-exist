@@ -150,7 +150,16 @@
         <partyId type="xs:integer">
             <xsl:value-of select="." />
         </partyId>
-    </xsl:template>    
+    </xsl:template>  
+    
+    <xsl:template match="field[@name='party']">
+        <party isA="TLCObject">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm">
+                <xsl:value-of select="." />                
+            </value>
+        </party>
+    </xsl:template>       
     
     <xsl:template match="field[@name='description']">
         <description>
@@ -163,6 +172,21 @@
             <xsl:value-of select="." />
         </notes>
     </xsl:template>
+
+    <xsl:template match="field[@name='user_unique']">
+        <userUnique isA="TLCObject">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value isA="TLCTerm">
+                <xsl:value-of select="." />                
+            </value>
+        </userUnique>
+    </xsl:template>  
+    
+    <xsl:template match="field[@name='sort_order']">
+        <sortOrder type="xs:integer">
+            <xsl:value-of select="." />
+        </sortOrder>
+    </xsl:template>    
     
     <xsl:template match="field[@name='language']">
         <!-- !+RENDERED NOW as xml:lang on the legislativeItem
@@ -270,16 +294,7 @@
                 <xsl:value-of select="." />                
             </value>
         </membershipType>
-    </xsl:template>     
-    
-    <xsl:template match="field[@name='member_election_type']">
-        <memberElectionType isA="TLCObject">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <value isA="TLCTerm">
-                <xsl:value-of select="." />                
-            </value>
-        </memberElectionType>
-    </xsl:template>         
+    </xsl:template>      
     
     <xsl:template match="field[@name='birth_nationality']">
         <birthNationality type="xs:string">

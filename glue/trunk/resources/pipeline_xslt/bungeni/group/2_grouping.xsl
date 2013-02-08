@@ -444,6 +444,76 @@
                 <xsl:value-of select="." />                
             </value>
         </membershipType>
+    </xsl:template>  
+
+    <!-- !+NOTE (ao, 8th Feb 2013) also in membership pipepline i.e. duplicates -->
+    <xsl:template match="member_titles">
+        <memberTitles id="memberTitles">
+            <xsl:apply-templates />
+        </memberTitles>
+    </xsl:template>
+    
+    <xsl:template match="member_title[parent::member_titles]">
+        <memberTitle isA="TLCObject">
+            <xsl:apply-templates />
+        </memberTitle>
+    </xsl:template> 
+
+    <xsl:template match="field[@name='title_type_id']">
+        <titleTypeId type="xs:integer">
+            <xsl:value-of select="." />
+        </titleTypeId>
+    </xsl:template>  
+    
+    <xsl:template match="field[@name='member_title_id']">
+        <memberTitleId type="xs:integer">
+            <xsl:value-of select="." />
+        </memberTitleId>
+    </xsl:template> 
+    
+    <xsl:template match="title_type">
+        <titleType>
+            <xsl:apply-templates />
+        </titleType>
+    </xsl:template>   
+    
+    <xsl:template match="field[@name='user_unique']">
+        <userUnique isA="TLCObject">
+            <xsl:attribute name="showAs" select="@displayAs"/>
+            <value>
+                <xsl:value-of select="." />                
+            </value>
+        </userUnique>
     </xsl:template>      
+    
+    <xsl:template match="field[@name='sort_order']">
+        <sortOrder type="xs:integer">
+            <xsl:value-of select="." />
+        </sortOrder>
+    </xsl:template>    
+    
+    <xsl:template match="field[@name='title_name']">
+        <titleName type="xs:string">
+            <xsl:value-of select="." />
+        </titleName>
+    </xsl:template> 
+
+    <xsl:template match="field[@name='iso_name']">
+        <isoName type="xs:string">
+            <xsl:value-of select="." />
+        </isoName>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='iso3']">
+        <iso3 type="xs:string">
+            <xsl:value-of select="." />
+        </iso3>
+    </xsl:template>
+
+    <xsl:template match="field[@name='country_name']">
+        <countryName type="xs:string">
+            <xsl:value-of select="." />
+        </countryName>
+    </xsl:template>  
     
 </xsl:stylesheet>

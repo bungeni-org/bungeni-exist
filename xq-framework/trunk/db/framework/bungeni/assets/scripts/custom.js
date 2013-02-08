@@ -73,12 +73,17 @@ $(document).ready(function () {
         {      
             var text = $('.ls-row').find('li div.doc-toggle');
             text.slideUp('200');
-            $(this).siblings('span').html('+');    
+            $(this).siblings('span').html('+');   
+            
+            if ($(this).hasClass('list-active'))
+                $(this).removeClass('list-active').addClass('list-inactive');   
+            else
+                $(this).removeClass('list-inactive').addClass('list-active');
         }
-        else {
+        else {        
             var text = $('.ls-row').find('li div.doc-toggle');
             text.slideDown('200');
-            $(this).siblings('span').html('&#9660;');              
+            $(this).siblings('span').html('&#9660;');           
         }                
          
     });    

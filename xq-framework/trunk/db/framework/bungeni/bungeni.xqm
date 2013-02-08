@@ -2776,6 +2776,7 @@ declare function bun:get-parl-group(
 declare function bun:get-parl-committee(
             $acl as xs:string, 
             $docid as xs:string, 
+            $mem-status as xs:string,
             $parts as node()) as element()* {
 
     (: stylesheet to transform :)
@@ -2790,7 +2791,9 @@ declare function bun:get-parl-committee(
                         bun:get-ref-comm-members($match, $parts/parent::node())   
                 }     
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, <parameters>
+                                                 <param name="mem-status" value="{$mem-status}" />
+                                               </parameters>)
 };
 
 declare function bun:get-ref-comm-members($docitem as node(), $docviews as node()) {
@@ -2798,6 +2801,41 @@ declare function bun:get-ref-comm-members($docitem as node(), $docviews as node(
         {$docitem}
         <ref/>
         {bun:get-excludes($docitem, $docviews)}
+    </doc>     
+};
+
+declare function bun:get-parl-committee-sittings(
+            $acl as xs:string, 
+            $docid as xs:string, 
+            $parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    (: !+FIX_THIS , !+ACL_NEW_API
+    let $acl-filter := cmn:get-acl-filter($acl)
+    :)
+    let $doc := document {
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+                    return
+                        (: $parts/parent::node() returns all tabs of this doctype :)
+                        bun:get-ref-comm-sitting($match, $parts/parent::node())   
+                }     
+    return
+        transform:transform($doc, $stylesheet, ())
+};
+
+declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node()) {
+    <doc>
+        {$docitem}
+        <ref>
+        {
+            for $match in collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting']
+            where data($match/bu:legislature/bu:group/@href) eq data($docitem/bu:group/@uri)
+            order by $match/bu:legislature/bu:statusDate descending
+            return 
+                $match   
+        }
+        </ref>
     </doc>     
 };
 

@@ -96,7 +96,7 @@
             <a href="committee-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/> / <xsl:value-of select="bu:ontology/bu:group/bu:status/bu:value"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:group/bu:status/bu:value"/>
             </div>
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
@@ -110,13 +110,13 @@
                     <tr>
                         <td class="labels">committee type:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:group/bu:subType"/>
+                            <xsl:value-of select="bu:ontology/bu:group/bu:subType/@showAs"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="labels">continuity type:</td>
                         <td>
-                            <xsl:value-of select="bu:ontology/bu:group/bu:groupContinuity"/>
+                            <xsl:value-of select="bu:ontology/bu:group/bu:groupContinuity/@showAs"/>
                         </td>
                     </tr>
                 </table>

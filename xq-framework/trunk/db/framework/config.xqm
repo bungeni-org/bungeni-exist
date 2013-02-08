@@ -13,7 +13,7 @@ Adapted code from http://seewhatithink.sourceforge.net/ by Adam Retter
 module namespace config = "http://bungeni.org/xquery/config";
 (: The db root :)
 
-declare variable $config:db-root-collection := "/db";
+declare variable $config:db-root-collection := "/db/apps";
 
 
 (: Framework files :)

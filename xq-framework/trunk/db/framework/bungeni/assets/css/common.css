@@ -197,13 +197,18 @@ div#doc-downloads {
  }
  .toggler-list {
     width: 110px;
-    color: #AAAAA9;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, .1);
     font-weight: normal;
     text-decoration: none;
     cursor:pointer;
     float:left;
  }
+ .list-active {
+    color: #494949;
+ } 
+ .list-inactive {
+    color: #AAAAA9;
+ }  
  .search-bar {
     float:right;  
     display:inline;

@@ -180,7 +180,7 @@ declare function pproc:update-document($uri as xs:string) {
         let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
         let $up-sigs := if (empty($signatory/bu:person)) then update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $signatory else ()
         return 
-            (),
+            (),            
         (: it's events :)
         let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else  (@internal-uri=$uri)]/ancestor::bu:ontology
         for $wfe in $doc//bu:document/bu:workflowEvents/bu:workflowEvent
@@ -212,6 +212,12 @@ declare function pproc:update-document($uri as xs:string) {
                 update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]
              else
                  (),
+            (: Adding sitting's href :)
+        let $sitting := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[@uri=$uri]/ancestor::bu:ontology
+        let $group-node := collection(cmn:get-lex-db())/bu:ontology/bu:group[bu:committeeId eq $sitting/bu:legislature/bu:group/bu:groupId]
+        let $groupId := $group-node/bu:committeeId
+        return 
+            update insert attribute href { xs:string(data($group-node/@uri)) } into $sitting/bu:legislature/bu:group,                 
         (: groups :)
         let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group[@uri=$uri]/ancestor::bu:ontology
         for $membership in $doc/bu:members/bu:member

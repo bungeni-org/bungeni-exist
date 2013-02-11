@@ -122,7 +122,7 @@
                     </div>
                     <div class="block">
                         <span class="labels">
-                            <i18n:text key="email">short bio(nt)</i18n:text>:</span>
+                            <i18n:text key="Biographical notes">short bio(nt)</i18n:text>:</span>
                         <span>
                             <xsl:value-of select="substring(bu:ontology/bu:membership/bu:notes,0,360)"/>...
                         </span>

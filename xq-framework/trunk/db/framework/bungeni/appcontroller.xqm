@@ -543,8 +543,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+                    $mem-status := xs:string(request:get-parameter("status","current")),
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-parl-group("public-view",$docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-group-members("public-view",$docnumber,$mem-status,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

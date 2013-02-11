@@ -117,7 +117,7 @@
                                     <tr>
                                         <td class="labels fbottom">political party:</td>
                                         <td class="fbt">
-                                            <xsl:value-of select="bu:ontology/bu:membership/bu:party/bu:fullName"/>
+                                            <xsl:value-of select="bu:ontology/bu:membership/bu:party/@showAs"/>
                                         </td>
                                     </tr>
                                 </table>

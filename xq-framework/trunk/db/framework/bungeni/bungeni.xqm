@@ -2344,7 +2344,7 @@ declare function bun:strip-namespace($e as node()) {
   }
 };
 
-declare function local:get-sitting-items($sittingdoc as node()) {
+declare function local:get-sitting-items($sittingdoc as node()?) {
     <doc>
         {if ($sittingdoc) then $sittingdoc else $sittingdoc}
         <ref>
@@ -2771,6 +2771,25 @@ declare function bun:get-parl-group(
                 }     
     return
         transform:transform($doc, $stylesheet, ())
+};
+
+declare function bun:get-group-members(
+            $acl as xs:string, 
+            $docid as xs:string, 
+            $mem-status as xs:string?,
+            $parts as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $doc := document {
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+                    return
+                        bun:get-ref-assigned-grps($match, $parts/parent::node())   
+                }     
+    return
+        transform:transform($doc, $stylesheet, <parameters>
+                                                 <param name="mem-status" value="{$mem-status}" />
+                                               </parameters>)
 };
 
 declare function bun:get-parl-committee(

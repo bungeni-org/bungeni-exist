@@ -88,7 +88,7 @@
             </div>
         </div>
     </xsl:template>
-    <!-- DOC-ITEM-SIGNATORIES -->
+    <!-- LIST-MEMBERS -->
     <xsl:template name="mem-list-details">
         <li>
             <a href="member?uri={bu:person/@href}">

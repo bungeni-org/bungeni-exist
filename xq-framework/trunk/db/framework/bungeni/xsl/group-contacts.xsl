@@ -6,7 +6,7 @@
                 <xd:b>Created on:</xd:b> Nov 16, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Committee item from Bungeni</xd:p>
+            <xd:p> Group contacts from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>

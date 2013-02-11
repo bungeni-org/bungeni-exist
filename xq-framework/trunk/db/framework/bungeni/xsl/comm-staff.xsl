@@ -64,13 +64,15 @@
                                                 <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
                                             </span>
                                         </div>
-                                        <div class="block">
-                                            <span class="labels">
-                                                <i18n:text key="date-end">end date(nt)</i18n:text>:</span>
-                                            <span>
-                                                <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
-                                            </span>
-                                        </div>
+                                        <xsl:if test="bu:endDate">
+                                            <div class="block">
+                                                <span class="labels">
+                                                    <i18n:text key="date-end">end date(nt)</i18n:text>:</span>
+                                                <span>
+                                                    <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
+                                                </span>
+                                            </div>
+                                        </xsl:if>
                                     </div>
                                     <div class="clear"/>
                                 </div>

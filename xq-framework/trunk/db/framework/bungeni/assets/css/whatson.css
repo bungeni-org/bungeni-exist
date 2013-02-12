@@ -28,7 +28,7 @@ ul.scheduling li {
             
         .schedule-block .left {
             display:inline-block;
-            width:15%;
+            margin-right:10px;
             white-space:nowrap;
             float:left }
             .schedule-block .left a {
@@ -36,8 +36,7 @@ ul.scheduling li {
         
         .schedule-block .right {
             display:inline-block;
-            width:85%;
-            float:right } 
+            float:left } 
         
     .whatson-wrapper > .right {
         width:27%;

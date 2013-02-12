@@ -2084,7 +2084,7 @@ declare function local:grouped-sitting-items-by-date($sittings) {
     order by $key ascending
     return 
         <doc title="{$key}">
-            {$key}
+            {$item}
         </doc>
 };
 

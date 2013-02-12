@@ -1,14 +1,10 @@
-xquery version "1.0";
+xquery version "3.0";
 
 module namespace rou = "http://exist.bungeni.org/rou";
 
 declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 declare namespace xh = "http://www.w3.org/1999/xhtml";
-
-(:~
-eXist Imports
-:)
-import module namespace request = "http://exist-db.org/xquery/request";
+declare namespace request = "http://exist-db.org/xquery/request";
 
 (:~
 Framework Imports
@@ -21,7 +17,6 @@ import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
 Application imports
 :)
 import module namespace akn = "http://exist.bungeni.org/akn" at "anapp.xqm";
-import module namespace rou = "http://exist.bungeni.org/rou" at "route.xqm";
 import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm"; 
 
 

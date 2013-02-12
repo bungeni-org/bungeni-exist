@@ -41,11 +41,11 @@ declare
         $role as xs:string*,        
         $group as xs:string*,
         $type as xs:string*, 
-        $offset as xs:int,
-        $limit as xs:int,
+        $offset as xs:int*,
+        $limit as xs:int*,
         $search as xs:string*,
-        $status as xs:string,
-        $daterange as xs:string) {
+        $status as xs:string*,
+        $daterange as xs:string*) {
         <docs>
             <role>{$role}</role>         
             <group>{$group}</group>           

@@ -102,7 +102,7 @@
                                                         <xsl:value-of select="bu:title"/>
                                                     </a>
                                                 </xsl:when>
-                                                <xsl:when test="bu:type/bu:value eq 'annex'">
+                                                <xsl:when test="bu:type/bu:value eq 'annex' and bu:auditFor/bu:value">
                                                     <a href="{lower-case($doc-type)}-attachment?uri={$doc-uri}@/{bu:auditFor/bu:value}{bu:attachmentId}">
                                                         <xsl:value-of select="bu:title"/>
                                                     </a>:
@@ -126,7 +126,7 @@
                                     </td>
                                     <td>
                                         <span>
-                                            <xsl:value-of select="format-dateTime((bu:statusDate,bu:activeDate),'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                            <xsl:value-of select="format-dateTime(bu:chronoTime,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </span>
                                     </td>
                                     <!--td>

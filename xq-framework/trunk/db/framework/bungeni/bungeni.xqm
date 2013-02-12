@@ -2873,7 +2873,7 @@ declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node(
 :       </ref>
 :   </doc>
 :)
-declare function bun:get-ref-assigned-grps($docitem as node(), $docviews as node()) {
+declare function bun:get-ref-assigned-grps($docitem as node()?, $docviews as node()) {
     <doc>
         {$docitem}
         <ref>
@@ -2943,7 +2943,7 @@ declare function bun:xqy-list-attachments-with-acl($parent-uri as xs:string, $ac
 :       </ref>
 :   </doc>
 :)
-declare function bun:get-ref-timeline-activities($docitem as node(), $docviews as node()) {
+declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews as node()) {
     <doc>
         {$docitem}
         <ref>
@@ -2952,12 +2952,13 @@ declare function bun:get-ref-timeline-activities($docitem as node(), $docviews a
                 (:
                 : !+FIX_THIS (ao, 8th Aug 2012) workflowEvents dont have permissions with them...
                 : currently using 'internal' to hide them from anonymous :)
-                let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, $event/child::*}
-                let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, $audit/child::*}
-                let $changes := for $change in $docitem//bu:changes/child::* return element timeline { attribute id {$change/@id }, $change/child::*}                
+                let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, element bu:chronoTime { $event/bu:statusDate/text() }, $event/child::*}
+                let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}
+                let $changes := for $change in $docitem//bu:changes/child::* return element timeline { attribute id {$change/@id }, element bu:chronoTime { $change/bu:activeDate/text() }, $change/child::*}                
                 
                 for $eachitem in ($wfevents, $audits, $changes) 
-                order by ($eachitem/bu:activeDate,$eachitem/bu:statusDate) descending
+                where $eachitem/bu:chronoTime/text() ne ""
+                order by $eachitem/bu:chronoTime descending
                 return $eachitem   
 
                 (:for $per-event in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
@@ -2988,7 +2989,7 @@ declare function bun:get-ref-timeline-activities($docitem as node(), $docviews a
 :       <tab/> ++
 :   </exclude>
 :)
-declare function bun:get-excludes($docitem as node(), $docviews as node()) {
+declare function bun:get-excludes($docitem as node()?, $docviews as node()) {
     <exclude>
         {
             for $view in $docviews/view

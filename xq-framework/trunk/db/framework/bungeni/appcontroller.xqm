@@ -1623,7 +1623,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),   
                     $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-member($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-member-officesheld($docnumber,$parts),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

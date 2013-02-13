@@ -44,102 +44,43 @@
                         </div>
                     </div>
                     <ul id="list-toggle" class="ls-row clear">
-                        <li>
-                            XIV-PARL - Bungeni Parliament
-                            <div class="struct-ib">&#160;/ parliament
-                            </div>
-                            <span class="tgl-pad-right">▼</span>
-                            <div class="doc-toggle">
-                                <div style="min-height:50px;">
-                                    <div class="block">
-                                        <span class="labels">
-                                            from:</span>
-                                        <span>
-                                            February 23, 2011
-                                        </span>
-                                    </div>
-                                    <div class="block">
-                                        <span class="labels">
-                                            to:</span>
-                                        <span>
-                                            March 14, 2012
-                                        </span>
-                                    </div>
-                                    <div class="block">
-                                        <span class="labels">
-                                            title:</span>
-                                        <span>
-                                            Chairperson
-                                        </span>
-                                    </div>
+                        <xsl:for-each select="ref/bu:office">
+                            <xsl:sort select="bu:member/bu:memberTitles/bu:memberTitle/bu:titleType/bu:sortOrder" order="ascending" data-type="number"/>
+                            <li>
+                                <xsl:value-of select="bu:fullName"/>
+                                <div class="struct-ib">&#160;/ <xsl:value-of select="bu:member/bu:membershipType/bu:value"/>
                                 </div>
-                                <div class="clear"/>
-                            </div>
-                        </li>
-                        <li>
-                            Com_02 - Parliamentary Committee P1_02
-                            <div class="struct-ib">&#160;/ committee
-                            </div>
-                            <span class="tgl-pad-right">▼</span>
-                            <div class="doc-toggle">
-                                <div style="min-height:50px;">
-                                    <div class="block">
-                                        <span class="labels">
-                                            from:</span>
-                                        <span>
-                                            February 23, 2011
-                                        </span>
+                                <span class="tgl-pad-right">▼</span>
+                                <div class="doc-toggle">
+                                    <div style="min-height:60px;">
+                                        <div class="block">
+                                            <span class="labels">
+                                                <i18n:text key="Title">title(nt)</i18n:text>:</span>
+                                            <span>
+                                                <xsl:value-of select="bu:member/bu:memberTitles/bu:memberTitle/bu:titleType/bu:titleName"/>
+                                            </span>
+                                        </div>
+                                        <div class="block">
+                                            <span class="labels">
+                                                <i18n:text key="Start Date">start date(nt)</i18n:text>:</span>
+                                            <span>
+                                                <xsl:value-of select="format-date(xs:date(bu:member/bu:startDate),$date-format,'en',(),())"/>
+                                            </span>
+                                        </div>
+                                        <xsl:if test="bu:member/bu:endDate">
+                                            <div class="block">
+                                                <span class="labels">
+                                                    <i18n:text key="End Date">end date(nt)</i18n:text>:</span>
+                                                <span>
+                                                    <xsl:value-of select="format-date(xs:date(bu:member/bu:endDate),$date-format,'en',(),())"/>
+                                                </span>
+                                            </div>
+                                        </xsl:if>
                                     </div>
-                                    <div class="block">
-                                        <span class="labels">
-                                            to:</span>
-                                        <span>
-                                            March 14, 2012
-                                        </span>
-                                    </div>
-                                    <div class="block">
-                                        <span class="labels">
-                                            title:</span>
-                                        <span>
-                                            Chairperson
-                                        </span>
-                                    </div>
+                                    <div class="clear"/>
                                 </div>
-                                <div class="clear"/>
-                            </div>
-                        </li>
-                        <li>
-                            Com_02 - Parliamentary Committee P1_02
-                            <div class="struct-ib">&#160;/ committee
-                            </div>
-                            <span class="tgl-pad-right">▼</span>
-                            <div class="doc-toggle">
-                                <div style="min-height:50px;">
-                                    <div class="block">
-                                        <span class="labels">
-                                            from:</span>
-                                        <span>
-                                            February 23, 2011
-                                        </span>
-                                    </div>
-                                    <div class="block">
-                                        <span class="labels">
-                                            to:</span>
-                                        <span>
-                                            March 14, 2012
-                                        </span>
-                                    </div>
-                                    <div class="block">
-                                        <span class="labels">
-                                            title:</span>
-                                        <span>
-                                            Chairperson
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="clear"/>
-                            </div>
-                        </li>
+                            </li>
+                        </xsl:for-each>
                     </ul>
                 </div>
             </div>

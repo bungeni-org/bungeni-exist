@@ -565,7 +565,7 @@
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
                 <template>xml/committee.xml</template>
-                <xsl>xsl/comm-contacts.xsl</xsl>
+                <xsl>xsl/group-contacts.xsl</xsl>
             </view>
         </views>
         <views name="PoliticalGroup">
@@ -592,7 +592,7 @@
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>
                 <template>xml/committee.xml</template>
-                <xsl>xsl/contacts.xsl</xsl>
+                <xsl>xsl/group-contacts.xsl</xsl>
             </view>
         </views>
         <views name="Ministry">

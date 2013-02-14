@@ -65,6 +65,26 @@ div.doc-toggle.opened {
     display:inherit;
 } 
 
+/* Listing of timeline */
+ul.ls-timeline {
+    margin:0 auto;
+    margin-top:10px;
+    display:block;
+    list-style-type:";
+    padding:0 0 0 15px;
+    width:96% !important;
+}
+ul.ls-timeline li {
+    display:block;
+    color:#494949;
+    margin-bottom:5px;
+}
+ul.ls-timeline li > span {
+    width:5px;
+    float:left;
+    margin-right:5px;
+}
+
 /* Listing of main-nav tabs */
 #tabs {
     text-align:left;

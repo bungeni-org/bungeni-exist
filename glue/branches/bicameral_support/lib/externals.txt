@@ -1,0 +1,14 @@
+odfdom http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/odfdom
+log4j http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/apache-log4j
+saxon http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/saxon
+bungeni http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/bungeni
+commons-lang http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/commons-lang
+jsoup http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/jsoup
+jaxen http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/jaxen
+dom4j http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/dom4j
+xerces http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/xerces
+transformer http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/transformer
+zip4j http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/zip4j
+sardine http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/sardine
+rabbitmq http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/rabbitmq
+jyson http://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/jyson

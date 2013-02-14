@@ -1,0 +1,102 @@
+'''
+Created on Feb 14, 2013
+
+@author: undesa
+'''
+
+import os
+import ConfigParser
+
+class Config(object):
+    """
+    Provides access to the configuration file via ConfigParser
+    """
+    
+    def __init__(self, config_file):
+        self.cfg = ConfigParser.RawConfigParser()
+        print "Reading config file : " , os.path.abspath(config_file)
+        self.cfg.read(config_file)
+    
+    def get(self, section, key):
+        return self.cfg.get(section, key)
+
+    def items(self, section):
+        return self.cfg.items(section)
+
+class TransformerConfig(Config):
+    """
+    Configuration information for the Transformer
+    """
+
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_pipes = {}
+
+    def using_queue(self):
+        return self.get("general", "message_queue")
+
+    def get_country_code(self):
+        return self.get("general", "country_code")
+        
+    def get_bicameral(self):
+        return self.get("general", "bicameral")    
+
+    def get_input_folder(self):
+        return self.get("general", "bungeni_docs_folder")
+
+    def get_transformer_resources_folder(self):
+        return self.get("general", "transformer_resources_folder")
+
+    def get_akomantoso_output_folder(self):
+        return self.get("general", "akomantoso_output_folder")
+
+    def get_ontoxml_output_folder(self):
+        return self.get("general", "metalex_output_folder")
+
+    def get_attachments_output_folder(self):
+        return self.get("general","attachments_output_folder")
+
+    def get_temp_files_folder(self):
+        return self.get("general","temp_files_folder")
+
+    def get_pipelines(self):
+        # list of key,values pairs as tuples 
+        if len(self.dict_pipes) == 0:
+            l_pipes = self.cfg.items("pipelines")
+            for l_pipe in l_pipes:
+                self.dict_pipes[l_pipe[0]] = l_pipe[1]
+        return self.dict_pipes
+
+
+class WebDavConfig(Config):
+    """
+    Configuration information for eXist WebDav
+    """
+
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_pipes = {}
+    
+    def get_bungeni_xml_folder(self):
+        return self.get("webdav", "bungeni_xml_folder")
+
+    def get_bungeni_atts_folder(self):
+        return self.get("webdav", "bungeni_atts_folder")
+
+    def get_fw_i18n_folder(self):
+        return self.get("webdav", "framework_i18n_folder")
+
+    def get_username(self):
+        return self.get("webdav", "username")
+    
+    def get_password(self):
+        return self.get("webdav", "password")
+
+    def get_server(self):
+        return self.get("webdav", "server")
+
+    def get_port(self):
+        return int(self.get("webdav", "port"))
+
+    def get_http_server_port(self):
+        return "http://"+self.get_server()+":"+str(self.get_port())

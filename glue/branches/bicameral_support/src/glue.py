@@ -1,4 +1,7 @@
 """ 
+
+    REQUIRES : Jython , NOT Python
+
     Performs XSLT transformations on Bungeni documents and outputs ontological documents;
     synchronizes with eXist-db; translates .po files to .xml catalogues
 
@@ -15,9 +18,9 @@
 """
 
 import httplib, socket #used in sync check
-import os.path, sys, errno, getopt, shutil, uuid
+import os.path, sys, errno, getopt, shutil
 import time
-import ConfigParser, jarray
+import jarray
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
@@ -32,509 +35,74 @@ __repo_sync__ = "reposync.xml"
 
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
-from org.dom4j import DocumentFactory
-from org.dom4j import DocumentException
-from org.dom4j.io import SAXReader
-from org.dom4j.io import OutputFormat
-from org.dom4j.io import XMLWriter
-from java.io import File, FileWriter, FileNotFoundException, IOException
-from java.io import FileInputStream
-from java.io import StringReader
-from java.util import HashMap
-from net.lingala.zip4j.core import ZipFile
-from net.lingala.zip4j.exception import ZipException
-from com.googlecode.sardine.impl import SardineException
+from org.dom4j import (
+    DocumentFactory,
+    DocumentException,
+    DocumentHelper
+    )
+
+from org.dom4j.io import (
+    SAXReader,
+    OutputFormat,
+    XMLWriter
+    )
+
+from java.io import (
+    File, 
+    FileWriter, 
+    InputStreamReader
+    )
+
+
 from org.apache.http.conn import HttpHostConnectException
-from com.googlecode.sardine import SardineFactory
-
-from java.io import InputStream
-from java.io import InputStreamReader
-from java.net import MalformedURLException
-from java.net import URL
-from java.net import URLConnection
 from org.apache.commons.codec.binary import Base64
-from java.lang import String
 
-from net.sf.saxon.trans import *
-from org.xml.sax import *
-from org.bungeni.translators.translator import OATranslator
-from org.bungeni.translators.globalconfigurations import GlobalConfigurations 
-from org.bungeni.translators.utility.files import FileUtility
+from com.googlecode.sardine.impl import SardineException
 
-from org.apache.log4j import PropertyConfigurator,Logger
+from java.net import (
+    MalformedURLException,
+    URL
+    )
+
+from java.lang import (
+    String,
+    )
+
+
+from org.apache.log4j import (
+    PropertyConfigurator,
+    Logger
+    )
+### APP Imports ####
+
+from configs import (
+    Config,
+    TransformerConfig,
+    WebDavConfig
+    )
+
+from utils import (
+    _COLOR, 
+    close_quietly,
+    WebDavClient,
+    Transformer
+    )
+
+from parsers import (
+    ParseXML,
+    ParseBungeniXML
+    )
+
+from walker import (
+    GenericDirWalkerXML,
+    GenericDirWalkerATTS,
+    GenericDirWalkerUNZIP
+    )
+
+
 LOG = Logger.getLogger("glue")
 
-class Config(object):
-    """
-    Provides access to the configuration file via ConfigParser
-    """
-    
-    def __init__(self, config_file):
-        self.cfg = ConfigParser.RawConfigParser()
-        print "Reading config file : " , os.path.abspath(config_file)
-        self.cfg.read(config_file)
-    
-    def get(self, section, key):
-        return self.cfg.get(section, key)
 
-    def items(self, section):
-        return self.cfg.items(section)
-
-class TransformerConfig(Config):
-    """
-    Configuration information for the Transformer
-    """
-
-    def __init__(self, config_file):
-        Config.__init__(self, config_file)
-        self.dict_pipes = {}
-
-    def using_queue(self):
-        return self.get("general", "message_queue")
-
-    def get_country_code(self):
-        return self.get("general","country_code")
-
-    def get_input_folder(self):
-        return self.get("general", "bungeni_docs_folder")
-
-    def get_transformer_resources_folder(self):
-        return self.get("general", "transformer_resources_folder")
-
-    def get_akomantoso_output_folder(self):
-        return self.get("general", "akomantoso_output_folder")
-
-    def get_ontoxml_output_folder(self):
-        return self.get("general", "metalex_output_folder")
-
-    def get_attachments_output_folder(self):
-        return self.get("general","attachments_output_folder")
-
-    def get_temp_files_folder(self):
-        return self.get("general","temp_files_folder")
-
-    def get_pipelines(self):
-        # list of key,values pairs as tuples 
-        if len(self.dict_pipes) == 0:
-            l_pipes = self.cfg.items("pipelines")
-            for l_pipe in l_pipes:
-                self.dict_pipes[l_pipe[0]] = l_pipe[1]
-        return self.dict_pipes
-
-
-def close_quietly(handle):
-    """
-    Always use this close to close any File, Stream or Response Handles
-    This closes all handles in a exception safe manner
-    """
-    try:
-        if (handle is not None):
-            handle.close()
-    except Exception, ex:
-        LOG.error("Error while closing handle", ex)
-        
-
-
-class Transformer(object):
-    """
-    Access the Transformer via this class
-    """
-
-    __global_path__ = "//"
-    
-    def __init__(self, cfg):
-        # point the transformer to the correct configuration folder
-        GlobalConfigurations.setApplicationPathPrefix(cfg.get_transformer_resources_folder())
-        # initialize the transformer
-        self.transformer = OATranslator.getInstance()
-        # setup a hashmap to pass input parameters to the pipeline
-        self._params = HashMap()
-        
-    def get_params(self):
-        # returns the parliament info object
-        return self._params
-    
-    def set_params(self, params):
-        # sets the parliament info object
-        self._params = params
-
-    def xpath_get_doc_uri(self):
-        #returns a documents URI
-        return self.__global_path__ + "bu:ontology/child::*/@uri"
-
-    def xpath_get_doc_internal_uri(self):
-        #returns a documents internal-URI. This is a fallback for document URI
-        return self.__global_path__ + "bu:ontology/child::*/@internal-uri"
-
-    def xpath_get_status_date(self):
-        #returns a documents URI
-        return self.__global_path__ + "bu:ontology/child::*/bu:statusDate"
-
-    def get_sync_status(self,input_file):
-        sreader = SAXReader()
-        self.xmldoc = sreader.read(StringReader(input_file))
-        return self.xmldoc.selectSingleNode("/response/status").getText()
-
-    def get_doc_params(self,input_file):
-        sreader = SAXReader()
-        self.xmldoc = sreader.read(input_file)
-        on_sync_params = {}
-        doc_uri = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri())
-        status_date = self.xmldoc.selectSingleNode(self.xpath_get_status_date())
-        if doc_uri is None:
-            uri_raw = self.xmldoc.selectSingleNode(self.xpath_get_doc_internal_uri()).getValue()
-            uri_encoded = uri_raw.encode('utf-8')
-        else:
-            uri_raw = doc_uri.getValue()
-            uri_encoded = uri_raw.encode('utf-8')
-        if status_date is None:
-            on_sync_params['status_date'] = ""
-        else:
-            on_sync_params['status_date'] = self.xmldoc.selectSingleNode(self.xpath_get_status_date()).getText()
-        
-        on_sync_params['uri'] = uri_encoded
-        return on_sync_params
-
-    def get_doc_uri(self,input_file):
-        sreader = SAXReader()
-        self.xmldoc = sreader.read(input_file)
-        doc_uri = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri())
-        if doc_uri is None:
-            return self.xmldoc.selectSingleNode(self.xpath_get_doc_internal_uri()).getValue()
-        else:
-            return doc_uri.getValue()
-
-    def replace_all(self, uri, dic):
-        #multiple replace characters
-        for i, j in dic.iteritems():
-            uri = uri.replace(i, j)
-        return uri
-
-    def run(self, input_file, output, config_file):
-        """
-        Run the transformer on the input file
-        """
-        print "[checkpoint] entering translation..."
-        if os.path.isfile(input_file) == False:
-            print _COLOR.FAIL, '\nFile disappeared. Will retry ', input_file, _COLOR.ENDC
-            return [None, None]
-        print "Executing Transformer with: ", input_file, output, config_file
-        try:
-            translatedFiles = self.transformer.translate(
-                input_file, 
-                config_file,  
-                self.get_params()
-                )
-            # catch internal exceptions that return 'null'
-            if translatedFiles is None:
-                print "[checkpoint] internal failure in the transformer"
-                return [None, None]
-            else:
-                #input stream
-                fis  = FileInputStream(translatedFiles["final"])
-                #get the document's URI
-                uri_raw = self.get_doc_uri(translatedFiles["final"])
-                # clean uri if it may have unicode characters
-                uri = uri_raw.encode('utf-8') 
-                rep_dict = {'/':'_', ':':','}
-                uri_name = self.replace_all(uri, rep_dict)
-                outFile = File(str(output) + uri_name.decode('iso-8859-1') + ".xml")
-                #copy transformed file to disk
-                FileUtility.getInstance().copyFile(fis, outFile)
-                close_quietly(fis)
-                return [outFile, None]
-        except SAXParseException, saE:
-            print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
-            return [None, None]
-        except XPathException, xpE:
-            print _COLOR.FAIL, xpE, '\nERROR: xpE While processing xml ', input_file, _COLOR.ENDC
-            return [None, None]
-        except IOException, ioE:
-            print _COLOR.FAIL, ioE, '\nERROR: ioE While processing xml ', input_file, _COLOR.ENDC
-            return [None, None]
-        except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: E While processing xml ', input_file, _COLOR.ENDC
-            return [None, None]
-        except RuntimeException, ruE:
-            print _COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, _COLOR.ENDC
-            return [None, None]
-            
-
-
-class ParseXML(object):
-    """
-    Parses XML output from Bungeni using Xerces
-    """
-
-    __global_path__ = "//"
-
-    def __init__(self, xml_path):
-        """
-        Load the xml document from the path
-        """
-        try:
-            self.xmlfile = xml_path
-            self.sreader = SAXReader()
-            self.an_xml = File(xml_path)
-        except IOException, ioE:
-            print _COLOR.FAIL, ioE, '\nERROR: IOErrorFound reading xml ', xml_path, _COLOR.ENDC
-
-    def doc_parse(self):
-        """
-        !+NOTE Previously, this was done in __init__ but it was tough returning that failure as a boolean.
-        To be called after initializing ParseXML this is to catch any parsing errors and a return boolean. 
-        """
-        try:
-            self.xmldoc = self.sreader.read(self.an_xml)
-            return True
-        except DocumentException, fNE:
-            print _COLOR.FAIL, fNE, '\nERROR: when trying to parse ', self.xmlfile, _COLOR.ENDC
-            return False
-        except IOException, fE:
-            print _COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', self.xmlfile, _COLOR.ENDC
-            return False
-        except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: Saxon parsing xml ', self.xmlfile, _COLOR.ENDC
-            return False
-        except RuntimeException, ruE:
-            print _COLOR.FAIL, ruE, '\nERROR: ruE Saxon parsing xml ', self.xmlfile, _COLOR.ENDC
-            return False
-
-    def doc_dom(self):
-        """
-        Used by RepoSyncUploader to read a __repo_sync__ file generated 
-        before uploading to eXist-db
-        """
-        return self.xmldoc
-
-    def write_to_disk(self):
-        format = OutputFormat.createPrettyPrint()
-        writer = XMLWriter(FileWriter(self.xmlfile), format)
-        try:
-            writer.write(self.xmldoc)
-            writer.flush()
-        except Exception, ex:
-            LOG.error("Error while writing %s to disk" % self.xmlfile, ex)
-        finally:
-            close_quietly(writer)
-            
-
-class ParseBungeniXML(ParseXML):
-    """
-    Parsing contenttype documents from Bungeni.
-    """
-    def xpath_parl_item(self,name):
-
-        return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
-        
-    def xpath_get_attr_val(self,name):
-
-        return self.__global_path__ + "field[@name]"  
-        
-    def get_parliament_info(self, cc):
-        parl_params = HashMap()
-        
-        parliament_doc = self.xmldoc.selectSingleNode(self.xpath_parl_item("type"))
-       
-        if parliament_doc is None:
-            return None
-        if parliament_doc.getText() == "parliament" :
-            """
-            Get the parliamentary information at this juncture.
-            """
-            # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
-            # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
-            # !+NOTE (ao, 8th Feb 2013) country-code added from glue.ini config file
-            parl_params['country-code'] = cc
-            parl_params['parliament-id'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("parliament_id")).getText()
-            parl_params['parliament-election-date'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("election_date")).getText()
-            parl_params['for-parliament'] = self.xmldoc.selectSingleNode(self.xpath_parl_item("type")).getText()
-            return parl_params
-        else:
-            return None
-
-    def get_contenttype_name(self):
-        root_element = self.xmldoc.getRootElement()
-        if root_element.getName() == "contenttype":
-            return root_element.attributeValue("name")   
-        else:
-            return None
-
-    def xpath_get_attachments(self):
-        
-        return self.__global_path__ + "attachments"
-
-    def xpath_get_image(self):
-
-        return self.__global_path__ + "image"
-
-    def xpath_get_log_data(self):
-
-        return self.__global_path__ + "logo_data"
-
-    def get_attached_files(self):
-        """
-        Gets the attached_files node for a document
-        """
-        return self.xmldoc.selectSingleNode(self.xpath_get_attachments())
-
-    def get_image_file(self):
-        """
-        Gets the image node for a user/group document
-        """
-        # get from default <image/> node...
-        image_node = self.xmldoc.selectSingleNode(self.xpath_get_image())
-        if image_node is not None:
-            return image_node
-        else:
-            # ...or from <log_data/>. Known to have an image.
-            return self.xmldoc.selectSingleNode(self.xpath_get_log_data())
-
-class ParseOntologyXML(ParseXML):
-    """
-    Parsing ontology documents from Transformation process.
-    """
-    def get_ontology_name(self):
-        root_element = self.xmldoc.getRootElement()
-        if root_element.attributeValue("for") == "document":
-            return root_element
-        else:
-            return None
-
-    def write_to_disk(self):
-        super(ParseOntologyXML, self).write_to_disk()
-
-
-class _COLOR(object):
-    """
-    Color definitions used for color-coding significant runtime events 
-    or raised exceptions as applied on python print() function
-    """
-    
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-
-    def disable(self):
-        self.HEADER = ''
-        self.OKBLUE = ''
-        self.OKGREEN = ''
-        self.WARNING = ''
-        self.FAIL = ''
-        self.ENDC = ''
-
-
-class GenericDirWalker(object):
-    """
-    Walks a directory tree and invokes a
-    callback API for every file in the tree
-    """
-    
-    def __init__(self, input_params = None):
-        """
-        input_params - the parameters for the callback function
-        """
-        self.counter = 0
-        self.object_info = None
-        self.input_params = input_params
-
-    def walk(self, folder):
-        """ 
-        walk a folder and recursively walk through sub-folders
-        for every file in the folder call the processing function
-        """
-        folder = os.path.abspath(folder)
-        for a_file in [
-          a_file for a_file in os.listdir(folder) if not a_file in [".",".."]
-          ]:
-            nfile = os.path.join(folder, a_file)
-            if os.path.isdir(nfile):
-                self.walk(nfile)
-            else:
-                # increment the counter in the callback
-                info_object = self.fn_callback(nfile)
-                if info_object[0] == True:
-                    self.object_info = info_object[1]
-                    break
-                else:
-                    continue
-
-    def fn_callback(self, nfile):
-        LOG.debug("in GenericDirWalker BASE callback" + nfile)
-        return (False, None)
-
-
-class GenericDirWalkerXML(GenericDirWalker):
-    """
-    Walks a directory tree, but the callback filters on for 
-    XML documents
-    """
-
-    def fn_callback(self, nfile):
-        import fnmatch
-        LOG.debug("in GenericDirWalker XML callback" + nfile)
-        if fnmatch.fnmatch(nfile, "*.xml"):
-            self.counter = self.counter + 1
-            LOG.debug("returning TRUE GenericDirWalker XML callback" + nfile )
-            return (True, None)
-        else:
-            LOG.debug("returning FALSE GenericDirWalker XML callback" + nfile )
-            return (False,None)
-
-
-class GenericDirWalkerATTS(GenericDirWalker):
-    """
-    grabs anyfile in the attachments folder no discrimination by filetype
-    """
-    
-    def fn_callback(self, nfile):
-        LOG.debug("in GenericDirWalker ATTS callback" + nfile)
-        if nfile:
-            self.counter = self.counter + 1
-            LOG.debug("returning TRUE GenericDirWalker XML callback" + nfile )
-            return (True, None)
-        else:
-            LOG.debug("returning FALSE GenericDirWalker XML callback" + nfile )
-            return (False,None)
-
-
-class GenericDirWalkerUNZIP(GenericDirWalker):
-
-    def extractor(self, zip_file, dest_path = None):
-        """
-        extracts any .zip files in folder matching original name file.
-        http://www.lingala.net/zip4j/
-        """
-        try:
-            #Initiate ZipFile object with the path/name of the zip file.
-            unzipper = ZipFile(zip_file)
-            if dest_path is not None:
-                extract_to = dest_path
-            else:
-                extract_to = os.path.splitext(zip_file)[0]
-            #Extracts all files to the path specified
-            unzipper.extractAll(extract_to)
-            print _COLOR.WARNING + "Extracted zip file... " + zip_file+_COLOR.ENDC
-        except ZipException, e:
-            LOG.error("Error while processing zip "+ zip_file + e)
-
-    def fn_callback(self, nfile):
-        import fnmatch
-        #print "in GenericDirWalker ZIP callback" , nfile
-        if fnmatch.fnmatch(nfile, "*.zip"):
-            self.counter = self.counter + 1
-            self.extractor(nfile)
-            #print "returning TRUE GenericDirWalker ZIP callback" , nfile
-            # There is no extended processing here - we just continue until 
-            # we have run out of zip files to process, so we return False
-            # so as to not break the loop
-            return (False, None)
-        else:
-            #print "returning FALSE GenericDirWalker ZIP callback" , nfile
-            return (False,None)
 
 
 class ParliamentInfoWalker(GenericDirWalkerXML):
@@ -542,24 +110,126 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     Walker that retrieves the info about the parliament
     """
     
+    def __init__(self, input_params = None):
+        super(ParliamentInfoWalker, self).__init__(input_params)
+        # check if the system is setup for unicameral or bicameral 
+        self.bicameral = self.input_params["main_config"].get_bicameral()
+        self.cache_file = self.input_params["main_config"].get_temp_files_folder() + __parl_info__
+        self.camera_count = 0
+        self.parliament_docs = {}
+    
+    """
+    The system can have 2 parliaments, so the assumption is if bicameral is = True
+    There can be 2 chambers.
+    
+    """
+
     def get_from_cache(self, input_file_path):
         bunparse = ParseBungeniXML(input_file_path)
         bunparse.doc_parse()
-        the_parl_doc = bunparse.get_parliament_info(self.input_params["main_config"].get_country_code())
+        the_parl_doc = bunparse.get_parliament_info(
+                self.input_params["main_config"].get_country_code()
+                )
         return the_parl_doc
 
+
+    def is_cache_full(self):
+        """
+        Check if cache has more than one document
+        """
+        if os.path.exists(self.cache_file):
+            reader = SAXReader()
+            cache_doc = reader.read(
+                File(self.cache_file)            
+            )
+            list_of_cached_nodes = cache_doc.selectNodes("//cachedTypes/contentType")
+            if self.bicameral:
+                if list_of_cached_nodes == 0:
+                    return False
+                if list_of_cached_nodes == 1:
+                    return True
+                return False
+            else:
+                if list_of_cached_nodes == 0:
+                    return False
+                if list_of_cached_nodes == 1:
+                    return False
+                if list_of_cached_nodes == 2:
+                    return True
+                return False
+        return False 
+                
+        
+
+    def new_cache_document(self):
+        """
+        Creates a new empty cache document and saves it to disk
+        """
+        cache_doc = DocumentHelper.createDocument()
+        cache_doc.addElement("cachedtypes")
+        self.write_cache_doc_to_file(cache_doc)
+
+    def new_cache(self, input_file):
+        """
+        Takes the input file, creates a new empty cache document, 
+        and adds the input file to the cache 
+        """
+        self.new_cache_document()
+        reader = SAXReader()
+        new_doc = reader.read(
+            File(input_file)
+        )
+        element_to_import = new_doc.getRootElement()
+        self.append_element_into_cache_document(element_to_import)
+
+    def write_cache_doc_to_file(self, cache_doc):
+        fw = FileWriter(self.cache_file)
+        cache_doc.write(fw)
+        
+    def append_to_cache(self, input_file):
+        reader = SAXReader()
+        new_doc = reader.read(
+            File(input_file)
+        )
+        
+        element_to_import = new_doc.getRootElement()
+        self.append_element_into_cache_document(element_to_import)
+
+    def append_element_into_cache_document(self, element_to_import):
+        reader = SAXReader()
+        cache_doc = reader.read(
+            File(self.cache_file)
+            )
+        cache_doc.importNode(element_to_import, True)
+        cache_doc.getRootElement().addElement(
+            element_to_import
+            )
+        self.write_cache_doc_to_file(cache_doc)    
+   
     def fn_callback(self, input_file_path):
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseBungeniXML(input_file_path)
             bunparse.doc_parse()
-            the_parl_doc = bunparse.get_parliament_info(self.input_params["main_config"].get_country_code())
+            # check if its a parliament document
+            the_parl_doc = bunparse.get_parliament_info(
+                    self.input_params["main_config"].get_country_code()
+                    )
             if the_parl_doc is not None:
                 """
                 Create a cached copy in tmp folder defined in config.ini for quick access 
                 in the current parliament's future transformation processes
                 """
-                tmp_folder = self.input_params["main_config"].get_temp_files_folder()
-                shutil.copyfile(input_file_path, tmp_folder + __parl_info__)
+                # check if file exists , if it exists there is already a parliament in the
+                # cache 
+                from os import path
+                if path.exists(self.cache_file):
+                    if self.is_cache_full() == False:
+                        # inject into file after contenttypes node
+                        self.append_to_cache(input_file_path)
+                else:
+                    # new document
+                    self.new_cache(input_file_path)
+                    
                 return (True, the_parl_doc)
             else :
                 return (False, None)
@@ -601,7 +271,7 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
                     original_name = saved_file_node.getText()
                     # first get the current directory name 
                     current_dir = os.path.dirname(inputdoc.xmlfile)
-                     # rename file with md5sum
+                    # rename file with md5sum
                     new_name = __md5_file(current_dir + "/" + original_name)
                     # move file to attachments folder and use derived uuid as new name for the file
                     shutil.move(current_dir + "/" + original_name, self.atts_folder + new_name)
@@ -979,102 +649,6 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
         else:
             return (False,None)
 
-
-class WebDavConfig(Config):
-    """
-    Configuration information for eXist WebDav
-    """
-
-    def __init__(self, config_file):
-        Config.__init__(self, config_file)
-        self.dict_pipes = {}
-    
-    def get_bungeni_xml_folder(self):
-        return self.get("webdav", "bungeni_xml_folder")
-
-    def get_bungeni_atts_folder(self):
-        return self.get("webdav", "bungeni_atts_folder")
-
-    def get_fw_i18n_folder(self):
-        return self.get("webdav", "framework_i18n_folder")
-
-    def get_username(self):
-        return self.get("webdav", "username")
-    
-    def get_password(self):
-        return self.get("webdav", "password")
-
-    def get_server(self):
-        return self.get("webdav", "server")
-
-    def get_port(self):
-        return int(self.get("webdav", "port"))
-
-    def get_http_server_port(self):
-        return "http://"+self.get_server()+":"+str(self.get_port())
-
-class WebDavClient(object):
-    """        
-    Connects to eXist via WebDav and finally places the files to rest.
-    """
-    def __init__(self, username, password, put_folder = None):
-        self.put_folder = put_folder
-        self.sardine = SardineFactory.begin(username, password)
-
-    def shutdown(self):
-        try:
-            self.sardine.shutdown()
-        except Exception,e:
-            print _COLOR.FAIL, e, '\nERROR Closing sardine ', _COLOR.ENDC
-
-    def reset_remote_folder(self, put_folder):
-        try:
-            if self.sardine.exists(put_folder) is False:
-                print _COLOR.WARNING + "INFO: " + put_folder + " folder wasn't there !" + _COLOR.ENDC            
-                self.sardine.createDirectory(put_folder)
-        except SardineException, e:
-            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , _COLOR.ENDC
-            sys.exit()
-        except HttpHostConnectException, e:
-            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
-            sys.exit()
-
-    def pushFile(self, onto_file):
-        try:
-            a_file = File(onto_file)
-        except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: E While processing xml ', onto_file, _COLOR.ENDC
-        try:
-            inputStream = FileInputStream(a_file)
-            length = a_file.length()
-            bytes = jarray.zeros(length,'b')
-            #Read in the bytes
-            #http://www.flexonjava.net/2009/08/jython-convert-file-into-byte-array.html
-            offset = 0
-            numRead = 0
-            while offset<length:
-                if numRead>= 0:
-                    #print numRead #For debugging
-                    numRead=inputStream.read(bytes, offset, length-offset)
-                    offset = offset + numRead
-                    
-            try:
-                self.sardine.put(self.put_folder+os.path.basename(onto_file), bytes)
-                print "PUT: "+self.put_folder+os.path.basename(onto_file)
-                return True
-            except SardineException, e:
-                print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , _COLOR.ENDC
-                return False
-            except HttpHostConnectException, e:
-                print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
-                sys.exit()
-            finally:
-                close_quietly(inputStream)
-                self.shutdown()
-                 
-        except FileNotFoundException, e:
-            print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , _COLOR.ENDC
-            return True
 
 class PoTranslationsConfig(Config):
     """

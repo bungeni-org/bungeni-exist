@@ -29,7 +29,7 @@ declare
     %rest:form-param("group", "{$group}", "*")    
     %rest:form-param("type", "{$type}", "*")
     %rest:form-param("offset", "{$offset}", 1)
-    %rest:form-param("limit", "{$limit}", 0)    
+    %rest:form-param("limit", "{$limit}", 10) (: set a default and then return next offset for next batch :)   
     %rest:form-param("search", "{$search}", "none")
     %rest:form-param("status", "{$status}", "*")
     %rest:form-param("daterange", "{$daterange}", "*")
@@ -51,6 +51,7 @@ declare
             <group>{$group}</group>           
             <type>{$type}</type>   
             <offset>{$offset}</offset>
+            <next-offset>{($offset+$limit)}</next-offset>
             <limit>{$limit}</limit>
             <search>{$search}</search>
             <status>{$status}</status>

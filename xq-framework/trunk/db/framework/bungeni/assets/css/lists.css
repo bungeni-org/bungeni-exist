@@ -27,6 +27,7 @@ ul.doc-versions {
 
 /* Listing of items */
 ul.ls-row {
+    text-align:left;
     margin:0 auto;
     margin-top:20px;
     display:block;

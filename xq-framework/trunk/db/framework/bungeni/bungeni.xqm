@@ -3273,11 +3273,12 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
                     {$member-doc}
                     <ref>
                     {
-                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member/bu:person[@href eq $memberid]
-                      let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName
+                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
+                      let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
+                      order by $doc/bu:memberTitles/bu:memberTitle/bu:titleType/bu:sortOrder ascending 
                       return 
                             element bu:office {
-                                ($doc/parent::node(), $group-name)
+                                ($doc, $group-name)
                             }
                     }
                     </ref>
@@ -3298,7 +3299,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          
             for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
-            where bu:signatories/bu:signatory/bu:person[@href=$memberid]/ancestor::bu:ontology or 
+            where bu:signatories/bu:signatory[bu:person/@href=$memberid][bu:status/bu:value eq 'consented']/ancestor::bu:ontology or 
                   bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
             return
                   $match

@@ -212,9 +212,9 @@
             <xsl:choose>
                 <!-- check whether we have signatories or not -->
                 <xsl:when test="bu:ontology/bu:signatories">
-                    <xsl:for-each select="bu:ontology/bu:signatories/bu:signatory">
+                    <xsl:for-each select="bu:ontology/bu:signatories/bu:signatory[bu:status/bu:value eq 'consented'][bu:person/@href ne ancestor::bu:ontology/bu:document/bu:owner/bu:person/@href]">
                         <i>
-                            <a href="member?uri={bu:person/@href}" title="{bu:status/bu:value}">
+                            <a href="member?uri={bu:person/@href}" title="{bu:status/@showAs}">
                                 <xsl:value-of select="bu:person/@showAs"/>
                             </a>
                         </i>

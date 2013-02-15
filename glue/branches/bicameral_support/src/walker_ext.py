@@ -63,15 +63,17 @@ __parl_info__ = "parliament_info.xml"
 class ParliamentInfoWalker(GenericDirWalkerXML):
     """
     Walker that retrieves the info about the parliament
+    This is called from both the queue processor and from the batch processor
     """
-    
     def __init__(self, input_params = None):
         super(ParliamentInfoWalker, self).__init__(input_params)
         # check if the system is setup for unicameral or bicameral 
         self.bicameral = self.input_params["main_config"].get_bicameral()
         self.cache_file = self.input_params["main_config"].get_temp_files_folder() + __parl_info__
-        self.camera_count = 0
-        self.parliament_docs = {}
+        self.parliament_info = {}
+    
+    def cache_file_exists(self):
+        return os.path.isfile(self.cache_file)
     
     """
     The system can have 2 parliaments, so the assumption is if bicameral is = True
@@ -79,14 +81,28 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     
     """
 
-    def get_from_cache(self, input_file_path):
-        bunparse = ParseBungeniXML(input_file_path)
+    def get_from_cache(self):
+        """
+        check if the dom is cached for the parliament information map
+        Returns the parliament information of 1 parliament
+        """
+        # !+BICAMERAL !+FIX_THIS the cache file is not just the raw file, 
+        # it has 2 parliaments !
+        reader = SAXReader()
+        cache_doc = reader.read(
+            File(self.cache_file)
+            )
+        list_of_cached_nodes = cache_doc.selectNodes("//cachedTypes/contentType")
+        
+        #!+FIX_THIS implement ParseBungeniXML to take a node as an input
+        bunparse = ParseBungeniXML(self.cache_file)
         bunparse.doc_parse()
+        # return the parliament information in a hashmap
         the_parl_doc = bunparse.get_parliament_info(
                 self.input_params["main_config"].get_country_code()
                 )
         return the_parl_doc
-
+        
 
     def is_cache_full(self):
         """
@@ -144,7 +160,6 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         new_doc = reader.read(
             File(input_file)
         )
-        
         element_to_import = new_doc.getRootElement()
         self.append_element_into_cache_document(element_to_import)
 
@@ -178,6 +193,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
                 if path.exists(self.cache_file):
                     if self.is_cache_full() == False:
                         # inject into file after contenttypes node
+                        # check if the parliament info is not already cached
                         self.append_to_cache(input_file_path)
                 else:
                     # new document

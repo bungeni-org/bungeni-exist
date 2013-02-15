@@ -98,8 +98,8 @@ class ParseXML(object):
             close_quietly(writer)
             
 
-
 class ParseBungeniXML(ParseXML):
+    
     """
     Parsing contenttype documents from Bungeni.
     """
@@ -112,6 +112,9 @@ class ParseBungeniXML(ParseXML):
         return self.__global_path__ + "field[@name]"  
         
     def get_parliament_info(self, cc):
+        """
+        Returns Parliament information in a HashMap
+        """
         parl_params = HashMap()
         
         parliament_doc = self.xmldoc.selectSingleNode(self.xpath_parl_item("type"))
@@ -182,6 +185,10 @@ class ParseBungeniXML(ParseXML):
             # ...or from <log_data/>. Known to have an image.
             return self.xmldoc.selectSingleNode(self.xpath_get_log_data())
 
+
+# !+FIX_THIS implement an overload ParseBungeniXML that supports input node processing
+class ParseBungeniXMLInputNode(ParseBungeniXML):
+    pass
 
 class ParseOntologyXML(ParseXML):
     """

@@ -185,6 +185,10 @@ h1 {
     display:none;
 }
 
+.bf .bfVerticalTable .bfVerticalTableLabel .xfLabel {
+    padding-top: 2px;
+}
+
 .xposeGreen {
     color:#000;
     font-style: italic;
@@ -336,6 +340,7 @@ ul.secondary i.add {
 i.new {
     color:#fac437;
 }
+.feature-workflow a,
 .sec-active {
     font-weight:bold;
 }

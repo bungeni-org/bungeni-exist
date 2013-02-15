@@ -1,8 +1,10 @@
-'''
+"""
 Created on Feb 14, 2013
 
+All config related classes are placed here
+
 @author: undesa
-'''
+"""
 
 import os
 import ConfigParser
@@ -100,3 +102,23 @@ class WebDavConfig(Config):
 
     def get_http_server_port(self):
         return "http://"+self.get_server()+":"+str(self.get_port())
+
+
+class PoTranslationsConfig(Config):
+    """
+    Configuration information for .po translation files
+    """
+    
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_pipes = {}
+
+    def get_po_files_folder(self):
+        return self.get("translations", "po_files_folder")
+
+    def get_po_listing(self):
+        return self.items("messages")
+
+    def get_i18n_catalogues_folder(self):
+        return self.get("translations", "i18n_catalogues_folder")
+

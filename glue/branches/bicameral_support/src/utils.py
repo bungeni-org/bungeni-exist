@@ -1,20 +1,16 @@
-'''
+"""
 Created on Feb 14, 2013
 
+All utility classes and APIs reside here
+
 @author: undesa
-'''
+"""
 
-import sys, os
-
-from java.util import (
-    HashMap
-    )
-
-from java.lang import (
-    RuntimeException
-    )
+import sys, os, socket
 
 from java.io import (
+    FileWriter, 
+    InputStreamReader,
     File, 
     FileNotFoundException, 
     IOException,
@@ -22,10 +18,32 @@ from java.io import (
     StringReader,
     )
 
+from java.net import (
+    MalformedURLException,
+    URL
+    )
+
+from java.util import (
+    HashMap
+    )
+
+from java.lang import (
+    String,
+    RuntimeException
+    )
+
+from org.dom4j import (
+    DocumentFactory,
+    DocumentException,
+    )
 
 from org.dom4j.io import (
+    OutputFormat,
+    XMLWriter,
     SAXReader
     )
+
+from org.apache.commons.codec.binary import Base64
 
 from net.sf.saxon.trans import XPathException
 from org.xml.sax import SAXParseException
@@ -41,6 +59,15 @@ import jarray
 
 from org.apache.http.conn import HttpHostConnectException
 from org.apache.log4j import Logger
+
+### APP Imports ####
+
+from parsers import (
+    ParseXML,
+    )
+
+
+__repo_sync__ = "reposync.xml"
 
 LOG = Logger.getLogger("glue")
 
@@ -256,6 +283,218 @@ class Transformer(object):
             return [None, None]
 
 
+class RepoSyncUploader(object):
+    """
+    
+    Pushes XML files one-by-one into eXist server from __repo_sync__ list of items
+    """
+    def __init__(self, input_params):
+        self.input_params = input_params
+        self.main_cfg = input_params["main_config"]
+        self.webdav_cfg = input_params["webdav_config"]
+        self.bunparse = ParseXML(self.main_cfg.get_temp_files_folder() + __repo_sync__)
+        self.bunparse.doc_parse()
+        try:
+            self.dom = self.bunparse.doc_dom()
+        except DocumentException, e:
+            print _COLOR.FAIL, e, '\nERROR: __repo_sync__ file not found. Use `-s` switch to sync first.', _COLOR.ENDC
+            sys.exit()
+
+    def upload_file(self, on_file):
+        self.username = self.webdav_cfg.get_username()
+        self.password = self.webdav_cfg.get_password()
+        self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
+        webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+        up_stat = webdaver.pushFile(str(on_file))
+        return up_stat
+
+    def upload_files(self):
+        coll = self.dom.selectSingleNode("//collection")
+        paths = coll.elements("file")
+        for path in paths:
+            path_name = path.getText()
+            self.username = self.webdav_cfg.get_username()
+            self.password = self.webdav_cfg.get_password()
+            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
+            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+            webdaver.pushFile(path_name)
+
+
+
+
+class PostTransform(object):
+    """
+    
+    Updates signatories, workflowEvents and groupsitting items in the eXist repository
+    """
+    def __init__(self, input_params = None):
+        self.webdav_cfg = input_params["webdav_config"]
+
+    def update(self, uri = None):
+        try:
+            # http://www.avajava.com/tutorials/lessons/how-do-i-connect-to-a-url-using-basic-authentication.html
+            scriptUrl = self.webdav_cfg.get_http_server_port()+'/exist/apps/framework/postproc-exec.xql?uri='+str(uri)
+            name = self.webdav_cfg.get_username()
+            password = self.webdav_cfg.get_password()
+
+            authString = String(name + ":" + password)
+            authEncBytes = Base64.encodeBase64(authString.getBytes())
+            authStringEnc = String(authEncBytes)
+            LOG.debug("Base64 encoded auth string: " + authStringEnc.toString())
+
+            url = URL(scriptUrl)
+            urlConnection = url.openConnection()
+            urlConnection.setRequestProperty("Authorization", "Basic " + str(authStringEnc))
+            iS = urlConnection.getInputStream()
+            isr = InputStreamReader(iS)
+
+            length = urlConnection.getContentLength()
+            bytes = jarray.zeros(length,'c')
+            #Read in the bytes
+            offset = 0
+            numRead = 0
+            while offset<length:
+                if numRead>= 0:
+                    numRead=isr.read(bytes, offset, length-offset)
+                    offset = offset + numRead
+            print _COLOR.WARNING, String(bytes), _COLOR.ENDC
+            return True
+        except MalformedURLException, e:
+            print _COLOR.FAIL, e, '\nERROR: MalformedURLException', _COLOR.ENDC
+            return False
+        except IOException, e:
+            print _COLOR.FAIL, e, '\nERROR: IOException', _COLOR.ENDC
+            return False
+        finally:
+            isr.close()
+
+
+class POFilesTranslator(object):
+    """
+    
+    Translates the PO files one-by-one into XML catalogue format 
+    palatable for i18n module in eXist-db
+    
+    pescape_key() & pescape_value() are based on this nifty script
+    https://raw.github.com/fileformat/lptools/master/po2prop.py
+    """ 
+    def __init__(self, input_params = None):
+        self.main_cfg = input_params["main_config"]
+        self.po_cfg = input_params["po_config"]
+        self.webdav_cfg = input_params["webdav_config"]
+        self.download_po_files()
+
+    def download_po_files(self):
+        """
+        Retrieves the .po files from a remote location and stores them in a local folder
+        for translation to xml i18n catalogue
+        """
+        socket.setdefaulttimeout(20)
+        from urllib2 import (
+            urlopen, 
+            URLError, 
+            HTTPError
+            )
+        print _COLOR.OKGREEN + "Downloading .po files..." + _COLOR.ENDC
+        #return list of po link in the messages configuration
+        msgs_list = self.po_cfg.get_po_listing()
+        for iso_name, uri in msgs_list:
+            try:
+                f = urlopen(uri)
+                print iso_name + "-downloading from " + uri
+                local_file = open(self.po_cfg.get_po_files_folder()+iso_name+".po", "wb")
+                local_file.write(f.read())
+                close_quietly(f)
+                close_quietly(local_file)
+            except HTTPError, e:
+                print _COLOR.FAIL, "HTTP Error: ", e.code , uri, _COLOR.ENDC
+            except URLError, e:
+                print _COLOR.FAIL, "URL Error: ", e.reason, uri, _COLOR.ENDC
+        print _COLOR.OKGREEN + "Downloads finished... Now translating" + _COLOR.ENDC
+
+    def pescape_key(self, orig):
+        result = ""
+        if orig[0] == '#' or orig[0] == '!':
+            result = result + "\\"
+        
+        for ch in orig:
+            if ch == ':':
+                result = result + "\\:"
+            elif ch == '=':
+                result = result + "\\="
+            elif ch == '\r':
+                result = result + "\\r"
+            elif ch == '\n':
+                result = result + "\\n"
+            else:
+                result = result + ch
+            
+        return result
+
+    def pescape_value(self, orig):
+        result = ""
+        for ch in orig:
+            if ch == ':':
+                result = result + "\\:"
+            elif ch == '=':
+                result = result + "\\="
+            elif ch == '\r':
+                result = result + "\\r"
+            elif ch == '\n':
+                result = result + "\\n"
+            else:
+                result = result + ch
+        return result
+
+    def create_catalogue_file(self, iso):
+        OutputFormat.createPrettyPrint()
+        self.format = OutputFormat.createCompactFormat()
+        self.document = DocumentFactory.getInstance().createDocument()
+        self.root = self.document.addElement("catalogue")
+        self.root.addAttribute("xml:lang", iso)
+        return self.root
+
+    def add_msgs_to_catalogue(self,po_file):
+        import polib
+        po = polib.pofile(po_file, autodetect_encoding=False, encoding="utf-8", wrapwidth=-1)
+        for entry in po:
+            if entry.obsolete or entry.msgstr == '' or entry.msgstr == entry.msgid:
+                continue
+            name = self.root.addElement("msg")
+            name.addAttribute("key",self.pescape_key(entry.msgid))
+            name.addText(self.pescape_value(entry.msgstr))
+
+    def close_catalogue_file(self, lang):
+        self.format = OutputFormat.createPrettyPrint()
+        self.writer = XMLWriter(FileWriter(self.po_cfg.get_i18n_catalogues_folder()+"po_collection_"+lang+".xml"), self.format)
+        try:
+            self.writer.write(self.document)
+            self.writer.flush()
+        except Exception,ex:
+            LOG.error("Error while writing catalog file", ex)
+        finally:
+            close_quietly(self.writer)
+
+    def po_to_xml_catalogue(self):
+        po_files = os.listdir(os.path.join(self.po_cfg.get_po_files_folder()))
+        for po_file in po_files:
+            file_x_ext = os.path.splitext(po_file)[0] #remove extension
+            self.create_catalogue_file(file_x_ext)
+            self.add_msgs_to_catalogue(self.po_cfg.get_po_files_folder()+po_file)
+            self.close_catalogue_file(file_x_ext)
+            print "translated " + po_file
+
+    def upload_catalogues(self):
+        catalogues = os.listdir(os.path.join(self.po_cfg.get_i18n_catalogues_folder()))
+        for catalogue in catalogues:
+            self.username = self.webdav_cfg.get_username()
+            self.password = self.webdav_cfg.get_password()
+            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_fw_i18n_folder()
+            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+            webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder()+catalogue)
+
+
+
 def close_quietly(handle):
     """
     Always use this close to close any File, Stream or Response Handles
@@ -268,4 +507,16 @@ def close_quietly(handle):
         LOG.error("Error while closing handle", ex)
         
         
-        
+def __md5_file(f, block_size=2**20):
+    """
+    Gets the md5sum for a file
+    """
+    import hashlib
+    md5 = hashlib.md5()
+    f = open(f)
+    while True:
+        data = f.read(block_size)
+        if not data:
+            break
+        md5.update(data)
+    return md5.hexdigest()

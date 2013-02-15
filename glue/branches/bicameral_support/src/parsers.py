@@ -1,8 +1,11 @@
-'''
+"""
 Created on Feb 14, 2013
 
+Parser and Parser implementation classes reside here
+
 @author: undesa
-'''
+"""
+
 from java.io import (
     File, 
     FileWriter, 

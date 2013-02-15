@@ -1,8 +1,10 @@
-'''
+"""
 Created on Feb 14, 2013
 
+Walker Base Classes
+
 @author: undesa
-'''
+"""
 
 import os
 

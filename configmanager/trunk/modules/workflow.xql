@@ -127,10 +127,10 @@ declare function local:mode() as xs:string {
 declare function local:all-feature() {
     <features> 
     {
-        let $type := xs:string(request:get-parameter("type",""))
+        let $type := xs:string(request:get-parameter("type","doc"))
         let $docname := xs:string(request:get-parameter("doc","none"))
         let $wf-doc := $appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml"
-        let $featurename :=if (doc-available($wf-doc)) then $docname else $type
+        let $featurename :=if (doc-available($wf-doc) and $type ne 'doc') then $docname else $type
         let $feats-tmpl := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || "_features.xml")//features[@for eq $featurename]
         let $feats-wf := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")//feature   
         for $feature in $feats-tmpl/feature    
@@ -139,7 +139,10 @@ declare function local:all-feature() {
                 element feature {
                     attribute name { data($feature/@name) },
                     attribute workflow { data($feature/@workflow) },
-                    attribute enabled { if(data($feats-wf[@name eq data($feature/@name)]/@enabled)) then xs:string(data($feats-wf[@name eq data($feature/@name)]/@enabled)) else "false" }
+                    attribute enabled { if(data($feats-wf[@name eq data($feature/@name)]/@enabled)) then xs:string(data($feats-wf[@name eq data($feature/@name)]/@enabled)) else "false" },
+                    (: if there are parameters, show them :)
+                    $feats-wf[@name eq data($feature/@name)]/child::* 
+
                 }
             else 
                 element feature {
@@ -175,6 +178,10 @@ function workflow:edit($node as node(), $model as map(*)) {
                             <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$docname}.xml"/> 
                     }
                     
+                    <xf:instance id="URL-container" xmlns="">
+                       <URL/>
+                    </xf:instance>                    
+                    
                     <xf:instance id="i-grants">
                         <data>
                             <allow permission=".Add">
@@ -200,6 +207,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
                     
+                    <xf:instance id="i-boolean" src="{$workflow:REST-CXT-MODELTMPL}/boolean.xml"/>                    
+                    
                     <xf:instance id="i-alltags" src="{$workflow:REST-CXT-MODELTMPL}/_tags.xml"/>
                     
                     <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>                    
@@ -223,17 +232,17 @@ function workflow:edit($node as node(), $model as map(*)) {
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
-                        <xf:bind nodeset="feature/@enabled" type="xf:boolean" required="true()" />
+                        <xf:bind nodeset="feature/@enabled" type="xf:boolean" />
                         
-                        <!--xf:bind id="view" nodeset="allow[@permission eq '.View']/roles/role" required="true()" type="xs:string" constraint="(instance()/allow[@permission eq '.View']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
-                        <!xf:bind id="edit" nodeset="allow[@permission eq '.Edit']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="add" nodeset="allow[@permission eq '.Add']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="delete" nodeset="allow[@permission eq '.Delete']/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/-->                        
+                        <xf:bind nodeset="tags/tag" type="xf:string" constraint="count(instance()/tags/tag) eq count(distinct-values(instance()/tags/tag))" />
+                        
+                        <xf:bind id="view" nodeset="allow[@permission eq '.View']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.View']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
+                        <xf:bind id="view" nodeset="allow[@permission eq '.Edit']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Edit']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
+                        <xf:bind id="view" nodeset="allow[@permission eq '.Add']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Add']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
+                        <xf:bind id="view" nodeset="allow[@permission eq '.Delete']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Delete']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>                     
                     </xf:bind>
                     
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
-
-                    <xf:instance id="i-controller" src="{$workflow:REST-CXT-APP}/model_templates/controller.xml"/>
 
                     <xf:instance id="tmp">
                         <data xmlns="">
@@ -270,7 +279,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>The workflow information have not been filled in correctly</xf:message>
+                            <xf:message level="modal">The workflow information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
                     
@@ -338,29 +347,40 @@ function workflow:edit($node as node(), $model as map(*)) {
                         </xf:textarea>
                     </xf:group>
                     <hr/>
-                    <xf:group ref="." appearance="bf:horizontalTable">
+                    <xf:group ref="." appearance="bf:horizontalTable" style="width:500px;">
                         <xf:label>Features &amp; Tags</xf:label>
-                        <xf:group appearance="bf:horizontalTable">
+                        <xf:group appearance="bf:horizontalTable" style="width:500px;">
                             <xf:label>features</xf:label>
                             <xf:group appearance="bf:verticalTable">
-                                <xf:label>Workflowed</xf:label>
-                                <xf:select id="c-wfeatures" ref="feature/@enabled" appearance="full" incremental="true" class="blockCheckbox">
-                                    <xf:hint>enabled/disabled features on this workflow</xf:hint>
-                                    <xf:itemset nodeset="instance()/feature[@workflow eq 'True']">
-                                        <xf:label ref="@name"></xf:label>
-                                        <xf:value ref="@enabled"></xf:value>
-                                    </xf:itemset>
-                                </xf:select>  
+                                <xf:label>Workflowed</xf:label>  
+                                {
+                                    for $feature in local:all-feature()/feature[@workflow eq 'True']
+                                    return document {                                       
+                                            <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
+                                                <xf:label>{data($feature/@name)} </xf:label>
+                                                <xf:hint>click to enabled this feature</xf:hint>
+                                            </xf:input>,
+                                            <xf:trigger appearance="minimal" class="feature-workflow">
+                                                <xf:label>{data($feature/@name)} workflow&#160;</xf:label>
+                                                <xf:hint>click to go the feature workflow</xf:hint>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:setvalue ref="instance('URL-container')" value="index.html"/>
+                                                    <xf:load ref="instance('URL-container')"/>
+                                                </xf:action>
+                                                <xf:message level="ephemeral">The link trigger was clicked</xf:message>
+                                            </xf:trigger>                                        
+                                    }
+                                }
                             </xf:group>
                             <xf:group appearance="bf:verticalTable">
                                 <xf:label>Non-workflowed</xf:label>
-                                <xf:select id="c-nwfeatures" ref="feature/@enabled" appearance="full" incremental="true" class="blockCheckbox">
-                                    <xf:hint>enabled/disabled features on this workflow</xf:hint>
-                                    <xf:itemset nodeset="instance()/feature[@workflow eq 'False']">
-                                        <xf:label ref="@name"></xf:label>
-                                        <xf:value ref="@enabled"></xf:value>
-                                    </xf:itemset>
-                                </xf:select>  
+                                {
+                                    for $feature in local:all-feature()/feature[@workflow eq 'False']
+                                    return 
+                                        <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
+                                            <xf:label>{data($feature/@name)} </xf:label>
+                                        </xf:input>
+                                }                                
                             </xf:group>
                         </xf:group>
                         <xf:group appearance="bf:verticalTable">
@@ -619,7 +639,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>The workflow information have not been filled in correctly</xf:message>
+                            <xf:message level="modal">The workflow information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
 
@@ -686,7 +706,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 <xf:hint>a Hint for this control</xf:hint>
                                                 <xf:alert>invalid: emtpy or non-unique tags</xf:alert>
                                                 <xf:hint>tags should be unique</xf:hint>   
-                                                <xf:itemset nodeset="instance()/tags/tag">
+                                                <xf:itemset nodeset="instance('i-alltags')/tag">
                                                     <xf:label ref="."></xf:label>                                       
                                                     <xf:value ref="."></xf:value>
                                                 </xf:itemset>
@@ -845,7 +865,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
 
                     <xf:bind nodeset="instance()/state[last()]">
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
-                        <!--xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[last()]/tags/tag) eq count(distinct-values(instance()/state[last()]/tags/tag)) and string-length(.) &gt; 1" /-->
+                        <xf:bind nodeset="tags/tag" type="xf:string" constraint="count(instance()/state[last()]/tags/tag) eq count(distinct-values(instance()/state[last()]/tags/tag))" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                     </xf:bind>
 
@@ -886,7 +906,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>The workflow information have not been filled in correctly</xf:message>
+                            <xf:message level="modal">The workflow information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
 
@@ -974,8 +994,9 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                     <xf:action>
                                         <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                         <!-- removes any tag node thats empty -->
-                                        <xf:delete nodeset="instance()/tags/tag[string-length(.) &lt; 2]" />
+                                        <xf:delete nodeset="instance()/state[last()]/tags/tag[string-length(.) lt 2]" />
                                         <xf:send submission="s-add"/>
+                                        <xf:insert nodeset="instance()/state[last()]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" />
                                     </xf:action>                                
                                 </xf:trigger>   
                                 <hr/>
@@ -1114,7 +1135,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>Transition information have not been filled in correctly</xf:message>
+                            <xf:message level="modal">Transition information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
 
@@ -1371,7 +1392,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>Transition information have not been filled in correctly</xf:message>
+                            <xf:message level="modal">Transition information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
                     
@@ -1404,7 +1425,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>Transition information have not been filled in correctly</xf:message>
+                            <xf:message level="modal">Transition information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>                    
 

@@ -121,18 +121,36 @@ def __setup_output_dirs__(cfg):
         mkdir_p(cfg.get_temp_files_folder())
 
 def get_parl_info(cfg):
+    """
+    !+BICAMERAL
+    Returns a list containing a map of active parliaments
+    This list will have 2 maps in bicameral parliaments
+    and 1 map when its unicameral 
+    """
     piw = ParliamentInfoWalker({"main_config":cfg})
     """
     Check first if we have a cached copy
     """
-    if os.path.isfile(cfg.get_temp_files_folder() + __parl_info__):
-        return piw.get_from_cache(cfg.get_temp_files_folder() + __parl_info__)
-    else:
-        piw.walk(cfg.get_input_folder())
-        if piw.object_info is None:
-            return False
+    if piw.cache_file_exists():
+        # if the cache file exists
+        # get the parliament info from cache
+        if piw.is_cache_full():
+            return piw.get_from_cache()
         else:
-            return piw.object_info
+            _walk_get_parl_info(piw, cfg)
+            # walk some more
+    else:
+        _walk_get_parl_info(piw, cfg)
+
+def _walk_get_parl_info(piw, cfg):
+    # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
+    # instead return the extract from the cached parliament_info.xml document 
+    piw.walk(cfg.get_input_folder())
+    if piw.object_info is None:
+        return False
+    else:
+        return piw.object_info
+
 
 def do_bind_attachments(cfg):
     # first we unzip the attachments using the GenericDirWalkerUNZIP 
@@ -160,6 +178,9 @@ def do_po_translations(cfg, po_cfg, wd_cfg):
     print _COLOR.OKGREEN + "Catalogues uploaded to eXist-db !" + _COLOR.ENDC
 
 def do_transform(cfg, parl_info):
+    """
+    Batch processor for XML documents
+    """
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
     print _COLOR.OKGREEN + "Commencing transformations..." + _COLOR.ENDC
@@ -264,6 +285,9 @@ def list_uniqifier(seq):
 
 def main_queue(config_file, afile):
     """
+    
+    Entry Point for Queue invocation, processes one file at a time
+    
     Serially processes XML/ZIP files from the message queue and 
     uploads to XML repository. Returns True/False to consumer
         True = Remove from queue
@@ -287,12 +311,22 @@ def main_queue(config_file, afile):
     Get parliament information
     """
     print "[checkpoint] getting parliament info"
+    """
+    !+BICAMERAL
+    if its a bicameral legislature, then the parliament information must return 
+    a list with 2 maps containing info about the 2 chambers
+    otherwise a list with a map containing info about the chamber
+    """
     parl_info = get_parl_info(cfg)
     if parl_info == False:
         return in_queue
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
-    cfgs = {"main_config":cfg, "transformer":transformer, "webdav_config" : wd_cfg}
+    cfgs = {
+        "main_config":cfg, 
+        "transformer":transformer, 
+        "webdav_config" : wd_cfg
+    }
     pxf = ProcessXmlFilesWalker(cfgs)
     """
     Do Unzipping and Transformations
@@ -452,7 +486,11 @@ def main_queue(config_file, afile):
         in_queue = False
     return in_queue
 
+
 def main(options):
+    """
+    Entry point for command line invocation
+    """
     # parse command line options if any
     try:
         # first get the configuration file from the command line

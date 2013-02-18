@@ -104,17 +104,17 @@ class ParseBungeniXML(ParseXML):
     Parsing contenttype documents from Bungeni.
     """
     def xpath_parl_item(self,name):
-
+        """
+        Gets fields in a parliament object
+        """
         return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
         
     def xpath_get_attr_val(self,name):
 
         return self.__global_path__ + "field[@name]"  
-        
+   
+    """     
     def get_parliament_info(self, cc):
-        """
-        Returns Parliament information in a HashMap
-        """
         parl_params = HashMap()
         
         parliament_doc = self.xmldoc.selectSingleNode(self.xpath_parl_item("type"))
@@ -122,9 +122,6 @@ class ParseBungeniXML(ParseXML):
         if parliament_doc is None:
             return None
         if parliament_doc.getText() == "parliament" :
-            """
-            Get the parliamentary information at this juncture.
-            """
             # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
             # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
             # !+NOTE (ao, 8th Feb 2013) country-code added from glue.ini config file
@@ -147,7 +144,8 @@ class ParseBungeniXML(ParseXML):
             return parl_params
         else:
             return None
-
+    """
+    
     def get_contenttype_name(self):
         root_element = self.xmldoc.getRootElement()
         if root_element.getName() == "contenttype":
@@ -186,9 +184,126 @@ class ParseBungeniXML(ParseXML):
             return self.xmldoc.selectSingleNode(self.xpath_get_log_data())
 
 
+def _get_parl_params(self, cc, parliament_doc):
+    parl_map = HashMap()
+    parl_map["country-code"] = cc
+    parl_map["parliament-id"] = parliament_doc.selectSingleNode(
+        self._xpath_parliament_info_field("parliament_id")
+        ).getText()
+    parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
+        self._xpath_parliament_info_field("election_date")
+        ).getText()
+    parl_map["for-parliament"] = parliament_doc.selectSingleNode(
+        self._xpath_parliament_info_field("type")
+        ).getText()
+    # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
+    # bicameral legislatures 
+    parl_map["type"] = parliament_doc.selectSingleNode(
+        self._xpath_parliament_info_field("parliament_type")
+        ).getText()
+    return parl_map
+
+class ParseParliamentInfoXML(ParseXML):
+    """
+    Parse parliament information from an incoming document
+    """
+    
+    def _xpath_parliament_info_field(self, name):
+        return  "/contenttype/field[@name='"+name+"']"
+
+    def get_parliament_info(self, cc):
+        parl_params = []
+
+        parliament_doc = self.xmldoc.selectSingleNode(self._xpath_parl_item("type"))
+       
+        if parliament_doc is None:
+            return None
+        if parliament_doc.getText() == "parliament" :
+            parl_params.append(
+                _get_parl_params(cc, self.xmldoc)
+            )
+            return parl_params
+        else:
+            return None
+    
+
 # !+FIX_THIS implement an overload ParseBungeniXML that supports input node processing
-class ParseBungeniXMLInputNode(ParseBungeniXML):
-    pass
+class ParseCachedParliamentInfoXML(ParseXML):
+    """
+    Parse parliament info from the cached document
+    
+    """
+
+    def _xpath_cached_types(self):
+        return "/cachedTypes"
+
+    def _xpath_content_types(self):
+        return self._xpath_cached_types() + "/contenttype"
+    
+    def _xpath_parliament_info_field(self, name):
+        return  self._xpath_content_types() + "[@name='parliament']/field[@name='"+name+"']"
+    
+
+    def get_parliament_info(self, bicameral, cc):
+        """
+        Returns Cached Parliament information in a List
+        """
+        # !+BICAMERAL
+        parl_params = []
+                
+        parliament_docs = self.xmldoc.selectNodes(
+            self.xpath_content_types()
+            )
+       
+        if parliament_docs is None:
+            return None
+        
+        if bicameral:
+            if parliament_docs.size() == 2:
+                for parliament_doc in parliament_docs:
+                    parl_map = _get_parl_params(cc, parliament_doc)
+                    parl_params.append(parl_map)
+                return parl_params
+            else:
+                LOG.info(
+                    "WARNING_INFO : bicameral legislature, number of parliaments found" % parliament_docs.size()
+                )
+                return None
+        else:
+            if parliament_docs.size() == 1:
+                parl_params.append(
+                    _get_parl_params(cc, parliament_doc)
+                )
+            else:
+                LOG.info(
+                "WARNING_INFO: unicameral legislature , number of parliaments found = %d" % parliament_docs.size()
+                )
+                return None
+        """
+        if parliament_docs.getText() == "parliament" :
+            # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
+            # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
+            # !+NOTE (ao, 8th Feb 2013) country-code added from glue.ini config file
+            parl_params["country-code"] = cc
+            parl_params["parliament-id"] = self.xmldoc.selectSingleNode(
+                self.xpath_parl_item("parliament_id")
+                ).getText()
+            parl_params["parliament-election-date"] = self.xmldoc.selectSingleNode(
+                self.xpath_parl_item("election_date")
+                ).getText()
+            parl_params["for-parliament"] = self.xmldoc.selectSingleNode(
+                self.xpath_parl_item("type")
+                ).getText()
+            # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
+            # bicameral legislatures 
+            parl_params["type"] = self.xmldoc.selectSingleNode(
+                self.xpath_parl_item("parliament_type")
+                ).getText()
+            
+            return parl_params
+        else:
+            return None
+        """
 
 class ParseOntologyXML(ParseXML):
     """

@@ -24,11 +24,13 @@ from java.net import (
     )
 
 from java.util import (
-    HashMap
+    HashMap,
+    ArrayList
     )
 
 from java.lang import (
     String,
+    StringBuilder,
     RuntimeException
     )
 
@@ -167,10 +169,13 @@ class Transformer(object):
     
     def __init__(self, cfg):
         # point the transformer to the correct configuration folder
-        GlobalConfigurations.setApplicationPathPrefix(cfg.get_transformer_resources_folder())
+        GlobalConfigurations.setApplicationPathPrefix(
+            cfg.get_transformer_resources_folder()
+        )
         # initialize the transformer
         self.transformer = OATranslator.getInstance()
         # setup a hashmap to pass input parameters to the pipeline
+        self.cfg = cfg
         self._params = HashMap()
         
     def get_params(self):
@@ -178,8 +183,55 @@ class Transformer(object):
         return self._params
     
     def set_params(self, params):
+        """
+        @params - a list containing hashmaps of parliamentary information
+        This api converts it to an xml document
+        !+BICAMERAL 
+        """
         # sets the parliament info object
-        self._params = params
+        li_parl_params = StringBuilder()
+        li_parl_params.append(
+            "<parliaments>"
+            )
+        li_parl_params.append(
+               "<countryCode>%s</countryCode>"  % self.cfg.get_country_code()
+            )
+        for param in params:
+            li_parl_params.append(
+                '<parliament id="%s">' % param["parliament_id"]
+            )
+            li_parl_params.append(
+                "<electionDate>%s</electionDate>" % param["parliament-election-date"]
+            )
+            li_parl_params.append(
+                "<forParliament>%s</forParliament>" % param["for-parliament"]
+            )
+            li_parl_params.append(
+                "<type>%s</type>" % param["type"]
+            )
+            li_parl_params.append(
+                "</parliament>"
+            )
+        li_parl_params.append(
+            "</parliaments>"
+        )
+        
+        """
+        Now convert the string to a DOM node
+        """
+        from javax.xml.parsers import DocumentBuilderFactory
+        from java.io import ByteArrayInputStream
+        from net.sf.saxon.dom import DocumentWrapper
+        from net.sf.saxon import Configuration
+        
+        doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
+            ByteArrayInputStream(
+                li_parl_params.toString().getBytes("UTF-8")
+            )
+        )
+        dw = DocumentWrapper(doc, "", Configuration())
+                   
+        self._params = HashMap("parliament_info", dw)
 
     def xpath_get_doc_uri(self):
         #returns a documents URI

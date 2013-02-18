@@ -47,7 +47,9 @@ from utils import (
     )
 
 from parsers import (
-    ParseBungeniXML
+    ParseBungeniXML,
+    ParseCachedParliamentInfoXML,
+    ParseParliamentInfoXML
     )
 
 from walker import (
@@ -88,17 +90,21 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         """
         # !+BICAMERAL !+FIX_THIS the cache file is not just the raw file, 
         # it has 2 parliaments !
+        """
         reader = SAXReader()
         cache_doc = reader.read(
             File(self.cache_file)
             )
-        list_of_cached_nodes = cache_doc.selectNodes("//cachedTypes/contentType")
-        
+        list_of_cached_nodes = cache_doc.selectNodes(
+            "//cachedTypes/contenttype"
+            )
+        """
         #!+FIX_THIS implement ParseBungeniXML to take a node as an input
-        bunparse = ParseBungeniXML(self.cache_file)
+        bunparse = ParseCachedParliamentInfoXML(self.cache_file)
         bunparse.doc_parse()
-        # return the parliament information in a hashmap
+        # return the parliament information in a list containing a hashmap
         the_parl_doc = bunparse.get_parliament_info(
+                self.input_params["main_config"].get_bicameral(),
                 self.input_params["main_config"].get_country_code()
                 )
         return the_parl_doc
@@ -113,7 +119,9 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
             cache_doc = reader.read(
                 File(self.cache_file)            
             )
-            list_of_cached_nodes = cache_doc.selectNodes("//cachedTypes/contentType")
+            list_of_cached_nodes = cache_doc.selectNodes(
+                "//cachedTypes/contenttype[@name='parliament']"
+            )
             if self.bicameral:
                 if list_of_cached_nodes == 0:
                     return False
@@ -175,8 +183,11 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         self.write_cache_doc_to_file(cache_doc)    
    
     def fn_callback(self, input_file_path):
+        """
+        This is an incoming document 
+        """
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
-            bunparse = ParseBungeniXML(input_file_path)
+            bunparse = ParseParliamentInfoXML(input_file_path, False)
             bunparse.doc_parse()
             # check if its a parliament document
             the_parl_doc = bunparse.get_parliament_info(

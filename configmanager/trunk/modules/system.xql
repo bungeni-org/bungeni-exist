@@ -146,7 +146,7 @@ function sysmanager:store($node as node(), $model as map(*)) {
     (: 
     The custom folder is imported into a structure that looks like this :
     app-root
-        +--working
+        +--bungeni-configuration
                 +--live
                     +-bungeni_custom
                 +--import

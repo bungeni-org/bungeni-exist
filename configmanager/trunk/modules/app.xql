@@ -160,6 +160,7 @@ function app:get-action-state($node as node(), $model as map(*), $active as xs:s
 declare function local:get-roles() {
     for $role at $pos in doc($appconfig:UI-XML)/ui/roles/role
     let $count := count(doc($appconfig:UI-XML)/ui/roles/role)
+    order by $role ascending 
     return  
         <li>
             <a class="editlink" href="role.html?name={$role}&amp;pos={$pos}">{$role/text()}</a>

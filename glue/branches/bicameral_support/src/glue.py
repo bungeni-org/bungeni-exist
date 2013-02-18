@@ -34,9 +34,7 @@ __status__ = "Development"
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
 
-from java.io import (
-    File, 
-    )
+from java.io import File
 
 
 from org.apache.log4j import (
@@ -69,7 +67,6 @@ from walker import (
     )
 
 from walker_ext import (
-     __parl_info__,
      ParliamentInfoWalker,
      SeekBindAttachmentsWalker,
      ProcessXmlFilesWalker,

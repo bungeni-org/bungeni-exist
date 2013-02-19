@@ -103,6 +103,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
             )
         """
         #!+FIX_THIS implement ParseBungeniXML to take a node as an input
+        print "XXXXX parsing cached file ", self.cache_file
         bunparse = ParseCachedParliamentInfoXML(self.cache_file)
         bunparse.doc_parse()
         # return the parliament information in a list containing a hashmap

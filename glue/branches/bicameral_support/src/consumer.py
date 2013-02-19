@@ -1,18 +1,41 @@
-import sys
-import getopt
-import time
-from glue import *
+import sys, time, getopt
 
+"""
 from com.rabbitmq.client import *
 import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.Channel
+"""
+
+from java.lang import InterruptedException
+
+
+
+
+"""
+import glue.LOG as LOG
+"""
+from glue import (
+    main_queue
+)
+
+from com.rabbitmq.client import (
+    ConnectionFactory,
+    QueueingConsumer
+)
+
+
+
+import org.apache.log4j.Logger as ApacheLogger
+
+
 
 from com.xhaus.jyson import JysonCodec as json
-import java.io.IOException
 from java.lang import String
 from java.lang import Thread
-from java.util import List, ArrayList
+from java.util import (
+        ArrayList
+        )
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
@@ -21,6 +44,9 @@ __version__ = "1.1"
 __maintainer__ = "Anthony Oduor"
 __created__ = "20th Jun 2012"
 __status__ = "Development"
+
+LOG = ApacheLogger.getLogger("consumer")
+
 
 class Logger(object):
     def __init__(self):

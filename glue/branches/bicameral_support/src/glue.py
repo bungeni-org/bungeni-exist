@@ -49,8 +49,9 @@ from configs import (
     PoTranslationsConfig
     )
 
+from gen_utils import COLOR
+
 from utils import (
-    _COLOR, 
     WebDavClient,
     Transformer,
     RepoSyncUploader,
@@ -106,10 +107,10 @@ def __setup_output_dirs__(cfg):
         mkdir_p(cfg.get_akomantoso_output_folder())
     else:
         __empty_output_dir__(cfg.get_akomantoso_output_folder())        
-    if not os.path.isdir(cfg.get_ontoxml_output_folder()):
-        mkdir_p(cfg.get_ontoxml_output_folder())
-    else:
-        __empty_output_dir__(cfg.get_ontoxml_output_folder())
+    #if not os.path.isdir(cfg.get_ontoxml_output_folder()):
+    #    mkdir_p(cfg.get_ontoxml_output_folder())
+    #else:
+    #    __empty_output_dir__(cfg.get_ontoxml_output_folder())
     if not os.path.isdir(cfg.get_attachments_output_folder()):
         mkdir_p(cfg.get_attachments_output_folder())
     else:
@@ -129,24 +130,33 @@ def get_parl_info(cfg):
     Check first if we have a cached copy
     """
     if piw.cache_file_exists():
+        print "CACHED FILE EXISTS !"
         # if the cache file exists
         # get the parliament info from cache
         if piw.is_cache_full():
+            print "GETTING FROM CACHE"
             return piw.get_from_cache()
         else:
+            print "CACHE IS NOT FULL"
             _walk_get_parl_info(piw, cfg)
             # walk some more
     else:
+        print " XXX CACHE FILE DOES NOT EXIST XXXX"
         _walk_get_parl_info(piw, cfg)
 
 def _walk_get_parl_info(piw, cfg):
     # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
     # instead return the extract from the cached parliament_info.xml document 
+    # !+FIXED
     piw.walk(cfg.get_input_folder())
-    if piw.object_info is None:
-        return False
+    if piw.is_cache_full():
+        return piw.get_from_cache()
+    #if piw.object_info is None:
+    #    return False
+    #else:
+    #    return piw.object_info
     else:
-        return piw.object_info
+        return False
 
 
 def do_bind_attachments(cfg):
@@ -160,19 +170,19 @@ def do_bind_attachments(cfg):
     sba = SeekBindAttachmentsWalker({"main_config":cfg})
     sba.walk(cfg.get_input_folder())
     if sba.object_info is not None:
-        print _COLOR.OKBLUE,"ATT: Found attachment ", _COLOR.ENDC
+        print COLOR.OKBLUE,"ATT: Found attachment ", COLOR.ENDC
     else:
         return sba.object_info
 
 def do_po_translations(cfg, po_cfg, wd_cfg):
     """ translating .po files """
-    print _COLOR.OKGREEN + "Translating .po files to i18n xml <catalogue/> format..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Translating .po files to i18n xml <catalogue/> format..." + COLOR.ENDC
     pofw = POFilesTranslator({"main_config":cfg, "po_config" : po_cfg, "webdav_config" : wd_cfg})
     pofw.po_to_xml_catalogue()
-    print _COLOR.OKGREEN + "Completed translations from po to xml !" + _COLOR.ENDC
-    print _COLOR.OKGREEN + "Commencing i18n catalogues upload to eXist-db via WebDav..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Completed translations from po to xml !" + COLOR.ENDC
+    print COLOR.OKGREEN + "Commencing i18n catalogues upload to eXist-db via WebDav..." + COLOR.ENDC
     pofw.upload_catalogues()
-    print _COLOR.OKGREEN + "Catalogues uploaded to eXist-db !" + _COLOR.ENDC
+    print COLOR.OKGREEN + "Catalogues uploaded to eXist-db !" + COLOR.ENDC
 
 def do_transform(cfg, parl_info):
     """
@@ -180,13 +190,13 @@ def do_transform(cfg, parl_info):
     """
     transformer = Transformer(cfg)
     transformer.set_params(parl_info)
-    print _COLOR.OKGREEN + "Commencing transformations..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Commencing transformations..." + COLOR.ENDC
     pxf = ProcessXmlFilesWalker({"main_config":cfg, "transformer":transformer})
     pxf.walk(cfg.get_input_folder())
-    print _COLOR.OKGREEN + "Completed transformations !" + _COLOR.ENDC
+    print COLOR.OKGREEN + "Completed transformations !" + COLOR.ENDC
 
 def do_sync(cfg, wd_cfg):
-    print _COLOR.OKGREEN + "Syncing with eXist repository..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Syncing with eXist repository..." + COLOR.ENDC
     """ synchronizing xml documents """
     sxw = SyncXmlFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
 
@@ -196,10 +206,10 @@ def do_sync(cfg, wd_cfg):
     sxw.create_sync_file()
     sxw.walk(cfg.get_ontoxml_output_folder())
     sxw.close_sync_file()
-    print _COLOR.OKGREEN + "Completed synching to eXist !" + _COLOR.ENDC
+    print COLOR.OKGREEN + "Completed synching to eXist !" + COLOR.ENDC
 
 def webdav_upload(cfg, wd_cfg):
-    print _COLOR.OKGREEN + "Commencing XML files upload to eXist via WebDav..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Commencing XML files upload to eXist via WebDav..." + COLOR.ENDC
     """ uploading xml documents """
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
@@ -208,7 +218,7 @@ def webdav_upload(cfg, wd_cfg):
     # upload xmls at this juncture
     rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
     rsu.upload_files()
-    print _COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + COLOR.ENDC
     """ now uploading found attachments """
     # first reset attachments folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
@@ -217,7 +227,7 @@ def webdav_upload(cfg, wd_cfg):
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     pafw.walk(cfg.get_attachments_output_folder())
-    print _COLOR.OKGREEN + "Completed uploads to eXist !" + _COLOR.ENDC
+    print COLOR.OKGREEN + "Completed uploads to eXist !" + COLOR.ENDC
 
 def main_po_translate(config_file):
     """
@@ -238,18 +248,22 @@ def main_transform(config_file):
     cfg = TransformerConfig(config_file)
     # create the output folders
     __setup_output_dirs__(cfg)
-    print _COLOR.HEADER + "Retrieving parliament information..." + _COLOR.ENDC
+    print COLOR.HEADER + "Retrieving parliament information..." + COLOR.ENDC
     # look for the parliament document - and get the info which is used in the
     # following transformations
     parl_info = get_parl_info(cfg)
     if parl_info == False:
-        print _COLOR.FAIL,"ERROR: Could not find Parliament info :(", _COLOR.ENDC
+        print COLOR.FAIL,"ERROR: Could not find Parliament info :(", COLOR.ENDC
         sys.exit()
-    print _COLOR.OKGREEN,"Retrieved Parliament info...", parl_info, _COLOR.ENDC
-    print _COLOR.OKGREEN + "Seeking attachments..." + _COLOR.ENDC
+    print parl_info , "XXXX PARL_INFO XXX"
+    if parl_info == None:
+        print COLOR.FAIL, "PARLINFO is NULL"
+        sys.exit()
+    print COLOR.OKGREEN,"Retrieved Parliament info...", parl_info, COLOR.ENDC
+    print COLOR.OKGREEN + "Seeking attachments..." + COLOR.ENDC
     do_bind_attachments(cfg)
-    print _COLOR.OKGREEN + "Done with attachments..." + _COLOR.ENDC
-    print _COLOR.HEADER + "Transforming ...." + _COLOR.ENDC      
+    print COLOR.OKGREEN + "Done with attachments..." + COLOR.ENDC
+    print COLOR.HEADER + "Transforming ...." + COLOR.ENDC      
     do_transform(cfg, parl_info)
 
 
@@ -267,7 +281,7 @@ def main_upload(config_file):
 
 def update_refs(config_file):
     wd_cfg = WebDavConfig(config_file)
-    print _COLOR.OKGREEN + "Commencing Repository updates..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Commencing Repository updates..." + COLOR.ENDC
     pt = PostTransform({"webdav_config": wd_cfg})
     pt.update()
 
@@ -378,7 +392,7 @@ def main_queue(config_file, afile):
                     in_queue = False
                     return in_queue
                 else:
-                    print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+                    print COLOR.WARNING, "No pipeline defined here ", COLOR.ENDC
                     in_queue = False
                     return in_queue
             else:
@@ -401,7 +415,7 @@ def main_queue(config_file, afile):
                 in_queue = True
                 return in_queue
             else:
-                print _COLOR.WARNING, "No pipeline defined here ", _COLOR.ENDC
+                print COLOR.WARNING, "No pipeline defined here ", COLOR.ENDC
                 in_queue = False
                 return in_queue
         else:
@@ -441,7 +455,7 @@ def main_queue(config_file, afile):
     """
     Do uploading to eXist
     """
-    print _COLOR.OKGREEN + "Uploading XML file(s) to eXist via WebDav..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Uploading XML file(s) to eXist via WebDav..." + COLOR.ENDC
     print "[checkpoint] at", time.localtime(time.time())
     # first reset bungeni xmls folder
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
@@ -455,7 +469,7 @@ def main_queue(config_file, afile):
         in_queue = False
         return in_queue
 
-    print _COLOR.OKGREEN + "Uploading ATTACHMENT file(s) to eXist via WebDav..." + _COLOR.ENDC
+    print COLOR.OKGREEN + "Uploading ATTACHMENT file(s) to eXist via WebDav..." + COLOR.ENDC
     webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
     webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
     webdaver.shutdown()
@@ -467,7 +481,7 @@ def main_queue(config_file, afile):
         in_queue = True
     else:
         return False
-    print _COLOR.OKGREEN + "Completed upload to eXist!" + _COLOR.ENDC
+    print COLOR.OKGREEN + "Completed upload to eXist!" + COLOR.ENDC
     # do post-transform
     """
     !+FIX_THIS (ao,8th Aug 2012) PostTransform degenerates and becomes and expensive process 
@@ -516,10 +530,10 @@ def main(options):
             else:
                 print "upload not specified"
         else:
-            print _COLOR.FAIL," config.ini specified incorrectly !",_COLOR.ENDC
+            print COLOR.FAIL," config.ini specified incorrectly !",COLOR.ENDC
     except getopt.error, msg:
         print msg
-        print _COLOR.FAIL + "There was an exception during startup !" + _COLOR.ENDC
+        print COLOR.FAIL + "There was an exception during startup !" + COLOR.ENDC
         sys.exit(2)
         
         
@@ -553,4 +567,4 @@ if __name__ == "__main__":
         # call main
         main(options)
     else:
-        print _COLOR.FAIL , " config.ini file must be an input parameter " , _COLOR.ENDC
+        print COLOR.FAIL , " config.ini file must be an input parameter " , COLOR.ENDC

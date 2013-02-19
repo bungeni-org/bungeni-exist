@@ -63,6 +63,10 @@ from org.apache.http.conn import HttpHostConnectException
 from org.apache.log4j import Logger
 
 ### APP Imports ####
+from gen_utils import (
+    COLOR,
+    close_quietly
+    )
 
 from parsers import (
     ParseXML,
@@ -72,28 +76,6 @@ from parsers import (
 __repo_sync__ = "reposync.xml"
 
 LOG = Logger.getLogger("glue")
-
-
-class _COLOR(object):
-    """
-    Color definitions used for color-coding significant runtime events 
-    or raised exceptions as applied on python print() function
-    """
-    
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-
-    def disable(self):
-        self.HEADER = ''
-        self.OKBLUE = ''
-        self.OKGREEN = ''
-        self.WARNING = ''
-        self.FAIL = ''
-        self.ENDC = ''
 
 
 class WebDavClient(object):
@@ -108,25 +90,25 @@ class WebDavClient(object):
         try:
             self.sardine.shutdown()
         except Exception,e:
-            print _COLOR.FAIL, e, '\nERROR Closing sardine ', _COLOR.ENDC
+            print COLOR.FAIL, e, '\nERROR Closing sardine ', COLOR.ENDC
 
     def reset_remote_folder(self, put_folder):
         try:
             if self.sardine.exists(put_folder) is False:
-                print _COLOR.WARNING + "INFO: " + put_folder + " folder wasn't there !" + _COLOR.ENDC            
+                print COLOR.WARNING + "INFO: " + put_folder + " folder wasn't there !" + COLOR.ENDC            
                 self.sardine.createDirectory(put_folder)
         except SardineException, e:
-            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , _COLOR.ENDC
+            print COLOR.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , COLOR.ENDC
             sys.exit()
         except HttpHostConnectException, e:
-            print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
+            print COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , COLOR.ENDC
             sys.exit()
 
     def pushFile(self, onto_file):
         try:
             a_file = File(onto_file)
         except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: E While processing xml ', onto_file, _COLOR.ENDC
+            print COLOR.FAIL, E, '\nERROR: E While processing xml ', onto_file, COLOR.ENDC
         try:
             inputStream = FileInputStream(a_file)
             length = a_file.length()
@@ -146,17 +128,17 @@ class WebDavClient(object):
                 print "PUT: "+self.put_folder + os.path.basename(onto_file)
                 return True
             except SardineException, e:
-                print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , _COLOR.ENDC
+                print COLOR.FAIL, e.printStackTrace(), "\nERROR: Check eXception thrown for more." , COLOR.ENDC
                 return False
             except HttpHostConnectException, e:
-                print _COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , _COLOR.ENDC
+                print COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , COLOR.ENDC
                 sys.exit()
             finally:
                 close_quietly(inputStream)
                 self.shutdown()
                  
         except FileNotFoundException, e:
-            print _COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , _COLOR.ENDC
+            print COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , COLOR.ENDC
             return True
 
 
@@ -231,7 +213,7 @@ class Transformer(object):
         )
         dw = DocumentWrapper(doc, "", Configuration())
                    
-        self._params = HashMap("parliament_info", dw)
+        self._params = HashMap("parliament-info", dw)
 
     def xpath_get_doc_uri(self):
         #returns a documents URI
@@ -291,7 +273,7 @@ class Transformer(object):
         """
         print "[checkpoint] entering translation..."
         if os.path.isfile(input_file) == False:
-            print _COLOR.FAIL, '\nFile disappeared. Will retry ', input_file, _COLOR.ENDC
+            print COLOR.FAIL, '\nFile disappeared. Will retry ', input_file, COLOR.ENDC
             return [None, None]
         print "Executing Transformer with: ", input_file, output, config_file
         try:
@@ -319,19 +301,19 @@ class Transformer(object):
                 close_quietly(fis)
                 return [outFile, None]
         except SAXParseException, saE:
-            print _COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, _COLOR.ENDC
+            print COLOR.FAIL, saE, '\nERROR: saE While processing xml ', input_file, COLOR.ENDC
             return [None, None]
         except XPathException, xpE:
-            print _COLOR.FAIL, xpE, '\nERROR: xpE While processing xml ', input_file, _COLOR.ENDC
+            print COLOR.FAIL, xpE, '\nERROR: xpE While processing xml ', input_file, COLOR.ENDC
             return [None, None]
         except IOException, ioE:
-            print _COLOR.FAIL, ioE, '\nERROR: ioE While processing xml ', input_file, _COLOR.ENDC
+            print COLOR.FAIL, ioE, '\nERROR: ioE While processing xml ', input_file, COLOR.ENDC
             return [None, None]
         except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: E While processing xml ', input_file, _COLOR.ENDC
+            print COLOR.FAIL, E, '\nERROR: E While processing xml ', input_file, COLOR.ENDC
             return [None, None]
         except RuntimeException, ruE:
-            print _COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, _COLOR.ENDC
+            print COLOR.FAIL, ruE, '\nERROR: ruE While processing xml ', input_file, COLOR.ENDC
             return [None, None]
 
 
@@ -349,7 +331,7 @@ class RepoSyncUploader(object):
         try:
             self.dom = self.bunparse.doc_dom()
         except DocumentException, e:
-            print _COLOR.FAIL, e, '\nERROR: __repo_sync__ file not found. Use `-s` switch to sync first.', _COLOR.ENDC
+            print COLOR.FAIL, e, '\nERROR: __repo_sync__ file not found. Use `-s` switch to sync first.', COLOR.ENDC
             sys.exit()
 
     def upload_file(self, on_file):
@@ -409,13 +391,13 @@ class PostTransform(object):
                 if numRead>= 0:
                     numRead=isr.read(bytes, offset, length-offset)
                     offset = offset + numRead
-            print _COLOR.WARNING, String(bytes), _COLOR.ENDC
+            print COLOR.WARNING, String(bytes), COLOR.ENDC
             return True
         except MalformedURLException, e:
-            print _COLOR.FAIL, e, '\nERROR: MalformedURLException', _COLOR.ENDC
+            print COLOR.FAIL, e, '\nERROR: MalformedURLException', COLOR.ENDC
             return False
         except IOException, e:
-            print _COLOR.FAIL, e, '\nERROR: IOException', _COLOR.ENDC
+            print COLOR.FAIL, e, '\nERROR: IOException', COLOR.ENDC
             return False
         finally:
             isr.close()
@@ -447,7 +429,7 @@ class POFilesTranslator(object):
             URLError, 
             HTTPError
             )
-        print _COLOR.OKGREEN + "Downloading .po files..." + _COLOR.ENDC
+        print COLOR.OKGREEN + "Downloading .po files..." + COLOR.ENDC
         #return list of po link in the messages configuration
         msgs_list = self.po_cfg.get_po_listing()
         for iso_name, uri in msgs_list:
@@ -459,10 +441,10 @@ class POFilesTranslator(object):
                 close_quietly(f)
                 close_quietly(local_file)
             except HTTPError, e:
-                print _COLOR.FAIL, "HTTP Error: ", e.code , uri, _COLOR.ENDC
+                print COLOR.FAIL, "HTTP Error: ", e.code , uri, COLOR.ENDC
             except URLError, e:
-                print _COLOR.FAIL, "URL Error: ", e.reason, uri, _COLOR.ENDC
-        print _COLOR.OKGREEN + "Downloads finished... Now translating" + _COLOR.ENDC
+                print COLOR.FAIL, "URL Error: ", e.reason, uri, COLOR.ENDC
+        print COLOR.OKGREEN + "Downloads finished... Now translating" + COLOR.ENDC
 
     def pescape_key(self, orig):
         result = ""
@@ -545,19 +527,6 @@ class POFilesTranslator(object):
             webdaver = WebDavClient(self.username, self.password, self.xml_folder)
             webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder()+catalogue)
 
-
-
-def close_quietly(handle):
-    """
-    Always use this close to close any File, Stream or Response Handles
-    This closes all handles in a exception safe manner
-    """
-    try:
-        if (handle is not None):
-            handle.close()
-    except Exception, ex:
-        LOG.error("Error while closing handle", ex)
-        
         
 def __md5_file(f, block_size=2**20):
     """

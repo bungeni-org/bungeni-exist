@@ -13,7 +13,7 @@ from net.lingala.zip4j.exception import ZipException
 
 from org.apache.log4j import Logger
 
-from utils import _COLOR
+from gen_utils import COLOR
 
 LOG = Logger.getLogger("glue")
 
@@ -111,7 +111,7 @@ class GenericDirWalkerUNZIP(GenericDirWalker):
                 extract_to = os.path.splitext(zip_file)[0]
             #Extracts all files to the path specified
             unzipper.extractAll(extract_to)
-            print _COLOR.WARNING + "Extracted zip file... " + zip_file+_COLOR.ENDC
+            print COLOR.WARNING + "Extracted zip file... " + zip_file+COLOR.ENDC
         except ZipException, e:
             LOG.error("Error while processing zip "+ zip_file + e)
 

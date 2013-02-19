@@ -37,11 +37,13 @@ from org.apache.log4j import (
 
 ### APP Imports ####
 
+from gen_utils import (
+    COLOR,
+    close_quietly
+    )
 
 from utils import (
-    _COLOR, 
     __md5_file,
-    close_quietly,
     WebDavClient,
     Transformer
     )
@@ -49,7 +51,8 @@ from utils import (
 from parsers import (
     ParseBungeniXML,
     ParseCachedParliamentInfoXML,
-    ParseParliamentInfoXML
+    ParseParliamentInfoXML,
+    ParliamentInfoParams
     )
 
 from walker import (
@@ -119,21 +122,27 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
             cache_doc = reader.read(
                 File(self.cache_file)            
             )
+            pinfo = ParliamentInfoParams()
             list_of_cached_nodes = cache_doc.selectNodes(
-                "//cachedTypes/contenttype[@name='parliament']"
+                pinfo._xpath_content_types()
             )
-            if self.bicameral:
-                if list_of_cached_nodes == 0:
-                    return False
-                if list_of_cached_nodes == 1:
+            print "XXXX list of cached nodes" , list_of_cached_nodes.size(), self.bicameral
+            if not self.bicameral:
+                """
+                If its unicameral
+                """
+                if len(list_of_cached_nodes) == 1:
                     return True
-                return False
+                else:
+                    return False
             else:
-                if list_of_cached_nodes in [0,1]:
-                    return False
-                if list_of_cached_nodes == 2:
+                """
+                If its bicameral
+                """
+                if len(list_of_cached_nodes) == 2:
                     return True
-                return False
+                else:
+                    return False
         return False 
                 
         
@@ -143,7 +152,9 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         Creates a new empty cache document and saves it to disk
         """
         cache_doc = DocumentHelper.createDocument()
-        cache_doc.addElement("cachedtypes")
+        pinfo = ParliamentInfoParams()
+        # <cachedTypes />
+        cache_doc.addElement(pinfo.CACHED_TYPES)
         self.write_cache_doc_to_file(cache_doc)
 
     def new_cache(self, input_file):
@@ -162,6 +173,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     def write_cache_doc_to_file(self, cache_doc):
         fw = FileWriter(self.cache_file)
         cache_doc.write(fw)
+        fw.close()
         
     def append_to_cache(self, input_file):
         reader = SAXReader()
@@ -172,14 +184,21 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         self.append_element_into_cache_document(element_to_import)
 
     def append_element_into_cache_document(self, element_to_import):
+        print "XXXXXXXX   INJECTING PARLIAMENT INFO ELEMENT ", element_to_import
         reader = SAXReader()
         cache_doc = reader.read(
             File(self.cache_file)
             )
-        cache_doc.importNode(element_to_import, True)
-        cache_doc.getRootElement().addElement(
-            element_to_import
-            )
+        # get the child elements
+        list_of_elements = cache_doc.getRootElement().elements()
+        # get a deep copy of the element to be imported, this also detaches the node 
+        # from the parent
+        element_to_copy = element_to_import.createCopy()
+        list_of_elements.add(element_to_copy)
+        #cache_doc.importNode(element_to_import, True)
+        #cache_doc.getRootElement().addElement(
+        ##    element_to_import
+        #    )
         self.write_cache_doc_to_file(cache_doc)    
    
     def fn_callback(self, input_file_path):
@@ -187,7 +206,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         This is an incoming document 
         """
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
-            bunparse = ParseParliamentInfoXML(input_file_path, False)
+            bunparse = ParseParliamentInfoXML(input_file_path)
             bunparse.doc_parse()
             # check if its a parliament document
             the_parl_doc = bunparse.get_parliament_info(
@@ -209,8 +228,13 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
                 else:
                     # new document
                     self.new_cache(input_file_path)
-                    
-                return (True, the_parl_doc)
+                # Check if the cache is full
+                # if the cache is full , stop processing and return the parl_doc
+                if self.is_cache_full():
+                    return (True, the_parl_doc)
+                else:
+                    # else continue
+                    return (False, None)    
             else :
                 return (False, None)
         else:
@@ -351,7 +375,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                 # Any error in transfromer return a None object which we want to leave 
                 # the doc in queue e.g. premature end of file encountered
                 if out_files[0] == None:
-                    print _COLOR.OKBLUE, "[checkpoint] not transformed - requeued", _COLOR.ENDC
+                    print COLOR.OKBLUE, "[checkpoint] not transformed - requeued", COLOR.ENDC
                     return (True, False)
                 else:
                     if pipe_type == "parliament":
@@ -359,7 +383,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                         # to remain upto date.
                         tmp_folder = self.input_params["main_config"].get_temp_files_folder()
                         shutil.copyfile(input_file_path, tmp_folder + __parl_info__)
-                        print _COLOR.WARNING, "[checkpoint] - Updated parliament info !", _COLOR.ENDC
+                        print COLOR.WARNING, "[checkpoint] - Updated parliament info !", COLOR.ENDC
                     return (out_files[0], True)
             # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
             # from queue programmatically
@@ -390,7 +414,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                          pipe_path
                          )
                 else:
-                    print _COLOR.WARNING, "No pipeline defined for content type %s " % pipe_type, _COLOR.ENDC
+                    print COLOR.WARNING, "No pipeline defined for content type %s " % pipe_type, COLOR.ENDC
                 return (False, None)
             else:
                 print "Ignoring %s" % input_file_path
@@ -435,7 +459,7 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
                 else:
                     upload_stat = False
             except HttpHostConnectException, e:
-                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
                 break
         if atts_present == False:
             return True
@@ -455,10 +479,10 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
                 webdaver.pushFile(input_file_path)
                 return (False, None)
             except SardineException, e:
-                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
                 return (False, None)
             except HttpHostConnectException, e:
-                print _COLOR.FAIL, e.printStackTrace(), _COLOR.ENDC
+                print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
                 return (False, None)
         else:
             return (False,None)
@@ -528,25 +552,25 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                 data = response.read()
                 if(self.get_sync(data) != 'ignore'):
                     # !+NOTE without adding str in str(input_file_path), the compiler just stopped execution and went silent!
-                    print _COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), _COLOR.ENDC
+                    print COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), COLOR.ENDC
                     # 'ignore' means that its in the repository so we add anything that that is not `ignore` to the reposync list
                     self.add_item_to_repo(str(input_file_path))
                     LOG.debug( data )
                     return (True, file_uri)
                 else:
-                    print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), _COLOR.ENDC
+                    print COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(str(input_file_path)), COLOR.ENDC
                     return (True, None)
             else:
-                print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
+                print COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, COLOR.ENDC
                 return (False, None)
         except socket.timeout:
-            print _COLOR.FAIL, '\nERROR: eXist socket.timedout at sync file... back to MQ', _COLOR.ENDC
+            print COLOR.FAIL, '\nERROR: eXist socket.timedout at sync file... back to MQ', COLOR.ENDC
             return (False, None)
         except urllib2.URLError, e:
-            print _COLOR.FAIL, e, '\nERROR: eXist URLError.timedout at sync file... back to MQ', _COLOR.ENDC
+            print COLOR.FAIL, e, '\nERROR: eXist URLError.timedout at sync file... back to MQ', COLOR.ENDC
             return (False, None)
         except socket.error, (code, message):
-            print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
+            print COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', COLOR.ENDC
             return (False, None)
         finally:
             close_quietly(response)
@@ -573,16 +597,16 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                 if(response.status == 200):
                     data = response.read()
                     if(self.get_sync(data) != 'ignore'):
-                        print _COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
+                        print COLOR.WARNING, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), COLOR.ENDC
                         # 'ignore' means that its in the repository so we add anything that that is not `ignore` to the reposync list
                         self.add_item_to_repo(input_file_path)
                         LOG.debug( data )
                     else:
-                        print _COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), _COLOR.ENDC
+                        print COLOR.OKGREEN, response.status, "[",self.get_sync(data),"]","- ", os.path.basename(input_file_path), COLOR.ENDC
                 else:
-                    print _COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, _COLOR.ENDC
+                    print COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, COLOR.ENDC
             except socket.error, (code, message):
-                print _COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', _COLOR.ENDC
+                print COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', COLOR.ENDC
                 sys.exit()
             finally:
                 close_quietly(response)

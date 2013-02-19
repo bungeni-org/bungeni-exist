@@ -52,9 +52,6 @@ class TransformerConfig(Config):
     def get_akomantoso_output_folder(self):
         return self.get("general", "akomantoso_output_folder")
 
-    def get_ontoxml_output_folder(self):
-        return self.get("general", "metalex_output_folder")
-
     def get_attachments_output_folder(self):
         return self.get("general","attachments_output_folder")
 

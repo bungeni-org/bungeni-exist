@@ -33,8 +33,8 @@ from org.dom4j.io import (
 
 from org.apache.log4j import Logger
 
-from utils import (
-    _COLOR,
+from gen_utils import (
+    COLOR,
     close_quietly
     )
 
@@ -56,7 +56,7 @@ class ParseXML(object):
             self.sreader = SAXReader()
             self.an_xml = File(xml_path)
         except IOException, ioE:
-            print _COLOR.FAIL, ioE, '\nERROR: IOErrorFound reading xml ', xml_path, _COLOR.ENDC
+            print COLOR.FAIL, ioE, '\nERROR: IOErrorFound reading xml ', xml_path, COLOR.ENDC
 
     def doc_parse(self):
         """
@@ -67,16 +67,16 @@ class ParseXML(object):
             self.xmldoc = self.sreader.read(self.an_xml)
             return True
         except DocumentException, fNE:
-            print _COLOR.FAIL, fNE, '\nERROR: when trying to parse ', self.xmlfile, _COLOR.ENDC
+            print COLOR.FAIL, fNE, '\nERROR: when trying to parse ', self.xmlfile, COLOR.ENDC
             return False
         except IOException, fE:
-            print _COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', self.xmlfile, _COLOR.ENDC
+            print COLOR.FAIL, fE, '\nERROR: IOErrorFound parsing xml ', self.xmlfile, COLOR.ENDC
             return False
         except Exception, E:
-            print _COLOR.FAIL, E, '\nERROR: Saxon parsing xml ', self.xmlfile, _COLOR.ENDC
+            print COLOR.FAIL, E, '\nERROR: Saxon parsing xml ', self.xmlfile, COLOR.ENDC
             return False
         except RuntimeException, ruE:
-            print _COLOR.FAIL, ruE, '\nERROR: ruE Saxon parsing xml ', self.xmlfile, _COLOR.ENDC
+            print COLOR.FAIL, ruE, '\nERROR: ruE Saxon parsing xml ', self.xmlfile, COLOR.ENDC
             return False
 
     def doc_dom(self):
@@ -184,43 +184,62 @@ class ParseBungeniXML(ParseXML):
             return self.xmldoc.selectSingleNode(self.xpath_get_log_data())
 
 
-def _get_parl_params(self, cc, parliament_doc):
-    parl_map = HashMap()
-    parl_map["country-code"] = cc
-    parl_map["parliament-id"] = parliament_doc.selectSingleNode(
-        self._xpath_parliament_info_field("parliament_id")
-        ).getText()
-    parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
-        self._xpath_parliament_info_field("election_date")
-        ).getText()
-    parl_map["for-parliament"] = parliament_doc.selectSingleNode(
-        self._xpath_parliament_info_field("type")
-        ).getText()
-    # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
-    # bicameral legislatures 
-    parl_map["type"] = parliament_doc.selectSingleNode(
-        self._xpath_parliament_info_field("parliament_type")
-        ).getText()
-    return parl_map
+
+class ParliamentInfoParams:
+
+    def __init__(self):    
+        self.CACHED_TYPES = "cachedTypes"
+        self.CONTENT_TYPE = "contenttype"
+    
+    def _xpath_cached_types(self):
+        return "/" + self.CACHED_TYPES
+
+    def _xpath_content_types(self):
+        return self._xpath_cached_types() + self._xpath_content_type()
+    
+    def _xpath_content_type(self):
+        return "/" + self.CONTENT_TYPE
+    
+    def _xpath_parliament_info_field(self, name):
+        return  self._xpath_content_type() + "[@name='parliament']/field[@name='"+name+"']"
+    
+    def _get_parl_params(self, cc, parliament_doc):
+        parl_map = HashMap()
+        parl_map["country-code"] = cc
+        parl_map["parliament-id"] = parliament_doc.selectSingleNode(
+            self._xpath_parliament_info_field("parliament_id")
+            ).getText()
+        parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
+            self._xpath_parliament_info_field("election_date")
+            ).getText()
+        parl_map["for-parliament"] = parliament_doc.selectSingleNode(
+            self._xpath_parliament_info_field("type")
+            ).getText()
+        # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
+        # bicameral legislatures 
+        parl_map["type"] = parliament_doc.selectSingleNode(
+            self._xpath_parliament_info_field("parliament_type")
+            ).getText()
+        return parl_map
+
 
 class ParseParliamentInfoXML(ParseXML):
     """
     Parse parliament information from an incoming document
     """
-    
-    def _xpath_parliament_info_field(self, name):
-        return  "/contenttype/field[@name='"+name+"']"
 
     def get_parliament_info(self, cc):
+        pinfo = ParliamentInfoParams()
         parl_params = []
-
-        parliament_doc = self.xmldoc.selectSingleNode(self._xpath_parl_item("type"))
-       
+        parliament_doc = self.xmldoc.selectSingleNode(pinfo._xpath_parliament_info_field("type"))
         if parliament_doc is None:
+            #print "XXXX FOUND DOC NULL XXXX"
             return None
+        print parliament_doc.getText(), "XXX FOUND TYPE "
         if parliament_doc.getText() == "parliament" :
+            print "XXX FOUND PARLIAMENT TYPE !!! "
             parl_params.append(
-                _get_parl_params(cc, self.xmldoc)
+                pinfo._get_parl_params(cc, self.xmldoc)
             )
             return parl_params
         else:
@@ -234,25 +253,15 @@ class ParseCachedParliamentInfoXML(ParseXML):
     
     """
 
-    def _xpath_cached_types(self):
-        return "/cachedTypes"
-
-    def _xpath_content_types(self):
-        return self._xpath_cached_types() + "/contenttype"
-    
-    def _xpath_parliament_info_field(self, name):
-        return  self._xpath_content_types() + "[@name='parliament']/field[@name='"+name+"']"
-    
-
     def get_parliament_info(self, bicameral, cc):
         """
         Returns Cached Parliament information in a List
         """
         # !+BICAMERAL
         parl_params = []
-                
+        pinfo = ParliamentInfoParams()        
         parliament_docs = self.xmldoc.selectNodes(
-            self.xpath_content_types()
+            pinfo._xpath_content_types()
             )
        
         if parliament_docs is None:
@@ -260,8 +269,9 @@ class ParseCachedParliamentInfoXML(ParseXML):
         
         if bicameral:
             if parliament_docs.size() == 2:
+                pinfo = ParliamentInfoParams()
                 for parliament_doc in parliament_docs:
-                    parl_map = _get_parl_params(cc, parliament_doc)
+                    parl_map = pinfo._get_parl_params(cc, parliament_doc)
                     parl_params.append(parl_map)
                 return parl_params
             else:
@@ -271,8 +281,9 @@ class ParseCachedParliamentInfoXML(ParseXML):
                 return None
         else:
             if parliament_docs.size() == 1:
+                pinfo = ParliamentInfoParams()
                 parl_params.append(
-                    _get_parl_params(cc, parliament_doc)
+                    pinfo._get_parl_params(cc, parliament_doc)
                 )
             else:
                 LOG.info(
@@ -304,11 +315,8 @@ class ParseCachedParliamentInfoXML(ParseXML):
         else:
             return None
         """
-
+"""
 class ParseOntologyXML(ParseXML):
-    """
-    Parsing ontology documents from Transformation process.
-    """
     def get_ontology_name(self):
         root_element = self.xmldoc.getRootElement()
         if root_element.attributeValue("for") == "document":
@@ -318,6 +326,6 @@ class ParseOntologyXML(ParseXML):
 
     def write_to_disk(self):
         super(ParseOntologyXML, self).write_to_disk()
-
+"""
             
             

@@ -766,10 +766,10 @@ declare function bun:search-documentitems(
 :   advanced-search.xsl
 :)
 declare function bun:advanced-search($qryall as xs:string,
-            $qryexact as xs:string,
-            $qryhas as xs:string, 
-            $parent-types as xs:string,
-            $doc-types as xs:string,
+            $qryexact as xs:string?,
+            $qryhas as xs:string?, 
+            $parent-types as xs:string*,
+            $doc-types as xs:string*,
             $parts as node(),
             $offset as xs:integer, 
             $limit as xs:integer, 
@@ -3343,3 +3343,4 @@ declare function local:get-parl-info() as element() {
     collection(cmn:get-lex-db())/bu:ontology[@for='group']/bu:group/bu:docType[bu:value eq 'government'][1]/ancestor::bu:ontology
 
 };
+

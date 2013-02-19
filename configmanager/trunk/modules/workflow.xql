@@ -132,6 +132,60 @@ declare function local:get-permissions() {
     
 };
 
+declare function local:gen-facets() {
+
+    let $docname := xs:string(request:get-parameter("doc","none"))
+    let $ATTR := xs:integer(request:get-parameter("attr",""))
+    let $doc := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")/workflow
+    let $perm-actions := $doc/permActions/permAction
+    let $global-actions := string-join($perm-actions,' ')    
+    let $name := data($doc/state[$ATTR]/@id)
+    let $roles :=   <roles> 
+                    {
+                        for $role in $doc/allow/roles/role
+                        return 
+                        <role key="{$role/ancestor::allow/@permission}" name="{$role}" />
+                    }
+                    </roles>
+    for $role in $roles/role[./@name ne 'ALL' and data(./@name) ne '']
+    group by $key := data($role/@name)
+    return 
+        <facet name="{$name}_{replace($key,'[.]','')}" role="{$key}">
+            {
+                for $perm at $pos in $perm-actions
+                return
+                    switch($perm)
+            
+                    case '.View' return
+                        <allow permission="{$perm/text()}">
+                            <roles originAttr="roles">
+                                <role>{data($role[@key eq $perm]/@name)}</role>
+                            </roles>
+                        </allow>
+                    case '.Edit' return
+                        <allow permission="{$perm/text()}">
+                            <roles originAttr="roles">
+                                <role>{data($role[@key eq $perm]/@name)}</role>
+                            </roles>
+                        </allow>
+                    case '.Add' return 
+                        <allow permission="{$perm/text()}">
+                            <roles originAttr="roles">
+                                <role>{data($role[@key eq $perm]/@name)}</role>
+                            </roles>
+                        </allow>
+                    case '.Delete' return
+                        <allow permission="{$perm/text()}">
+                            <roles originAttr="roles">
+                                <role>{data($role[@key eq $perm]/@name)}</role>
+                            </roles>
+                        </allow>
+                    default return
+                        ()                   
+            }
+        </facet>
+};
+
 declare function local:all-feature() {
     <features> 
     {
@@ -556,6 +610,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                             <xf:label>Save</xf:label>
                             <xf:action>
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                <xf:delete nodeset="instance()/allow[count(roles/role) = 1]" /> 
+                                <!--xf:delete nodeset="instance()/allow/roles/role[string-length(.) lt 2]" /--> 
                                 <xf:send submission="s-add"/>
                             </xf:action>                                
                         </xf:trigger>                         
@@ -602,13 +658,32 @@ function workflow:state-edit($node as node(), $model as map(*)) {
 
                     <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>
 
-                    <xf:bind nodeset="./state">
+                    <xf:bind nodeset="./state[{$ATTR}]">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag))" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
-                        <!--xf:bind nodeset="../facet/allow/roles/role" type="xf:string" required="true()" /-->
+                        <!--xf:bind nodeset="../facet/allow/roles/role" type="xf:string" required="true()" /-->                    
                     </xf:bind>
+                    <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" />                  
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" />                  
+                    
+                    <xf:instance id="i-facets">
+                        <data xmlns="">
+                            {local:gen-facets()}
+                        </data>
+                    </xf:instance>   
+                    
+                    <xf:instance id="codes">
+                        <countrylist xmlns="">
+                            <country>
+                                <country-name>Afghanistan</country-name>
+                                <code>AF</code>
+                            </country>
+                        </countrylist>
+                    </xf:instance>                    
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
@@ -661,7 +736,8 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         <xf:action if="empty(instance()/state[{$ATTR}]/tags)">
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;tags&gt;&lt;/xmp&gt; node</xf:message>
                             <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-tags')/tags" />
-                        </xf:action>                       
+                        </xf:action>           
+                        <xf:insert nodeset="instance()/feature" at="1" position="after" origin="instance('i-facets')/facet" /> 
                     </xf:action>
             </xf:model>
             
@@ -773,61 +849,75 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <h1>Manage Permissions</h1>
                                 <div style="width:100%;" class="clearfix">
                                     <div style="float:left;width:60%;">
-
+                                    <xf:group>
                                         <table class="listingTable" style="width:100%;border:1px solid red;">
                                             <thead>
                                                 <tr>
                                                     <th>Roles</th>        
                                                     <th>View</th>
                                                     <th>Edit</th>
-                                                    <th>Delete</th>
                                                     <th>Add</th>
+                                                    <th>Delete</th>
                                                 </tr>
                                             </thead>
                                             <!--tbody id="r-attrs" xf:repeat-nodeset="instance()/facet[@name eq 'public']/allow/roles/role"-->
                                             <tbody>
                                             {
-                                                let $doc := local:get-permissions()/workflow                                            
-                                                let $roles :=   <roles> 
-                                                                {
-                                                                    for $role in $doc/allow/roles/role
-                                                                    return 
-                                                                    <role key="{$role/ancestor::allow/@permission}" name="{$role}" />
-                                                                }
-                                                                </roles>
-                                                for $role in $roles/role
-                                                group by $key := $role/@name
+                                                for $facet in local:gen-facets()
+                                                let $allow := $facet/allow
                                                 return
                                                     <tr>
-                                                        <td id="foo" class="one" style="color:steelblue;font-weight:bold;">
-                                                            {$key}
+                                                        <td id="foo" class="one">
+                                                            {data($facet/@role)}
                                                         </td>
                                                         <td class="permView">
-                                                            <xf:input id="input1" ref="input1/value" incremental="true">
-                                                                <xf:label>a checkbox</xf:label>
-                                                                <xf:hint>a Hint for this control</xf:hint>
-                                                                <xf:help>help for input1</xf:help>
-                                                                <xf:alert>invalid</xf:alert>
-                                                            </xf:input>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
                                                         </td>
-                                                        <td class="three" style="color:blue;">
-                                                            checkbox
+                                                        <td>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
                                                         </td>
-                                                        <td class="four" style="color:blue;">
-                                                            checkbox
-                                                        </td>
-                                                        <td class="five" style="color:blue;">
-                                                            checkbox
+                                                        <td>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
+                                                        </td>                                                        
+                                                        <td>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
                                                         </td>
                                                     </tr>                                                          
                                             }                                                                                                                                             
                                             </tbody>
                                         
-                                        </table>                                        
+                                        </table> 
                                         <div style="margin-top:15px;"/>                                           
-                                        <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}">add permission</a>                                 
-                                    </div>                                   
-                                </div>                                
+                                        <xf:trigger>
+                                            <xf:label>Save</xf:label>
+                                            <xf:action>
+                                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                                <xf:delete nodeset="instance()/state[{$ATTR}]/tags/tag[last() > 1]" at="last()" />
+                                                <!-- remove the tags node if there is jus the template tag we insert -->
+                                                <xf:delete nodeset="instance()/state[{$ATTR}]/tags[string-length(tag/text()) &lt; 2]" />
+                                                <xf:send submission="s-add"/>
+                                                <xf:insert nodeset="instance()/state[{$ATTR}]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" />
+                                            </xf:action>                                
+                                        </xf:trigger>                                          
+                                    </xf:group>                                                                         
+                                </div>                                   
+                            </div>                                
                                 
                             </div>                       
                         </div>

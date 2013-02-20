@@ -27,23 +27,5 @@
         <roles originAttr="roles">
             <role/>
         </roles>
-    </allow>    
-    <!-- features -->
-
-    <!-- workflow facets -->
-    <facet name="un_Defined">
-        <allow permission=".Undefined">
-            <roles originAttr="roles">
-                <role/>
-            </roles>
-        </allow>
-    </facet>
-    <transition title="" condition="" trigger="automatic" order="0">
-        <sources originAttr="source">
-            <source/>
-        </sources>
-        <destinations originAttr="destination">
-            <destination/>
-        </destinations>
-    </transition>
+    </allow>
 </workflow>

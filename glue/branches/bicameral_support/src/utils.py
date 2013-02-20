@@ -25,7 +25,6 @@ from java.net import (
 
 from java.util import (
     HashMap,
-    ArrayList
     )
 
 from java.lang import (
@@ -197,23 +196,10 @@ class Transformer(object):
         li_parl_params.append(
             "</parliaments>"
         )
-        
-        """
-        Now convert the string to a DOM node
-        """
-        from javax.xml.parsers import DocumentBuilderFactory
-        from java.io import ByteArrayInputStream
-        from net.sf.saxon.dom import DocumentWrapper
-        from net.sf.saxon import Configuration
-        
-        doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
-            ByteArrayInputStream(
-                li_parl_params.toString().getBytes("UTF-8")
-            )
-        )
-        dw = DocumentWrapper(doc, "", Configuration())
+
+        print "XXXXX parliaments parameter ", li_parl_params.toString()        
                    
-        self._params = HashMap("parliament-info", dw)
+        self._params = HashMap("parliament-info", li_parl_params.toString)
 
     def xpath_get_doc_uri(self):
         #returns a documents URI

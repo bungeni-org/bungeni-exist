@@ -132,14 +132,37 @@ declare function local:get-permissions() {
     
 };
 
-declare function local:gen-facets() {
+declare function local:workflow() {
 
     let $docname := xs:string(request:get-parameter("doc","none"))
-    let $ATTR := xs:integer(request:get-parameter("attr",""))
+    let $doc := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")/workflow
+    return 
+        $doc
+    
+};
+
+declare function local:get-facets() as node()* {
+
+    let $docname := xs:string(request:get-parameter("doc","none"))
+    let $attr := xs:integer(request:get-parameter("attr",0))
+    let $state-pos := if($attr ne 0) then $attr else "last()"
+    let $doc := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")/workflow
+    for $facet in $doc/facet
+    where starts-with($facet/@name, 'working_drafty')
+    return 
+        $facet    
+};
+
+
+declare function local:gen-facets() as node()* {
+
+    let $docname := xs:string(request:get-parameter("doc","none"))
+    let $attr := xs:integer(request:get-parameter("attr",0))
+    let $state-pos := if($attr ne 0) then $attr else "last()"    
     let $doc := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")/workflow
     let $perm-actions := $doc/permActions/permAction
     let $global-actions := string-join($perm-actions,' ')    
-    let $name := data($doc/state[$ATTR]/@id)
+    let $name := data($doc/state[$state-pos]/@id)
     let $roles :=   <roles> 
                     {
                         for $role in $doc/allow/roles/role
@@ -150,34 +173,35 @@ declare function local:gen-facets() {
     for $role in $roles/role[./@name ne 'ALL' and data(./@name) ne '']
     group by $key := data($role/@name)
     return 
-        <facet name="{$name}_{replace($key,'[.]','')}" role="{$key}">
+        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}" role="{data($role[1]/@name)}">
             {
                 for $perm at $pos in $perm-actions
+                let $beshown := string-length(data($role[@key eq $perm]/@name))
                 return
                     switch($perm)
             
                     case '.View' return
-                        <allow permission="{$perm/text()}">
+                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
                             <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
+                                <role/>
                             </roles>
                         </allow>
                     case '.Edit' return
-                        <allow permission="{$perm/text()}">
+                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
                             <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
+                                <role/>
                             </roles>
                         </allow>
                     case '.Add' return 
-                        <allow permission="{$perm/text()}">
+                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
                             <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
+                                <role/>
                             </roles>
                         </allow>
                     case '.Delete' return
-                        <allow permission="{$perm/text()}">
+                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
                             <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
+                                <role/>
                             </roles>
                         </allow>
                     default return
@@ -624,7 +648,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <ul class="clearfix">
                             {local:states($docname)}
                         </ul>
-                        <a class="button-link" href="state-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}">add state</a>                 
+                        <a class="button-link" href="state-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;attr=0">add state</a>                 
                     </div> 
                  </div>
                 <div id="facets" class="tab_content">
@@ -662,19 +686,31 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag))" />
-                        <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
-                        <!--xf:bind nodeset="../facet/allow/roles/role" type="xf:string" required="true()" /-->                    
+                        <xf:bind nodeset="@version" type="xf:boolean" required="true()" />                  
                     </xf:bind>
-                    <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" />                  
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" />                  
+                    <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />                  
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />                  
                     
                     <xf:instance id="i-facets">
                         <data xmlns="">
-                            {local:gen-facets()}
+                            { 
+                                (: if <facet/>s exist, get them :)
+                                if(not(empty(local:workflow()/facets))) then 
+                                    local:get-facets()
+                                (: else generate them :)
+                                else
+                                    local:gen-facets()
+                            }
                         </data>
                     </xf:instance>   
+                    
+                    <xf:instance id="i-facet">
+                        <data>
+                            <facet ref=""/>
+                        </data>
+                    </xf:instance>
                     
                     <xf:instance id="codes">
                         <countrylist xmlns="">
@@ -727,6 +763,13 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready" >  
+                        <!-- Add the facets for a new state -->
+                        {
+                            for $facet at $pos in local:gen-facets()
+                            let $allow := $facet/allow
+                            return
+                                <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet" />
+                        }                    
                         <!-- remove the tags node if there is jus the template tag we insert -->
                         <xf:delete nodeset="instance()/state[{$ATTR}]/tags[string-length(tag/text()) &lt; 2]" />                    
                         <xf:action if="not(empty(instance()/state[{$ATTR}]/tags))">
@@ -737,7 +780,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;tags&gt;&lt;/xmp&gt; node</xf:message>
                             <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-tags')/tags" />
                         </xf:action>           
-                        <xf:insert nodeset="instance()/feature" at="1" position="after" origin="instance('i-facets')/facet" /> 
+                        <xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" />
                     </xf:action>
             </xf:model>
             
@@ -850,7 +893,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <div style="width:100%;" class="clearfix">
                                     <div style="float:left;width:60%;">
                                     <xf:group>
-                                        <table class="listingTable" style="width:100%;border:1px solid red;">
+                                        <table class="listingTable">
                                             <thead>
                                                 <tr>
                                                     <th>Roles</th>        
@@ -860,10 +903,9 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                     <th>Delete</th>
                                                 </tr>
                                             </thead>
-                                            <!--tbody id="r-attrs" xf:repeat-nodeset="instance()/facet[@name eq 'public']/allow/roles/role"-->
                                             <tbody>
                                             {
-                                                for $facet in local:gen-facets()
+                                                for $facet at $pos in local:gen-facets()
                                                 let $allow := $facet/allow
                                                 return
                                                     <tr>
@@ -911,13 +953,19 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 <xf:delete nodeset="instance()/state[{$ATTR}]/tags/tag[last() > 1]" at="last()" />
                                                 <!-- remove the tags node if there is jus the template tag we insert -->
                                                 <xf:delete nodeset="instance()/state[{$ATTR}]/tags[string-length(tag/text()) &lt; 2]" />
+                                                {
+                                                    for $facet at $pos in local:gen-facets()
+                                                    let $allow := $facet/allow
+                                                    return
+                                                        <xf:setvalue ref="instance()/state[{$ATTR}]/facet[{$pos}]/@ref" value="concat('.',instance()/facet[{$pos}]/@name)"/>
+                                                }                                                
                                                 <xf:send submission="s-add"/>
                                                 <xf:insert nodeset="instance()/state[{$ATTR}]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" />
                                             </xf:action>                                
                                         </xf:trigger>                                          
                                     </xf:group>                                                                         
-                                </div>                                   
-                            </div>                                
+                                    </div>                                   
+                                </div>                                
                                 
                             </div>                       
                         </div>
@@ -954,16 +1002,26 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                 <tags originAttr="tags">
                                     <tag/>
                                 </tags>
-                                <facet ref=""/>
                             </state>                        
                         </data>
                     </xf:instance>
 
                     <xf:bind nodeset="instance()/state[last()]">
-                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
+                        <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
                         <xf:bind nodeset="tags/tag" type="xf:string" constraint="count(instance()/state[last()]/tags/tag) eq count(distinct-values(instance()/state[last()]/tags/tag))" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                     </xf:bind>
+                    
+                    <!--xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)"/>
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)"/>                  
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)" />                  
+                    
+                    <xf:instance id="i-facets">
+                        <data xmlns="">
+                            {local:gen-facets()}
+                        </data>
+                    </xf:instance-->                     
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
@@ -1006,12 +1064,12 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         </xf:action>
                     </xf:submission>
 
-                    <xf:action ev:event="xforms-ready" >  
-                        <!-- insert the tags for this workflow -->
-                        <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-tags')/tags" />                    
+                    <xf:action ev:event="xforms-ready">  
+                        <!-- insert a blank template state -->                
                         <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-state')/state" />
+                        <!--xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" /--> 
                         <xf:setfocus control="state-title" />
-                    </xf:action>
+                    </xf:action>                
             </xf:model>
             
             </div>    	
@@ -1115,7 +1173,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                         <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr=ONE&amp;from=TWO">add transition</a>                                 
                                     </div>                                   
                                 </div>
-                                
+                            
                             </div>                       
                         </div>
                     </div>

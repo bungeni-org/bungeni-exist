@@ -171,6 +171,7 @@ class Transformer(object):
         """
         self._params = HashMap()
         # sets the parliament info object
+        print "XXXXXX set_params ", input_params.keys()
         for key in input_params.keys():
             self._params.put(key, input_params[key])
 
@@ -502,5 +503,3 @@ def __md5_file(f, block_size=2**20):
     return md5.hexdigest()
 
 
-def get_legislature_information(cfg):
-    

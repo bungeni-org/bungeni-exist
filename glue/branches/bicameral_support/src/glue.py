@@ -109,10 +109,10 @@ def __setup_tmp_dirs__(cfg):
 
 def __setup_output_dirs__(cfg):
 
-    if not os.path.isdir(cfg.get_akomantoso_output_folder()):
-        mkdir_p(cfg.get_akomantoso_output_folder())
+    if not os.path.isdir(cfg.get_xml_output_folder()):
+        mkdir_p(cfg.get_xml_output_folder())
     else:
-        __empty_output_dir__(cfg.get_akomantoso_output_folder())        
+        __empty_output_dir__(cfg.get_xml_output_folder())        
     #if not os.path.isdir(cfg.get_ontoxml_output_folder()):
     #    mkdir_p(cfg.get_ontoxml_output_folder())
     #else:
@@ -136,32 +136,36 @@ def get_parl_info(cfg):
     Check first if we have a cached copy
     """
     if piw.cache_file_exists():
-        print "CACHED FILE EXISTS !"
+        print "INFO: CACHED PARLIAMENT INFO  FILE EXISTS !"
         # if the cache file exists
         # get the parliament info from cache
         if piw.is_cache_full():
-            print "GETTING FROM CACHE"
+            print "INFO: GETTING PARLIAMENT INFO  FROM CACHE"
             return piw.get_from_cache()
         else:
-            print "CACHE IS NOT FULL"
-            _walk_get_parl_info(piw, cfg)
+            print "INFO: PARLIAMENT INFO CACHE IS NOT FULL"
+            return _walk_get_parl_info(piw, cfg)
             # walk some more
     else:
-        print " XXX CACHE FILE DOES NOT EXIST XXXX"
-        _walk_get_parl_info(piw, cfg)
+        print "INFO: CACHED FILE DOES NOT EXIST, SEEKING INFO"
+        return _walk_get_parl_info(piw, cfg)
 
 def _walk_get_parl_info(piw, cfg):
     # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
     # instead return the extract from the cached parliament_info.xml document 
     # !+FIXED
+    print "XXXXX WALKING INPUT FOLDER"
     piw.walk(cfg.get_input_folder())
+    print "XXXX CHECKING IF CACHE FULL"
     if piw.is_cache_full():
+        print "XXXX RETURNING FROM CACHE"
         return piw.get_from_cache()
     #if piw.object_info is None:
     #    return False
     #else:
     #    return piw.object_info
     else:
+        print "XXXXX CACHE WAS NOT FULL WILL FAIL"
         return False
 
 
@@ -179,10 +183,10 @@ def param_parl_info(cfg, params):
         )
     for param in params:
         li_parl_params.append(
-             ('<parliament id="%(parl_id)s">',
-             " <electionDate>%(election_date)s</electionDate>",
-             " <forParliament>%(for_parl)s</forParliament>",
-             " <type>%(type)s</type>",
+             ('<parliament id="%(parl_id)s">'
+             " <electionDate>%(election_date)s</electionDate>"
+             " <forParliament>%(for_parl)s</forParliament>"
+             " <type>%(type)s</type>"
              "</parliament>") %  
              {
               "parl_id" : param["parliament_id"],
@@ -227,12 +231,12 @@ def do_po_translations(cfg, po_cfg, wd_cfg):
     pofw.upload_catalogues()
     print COLOR.OKGREEN + "Catalogues uploaded to eXist-db !" + COLOR.ENDC
 
-def do_transform(cfg, parl_info):
+def do_transform(cfg, params):
     """
     Batch processor for XML documents
     """
     transformer = Transformer(cfg)
-    transformer.set_params(parl_info)
+    transformer.set_params(params)
     print COLOR.OKGREEN + "Commencing transformations..." + COLOR.ENDC
     pxf = ProcessXmlFilesWalker({"main_config":cfg, "transformer":transformer})
     pxf.walk(cfg.get_input_folder())
@@ -247,7 +251,7 @@ def do_sync(cfg, wd_cfg):
         mkdir_p(cfg.get_temp_files_folder())
 
     sxw.create_sync_file()
-    sxw.walk(cfg.get_ontoxml_output_folder())
+    sxw.walk(cfg.get_xml_output_folder())
     sxw.close_sync_file()
     print COLOR.OKGREEN + "Completed synching to eXist !" + COLOR.ENDC
 
@@ -307,7 +311,13 @@ def main_transform(config_file):
     do_bind_attachments(cfg)
     print COLOR.OKGREEN + "Done with attachments..." + COLOR.ENDC
     print COLOR.HEADER + "Transforming ...." + COLOR.ENDC      
-    do_transform(cfg, parl_info)
+    do_transform(
+        cfg,
+        {
+         "parliament-info" : param_parl_info(cfg, parl_info),
+         "type-mappings": param_type_mappings()
+        } 
+        )
 
 
 def main_sync(config_file):

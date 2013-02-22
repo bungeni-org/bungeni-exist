@@ -44,3 +44,12 @@ def close_quietly(handle):
     except Exception, ex:
         LOG.error("Error while closing handle", ex)
         
+
+def get_module_dir():
+    import os
+    return os.path.dirname(os.path.realpath(__file__))
+
+def get_module_file(file_name):
+    import os
+    return os.path.join(get_module_dir(),file_name)
+    

@@ -452,7 +452,10 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
             try:
                 self.username = self.webdav_cfg.get_username()
                 self.password = self.webdav_cfg.get_password()
-                self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_atts_folder()
+                self.xml_folder = "%s%s" % (
+                        self.webdav_cfg.get_http_server_port(),
+                        self.webdav_cfg.get_bungeni_atts_folder()
+                        )
                 webdaver = WebDavClient(self.username, self.password, self.xml_folder)
                 up_info_obj = webdaver.pushFile(att_path)
                 if up_info_obj == True:

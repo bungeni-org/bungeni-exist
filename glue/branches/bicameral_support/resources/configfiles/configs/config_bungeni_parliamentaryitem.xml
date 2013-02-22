@@ -24,7 +24,12 @@
             what it wants to do with input parameters, since they can be carried over,
             by serializing them into the document being pipelined -->
             <parameters>
-                <parameter name="country-code" value="cc" />
+                <parameter name="parliament-info" type="xml" />
+                <parameter name="type-mappings" type="xml" />
+                
+                
+                
+                <!--                <parameter name="country-code" value="cc" />
                 <parameter name="parliament-id"/>
                 <parameter name="parliament-election-date" />
                 <parameter name="for-parliament" />
@@ -43,7 +48,7 @@
                         <map from="member_of_parliament" uri-name="ParliamentMember" element-name="parliamentmember" />
                     </value>
                 </parameter>
-            </parameters>
+-->            </parameters>
 
             <xslt step="1"
                 name="groupingLevel1-common"

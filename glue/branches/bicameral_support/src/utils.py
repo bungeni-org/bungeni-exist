@@ -163,43 +163,16 @@ class Transformer(object):
         # returns the parliament info object
         return self._params
     
-    def set_params(self, params):
+    def set_params(self, input_params):
         """
         @params - a list containing hashmaps of parliamentary information
         This api converts it to an xml document
         !+BICAMERAL 
         """
+        self._params = HashMap()
         # sets the parliament info object
-        li_parl_params = StringBuilder()
-        li_parl_params.append(
-            "<parliaments>"
-            )
-        li_parl_params.append(
-               "<countryCode>%s</countryCode>"  % self.cfg.get_country_code()
-            )
-        for param in params:
-            li_parl_params.append(
-                '<parliament id="%s">' % param["parliament_id"]
-            )
-            li_parl_params.append(
-                "<electionDate>%s</electionDate>" % param["parliament-election-date"]
-            )
-            li_parl_params.append(
-                "<forParliament>%s</forParliament>" % param["for-parliament"]
-            )
-            li_parl_params.append(
-                "<type>%s</type>" % param["type"]
-            )
-            li_parl_params.append(
-                "</parliament>"
-            )
-        li_parl_params.append(
-            "</parliaments>"
-        )
-
-        print "XXXXX parliaments parameter ", li_parl_params.toString()        
-                   
-        self._params = HashMap("parliament-info", li_parl_params.toString)
+        for key in input_params.keys():
+            self._params.put(key, input_params[key])
 
     def xpath_get_doc_uri(self):
         #returns a documents URI
@@ -527,3 +500,7 @@ def __md5_file(f, block_size=2**20):
             break
         md5.update(data)
     return md5.hexdigest()
+
+
+def get_legislature_information(cfg):
+    

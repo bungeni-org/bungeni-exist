@@ -38,10 +38,23 @@ class TransformerConfig(Config):
         return self.get("general", "message_queue")
 
     def get_country_code(self):
-        return self.get("general", "country_code")
+        #return self.get("general", "country_code")
+        return self.__legislature__()["country_code"]
+
+    def get_bungeni_custom(self):
+        return self.get("general", "bungeni_custom_folder")
+ 
+    def __legislature__(self):
+        import imp
+        bc = imp.load_source(self.get_bungeni_custom())
+        return bc.legislature
         
     def get_bicameral(self):
-        return self.get("general", "bicameral")    
+        #return self.get("general", "bicameral")
+        return self.__legislature__()["bicameral"]    
+
+    def get_legislature_identifier(self):
+        return str(self.__legislature__()["identifier"])
 
     def get_input_folder(self):
         return self.get("general", "bungeni_docs_folder")

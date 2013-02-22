@@ -113,38 +113,6 @@ class ParseBungeniXML(ParseXML):
 
         return self.__global_path__ + "field[@name]"  
    
-    """     
-    def get_parliament_info(self, cc):
-        parl_params = HashMap()
-        
-        parliament_doc = self.xmldoc.selectSingleNode(self.xpath_parl_item("type"))
-       
-        if parliament_doc is None:
-            return None
-        if parliament_doc.getText() == "parliament" :
-            # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
-            # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
-            # !+NOTE (ao, 8th Feb 2013) country-code added from glue.ini config file
-            parl_params["country-code"] = cc
-            parl_params["parliament-id"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("parliament_id")
-                ).getText()
-            parl_params["parliament-election-date"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("election_date")
-                ).getText()
-            parl_params["for-parliament"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("type")
-                ).getText()
-            # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
-            # bicameral legislatures 
-            parl_params["type"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("parliament_type")
-                ).getText()
-            
-            return parl_params
-        else:
-            return None
-    """
     
     def get_contenttype_name(self):
         root_element = self.xmldoc.getRootElement()
@@ -298,42 +266,5 @@ class ParseCachedParliamentInfoXML(ParseXML):
                 "WARNING_INFO: unicameral legislature , number of parliaments found = %d" % parliament_docs.size()
                 )
                 return None
-        """
-        if parliament_docs.getText() == "parliament" :
-            # !+NOTE (ao, 15th Nov 2012) country-code below is not available from Bungeni 
-            # Will be enabled once added, currently the default is set in the pipeline configs as 'cc'
-            # !+NOTE (ao, 8th Feb 2013) country-code added from glue.ini config file
-            parl_params["country-code"] = cc
-            parl_params["parliament-id"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("parliament_id")
-                ).getText()
-            parl_params["parliament-election-date"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("election_date")
-                ).getText()
-            parl_params["for-parliament"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("type")
-                ).getText()
-            # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
-            # bicameral legislatures 
-            parl_params["type"] = self.xmldoc.selectSingleNode(
-                self.xpath_parl_item("parliament_type")
-                ).getText()
-            
-            return parl_params
-        else:
-            return None
-        """
-"""
-class ParseOntologyXML(ParseXML):
-    def get_ontology_name(self):
-        root_element = self.xmldoc.getRootElement()
-        if root_element.attributeValue("for") == "document":
-            return root_element
-        else:
-            return None
 
-    def write_to_disk(self):
-        super(ParseOntologyXML, self).write_to_disk()
-"""
-            
             

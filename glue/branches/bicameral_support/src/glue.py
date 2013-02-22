@@ -36,11 +36,14 @@ __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
 from java.io import File
 
+from java.lang import StringBuilder
 
 from org.apache.log4j import (
     PropertyConfigurator,
     Logger
     )
+
+
 ### APP Imports ####
 
 from configs import (
@@ -49,7 +52,10 @@ from configs import (
     PoTranslationsConfig
     )
 
-from gen_utils import COLOR
+from gen_utils import (
+    COLOR,
+    get_module_file
+    )
 
 from utils import (
     WebDavClient,
@@ -158,6 +164,43 @@ def _walk_get_parl_info(piw, cfg):
     else:
         return False
 
+
+
+def param_parl_info(cfg, params):
+    """
+    Converts it to the transformers expected input form
+    """
+    li_parl_params = StringBuilder()
+    li_parl_params.append(
+        "<parliaments>"
+        )
+    li_parl_params.append(
+           "<countryCode>%s</countryCode>"  % cfg.get_country_code()
+        )
+    for param in params:
+        li_parl_params.append(
+             ('<parliament id="%(parl_id)s">',
+             " <electionDate>%(election_date)s</electionDate>",
+             " <forParliament>%(for_parl)s</forParliament>",
+             " <type>%(type)s</type>",
+             "</parliament>") %  
+             {
+              "parl_id" : param["parliament_id"],
+              "election_date": param["parliament-election-date"],
+              "for_parl": param["for-parliament"],
+              "type": param["type"]
+              }
+        )
+    li_parl_params.append(
+        "</parliaments>"
+    )
+    
+
+def param_type_mappings():
+    type_mappings_file = get_module_file("type_mappings.xml")
+    type_mappings = open(type_mappings_file, "r").read()
+    return type_mappings.encode("UTF-8")
+    
 
 def do_bind_attachments(cfg):
     # first we unzip the attachments using the GenericDirWalkerUNZIP 
@@ -332,7 +375,11 @@ def main_queue(config_file, afile):
     if parl_info == False:
         return in_queue
     transformer = Transformer(cfg)
-    transformer.set_params(parl_info)
+    input_map = {
+        "parliament-info" : param_parl_info(cfg, parl_info),
+        "type-mappings" : param_type_mappings()         
+        }
+    transformer.set_params(input_map)
     cfgs = {
         "main_config":cfg, 
         "transformer":transformer, 

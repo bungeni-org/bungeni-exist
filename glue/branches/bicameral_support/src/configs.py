@@ -46,7 +46,13 @@ class TransformerConfig(Config):
  
     def __legislature__(self):
         import imp
-        bc = imp.load_source(self.get_bungeni_custom())
+        bc = imp.load_source(
+                "bungeni_custom", 
+                os.path.join(
+                    self.get_bungeni_custom(), 
+                    "__init__.py"
+                )
+            )
         return bc.legislature
         
     def get_bicameral(self):
@@ -62,8 +68,8 @@ class TransformerConfig(Config):
     def get_transformer_resources_folder(self):
         return self.get("general", "transformer_resources_folder")
 
-    def get_akomantoso_output_folder(self):
-        return self.get("general", "akomantoso_output_folder")
+    def get_xml_output_folder(self):
+        return self.get("general", "xml_output_folder")
 
     def get_attachments_output_folder(self):
         return self.get("general","attachments_output_folder")

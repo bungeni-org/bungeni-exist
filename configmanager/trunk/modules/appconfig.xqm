@@ -88,7 +88,7 @@ declare function appconfig:rest-images($cxt-path as xs:string, $value as xs:stri
 : @return 
 :   3 nodes representing the 3 archtypes of bungeni
 :)
-declare function appconfig:flatten($e as node()) as element()*
+declare function appconfig:flatten($e as node()*) as element()*
 {
   for $i at $p in $e/(child::*)
   return $i | appconfig:flatten($i)

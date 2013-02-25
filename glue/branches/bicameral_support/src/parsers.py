@@ -155,10 +155,15 @@ class ParseBungeniXML(ParseXML):
 
 class ParliamentInfoParams:
 
-    def __init__(self):    
+    def __init__(self, is_cache_file = False):
+        """
+        is_cache_file indicates whether the file being parsed is a cached file or a content file,
+        the XPath prefixes are adjusted according to which file is being processed 
+        """
         self.CACHED_TYPES = "cachedTypes"
         self.CONTENT_TYPE = "contenttype"
         self.FIELD_NAME = "field[@name='%s']"
+        self.cache_file = is_cache_file
     
     def _xpath_cached_types(self):
         return "/" + self.CACHED_TYPES
@@ -175,27 +180,31 @@ class ParliamentInfoParams:
     def _xpath_info_field(self, name):
         return (self.FIELD_NAME % name)
     
+    def __cache_file_prefix__(self):
+        if (self.cache_file):
+            return ""
+        else:
+            return "//"
+    
     def _get_parl_params(self, cc, parliament_doc):
         parl_map = HashMap()
         parl_map["country-code"] = cc
-        print "XXXXX self._xpath_info_field", self._xpath_info_field("parliament_id")
         #print "XXXXX  ROOT ELEMENT", parliament_doc.getRootElement()
         parl_map["parliament-id"] = parliament_doc.selectSingleNode(
-            "//" + self._xpath_info_field("parliament_id")
+            self.__cache_file_prefix__() + self._xpath_info_field("parliament_id")
             ).getText()
         parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
-            "//" + self._xpath_info_field("election_date")
+            self.__cache_file_prefix__() + self._xpath_info_field("election_date")
             ).getText()
         parl_map["for-parliament"] = parliament_doc.selectSingleNode(
-            "//" + self._xpath_info_field("type")
+            self.__cache_file_prefix__() + self._xpath_info_field("type")
             ).getText()
         # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
         # bicameral legislatures 
         parl_map["type"] = parliament_doc.selectSingleNode(
-            "//" + self._xpath_info_field("parliament_type")
+            self.__cache_file_prefix__() + self._xpath_info_field("parliament_type")
             ).getText()
             
-        print "XXXXXX PARL_MAP ", parl_map
         return parl_map
 
 
@@ -205,7 +214,7 @@ class ParseParliamentInfoXML(ParseXML):
     """
 
     def get_parliament_info(self, cc):
-        pinfo = ParliamentInfoParams()
+        pinfo = ParliamentInfoParams(is_cache_file=False)
         parl_params = []
         #print "XXXXXX parliament info ", pinfo._xpath_parliament_info_field("type")
         parliament_doc = self.xmldoc.selectSingleNode(pinfo._xpath_parliament_info_field("type"))
@@ -236,20 +245,16 @@ class ParseCachedParliamentInfoXML(ParseXML):
         """
         # !+BICAMERAL
         parl_params = []
-        pinfo = ParliamentInfoParams()        
+        pinfo = ParliamentInfoParams(is_cache_file=True)        
         parliament_docs = self.xmldoc.selectNodes(
             pinfo._xpath_content_types()
             )
-        print "XXXXX parliament_docs ", parliament_docs
         if parliament_docs is None:
             return None
         
         if bicameral:
             if len(parliament_docs) == 2:
-                print "XXXXX bicameral !!"
-                pinfo = ParliamentInfoParams()
                 for parliament_doc in parliament_docs:
-                    print "XXXXX parliament_doc ", parliament_doc
                     parl_map = pinfo._get_parl_params(cc, parliament_doc)
                     parl_params.append(parl_map)
                 return parl_params

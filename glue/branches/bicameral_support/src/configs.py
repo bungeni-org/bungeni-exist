@@ -44,6 +44,17 @@ class TransformerConfig(Config):
     def get_bungeni_custom(self):
         return self.get("general", "bungeni_custom_folder")
  
+ 
+    def get_legislature_identifier(self):
+        return self.__legislature__()["identifier"]
+ 
+    def get_legislature_start_date(self):
+        return self.__legislature__()["start_date"]
+ 
+ 
+    def get_legislature_election_date(self):
+        return self.__legislature__()["election_date"]
+ 
     def __legislature__(self):
         import imp
         bc = imp.load_source(

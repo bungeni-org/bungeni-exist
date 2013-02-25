@@ -171,7 +171,6 @@ class Transformer(object):
         """
         self._params = HashMap()
         # sets the parliament info object
-        print "XXXXXX set_params ", input_params.keys()
         for key in input_params.keys():
             self._params.put(key, input_params[key])
 

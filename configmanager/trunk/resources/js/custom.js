@@ -68,7 +68,7 @@ $(document).ready(function(){
         var li = $(this).closest('li');          
 
         if ($(this).is(".delete")) {   
-            if (confirm('Are you sure to delete this field?')) {
+            if (confirm('Are you sure to perform this delete?\r\n It is non-reversible')) {
                 $.ajax({
                     type: "DELETE",
                     url: href,

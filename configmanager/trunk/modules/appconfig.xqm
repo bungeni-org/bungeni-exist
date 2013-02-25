@@ -28,6 +28,8 @@ declare variable $appconfig:CONFIGS-FOLDER := $appconfig:CONFIGS-ROOT-LIVE || "/
 
 declare variable $appconfig:FORM-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@form);
 
+declare variable $appconfig:SYS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@sys);
+
 declare variable $appconfig:WF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@wf);
 
 declare variable $appconfig:WS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@ws);

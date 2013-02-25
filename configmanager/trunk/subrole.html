@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:model id="role" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+        <xf:instance id="i-subrole">
+            <data>
+                <subrole id="" title=""/>
+            </data>
+        </xf:instance>
+        <xf:bind id="b-title" nodeset="instance('i-subrole')/subrole/@title" type="string"/>
+        <xf:bind id="b-id" nodset="instance('i-subrole')/subrole/@id" type="string"/>
+        <xf:submission id="s-load-from-master" resource="instance('i-subrole')/subrole" replace="instance">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Subrole add form loaded</xf:message>
+        </xf:submission>
+        <xf:submission id="s-update-master" resource="model:master#instance('master')/role/subrole[last()]" replace="none" method="post">
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Subrole saved</xf:message>
+        </xf:submission>
+        <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+    </xf:model>
+    <!-- subform to add new route -->
+    <xf:group appearance="full">
+        <xf:action ev:event="betterform-variable-changed" ev:observer="ui-subroles">
+            <xf:insert nodeset="model:master#instance('master')/roles/subrole[last()]" context="model:master#instance('master')/role/subrole" at="last()" position="after" if="exists(model:master#instance('master')/roles/subrole[last()])"/>
+            <xf:setvalue bind="b-title" ref="model:master#instance('master')/role/subrole/@title" value="null"/>
+            <xf:setvalue bind="b-id" ref="model:master#instance('master')/role/subrole/@id" value="null"/>
+        </xf:action>
+        <xf:label id="addroute-subform">Add New Subrole Subform</xf:label>
+        <xf:input bind="b-id" incremental="true">
+            <xf:help>helper</xf:help>
+            <xf:alert>invalid path entered</xf:alert>
+            <xf:label>id</xf:label>
+        </xf:input>
+        <xf:input bind="b-title">
+            <xf:help>helper</xf:help>
+            <xf:label>title</xf:label>
+        </xf:input>
+        <xf:trigger appearance="triggerMiddleColumn">
+            <xf:label>add role configuration</xf:label>
+            <xf:send submission="s-update-master"/>
+        </xf:trigger>
+    </xf:group>
+</div>

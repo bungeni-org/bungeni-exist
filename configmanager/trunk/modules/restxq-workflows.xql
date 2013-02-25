@@ -30,3 +30,39 @@ function cmrest:workflows() {
     }
     </workflows>
 };
+
+(:~
+ : DELETE a state in a workflow
+ :)
+declare 
+    %rest:DELETE
+    %rest:path("/workflow/{$doc}/state/{$pos}")
+function cmrest:delete-state($doc as xs:string,$pos as xs:integer) {
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
+    let $state-name := data($doc/state[$pos]/@id)
+    return (
+        update delete $doc/state[$pos],
+        update delete $doc/facet[starts-with(@name,$state-name)],
+        $doc
+    )
+};
+
+(:~
+ : DELETE a facet in a workflow
+ :)
+declare 
+    %rest:DELETE
+    %rest:path("/workflow/{$doc}/facet/{$pos}")
+function cmrest:delete-facet($doc as xs:string,$pos as xs:integer) {
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
+    let $facet-name := data($doc/facet[$pos]/@name)
+    return (
+        update delete $doc/facet[$pos],
+        update delete $doc/state/facet[@ref eq "." || $facet-name],
+        $doc
+    )
+};

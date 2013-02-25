@@ -103,7 +103,6 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
             )
         """
         #!+FIX_THIS implement ParseBungeniXML to take a node as an input
-        print "XXXXX parsing cached file ", self.cache_file
         bunparse = ParseCachedParliamentInfoXML(self.cache_file)
         bunparse.doc_parse()
         # return the parliament information in a list containing a hashmap
@@ -127,7 +126,6 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
             list_of_cached_nodes = cache_doc.selectNodes(
                 pinfo._xpath_content_types()
             )
-            print "XXXX list of cached nodes" , list_of_cached_nodes.size(), self.bicameral
             if not self.bicameral:
                 """
                 If its unicameral
@@ -175,21 +173,43 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         fw = FileWriter(self.cache_file)
         cache_doc.write(fw)
         fw.close()
+
+
+    def does_parliament_exists_in_cache(self, parliament_id):
+        cache_doc = self.__doc_cache_file()
+        found_parl_node = cache_doc.selectSingleNode(
+            "/cachedTypes/contenttype[@name='parliament']/field[@name='parliament_id'][. = '%s']" % parliament_id
+            )
+        if found_parl_node is not None:
+            # parliament already cached !
+            return True
+        else:
+            return False
+
         
     def append_to_cache(self, input_file):
         reader = SAXReader()
         new_doc = reader.read(
             File(input_file)
         )
-        element_to_import = new_doc.getRootElement()
-        self.append_element_into_cache_document(element_to_import)
+        parl_node = new_doc.selectSingleNode("/contenttype[@name='parliament']/field[@name='parliament_id']")
+        parliament_id = parl_node.getText()
+        if not self.does_parliament_exists_in_cache(parliament_id):
+            element_to_import = new_doc.getRootElement()
+            self.append_element_into_cache_document(element_to_import)
+        else:
+            LOG.info(parliament_id + " already exists in cache")
 
-    def append_element_into_cache_document(self, element_to_import):
-        print "XXXXXXXX   INJECTING PARLIAMENT INFO ELEMENT ", element_to_import
+
+    def __doc_cache_file(self):
         reader = SAXReader()
         cache_doc = reader.read(
             File(self.cache_file)
             )
+        return cache_doc
+
+    def append_element_into_cache_document(self, element_to_import):
+        cache_doc = self.__doc_cache_file()
         # get the child elements
         list_of_elements = cache_doc.getRootElement().elements()
         # get a deep copy of the element to be imported, this also detaches the node 

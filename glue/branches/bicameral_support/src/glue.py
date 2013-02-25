@@ -132,6 +132,7 @@ def get_parl_info(cfg):
     and 1 map when its unicameral 
     """
     piw = ParliamentInfoWalker({"main_config":cfg})
+    parl_info = []
     """
     Check first if we have a cached copy
     """
@@ -141,31 +142,28 @@ def get_parl_info(cfg):
         # get the parliament info from cache
         if piw.is_cache_full():
             print "INFO: GETTING PARLIAMENT INFO  FROM CACHE"
-            return piw.get_from_cache()
+            parl_info = piw.get_from_cache()
         else:
             print "INFO: PARLIAMENT INFO CACHE IS NOT FULL"
-            return _walk_get_parl_info(piw, cfg)
+            parl_info = _walk_get_parl_info(piw, cfg)
             # walk some more
     else:
         print "INFO: CACHED FILE DOES NOT EXIST, SEEKING INFO"
-        return _walk_get_parl_info(piw, cfg)
+        parl_info = _walk_get_parl_info(piw, cfg)
+    return parl_info
 
 def _walk_get_parl_info(piw, cfg):
     # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
     # instead return the extract from the cached parliament_info.xml document 
     # !+FIXED
-    print "XXXXX WALKING INPUT FOLDER"
     piw.walk(cfg.get_input_folder())
-    print "XXXX CHECKING IF CACHE FULL"
     if piw.is_cache_full():
-        print "XXXX RETURNING FROM CACHE"
         return piw.get_from_cache()
     #if piw.object_info is None:
     #    return False
     #else:
     #    return piw.object_info
     else:
-        print "XXXXX CACHE WAS NOT FULL WILL FAIL"
         return False
 
 
@@ -179,18 +177,32 @@ def param_parl_info(cfg, params):
         "<parliaments>"
         )
     li_parl_params.append(
-           "<countryCode>%s</countryCode>"  % cfg.get_country_code()
+           ("<countryCode>%s(country_code)s</countryCode>"  
+            "<legislature>" 
+            "  <identifier>%(identifier)s</identifier>"
+            "  <startDate>%(start_date)s</startDate>" 
+            "  <electionDate>%(election_date)s</electionDate>" 
+            "</legislature>")% 
+            {
+            "country_code" : cfg.get_country_code(),
+            "identifier" : cfg.get_legislature_identifier(),
+            "start_date" : cfg.get_legislature_start_date(),
+            "election_date" : cfg.get_legislature_election_date()
+             
+            }
         )
     for param in params:
         li_parl_params.append(
              ('<parliament id="%(parl_id)s">'
              " <electionDate>%(election_date)s</electionDate>"
              " <forParliament>%(for_parl)s</forParliament>"
+             " <identifier>%(identifier)s</identifier>"
              " <type>%(type)s</type>"
              "</parliament>") %  
              {
-              "parl_id" : param["parliament_id"],
+              "parl_id" : param["parliament-id"],
               "election_date": param["parliament-election-date"],
+              "identifier": param["identifier"],
               "for_parl": param["for-parliament"],
               "type": param["type"]
               }
@@ -198,7 +210,8 @@ def param_parl_info(cfg, params):
     li_parl_params.append(
         "</parliaments>"
     )
-    
+    print "parl_info = " + li_parl_params.toString()
+    return li_parl_params.toString()
 
 def param_type_mappings():
     type_mappings_file = get_module_file("type_mappings.xml")
@@ -302,7 +315,6 @@ def main_transform(config_file):
     if parl_info == False:
         print COLOR.FAIL,"ERROR: Could not find Parliament info :(", COLOR.ENDC
         sys.exit()
-    print parl_info , "XXXX PARL_INFO XXX"
     if parl_info == None:
         print COLOR.FAIL, "PARLINFO is NULL"
         sys.exit()
@@ -311,6 +323,7 @@ def main_transform(config_file):
     do_bind_attachments(cfg)
     print COLOR.OKGREEN + "Done with attachments..." + COLOR.ENDC
     print COLOR.HEADER + "Transforming ...." + COLOR.ENDC      
+    #print "XXXXXX BEFORE CALLING DO TRANSFORM XXXXX !!!! ", parl_info, param_parl_info(cfg, parl_info)
     do_transform(
         cfg,
         {

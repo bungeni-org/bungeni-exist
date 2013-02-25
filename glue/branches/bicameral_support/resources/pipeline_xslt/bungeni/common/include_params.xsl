@@ -12,7 +12,7 @@
     </xsl:variable>
     
     <xsl:variable name="origin-parliament">
-        <xsl:value-of select="//field/@origin_parliament" />    
+        <xsl:value-of select="//field[@name='origin_parliament']" />    
     </xsl:variable>
     
     <xsl:variable name="current-parliament" 
@@ -30,5 +30,5 @@
         <xsl:value-of select="$current-parliament/electionDate" />
     </xsl:variable>
     
-
+    
 </xsl:stylesheet>

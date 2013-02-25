@@ -12,11 +12,11 @@
     </xd:doc>
 
     <!-- these are input parameters to the transformation a-->
-    <xsl:param name="country-code" />
-    <xsl:param name="parliament-id" />
-    <xsl:param name="parliament-election-date" />
-    <xsl:param name="for-parliament" />
     
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
+    
+    
+
     <xsl:template match="/">
         <xsl:apply-templates />
     </xsl:template>

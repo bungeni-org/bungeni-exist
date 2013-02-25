@@ -18,34 +18,8 @@
     
     <!-- INPUT PARAMETERS TO TRANSFORM-->
     
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
     
-    <xsl:param name="parliament-info" />
-    <xsl:param name="type-mappings" />
-    
-    <xsl:variable name="country-code" >
-        <xsl:value-of select="$parliament-info//countryCode" />
-    </xsl:variable>
-    
-    <xsl:variable name="origin-parliament">
-        <xsl:value-of select="//field/@origin_parliament" />    
-    </xsl:variable>
-    <xsl:variable name="current-parliament" 
-        select="$parliament-info//parliament[@id eq $origin-parliament]" />
-    
-    <xsl:variable name="parliament-id">
-        <xsl:value-of select="$current-parliament/@id" />
-    </xsl:variable>
-    
-    <xsl:variable name="for-parliament">
-        <xsl:value-of select="$current-parliament/forParliament" />
-    </xsl:variable>
-    
-    <xsl:variable name="parliament-election-date">
-        <xsl:value-of select="$current-parliament/electionDate" />
-    </xsl:variable>
-    
-    
-
     <xsl:template match="/">
         <xsl:apply-templates />
     </xsl:template>

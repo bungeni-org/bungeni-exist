@@ -1,2 +1,2 @@
-zip  -r --exclude="*.svn*" configmanager-0.1.xar ./*
+zip  -r --exclude="*.svn*" configmanager-0.1.2.xar ./*
 

@@ -33,34 +33,62 @@ declare function local:fields($doctype) as node() * {
     for $field at $pos in $form/descriptor/field
         return
             <li>
-                <span><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={$pos}">{data($field/@label)}</a></span>
+                <span><a href="field-edit.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;node=field&amp;id={data($field/@name)}">{data($field/@label)}</a></span>
                  <div class="roles-wrapper clearfix">
                     {
                      (: Showing only with @show = true :)
-                     if($field/view[@show = 'true']) then (
+                     (: view roles :)
+                     if (some $role in $field/view/roles/role satisfies (contains($role/text(), 'ALL')) and count($field/view/roles/role) <= 1 and $field/view[@show = 'true']) then (
+                        <span>
+                            <b>view</b> <tt class="roles-inline">(ALL)</tt> <br/>
+                        </span>
+                     ) 
+                     else if ($field/view[@show = 'true']) then (
                         <span>
                             <b>view</b> <tt class="roles-inline">({string-join($field/view/roles/role[position()!=last()],", ")})</tt> <br/>
-                        </span>
-                     ) else (),
-                     
-                     if (data($field/edit/@show) = 'true') then (
+                        </span>                          
+                     ) 
+                     else
+                     (),
+                     (: edit roles :)
+                     if (some $role in $field/edit/roles/role satisfies (contains($role/text(), 'ALL')) and count($field/edit/roles/role) <= 1 and $field/edit[@show = 'true']) then (
                         <span>
-                            <b>edit</b> <tt class="roles-inline">({string-join($field/edit/roles/role[position()!=last()],", ")})</tt> <br/> 
+                            <b>edit</b> <tt class="roles-inline">(ALL)</tt> <br/> 
                         </span>                     
-                     ) else (),
-                     
-                     if (data($field/add/@show) = 'true') then (
+                     )
+                     else if ($field/edit[@show = 'true']) then (
                         <span>
-                            <b>add</b> <tt class="roles-inline">({string-join($field/add/roles/role[position()!=last()],", ")})</tt> <br/>
-                        </span>                     
-                     ) else (),
-                     
-                     if (data($field/listing/@show) = 'true') then (
+                            <b>view</b> <tt class="roles-inline">({string-join($field/edit/roles/role[position()!=last()],", ")})</tt> <br/>
+                        </span>                          
+                     ) 
+                     else
+                     (),                     
+                     (: add roles :)
+                     if (some $role in $field/add/roles/role satisfies (contains($role/text(), 'ALL')) and count($field/add/roles/role) <= 1 and $field/add[@show = 'true']) then (
                         <span>
-                            <b>listing</b> <tt class="roles-inline">({string-join($field/listing/roles/role[position()!=last()],", ")})</tt> <br/>
+                            <b>add</b> <tt class="roles-inline">(ALL)</tt> <br/>
                         </span>                     
-                     )                     
-                     else ()
+                     )
+                     else if ($field/add[@show = 'true']) then (
+                        <span>
+                            <b>view</b> <tt class="roles-inline">({string-join($field/add/roles/role[position()!=last()],", ")})</tt> <br/>
+                        </span>                          
+                     ) 
+                     else
+                     (),
+                     (: listing roles :)
+                     if (some $role in $field/listing/roles/role satisfies (contains($role/text(), 'ALL')) and count($field/listing/roles/role) <= 1 and $field/listing[@show = 'true']) then (
+                        <span>
+                            <b>listing</b> <tt class="roles-inline">(ALL)</tt> <br/>
+                        </span>                     
+                     )
+                     else if ($field/listing[@show = 'true']) then (
+                        <span>
+                            <b>view</b> <tt class="roles-inline">({string-join($field/listing/roles/role[position()!=last()],", ")})</tt> <br/>
+                        </span>                          
+                     ) 
+                     else
+                     ()                     
                     }
                 </div>    
                 <span class="nodeMove">
@@ -285,13 +313,13 @@ function form:field-edit($node as node(), $model as map(*)) {
     let $pos := xs:string(request:get-parameter("pos",""))
     let $docname := xs:string(request:get-parameter("doc",""))
     let $node := xs:string(request:get-parameter("node",""))
-    let $fieldid := xs:string(request:get-parameter("id",""))
+    let $fieldname := xs:string(request:get-parameter("id",""))
     return 
         (: Element to pop up :)
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none">
-                 <xf:model>
-                    <xf:instance id="i-field" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/> 
+                 <xf:model id="fieldedit">
+                    <xf:instance id="i-field" src="{$form:REST-BC-LIVE}/forms/{$docname}.xml"/> 
                     
                     <xf:instance id="i-modes" xmlns="">
                         <data>
@@ -353,7 +381,7 @@ function form:field-edit($node as node(), $model as map(*)) {
  
                     <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/.auto/_rendertypes.xml"/>
 
-                    <xf:bind nodeset=".[@name eq '{$docname}']/field[{$fieldid}]">
+                    <xf:bind nodeset=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
@@ -378,19 +406,12 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <role>Clerk</role>
                                 </roles>
                         -->
-                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[{$fieldid}]/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
                         
                     </xf:bind>
-                    
-                    <xf:submission id="s-get-form"
-                        method="get"
-                        resource="{$form:REST-BC-LIVE}/forms/{$docname}.xml"
-                        replace="instance"
-                        serialization="none">
-                    </xf:submission> 
                     
                     <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>
 
@@ -421,7 +442,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                         </xf:header>
     
                         <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">field '{$fieldid}' saved successfully</xf:message>
+                            <xf:message level="ephemeral">field '{$fieldname}' saved successfully</xf:message>
                             <script type="text/javascript" if="instance('tmp')/wantsToClose">
                                 console.log("done");
                             </script>
@@ -438,7 +459,6 @@ function form:field-edit($node as node(), $model as map(*)) {
                     </xf:submission>                    
 
                     <xf:action ev:event="xforms-ready" >
-                        <xf:send submission="s-get-form"/>
                         <xf:setfocus control="field-name"/>
                     </xf:action>
                 </xf:model>
@@ -446,7 +466,7 @@ function form:field-edit($node as node(), $model as map(*)) {
             </div>
             
             <div>       
-                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[{$fieldid}]" class="fieldEdit">
+                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']" class="fieldEdit">
                         <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
                             <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
                         </a>
@@ -494,7 +514,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:hint>external value show on input forms</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[@name eq instance()[@name eq '{$docname}']/field[{$fieldid}]/@value_type]">
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[@name eq instance()[@name eq '{$docname}']/field[@name eq '{$fieldname}']/@value_type]">
                                         <xf:label ref="@rendertype"></xf:label>
                                         <xf:value ref="@rendertype"></xf:value>
                                     </xf:itemset>
@@ -653,11 +673,12 @@ function form:field-edit($node as node(), $model as map(*)) {
                                 </xf:action>                              
                             </xf:trigger>
                             <xf:trigger>
-                                <xf:label>Cancel</xf:label>
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:reset/>
+                                <xf:label>Reset</xf:label>
+                                <xf:hint>Resets the form prior to any modifications</xf:hint>                                
+                                <xf:action>
+                                    <xf:reset model="fieldedit" ev:event="DOMActivate"/>
                                 </xf:action>
-                            </xf:trigger>                    
+                            </xf:trigger>                     
                         </xf:group>   
                         
                         <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>                        
@@ -843,7 +864,7 @@ function form:field-add($node as node(), $model as map(*)) {
                     <xf:action ev:event="xforms-ready" >
                         <xf:setvalue ref="instance()/@name" value="'{$docname}'"/>
                         <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-fieldtmpl')/field" />
-                        <xf:setfocus control="field-name"/>
+                        <xf:setfocus control="label-name"/>
                     </xf:action>
                 </xf:model>
             
@@ -1054,10 +1075,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                     <xf:send submission="s-add"/>
                                 </xf:action>                              
-                            </xf:trigger>
-                            <xf:trigger>
-                                <xf:label>Cancel</xf:label>
-                            </xf:trigger>                    
+                            </xf:trigger>                  
                         </xf:group>   
                         
                         <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>                      

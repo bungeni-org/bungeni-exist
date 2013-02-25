@@ -77,6 +77,7 @@ function app:breadcrumb($node as node(), $model as map(*),
     $level as xs:integer) {
 
     let $type := request:get-parameter("type", "none")
+    (: Types = doc.xml, Roles = <role/>  :)
     let $name := request:get-parameter("doc", "none")
     let $pos := xs:integer(request:get-parameter("pos", 0))    
     let $d := doc($appconfig:TYPES-XML)/types
@@ -157,35 +158,7 @@ function app:get-action-state($node as node(), $model as map(*), $active as xs:s
     </div>
 };
 
-declare function local:get-roles() {
-    for $role at $pos in doc($appconfig:UI-XML)/ui/roles/role
-    let $count := count(doc($appconfig:UI-XML)/ui/roles/role)
-    order by $role ascending 
-    return  
-        <li>
-            <a class="editlink" href="role.html?name={$role}&amp;pos={$pos}">{$role/text()}</a>
-        </li>
-};
 
-declare 
-function app:roles($node as node(), $model as map(*)) { 
-        <div>
-            <div class="ulisting">
-                <h2>All Roles</h2>
-                <ul class="clearfix">
-                    {local:get-roles()}
-                </ul>
-                
-                <a class="button-link" href="role-add.html?type=none&amp;doc=none&amp;pos=0">add role</a>
-            </div> 
-        </div>   
-};
-
-(:
-
-This is the main XFOrms declaration in index.html 
-
-:)
 declare function app:xforms-declare($node as node(), $model as map(*)) {
      let $CXT := request:get-context-path()
      let $REST-CXT-VIEWS :=  $CXT || "/rest" || $config:app-root || "/views"
@@ -214,21 +187,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                             <xf:message>Submission failed</xf:message>
                         </xf:action>
                     </xf:submission>
-                    
-                    <xf:instance id="i-vars">
-                        <data xmlns="">
-                            <default-duration>120</default-duration>
-                            <currentTask/>
-                            <currentView/>
-                            <currentDoc/>
-                            <currentNode/>
-                            <currentAttr/>
-                            <currentField/>
-                            <showTab/>
-                            <selectedTasks/>
-                        </data>
-                    </xf:instance>
-                    <xf:bind nodeset="instance('i-vars')/default-duration" type="xf:integer"/>
+
 
                     <xf:action ev:event="xforms-ready">
                         <xf:message level="ephemeral">Default: show about</xf:message>
@@ -242,192 +201,7 @@ declare function app:xforms-declare($node as node(), $model as map(*)) {
                     <xf:label>Overview</xf:label>
                     <xf:send submission="s-query-workflows"/>
                 </xf:trigger>
-                
-                <xf:trigger id="storeSys">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat(
-                            '{$REST-CXT-VIEWS}/sys-store-custom.xql#xforms?fs_path=',
-                            instance('i-vars')/currentDoc
-                            )"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger> 
-                
-                <xf:trigger id="writeSys">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat(
-                            '{$REST-CXT-VIEWS}/sys-sync-custom.xql#xforms?fs_path=',
-                            instance('i-vars')/currentDoc
-                            )"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>                
-                
-                <xf:trigger id="viewForm">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat(
-                            '{$REST-CXT-VIEWS}/get-form.xql#xforms?doc=',
-                            instance('i-vars')/currentDoc,
-                            '&amp;tab=',instance('i-vars')/showTab
-                            )"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>   
-                
-                <xf:trigger id="viewWorkflow">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat(
-                            '{$REST-CXT-VIEWS}/get-workflow.xql#xforms?doc=',
-                            instance('i-vars')/currentDoc,
-                            '&amp;tab=',instance('i-vars')/showTab
-                            )"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>         
-                
-                <xf:trigger id="addPopup">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat(
-                            '{$REST-CXT-VIEWS}/add-',
-                            instance('i-vars')/currentView,
-                            '.xql#xforms?doc=',
-                            instance('i-vars')/currentDoc,
-                            '&amp;node=',instance('i-vars')/currentNode,
-                            '&amp;attr=',instance('i-vars')/currentAttr,
-                            '&amp;tab=',instance('i-vars')/showTab
-                            )"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>                 
-                
-                <xf:trigger id="editPopup">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat(
-                            '{$REST-CXT-VIEWS}/edit-',
-                            instance('i-vars')/currentView,
-                            '.xql#xforms?doc=',
-                            instance('i-vars')/currentDoc,
-                            '&amp;node=',
-                            instance('i-vars')/currentNode,
-                            '&amp;attr=',
-                            instance('i-vars')/currentAttr,
-                            '&amp;tab=',
-                            instance('i-vars')/showTab)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>     
-                
-                <xf:trigger id="view">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$REST-CXT-VIEWS}/get-',instance('i-vars')/currentView,'.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;node=',instance('i-vars')/currentNode,'&amp;attr=',instance('i-vars')/currentAttr,'&amp;tab=',instance('i-vars')/showTab)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>                  
-                
-                <xf:trigger id="addField">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat('{$REST-CXT-VIEWS}/add-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField,'&amp;mode=new')"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>                
-
-                <xf:trigger id="editField">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat('{$REST-CXT-VIEWS}/get-field.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>
-                
-                <xf:trigger id="editRole">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedDialog">
-                            <xf:resource value="concat('{$REST-CXT-VIEWS}/edit-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;role=',instance('i-vars')/currentNode)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>                
-                
-                <xf:trigger id="moveFieldUp">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$REST-CXT-ACTNS}/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=up&amp;field=',instance('i-vars')/currentField)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger> 
-                
-                <xf:trigger id="moveFieldDown">
-                    <xf:label>new</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$REST-CXT-ACTNS}/move-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;move=down&amp;field=',instance('i-vars')/currentField)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>  
-                
-                <xf:trigger id="deleteField">
-                    <xf:label>delete</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$REST-CXT-ACTNS}/delete-node.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>   
-                
-                <xf:trigger id="deleteRole">
-                    <xf:label>delete</xf:label>
-                    <xf:action>
-                        <xf:load show="embed" targetid="embedInline">
-                            <xf:resource value="concat('{$REST-CXT-ACTNS}/delete-role.xql#xforms?doc=',instance('i-vars')/currentDoc,'&amp;field=',instance('i-vars')/currentField)"/>
-                        </xf:load>
-                    </xf:action>
-                </xf:trigger>                    
-
-                <xf:trigger id="deleteTask">
-                    <xf:label>delete</xf:label>
-                    <xf:send submission="s-delete-workflow"/>
-                </xf:trigger>
-
-                <xf:input id="currentTask" ref="instance('i-vars')/currentTask">
-                    <xf:label>This is just a dummy used by JS</xf:label>
-                </xf:input>
-                <xf:input id="currentView" ref="instance('i-vars')/currentView">
-                    <xf:label>This is just a hidden used by JS</xf:label>
-                </xf:input>                
-                <xf:input id="currentDoc" ref="instance('i-vars')/currentDoc">
-                    <xf:label>This is just an ephemeral used by JS</xf:label>
-                </xf:input>
-                <xf:input id="currentNode" ref="instance('i-vars')/currentNode">
-                    <xf:label>This is just a dummy placeholder by JS</xf:label>
-                </xf:input>
-                <xf:input id="currentAttr" ref="instance('i-vars')/currentAttr">
-                    <xf:label>This is just a value placeholder by JS</xf:label>
-                </xf:input>                
-                <xf:input id="currentField" ref="instance('i-vars')/currentField">
-                    <xf:label>This is just a random placeholder by JS</xf:label>
-                </xf:input>
-                <xf:input id="showTab" ref="instance('i-vars')/showTab">
-                    <xf:label>This is just a renderlook placeholder by JS</xf:label>
-                </xf:input>                 
+                                  
+                                               
             </div>
 };
-
-

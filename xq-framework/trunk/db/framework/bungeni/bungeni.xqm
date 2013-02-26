@@ -699,13 +699,11 @@ declare function bun:search-documentitems(
             $sortby as xs:string) as element() {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:list-documentitems-with-acl($acl, $type)
+    let $stylesheet := cmn:get-xslt($stylesheet)
     let $getqrystr := xs:string(request:get-query-string())
+    (: Escape all invalid characters :)
+    let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`') 
 
-    (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search(bun:xqy-list-documentitems-with-acl($acl, $type), $querystr, $type) else $coll_rs
-    
     (: 
         Logical offset is set to Zero but since there is no document Zero
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
@@ -713,14 +711,20 @@ declare function bun:search-documentitems(
     :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
     
+    let $xqy-coll-rs := bun:xqy-list-documentitems-with-acl($acl, $type)  
+    let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
+    let $eval-query := "subsequence(" || $coll-ft-search || ",$query-offset,$limit)"
+        
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
             (: Count the total number of documents :)
             <count>{
-                count(
-                    $coll
-                  )
+                count( if ($querystr ne "") then 
+                            util:eval($coll-ft-search) 
+                       else 
+                            bun:list-documentitems-with-acl($acl, $type)
+                )
              }</count>
              <currentView>search</currentView>
             <documentType>{$type}</documentType>
@@ -732,10 +736,21 @@ declare function bun:search-documentitems(
         </paginator>
         <alisting>
         {
-                for $match in subsequence($coll,$query-offset,$limit)
+            if($querystr ne "") then (
+                for $search-rs in util:eval($eval-query)
+                let $expanded := kwic:expand($search-rs),
+                $config := <config xmlns="" width="160"/>                        
+                order by ft:score($search-rs) descending
                 return 
-                    bun:get-reference($match)         
-                (:ft:score($m):)
+                    <doc>
+                        {$search-rs}
+                        <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+                    </doc>
+             ) else (
+                for $match in subsequence(bun:list-documentitems-with-acl($acl, $type),$query-offset,$limit)
+                return 
+                    bun:get-reference($match)               
+             )
         } 
         </alisting>
     </docs>
@@ -1109,15 +1124,13 @@ declare function bun:search-membership(
             $limit as xs:integer, 
             $querystr as xs:string, 
             $sortby as xs:string) as element() {
-    
+            
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($stylesheet)    
-    let $coll_rs := bun:xqy-list-membership($type)
+    let $stylesheet := cmn:get-xslt($stylesheet)
     let $getqrystr := xs:string(request:get-query-string())
+    (: Escape all invalid characters :)
+    let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`') 
 
-    (: check if search is there so as to proceed to search or not :)    
-    let $coll := if ($querystr ne "") then bun:ft-search($coll_rs, $querystr, $type) else bun:list-membership($coll_rs, $sortby)
-    
     (: 
         Logical offset is set to Zero but since there is no document Zero
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
@@ -1125,14 +1138,20 @@ declare function bun:search-membership(
     :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
     
+    let $xqy-coll-rs := bun:xqy-list-membership($type)  
+    let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
+    let $eval-query := "subsequence(" || $coll-ft-search || ",$query-offset,$limit)"
+        
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
             (: Count the total number of documents :)
             <count>{
-                count(
-                    $coll
-                  )
+                count( if ($querystr ne "") then 
+                            util:eval($coll-ft-search) 
+                       else 
+                            bun:list-membership($xqy-coll-rs, $sortby)
+                )
              }</count>
              <currentView>search</currentView>
             <documentType>{$type}</documentType>
@@ -1144,14 +1163,25 @@ declare function bun:search-membership(
         </paginator>
         <alisting>
         {
-            for $match in subsequence($coll,$query-offset,$limit)
-            return 
-                <doc>
-                    {$match}
-                    <ref>
-                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
-                    </ref>                    
-                </doc>
+            if($querystr ne "") then (
+                for $search-rs in util:eval($eval-query)
+                let $userid := data($search-rs/bu:membership/bu:referenceToUser/@uri)
+                let $expanded := kwic:expand($search-rs),
+                $config := <config xmlns="" width="160"/>                        
+                order by ft:score($search-rs) descending
+                return 
+                    <doc>
+                        {$search-rs}
+                        <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+                        <ref>
+                            {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$userid][1]/ancestor::bu:ontology}
+                        </ref>                         
+                    </doc>
+             ) else (
+                for $match in subsequence(bun:list-membership($xqy-coll-rs, $sortby),$query-offset,$limit)
+                return 
+                    bun:get-reference($match)               
+             )            
         } 
         </alisting>
     </docs>
@@ -1292,9 +1322,14 @@ declare function bun:search-global(
                     let $eval-query := concat("subsequence(",$coll-legis,"[ft:query(., '",$escaped,"')]",",$query-offset,$query-limit)")
                     
                     for $search-rs in util:eval($eval-query)
+                    let $expanded := kwic:expand($search-rs),
+                    $config := <config xmlns="" width="160"/>                        
                     order by ft:score($search-rs) descending
                     return 
-                        <doc>{$search-rs}</doc>
+                        <doc>
+                            {$search-rs}
+                            <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+                        </doc>
                      )
                  else (<none>{$querystr}</none>)                
             } 
@@ -1309,25 +1344,38 @@ declare function bun:search-global(
                     let $eval-query := concat("subsequence(",$coll-groups,"[ft:query(., '",$escaped,"')]",",$query-offset,$query-limit)")
                     
                     for $search-rs in util:eval($eval-query)
+                    let $expanded := kwic:expand($search-rs),
+                    $config := <config xmlns="" width="160"/>                    
                     order by ft:score($search-rs) descending
                     return 
-                        <doc>{$search-rs}</doc>
+                        <doc>
+                            {$search-rs}
+                            <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+                        </doc>
                      )
                  else (<none>{$querystr}</none>)                
             } 
         </groups>     
         <members>
             {
-                if(($querystr ne "" and $scope eq "global") or
-                    ($querystr ne "" and $scope eq "members")) then (
-                    element count { count(util:eval(concat($coll-members,"[ft:query(., '",$escaped,"')]"))) },
+                if(($querystr ne "" and $scope eq "global") or ($querystr ne "" and $scope eq "members")) then (                    
+                    element count { count(util:eval(concat($coll-members,"[ft:query(., '",$escaped,"*')]"))) },
                     
-                    let $eval-query := concat("subsequence(",$coll-members,"[ft:query(., '",$escaped,"')]",",$query-offset,$query-limit)")
                     
+                    let $eval-query := concat("subsequence(",$coll-members,"[ft:query(., '",$escaped,"*')]",",$query-offset,$query-limit)")
                     for $search-rs in util:eval($eval-query)
-                    order by ft:score($search-rs) descending
+                    let $userid := data($search-rs/bu:membership/bu:referenceToUser/@uri)
+                    let $expanded := kwic:expand($search-rs),
+                    $config := <config xmlns="" width="160"/>
+                    order by ft:score($search-rs) descending 
                     return 
-                        <doc>{$search-rs}</doc>
+                        <doc>
+                            {$search-rs}
+                            <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
+                            <ref>
+                                {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$userid][1]/ancestor::bu:ontology}
+                            </ref>                            
+                        </doc>
                      )
                  else (<none>{$querystr}</none>)                
             } 

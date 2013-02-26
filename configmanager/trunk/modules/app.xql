@@ -40,8 +40,8 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li>
                 <h4>&#160; Main Navigation &#187;</h4>
             </li>
+            <li><a href="roles.html"><span>roles</span></a></li>            
             <li><a href="types.html"><span>types</span></a></li>
-            <li><a href="roles.html"><span>roles</span></a></li>
             <li><a href="vocabularies.html"><span>vocabularies</span></a></li>
             <li class="hasmore"><a href="#config"><span>configuration</span></a>
                 <ul class="dropdown">

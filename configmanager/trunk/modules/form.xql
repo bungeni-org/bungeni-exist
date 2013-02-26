@@ -58,7 +58,7 @@ declare function local:fields($doctype) as node() * {
                      )
                      else if ($field/edit[@show = 'true']) then (
                         <span>
-                            <b>view</b> <tt class="roles-inline">({string-join($field/edit/roles/role[position()!=last()],", ")})</tt> <br/>
+                            <b>edit</b> <tt class="roles-inline">({string-join($field/edit/roles/role[position()!=last()],", ")})</tt> <br/>
                         </span>                          
                      ) 
                      else
@@ -346,27 +346,8 @@ function form:field-edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>     
                     
-                    <xf:instance id="i-globalroles" xmlns="">
-                        <data>
-                            <roles originAttr="roles">
-                                <role>CommitteeMember</role>
-                                <role>Minister</role>
-                                <role>Owner</role>
-                                <role>Clerk.HeadClerk</role>
-                                <role>Signatory</role>
-                                <role>Anonymous</role>
-                                <role>MP</role>
-                                <role>Authenticated</role>
-                                <role>Speaker</role>
-                                <role>PoliticalGroupMember</role>
-                                <role>Admin</role>
-                                <role>Government</role>
-                                <role>Clerk.QuestionClerk</role>
-                                <role>Translator</role>
-                                <role>Clerk</role>
-                                <role>ALL</role>
-                            </roles>                        
-                        </data>
+                    <xf:instance id="i-allroles" xmlns="">
+                        {appconfig:roles()}
                     </xf:instance>
 
                     <xf:instance id="i-originrole" xmlns="">
@@ -536,9 +517,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>
@@ -570,9 +551,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>
@@ -604,9 +585,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>
@@ -638,9 +619,9 @@ function form:field-edit($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>
@@ -763,27 +744,8 @@ function form:field-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>                    
  
-                    <xf:instance id="i-globalroles" xmlns="">
-                        <data>
-                            <roles originAttr="roles">
-                                <role>CommitteeMember</role>
-                                <role>Minister</role>
-                                <role>Owner</role>
-                                <role>Clerk.HeadClerk</role>
-                                <role>Signatory</role>
-                                <role>Anonymous</role>
-                                <role>MP</role>
-                                <role>Authenticated</role>
-                                <role>Speaker</role>
-                                <role>PoliticalGroupMember</role>
-                                <role>Admin</role>
-                                <role>Government</role>
-                                <role>Clerk.QuestionClerk</role>
-                                <role>Translator</role>
-                                <role>Clerk</role>
-                                <role>ALL</role>
-                            </roles>                        
-                        </data>
+                    <xf:instance id="i-allroles" xmlns="">
+                        {appconfig:roles()}
                     </xf:instance>
 
                     <xf:instance id="i-originrole" xmlns="">
@@ -940,9 +902,9 @@ function form:field-add($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>
@@ -974,9 +936,9 @@ function form:field-add($node as node(), $model as map(*)) {
                                           <xf:label>select a role</xf:label>
                                           <xf:help>help for select1</xf:help>
                                           <xf:alert>invalid: cannot be empty</xf:alert>
-                                          <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                              <xf:label ref="."></xf:label>
-                                              <xf:value ref="."></xf:value>
+                                          <xf:itemset nodeset="instance('i-allroles')/role">
+                                              <xf:label ref="@name"></xf:label>
+                                              <xf:value ref="@name"></xf:value>
                                           </xf:itemset>
                                       </xf:select1>
                                       <xf:trigger>
@@ -1008,9 +970,9 @@ function form:field-add($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>
@@ -1042,9 +1004,9 @@ function form:field-add($node as node(), $model as map(*)) {
                                         <xf:label>select a role</xf:label>
                                         <xf:help>help for select1</xf:help>
                                         <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                            <xf:label ref="."></xf:label>
-                                            <xf:value ref="."></xf:value>
+                                        <xf:itemset nodeset="instance('i-allroles')/role">
+                                            <xf:label ref="@name"></xf:label>
+                                            <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:trigger>

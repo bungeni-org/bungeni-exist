@@ -119,3 +119,21 @@ declare function appconfig:three-in-one($flattened as node()) {
     }
     </types>
 };
+
+(:
+    Creates a list of all the roles: Both system and custom roles
+:)
+declare function appconfig:roles() {
+
+    <roles> {
+        let $autoroles := doc($appconfig:SYS-FOLDER || '/.auto/_roles.xml')/roles
+        let $customroles := doc($appconfig:SYS-FOLDER || '/acl/roles.xml')/roles
+        let $allroles := for $role in ($autoroles/role/@name, $customroles//@id) return data($role)
+        
+        for $role in distinct-values($allroles)
+        order by $role ascending
+        return
+            <role name="{$role}"/>
+    } </roles>
+    
+};

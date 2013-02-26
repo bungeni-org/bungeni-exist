@@ -106,6 +106,9 @@ br {
 h1 {
     margin-top: 0;
 }
+.xfRepeatIndex {
+    background-color: transparent;
+}
 
 /*
  * STYLING XFORMS
@@ -570,11 +573,30 @@ div.ulisting li a:first-child {
   width: 90%;
 }
 
-div.ulisting li:hover {
+
+div.sysroles {
+  margin:10px 0 0 10px;
+}
+
+div.sysroles ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.sysroles li:hover {
   background: #f6f6f6;
 }
-div.ulisting li > a:first-child:hover {
-  font-size: 22px;
+div.sysroles li,
+div.sysroles h4 {
+    color:#aaa;
+}
+div.sysroles li {
+  font-size: 12px;
+  border-bottom: 1px solid #ccc;
+}
+div.sysroles li:last-child {
+  border: none;
 }
 
 .clearfix {

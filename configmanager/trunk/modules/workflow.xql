@@ -433,7 +433,9 @@ function workflow:edit($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>                    
                     
-                    <xf:instance id="i-allroles" src="{$workflow:REST-BC-LIVE}/sys/.auto/_roles.xml"/> 
+                    <xf:instance id="i-allroles" xmlns="">
+                        {appconfig:roles()}
+                    </xf:instance>
                     
                     <xf:instance id="i-features" xmlns="">
                         <data>

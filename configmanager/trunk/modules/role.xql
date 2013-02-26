@@ -48,6 +48,31 @@ function role:roles($node as node(), $model as map(*)) {
         </div>   
 };
 
+declare function local:get-system-roles() {
+    let $allroles := doc($appconfig:SYS-FOLDER || '/.auto/_roles.xml')/roles
+    let $customroles := doc($appconfig:SYS-FOLDER || '/acl/roles.xml')/roles
+    for $role in $allroles/role/@name
+    return 
+        if(every $sysrole in distinct-values($customroles//@id) satisfies $sysrole != data($role)) then 
+            <li>
+                {data($role)}
+            </li>           
+        else
+            ()
+};
+
+declare 
+function role:system-roles($node as node(), $model as map(*)) { 
+        <div>
+            <div class="sysroles">
+                <h4>system roles</h4>
+                <ul class="clearfix">
+                    {local:get-system-roles()}
+                </ul>
+            </div> 
+        </div>   
+};
+
 declare 
 function role:edit($node as node(), $model as map(*)) {
 
@@ -179,6 +204,10 @@ function role:edit($node as node(), $model as map(*)) {
             </xf:model>
             <!-- ######################### View start ################################## -->
             <div style="width: 100%; height: 100%;">
+                <a href="roles.html">
+                    <img src="resources/images/back_arrow.png" title="back to custom roles" alt="back to custom roles"/>
+                </a>   
+                <br/>            
                 <h1>role | <xf:output value="role[@id eq '{$name}']/@id" class="transition-inline"/></h1>
                 <br/>
                 <div style="margin-top:10px;" />
@@ -377,6 +406,10 @@ function role:add($node as node(), $model as map(*)) {
             </xf:model>
             <!-- ######################### View start ################################## -->
             <div style="width: 100%; height: 100%;">
+                <a href="roles.html">
+                    <img src="resources/images/back_arrow.png" title="back to custom roles" alt="back to custom roles"/>
+                </a>   
+                <br/>
                 <h1>role | <xf:output value="role[last()]/@id" class="transition-inline"/></h1>
                 <br/>
                 <div style="margin-top:10px;" />
@@ -392,7 +425,7 @@ function role:add($node as node(), $model as map(*)) {
                             <xf:label>title:</xf:label>
                             <xf:hint>Title for this role</xf:hint>
                             <xf:help>help for select1</xf:help>
-                            <xf:alert>invalid</xf:alert>
+                            <xf:alert>invalid: cannot be empty</xf:alert>
                         </xf:input>                            
                     </xf:group>
                     <hr/>

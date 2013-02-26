@@ -105,15 +105,15 @@
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
                         <div id="toggle-i18n" class="hide">
                             <span id="i-compress">
-                                <i18n:text key="compress">- compress all(nt)</i18n:text>
+                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
                             </span>
                             <span id="i-expand">
-                                <i18n:text key="expand">+ expand all(nt)</i18n:text>
+                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
                             </span>
                         </div>
-                        <div class="toggler-list" id="expand-all">-&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
                         </div>
-                    </div>                    
+                    </div>                   
                     <!-- 
                     !+LISTING_GENERATOR
                     render the actual listing
@@ -154,12 +154,19 @@
                 <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
                 <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>
-            <span>-</span>
+            <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
                 <div class="black-full">
-                    <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...               
+                    <xsl:choose>
+                        <xsl:when test="kwic">
+                            <xsl:apply-templates select="kwic"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...                            
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </div>
-                <div class="grey-full">
+                <div class="search-subh">
                     <span>
                         <xsl:value-of select="bu:ontology/bu:document/bu:status/bu:value"/>
                     </span>
@@ -176,5 +183,8 @@
                 </div>
             </div>
         </li>
+    </xsl:template>
+    <xsl:template match="kwic">
+        <xsl:copy-of select="child::*"/>
     </xsl:template>
 </xsl:stylesheet>

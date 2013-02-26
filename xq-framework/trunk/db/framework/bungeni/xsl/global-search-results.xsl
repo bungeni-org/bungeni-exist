@@ -40,8 +40,17 @@
                         </div>
                     </div>
                     <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div class="toggler-list" id="expand-all">- compress all</div>
-                    </div>                    
+                        <div id="toggle-i18n" class="hide">
+                            <span id="i-compress">
+                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
+                            </span>
+                        </div>
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
+                    </div>                 
                     <!-- render the actual listing-->
                     <xsl:apply-templates select="legis"/>
                     <xsl:apply-templates select="groups"/>
@@ -51,10 +60,6 @@
         </div>
     </xsl:template>
     
-    
-    <!-- Include the paginator generator -->
-    <xsl:include href="paginator.xsl"/>
-    
     <!-- legislative items -->
     <xsl:template match="legis">
         <ul id="list-toggle" class="ls-row clear">
@@ -63,7 +68,10 @@
             </xsl:if>
         </ul>
     </xsl:template>
+    <!-- remove the count display here -->
+    <xsl:template match="count" mode="renderui1"/>
     <xsl:template match="doc" mode="renderui1">
+        <xsl:variable name="doc-sub-type" select="bu:ontology/child::*/bu:docType/bu:value"/>
         <xsl:variable name="docIdentifier">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">
@@ -75,25 +83,33 @@
             </xsl:choose>
         </xsl:variable>
         <li>
-            <a href="{lower-case(bu:ontology/bu:document/bu:docType/bu:value)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
+            <xsl:variable name="base-path">
+                <xsl:choose>
+                    <xsl:when test="$doc-sub-type eq 'Event'">
+                        <!-- an event of some document -->
+                        <xsl:value-of select="concat(lower-case(bu:ontology/bu:document/bu:eventOf/bu:type/bu:value),'-event')"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat(lower-case($doc-sub-type),'-text')"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <a href="{$base-path}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </a>
-            &#160;›&#160;
-            <a class="van-light" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
-                <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
-                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
-            </a>
-            <span>-</span>
+            <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
+                <div class="black-full">
+                    <xsl:apply-templates select="kwic"/>
+                </div>
                 <div class="search-subh">
                     <xsl:value-of select="format-dateTime(bu:ontology/child::*/bu:statusDate,$datetime-format,'en',(),())"/>
                     &#160;-&#160;
                     <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status/bu:value"/>
+                    &#160;-&#160;
+                    <i>Primary Sponsor</i>, <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </div>
                 <br/>
-                <div class="black-full">
-                    <xsl:value-of select="substring(bu:ontology/bu:document/bu:body,0,320)"/> ...               
-                </div>
             </div>
         </li>
     </xsl:template>
@@ -107,6 +123,8 @@
             </xsl:if>
         </ul>
     </xsl:template>
+    <!-- remove the count display here -->
+    <xsl:template match="count" mode="renderui2"/>
     <xsl:template match="doc" mode="renderui2">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
@@ -115,16 +133,15 @@
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
             </div>
-            <span>-</span>
+            <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
+                <div class="black-full">
+                    <xsl:apply-templates select="kwic"/>
+                </div>
                 <div class="search-subh">
                     <i>start date</i>&#160;<xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate, '[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                     &#160;-&#160;
                     <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status/bu:value"/>
-                </div>
-                <br/>
-                <div class="black-full">
-                    <xsl:value-of select="substring(bu:ontology/bu:group/bu:description,0,320)"/> ...               
                 </div>
             </div>
         </li>
@@ -138,19 +155,25 @@
             </xsl:if>
         </ul>
     </xsl:template>
+    <!-- remove the count display here -->
+    <xsl:template match="count" mode="renderui3"/>
     <xsl:template match="doc" mode="renderui3">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:title,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
             <div class="struct-ib">/ Constitutency / Party</div>
-            <span>-</span>
+            <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
-                <div style="min-height:110px;">
+                <div style="min-height:170px;">
                     <p class="imgonlywrap photo-listing" style="float:left;">
-                        <img src="assets/images/presidente.jpg" alt="Presidente" align="left"/>
+                        <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
+                        <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:lastName,'_', bu:ontology/bu:membership/bu:firstName)}" alt="Photo of M.P" align="left"/>
                     </p>
+                    <div class="block">
+                        <xsl:apply-templates select="kwic"/>
+                    </div>
                     <div class="block">
                         <span class="labels">id:</span>
                         <span>
@@ -177,15 +200,11 @@
                             <xsl:value-of select="bu:ontology/bu:membership/bu:status/bu:value"/>
                         </span>
                     </div>
-                    <div class="block">
-                        <span class="labels">
-                            <i18n:text key="email">short bio(nt)</i18n:text>:</span>
-                        <span>
-                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,360)"/>...
-                        </span>
-                    </div>
                 </div>
             </div>
         </li>
+    </xsl:template>
+    <xsl:template match="kwic">
+        <xsl:copy-of select="child::*"/>
     </xsl:template>
 </xsl:stylesheet>

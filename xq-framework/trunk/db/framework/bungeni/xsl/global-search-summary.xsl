@@ -40,9 +40,16 @@
                         </div>
                     </div>                 
                     <!-- render the actual listing-->
-                    <xsl:apply-templates select="legis"/>
-                    <xsl:apply-templates select="groups"/>
-                    <xsl:apply-templates select="members"/>
+                        <!-- Only show block that has results -->
+                    <xsl:if test="legis/doc">
+                        <xsl:apply-templates select="legis"/>
+                    </xsl:if>
+                    <xsl:if test="groups/doc">
+                        <xsl:apply-templates select="groups"/>
+                    </xsl:if>
+                    <xsl:if test="members/doc">
+                        <xsl:apply-templates select="members"/>
+                    </xsl:if>
                 </div>
             </div>
         </div>
@@ -75,7 +82,7 @@
             <xsl:choose>
                 <xsl:when test="$doc-type = 'Event'">
                     <xsl:variable name="event-href" select="bu:ontology/bu:document/@uri"/>
-                    <a href="{lower-case($eventOf)}/event?uri={$event-href}" id="{$docIdentifier}">
+                    <a href="{lower-case($eventOf)}-event?uri={$event-href}" id="{$docIdentifier}">
                         <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                     </a>
                 </xsl:when>
@@ -121,7 +128,7 @@
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
             <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:title,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
             </a>
         </li>
     </xsl:template>

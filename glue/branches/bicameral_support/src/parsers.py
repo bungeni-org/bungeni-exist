@@ -199,6 +199,9 @@ class ParliamentInfoParams:
         parl_map["for-parliament"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("type")
             ).getText()
+        parl_map["identifier"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("identifier")
+            ).getText()
         # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
         # bicameral legislatures 
         parl_map["type"] = parliament_doc.selectSingleNode(
@@ -221,9 +224,7 @@ class ParseParliamentInfoXML(ParseXML):
         if parliament_doc is None:
             #print "XXXX FOUND DOC NULL XXXX"
             return None
-        print parliament_doc.getText(), "XXX FOUND TYPE "
         if parliament_doc.getText() == "parliament" :
-            print "XXX FOUND PARLIAMENT TYPE !!! "
             parl_params.append(
                 pinfo._get_parl_params(cc, self.xmldoc)
             )

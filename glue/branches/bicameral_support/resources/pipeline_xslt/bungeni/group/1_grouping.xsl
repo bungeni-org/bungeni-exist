@@ -7,6 +7,7 @@
     
     <!-- INCLUDE FUNCTIONS -->
     <xsl:include href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -16,13 +17,6 @@
         </xd:desc>
     </xd:doc>
     
-    
-    <!-- INPUT PARAMETERS TO TRANSFORM-->
-    <!--
-    <xsl:param name="country-code"  />
-    <xsl:param name="parliament-id"/>
-    <xsl:param name="parliament-election-date"  />
-    <xsl:param name="for-parliament" /> -->
     
     <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
     
@@ -41,6 +35,8 @@
         
         <xsl:variable name="group_principal_id" select="field[@name='group_principal_id']" />
         <xsl:variable name="group_id" select="field[@name='group_id']" />
+        
+        <xsl:variable name="group_identifier" select="field[@name='identifier']" />
         
         <xsl:variable name="full-group-identifier" select="translate(concat(
             $content-type-uri-name, '.',$for-parliament,'-',$parliament-election-date,'-',$parliament-id, '.','group','.',$group_id
@@ -76,15 +72,73 @@
                 <!-- !+URI_REWORK(ah, mar-2012) ...follow up to the FIX_THIS above, the URIs,
                     are being reworked to be fully AN compatible !!!WARNING!!! this will
                     break XML ui for the moment -->
+                <!-- !+BICAMERAL_CHANGES below (ah, feb-2013)
                 <xsl:attribute name="uri" 
                     select="concat('/ontology/',$content-type-uri-name ,'/',$full-group-identifier)" 
                 />                
+                -->
+                <xsl:attribute name="uri" >
+                    <xsl:choose>
+                        <xsl:when test="$group-element-name eq 'parliament'">
+                            <xsl:value-of select="$parliament-full-uri" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="concat($parliament-full-uri, '/', $content-type-uri-name, '/', $group_identifier)" /> 
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                                
+                
+                <xsl:attribute name="unique-id">
+                    <!-- this attribute uniquely identifies the document in the system -->
+                    
+                    <xsl:choose>
+                        <xsl:when test="$origin-parliament ne 'None'">
+                            <xsl:choose>
+                                <xsl:when test="$group-element-name eq 'parliament'">
+                                    <xsl:value-of select="concat(
+                                        $legislature-type-name, '.', $legislature-identifier, 
+                                        '-', 
+                                        $parliament-type-name, '.', $parliament-id 
+                                        )" />                                    
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="concat(
+                                        $legislature-type-name, '.', $legislature-identifier, 
+                                        '-', 
+                                        $parliament-type-name, '.', $parliament-id, 
+                                        '-',
+                                        $group-element-name, '.', $group_id
+                                        )" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="concat(
+                                $legislature-type-name, '.', $legislature-identifier, 
+                                '-',
+                                $group-element-name, '.', $group_id
+                                )" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                
                 
                 <xsl:attribute name="id" select="$full-group-identifier" />
+                
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
+                
                 
                 <docType isA="TLCTerm">
                     <value type="xs:string"><xsl:value-of select="$content-type-uri-name" /></value>
                 </docType>                 
+                
+                <groupIdentifier isA="key" type="xs:string">
+                    <xsl:value-of select="$group_identifier" />
+                </groupIdentifier>
                 
                 <xsl:copy-of select="field[ @name='parent_group_id' or 
                     @name='committee_id' or 
@@ -109,7 +163,14 @@
                 <xsl:copy-of select="group_addresses | contained_groups"/>                
                 <xsl:copy-of select="permissions" />                               
             </group>
-            <legislature isA="TLCConcept" href="{$for-parliament}">
+            
+            <xsl:call-template name="incl_legislature">
+                <xsl:with-param name="leg-uri" select="$legislature-full-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
+            
+            <chamber isA="TLCConcept" href="{$parliament-full-uri}">
                 <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate> 
                 <xsl:copy-of select="field[  
                     @name='parliament_id' or 
@@ -120,7 +181,7 @@
                     @name='proportional_representation' or 
                     @name='status_date' ] | agenda_items" 
                 />                 
-            </legislature>
+            </chamber>
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <xsl:copy-of select="tags" />
                 <xsl:copy-of select="field[@name='timestamp']" />

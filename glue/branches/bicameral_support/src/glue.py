@@ -177,7 +177,7 @@ def param_parl_info(cfg, params):
         "<parliaments>"
         )
     li_parl_params.append(
-           ("<countryCode>%s(country_code)s</countryCode>"  
+           ("<countryCode>%(country_code)s</countryCode>"  
             "<legislature>" 
             "  <identifier>%(identifier)s</identifier>"
             "  <startDate>%(start_date)s</startDate>" 

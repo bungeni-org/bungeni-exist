@@ -8,6 +8,7 @@
     
     <!-- INCLUDE FUNCTIONS -->
     <xsl:include href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />    
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -64,6 +65,10 @@
                     )" />
                 
                 <xsl:attribute name="id" select="$group_id" />
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
                 
                 <docType isA="TLCTerm">
                     <value type="xs:string"><xsl:value-of select="$content-type-uri-name" /></value>
@@ -89,6 +94,11 @@
                 
                 <xsl:copy-of select="permissions | contained_groups" />                
             </groupsitting>
+            <xsl:call-template name="incl_parliament">
+                <xsl:with-param name="leg-uri" select="$legislature-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
             <legislature isA="TLCConcept" href="{$for-parliament}">
                 <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate>
                 <xsl:copy-of select="field[  

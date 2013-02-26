@@ -7,6 +7,7 @@
     
     <!-- INCLUDE FUNCTIONS -->
     <xsl:include href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -25,9 +26,8 @@
         <xsl:param name="parliament-election-date"  />
         <xsl:param name="for-parliament" /> -->
     
-    
-    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
-    
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl"/>
+
     
     <xsl:template match="/">
         <xsl:apply-templates />
@@ -36,9 +36,20 @@
     <xsl:template match="contenttype">
         <xsl:variable name="address_id" select="field[@name='address_id']" />
         <xsl:variable name="content-type" select="@name" />
-        <xsl:variable name="group_id" select="head/field[@name='group_id']" />        
+        <xsl:variable name="group_id" select="head/field[@name='group_id']" />
+        <xsl:variable name="user_id" select="head/field[@name='user_id']" />        
         <xsl:variable name="group-type" select="head/field[@name='type']" />
-        <xsl:variable name="parl-info" select="concat('/',$country-code,'/',$for-parliament,'/')"/>
+        
+        <xsl:variable name="parl-info">
+            <xsl:choose>
+                <xsl:when test="$origin-parliament eq 'None'">
+                    <xsl:value-of select="$legislature-full-uri" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$parliament-full-uri" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable> 
         
         <!-- this field identifies the type of the input xml bill, question , motion etc. -->
         <xsl:variable name="bungeni-content-type" select="@name" />
@@ -88,10 +99,55 @@
                 <!-- !+URI_GENERATOR,!+FIX_THIS(ah,nov-2011) use ontology uri
                 for group since its non-document entity -->
                 <!-- In relation to the !+NOTE above... -->
-                <xsl:attribute name="uri" 
-                    select="concat('/ontology/Address',$parl-info,$content-type,'/',$address_id)" 
-                />                
                 
+                <xsl:attribute name="uri" 
+                    select="concat($parl-info, '/', $content-type-uri-name ,'/',$address_id)" 
+                />
+                
+                <xsl:attribute name="unique-id">
+                    <!-- this attribute uniquely identifies the document in the system -->
+                    <xsl:variable name="container-id">
+                        <xsl:choose>
+                            <xsl:when test="field[@name='group_id']">
+                                <xsl:value-of select="concat('group.', $group_id)"></xsl:value-of>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat('user.', $user_id)"></xsl:value-of>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    
+                    <xsl:choose>
+                        <xsl:when test="$origin-parliament ne 'None'">
+                            <xsl:value-of select="concat(
+                                $legislature-type-name, '.', $legislature-identifier, 
+                                '-', 
+                                $parliament-type-name, '.', $parliament-id, 
+                                '-',
+                                $container-id,
+                                '-',
+                                $content-type,'.',  $address_id
+                                )" />
+                       </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="concat(
+                                $legislature-type-name, '.', $legislature-identifier, 
+                                '-',
+                                $container-id,
+                                '-',
+                                $content-type,'.',  $address_id
+                                )" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                    
+                
+                <xsl:if test="$origin-parliament ne 'None'">                
+                    <xsl:call-template name="incl_origin">
+                        <xsl:with-param name="parl-id" select="$parliament-id" />
+                        <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                    </xsl:call-template>
+                </xsl:if>
                 <assignedTo isA="TLCReference">
                     <xsl:attribute name="uri">
                         <xsl:choose>
@@ -165,9 +221,19 @@
                 </xsl:element>
             -->
             <!-- i.e. not yet grouped ontologically (ao, Jan 2012) -->
-            <legislature isA="TLCConcept" href="{$for-parliament}">
-                <xsl:copy-of select="parent_group" />             
-            </legislature>             
+            
+            <xsl:call-template name="incl_legislature">
+                <xsl:with-param name="leg-uri" select="$legislature-full-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
+            
+            <xsl:if test="$origin-parliament ne 'None'">
+                <chamber isA="TLCConcept" href="{$parliament-full-uri}">
+                    <xsl:copy-of select="parent_group" />             
+                </chamber>
+            </xsl:if>
+            
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <xsl:copy-of select="tags"/>
                 <xsl:copy-of select="field[@name='timestamp']" />

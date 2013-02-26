@@ -7,6 +7,7 @@
     
     <!-- INCLUDE FUNCTIONS -->
     <xsl:include href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -30,18 +31,21 @@
         <xsl:variable name="group_id" select="field[@name='group_id']" />
         <xsl:variable name="group-type" select="field[@name='type']" />
         <ontology for="membership">
-            
             <!-- this return the embedded membership-title etc .-->
             <xsl:variable name="bungeni-membership-name" select="@name" />
             <!-- we map internal group type names to configured mapped name types -->
-            <xsl:variable name="group-element-name" select="bctype:get_content_type_element_name($bungeni-membership-name, $type-mappings)" />
+            <xsl:variable name="user-type-element-name" select="bctype:get_content_type_element_name('user', $type-mappings)" />
+            <xsl:variable name="content-type-element-name" select="bctype:get_content_type_element_name($bungeni-membership-name, $type-mappings)" />
             <xsl:variable name="content-type-uri-name" select="bctype:get_content_type_uri_name($bungeni-membership-name, $type-mappings)" />
             
             <xsl:variable name="group_principal_id" select="field[@name='group_principal_id']" />
-            <xsl:variable name="group_id" select="field[@name='group_id']" />            
+            <xsl:variable name="group_id" select="field[@name='group_id']" />    
+            <xsl:variable name="user_id" select="field[@name='user_id']" />
+            <xsl:variable name="membership_id" select="field[@name='membership_id']" />
+            
             
             <membership id="bungeniMembership" isA="TLCPerson" >
-                
+
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="field[@name='language']" />
                 </xsl:attribute>                  
@@ -66,11 +70,6 @@
                     </xsl:for-each>                    
                 </xsl:variable>
                 
-                <xsl:variable name="item_number" select="user/field[@name='user_id']"></xsl:variable>
-                <xsl:variable name="group_type" select="group/field[@name='type']"></xsl:variable>
-                <xsl:variable name="groups_id" select="group/field[@name='group_id']"></xsl:variable>
-                
-                
                 <!-- !+NOTES (ao, 26 Mar 2012)
                     This is temporary - Group membership URI should be built with the group and not 
                     by parliament as enforced now. Proposed URI scheme should have secondary URIs to a resource 
@@ -82,6 +81,7 @@
                     /ke/parliament/2011-02-01/office/16/member/20 
                 -->
                 <!-- !+URI_REWORK(ah, 11-04-2012 -->
+                <!--
                 <xsl:attribute name="uri" 
                     select="concat('/ontology/Person/',
                     $country-code, '/', 
@@ -89,12 +89,40 @@
                     $for-parliament, '/', 
                     $parliament-election-date, '/',
                     $full-user-identifier)" 
+                /> -->
+
+                <xsl:attribute name="uri" 
+                    select="concat(
+                    $parliament-full-uri, 
+                    '/',
+                    $full-user-identifier)" 
                 />
+                
+                <xsl:attribute name="unique-id">
+                    <!-- this attribute uniquely identifies the document in the system -->
+                    <xsl:value-of select="concat(
+                        $legislature-type-name, '.', $legislature-identifier, 
+                        '-', 
+                        $parliament-type-name, '.', $parliament-id, 
+                        '-',
+                        $user-type-element-name, '.', $user_id,
+                        '-',
+                        $content-type-element-name,'.',  $membership_id
+                        )" />
+                </xsl:attribute>
+                
+                
+                
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
+                
                 
                 <docType isA="TLCTerm">
                     <value type="xs:string"><xsl:value-of select="$content-type-uri-name" /></value>
                 </docType>      
-
+                <membershipID isA="key" type="xs:integer"><xsl:value-of select="$membership_id" /></membershipID>
                 <!--
                     <xsl:attribute name="uri" 
                     select="concat('/', $country-code, '/',
@@ -128,7 +156,14 @@
                 <!-- PERMISSIONS -->
                 <xsl:copy-of select="permissions" />                  
             </membership>
-            <legislature isA="TLCConcept" href="{$for-parliament}">
+
+            <xsl:call-template name="incl_legislature">
+                <xsl:with-param name="leg-uri" select="$legislature-full-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
+            
+            <chamber isA="TLCConcept" href="{$parliament-full-uri}">
                 <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate>                 
                 <xsl:copy-of select="group/field[  
                     @name='short_name' or
@@ -143,7 +178,7 @@
                     @name='proportional_presentation' or 
                     @name='status_date' ] " 
                 />             
-            </legislature>             
+            </chamber>             
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <xsl:attribute name="id" select="$parliament-id"/>
                 <xsl:copy-of select="field[@name='timestamp']" />                    

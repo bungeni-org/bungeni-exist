@@ -7,6 +7,7 @@
     
     <!-- INCLUDE FUNCTIONS -->
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -60,6 +61,12 @@
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="field[@name='language']" />
                 </xsl:attribute>
+                <!--
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
+                -->
                 <!--
                 <xsl:attribute name="uri" 
                     select="concat(
@@ -158,6 +165,11 @@
                 -->               
                 
             </document>
+            <xsl:call-template name="incl_parliament">
+                <xsl:with-param name="leg-uri" select="$legislature-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
             <legislature isA="TLCConcept" href="{$for-parliament}">
                <parliamentId key="true" type="xs:integer" select="{$parliament-id}" />
                <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate> 

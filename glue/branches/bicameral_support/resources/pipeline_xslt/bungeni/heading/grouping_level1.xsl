@@ -10,7 +10,7 @@
             <xd:p></xd:p>
         </xd:desc>
     </xd:doc>
-
+   <!-- !+FIX_THIS for parliament / legislature ontologies -->
     <!-- these are input parameters to the transformation a-->
     <!-- these are input parameters to the transformation a-->
 <!--    <xsl:param name="country-code" />
@@ -20,6 +20,7 @@
     
     
     <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     
     <xsl:template match="/">
@@ -43,6 +44,11 @@
                     $for-parliament, '/', 
                     $content-type, '/', 
                     $heading_id)" />
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
+                
                 <xsl:copy-of select="field[
                     @name='heading_id' or 
                     @name='status' or 

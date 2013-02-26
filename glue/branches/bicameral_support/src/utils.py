@@ -172,8 +172,14 @@ class Transformer(object):
         self._params = HashMap()
         # sets the parliament info object
         for key in input_params.keys():
+            print "XXXXX SET_PARAM ", key, input_params[key]
             self._params.put(key, input_params[key])
 
+    def xpath_get_unique_id(self):
+        # returns the documents unique id, the uri can change, but the unique id will never change
+        # !+BICAMERAL_CHANGES
+        return self.__global_path__+ "bu:ontology/child::*/@unique-id"
+    
     def xpath_get_doc_uri(self):
         #returns a documents URI
         return self.__global_path__ + "bu:ontology/child::*/@uri"
@@ -211,7 +217,25 @@ class Transformer(object):
         on_sync_params['uri'] = uri_encoded
         return on_sync_params
 
+    def get_doc_unique_id(self, input_file):
+        """
+        !+BICAMERAL_CHANGES
+        For bicameral documents we dont use uri to generate unique file names
+        """
+        sreader = SAXReader()
+        self.xmldoc = sreader.read(input_file)
+        doc_unique = self.xmldoc.selectSingleNode(self.xpath_get_unique_id())
+        if doc_unique is None:
+            print "XXXXXX UNIQUE ID NULL FOR ", input_file
+            LOG.error("Unique ID was null !! for ", input_file)
+            return "NULL_VALUE"
+        return doc_unique.getValue()
+    
     def get_doc_uri(self,input_file):
+        """
+        !+DEPRECATE
+        !+BICAMERAL_CHANGES
+        """
         sreader = SAXReader()
         self.xmldoc = sreader.read(input_file)
         doc_uri = self.xmldoc.selectSingleNode(self.xpath_get_doc_uri())
@@ -249,13 +273,17 @@ class Transformer(object):
                 #input stream
                 fis  = FileInputStream(translatedFiles["final"])
                 #get the document's URI
-                uri_raw = self.get_doc_uri(translatedFiles["final"])
+                # !+BICAMERAL_CHANGE use doc unique id instead of uri for name generation
+                uri_raw = self.get_doc_unique_id(translatedFiles["final"])
                 # clean uri if it may have unicode characters
                 uri = uri_raw.encode('utf-8') 
                 rep_dict = {'/':'_', ':':','}
                 uri_name = self.replace_all(uri, rep_dict)
-                outFile = File(str(output) + uri_name.decode('iso-8859-1') + ".xml")
+                file_name = str(output) + uri_name.decode('iso-8859-1') + ".xml"
+                outFile = File(file_name)
                 #copy transformed file to disk
+                if os.path.isfile(file_name):
+                    print "XXXXXX ERROR_OUTFILE_EXISTS ", file_name
                 FileUtility.getInstance().copyFile(fis, outFile)
                 close_quietly(fis)
                 return [outFile, None]

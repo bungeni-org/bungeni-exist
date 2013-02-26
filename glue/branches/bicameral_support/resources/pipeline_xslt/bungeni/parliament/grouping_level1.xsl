@@ -14,6 +14,7 @@
     <!-- these are input parameters to the transformation a-->
     
     <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     
 
@@ -28,13 +29,19 @@
         <xsl:variable name="group-type" select="head/field[@name='type']" />
         <xsl:variable name="parl-info" select="concat('/',$country-code,'/',$for-parliament,'/')"/>
         <ontology type="{$content-type}">
+            <xsl:call-template name="incl_origin">
+                <xsl:with-param name="parl-id" select="$parliament-id" />
+                <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+            </xsl:call-template>
+            
             <bungeni>
                 <xsl:attribute name="id" select="$parliament-id"/>
                 <xsl:copy-of select="tags"/>
                 <xsl:copy-of select="field[ 
                     @name='language' ]" 
                 />                
-            </bungeni>             
+            </bungeni>  
+            
             <parliament isA="TLCObject" date="{$parliament-election-date}">
                 <xsl:attribute name="uri" 
                     select="concat('/',$country-code,'/',

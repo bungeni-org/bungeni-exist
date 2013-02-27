@@ -48,10 +48,10 @@
     </xsl:function>
         
      <xsl:function name="busers:get_user_uri">
-            <xsl:param name="country-code"></xsl:param>
+            <xsl:param name="uri-base"></xsl:param>
             <xsl:param name="full-user-identifier"></xsl:param>
             <xsl:sequence select="concat(
-                $person-uri-prefix,
+                $uri-base, '/',
                 $full-user-identifier
                 )"             
             />

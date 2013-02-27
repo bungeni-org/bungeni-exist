@@ -10,7 +10,7 @@
         <xsl:param name="leg-identifier"></xsl:param>
         <legislature isA="TLCConcept" href="{$leg-uri}">
             <electionDate type="xs:date" select="{$leg-election-date}" />
-            <identifier type="xs:string" isA="key"><xsl:value-of select="$leg-identifier" /></identifier>
+            <identifier type="xs:string" key="true"><xsl:value-of select="$leg-identifier" /></identifier>
         </legislature>
     </xsl:template>
     
@@ -20,7 +20,7 @@
         <xsl:param name="parl-identifier"></xsl:param>
         <xsl:if test="$parl-id">
             <origin>
-                <internalID type="xs:string" isA="key"><xsl:value-of select="$parl-id" /></internalID>
+                <internalID type="xs:string" key="true"><xsl:value-of select="$parl-id" /></internalID>
                 <identifier type="xs:string" isA="TLCTerm"><xsl:value-of select="$parl-identifier" /></identifier>
             </origin>
         </xsl:if>    

@@ -1554,10 +1554,11 @@ declare function local:filter-labels($searchins as element()) {
         attribute for { $searchins/@value},
          if($searchins/@name eq 'all') then 
             element b {
-                $searchins/text()
+                <i18n:text key="{$searchins/text()}">{$searchins/text()}(nt)</i18n:text>
             }
          else
-            $searchins/text()    
+            <i18n:text key="{$searchins/text()}">{$searchins/text()}(nt)</i18n:text>
+                
     }
 };
 

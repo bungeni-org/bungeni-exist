@@ -172,4 +172,6 @@
     <msg key="parl-shortname">short name</msg>
     <msg key="parl-start-date">election date</msg>
     <msg key="parl-power-date">in power from</msg>
+    <msg key="Entire Document">todo el documento</msg>
+    <msg key="Body">cuerpo</msg>
 </catalogue>

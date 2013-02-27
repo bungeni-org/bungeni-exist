@@ -25,10 +25,10 @@
     <map from="event" uri-name="Event" element-name="event" />
     <map from="report" uri-name="Report" element-name="report" />
     
-    <map from="minister" uri-name="Membership"  element-name="minister" />
-    <map from="political_group_member" uri-name="Membership"  element-name="politicalGroupMember" />
-    <map from="member_of_parliament" uri-name="Membership"  element-name="memberOfParliament" />
-    <map from="committee_member" uri-name="Membership"  element-name="committeeMember" />
-    <map from="committee_staff" uri-name="Membership"  element-name="committeeStaff" />
-    <map from="office_member" uri-name="Membership"  element-name="officeMember" />	 	    
+    <map from="minister" uri-name="Minister"  element-name="minister" />
+    <map from="political_group_member" uri-name="PoliticalGroupMember"  element-name="politicalGroupMember" />
+    <map from="member_of_parliament" uri-name="MemberOfParliament"  element-name="memberOfParliament" />
+    <map from="committee_member" uri-name="CommitteeMember"  element-name="committeeMember" />
+    <map from="committee_staff" uri-name="CommitteeStaff"  element-name="committeeStaff" />
+    <map from="office_member" uri-name="OfficeMember"  element-name="officeMember" />	 	    
 </value>

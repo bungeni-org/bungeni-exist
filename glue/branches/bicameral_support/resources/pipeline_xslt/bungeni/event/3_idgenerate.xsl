@@ -20,12 +20,19 @@
     <xsl:output indent="yes" method="xml" encoding="UTF-8"/>
     
     <!-- These values are set in first input which is grouping_Level1 -->        
+
+   <!-- <xsl:variable name="uri-type" select="data(/ontology/document/docType/value)" /> -->
+    <xsl:variable name="lang" select="data(/ontology/document/@xml:lang)" />
+    <xsl:variable name="country" select="string(data(/ontology/legislature/country/value))" />
+    <xsl:variable name="add-change" select="/ontology/document/changes/change[auditAction/value[.='add']]" />
+    <xsl:variable name="active-date" select="data($add-change/activeDate)" />
+    <xsl:variable name="uri-active-date" select="bdates:yyyymmdd-hhmmss-date($active-date)" />
+    <xsl:variable name="parliament-id" select="data(/ontology/legislature/parliamentId)" />
     <xsl:variable name="doc-uri" select="data(/ontology/document/@uri)" />
     <xsl:variable name="internal-doc-uri" select="data(/ontology/document/@internal-uri)" />
     
     <xsl:variable name="uri">
         <xsl:choose>
-            <!-- if doc uri exists -->
             <xsl:when test="normalize-space($doc-uri) != ''">
                 <xsl:value-of select="$doc-uri"/>
             </xsl:when>

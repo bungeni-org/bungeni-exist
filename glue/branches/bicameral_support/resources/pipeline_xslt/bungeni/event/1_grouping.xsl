@@ -61,8 +61,17 @@
                 </xsl:when>
                 
                 <!-- agendaitem, Event is progressive internal -->
-                <xsl:otherwise>
+                <!-- generate @uri use doc_id -->
+            
+                <xsl:when test="
+                    $content-type-uri-name eq 'AgendaItem' or 
+                    $content-type-uri-name eq 'Event'
+                    ">
                     <xsl:text>PROGRESSIVE-INTERNAL</xsl:text>
+                </xsl:when>
+                
+                <xsl:otherwise>
+                    <xsl:text>UNKWOWN</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -77,29 +86,51 @@
                         $progressive-number
                         )" />
                 </xsl:when>
+                <xsl:when test="$uri-generator-type eq 'PROGRESSIVE-INTERNAL'">
+                    <xsl:choose>
+                        <xsl:when test="$content-type-uri-name eq 'Event' or $content-type-uri-name eq 'Attachment'">
+                            <xsl:value-of select="concat(
+                                $head-item-internal-uri, '/',
+                                $content-type-uri-name, '/',
+                                $doc_id
+                                )" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="concat(
+                                $parliament-full-uri, '/',
+                                $content-type-uri-name, '/',
+                                $doc_id
+                                )" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>NO_URI</xsl:text>
+                    <xsl:text>URI_UNKNOWN</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
-        <xsl:variable name="internal-uri">
-            <xsl:value-of select="concat(
-                $parliament-full-uri, '/',
-                $content-type-uri-name, '/',
-                $doc_id
-                )" />
-        </xsl:variable>
-
-        <!--
+        
+        
         <xsl:variable name="internal-doc-uri">
+            <xsl:variable name="doc-number">
+                <xsl:choose>
+                    <!-- attachments do not have doc_id but have the same structure as parliamentaryitems
+                        so, this condition makes it possible to build valid URL -->
+                    <xsl:when test="$content-type-uri-name eq 'Attachment'">
+                        <xsl:value-of select="field[@name='attachment_id']"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$doc_id"/>
+                    </xsl:otherwise>
+                </xsl:choose>    
+            </xsl:variable>
             <xsl:value-of select="concat(
-                $parliament-full-uri, '/',
+                $head-item-internal-uri, '/',
                 $content-type-uri-name, '/',
-                $doc_id
+                $doc-number
                )" />
         </xsl:variable>    
-        -->
+        
   
         <!-- ROOT ELEMENT OF DOCUMENT -->
         <ontology for="document">
@@ -119,12 +150,13 @@
                         )" />
                 </xsl:attribute>
                 
-                <xsl:if test="$uri-generator-type eq 'PROGRESSIVE'">
+                <xsl:if test="$uri-generator-type eq 'PROGRESSIVE' or 
+                        $uri-generator-type eq 'PROGRESSIVE-INTERNAL'">
                         <xsl:attribute name="uri" select="$doc-uri" />
                 </xsl:if> 
                 
                 <xsl:attribute name="internal-uri" 
-                    select="$internal-uri" />
+                    select="$internal-doc-uri" />
                 
                 <!-- 
                     THe URI is generated further up the pipeline -->
@@ -139,6 +171,8 @@
                 </docType>
  
  
+ 
+                
                 <xsl:copy-of select="field[
                     @name='status_date' or 
                     @name='registry_number' or 
@@ -150,10 +184,10 @@
                     sittingreport | 
                     versions
                     " />
+                
+                
                 <!-- for <event> and <attachment> -->
-                <!--
                 <xsl:copy-of select="head" />    
-                -->
                 
                 <xsl:copy-of select="field[
                     @name='status' or 
@@ -296,6 +330,38 @@
                        
                    </xsl:for-each>
                 </xsl:if>
+                
+                <!-- for <bill> and <tableddocument> and <user> -->
+                <!-- DEPRECATE
+                <xsl:if test="item_assignments/* or item_assignments/text()">
+                    <xsl:copy-of select="item_assignments" />
+                </xsl:if>
+                -->
+                
+                
+                <!-- for <user> -->
+                <!--
+                <xsl:copy-of select="field[
+                                            @name='first_name' or 
+                                            @name='last_name' or 
+                                            @name='user_id' or 
+                                            @name='description' or 
+                                            @name='gender' or 
+                                            @name='active_p' or 
+                                            @name='date_of_birth' or 
+                                            @name='titles' or 
+                                            @name='birth_country' or 
+                                            @name='national_id' or 
+                                            @name='login' or 
+                                            @name='password' or 
+                                            @name='salt' or 
+                                            @name='email' or 
+                                            @name='birth_nationality' or 
+                                            @name='current_nationality' 
+                                            ] |
+                                       subscriptions | 
+                                       user_addresses " />     -->
+                
             </xsl:element>
 
             

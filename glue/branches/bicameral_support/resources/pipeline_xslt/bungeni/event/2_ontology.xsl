@@ -10,9 +10,7 @@
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_users.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
-    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_common.xsl"/>
-    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_user_tmpls.xsl"/>
-    
+     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Oct 17, 2011</xd:p>
@@ -127,9 +125,7 @@
     </xsl:template>
     
     <xsl:template match="field[@name='type_number']" >
-        <xsl:if test=". ne 'None'">
-            <progressiveNumber type="xs:integer"><xsl:value-of select="." /></progressiveNumber>
-        </xsl:if>
+        <progressiveNumber type="xs:integer"><xsl:value-of select="." /></progressiveNumber>
     </xsl:template>
         
     <xsl:template match="field[@name='start_date']">
@@ -294,7 +290,6 @@
     
     <!-- Only for question -->
     
-    <!--
     <xsl:template match="field[
         @name='question_number' or
         @name='motion_number' or
@@ -305,9 +300,7 @@
             <xsl:value-of select="." />
         </itemNumber>
     </xsl:template>    
-    -->
     
-    <!--
     <xsl:template match="field[
         @name='question_id' or 
         @name='bill_id' or 
@@ -318,7 +311,6 @@
             <xsl:value-of select="." />
         </itemId>
     </xsl:template>
-    -->
     
     <xsl:template match="field[@name='tag']">
         <tag isA="TLCTerm">
@@ -327,6 +319,21 @@
             </value>    
         </tag>
     </xsl:template>    
+    
+    <!--
+    <xsl:template match="field[@name='doc_type']">
+        <xsl:variable name="parent-type" select="//legislativeItem/field[@name='type']" />
+        <xsl:variable name="value" select="." />
+        <xsl:element name="type">
+            <xsl:attribute 
+                name="href" 
+                select="concat('/ontology/',$country-code, '/', $parent-type, '/', $value)"
+                />
+             <xsl:attribute 
+                 name="showAs" 
+                 select="$value" />
+        </xsl:element>    
+    </xsl:template> -->
     
     <xsl:template match="permissions">
         <permissions>
@@ -397,6 +404,14 @@
         </acronym>
     </xsl:template>    
     
+    <!-- Causes Ambiguity witj a similar template on line 278 above... -->
+    <!-- xsl:template match="field[@name='doc_type']">
+        <docType>
+            <xsl:value-of select="." />
+        </docType>
+        </xsl:template -->  
+    
+    
     <!-- !+BEGIN(AUDIT) AUDIT, CHANGE, VERSION AND SITTINGREPORT TEMPLATES -->
     
     
@@ -440,6 +455,11 @@
     
     
     <xsl:template match="version">
+        <!--
+        <xsl:variable name="doc-uri" select="//legislativeItem/@uri" />
+        <xsl:variable name="active-date" select="field[@name='date_active']" />
+        <xsl:variable name="version-status-date" select="bdates:parse-date($active-date)" />
+        -->
         <version isA="TLCObject">
             <xsl:apply-templates />
         </version>
@@ -487,6 +507,14 @@
     </xsl:template>    
     
     
+    
+    <!--
+    <xsl:template match="field[@name='audit_head_id']">
+        <auditHeadId type="xs:integer">
+            <xsl:value-of select="." />
+        </auditHeadId>
+    </xsl:template>    
+    -->
     
     <xsl:template match="field[@name='audit_user_id']">
         <auditUserId>
@@ -621,9 +649,31 @@
     </xsl:template>
 
     <!-- !+END(WORKFLOW) -->
-
-
-
+    
+    <!--
+    <xsl:template name="user_render">
+        <xsl:param name="typeOf" select="string('unknown')" />
+        <xsl:variable name="showAs" select="concat(field[@name='last_name'], ', ' , field[@name='first_name'])" />
+        <xsl:variable name="isA" select="string('TLCPerson')" />
+        <xsl:variable name="full-user-identifier"
+            select="concat($country-code, '.',
+            field[@name='last_name'], '.', 
+            field[@name='first_name'], '.', 
+            field[@name='date_of_birth'], '.', 
+            field[@name='user_id'])" />
+        <xsl:element name="{$typeOf}">
+            <xsl:attribute name="isA" select="$isA" />
+            <xsl:attribute name="showAs" select="$showAs" />
+            <xsl:attribute name="href" select="concat('/ontology/Person/',
+                $country-code, '/', 
+                'ParliamentMember/', 
+                $for-parliament, '/', 
+                $parliament-election-date, '/',
+                $full-user-identifier)"             
+            />
+        </xsl:element> 
+    </xsl:template> -->
+    
     <!-- for <event>s -->
 
 
@@ -642,5 +692,24 @@
         <!-- Dont emit owner id -->
     </xsl:template>
     
+    <!--
+    <xsl:template match="custom">
+      <xsl:copy-of select="$type-mappings"></xsl:copy-of>
+    </xsl:template> -->
+    
+    <!--!+MINISTRY_MATCH (ah, oct-2011) removing this for now  
+        <xsl:template match="ministry">
+        <xsl:variable name="parliament-href" select="/ontology/bungeni/parliament/@href" />
+        <xsl:variable name="group_principal_id" select="field[@name='group_principal_id']" />
+        <group 
+        href="{concat($parliament-href,'/', $group_principal_id)}" 
+        isA="TLCOrganization" 
+        showAs="{field[@name='short_name']}">
+        
+        </group>
+        
+        
+        </xsl:template>
+    -->
     
 </xsl:stylesheet>

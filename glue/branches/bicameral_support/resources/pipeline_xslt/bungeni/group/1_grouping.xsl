@@ -136,7 +136,7 @@
                     <value type="xs:string"><xsl:value-of select="$content-type-uri-name" /></value>
                 </docType>                 
                 
-                <groupIdentifier isA="key" type="xs:string">
+                <groupIdentifier key="true" type="xs:string">
                     <xsl:value-of select="$group_identifier" />
                 </groupIdentifier>
                 

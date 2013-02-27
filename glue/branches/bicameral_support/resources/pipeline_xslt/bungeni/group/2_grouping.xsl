@@ -8,6 +8,12 @@
     
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_identity.xsl" />
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_common.xsl"/>
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_user_tmpls.xsl"/>
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_addr_tmpls.xsl"/>
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_group_tmpls.xsl"/>
+    
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -28,17 +34,7 @@
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
-    
-    <xsl:template match="*">
-        <xsl:element name="{node-name(.)}">
-            <xsl:for-each select="@*">
-                <xsl:attribute name="{name(.)}">
-                    <xsl:value-of select="."/>
-                </xsl:attribute>
-            </xsl:for-each>
-            <xsl:apply-templates />
-        </xsl:element>
-    </xsl:template>  
+<!--    
     
     <xsl:template match="field[@name='type']">
         <type isA="TLCTerm">
@@ -55,7 +51,8 @@
             </value>
         </tag>
     </xsl:template>    
-    
+-->
+    <!--
     <xsl:template match="field[@name='active_p']">
         <activeP type="xs:string">
             <xsl:variable name="field_active" select="." />
@@ -220,19 +217,8 @@
             <xsl:value-of select="." />
         </legislativeItemId>
     </xsl:template>
-    
-    <xsl:template match="field[@name='country_code']">
-        <country>
-            <xsl:attribute name="code">
-                <xsl:value-of select="$country-code"/>
-            </xsl:attribute>
-            <!-- !+FIX_THIS (ao, 24-Apr-2012) Is country name
-                available set correct, else remove it altogether 
-            -->
-            <xsl:text>Kenya</xsl:text>
-        </country>
-    </xsl:template>
-    
+    -->
+    <!--
     <xsl:template match="field[@name='short_name']">
         <shortName>
             <xsl:value-of select="." />
@@ -270,9 +256,9 @@
     </xsl:template>     
     
     <xsl:template match="field[@name='language']">
-        <!-- !+RENDERED NOW as xml:lang on the legislativeItem
+        <!-\- !+RENDERED NOW as xml:lang on the legislativeItem
             <language type="xs"><xsl:value-of select="." /></language>
-        -->
+        -\->
     </xsl:template>   
     
     <xsl:template match="field[@name='status_date']">
@@ -306,13 +292,8 @@
             name="{field[@name='permission']}"
             role="{field[@name='role']}" />
     </xsl:template>
-    
-    <xsl:template match="versions">
-        <versions>
-            <xsl:apply-templates />
-        </versions>
-    </xsl:template>
-    
+    -->
+    <!--
     <xsl:template match="group_address[parent::group_addresses]">
         <groupAddress isA="TLCObject">
             <xsl:apply-templates />
@@ -331,7 +312,7 @@
         </member>
     </xsl:template>    
     
-    <!-- add node() test to check if the element has children, suppress empty container nodes -->
+    <!-\- add node() test to check if the element has children, suppress empty container nodes -\->
     <xsl:template match="group_addresses">
         <xsl:if test="node()">
             <groupAddresses id="groupAddresses">
@@ -412,41 +393,15 @@
         </street>
     </xsl:template>      
     
-    <xsl:template match="field[@name='postal_address_type']">
-        <postalAddressType isA="TLCTerm">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <xsl:value-of select="."/>
-        </postalAddressType>
-    </xsl:template>
-    
-    <xsl:template match="field[@name='logical_address_type']">
-        <logicalAddressType isA="TLCTerm">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <xsl:value-of select="."/>
-        </logicalAddressType>
-    </xsl:template>      
-    
-    <xsl:template match="field[@name='zipcode']">
-        <zipCode type="xs:integer">
-            <xsl:value-of select="."/>
-        </zipCode>
-    </xsl:template>      
-    
-    <xsl:template match="field[@name='numcode']">
-        <numCode type="xs:integer">
-            <xsl:value-of select="." />
-        </numCode>
-    </xsl:template>    
-    
     <xsl:template match="field[@name='membership_type']">
         <membershipType isA="TLCTerm">
             <value type="xs:string">
                 <xsl:value-of select="." />                
             </value>
         </membershipType>
-    </xsl:template>  
+    </xsl:template>  -->
 
-    <!-- !+NOTE (ao, 8th Feb 2013) also in membership pipepline i.e. duplicates -->
+<!--
     <xsl:template match="member_titles">
         <memberTitles id="memberTitles">
             <xsl:apply-templates />
@@ -515,5 +470,5 @@
             <xsl:value-of select="." />
         </countryName>
     </xsl:template>  
-    
+-->    
 </xsl:stylesheet>

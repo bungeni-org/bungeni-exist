@@ -129,9 +129,9 @@
                         '-', 
                         $parliament-type-name, '.', $parliament-id, 
                         '-',
-                        $user-type-element-name, '.', $user_id,
+                        $user-type-uri-name, '.', $user_id,
                         '-',
-                        $content-type-element-name,'.',  $membership_id
+                        $content-type-uri-name,'.',  $membership_id
                         )" />
                 </xsl:attribute>
                 

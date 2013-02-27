@@ -40,52 +40,23 @@
         <!-- ROOT ELEMENT OF DOCUMENT -->
         <ontology for="document">
             
-            <!-- 
-            Test for and calculate the item_number for the item
-            this is available only after a certain stage of the workflow 
-            -->
-            <!--
-            <xsl:variable name="item_number">
-                <xsl:choose>
-                 
-                    <xsl:when test="field[@name='doc_id']" >
-                        <xsl:value-of select="field[@name='doc_id']" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="field[@name='registry_number']" />
-                    </xsl:otherwise>
-                </xsl:choose>
-                
-            </xsl:variable> -->
             <document id="bungeniDocument" isA="TLCConcept">
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="field[@name='language']" />
                 </xsl:attribute>
-                <!--
+                
+                <!-- 
+                    THe URI is generated further up the pipeline -->
+                
                 <xsl:call-template name="incl_origin">
                     <xsl:with-param name="parl-id" select="$parliament-id" />
                     <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
                 </xsl:call-template>
-                -->
-                <!--
-                <xsl:attribute name="uri" 
-                    select="concat(
-                    '/', $country-code,'/', 
-                    $content-type-uri-name,'/', 
-                    $item_number,'/', 
-                    $language
-                    )" /> -->
+
                 <docType isA="TLCTerm">
                     <value type="xs:string"><xsl:value-of select="$content-type-uri-name" /></value>
                 </docType>
-               
-                
-                
-      
-                
-                <!-- !+URI_GENERATOR,!+FIX_THIS(ah,nov-2011) this logic needs to be eventually
-                    factored out -->
-         
+ 
                 
                 <xsl:copy-of select="field[
                     @name='status_date' or 

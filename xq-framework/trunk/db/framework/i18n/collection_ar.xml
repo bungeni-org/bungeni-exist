@@ -186,4 +186,6 @@
     <msg key="plenary">العامة</msg>
     <msg key="committee">لجنة</msg>
     <msg key="joint_committee">مشترك comittee</msg>
+    <msg key="Entire Document">الوثيقة بأكملها</msg>
+    <msg key="Body">هيئة</msg>
 </catalogue>

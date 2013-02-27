@@ -33,7 +33,7 @@ declare function adm:main-menu($active as xs:string) {
 declare function adm:catalogues() {
     <catalogues>
     {
-        for $lang in data(collection('/db/framework/i18n')/catalogue/@xml:lang)
+        for $lang in data(collection('/db/apps/framework/i18n')/catalogue/@xml:lang)
         return 
             <lang label="{$lang}">{$lang}</lang>
     }

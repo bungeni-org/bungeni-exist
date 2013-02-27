@@ -186,4 +186,6 @@
     <msg key="plenary">plenário</msg>
     <msg key="committee">comitê</msg>
     <msg key="joint_committee">Comitê conjunta</msg>
+    <msg key="Entire Document">documento inteiro</msg>
+    <msg key="Body">corpo</msg>
 </catalogue>

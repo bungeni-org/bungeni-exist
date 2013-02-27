@@ -965,8 +965,7 @@
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
                 <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
                 <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
-                    No.</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -987,8 +986,7 @@
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
                 <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
                 <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
-                    No.</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1009,8 +1007,7 @@
                 <searchin default="true" field="." name="all" value="all">All</searchin>
                 <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
                 <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
-                    No.</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1031,8 +1028,7 @@
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
                 <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
                 <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
-                    No.</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1053,8 +1049,7 @@
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
                 <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
                 <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
-                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Doc
-                    No.</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
@@ -1151,10 +1146,8 @@
             </orderbys>
             <searchins>
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
-                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First
-                    Name</searchin>
-                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last
-                    Name</searchin>
+                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First Name</searchin>
+                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last Name</searchin>
                 <searchin field="bu:membership/bu:description" name="ds" value="desc">Description</searchin>
             </searchins>
             <listingfilters>

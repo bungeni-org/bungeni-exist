@@ -35,8 +35,17 @@
             <xsl:variable name="bungeni-membership-name" select="@name" />
             <!-- we map internal group type names to configured mapped name types -->
             <xsl:variable name="user-type-element-name" select="bctype:get_content_type_element_name('user', $type-mappings)" />
+            <xsl:variable name="user-type-uri-name" select="bctype:get_content_type_uri_name('user', $type-mappings)" />
+            
             <xsl:variable name="content-type-element-name" select="bctype:get_content_type_element_name($bungeni-membership-name, $type-mappings)" />
             <xsl:variable name="content-type-uri-name" select="bctype:get_content_type_uri_name($bungeni-membership-name, $type-mappings)" />
+
+            <xsl:variable name="group-uri">
+                <xsl:variable name="group-type" select="group/field[@name='type']" />
+                <xsl:variable name="group-type-uri-name" select="bctype:get_content_type_uri_name($group-type, $type-mappings)" />
+                <xsl:variable name="group-identifier" select="group/field[@name='identifier']" />
+                <xsl:value-of select="concat('/', $group-type-uri-name, '/', $group-identifier)" />                
+            </xsl:variable>
             
             <xsl:variable name="group_principal_id" select="field[@name='group_principal_id']" />
             <xsl:variable name="group_id" select="field[@name='group_id']" />    
@@ -91,15 +100,30 @@
                     $full-user-identifier)" 
                 /> -->
 
+                <!-- /ontology/ke/User/Legislature/x/Chamber/y/Office/a/MemberType/y/user-identifier -->
+                <xsl:attribute name="uri">
+                    <xsl:value-of select="concat(
+                        $uri-base, '/',
+                        $user-type-uri-name, 
+                        $legislature-uri, 
+                        $parliament-uri, 
+                        $group-uri, '/',
+                        $content-type-uri-name, '/',
+                        $membership_id, '/',
+                        $full-user-identifier
+                        )" />
+                </xsl:attribute>
+                <!--
                 <xsl:attribute name="uri" 
                     select="concat(
                     $parliament-full-uri, 
                     '/',
                     $full-user-identifier)" 
-                />
+                /> -->
                 
                 <xsl:attribute name="unique-id">
                     <!-- this attribute uniquely identifies the document in the system -->
+                    
                     <xsl:value-of select="concat(
                         $legislature-type-name, '.', $legislature-identifier, 
                         '-', 

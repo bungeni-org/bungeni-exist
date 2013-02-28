@@ -103,6 +103,40 @@
         </identifier>
     </xsl:template>     
     
+
+    <xsl:template match="group_addresses">
+        <groupAddresses>
+            <xsl:apply-templates />    
+        </groupAddresses>
+    </xsl:template>      
+    
+    <xsl:template match="group_address[parent::group_addresses]">
+        <groupAddress isA="TLCObject">
+            <xsl:apply-templates />
+        </groupAddress>
+    </xsl:template>      
+    
+    <xsl:template match="members">
+        <members id="groupMembers">
+            <xsl:apply-templates />
+        </members>
+    </xsl:template>
+    
+    <xsl:template match="member[parent::members]">
+        <member isA="TLCObject">
+            <xsl:apply-templates />
+        </member>
+    </xsl:template>
+
+  <!-- !+FIX_THIS parent group templates to be done -->
+
+    <xsl:template match="parent_group">
+        <xsl:if test="not(normalize-space(.))">
+            <parentGroup>
+                <xsl:apply-templates />
+            </parentGroup>
+        </xsl:if>
+    </xsl:template>
     
     
 </xsl:stylesheet>

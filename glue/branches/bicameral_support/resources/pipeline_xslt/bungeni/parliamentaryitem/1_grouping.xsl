@@ -261,6 +261,9 @@
                            
                            <xsl:variable name="group-type" select="field[@name='type']" />
                            
+                           <xsl:variable name="group-identifier" select="field[@name='identifier']" />
+                           
+                           
                            <xsl:variable name="group-type-element-name" select="translate(bctype:get_content_type_element_name(
                                $group-type, 
                                $type-mappings
@@ -271,18 +274,12 @@
                                $type-mappings
                                ),' ','')" />
                            
-                           <xsl:variable name="full-group-identifier" select="translate(bctype:generate-group-identifier(
-                               $group-type-uri-name, 
-                               $for-parliament, 
-                               $parliament-election-date, 
-                               $parliament-id, 
-                               $group-id
-                               ),' ','')" />
                            
-                           <xsl:attribute name="href" select="translate(bctype:generate-group-uri(
-                               $group-type-uri-name, 
-                               $full-group-identifier
-                               ),' ','')" />
+                           <xsl:attribute name="href" select="concat(
+                               $parliament-full-uri, '/',
+                               $group-type-uri-name, '/',
+                               $group-identifier
+                               )" />
                            
                            <xsl:copy-of select="field[@name='group_id' or 
                                @name='short_name' or

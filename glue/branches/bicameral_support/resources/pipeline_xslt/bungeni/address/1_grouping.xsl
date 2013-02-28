@@ -239,6 +239,20 @@
                 <xsl:copy-of select="field[@name='timestamp']" />
                 <withPermissions href="#addressPermissions" />
             </bungeni> 
+            
+            
+            <custom>
+                <xsl:copy-of select="$type-mappings" />
+                <bungeni_doc_type>
+                    <xsl:value-of select="$bungeni-content-type"/>
+                </bungeni_doc_type>
+                <uri-base><xsl:value-of select="$uri-base" /></uri-base>
+                <legislature-uri><xsl:value-of select="$legislature-uri" /></legislature-uri>
+                <parliament-uri><xsl:value-of select="$parliament-uri" /></parliament-uri>
+                <legislature-full-uri><xsl:value-of select="$legislature-full-uri" /></legislature-full-uri>
+                <parliament-full-uri><xsl:value-of select="$parliament-full-uri" /></parliament-full-uri>
+            </custom>
+            
         </ontology>
     </xsl:template>
     

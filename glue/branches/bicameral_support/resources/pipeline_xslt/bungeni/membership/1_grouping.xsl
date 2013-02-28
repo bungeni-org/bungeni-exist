@@ -210,6 +210,19 @@
                 />    
             </bungeni> 
             
+            <custom>
+                <xsl:copy-of select="$type-mappings" />
+                <bungeni_doc_type>
+                    <xsl:value-of select="$group-type"/>
+                </bungeni_doc_type>
+                <uri-base><xsl:value-of select="$uri-base" /></uri-base>
+                <legislature-uri><xsl:value-of select="$legislature-uri" /></legislature-uri>
+                <parliament-uri><xsl:value-of select="$parliament-uri" /></parliament-uri>
+                <legislature-full-uri><xsl:value-of select="$legislature-full-uri" /></legislature-full-uri>
+                <parliament-full-uri><xsl:value-of select="$parliament-full-uri" /></parliament-full-uri>
+            </custom>
+            
+            
             <!--    !+FIX_THIS (ao, jan 2012. Some address documents for individuals like clerk dont have 'type' field and 
                 this broke the pipeline processor
                 

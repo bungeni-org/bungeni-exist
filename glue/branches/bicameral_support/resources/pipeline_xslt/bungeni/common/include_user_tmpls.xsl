@@ -112,11 +112,6 @@
         </login>
     </xsl:template>    
     
-    <xsl:template match="field[@name='password']">
-        <password type="xs:string">
-            <xsl:value-of select="." />
-        </password>
-    </xsl:template> 
     
     <xsl:template match="field[@name='salt']">
         <salt type="xs:string">

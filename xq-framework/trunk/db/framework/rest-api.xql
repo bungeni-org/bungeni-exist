@@ -182,4 +182,126 @@ declare
         <goodbye>{$name}</goodbye>
         )
 };
+
+: 
+ : Test list attachments
+ :  :)
+declare function local:get-mock-attachments() as node(){
+    
+    let $coll := <collection>
+        {collection('/db/bungeni-xml')/bu:ontology/bu:attachments/bu:attachment}
+        </collection>
+        
+    return $coll 
+};
+
+(: 
+ : Retrieve collection of attachments
+ : :)
+declare function local:get-attachments() as node(){
+    
+    let $doc := <collection>
+        {collection('/db/bungeni-xml')/bu:ontology[@for='document']
+        [bu:document[bu:docType[bu:value[. = 'Bill']]][bu:status[bu:value[. = 'received']]]]
+        /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]]}
+        </collection>
+        
+    return $doc
+};
+
+(: 
+ : Retrieve an attachment by name
+ :  :)
+declare function local:get-attachment-hash-by-name($name as xs:string){
+    
+    collection('/db/bungeni-xml')/bu:ontology[@for='document']
+    [bu:document[bu:docType[bu:value[. = 'Bill']]][bu:status[bu:value[. = 'received']]]]
+    /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]]
+    [bu:name[.=$name]]/bu:fileHash/string()
+};
+
+(: 
+ : Search for attachments by partial name
+ :  and return list with hash and name
+ :  :)
+declare
+    %rest:POST
+    %rest:path("/attachments")
+    %rest:form-param("search", "{$search}","*")  
+    %output:method("xml")
+    function local:search-for-attachments($search as xs:string*){
+        <attachments>{
+        
+            for $i in local:get-attachments()/child::node()
+            return 
+                if (matches($i/bu:name/string(), $search)) then
+                    <attachment>
+                        <hash>{$i/bu:fileHash/string()}</hash>
+                        <name>{$i/bu:name/string()}</name>
+                    </attachment>
+                else 
+                    () 
+                
+        }</attachments>
+};
+
+(: 
+ : Test search GET attachment list
+ :  :)
+declare
+    %rest:GET
+    %rest:path("/test/get/attachments")
+    %rest:form-param("search", "{$search}","*")  
+    %output:method("xml")
+    function local:test-get-search-attachmemnts($search as xs:string*){
+      
+       local:search-for-attachments($search)   
+};
+
+
+(: 
+ : Get an attachment by name
+ :  and return document
+ :  :)    
+declare
+    %rest:POST
+    %rest:path("/attachment")
+    %rest:form-param("name", "{$name}","*")  
+    %output:method("xml")
+    function local:get-attachment($name as xs:string*){
+        
+      util:parse(util:binary-to-string(util:binary-doc(concat("/db/bungeni-atts/", local:get-attachment-hash-by-name($name)))))
+};
+
+(: 
+ : Test GET attachment
+ :  :)
+declare
+    %rest:GET
+    %rest:path("/test/get/attachment")
+    %rest:form-param("name", "{$name}","*")  
+    %output:method("xml")
+    function local:test-get-attachment($name as xs:string*){
+        
+      local:get-attachment($name)
+};
+
+(: 
+ : Authenticate and save document to /db
+ :  :)
+declare 
+    %rest:POST
+    %rest:path("/update")
+    %rest:form-param("username", "{$username}","*")  
+    %rest:form-param("password", "{$password}","*")  
+    %rest:form-param("documentname", "{$documentname}","*")
+    %rest:form-param("document", "{$document}","*")  
+    %output:method("xml")
+    function local:push-document($username as xs:string*, $password as xs:string*, $documentname as xs:string*, $document as xs:string*){
+        
+        let $login := xmldb:login("/db", $username, $password)
+        let $store-return-status := xmldb:store("/db", $documentname, $document)
+            return ()
+};
+
 local:goodbye("unknown")

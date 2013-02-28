@@ -6,6 +6,7 @@ import module namespace template = "http://bungeni.org/xquery/template" at "temp
 import module namespace bun = "http://exist.bungeni.org/bun" at "bungeni/bungeni.xqm";
 import module namespace xmldb = "http://exist-db.org/xquery/xmldb";
 import module namespace json="http://www.json.org";
+import module namespace datetime = "http://exist-db.org/xquery/datetime";
 
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace request="http://exist-db.org/xquery/request";

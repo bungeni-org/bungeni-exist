@@ -13,15 +13,15 @@
     </xsl:template>    
     
     <xsl:template match="field[@name='title_type_id']">
-        <titleTypeId type="xs:integer">
+        <designationDefinitionId type="xs:integer">
             <xsl:value-of select="." />
-        </titleTypeId>
+        </designationDefinitionId>
     </xsl:template>  
     
     <xsl:template match="field[@name='member_title_id']">
-        <memberTitleId type="xs:integer">
+        <designationId type="xs:integer">
             <xsl:value-of select="." />
-        </memberTitleId>
+        </designationId>
     </xsl:template>  
     
     
@@ -76,6 +76,33 @@
         </titleName>
     </xsl:template>    
     
+    <xsl:template match="member_titles">
+        <designations>
+            <xsl:apply-templates />
+        </designations>
+    </xsl:template>    
+    
+    <xsl:template match="member_title">
+        <designation isA="TLCRole">
+            <xsl:apply-templates />
+        </designation>
+    </xsl:template>    
+    
+    
+    <xsl:template match="titletypes">
+        <desiginationDefinitions>
+            <xsl:apply-templates />
+        </desiginationDefinitions>
+    </xsl:template>    
+    
+    <xsl:template match="titletype">
+        <desiginationDefinition isA="TLCTerm">
+            <xsl:apply-templates />
+        </desiginationDefinition>
+    </xsl:template>    
+    
+    
+    <xsl:template match="title_type[parent::member_title]" />
     
     
     

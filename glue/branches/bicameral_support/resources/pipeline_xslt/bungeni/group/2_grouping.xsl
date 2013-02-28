@@ -6,13 +6,15 @@
     exclude-result-prefixes="xs"
     version="2.0">
     
-    <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
-    <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
+ <!--   <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" /> -->
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_identity.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_common.xsl"/>
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_user_tmpls.xsl"/>
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_addr_tmpls.xsl"/>
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_memb_tmpls.xsl"/>
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_group_tmpls.xsl"/>
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_suppress.xsl"/>
     
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
@@ -34,6 +36,9 @@
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
+    
+    
+    
 <!--    
     
     <xsl:template match="field[@name='type']">

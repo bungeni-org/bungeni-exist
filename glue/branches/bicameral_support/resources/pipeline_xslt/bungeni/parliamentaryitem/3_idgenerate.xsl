@@ -117,6 +117,7 @@
                <xsl:variable name="legislature-full-uri" select="/custom/legislature-full-uri" />
                <xsl:value-of select="concat($internal-doc-uri, '/', $event-uri-name,'/', $event-docid)" />
            </xsl:attribute>
+           <xsl:attribute name="isA" select="string('TLCEvent')" />
            <xsl:apply-templates />
        </xsl:copy>
    </xsl:template>

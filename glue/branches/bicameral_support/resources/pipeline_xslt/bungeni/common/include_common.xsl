@@ -7,7 +7,10 @@
     <xsl:import href="func_dates.xsl" />
     
     <xsl:template match="field[@name='language']">
-        <language type="xs:string" showAs="{data(@displayAs)}">
+        <language type="xs:string" >
+            <xsl:if test="@displayAs">
+                <xsl:attribute name="showAs"><xsl:value-of select="@displayAs" /></xsl:attribute>
+            </xsl:if>
             <xsl:value-of select="." />
         </language>
     </xsl:template>  
@@ -48,12 +51,14 @@
         </status>
     </xsl:template>
 
+<!--
     <xsl:template match="field[@name='status_date']">
         <xsl:variable name="status_date" select="." />
         <statusDate type="xs:dateTime">
             <xsl:value-of select="bdates:parse-date($status_date)" />
         </statusDate>  
     </xsl:template>
+-->
     
     <xsl:template match="field[@name='parliament_type']">
         <legislatureType isA="TLCTerm" showAs="{data(@displayAs)}">
@@ -110,19 +115,61 @@
         </description>
     </xsl:template>   
     
-    
-    <xsl:template match="permissions">
-        <permissions >
-            <xsl:apply-templates />
-        </permissions>
-    </xsl:template>
-    
+    <!--
     <xsl:template match="permission">
         <permission 
             setting="{field[@name='setting']}" 
             name="{field[@name='permission']}"  
             role="{field[@name='role']}" />
     </xsl:template>    
+    -->
+    <xsl:template match="permissions">
+        <permissions>
+            <xsl:apply-templates />
+        </permissions>
+    </xsl:template>
+    
+    <xsl:template match="permissions[parent::document]">
+        <permissions id="documentPermissions">
+            <xsl:apply-templates />
+        </permissions>
+    </xsl:template>
+    
+    <xsl:template match="permission">
+        <xsl:variable name="bungeni-content-type" select="data(//custom/bungeni_doc_type)" />
+        <xsl:variable name="content-type-uri-name" select="data(/ontology/document/docType[@isA='TLCTerm']/value)" />
+        
+        <xsl:variable name="perm-content-type-view" select="concat('bungeni.',$bungeni-content-type,'.View')" />
+        <xsl:variable name="perm-content-type-edit" select="concat('bungeni.',$bungeni-content-type,'.View')" />
+        <!--
+        <xsl:variable name="perm-event-type-view">
+            <xsl:if test="head/node()">
+                <xsl:value-of select="concat('bungeni.',head/field[@name='type'],'.View')"/>
+            </xsl:if>
+        </xsl:variable>          
+        -->
+        <xsl:variable name="perm-name" select="data(field[@name='permission'])" />
+        <xsl:variable name="perm-role" select="data(field[@name='role'])" />
+        <xsl:variable name="perm-setting" select="data(field[@name='setting'])" />
+        <permission 
+            setting="{$perm-setting}" 
+            name="{$perm-name}"  
+            role="{$perm-role}" />
+        <xsl:choose>
+            <xsl:when test="$perm-name eq $perm-content-type-view">
+                <control name="View" setting="{$perm-setting}" role="{$perm-role}" />  
+            </xsl:when>
+            <xsl:when test="$perm-name eq $perm-content-type-edit">
+                <control name="Edit" setting="{$perm-setting}" role="{$perm-role}" />  
+            </xsl:when>
+           <!--
+            <xsl:when test="not(empty($perm-event-type-view)) and ends-with($perm-name,'.View')">
+                <control name="View" setting="{$perm-setting}" role="{$perm-role}" />  
+            </xsl:when>
+            -->
+            <xsl:otherwise />
+        </xsl:choose>
+    </xsl:template>
     
     <xsl:template match="versions">
         <versions>
@@ -142,5 +189,52 @@
             <xsl:value-of select="bdates:parse-date($status_date)" />
         </statusDate>  
     </xsl:template>    
+    
+    <xsl:template match="field[@name='timestamp']">
+        <xsl:variable name="timestampDate" select="bdates:parse-date(data(.))" />
+        <timestampDate type="xs:dateTime">
+            <xsl:value-of select="$timestampDate" />         
+        </timestampDate>
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='body_text' or @name='body']">
+        <body type="xs:string">
+            <xsl:value-of select="." />
+        </body>
+    </xsl:template>    
+    
+    
+    
+    <xsl:template match="field[@name='doc_id']">
+        <docId type="xs:integer">
+            <xsl:value-of select="." />
+        </docId>
+    </xsl:template>    
+    
+    <xsl:template match="field[@name='attachment_id']">
+        <attachmentId type="xs:integer">
+            <xsl:value-of select="." />
+        </attachmentId>
+    </xsl:template>    
+    
+    <xsl:template match="field[@name='geolocation']">
+        <xsl:if test=". ne 'None'">
+            <geoLocation type="xs:string">
+                <xsl:value-of select="." />
+            </geoLocation>
+        </xsl:if>
+    </xsl:template>
+    
+    
+    
+    <xsl:template match="field[@name='owner_id']">
+        <ownerId type="xs:integer">
+            <xsl:value-of select="." />
+        </ownerId>
+    </xsl:template>
+    
+    
+    
     
 </xsl:stylesheet>

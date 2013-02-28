@@ -198,6 +198,20 @@
             <xsl:copy-of select="members"/>
             <xsl:copy-of select="titletypes"/>
             <xsl:copy-of select="committee_type"></xsl:copy-of>  
+            
+            
+            <custom>
+                <xsl:copy-of select="$type-mappings" />
+                <bungeni_doc_type>
+                    <xsl:value-of select="$bungeni-group-type"/>
+                </bungeni_doc_type>
+                <uri-base><xsl:value-of select="$uri-base" /></uri-base>
+                <legislature-uri><xsl:value-of select="$legislature-uri" /></legislature-uri>
+                <parliament-uri><xsl:value-of select="$parliament-uri" /></parliament-uri>
+                <legislature-full-uri><xsl:value-of select="$legislature-full-uri" /></legislature-full-uri>
+                <parliament-full-uri><xsl:value-of select="$parliament-full-uri" /></parliament-full-uri>
+            </custom>
+            
         </ontology>
     </xsl:template>
     

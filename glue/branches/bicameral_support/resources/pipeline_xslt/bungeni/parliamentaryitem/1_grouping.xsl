@@ -40,6 +40,7 @@
         <xsl:variable name="content-type-element-name" select="bctype:get_content_type_element_name($bungeni-content-type, $type-mappings)" />
         <xsl:variable name="content-type-uri-name" select="bctype:get_content_type_uri_name($bungeni-content-type, $type-mappings)" />
         
+        <!--
         <xsl:variable name="head-type" select="head/field[@name='type']" />
         <xsl:variable name="head-type-uri-name" select="bctype:get_content_type_uri_name($head-type, $type-mappings)" />
         <xsl:variable name="head-item-internal-id" select="head/field[@name='doc_id']" />
@@ -48,6 +49,7 @@
             $head-type-uri-name, '/',
             $head-item-internal-id
             )" />
+        -->
         <xsl:variable name="language" select="field[@name='language']" />
         <xsl:variable name="doc_id" select="field[@name='doc_id']" />
         

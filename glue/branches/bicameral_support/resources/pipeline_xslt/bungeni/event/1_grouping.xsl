@@ -40,6 +40,8 @@
         <xsl:variable name="content-type-element-name" select="bctype:get_content_type_element_name($bungeni-content-type, $type-mappings)" />
         <xsl:variable name="content-type-uri-name" select="bctype:get_content_type_uri_name($bungeni-content-type, $type-mappings)" />
         
+        <!-- event specific -->
+        
         <xsl:variable name="head-type" select="head/field[@name='type']" />
         <xsl:variable name="head-type-uri-name" select="bctype:get_content_type_uri_name($head-type, $type-mappings)" />
         <xsl:variable name="head-item-internal-id" select="head/field[@name='doc_id']" />
@@ -61,17 +63,8 @@
                 </xsl:when>
                 
                 <!-- agendaitem, Event is progressive internal -->
-                <!-- generate @uri use doc_id -->
-            
-                <xsl:when test="
-                    $content-type-uri-name eq 'AgendaItem' or 
-                    $content-type-uri-name eq 'Event'
-                    ">
-                    <xsl:text>PROGRESSIVE-INTERNAL</xsl:text>
-                </xsl:when>
-                
                 <xsl:otherwise>
-                    <xsl:text>UNKWOWN</xsl:text>
+                    <xsl:text>PROGRESSIVE-INTERNAL</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -86,56 +79,34 @@
                         $progressive-number
                         )" />
                 </xsl:when>
-                <xsl:when test="$uri-generator-type eq 'PROGRESSIVE-INTERNAL'">
-                    <xsl:choose>
-                        <xsl:when test="$content-type-uri-name eq 'Event' or $content-type-uri-name eq 'Attachment'">
-                            <xsl:value-of select="concat(
-                                $head-item-internal-uri, '/',
-                                $content-type-uri-name, '/',
-                                $doc_id
-                                )" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="concat(
-                                $parliament-full-uri, '/',
-                                $content-type-uri-name, '/',
-                                $doc_id
-                                )" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>URI_UNKNOWN</xsl:text>
+                    <xsl:text>NO_URI</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
-        
-        <xsl:variable name="internal-doc-uri">
-            <xsl:variable name="doc-number">
-                <xsl:choose>
-                    <!-- attachments do not have doc_id but have the same structure as parliamentaryitems
-                        so, this condition makes it possible to build valid URL -->
-                    <xsl:when test="$content-type-uri-name eq 'Attachment'">
-                        <xsl:value-of select="field[@name='attachment_id']"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$doc_id"/>
-                    </xsl:otherwise>
-                </xsl:choose>    
-            </xsl:variable>
+
+        <xsl:variable name="internal-uri">
             <xsl:value-of select="concat(
-                $head-item-internal-uri, '/',
+                $parliament-full-uri, '/',
                 $content-type-uri-name, '/',
-                $doc-number
+                $doc_id
+                )" />
+        </xsl:variable>
+
+        <!--
+        <xsl:variable name="internal-doc-uri">
+            <xsl:value-of select="concat(
+                $parliament-full-uri, '/',
+                $content-type-uri-name, '/',
+                $doc_id
                )" />
         </xsl:variable>    
-        
+        -->
   
         <!-- ROOT ELEMENT OF DOCUMENT -->
-        <ontology for="document">
+        <ontology for="event">
             
-            <document id="bungeniDocument" isA="TLCConcept">
+            <event id="bungeniEvent" isA="TLCConcept">
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="field[@name='language']" />
                 </xsl:attribute>
@@ -150,13 +121,12 @@
                         )" />
                 </xsl:attribute>
                 
-                <xsl:if test="$uri-generator-type eq 'PROGRESSIVE' or 
-                        $uri-generator-type eq 'PROGRESSIVE-INTERNAL'">
+                <xsl:if test="$uri-generator-type eq 'PROGRESSIVE'">
                         <xsl:attribute name="uri" select="$doc-uri" />
                 </xsl:if> 
                 
                 <xsl:attribute name="internal-uri" 
-                    select="$internal-doc-uri" />
+                    select="$internal-uri" />
                 
                 <!-- 
                     THe URI is generated further up the pipeline -->
@@ -171,8 +141,6 @@
                 </docType>
  
  
- 
-                
                 <xsl:copy-of select="field[
                     @name='status_date' or 
                     @name='registry_number' or 
@@ -184,10 +152,10 @@
                     sittingreport | 
                     versions
                     " />
-                
-                
                 <!-- for <event> and <attachment> -->
+                <!--
                 <xsl:copy-of select="head" />    
+                -->
                 
                 <xsl:copy-of select="field[
                     @name='status' or 
@@ -250,7 +218,7 @@
                     </xsl:if>                 
                 -->               
                 
-            </document>
+            </event>
             <xsl:call-template name="incl_legislature">
                 <xsl:with-param name="leg-uri" select="$legislature-full-uri" />
                 <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
@@ -278,7 +246,7 @@
                 
                 <xsl:attribute name="isA"><xsl:text>TLCObject</xsl:text></xsl:attribute>
                 
-                <document href="#bungeniDocument" />
+                <event href="#bungeniEvent" />
                 
                 <xsl:copy-of select="field[
                         @name='doc_type'
@@ -295,6 +263,9 @@
                            
                            <xsl:variable name="group-type" select="field[@name='type']" />
                            
+                           <xsl:variable name="group-identifier" select="field[@name='identifier']" />
+                           
+                           
                            <xsl:variable name="group-type-element-name" select="translate(bctype:get_content_type_element_name(
                                $group-type, 
                                $type-mappings
@@ -305,18 +276,12 @@
                                $type-mappings
                                ),' ','')" />
                            
-                           <xsl:variable name="full-group-identifier" select="translate(bctype:generate-group-identifier(
-                               $group-type-uri-name, 
-                               $for-parliament, 
-                               $parliament-election-date, 
-                               $parliament-id, 
-                               $group-id
-                               ),' ','')" />
                            
-                           <xsl:attribute name="href" select="translate(bctype:generate-group-uri(
-                               $group-type-uri-name, 
-                               $full-group-identifier
-                               ),' ','')" />
+                           <xsl:attribute name="href" select="concat(
+                               $parliament-full-uri, '/',
+                               $group-type-uri-name, '/',
+                               $group-identifier
+                               )" />
                            
                            <xsl:copy-of select="field[@name='group_id' or 
                                @name='short_name' or
@@ -330,38 +295,6 @@
                        
                    </xsl:for-each>
                 </xsl:if>
-                
-                <!-- for <bill> and <tableddocument> and <user> -->
-                <!-- DEPRECATE
-                <xsl:if test="item_assignments/* or item_assignments/text()">
-                    <xsl:copy-of select="item_assignments" />
-                </xsl:if>
-                -->
-                
-                
-                <!-- for <user> -->
-                <!--
-                <xsl:copy-of select="field[
-                                            @name='first_name' or 
-                                            @name='last_name' or 
-                                            @name='user_id' or 
-                                            @name='description' or 
-                                            @name='gender' or 
-                                            @name='active_p' or 
-                                            @name='date_of_birth' or 
-                                            @name='titles' or 
-                                            @name='birth_country' or 
-                                            @name='national_id' or 
-                                            @name='login' or 
-                                            @name='password' or 
-                                            @name='salt' or 
-                                            @name='email' or 
-                                            @name='birth_nationality' or 
-                                            @name='current_nationality' 
-                                            ] |
-                                       subscriptions | 
-                                       user_addresses " />     -->
-                
             </xsl:element>
 
             
@@ -381,6 +314,8 @@
                 <parliament-uri><xsl:value-of select="$parliament-uri" /></parliament-uri>
                 <legislature-full-uri><xsl:value-of select="$legislature-full-uri" /></legislature-full-uri>
                 <parliament-full-uri><xsl:value-of select="$parliament-full-uri" /></parliament-full-uri>
+                <head-item-internal-uri><xsl:value-of select="$head-item-internal-uri" /></head-item-internal-uri>
+                <event-id><xsl:value-of select="$doc_id" /></event-id>
             </custom>
             
            </ontology>

@@ -26,7 +26,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
     <meta name="author" content="aowino at googlemail.com"/>
     <meta name="author" content="ashok at parliaments.info"/>
     <meta name="description" content="Landing page for admin panel."/>
-    <link rel="stylesheet" href="../../assets/admin/style.css"/>
+    <link rel="stylesheet" href="../assets/css/admin.css"/>
 </head>
 <body>
  <div id="xforms">

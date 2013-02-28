@@ -238,6 +238,12 @@ declare
                     <attachment>
                         <hash>{$i/bu:fileHash/string()}</hash>
                         <name>{$i/bu:name/string()}</name>
+                        <title>{$i/bu:title/string()}</title>
+                        {if(not(empty($i/bu:description/string()))) then
+                            <descr>{$i/bu:description/string()}</descr>
+                        else
+                            <descr>None</descr>}
+                        <statusDate>{datetime:format-dateTime(xs:dateTime($i/bu:statusDate/string()),"EEE, d MMM yyyy HH:mm:ss Z")}</statusDate>
                     </attachment>
                 else 
                     () 

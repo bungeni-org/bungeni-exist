@@ -183,7 +183,7 @@ declare
         )
 };
 
-: 
+(: 
  : Test list attachments
  :  :)
 declare function local:get-mock-attachments() as node(){

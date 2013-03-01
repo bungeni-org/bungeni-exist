@@ -34,7 +34,7 @@
     <xsl:template match="contenttype">
   
         <!-- this field identifies the type of the input xml bill, question , motion etc. -->
-        <xsl:variable name="bungeni-content-type" select="field[@name='type']" />
+        <xsl:variable name="bungeni-content-type" select="@name" />
         <!-- We map the bungeni internal content type name to a alternative name to prevent tie-in to internal representations -->
         <!-- the type mapping specifies both the name in the URI and the Element name -->
         <xsl:variable name="content-type-element-name" select="bctype:get_content_type_element_name($bungeni-content-type, $type-mappings)" />
@@ -51,7 +51,7 @@
             $head-item-internal-id
             )" />
         <xsl:variable name="language" select="field[@name='language']" />
-        <xsl:variable name="doc_id" select="field[@name='doc_id']" />
+        <xsl:variable name="doc_id" select="field[@name='attachment_id']" />
         
         
         <!--
@@ -96,9 +96,9 @@
 
   
         <!-- ROOT ELEMENT OF DOCUMENT -->
-        <ontology for="event">
+        <ontology for="attachment">
             
-            <document id="bungeniEvent" isA="TLCConcept">
+            <document id="bungeniAttachment" isA="TLCConcept">
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="field[@name='language']" />
                 </xsl:attribute>
@@ -115,17 +115,10 @@
                         )" />
                 </xsl:attribute>
                 
-                <!--                
-                <xsl:if test="$uri-generator-type eq 'PROGRESSIVE'">
-                        <xsl:attribute name="uri" select="$doc-uri" />
-                </xsl:if> 
-                -->
                 
                 <xsl:attribute name="internal-uri" 
                     select="$internal-uri" />
                 
-                <!-- 
-                    THe URI is generated further up the pipeline -->
                 
                 <xsl:call-template name="incl_origin">
                     <xsl:with-param name="parl-id" select="$parliament-id" />
@@ -171,30 +164,6 @@
                     @name='type_number' 
                     ]" />                  
                 
-                <!-- for <tableddocument> 
-                    <xsl:copy-of select="field[
-                    @name='tabled_document_id' or 
-                    @name='tabled_document_number' 
-                    ]" />    
-                    
-                    
-                    <xsl:copy-of select="field[
-                    @name='bill_id' or 
-                    @name='bill_type_id' or 
-                    @name='bill_number'
-                    ]" />
-                    
-                    <xsl:copy-of select="field[
-                    @name='motion_id' or 
-                    @name='motion_number'
-                    ]" />
-                -->
-                
-                <!-- for <motion> & <bill> !+FIX_THIS(ah,17-04-2012)
-                    <xsl:copy-of select="field[
-                    @name='publication_date' or
-                    @name='doc_type' 
-                    ]" />  -->
                 
                 <!-- for <event> -->
                 <xsl:copy-of select="field[
@@ -205,14 +174,6 @@
                 
                 <!-- PERMISSIONS -->
                 <xsl:copy-of select="permissions" />
-                
-                <!-- for <question> !+FIX_THIS(ah,17-04-2012)
-                    <xsl:if test="ministry/*">
-                    <assignedTo group="ministry">
-                    <xsl:copy-of select="ministry" />
-                    </assignedTo>
-                    </xsl:if>                 
-                -->               
                 
             </document>
             <xsl:call-template name="incl_legislature">
@@ -242,7 +203,7 @@
                 
                 <xsl:attribute name="isA"><xsl:text>TLCObject</xsl:text></xsl:attribute>
                 
-                <document href="#bungeniEvent" />
+                <document href="#bungeniAttachment" />
                 
                 <xsl:copy-of select="field[
                         @name='doc_type'
@@ -251,9 +212,7 @@
                 <xsl:copy-of select="head" />        
                 
 
-                <!-- This is a reference to a group from the parliamentary item -->    
-                
-                <!--
+                <!-- This is a reference to a group from the parliamentary item -->         
                 <xsl:if test="group">
                    <xsl:for-each select="group">
                        
@@ -294,9 +253,9 @@
                        </group>
                        
                    </xsl:for-each>
-                </xsl:if> -->
+                </xsl:if>
             </xsl:element>
-            
+
             
             <!-- End of Legislative Item -->
             

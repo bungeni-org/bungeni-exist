@@ -3,92 +3,88 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     exclude-result-prefixes="xs"
     version="2.0">
-    
+    <xsl:import href="include_tmpls.xsl"/>
     
     <xsl:template match="field[@name='country_id']">
-        <countryId type="TLCTerm">
-            <value type="xs:string">
-                <xsl:value-of select="."/>                
-            </value>
-        </countryId>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">country</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='address_id']">
-        <addressId type="xs:integer">
-            <xsl:value-of select="."/>
-        </addressId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">addressId</xsl:with-param>
+        </xsl:call-template>
     </xsl:template> 
     
     
     <xsl:template match="field[@name='city']">
-        <city type="xs:string">
-            <xsl:value-of select="."/>
-        </city>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">city</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='fax']">
-        <fax type="xs:string">
-            <xsl:value-of select="."/>
-        </fax>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">fax</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='country_name']">
-        <countryName type="xs:string">
-            <xsl:value-of select="." />
-        </countryName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">countryName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     
     <xsl:template match="field[@name='numcode']">
-        <numericCode type="xs:integer">
-            <xsl:value-of select="." />
-        </numericCode>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">numericCode</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     
     
     <xsl:template match="field[@name='iso_name']">
-        <isoName type="xs:string">
-            <xsl:value-of select="." />
-        </isoName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">isoName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='iso3']">
-        <iso3Code type="xs:string">
-            <xsl:value-of select="." />
-        </iso3Code>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">iso3Code</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='phone']">
-        <phone type="xs:string">
-            <xsl:value-of select="."/>
-        </phone>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">phone</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='street']">
-        <street type="xs:string">
-            <xsl:value-of select="."/>
-        </street>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">street</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='postal_address_type']">
-        <postalAddressType isA="TLCTerm">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <xsl:value-of select="."/>
-        </postalAddressType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">postalAddressType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="field[@name='logical_address_type']">
-        <logicalAddressType isA="TLCTerm">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <xsl:value-of select="."/>
-        </logicalAddressType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">logicalAddressType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='zipcode']">
-        <zipCode type="xs:integer">
-            <xsl:value-of select="."/>
-        </zipCode>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">zipCode</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     

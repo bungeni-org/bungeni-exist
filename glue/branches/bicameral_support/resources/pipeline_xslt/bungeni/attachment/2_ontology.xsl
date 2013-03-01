@@ -37,7 +37,7 @@
     </xsl:template>  
     
     <xsl:template match="head">
-        <eventOf isA="TLCObject">
+        <attachmentOf isA="TLCObject">
             <refersTo isA="TLCReference">
                 <xsl:attribute name="href">
                     <xsl:variable name="head-item-uri" select="//custom/head-item-internal-uri" />

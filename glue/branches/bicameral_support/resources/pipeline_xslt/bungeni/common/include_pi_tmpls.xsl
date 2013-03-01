@@ -5,9 +5,8 @@
     xmlns:bctypes="http://www.bungeni.org/xml/contenttypes/1.0"
     exclude-result-prefixes="xs"
     version="2.0">
-    <xsl:import href="func_dates.xsl" />
     <xsl:import href="func_content_types.xsl" />
-    
+    <xsl:import href="include_tmpls.xsl"/>
     
     
     <xsl:template match="sa_events">
@@ -53,33 +52,21 @@
         </auditAction>
     </xsl:template>
     
-    <xsl:template match="field[@name='date_audit']">
-        <auditDate type="xs:dateTime">
-            <xsl:variable name="audit_date" select="." />
-            <xsl:value-of select="bdates:parse-date($audit_date)" />
-        </auditDate>
-    </xsl:template> 
-    
-    
     
     <xsl:template match="field[@name='audit_id']">
-        <auditId type="xs:integer">
-            <xsl:value-of select="." />
-        </auditId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">auditId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>   
     
     
     
     <xsl:template match="field[@name='seq']">
-        <sequence type="xs:integer"><xsl:value-of select="." /></sequence>    
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">sequence</xsl:with-param>
+        </xsl:call-template>   
+        
     </xsl:template>
-    
-    <xsl:template match="field[@name='date_active']">
-        <activeDate type="xs:dateTime">
-            <xsl:variable name="active_date" select="." />
-            <xsl:value-of select="bdates:parse-date($active_date)" />
-        </activeDate>
-    </xsl:template> 
     
     <xsl:template match="changes[parent::document]">
         <changes id="documentChanges">
@@ -97,7 +84,7 @@
     <xsl:template match="_vp_response_type">
         <responseType isA="TLCTerm">
             <xsl:attribute name="showAs" select="@displayAs"/>
-            <value isA="TLCTerm">
+            <value type="xs:string">
                 <xsl:value-of select="field[@name='value']" />
             </value>
         </responseType>
@@ -105,9 +92,16 @@
     
     
     <xsl:template match="field[@name='response_text']">
-        <responseText>
-            <xsl:apply-templates />
-        </responseText>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">responseText</xsl:with-param>
+        </xsl:call-template>   
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='att_hash']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">attachmentHash</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>
     
     
@@ -121,42 +115,42 @@
     </xsl:template>    
     
     <xsl:template match="field[@name='type_number']" >
-        <xsl:if test=". ne 'None'">
-            <progressiveNumber type="xs:integer"><xsl:value-of select="." /></progressiveNumber>
-        </xsl:if>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">progressiveNumber</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>
     
     <xsl:template match="field[@name='item_id']">
-        <itemId type="xs:integer">
-            <xsl:value-of select="." />
-        </itemId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">itemId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>     
     
     
     
     <xsl:template match="field[@name='registry_number']">
-        <registryNumber type="xs:string">
-            <xsl:value-of select="." />
-        </registryNumber>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">registryNumber</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>    
     
     <xsl:template match="field[@name='change_id']">
-        <changeId type="xs:string">
-            <xsl:value-of select="." />
-        </changeId>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">changeId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>    
     
     <xsl:template match="field[@name='manual']">
-        <manual>
-            <xsl:value-of select="." />
-        </manual>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">manual</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>     
     
     
     <xsl:template match="field[@name='long_title']">
-        <longTitle type="xs:string">
-            <xsl:value-of select="." />
-        </longTitle>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">longTitle</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>  
     
     
@@ -178,11 +172,9 @@
     </xsl:template>   
     
     <xsl:template match="field[@name='note']">
-        <xsl:if test=". ne 'None'">
-            <changeNote type="xs:string">
-                <xsl:value-of select="." />
-            </changeNote>
-        </xsl:if>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">changeNote</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>   
     
     
@@ -194,9 +186,64 @@
     
     
     <xsl:template match="field[@name='head_id']">
-        <headId type="xs:integer">
-           <xsl:value-of select="." />
-        </headId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">headId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>   
+    
+    <xsl:template match="field[@name='event_date']">
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>eventDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>   
+    
+    
+    <xsl:template match="field[@name='submission_date']">
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>submissionDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>   
+    
+    <xsl:template match="field[@name='uri']">
+        <bungeniUri type="xs:anyURI">
+            <xsl:value-of select="." />
+        </bungeniUri>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='coverage']">
+         <xsl:call-template name="renderStringElement">
+             <xsl:with-param name="elementName">coverage</xsl:with-param>
+         </xsl:call-template>   
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='subject']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">subject</xsl:with-param>
+        </xsl:call-template>   
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='ministry_submit_date']">
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>ministrySubmittedDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>   
+
+    <xsl:template match="field[@name='admissible_date']">
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>admissibleDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>   
+    
+    
     
 </xsl:stylesheet>

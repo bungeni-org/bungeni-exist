@@ -16,8 +16,6 @@
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_addr_tmpls.xsl"/>
     
     
-    
-    
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Jan 24, 2012</xd:p>
@@ -28,11 +26,6 @@
 
     <xsl:output indent="yes" method="xml" encoding="UTF-8"/>
     
-    <!-- These values are set in first input which is grouping_Level1 -->        
-    <xsl:variable name="country-code" select="data(/ontology/bungeni/country)" />
-    <xsl:variable name="parliament-election-date" select="data(/ontology/bungeni/parliament/@date)" />
-    <xsl:variable name="for-parliament" select="data(/ontology/bungeni/parliament/@href)" />  
-    <xsl:variable name="parliament-id" select="data(/ontology/bungeni/@id)" />
 
     <xsl:template match="/">
         <xsl:apply-templates/>

@@ -52,17 +52,20 @@ declare function scriba:add-title($title as xs:string) {
 :)
 declare function scriba:generate-content($pages as node()) {
 
+    let $server-name := request:get-server-name()
+    let $server-port := request:get-server-port()
+    return
     <contents tocId="toc">
         <content packageId="toc" packagePath="/" packageFile="toc.ncx" contentMediaType="application/x-dtbncx+xml" />
         <content packageId="cover" 
                 packagePath="/"
-                contentUrl="http://localhost:8088/exist/rest/db/framework/bungeni/assets/images/cover.png"
+                contentUrl="http://localhost:8088/exist/rest/db/apps/framework/bungeni/assets/images/cover.png"
                 packageFile="cover.png" 
                 isInSpine="false"
                 contentMediaType="image/png"/>      
         <content packageId="section-image" 
                 packagePath="/"
-                contentUrl="http://localhost:8088/exist/rest/db/framework/bungeni/assets/images/bungeni-logo.png"
+                contentUrl="http://localhost:8088/exist/rest/db/apps/framework/bungeni/assets/images/bungeni-logo.png"
                 packageFile="section-image.png" 
                 isInSpine="false"
                 contentMediaType="image/png"/>                

@@ -186,4 +186,6 @@
     <msg key="plenary">kikao</msg>
     <msg key="committee">kamati</msg>
     <msg key="joint_committee">pamoja comittee</msg>
+    <msg key="representation">uwakilishi</msg>
+    <msg key="elected/nominated">waliochaguliwa/kuteuliwa</msg>
 </catalogue>

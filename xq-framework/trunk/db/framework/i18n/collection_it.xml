@@ -197,4 +197,6 @@
     <msg key="parl-shortname">nome breve</msg>
     <msg key="parl-start-date">data di elezione</msg>
     <msg key="parl-power-date">in alimentazione</msg>
+    <msg key="representation">rappresentazione</msg>
+    <msg key="elected/nominated">eletti / nominati</msg>
 </catalogue>

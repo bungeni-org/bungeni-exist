@@ -73,49 +73,43 @@
                             <div class="mem-top-right">
                                 <table class="mem-tbl-details">
                                     <tr>
-                                        <td class="labels fbottom">elected/nominated:</td>
+                                        <td class="labels fbottom">
+                                            <i18n:text key="elected/nominated">elected/nominatedy</i18n:text>:</td>
                                         <td class="fbt">
                                             <xsl:value-of select="if (bu:ontology/bu:membership/bu:memberElectionType/@showAs) then                                             data(bu:ontology/bu:membership/bu:memberElectionType/@showAs) else                                              bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels fbottom">election/nomination date:</td>
+                                        <td class="labels fbottom">
+                                            <i18n:text key="Election/Nomination Date">Election/Nomination Date</i18n:text>:</td>
                                         <td class="fbt">
                                             <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:electionNominationDate),$date-format,'en',(),())"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels fbottom">start date:</td>
+                                        <td class="labels fbottom">
+                                            <i18n:text key="Start Date">Start Date</i18n:text>:</td>
                                         <td class="fbt">
                                             <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:startDate),$date-format,'en',(),())"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels fbottom">language:</td>
+                                        <td class="labels fbottom">
+                                            <i18n:text key="Language">Language</i18n:text>:</td>
                                         <td class="fbt">
                                             <xsl:value-of select="bu:ontology/bu:membership/@xml:lang"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels fbottom">constituency:</td>
+                                        <td class="labels fbottom">
+                                            <i18n:text key="representation">representation</i18n:text>:</td>
                                         <td class="fbt">
-                                            <xsl:value-of select="bu:ontology/bu:membership/bu:constituency/@name"/>
+                                            <xsl:value-of select="bu:ontology/bu:membership/bu:representation/@showAs"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="labels fbottom">province:</td>
-                                        <td class="fbt">
-                                            <xsl:value-of select="bu:ontology/bu:membership/bu:province/@name"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="labels fbottom">region:</td>
-                                        <td class="fbt">
-                                            <xsl:value-of select="bu:ontology/bu:membership/bu:region/@name"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="labels fbottom">political party:</td>
+                                        <td class="labels fbottom">
+                                            <i18n:text key="Political Party">Political Party</i18n:text>:</td>
                                         <td class="fbt">
                                             <xsl:value-of select="bu:ontology/bu:membership/bu:party/@showAs"/>
                                         </td>

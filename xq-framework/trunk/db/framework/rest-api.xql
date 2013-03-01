@@ -251,7 +251,7 @@ declare
                             <descr>{$i/bu:description/string()}</descr>
                         else
                             <descr>None</descr>}
-                        <statusDate>{$i/bu:statusDate/string()}</statusDate>
+                        <statusDate>{datetime:format-dateTime(xs:dateTime($i/bu:statusDate/string()),"EEE, d MMM yyyy HH:mm:ss Z")}</statusDate>
                     </attachment>
                 else 
                     () 

@@ -188,4 +188,6 @@
     <msg key="joint_committee">مشترك comittee</msg>
     <msg key="Entire Document">الوثيقة بأكملها</msg>
     <msg key="Body">هيئة</msg>
+    <msg key="representation">التمثي</msg>
+    <msg key="elected/nominated">انتخاب / تعيين</msg>
 </catalogue>

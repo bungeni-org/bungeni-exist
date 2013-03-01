@@ -187,4 +187,6 @@
     <msg key="committee">committee</msg>
     <msg key="joint_committee">joint comittee</msg>
     <msg key="Entire Document">entire document</msg>
+    <msg key="representation">representation</msg>
+    <msg key="elected/nominated">elected / nominated</msg>
 </catalogue>

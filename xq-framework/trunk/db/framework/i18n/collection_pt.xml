@@ -188,4 +188,6 @@
     <msg key="joint_committee">Comitê conjunta</msg>
     <msg key="Entire Document">documento inteiro</msg>
     <msg key="Body">corpo</msg>
+    <msg key="representation">representação</msg>
+    <msg key="elected/nominated">eleitos / nomeados</msg>
 </catalogue>

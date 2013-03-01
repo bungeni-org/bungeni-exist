@@ -187,4 +187,6 @@
     <msg key="committee">comité</msg>
     <msg key="joint_committee">comittee commune</msg>
     <msg key="Entire Document">document entier</msg>
+    <msg key="representation">représentation</msg>
+    <msg key="elected/nominated">élus / nommés</msg>
 </catalogue>

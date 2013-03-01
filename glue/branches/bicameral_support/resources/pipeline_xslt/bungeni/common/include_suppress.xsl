@@ -9,6 +9,8 @@
     <xsl:template match="field[@name='_password']" />
     <xsl:template match="field[@name='password']" />
     <xsl:template match="_vp_response_text" />
+    <xsl:template match="_vp_event_date" />
+    
     <xsl:template match="_vp_note" />
     <xsl:template match="field[@name='object_type'][parent::_vp_response_text]" />
     <xsl:template match="field[@name='object_id'][parent::_vp_response_text]" />

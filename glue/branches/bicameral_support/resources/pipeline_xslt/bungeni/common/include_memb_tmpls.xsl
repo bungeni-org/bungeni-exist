@@ -4,55 +4,53 @@
     xmlns:bdates="http://www.bungeni.org/xml/dates/1.0"
     exclude-result-prefixes="xs bdates"
     version="2.0">
-    <xsl:import href="func_dates.xsl" />
+    <xsl:import href="include_tmpls.xsl" />
     
     <xsl:template match="field[@name='membership_id']">
-        <membershipId type="xs:integer">
-            <xsl:value-of select="." />
-        </membershipId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">membershipId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>    
     
     <xsl:template match="field[@name='title_type_id']">
-        <designationDefinitionId type="xs:integer">
-            <xsl:value-of select="." />
-        </designationDefinitionId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">designationDefinitionId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>  
     
     <xsl:template match="field[@name='member_title_id']">
-        <designationId type="xs:integer">
-            <xsl:value-of select="." />
-        </designationId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">designationId</xsl:with-param>
+        </xsl:call-template>   
     </xsl:template>  
     
     
     <xsl:template match="field[@name='membership_type']">
-        <membershipType isA="TLCTerm">
-            <value type="xs:string">
-                <xsl:value-of select="." />                
-            </value>
-        </membershipType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">membershipType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='election_nomination_date']">
-        <xsl:variable name="nomination_date" select="." />
-        <electionNominationDate type="xs:dateTime">
-            <xsl:value-of select="bdates:parse-date($nomination_date)" />
-        </electionNominationDate>
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>electionNominationDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='election_date']">
-        <xsl:variable name="elec_date" select="." />
-        <electionDate type="xs:dateTime">
-            <xsl:value-of select="bdates:parse-date($elec_date)" />
-        </electionDate>
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>electionDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='member_election_type']">
-        <memberElectionType isA="TLCTerm" showAs="{data(@displayAs)}">
-            <value type="xs:string">
-                <xsl:value-of select="." />
-            </value>            
-        </memberElectionType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">memberElectionType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="field[@name='user_unique']">
@@ -65,15 +63,15 @@
     </xsl:template>  
     
     <xsl:template match="field[@name='sort_order']">
-        <sortOrder type="xs:integer">
-            <xsl:value-of select="." />
-        </sortOrder>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">sortOrder</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>    
     
     <xsl:template match="field[@name='title_name']">
-        <titleName type="xs:string">
-            <xsl:value-of select="." />
-        </titleName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">titleName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>    
     
     <xsl:template match="member_titles">

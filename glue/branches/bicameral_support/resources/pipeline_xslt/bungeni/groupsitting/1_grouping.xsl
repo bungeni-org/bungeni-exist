@@ -94,7 +94,7 @@
                 
                 <xsl:copy-of select="permissions | contained_groups" />                
             </groupsitting>
-            <xsl:call-template name="incl_parliament">
+            <xsl:call-template name="incl_legislature">
                 <xsl:with-param name="leg-uri" select="$legislature-uri" />
                 <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
                 <xsl:with-param name="leg-identifier" select="$legislature-identifier" />

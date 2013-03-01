@@ -27,29 +27,8 @@
     
     <xsl:output indent="yes" method="xml" encoding="UTF-8"/>
     
-    <!-- These values are set in first input which is grouping_Level1 -->        
-    <xsl:variable name="country-code" select="data(/ontology/bungeni/country)" />
-    <xsl:variable name="parliament-election-date" select="data(/ontology/bungeni/parliament/@date)" />
-    <xsl:variable name="for-parliament" select="data(/ontology/bungeni/parliament/@href)" />
-    <xsl:variable name="parliament-id" select="data(/ontology/bungeni/@id)" />
-    
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
-    
-    <xsl:template match="field[@name='combined_name']" />
-    <xsl:template match="field[@name='receive_notification']" />
-    <xsl:template match="field[@name='_password']" />
-    
-    <xsl:template match="field[@name='timestamp' or 
-        @name='date_active' or 
-        @name='date_audit']">
-        <xsl:element name="{local-name()}" >
-            <xsl:variable name="misc_dates" select="." />
-            <xsl:attribute name="name" select="@name" /> 
-            <xsl:attribute name="type">xs:dateTime</xsl:attribute>
-            <xsl:value-of select="bdates:parse-date($misc_dates)" />
-        </xsl:element>
-    </xsl:template> 
     
 </xsl:stylesheet>

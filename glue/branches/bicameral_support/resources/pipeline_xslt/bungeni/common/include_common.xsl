@@ -5,6 +5,7 @@
     exclude-result-prefixes="xs bdates"
     version="2.0">
     <xsl:import href="func_dates.xsl" />
+    <xsl:import href="include_tmpls.xsl" />
     
     <xsl:template match="field[@name='language']">
         <language type="xs:string" >
@@ -184,17 +185,18 @@
     </xsl:template>
     
     <xsl:template match="field[@name='status_date']">
-        <xsl:variable name="status_date" select="." />
-        <statusDate type="xs:dateTime">
-            <xsl:value-of select="bdates:parse-date($status_date)" />
-        </statusDate>  
-    </xsl:template>    
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>statusDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    </xsl:template>    
     
     <xsl:template match="field[@name='timestamp']">
-        <xsl:variable name="timestampDate" select="bdates:parse-date(data(.))" />
-        <timestampDate type="xs:dateTime">
-            <xsl:value-of select="$timestampDate" />         
-        </timestampDate>
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>timestampDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>
     
     
@@ -233,6 +235,24 @@
             <xsl:value-of select="." />
         </ownerId>
     </xsl:template>
+    
+    
+    <xsl:template match="field[@name='date_active']">
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>activeDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template> 
+    
+    
+    <xsl:template match="field[@name='date_audit']">
+        <xsl:call-template name="renderDateElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>auditDate</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:template> 
     
     
     

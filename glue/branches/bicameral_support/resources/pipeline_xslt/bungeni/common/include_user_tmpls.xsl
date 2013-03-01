@@ -3,27 +3,34 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     exclude-result-prefixes="xs"
     version="2.0">
+    <xsl:import href="include_tmpls.xsl" />
     
     <xsl:template match="field[@name='active_p']">
-        <status>
+        <status isA="TLCTerm">
+            <value type="xs:string">
             <xsl:variable name="field_active" select="." />
             <xsl:choose >
                 <xsl:when test="$field_active eq 'A'">active</xsl:when>
                 <xsl:otherwise>inactive</xsl:otherwise>
             </xsl:choose>
+            </value>
         </status>
     </xsl:template>
     
     <xsl:template match="field[@name='first_name']">
-        <firstName>
-            <xsl:value-of select="." />
-        </firstName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>firstName</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>   
     
     <xsl:template match="field[@name='last_name']">
-        <lastName>
-            <xsl:value-of select="." />
-        </lastName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>lastName</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>  
     
     <!-- !+COMMON
@@ -43,25 +50,15 @@
     -->
     
     <xsl:template match="field[@name='gender']">
-        <gender isA="TLCTerm">
-            <xsl:if test="@displayAs">
-                <xsl:attribute name="showAs">
-                    <xsl:value-of select="@displayAs" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:value-of select="." />
-        </gender>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">gender</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>   
     
     <xsl:template match="field[@name='marital_status']">
-        <maritalStatus isA="TLCTerm">
-            <xsl:if test="@displayAs">
-                <xsl:attribute name="showAs">
-                    <xsl:value-of select="@displayAs" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:value-of select="." />
-        </maritalStatus>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">maritalStatus</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>   
     
     <xsl:template match="field[@name='date_of_birth']">
@@ -79,56 +76,73 @@
     -->
     
     <xsl:template match="field[@name='salutation']">
-        <salutation type="xs:string">
-            <xsl:value-of select="." />
-        </salutation>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>salutation</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>         
     
     <xsl:template match="field[@name='birth_country']">
-        <birthCountry type="xs:string">
-            <xsl:value-of select="." />
-        </birthCountry>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>birthCountry</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>
     
     
     
     <xsl:template match="field[@name='current_nationality']">
-        <currentNationality type="xs:string">
-            <xsl:value-of select="."/>
-        </currentNationality>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>nationality</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>    
     
     
     
     <xsl:template match="field[@name='national_id']">
-        <nationalId type="xs:string">
-            <xsl:value-of select="." />
-        </nationalId>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>nationalId</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
+        
     </xsl:template>   
     
     <xsl:template match="field[@name='login']">
-        <login type="xs:string">
-            <xsl:value-of select="." />
-        </login>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>login</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>    
     
     
     <xsl:template match="field[@name='salt']">
-        <salt type="xs:string">
-            <xsl:value-of select="." />
-        </salt>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>salt</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>    
     
     <xsl:template match="field[@name='email']">
-        <email type="xs:string">
-            <xsl:value-of select="." />
-        </email>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>email</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>  
     
     <xsl:template match="field[@name='birth_nationality']">
-        <birthNationality type="xs:string">
-            <xsl:value-of select="." />
-        </birthNationality>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>birthNationality</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>    
     
     
@@ -147,9 +161,11 @@
     -->
     
     <xsl:template match="field[@name='img_hash']">
-        <imageHash type="xs:string">
-            <xsl:value-of select="." />
-        </imageHash>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>imageHash</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>
     
     <xsl:template match="user_addresses">
@@ -174,48 +190,56 @@
     -->
     
     <xsl:template match="field[@name='city']">
-        <city type="xs:string">
-            <xsl:value-of select="."/>
-        </city>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>city</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>
     
     
     <xsl:template match="field[@name='postal_address_type']">
-        <postalAddressType type="xs:string">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <xsl:value-of select="."/>
-        </postalAddressType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">postalAddressType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="field[@name='logical_address_type']">
-        <logicalAddressType type="xs:string">
-            <xsl:attribute name="showAs" select="@displayAs"/>
-            <xsl:value-of select="."/>
-        </logicalAddressType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">logicalAddressType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='phone']">
-        <phone type="xs:string">
-            <xsl:value-of select="."/>
-        </phone>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>phone</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>      
     
     <xsl:template match="field[@name='street']">
-        <street type="xs:string">
-            <xsl:value-of select="."/>
-        </street>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>street</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>   
     
     <xsl:template match="field[@name='fax']">
-        <fax type="xs:string">
-            <xsl:value-of select="."/>
-        </fax>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>fax</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>      
     
     <xsl:template match="field[@name='zipcode']">
-        <zipCode type="xs:integer">
-            <xsl:value-of select="."/>
-        </zipCode>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">
+                <xsl:text>zipCode</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template>    
     </xsl:template>
     
     

@@ -104,7 +104,8 @@
     
     
    <!-- The content of the workflow event is duplicated here the href points to the full 
-       document -->
+   document -->
+    <!--
    <xsl:template match="workflowEvent">
        <xsl:copy>
            <xsl:attribute name="href">
@@ -121,7 +122,7 @@
            <xsl:apply-templates />
        </xsl:copy>
    </xsl:template>
-    
+    -->
     
     
    <xsl:template match="custom" />

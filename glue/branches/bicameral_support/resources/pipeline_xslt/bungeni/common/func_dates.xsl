@@ -45,6 +45,6 @@
         <xsl:sequence select="concat($arrInputDate[1],'T',$arrInputTime)" />
     </xsl:function>
     
- 
+    
     
 </xsl:stylesheet>

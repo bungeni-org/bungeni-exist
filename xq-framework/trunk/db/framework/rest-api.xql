@@ -229,13 +229,20 @@ declare
     %rest:POST
     %rest:path("/attachments")
     %rest:form-param("search", "{$search}","*")  
+    %rest:form-param("page", "{$page}", 1) 
+    %rest:form-param("perPage", "{$perPage}", 5) 
     %output:method("xml")
-    function local:search-for-attachments($search as xs:string*){
-        <attachments>{
+    function local:search-for-attachments($search as xs:string*, $page as xs:integer*, $perPage as xs:integer*){
         
-            for $i in local:get-attachments()/child::node()
+        let $allResults := local:get-attachments()/child::node()
+        let $startItem := if ($page eq 1) then
+                                xs:integer(1)
+                            else
+                                ((($page)-1)*$perPage)+1
+                            
+        let $pagedResult := for $i in subsequence($allResults, $startItem, $perPage)
             return 
-                if (matches($i/bu:name/string(), $search)) then
+                if (matches($i/bu:name/string(), $search, 'i')) then
                     <attachment>
                         <hash>{$i/bu:fileHash/string()}</hash>
                         <name>{$i/bu:name/string()}</name>
@@ -244,12 +251,20 @@ declare
                             <descr>{$i/bu:description/string()}</descr>
                         else
                             <descr>None</descr>}
-                        <statusDate>{datetime:format-dateTime(xs:dateTime($i/bu:statusDate/string()),"EEE, d MMM yyyy HH:mm:ss Z")}</statusDate>
+                        <statusDate>{$i/bu:statusDate/string()}</statusDate>
                     </attachment>
                 else 
                     () 
-                
-        }</attachments>
+        return 
+            <attachments>{
+                if(empty($pagedResult)) then
+                    <totalCount>0</totalCount>
+                else
+                    (<totalCount>{count($allResults)}</totalCount>,
+                    <page>{$page}</page>,
+                    <perPage>{$perPage}</perPage>,
+                    $pagedResult)
+            }</attachments>
 };
 
 (: 
@@ -259,10 +274,12 @@ declare
     %rest:GET
     %rest:path("/test/get/attachments")
     %rest:form-param("search", "{$search}","*")  
+    %rest:form-param("page", "{$page}", 1) 
+    %rest:form-param("perPage", "{$perPage}", 5) 
     %output:method("xml")
-    function local:test-get-search-attachmemnts($search as xs:string*){
+    function local:test-get-search-attachmemnts($search as xs:string*, $page as xs:integer*, $perPage as xs:integer*){
       
-       local:search-for-attachments($search)   
+       local:search-for-attachments($search, $page, $perPage)   
 };
 
 

@@ -311,12 +311,13 @@ def main_transform(config_file):
     print COLOR.HEADER + "Retrieving parliament information..." + COLOR.ENDC
     # look for the parliament document - and get the info which is used in the
     # following transformations
+    # returns a list
     parl_info = get_parl_info(cfg)
-    if parl_info == False:
-        print COLOR.FAIL,"ERROR: Could not find Parliament info :(", COLOR.ENDC
-        sys.exit()
     if parl_info == None:
         print COLOR.FAIL, "PARLINFO is NULL"
+        sys.exit()
+    if len(parl_info) == 0:
+        print COLOR.FAIL, "PARLINFO is EMPTY"
         sys.exit()
     print COLOR.OKGREEN,"Retrieved Parliament info...", parl_info, COLOR.ENDC
     print COLOR.OKGREEN + "Seeking attachments..." + COLOR.ENDC
@@ -395,7 +396,15 @@ def main_queue(config_file, afile):
     otherwise a list with a map containing info about the chamber
     """
     parl_info = get_parl_info(cfg)
-    if parl_info == False:
+    
+    if parl_info == None:
+        print "XXXX PARL_INFO WAS NULL"
+        return in_queue
+    if len(parl_info) == 0:
+        print "XXXX PARL_INFO WAS 0"
+        return in_queue
+    if cfg.get_bicameral() and len(parl_info) < 2:
+        print "XXXX PARL_INFO WAS LESS THAN 2"
         return in_queue
     transformer = Transformer(cfg)
     input_map = {

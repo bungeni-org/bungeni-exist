@@ -124,7 +124,7 @@ class QueueRunner(Thread):
         try:
             rmq = RabbitMQClient()
             rmq.consume_msgs()
-        except e:
+        except Exception, e:
             print "There was an exception processing the queue", e
         finally:
             self.latch.countDown()

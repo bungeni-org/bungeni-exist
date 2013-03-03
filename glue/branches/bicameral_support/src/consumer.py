@@ -36,6 +36,9 @@ from java.lang import Thread
 from java.util import (
         ArrayList
         )
+from java.util.concurrent import (
+        CountDownLatch
+        )
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
 __copyright__ = "Copyright 2011, Bungeni"
@@ -113,14 +116,18 @@ class RabbitMQClient:
                     LOG.error("Error while closing connection", ex)
 
 class QueueRunner(Thread):
+    
+    def __init__(self, cd_latch):
+        self.latch = cd_latch
 
     def run(self):
         try:
             rmq = RabbitMQClient()
             rmq.consume_msgs()
-        except:
-            print "There was an exception processing the queue"
-
+        except e:
+            print "There was an exception processing the queue", e
+        finally:
+            self.latch.countDown()
 
 if (len(sys.argv) >= 2):
     # process input command line options
@@ -131,15 +138,13 @@ else:
     print " config.ini and time interval file must be input parameters."
     sys.exit()
 
-thread_list = ArrayList()
-
 while True:
-    time.sleep(int(__time_int__)) # of seconds to wait till next consumption of messages is done.
-    qr_thread = QueueRunner()
+    time.sleep(int(__time_int__))
+    cd_latch = CountDownLatch(1)
+    qr_thread = QueueRunner(cd_latch)
     qr_thread.start()
-    thread_list.add(qr_thread)
-    for thread in thread_list:
-        try:
-            thread.join()
-        except InterruptedException, e:
-            print "QueueRunner thread was interrupted !" , e
+    try:
+        cd_latch.await()
+    except InterruptedException, e:
+        print "QueueRunner thread was interrupted !", e
+    

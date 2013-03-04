@@ -54,7 +54,8 @@ from configs import (
 
 from gen_utils import (
     COLOR,
-    get_module_file
+    get_module_file,
+    ParliamentCacheInfo
     )
 
 from utils import (
@@ -99,6 +100,10 @@ def mkdir_p(path):
             pass
         else: raise
 
+def __setup_tmp_dir__(cfg):
+    if not os.path.isdir(cfg.get_temp_files_folder()):
+        mkdir_p(cfg.get_temp_files_folder())
+    
 def __setup_tmp_dirs__(cfg):
 
     if not os.path.isdir(cfg.get_po_files_folder()):
@@ -107,8 +112,17 @@ def __setup_tmp_dirs__(cfg):
     if not os.path.isdir(cfg.get_i18n_catalogues_folder()):
         mkdir_p(cfg.get_i18n_catalogues_folder())
 
-def __setup_output_dirs__(cfg):
+def __setup_cache_dirs__(cfg):
 
+    if not os.path.isdir(cfg.get_cache_file_folder()):
+        mkdir_p(cfg.get_cache_file_folder())
+    else:
+        ### clear the cache file during every run of the consumer
+        __empty_output_dir__(cfg.get_cache_file_folder())
+    
+
+def __setup_output_dirs__(cfg):
+        
     if not os.path.isdir(cfg.get_xml_output_folder()):
         mkdir_p(cfg.get_xml_output_folder())
     else:
@@ -124,7 +138,20 @@ def __setup_output_dirs__(cfg):
     if not os.path.isdir(cfg.get_temp_files_folder()):
         mkdir_p(cfg.get_temp_files_folder())
 
-def get_parl_info(cfg):
+def setup_consumer_directories(config_file):
+    cfg = TransformerConfig(config_file)
+    __setup_tmp_dir__(cfg)
+    __setup_cache_dirs__(cfg)
+
+def get_parl_info(config_file):
+    """
+    Returns a ParliamentCacheInfo object (see gen_utils)
+    This object consists of :
+        a list containing 1 or more parliaments
+        a variable indicating number of chambers in the legislature
+    """
+  
+    cfg = TransformerConfig(config_file)
     """
     !+BICAMERAL
     Returns a list containing a map of active parliaments
@@ -132,7 +159,13 @@ def get_parl_info(cfg):
     and 1 map when its unicameral 
     """
     piw = ParliamentInfoWalker({"main_config":cfg})
-    parl_info = []
+
+    no_of_parliaments_required = 1
+    if cfg.get_bicameral():
+        no_of_parliaments_required = 2
+    
+    pc_info = ParliamentCacheInfo(no_of_parls = no_of_parliaments_required, p_info = [])
+    #parl_info = []
     """
     Check first if we have a cached copy
     """
@@ -141,16 +174,16 @@ def get_parl_info(cfg):
         # if the cache file exists
         # get the parliament info from cache
         if piw.is_cache_full():
-            print "INFO: GETTING PARLIAMENT INFO  FROM CACHE"
-            parl_info = piw.get_from_cache()
+            pc_info.parl_info = piw.get_from_cache()
+            print "INFO: GETTING PARLIAMENT INFO  FROM CACHE", pc_info
         else:
-            print "INFO: PARLIAMENT INFO CACHE IS NOT FULL"
-            parl_info = _walk_get_parl_info(piw, cfg)
+            pc_info.parl_info = _walk_get_parl_info(piw, cfg)
+            print "INFO: PARLIAMENT INFO CACHE IS NOT FULL", pc_info
             # walk some more
     else:
         print "INFO: CACHED FILE DOES NOT EXIST, SEEKING INFO"
-        parl_info = _walk_get_parl_info(piw, cfg)
-    return parl_info
+        pc_info.parl_info = _walk_get_parl_info(piw, cfg)
+    return pc_info
 
 def _walk_get_parl_info(piw, cfg):
     # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
@@ -159,12 +192,8 @@ def _walk_get_parl_info(piw, cfg):
     piw.walk(cfg.get_input_folder())
     if piw.is_cache_full():
         return piw.get_from_cache()
-    #if piw.object_info is None:
-    #    return False
-    #else:
-    #    return piw.object_info
     else:
-        return False
+        return None
 
 
 
@@ -307,19 +336,20 @@ def main_transform(config_file):
     """
     cfg = TransformerConfig(config_file)
     # create the output folders
+    __setup_cache_dirs__(cfg)
     __setup_output_dirs__(cfg)
     print COLOR.HEADER + "Retrieving parliament information..." + COLOR.ENDC
     # look for the parliament document - and get the info which is used in the
     # following transformations
     # returns a list
-    parl_info = get_parl_info(cfg)
-    if parl_info == None:
+    pc_info = get_parl_info(cfg)
+    if pc_info == None:
         print COLOR.FAIL, "PARLINFO is NULL"
         sys.exit()
-    if len(parl_info) == 0:
+    if len(pc_info.parl_info) == 0:
         print COLOR.FAIL, "PARLINFO is EMPTY"
         sys.exit()
-    print COLOR.OKGREEN,"Retrieved Parliament info...", parl_info, COLOR.ENDC
+    print COLOR.OKGREEN,"Retrieved Parliament info...", pc_info, COLOR.ENDC
     print COLOR.OKGREEN + "Seeking attachments..." + COLOR.ENDC
     do_bind_attachments(cfg)
     print COLOR.OKGREEN + "Done with attachments..." + COLOR.ENDC
@@ -328,7 +358,7 @@ def main_transform(config_file):
     do_transform(
         cfg,
         {
-         "parliament-info" : param_parl_info(cfg, parl_info),
+         "parliament-info" : param_parl_info(cfg, pc_info.parl_info),
          "type-mappings": param_type_mappings()
         } 
         )
@@ -361,7 +391,7 @@ def list_uniqifier(seq):
     seen_add = seen.add
     return [ x for x in seq if x not in seen and not seen_add(x)]
 
-def main_queue(config_file, afile):
+def main_queue(config_file, afile, parliament_cache_info):
     """
     
     Entry Point for Queue invocation, processes one file at a time
@@ -373,7 +403,7 @@ def main_queue(config_file, afile):
     
     @param config_file  configuration file
     @param afile        path to the serialized file
-    
+    @param parliament_cache_info object of type gen_utils.ParliamentCacheInfo
     @return Boolean 
     """
     print "[checkpoint] got file " + afile
@@ -395,6 +425,7 @@ def main_queue(config_file, afile):
     a list with 2 maps containing info about the 2 chambers
     otherwise a list with a map containing info about the chamber
     """
+    """"
     parl_info = get_parl_info(cfg)
     
     if parl_info == None:
@@ -406,9 +437,10 @@ def main_queue(config_file, afile):
     if cfg.get_bicameral() and len(parl_info) < 2:
         print "XXXX PARL_INFO WAS LESS THAN 2"
         return in_queue
+    """
     transformer = Transformer(cfg)
     input_map = {
-        "parliament-info" : param_parl_info(cfg, parl_info),
+        "parliament-info" : param_parl_info(cfg, parliament_cache_info.parl_info),
         "type-mappings" : param_type_mappings()         
         }
     transformer.set_params(input_map)

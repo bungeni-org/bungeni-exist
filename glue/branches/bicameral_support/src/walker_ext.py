@@ -74,7 +74,10 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         super(ParliamentInfoWalker, self).__init__(input_params)
         # check if the system is setup for unicameral or bicameral 
         self.bicameral = self.input_params["main_config"].get_bicameral()
-        self.cache_file = self.input_params["main_config"].get_temp_files_folder() + __parl_info__
+        self.cache_file = "%s%s" % (
+            self.input_params["main_config"].get_cache_file_folder(),
+            __parl_info__
+            )
         self.parliament_info = {}
     
     def cache_file_exists(self):
@@ -170,11 +173,20 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         self.append_element_into_cache_document(element_to_import)
 
     def write_cache_doc_to_file(self, cache_doc):
-        fw = FileWriter(self.cache_file)
-        cache_doc.write(fw)
-        fw.close()
-
-
+        print "XXXX WRITE CACHE TO FILE ", cache_doc.getRootElement().getDocument().asXML()
+        format = OutputFormat.createPrettyPrint()
+        writer = XMLWriter(
+            FileWriter(self.cache_file),
+            format
+            )
+        try:
+            writer.write(cache_doc)
+            writer.flush()
+        except Exception, e:
+            print "Error WRITE_CACHE_DOC_TO_FILE ", e
+        finally:
+            close_quietly(writer)
+    
     def does_parliament_exists_in_cache(self, parliament_id):
         cache_doc = self.__doc_cache_file()
         found_parl_node = cache_doc.selectSingleNode(
@@ -212,14 +224,17 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         cache_doc = self.__doc_cache_file()
         # get the child elements
         list_of_elements = cache_doc.getRootElement().elements()
+        print "XXXX LIST OF ELEMENTS IN CACHE, ", list_of_elements 
         # get a deep copy of the element to be imported, this also detaches the node 
         # from the parent
         element_to_copy = element_to_import.createCopy()
+        print "XXXX LIST OF ELEMENTS TO COPY, ", element_to_copy 
         list_of_elements.add(element_to_copy)
         #cache_doc.importNode(element_to_import, True)
         #cache_doc.getRootElement().addElement(
         ##    element_to_import
         #    )
+        print "XXXX LIST OF ELEMENTS AFTER COPY, ", list_of_elements 
         self.write_cache_doc_to_file(cache_doc)    
    
     def fn_callback(self, input_file_path):
@@ -242,10 +257,14 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
                 # cache 
                 from os import path
                 if path.exists(self.cache_file):
+                    print "XXXX CACHE FILE EXISTS"
                     if self.is_cache_full() == False:
+                        print "XXXX CACHE IS NOT FULL"
                         # inject into file after contenttypes node
                         # check if the parliament info is not already cached
+                        print "XXXX APPENDING TO CACHE"
                         self.append_to_cache(input_file_path)
+                        #return (True, the_parl_doc)
                 else:
                     # new document
                     self.new_cache(input_file_path)
@@ -387,8 +406,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                 output_file_name_wo_prefix  =   pipe_type + "_"
                 #truncate to first-3 characters only
                 truncated_prefix = output_file_name_wo_prefix[:3]
-                on_xml_file = "on_" + truncated_prefix
-                print "XXXXXX OUT_FILE", on_xml_file
+                on_xml_file = "on_%s_" % truncated_prefix
                 out_files = self.input_params["transformer"].run(
                      input_file_path,
                      self.input_params["main_config"].get_xml_output_folder() + on_xml_file ,
@@ -400,12 +418,6 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     print COLOR.OKBLUE, "[checkpoint] not transformed - requeued", COLOR.ENDC
                     return (True, False)
                 else:
-                    if pipe_type == "parliament":
-                        # if it was a parliament info document update cached copy 
-                        # to remain upto date.
-                        tmp_folder = self.input_params["main_config"].get_temp_files_folder()
-                        shutil.copyfile(input_file_path, tmp_folder + __parl_info__)
-                        print COLOR.WARNING, "[checkpoint] - Updated parliament info !", COLOR.ENDC
                     return (out_files[0], True)
             # !+FIX_THIS (ao, 22 Aug 2012) Currently these are not being processed so removing them 
             # from queue programmatically

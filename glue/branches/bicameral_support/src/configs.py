@@ -44,13 +44,8 @@ class TransformerConfig(Config):
     def get_bungeni_custom(self):
         return self.get("general", "bungeni_custom_folder")
  
- 
-    def get_legislature_identifier(self):
-        return self.__legislature__()["identifier"]
- 
     def get_legislature_start_date(self):
         return self.__legislature__()["start_date"]
- 
  
     def get_legislature_election_date(self):
         return self.__legislature__()["election_date"]
@@ -87,6 +82,9 @@ class TransformerConfig(Config):
 
     def get_temp_files_folder(self):
         return self.get("general","temp_files_folder")
+
+    def get_cache_file_folder(self):
+        return self.get("general","cache_file_folder")
 
     def get_pipelines(self):
         # list of key,values pairs as tuples 

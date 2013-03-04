@@ -33,6 +33,19 @@ class COLOR(object):
         self.ENDC = ''
 
 
+class ParliamentCacheInfo:
+    
+    def __init__(self, no_of_parls = 1, p_info = []):
+        self.no_of_parliaments = no_of_parls
+        self.parl_info = p_info
+    
+    def is_cache_satisfied(self):
+        print "XXXX is_cache_satisfied ", self.parl_info
+        if self.parl_info is None:
+            return False
+        else:
+            return self.no_of_parliaments == len(self.parl_info)
+
 def close_quietly(handle):
     """
     Always use this close to close any File, Stream or Response Handles

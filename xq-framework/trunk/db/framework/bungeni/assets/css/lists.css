@@ -71,12 +71,11 @@ ul.ls-timeline {
     margin:0 auto;
     margin-top:10px;
     display:block;
-    list-style-type:";
     padding:0 0 0 15px;
     width:96% !important;
+    list-style-type: square;
 }
 ul.ls-timeline li {
-    display:block;
     color:#494949;
     margin-bottom:5px;
 }

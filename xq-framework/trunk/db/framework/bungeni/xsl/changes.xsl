@@ -118,7 +118,6 @@
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </div>
-                                        <span class="tgl-pad-right">►</span>
                                     </li>
                                 </xsl:for-each>
                             </ul>

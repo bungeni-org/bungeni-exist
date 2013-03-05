@@ -413,7 +413,33 @@
     <menugroups>
         <menu for="/" name="mainnav">
             <div xmlns="http://www.w3.org/1999/xhtml" class="menu" id="mainnav">
-                <ul id="portal-globalnav">
+                <nav>
+                    <ul>
+                        <li class="lower-hse">
+                            <a href="assembly.html">National Assembly</a>
+                            <ul class="hse-list">
+                                <li>
+                                    <a href="assembly.html">business</a>
+                                </li>
+                                <li>
+                                    <a href="assembly.html">members</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="upper-hse">
+                            <a href="senate.html">Senate</a>
+                            <ul class="hse-list">
+                                <li>
+                                    <a href="senate.html">business</a>
+                                </li>
+                                <li>
+                                    <a href="senate.html">members</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>                   
+                <!--ul id="portal-globalnav">
                     <li>
                         <a href="home" name="home">
                             <i18n:text key="home">home</i18n:text>
@@ -429,7 +455,7 @@
                             <i18n:text key="members">members</i18n:text>
                         </a>
                     </li>
-                </ul>
+                </ul-->
             </div>
         </menu>
         <menu for="home" name="home">

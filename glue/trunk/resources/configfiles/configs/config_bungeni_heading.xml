@@ -24,19 +24,17 @@
             what it wants to do with input parameters, since they can be carried over,
             by serializing them into the document being pipelined -->
         <parameters>
-            <parameter name="country-code" value="cc" />
-            <parameter name="parliament-id"/>
-            <parameter name="parliament-election-date"/>
-            <parameter name="for-parliament"/>
+            <parameter name="parliament-info" type="xml" />
+            <parameter name="type-mappings" type="xml" />
         </parameters>
         
         <xslt   step="1" 
             name="groupingLevel1" 
-            href="pipeline_xslt/bungeni/heading/grouping_level1.xsl"/>
+            href="pipeline_xslt/bungeni/heading/1_grouping.xsl"/>
         
         <xslt   step="2" 
             name="groupingLevel2" 
-            href="pipeline_xslt/bungeni/heading/grouping_level2.xsl"/>               
+            href="pipeline_xslt/bungeni/heading/2_grouping.xsl"/>               
         
         <xslt   step="3" 
             name="appendBungeniNS" 

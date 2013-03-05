@@ -6,7 +6,8 @@
 
     <!-- INCLUDE FUNCTIONS -->
     <xsl:include href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl"/>
-
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
+    
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Feb 11, 2013</xd:p>
@@ -16,13 +17,11 @@
     </xd:doc>
 
     <!-- these are input parameters to the transformation a-->
-    <!-- these are input parameters to the transformation a-->
-    <xsl:param name="country-code"/>
-    <xsl:param name="parliament-id"/>
-    <xsl:param name="parliament-election-date"/>
-    <xsl:param name="for-parliament"/>
-    <xsl:param name="type-mappings"/>
-
+    
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
+    
+    
+    
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -62,6 +61,11 @@
 
                 <xsl:attribute name="id" select="$debate_record_id"/>
 
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
+                
                 <docType isA="TLCTerm">
                     <value type="xs:string">
                         <xsl:value-of select="$content-type-uri-name"/>
@@ -90,6 +94,14 @@
 
                 <xsl:copy-of select="sitting | permissions | contained_groups"/>
             </debateRecord>
+            
+            <xsl:call-template name="incl_legislature">
+                <xsl:with-param name="leg-uri" select="$legislature-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
+            
+            
             <legislature isA="TLCConcept" href="{$for-parliament}">
                 <electionDate type="xs:date" select="{$parliament-election-date}"/>
                 <xsl:copy-of

@@ -23,5 +23,10 @@
 <path>/glue-integrator/lib/sardine/slf4j-api-1.6.2.jar</path>
 <path>/glue-integrator/lib/zip4j/zip4j_1.2.8.jar</path>
 <path>/glue-integrator/lib/transformer/odttransformer.jar</path>
+<path>/glue-integrator/lib/jyson/jyson-1.0.2.jar</path>
+<path>/glue-integrator/lib/rabbitmq/mime-util-2.1.3.jar</path>
+<path>/glue-integrator/lib/rabbitmq/rabbitmq-client-tests.jar</path>
+<path>/glue-integrator/lib/rabbitmq/rabbitmq-client.jar</path>
+<path>/glue-integrator/lib/jaxen/jaxen.jar</path>
 </pydev_pathproperty>
 </pydev_project>

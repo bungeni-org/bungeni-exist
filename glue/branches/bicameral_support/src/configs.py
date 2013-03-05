@@ -14,10 +14,12 @@ class Config(object):
     Provides access to the configuration file via ConfigParser
     """
     
-    def __init__(self, config_file):
+    def __init__(self, cfg_file):
         self.cfg = ConfigParser.RawConfigParser()
-        print "Reading config file : " , os.path.abspath(config_file)
-        self.cfg.read(config_file)
+        print "Reading config file : " , cfg_file
+        self.cfg.read(cfg_file)
+        print "Finished reading config_file "
+
     
     def get(self, section, key):
         return self.cfg.get(section, key)

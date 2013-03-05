@@ -334,6 +334,7 @@ def main_transform(config_file):
     """
     process the -transform option by running the transformation
     """
+    print "IN MAIN TRANSFORM" , config_file
     cfg = TransformerConfig(config_file)
     # create the output folders
     __setup_cache_dirs__(cfg)
@@ -342,7 +343,7 @@ def main_transform(config_file):
     # look for the parliament document - and get the info which is used in the
     # following transformations
     # returns a list
-    pc_info = get_parl_info(cfg)
+    pc_info = get_parl_info(config_file)
     if pc_info == None:
         print COLOR.FAIL, "PARLINFO is NULL"
         sys.exit()

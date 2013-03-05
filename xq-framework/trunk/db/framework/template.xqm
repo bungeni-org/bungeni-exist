@@ -281,7 +281,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     tab is slight more involved hence the nested if 
     :)
     
-    else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:li) then (
+    (:else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:li) then (
 			if ($route/navigation) then (
 				if ($content/self::xh:li[xh:a/@name=$route/navigation/text()]) then (
 				    <xh:li class="selected"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
@@ -291,7 +291,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			)
 			else
 			  $content
-	)
+	):)
     (:~
     Set the sub-navigation tab to the active one as specified in the route
     :)

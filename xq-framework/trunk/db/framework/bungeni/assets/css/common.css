@@ -3,7 +3,6 @@ body {background-color:#eeeeee}
 div#header {
     width:100%;
     margin:0;
-    height:116px;
     background-color:#434343;
     padding-top:0;
 }
@@ -11,10 +10,9 @@ div#sub-header {
     clear:none;
     width:100%;
     margin:0;
-    margin-top:-4px;
+    margin-top:-3px;
     height:27px;
     background-color:#7e7e7e;
-    padding-top:0px;
 }
 
 div#header-banner {
@@ -71,10 +69,9 @@ h1.title {
 .lev-1-search {
     margin: auto 0px 10px auto;
     float: right !important;
-    width: 600px;
+    width: 400px;
     height: 40px;
     text-align: right;
-    margin-top: -50px !important;
     position: relative;
 }
 
@@ -579,4 +576,183 @@ tbody tr.items:hover {
 -------------------------------------------------------------- */
 .dhx_cal_navline .dhx_cal_date {
     font-size: 14px !important;
+}
+
+/* MENU
+-------------------------------------------------------------- */
+@font-face {
+    font-family: "Droid Sans";
+    src: url(../fonts/DroidSans.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Droid Sans";
+    src: url("../fonts/DroidSans-Bold.ttf");
+    font-weight: bold;
+}
+
+.nav * {
+    font-family: 'Droid Sans', sans-serif;
+}
+
+nav {
+	margin: 0 auto; 
+	text-align: left;
+}
+
+nav ul ul.mouseover {
+	display: none;
+}
+	nav ul li:hover > ul.mouseover {
+		display: block;
+	}
+
+nav ul {
+    padding:0;
+    margin:0;
+	background: #efefef; 
+	background: linear-gradient(top, #efefef 0%, #bbbbbb 100%);  
+	background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%); 
+	background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%); 
+	box-shadow: 0px 0px 9px rgba(0,0,0,0.15);
+	list-style: none;
+	position: relative;
+	display: inline-table;
+}
+	nav ul:after {
+		content: ""; 
+		clear: both; 
+		display: block;
+	}
+
+	nav ul li {
+		float: left;
+	}
+        /* The National Assembly */
+        nav ul li.lower-hse {
+    	    display:inline;
+    	    width:350px;       
+            background: linear-gradient(top, #7e7e7e 0%, #696969 100%);  
+            background: -moz-linear-gradient(top, #7e7e7e 0%, #696969 100%); 
+            background: -webkit-linear-gradient(top, #7e7e7e 0%,#696969 100%); 	
+            }
+            nav ul li.lower-hse > a {
+                font-weight:bold;
+                color:#eeeeee;
+                font-size:16px;
+            }
+	   
+        /* The Senate */
+        nav ul li.upper-hse {
+            width:350px;    
+            background: linear-gradient(top, #585858 0%, #434343 100%);  
+            background: -moz-linear-gradient(top, #585858 0%, #434343 100%); 
+            background: -webkit-linear-gradient(top, #585858 0%,#434343 100%); 		    
+            }
+            nav ul li.upper-hse > a {
+                font-weight:bold;
+                color:#eeeeee;
+                font-size:16px;                
+            }
+	   
+		nav ul li:hover {
+               -webkit-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
+                -moz-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
+                box-shadow: rgba(0,0,0,.2) 2px 4px 4px;                
+            }
+    			nav ul li:hover a {
+    				color: #fff;
+    			}
+		
+		nav ul > li > a {
+			display: inline-block; 
+			padding: 10px 20px;
+			text-decoration: none;
+		}
+		
+    /* HOUSE TOP-NAVS */	
+    nav ul ul.hse-list {
+        margin:0;
+        padding:0;
+        display:inline-block;
+        background:transparent;
+        
+    }
+    nav ul ul.hse-list li {
+        display:inline;
+        padding:0 5px;
+        background-color:transparent;
+    }
+    nav ul ul.hse-list li a {
+        padding:0;
+        margin:0;
+        color:#dedede;   
+        background-color:transparent;
+    } 
+    nav ul ul.hse-list li a:hover {
+        color:#ffffff;   
+    }        
+    
+    .subnav {
+        /*background: linear-gradient(top, #239e45 0%, #037d2e 100%);  
+        background: -moz-linear-gradient(top, #239e45 0%, #037d2e 100%); 
+        background: -webkit-linear-gradient(top, #239e45 0%,#037d2e 100%);*/         
+    }
+    .subnav ul {
+        margin:0;
+        padding:0;
+        display:inline-block;
+        background:transparent;
+    }
+    .subnav ul li {
+        display:inline;
+        padding:0 5px;
+        background-color:transparent;
+    }
+    .subnav ul li a {
+        padding:0;
+        margin:0;
+        color:#dedede;   
+        background-color:transparent;
+    }    
+    .subnav ul li a:hover {
+        color:#ffffff;   
+    }      
+		
+	nav ul ul.mouseover {
+		background: #555556; 
+		border-radius: 0px; 
+		padding: 0;
+		position: absolute; top: 100%;
+	}
+		nav ul ul.mouseover li {
+			float: none; 
+			border-top: 1px solid #6b727c;
+			border-bottom: 1px solid #555556; 
+			position: relative;
+		}
+			nav ul ul.mouseover li a {
+				padding: 15px 20px;
+				color: #fff;
+			}	
+				nav ul ul.mouseover li a:hover {
+					background: #444;
+				}
+		
+	nav ul ul.mouseover ul {
+		position: absolute; 
+		left: 100%; 
+		top:0;
+	}
+/*------------------------------*/
+
+.assembly {
+    background: linear-gradient(top, #239e45 0%, #037d2e 100%);  
+    background: -moz-linear-gradient(top, #239e45 0%, #037d2e 100%); 
+    background: -webkit-linear-gradient(top, #239e45 0%,#037d2e 100%);             
+}
+
+.senate {
+    background: linear-gradient(top, #d3302f 0%, #bb0025 100%);  
+    background: -moz-linear-gradient(top, #d3302f 0%, #bb0025 100%); 
+    background: -webkit-linear-gradient(top, #d3302f 0%,#bb0025 100%);           
 }

@@ -87,8 +87,8 @@ class ParseXML(object):
         return self.xmldoc
 
     def write_to_disk(self):
-        print "XXXX write_to_disk ", self.xmlfile
-        print "XXXX write_to_disk writing dom ", self.xmldoc.asXML()
+        #print "XXXX write_to_disk ", self.xmlfile
+        #print "XXXX write_to_disk writing dom ", self.xmldoc.asXML()
         format = OutputFormat.createPrettyPrint()
         writer = XMLWriter(FileWriter(self.xmlfile), format)
         try:

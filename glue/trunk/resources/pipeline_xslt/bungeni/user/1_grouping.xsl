@@ -7,6 +7,7 @@
     
     <!-- INCLUDE FUNCTIONS -->
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />    
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -18,11 +19,7 @@
     
     <!-- INPUT PARAMETERS TO TRANSFORM-->
     
-    <xsl:param name="country-code"  />
-    <xsl:param name="parliament-id" />
-    <xsl:param name="parliament-election-date"  />
-    <xsl:param name="for-parliament" />
-    <xsl:param name="type-mappings" />
+    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_params.xsl" />
     
     <xsl:template match="/">
         <xsl:apply-templates />
@@ -41,20 +38,41 @@
         <!-- ROOT ELEMENT OF DOCUMENT -->
         <ontology for="user">
             
-            <xsl:variable name="full-user-identifier"
-                select="translate(concat($country-code, '.',field[@name='last_name'], '.', field[@name='first_name'], '.', field[@name='date_of_birth'], '.', field[@name='user_id']),' ','')" />
-            
+            <xsl:variable name="full-user-identifier">
+                <xsl:choose>
+                    <xsl:when test="field[@name='date_of_birth']">
+                        <xsl:value-of select="translate(concat($country-code, '.',field[@name='last_name'], '.', field[@name='first_name'], '.', field[@name='date_of_birth'], '.', field[@name='user_id']),' ','')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="translate(concat($country-code, '.',field[@name='last_name'], '.', field[@name='first_name'], '.', field[@name='login']),' ','')" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
             <user id="bungeniUser" isA="TLCPerson" >
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="field[@name='language']" />
                 </xsl:attribute>
                 
-                <xsl:variable name="item_number" select="field[@name='user_id']"></xsl:variable>
+                <xsl:variable name="user_id" select="field[@name='user_id']"></xsl:variable>
                 
                 <xsl:attribute name="uri" 
-                    select="concat('/ontology/Person/',$full-user-identifier)" 
+                    select="concat($uri-base, '/', $content-type-uri-name, '/',$full-user-identifier)" 
                 />
                 
+                <xsl:attribute name="unique-id">
+                    <!-- this attribute uniquely identifies the document in the system -->
+                    <xsl:value-of select="concat(
+                        $content-type-element-name, '.', $user_id
+                        )" />
+                </xsl:attribute>
+                
+                
+                <xsl:if test="$origin-parliament ne 'None'">
+                <xsl:call-template name="incl_origin">
+                    <xsl:with-param name="parl-id" select="$parliament-id" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                </xsl:call-template>
+                </xsl:if>
                 <xsl:copy-of select="field[
                     @name='first_name' or 
                     @name='last_name' or 
@@ -79,11 +97,32 @@
             </user>
             <xsl:copy-of select="image"/>
             <xsl:copy-of select="subscriptions"/>
-            
+            <!--user is independent of legislature too -->
+            <!--
+            <xsl:call-template name="incl_legislature">
+                <xsl:with-param name="leg-uri" select="$legislature-full-uri" />
+                <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
+                <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
+            </xsl:call-template>
+            -->
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <withPermissions href="#documentPermissions" />
             </bungeni>
-                      
+
+
+            <custom>
+                <xsl:copy-of select="$type-mappings" />
+                <bungeni_doc_type>
+                    <xsl:value-of select="$bungeni-content-type"/>
+                </bungeni_doc_type>
+                <uri-base><xsl:value-of select="$uri-base" /></uri-base>
+                <legislature-uri><xsl:value-of select="$legislature-uri" /></legislature-uri>
+                <parliament-uri><xsl:value-of select="$parliament-uri" /></parliament-uri>
+                <legislature-full-uri><xsl:value-of select="$legislature-full-uri" /></legislature-full-uri>
+                <parliament-full-uri><xsl:value-of select="$parliament-full-uri" /></parliament-full-uri>
+            </custom>
+            
+
         </ontology>
     </xsl:template>
     

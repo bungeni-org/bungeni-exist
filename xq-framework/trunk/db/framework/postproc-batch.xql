@@ -8,8 +8,8 @@ let $getqrystr := xs:string(request:get-query-string())
 let $uri := xs:string(request:get-parameter("uri",'none'))
 let $sigs := pproc:update-signatories()
 let $members := pproc:update-groups()
-let $events := pproc:update-events()
-let $attachments := pproc:update-attachments()
+(:let $events := pproc:update-events()
+let $attachments := pproc:update-attachments() :)
 let $sittings := pproc:update-sittings()
 
 return 
@@ -17,10 +17,6 @@ return
         $sigs
     else if ($members/node()) then 
         $members        
-    else if ($events/node()) then 
-        $events
-    else if ($attachments/node()) then 
-        $attachments     
     else if ($sittings/node()) then 
         $sittings        
     else 

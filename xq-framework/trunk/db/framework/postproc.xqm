@@ -181,26 +181,6 @@ declare function pproc:update-document($uri as xs:string) {
         let $up-sigs := if (empty($signatory/bu:person)) then update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $signatory else ()
         return 
             (),            
-        (: it's events :)
-        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else  (@internal-uri=$uri)]/ancestor::bu:ontology
-        for $wfe in $doc//bu:document/bu:workflowEvents/bu:workflowEvent
-        let $doc-node := $wfe/ancestor::bu:document
-        let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
-        let $event := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[bu:docId eq $wfe/bu:docId]
-        return (
-           update replace $event/bu:eventOf/bu:refersTo/@href with $docuri,
-           update replace $doc-node/bu:workflowEvents/bu:workflowEvent[bu:docId=$wfe/bu:docId]/@href with if($event/@uri) then $event/@uri else "E_DOC_NOT_FOUND"
-                   ),
-        (: it's attachments :)
-        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else  (@internal-uri=$uri)]/ancestor::bu:ontology
-        for $attnode in $doc/bu:attachments/bu:attachment
-        let $doc-node := $attnode/ancestor::bu:ontology
-        let $docuri := if ($doc-node/bu:document/@uri) then data($doc-node/bu:document/@uri) else data($doc-node/bu:document/@internal-uri)
-        let $attdoc := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Attachment']/ancestor::bu:document[bu:attachmentId eq $attnode/bu:attachmentId]
-        return (
-                update replace $attdoc/bu:attachmentOf/bu:refersTo/@href with xs:string($docuri),
-                update insert attribute href { xs:string($docuri) || "@/attachment" || $attnode/bu:attachmentId } into $doc-node/bu:attachments/bu:attachment[bu:attachmentId=$attnode/bu:attachmentId]
-               ),                   
         (: it's sittings :)
         let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[@uri=$uri]/ancestor::bu:ontology
         for $anItem in $doc/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule

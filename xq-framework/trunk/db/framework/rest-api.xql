@@ -228,19 +228,19 @@ declare function local:get-attachment-hash-by-name($name as xs:string){
 declare
     %rest:POST
     %rest:path("/attachments")
-    %rest:form-param("search", "{$search}","*")  
-    %rest:form-param("page", "{$page}", 1) 
-    %rest:form-param("perPage", "{$perPage}", 5) 
+    %rest:form-param("search", "{$search}","")  
+    %rest:form-param("page", "{$page}", "1") 
+    %rest:form-param("perPage", "{$perPage}", "2") 
     %output:method("xml")
-    function local:search-for-attachments($search as xs:string*, $page as xs:integer*, $perPage as xs:integer*){
-        
+    function local:search-for-attachments($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
+
         let $allResults := local:get-attachments()/child::node()
-        let $startItem := if ($page eq 1) then
+        let $startItem := if (xs:integer($page) eq 1) then
                                 xs:integer(1)
                             else
-                                ((($page)-1)*$perPage)+1
+                                ((xs:integer($page)-1)*xs:integer($perPage))+1
                             
-        let $pagedResult := for $i in subsequence($allResults, $startItem, $perPage)
+        let $pagedResult := for $i in subsequence($allResults, xs:integer($startItem), xs:integer($perPage))
             return 
                 if (matches($i/bu:name/string(), $search, 'i')) then
                     <attachment>
@@ -255,12 +255,25 @@ declare
                     </attachment>
                 else 
                     () 
+                    
+        let $allResultsMatched := for $j in $allResults
+            return
+                if (matches($j/bu:name/string(), $search, 'i')) then 
+                    <name>{$j/bu:name/string()}</name>
+                else
+                    ()
+                    
+        let $page := if(count($allResultsMatched) eq 1) then
+                                xs:integer(1)
+                            else
+                                $page
+        
         return 
             <attachments>{
                 if(empty($pagedResult)) then
                     <totalCount>0</totalCount>
                 else
-                    (<totalCount>{count($allResults)}</totalCount>,
+                    (<totalCount>{count($allResultsMatched)}</totalCount>,
                     <page>{$page}</page>,
                     <perPage>{$perPage}</perPage>,
                     $pagedResult)
@@ -273,15 +286,14 @@ declare
 declare
     %rest:GET
     %rest:path("/test/get/attachments")
-    %rest:form-param("search", "{$search}","*")  
-    %rest:form-param("page", "{$page}", 1) 
-    %rest:form-param("perPage", "{$perPage}", 5) 
+    %rest:form-param("search", "{$search}","")  
+    %rest:form-param("page", "{$page}", "1") 
+    %rest:form-param("perPage", "{$perPage}", "2") 
     %output:method("xml")
-    function local:test-get-search-attachmemnts($search as xs:string*, $page as xs:integer*, $perPage as xs:integer*){
+    function local:test-get-search-attachmemnts($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
       
        local:search-for-attachments($search, $page, $perPage)   
 };
-
 
 (: 
  : Get an attachment by name

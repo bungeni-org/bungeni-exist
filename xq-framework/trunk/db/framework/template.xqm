@@ -32,8 +32,7 @@
 :                   </route-override>
 :                will override the title
 :)
-
-(:xquery version "1.0";:)
+xquery version "3.0";
 
 (: Further additions by Ashok Hariharan :)
 
@@ -87,7 +86,7 @@ declare function template:process-tmpl(
     (: extracts top level content and content from within an id less container :)
      $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
-      return 
+    return 
        template:process-page-meta($route-map, $route-override, $proc-doc) 
 };
 
@@ -136,7 +135,7 @@ declare function template:merge($request-rel-path as xs:string, $template1 as do
 :   The transformed result
 :)
 declare function template:copy-and-replace($request-rel-path as xs:string, $element as element(), $content as element()*) {
-  element {node-name($element)} {
+  element {node-name($element)} { 
      for $attr in $element/@* return
         template:adjust-absolute-paths($request-rel-path, $attr)
      ,
@@ -221,13 +220,23 @@ declare function template:make-relative-uri($request-rel-path as xs:string, $uri
     )
 };
 
+declare function template:adjust-body-paths($exist-controller as xs:string, $attr as attribute()) as attribute() {
+    if(fn:local-name($attr) = "class")then
+            attribute { "class" } { 
+                "Ola"
+            }
+        else 
+            attribute { "class" } { 
+                "ssdsdssss"
+            }
+};
 
 declare function template:adjust-absolute-paths($exist-controller as xs:string, $attr as attribute()) as attribute() {
     if(fn:local-name($attr) = ("src", "href", "action") and not(starts-with($attr, "/") or starts-with($attr, "http://") or starts-with($attr, "https://") or starts-with($attr, "#")))then
             attribute {node-name($attr)} { 
                 template:make-absolute-uri($exist-controller, $attr)
-            }
-        else 
+            }           
+    else 
             $attr
 };
 
@@ -275,16 +284,40 @@ declare function local:set-meta($route as element(), $override as element(), $co
 		      $route/title/text()
 		   }</title>
     ) 
-
+    (: set body classes :)
+    else if ($content/ancestor::xh:body) then (
+		let $chamber-name := if($override/identifier eq 'AS_XIV') then "assembly" else 'senate'
+		return 
+    		element { node-name($content/ancestor::xh:body) } {
+    			attribute class { "template-portal-eXist " || $chamber-name },
+    			$content/(@*, *)
+    	   }
+	) 
     (:~ 
     Set the navigation tab to the active one for the page - the condition to determine the active
     tab is slight more involved hence the nested if 
     :)
     
+    else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:li) then (
+			if ($route/navigation) then (
+				(:if ($content/descendant-or-self::xh:li[xh:a/@name = data($route/@href)] and contains(data($route/@href),$override/identifier)) then ( :)
+				if ($content/descendant-or-self::xh:li[xh:a/@name = $route/navigation/text()] and contains(data($route/@href),$override/identifier)) then (
+				    <xh:li class="active">
+				        {$content/self::xh:li/(@*, *)}
+				    </xh:li>
+				) 
+				else  
+				    $content
+			)
+			else
+			  $content
+	)  
     (:else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:li) then (
 			if ($route/navigation) then (
 				if ($content/self::xh:li[xh:a/@name=$route/navigation/text()]) then (
-				    <xh:li class="selected"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
+				    <xh:li class="selected">
+				        <xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a>
+				    </xh:li>
 				) 
 				else  
 				 $content
@@ -296,10 +329,12 @@ declare function local:set-meta($route as element(), $override as element(), $co
     Set the sub-navigation tab to the active one as specified in the route
     :)
 
-    else if ($content/ancestor::xh:div[@id="subnav"] and $content/self::xh:li) then (
+    else if ($content/ancestor::xh:div[@id eq $override/identifier/text()] and $content/self::xh:li) then (
 			if ($route/subnavigation) then (
 				if ($content/self::xh:li[xh:a/@name=$route/subnavigation/text()]) then (
-				    <xh:li class="selected navigation"><xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a></xh:li>
+				    <xh:li class="selected navigation">
+				        <xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a>
+				    </xh:li>
 				) 
 				else  
 				 $content

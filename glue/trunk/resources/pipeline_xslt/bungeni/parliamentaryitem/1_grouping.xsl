@@ -309,6 +309,10 @@
             
             <custom>
                 <xsl:copy-of select="$type-mappings" />
+                <internal-uri><xsl:value-of select="$internal-uri" /></internal-uri>
+                <xsl:if test="$doc-uri">
+                    <doc-uri><xsl:value-of select="$doc-uri" /></doc-uri>
+                </xsl:if>
                 <bungeni_doc_type>
                     <xsl:value-of select="$bungeni-content-type"/>
                 </bungeni_doc_type>

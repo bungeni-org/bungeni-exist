@@ -116,12 +116,14 @@
                     </xsl:choose>
                 </xsl:attribute>
                 
-                <sittingOf isA="TLCReference" href="{$group-uri}" >
-                    <type isA="TLCTerm">
-                        <value type="xs:string">
-                            <xsl:value-of select="$group-type-uri-name" />
-                        </value>
-                    </type>
+                <sittingOf isA="TLCObject">
+                    <refersTo isA="TLCReference"  href="{$group-uri}">
+                        <type isA="TLCTerm">
+                            <value type="xs:string">
+                                <xsl:value-of select="$group-type-uri-name" />
+                            </value>
+                        </type>
+                    </refersTo>
                 </sittingOf>
  
                 <xsl:call-template name="incl_origin">

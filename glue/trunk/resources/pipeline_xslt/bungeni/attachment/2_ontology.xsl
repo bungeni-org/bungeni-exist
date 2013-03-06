@@ -45,7 +45,7 @@
                 </xsl:attribute>
             </refersTo>  
             <xsl:apply-imports />
-        </eventOf>                   
+        </attachmentOf>                   
     </xsl:template> 
     
     

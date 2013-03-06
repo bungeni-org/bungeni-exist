@@ -226,54 +226,67 @@ declare function local:get-attachment-hash-by-name($name as xs:string){
  :  and return list with hash and name
  :  :)
 declare
-    %rest:GET
+    %rest:POST
     %rest:path("/attachments")
     %rest:form-param("search", "{$search}","")  
     %rest:form-param("page", "{$page}", "1") 
     %rest:form-param("perPage", "{$perPage}", "2") 
     %output:method("xml")
     function local:search-for-attachments($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
-                        
-        let $startItem := if (xs:integer($page) eq 1) then
-                                xs:integer(1)
-                            else
-                                ((xs:integer($page)-1)*xs:integer($perPage))+1
-
-        let $allResultsMatched := for $j in local:get-attachments()/child::node()
-            return
-                if (matches($j/bu:name/string(), $search, 'i')) then 
-                    $j
-                else
-                    ()
-                    
-        let $page := if(count($allResultsMatched) eq 1) then
-                        xs:integer(1)
-                    else
-                        $page
-                    
-        let $pagedResult := for $i in subsequence($allResultsMatched, xs:integer($startItem), xs:integer($perPage))
-                return 
-                    <attachment>
-                        <hash>{$i/bu:fileHash/string()}</hash>
-                        <name>{$i/bu:name/string()}</name>
-                        <title>{$i/bu:title/string()}</title>
-                        {if(not(empty($i/bu:description/string()))) then
-                            <descr>{$i/bu:description/string()}</descr>
-                        else
-                            <descr>None</descr>}
-                        <statusDate>{datetime:format-dateTime(xs:dateTime($i/bu:statusDate/string()),"EEE, d MMM yyyy HH:mm:ss Z")}</statusDate>
-                    </attachment>
         
-        return 
-            <attachments>{
-                if(empty($pagedResult)) then
-                    <totalCount>0</totalCount>
-                else
-                    (<totalCount>{count($allResultsMatched)}</totalCount>,
-                    <page>{$page}</page>,
-                    <perPage>{$perPage}</perPage>,
-                    $pagedResult)
-            }</attachments>
+        try{
+            let $startItem := if (xs:integer($page) eq 1) then
+                                    xs:integer(1)
+                                else
+                                    ((xs:integer($page)-1)*xs:integer($perPage))+1
+    
+            let $allResultsMatched := for $j in local:get-attachments()/child::node()
+                return
+                    if (matches($j/bu:name/string(), $search, 'i')) then 
+                        $j
+                    else
+                        ()
+                        
+            let $page := if(count($allResultsMatched) eq 1) then
+                            xs:integer(1)
+                        else
+                            $page
+                        
+            let $pagedResult := for $i in subsequence($allResultsMatched, xs:integer($startItem), xs:integer($perPage))
+                    return 
+                        <attachment>
+                            <hash>{$i/bu:fileHash/string()}</hash>
+                            <name>{$i/bu:name/string()}</name>
+                            <title>{$i/bu:title/string()}</title>
+                            {if(not(empty($i/bu:description/string()))) then
+                                <descr>{$i/bu:description/string()}</descr>
+                            else
+                                <descr>None</descr>}
+                            <statusDate>{datetime:format-dateTime(xs:dateTime($i/bu:statusDate/string()),"EEE, d MMM yyyy HH:mm:ss Z")}</statusDate>
+                        </attachment>
+            
+            return 
+                <attachments>{
+                    if(empty($pagedResult)) then
+                        <totalCount>0</totalCount>
+                    else
+                        (<totalCount>{count($allResultsMatched)}</totalCount>,
+                        <page>{$page}</page>,
+                        <perPage>{$perPage}</perPage>,
+                        $pagedResult)
+                }</attachments>
+        }
+        catch *{
+            
+            <attachments>
+                <totalCount>0</totalCount>
+                <error>
+                    <errorCode>{$err:code}</errorCode>
+                    <errorDescr>{$err:description}</errorDescr>
+                    <errorMod>{$err:module, "(", $err:line-number, ",", $err:column-number, ")"}</errorMod>
+                </error>
+            </attachments>    
+        }
 };
 
 (: 

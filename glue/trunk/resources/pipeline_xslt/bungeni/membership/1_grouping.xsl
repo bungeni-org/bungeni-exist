@@ -176,7 +176,7 @@
                 <xsl:copy-of select="changes | member_titles | titletypes"/>
                 <xsl:copy-of select="group" />
                 <xsl:copy-of select="party" />
-                
+                <xsl:copy-of select="tags" />
                 <!-- PERMISSIONS -->
                 <xsl:copy-of select="permissions" />                  
             </membership>

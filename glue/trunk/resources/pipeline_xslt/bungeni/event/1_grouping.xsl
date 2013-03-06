@@ -11,8 +11,8 @@
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_users.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
-    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_owner.xsl"
-    <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_owner.xsl" />
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>

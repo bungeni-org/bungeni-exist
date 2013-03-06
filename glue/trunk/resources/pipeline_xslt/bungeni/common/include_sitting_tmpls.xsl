@@ -22,12 +22,14 @@
                 <xsl:value-of select="bctype:get_content_type_uri_name($item_type, $type-mappings)" />
             </xsl:variable>
             <xsl:variable name="item_id" select="field[@name='item_id']" />
-            <sourceItem isA="TLCReference" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
-               <type isA="TLCTerm">
-                   <value type="xs:string">
-                       <xsl:value-of select="$item-type" />
-                   </value>
-               </type>
+            <sourceItem isA="TLCObject" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
+                <refersTo isA="TLCReference" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
+                    <type isA="TLCTerm">
+                        <value type="xs:string">
+                            <xsl:value-of select="$item-type" />
+                        </value>
+                    </type>
+                </refersTo>
             </sourceItem>
             <xsl:apply-templates />
         </scheduleItem>

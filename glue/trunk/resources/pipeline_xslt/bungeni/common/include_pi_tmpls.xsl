@@ -245,5 +245,36 @@
     </xsl:template>   
     
     
+    <xsl:template match="item_signatories">
+       <signatories id="documentSignatories">
+        <xsl:apply-templates />
+       </signatories>
+    </xsl:template>
     
+    
+    <xsl:template match="item_signatorie">
+       <signatory>
+           <xsl:attribute name="id">
+               <xsl:variable name="signatory_id" select="field[@name='signatory_id']" />
+               <xsl:value-of select="concat('signatory-', $signatory_id)" />
+           </xsl:attribute>
+        <xsl:apply-templates />
+       </signatory>
+    </xsl:template>
+    
+    <xsl:template match="attachments">
+        <attachments id="documentAttachments">
+            <xsl:apply-templates />
+        </attachments>
+    </xsl:template>
+    
+    <xsl:template match="attachment[parent::attachments]">
+        <attachment>
+            <xsl:attribute name="id">
+                <xsl:variable name="attachment_id" select="field[@name='attachment_id']" />
+                <xsl:value-of select="concat('attachment-', $attachment_id)" />
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </attachment>
+    </xsl:template>   
 </xsl:stylesheet>

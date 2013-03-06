@@ -323,14 +323,18 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/ancestor::bu:ontology")
 };
 
-declare function bun:xqy-list-documentitems-with-acl-n-tabs($acl as xs:string, $type as xs:string, $tag as xs:string) {
+declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber as xs:string, 
+                                                            $acl as xs:string, 
+                                                            $type as xs:string, 
+                                                            $tag as xs:string) {
     let $acl-filter := cmn:get-acl-permission-as-attr($acl),
         $list-tabs :=  cmn:get-listings-config($type)[@id eq $tag]/text()
     
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology[@for='document']",
-                "/bu:document/bu:docType[bu:value eq '",$type,"']",
+                "/bu:document[bu:origin/bu:identifier eq '",$chamber,"']",
+                "/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
@@ -524,10 +528,11 @@ declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:
                             "return $match"))    
 };
 
-declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string, 
+declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string,
+                                                        $acl as xs:string, 
                                                         $type as xs:string, 
                                                         $tag as xs:string) {
-    let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $tag)
+    let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($chamber, $acl, $type, $tag)
     let $coll :=  util:eval($eval-query)
     let $sortord := xs:string(request:get-parameter("s","none"))
     let $orderby := cmn:get-orderby-config-name($type, $sortord)
@@ -558,6 +563,7 @@ declare function bun:list-documentitems-with-acl-n-tabs($acl as xs:string,
 :)
 declare function bun:get-documentitems(
             $view-rel-path as xs:string,
+            $chamber as xs:string,
             $acl as xs:string,
             $type as xs:string,
             $parts as node(),
@@ -569,7 +575,7 @@ declare function bun:get-documentitems(
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     let $tab := xs:string(request:get-parameter("tab",'uc'))    
-    let $coll := bun:list-documentitems-with-acl-n-tabs($acl, $type, $tab)
+    let $coll := bun:list-documentitems-with-acl-n-tabs($chamber, $acl, $type, $tab)
     let $listings-filter := cmn:get-listings-config($type)
     let $getqrystr := xs:string(request:get-query-string())    
     
@@ -591,7 +597,7 @@ declare function bun:get-documentitems(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($chamber, $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
          }
          </tags>    
          <currentView>{$parts/current-view}</currentView>
@@ -621,6 +627,7 @@ declare function bun:get-documentitems(
             <parameters>
                 <param name="sortby" value="{$sortby}" />
                 <param name="listing-tab" value="{$tab}" />
+                <param name="chamber" value="{$chamber}" />
                 <param name="item-listing-rel-base" value="{$view-rel-path}" />
             </parameters>
            ) 
@@ -2705,7 +2712,7 @@ declare function bun:get-parl-doc($acl as xs:string,
                 bun:get-ref-assigned-grps($match, $parts/parent::node())
         }
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet,())
 };
 
 (:~
@@ -2773,7 +2780,7 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
 : @stylesheet 
 :   committee.xsl, home.xsl
 :)
-declare function bun:get-government($parts as node()) as element()* {
+declare function bun:get-government($parts as node(), $chamber-id as xs:string) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2783,7 +2790,7 @@ declare function bun:get-government($parts as node()) as element()* {
                         where multiple parliament info are present. Pending support for closing and opening
                         parliaments.
                     :)
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Parliament'][1]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Government']/preceding-sibling::bu:origin[bu:identifier eq $chamber-id]/ancestor::bu:ontology
                     return
                         $match  
                 }</doc>   
@@ -3229,6 +3236,7 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
 
 declare function bun:get-members(
             $view-rel-path as xs:string,
+            $chamber as xs:string,
             $offset as xs:integer, 
             $limit as xs:integer, 
             $parts as node(),
@@ -3286,7 +3294,8 @@ declare function bun:get-members(
             $stylesheet, 
             <parameters>
                 <param name="listing-tab" value="{$tab}" />
-                <param name="item-listing-rel-base" value="{$view-rel-path}" />                
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />  
+                <param name="chamber" value="{$chamber}" />
             </parameters>
         
         ) 

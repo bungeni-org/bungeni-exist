@@ -14,11 +14,13 @@
     <xsl:template name="doc-tabs">
         <xsl:param name="tab-group"/>
         <xsl:param name="tab-path"/>
+        <xsl:param name="chamber"/>
         <xsl:param name="uri"/>
         <xsl:param name="excludes"/>
         <xsl:call-template name="tab-generator">
             <xsl:with-param name="group" select="$tab-group"/>
             <xsl:with-param name="tab" select="$tab-path"/>
+            <xsl:with-param name="chamber" select="$chamber"/>
             <xsl:with-param name="uri" select="$uri"/>
             <xsl:with-param name="exc" select="$excludes"/>
         </xsl:call-template>
@@ -26,11 +28,13 @@
     <xsl:template name="mem-tabs">
         <xsl:param name="tab-group"/>
         <xsl:param name="tab-path"/>
+        <xsl:param name="chamber"/>
         <xsl:param name="uri"/>
         <xsl:param name="excludes"/>
         <xsl:call-template name="tab-generator">
             <xsl:with-param name="group" select="$tab-group"/>
             <xsl:with-param name="tab" select="$tab-path"/>
+            <xsl:with-param name="chamber" select="$chamber"/>
             <xsl:with-param name="uri" select="$uri"/>
             <xsl:with-param name="exc" select="$excludes"/>
         </xsl:call-template>
@@ -38,6 +42,7 @@
     <xsl:template name="tab-generator">
         <xsl:param name="group"/>
         <xsl:param name="tab"/>
+        <xsl:param name="chamber"/>
         <xsl:param name="uri"/>
         <xsl:param name="exc"/>
         <div id="tab-menu" class="ls-tabs">
@@ -52,7 +57,7 @@
                                 <xsl:if test="@id eq $tab">
                                     <xsl:attribute name="class">active</xsl:attribute>
                                 </xsl:if>
-                                <a href="{@path}?uri={$uri}">
+                                <a href="{$chamber}{@path}?uri={$uri}">
                                     <xsl:element name="i18n:text">
                                         <xsl:attribute name="key" select="./title/i18n:text/@key"/>
                                         <xsl:value-of select="./title/i18n:text/text()"/>

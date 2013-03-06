@@ -27,6 +27,8 @@ Change the path to the appcontroller to the appcontroller of your application
 :)
 import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "appcontroller.xqm";
 
+import module namespace functx = "http://www.functx.com" at "../functx.xqm";
+
 (: xhtml 1.1 :)
 (:
 declare option exist:serialize "media-type=text/html method=xhtml doctype-public=-//W3C//DTD&#160;XHTML&#160;1.1//EN doctype-system=http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd";
@@ -50,6 +52,8 @@ declare variable $REL-PATH := fn:concat($exist:root, '/', $exist:controller);
  
 let $ret := appcontroller:controller(
                 $exist:path, 
+                substring-before(functx:replace-first($exist:path,"/",""),"/"),
+                "/" || substring-after(functx:replace-first($exist:path,"/",""),"/"),
                 $exist:root, 
                 $exist:controller, 
                 $exist:resource,

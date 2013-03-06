@@ -29,6 +29,7 @@
                     <xsl:value-of select="$doc-uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">sittings</xsl:with-param>
+                <xsl:with-param name="chamber" select="concat(bu:ontology/bu:group/bu:origin/bu:identifier,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     
     <!-- Generic templates applied to document views -->
     <xsl:import href="tmpl-grp-generic.xsl"/>
@@ -20,7 +20,7 @@
             <div id="title-holder">
                 <h1 class="title">
                     <xsl:if test="bu:ontology">
-                        <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>                    
+                        <xsl:value-of select="bu:ontology/bu:group/bu:origin/bu:identifier"/>                   
                         &#160;|&#160;
                     </xsl:if>
                     <i18n:text key="welcome">Welcome Home(nt)</i18n:text>
@@ -32,6 +32,7 @@
                 </xsl:with-param>
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="tab-path">profile</xsl:with-param>
+                <xsl:with-param name="chamber" select="concat(bu:ontology/bu:group/bu:origin/bu:identifier,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <xsl:if test="bu:ontology">
@@ -72,7 +73,7 @@
                                 <div class="block-label">
                                     <i18n:text key="parl-power-date">in power from(nt)</i18n:text>:
                                 </div>
-                                <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
+                                <!--xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,$date-format, 'en', (),())"/-->
                             </div>
                         </div>
                         <div class="clear"/>

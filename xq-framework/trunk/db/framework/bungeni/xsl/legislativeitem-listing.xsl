@@ -46,6 +46,7 @@
     <xsl:param name="sortby"/>
     <xsl:param name="listing-tab"/>
     <xsl:param name="item-listing-rel-base"/>
+    <xsl:param name="chamber"/>
 
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -72,7 +73,7 @@
                             <xsl:if test="@id eq $listing-tab">
                                 <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                            <a href="{$item-listing-rel-base}?tab={@id}">
+                            <a href="{$chamber}/{$item-listing-rel-base}?tab={@id}">
                                 <i18n:translate>
                                     <i18n:text key="{@id}">Text to translate with ({1})</i18n:text>
                                     <i18n:param>
@@ -149,11 +150,11 @@
         </xsl:variable>
         <!--div border="0" style="border-style:none !important;height:18px;width:18px;background:transparent url(assets/bungeni/images/breadcrumbs.png) no-repeat left -197px"/-->
         <li>
-            <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{bu:ontology/bu:document/bu:origin/bu:identifier}/{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </a>
             &#160;›&#160;
-            <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+            <a href="{bu:ontology/bu:document/bu:origin/bu:identifier}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
                 <xsl:attribute name="title">primary sponsor</xsl:attribute>
                 <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>

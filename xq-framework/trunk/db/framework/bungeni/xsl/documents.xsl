@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -21,6 +21,7 @@
         <xsl:variable name="ver-id" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
         <xsl:variable name="ver-uri" select="bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-id]/@uri"/>
+        <xsl:variable name="chamber-id" select="bu:ontology/bu:document/bu:origin/bu:identifier"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">
@@ -74,6 +75,7 @@
                         </xsl:choose>
                     </xsl:with-param>
                     <xsl:with-param name="tab-path">attachments</xsl:with-param>
+                    <xsl:with-param name="chamber" select="concat(bu:ontology/bu:document/bu:origin/bu:identifier,'/')"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
                 </xsl:call-template>
                 <!-- Renders the document download types -->
@@ -106,7 +108,7 @@
                                     <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
                                         <xsl:sort select="bu:activeDate" order="descending"/>
                                         <li>
-                                            <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
+                                            <a href="{$chamber-id}/{lower-case($doc-type)}-version/text?uri={@uri}">
                                                 <xsl:value-of select="bu:auditAction/bu:value"/>&#160;<xsl:value-of select="bu:sequence"/>
                                             </a>
                                             <div class="struct-ib"> / 
@@ -144,7 +146,7 @@
                                             <!--a href="{lower-case($doc-type)}-event?uri={@uri}">
                                                 <xsl:value-of select="bu:title"/>
                                                 </a-->
-                                            <a href="popout?uri={@uri}" rel="{lower-case($doc-type)}-event?uri={@uri}" onclick="return false;">
+                                            <a href="{$chamber-id}/popout?uri={@uri}" rel="{$chamber-id}/{lower-case($doc-type)}-event?uri={@uri}" onclick="return false;">
                                                 <xsl:value-of select="bu:title"/>
                                             </a>
                                             <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
@@ -162,7 +164,7 @@
                             <ul class="ls-row">
                                 <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
                                     <li>
-                                        <a href="{lower-case($doc-type)}-attachment?uri={@href}">
+                                        <a href="{$chamber-id}/{lower-case($doc-type)}-attachment?uri={@href}">
                                             <xsl:value-of select="bu:title"/>
                                         </a>&#160; /      
                                         download:&#160;

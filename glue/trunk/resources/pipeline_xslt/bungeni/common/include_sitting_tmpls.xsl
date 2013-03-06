@@ -39,9 +39,7 @@
     <xsl:template match="field[@name='schedule_id']">
         <xsl:call-template name="renderIntegerElement">
             <xsl:with-param name="elementName">scheduleId</xsl:with-param>
-            <xsl:with-param name="key">
-                <xsl:value-of select="true()" />
-            </xsl:with-param>
+            <xsl:with-param name="key">true</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
     

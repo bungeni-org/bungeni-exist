@@ -65,12 +65,12 @@
     
     <xsl:template name="renderIntegerElement">
         <xsl:param name="elementName" />
-        <xsl:param name="key" select="false()" />
+        <xsl:param name="key" select="string('false')" />
         <xsl:variable name="nsp" select="normalize-space(.)" />
         <xsl:if test="$nsp ne ''">
             <xsl:if test="$nsp ne 'None'">
                 <xsl:element name="{$elementName}">
-                    <xsl:if test="$key eq true()">
+                    <xsl:if test="$key eq 'true'">
                         <xsl:attribute name="key">
                             <xsl:text>true</xsl:text>
                         </xsl:attribute>

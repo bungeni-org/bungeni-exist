@@ -176,4 +176,5 @@
     <msg key="Body">cuerpo</msg>
     <msg key="representation">representación</msg>
     <msg key="elected/nominated">elegido / nombrado</msg>
+    <msg key="senators">senadores</msg>
 </catalogue>

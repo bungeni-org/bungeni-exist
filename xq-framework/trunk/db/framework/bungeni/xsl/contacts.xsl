@@ -94,47 +94,68 @@
                 </xsl:call-template>
             </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
-                <div id="doc-main-section" class="blocks">
-                    <xsl:for-each select="ref/bu:ontology">
-                        <xsl:sort select="bu:address/bu:logicalAddressType" order="descending"/>
-                        <a id="mTag{bu:address/bu:addressId}" href="#" class="togglers" onClick="toggleOnly('{bu:address/bu:postalAddressType}{bu:address/bu:addressId}',this.id,'{bu:address/bu:logicalAddressType}');return false;">
-                            ▼<xsl:value-of select="bu:address/bu:logicalAddressType"/>
-                        </a>
-                        <div id="{bu:address/bu:postalAddressType}{bu:address/bu:addressId}" class="toggle address-info">
-                            <div class="address-block">
-                                <address>
-                                    <strong>
-                                        <xsl:value-of select="$contact-name"/>
-                                    </strong>
-                                    <br/>
-                                    <bu:street type="xs:string">address</bu:street>, room <bu:groupId type="xs:integer">4</bu:groupId>
-                                    <br/>
-                                    <xsl:value-of select="bu:address/bu:city"/>, <xsl:value-of select="bu:address/bu:countryId"/>&#160;<xsl:value-of select="bu:address/bu:zipCode"/>
-                              &#160;<xsl:value-of select="bu:address/bu:postalAddressType/@showAs"/>&#160;<bu:addressId type="xs:integer">4</bu:addressId>
-                                    <br/>
-                                    <abbr title="Phone">Phone:</abbr>
-                                    <xsl:value-of select="bu:address/bu:phone"/>
-                                    <br/>
-                                    <abbr title="Fax">Fax:</abbr>
-                                    <xsl:value-of select="bu:address/bu:fax"/>
-                                </address>
-                                <address>
-                                    <strong>
-                                        <xsl:value-of select="$contact-name-title"/>
-                                    </strong>
-                                    <br/>
-                                    <a href="mailto:#">
-                                        <xsl:value-of select="bu:address/bu:email"/>
-                                    </a>
-                                </address>
-                            </div>
-                            <div class="clear"/>
-                            <div class="mem-desc">
-                                <xsl:copy-of select="bu:ontology/bu:membership/bu:notes/child::node()" copy-namespaces="no"/>
-                            </div>
+                <div id="doc-main-section">
+                    <div id="toggle-wrapper" class="clear toggle-wrapper">
+                        <div id="toggle-i18n" class="hide">
+                            <span id="i-compress">
+                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
+                            </span>
+                            <span id="i-expand">
+                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
+                            </span>
                         </div>
-                        <br/>
-                    </xsl:for-each>
+                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                        </div>
+                    </div>
+                    <ul id="list-toggle" class="ls-row clear">
+                        <xsl:for-each select="ref/bu:ontology">
+                            <xsl:sort select="bu:address/bu:logicalAddressType" order="descending"/>
+                            <li>
+                                <xsl:value-of select="bu:address/bu:logicalAddressType"/>
+                                <span class="tgl-pad-right">▼</span>
+                                <div class="doc-toggle">
+                                    <div id="{bu:address/bu:postalAddressType}{bu:address/bu:addressId}" class="toggle address-info" style="min-height:100px">
+                                        <div class="address-block">
+                                            <address>
+                                                <strong>
+                                                    <xsl:value-of select="$contact-name"/>
+                                                </strong>
+                                                <br/>
+                                                <i18n:text key="Address">address(nt)</i18n:text>, room <bu:groupId type="xs:integer">4</bu:groupId>
+                                                <br/>
+                                                <xsl:value-of select="bu:address/bu:city"/>, <xsl:value-of select="bu:address/bu:countryId"/>&#160;<span title="i18n(Zip Code, Zip Code (nt))">
+                                                    <xsl:value-of select="bu:address/bu:zipCode"/>
+                                                </span>
+                                                &#160;<xsl:value-of select="bu:address/bu:postalAddressType/@showAs"/>&#160;<bu:addressId type="xs:integer">4</bu:addressId>
+                                                <br/>
+                                                <abbr title="i18n(Phone Number(s), phone (nt))">
+                                                    <i18n:text key="Phone Number(s)">Phone (nt)</i18n:text>:</abbr>
+                                                <xsl:value-of select="bu:address/bu:phone"/>
+                                                <br/>
+                                                <abbr title="i18n(Fax Number(s), fax (nt))">
+                                                    <i18n:text key="Fax Number(s)">Fax (nt)</i18n:text>:</abbr>
+                                                <xsl:value-of select="bu:address/bu:fax"/>
+                                            </address>
+                                            <address>
+                                                <strong>
+                                                    <xsl:value-of select="$contact-name-title"/>
+                                                </strong>
+                                                <br/>
+                                                <a href="mailto:#">
+                                                    <xsl:value-of select="bu:address/bu:email"/>
+                                                </a>
+                                            </address>
+                                        </div>
+                                        <div class="clear"/>
+                                        <div class="mem-desc">
+                                            <xsl:copy-of select="bu:ontology/bu:membership/bu:notes/child::node()" copy-namespaces="no"/>
+                                        </div>
+                                    </div>
+                                    <div class="clear"/>
+                                </div>
+                            </li>
+                        </xsl:for-each>
+                    </ul>
                 </div>
             </div>
         </div>

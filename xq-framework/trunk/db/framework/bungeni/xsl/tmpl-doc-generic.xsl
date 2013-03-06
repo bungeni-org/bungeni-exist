@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -64,6 +64,7 @@
                         </xsl:choose>
                     </xsl:with-param>
                     <xsl:with-param name="tab-path">text</xsl:with-param>
+                    <xsl:with-param name="chamber" select="concat(bu:ontology/bu:document/bu:origin/bu:identifier,'/')"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
                 </xsl:call-template>
                 <!-- Renders the document download types -->
@@ -198,7 +199,7 @@
     <xsl:template name="doc-item-sponsor">
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                <a href="{bu:ontology/bu:document/bu:origin/bu:identifier}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
                     <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </a>
             </i>

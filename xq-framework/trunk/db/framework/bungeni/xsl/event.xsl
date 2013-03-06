@@ -44,6 +44,7 @@
                 <xsl:with-param name="tab-group" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="tab-path">attachments</xsl:with-param>
+                <xsl:with-param name="chamber" select="concat(bu:ontology/bu:document/bu:origin/bu:identifier,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template-->
             <div id="doc-downloads"/>

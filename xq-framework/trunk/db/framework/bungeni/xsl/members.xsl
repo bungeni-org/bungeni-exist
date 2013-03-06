@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -13,7 +13,8 @@
         </xd:desc>
     </xd:doc>
     <xsl:param name="listing-tab"/>
-    <xsl:param name="item-listing-rel-base"/>    
+    <xsl:param name="item-listing-rel-base"/>
+    <xsl:param name="chamber"/>  
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -32,7 +33,7 @@
                             <xsl:if test="@id eq $listing-tab">
                                 <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                            <a href="{$item-listing-rel-base}?tab={@id}">
+                            <a href="{$chamber}/{$item-listing-rel-base}?tab={@id}">
                                 <i18n:translate>
                                     <i18n:text key="{@id}">nt({1})</i18n:text>
                                     <i18n:param>
@@ -121,15 +122,21 @@
                         </span>
                     </div>
                     <div class="block">
-                        <span class="labels">
-                            <i18n:text key="Biographical notes">short bio(nt)</i18n:text>:</span>
-                        <span>
-                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:notes,0,360)"/>...
-                        </span>
+                        <xsl:choose>
+                            <xsl:when test="kwic">
+                                <xsl:apply-templates select="kwic"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="substring(bu:ontology/bu:membership/bu:notes,0,360)"/>...                           
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </div>
                 </div>
                 <div class="clear"/>
             </div>
         </li>
+    </xsl:template>
+    <xsl:template match="kwic">
+        <xsl:copy-of select="child::*"/>
     </xsl:template>
 </xsl:stylesheet>

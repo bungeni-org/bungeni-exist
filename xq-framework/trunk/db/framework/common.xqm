@@ -121,8 +121,9 @@ declare function cmn:user-preferences() as document-node() {
 (:~
 Get the applicable menu for a route
 :)
-declare function cmn:get-menu-from-route($exist-path as xs:string) as node() {
+declare function cmn:get-menu-from-route($exist-path as xs:string) as node()? {
     let $doc := cmn:get-route($exist-path)
+    let $log := util:log("DEBUG",concat($exist-path, "++++++++++++++++++++++"))
       return cmn:get-ui-config()//menu[@for eq $doc/navigation/text()]
 };
 

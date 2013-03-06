@@ -590,13 +590,14 @@ tbody tr.items:hover {
     font-weight: bold;
 }
 
-.nav * {
-    font-family: 'Droid Sans', sans-serif;
-}
-
 nav {
+    clear:both;
 	margin: 0 auto; 
 	text-align: left;
+}
+nav *,
+.submenu * {
+    font-family: 'Droid Sans', sans-serif;
 }
 
 nav ul ul.mouseover {
@@ -627,32 +628,31 @@ nav ul {
 	nav ul li {
 		float: left;
 	}
-        /* The National Assembly */
-        nav ul li.lower-hse {
+        /* The Senate */
+        nav > ul > li {
+            width:350px;    
+            background: linear-gradient(top, #585858 0%, #434343 100%);  
+            background: -moz-linear-gradient(top, #585858 0%, #434343 100%); 
+            background: -webkit-linear-gradient(top, #585858 0%,#434343 100%); 		    
+            }
+            nav > ul > li > a {
+                font-weight:bold;
+                color:#eeeeee;
+                font-size:16px;                
+            }
+            
+        nav ul li.active {
     	    display:inline;
     	    width:350px;       
             background: linear-gradient(top, #7e7e7e 0%, #696969 100%);  
             background: -moz-linear-gradient(top, #7e7e7e 0%, #696969 100%); 
             background: -webkit-linear-gradient(top, #7e7e7e 0%,#696969 100%); 	
             }
-            nav ul li.lower-hse > a {
+            nav ul li.active > a {
                 font-weight:bold;
                 color:#eeeeee;
                 font-size:16px;
-            }
-	   
-        /* The Senate */
-        nav ul li.upper-hse {
-            width:350px;    
-            background: linear-gradient(top, #585858 0%, #434343 100%);  
-            background: -moz-linear-gradient(top, #585858 0%, #434343 100%); 
-            background: -webkit-linear-gradient(top, #585858 0%,#434343 100%); 		    
-            }
-            nav ul li.upper-hse > a {
-                font-weight:bold;
-                color:#eeeeee;
-                font-size:16px;                
-            }
+            }            
 	   
 		nav ul li:hover {
                -webkit-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;
@@ -744,15 +744,3 @@ nav ul {
 		top:0;
 	}
 /*------------------------------*/
-
-.assembly {
-    background: linear-gradient(top, #239e45 0%, #037d2e 100%);  
-    background: -moz-linear-gradient(top, #239e45 0%, #037d2e 100%); 
-    background: -webkit-linear-gradient(top, #239e45 0%,#037d2e 100%);             
-}
-
-.senate {
-    background: linear-gradient(top, #d3302f 0%, #bb0025 100%);  
-    background: -moz-linear-gradient(top, #d3302f 0%, #bb0025 100%); 
-    background: -webkit-linear-gradient(top, #d3302f 0%,#bb0025 100%);           
-}

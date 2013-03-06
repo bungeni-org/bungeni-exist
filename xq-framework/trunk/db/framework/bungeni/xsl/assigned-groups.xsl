@@ -40,6 +40,7 @@
                         <xsl:value-of select="$doc-type"/>
                     </xsl:with-param>
                     <xsl:with-param name="tab-path">assigned</xsl:with-param>
+                    <xsl:with-param name="chamber" select="concat(bu:ontology/bu:document/bu:origin/bu:identifier,'/')"/>
                     <xsl:with-param name="uri" select="$doc-uri"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
                 </xsl:call-template>

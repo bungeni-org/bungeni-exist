@@ -11,7 +11,7 @@
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_users.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
-    
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_owner.xsl"
     <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
@@ -141,6 +141,7 @@
                     @name='status_date' or 
                     @name='registry_number' or 
                     @name='doc_id'
+                    @name='sitting_id'
                     ] | 
                     changes |
                     audits |
@@ -322,6 +323,15 @@
     </xsl:template>
 
     <xsl:template match="owner">
+        <xsl:call-template name="ownerRender">
+            <xsl:with-param name="type-mappings" select="$type-mappings" />
+            <xsl:with-param name="country-code" select="$country-code" />
+            <xsl:with-param name="uri-base" select="$uri-base" />
+        </xsl:call-template>
+    </xsl:template>
+
+    <!--
+    <xsl:template match="owner">
         <xsl:variable name="user-type-uri-name" select="bctype:get_content_type_uri_name('user', $type-mappings)" />
         <xsl:variable name="first-name" select="data(field[@name='first_name'])" />
         <xsl:variable name="last-name" select="data(field[@name='last_name'])" />
@@ -337,7 +347,7 @@
         />
         <xsl:variable name="user-uri" select="busers:get_user_uri(
             concat(
-                $uri-base,
+                $uri-base, '/',
                 $user-type-uri-name
                 ),
             $user-identifier
@@ -354,6 +364,6 @@
             </role>
         </owner>
     </xsl:template>
-    
+        -->
     
 </xsl:stylesheet>

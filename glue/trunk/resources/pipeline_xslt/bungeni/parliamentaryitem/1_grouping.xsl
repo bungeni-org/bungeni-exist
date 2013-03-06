@@ -11,6 +11,7 @@
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_content_types.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_users.xsl" />
     <xsl:import href="resources/pipeline_xslt/bungeni/common/func_dates.xsl" />
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_owner.xsl" />
     
     <xsl:include href="resources/pipeline_xslt/bungeni/common/include_tmpls.xsl" />
     
@@ -217,6 +218,8 @@
                     </assignedTo>
                     </xsl:if>                 
                 -->               
+                <xsl:apply-templates select="owner" />
+                
                 
             </document>
             <xsl:call-template name="incl_legislature">
@@ -320,6 +323,16 @@
     </xsl:template>
 
     <xsl:template match="owner">
+        <xsl:call-template name="ownerRender">
+            <xsl:with-param name="type-mappings" select="$type-mappings" />
+            <xsl:with-param name="country-code" select="$country-code" />
+            <xsl:with-param name="uri-base" select="$uri-base" />
+        </xsl:call-template>
+    </xsl:template>
+    
+    
+    <!--
+    <xsl:template match="owner">
         <xsl:variable name="user-type-uri-name" select="bctype:get_content_type_uri_name('user', $type-mappings)" />
         <xsl:variable name="first-name" select="data(field[@name='first_name'])" />
         <xsl:variable name="last-name" select="data(field[@name='last_name'])" />
@@ -335,9 +348,9 @@
         />
         <xsl:variable name="user-uri" select="busers:get_user_uri(
             concat(
-                $uri-base,
-                $user-type-uri-name
-                ),
+            $uri-base,
+            $user-type-uri-name
+            ),
             $user-identifier
             )" />
         <owner isA="TLCPerson">
@@ -352,6 +365,6 @@
             </role>
         </owner>
     </xsl:template>
-    
+    -->
     
 </xsl:stylesheet>

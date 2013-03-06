@@ -140,15 +140,19 @@
                 <xsl:copy-of select="field[
                     @name='status_date' or 
                     @name='registry_number' or 
-                    @name='doc_id'
+                    @name='doc_id' or 
                     @name='sitting_id'
-                    ] | 
+                    ]" />
+                
+                <xsl:copy-of select="
                     changes |
                     audits |
                     sa_events | 
                     sittingreport | 
                     versions
                     " />
+                    
+                
                 <!-- for <event> and <attachment> -->
                 <!--
                 <xsl:copy-of select="head" />    

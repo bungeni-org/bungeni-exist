@@ -92,7 +92,7 @@
                 
                 <xsl:attribute name="unique-id">
                     <xsl:choose>
-                        <xsl:when test="$group-type eq 'parliament">
+                        <xsl:when test="$group-type eq 'parliament'">
                             <xsl:value-of select="concat(
                                 $legislature-type-name, '.', $legislature-identifier, 
                                 '-', 

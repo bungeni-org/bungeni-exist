@@ -1,16 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:bctype="http://www.bungeni.org/xml/contenttypes/1.0"    
     exclude-result-prefixes="xs"
     version="2.0">
     
     <xsl:import href="include_tmpls.xsl"/>
+    <xsl:include href="func_content_types.xsl" />    
+    
     
     <xsl:template match="item_schedule[parent::item_schedule]">
-        <schedule>
+        <scheduleItem>
+            <xsl:attribute name="id">
+                <xsl:variable name="schedule_id" select="field[@name='schedule_id']" />
+                <xsl:value-of select="concat('schedule-',$schedule_id)" />
+            </xsl:attribute>
+            <xsl:variable name="parliament-full-uri" select="//custom/parliament-full-uri" />
+            <xsl:variable name="type-mappings" select="//custom/value" />
+            <xsl:variable name="item-type">
+                <xsl:variable name="item_type" select="field[@name='item_type']" />
+                <xsl:value-of select="bctype:get_content_type_uri_name($item_type, $type-mappings)" />
+            </xsl:variable>
+            <xsl:variable name="item_id" select="field[@name='item_id']" />
+            <sourceItem isA="TLCReference" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
+               <type isA="TLCTerm">
+                   <value type="xs:string">
+                       <xsl:value-of select="$item-type" />
+                   </value>
+               </type>
+            </sourceItem>
             <xsl:apply-templates />
-        </schedule>
+        </scheduleItem>
     </xsl:template>    
+    
+    <xsl:template match="field[@name='item_type']" />
+    
+    <xsl:template match="field[@name='active']">
+        <active type="xs:boolean">
+            <xsl:choose>
+                <xsl:when test=". eq 'True'">
+                    true
+                </xsl:when>
+                <xsl:otherwise>
+                    false
+                </xsl:otherwise>
+            </xsl:choose>
+        </active>
+    </xsl:template>
     
     <xsl:template match="field[@name='item_uri']">
         <bungeniUri type="xs:anyURI">
@@ -45,14 +81,7 @@
     
     
     
-    <xsl:template match="field[@name='item_mover']">
-        <xsl:call-template name="renderIntegerElement">
-            <xsl:with-param name="elementName">scheduleId</xsl:with-param>
-            <xsl:with-param name="key">
-                <xsl:value-of select="true()" />
-            </xsl:with-param>
-        </xsl:call-template>
-    </xsl:template>
+    <xsl:template match="field[@name='item_mover']" />
     
     
     
@@ -73,9 +102,9 @@
     -->
     
     <xsl:template match="item_schedule[child::item_schedule]">
-        <schedules>
+        <scheduleItems>
             <xsl:apply-templates />
-        </schedules>
+        </scheduleItems>
     </xsl:template>
     
     <xsl:template match="itemdiscussions">
@@ -86,8 +115,19 @@
     
     <xsl:template match="itemdiscussion">
         <discussion>
+            <xsl:attribute name="id">
+                <xsl:variable name="discussion_id" select="field[@name='discussion_id']" />
+                <xsl:value-of select="concat('discussion-', $discussion_id)" />
+            </xsl:attribute>
             <xsl:apply-templates />
         </discussion>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='discussion_id']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">discussionId</xsl:with-param>
+            <xsl:with-param name="key">true</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="field[@name='sitting_id'][parent::sitting]">
@@ -96,6 +136,40 @@
         </sittingId>
     </xsl:template>
     
-    <xsl:template match="field[@name='sitting_id'][parent::item_schedule]" />
+    <xsl:template match="sa_attendance[child::sa_attendance]">
+        <attendanceRecords>
+            <xsl:apply-templates />
+        </attendanceRecords>
+    </xsl:template>
     
+    <xsl:template match="sa_attendance[parent::sa_attendance]">
+        <attendanceRecord>
+            <xsl:apply-templates />
+        </attendanceRecord>
+    </xsl:template>
+    
+    <xsl:template match="reports">
+       <reports>
+        <xsl:apply-templates />
+       </reports>
+    </xsl:template>
+    
+    <xsl:template match="report[parent::reports]">
+        <report>
+            <xsl:apply-templates />
+        </report>
+    </xsl:template>
+    
+    <xsl:template match="report[parent::report]">
+        <reportInfo>
+            <xsl:apply-templates />
+        </reportInfo>
+    </xsl:template>
+    
+    
+    
+
+    <xsl:template match="field[@name='sitting_id'][parent::item_schedule]" />
+
+
 </xsl:stylesheet>

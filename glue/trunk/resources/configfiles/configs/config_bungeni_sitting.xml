@@ -52,11 +52,11 @@
         
         <xslt   step="1" 
             name="groupingLevel1" 
-            href="pipeline_xslt/bungeni/groupsitting/1_grouping.xsl"/>
+            href="pipeline_xslt/bungeni/sitting/1_grouping.xsl"/>
         
         <xslt   step="2" 
             name="groupingLevel2" 
-            href="pipeline_xslt/bungeni/groupsitting/2_grouping.xsl"/>               
+            href="pipeline_xslt/bungeni/sitting/2_grouping.xsl"/>               
         
         <xslt   step="3" 
             name="appendBungeniNS" 
@@ -74,6 +74,10 @@
         <process name="unescapehtml"
             description="item notes"
             param="//bu:ontology//bu:notes" />        
+        
+        <process name="unescapehtml"
+            description="item notes"
+            param="//bu:ontology//bu:body" />        
         
     </processgroup>
     

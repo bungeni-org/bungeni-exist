@@ -34,10 +34,10 @@ declare function rou:func-name(
 
 :)
 
-declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER-ID as xs:string) {
+declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER as xs:string) {
         let 
             $parts := cmn:get-view-parts("/home"),
-            $act-entries-tmpl :=  bun:get-government($parts,$CHAMBER-ID),
+            $act-entries-tmpl :=  bun:get-government($parts,$CHAMBER),
             $act-entries-repl:= document {
     							template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     						 } 
@@ -49,7 +49,7 @@ declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER-ID as xs:strin
     							   cmn:get-route($CONTROLLER-DOC/exist-path),
                                     <route-override>
                                         <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                        <identifier>{$CHAMBER-ID}</identifier>
+                                        <identifier>{$CHAMBER}</identifier>
                                     </route-override>, 
     							   cmn:build-nav-node($CONTROLLER-DOC/exist-path, $act-entries-repl)
     							 )         
@@ -73,7 +73,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $parts := cmn:get-view-listing-parts($doc-type, 'text'),
                     $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC/exist-res, $CONTROLLER-DOC/chamber,$acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
+                    $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC/exist-res, $CONTROLLER-DOC/parliament,$acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -84,7 +84,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($CONTROLLER-DOC/exist-path),
                                                 <route-override>
-                                                    <identifier>{$CONTROLLER-DOC/chamber}</identifier>
+                                                    <identifier>{$CONTROLLER-DOC/parliament/identifier}</identifier>
                                                 </route-override>, 
     									    (cmn:build-nav-node(
     									       $CONTROLLER-DOC/exist-path,

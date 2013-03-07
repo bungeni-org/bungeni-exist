@@ -19,6 +19,8 @@
         document as opposed to main document. -->
     <xsl:param name="version"/>
     <xsl:param name="epub"/>
+    <xsl:param name="chamber"/>
+    <xsl:param name="chamber-id"/>
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
@@ -64,7 +66,7 @@
                         </xsl:choose>
                     </xsl:with-param>
                     <xsl:with-param name="tab-path">text</xsl:with-param>
-                    <xsl:with-param name="chamber" select="concat(bu:ontology/bu:document/bu:origin/bu:identifier,'/')"/>
+                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
                 </xsl:call-template>
                 <!-- Renders the document download types -->
@@ -199,7 +201,7 @@
     <xsl:template name="doc-item-sponsor">
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="{bu:ontology/bu:document/bu:origin/bu:identifier}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                <a href="{$chamber}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
                     <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </a>
             </i>
@@ -215,7 +217,7 @@
                 <xsl:when test="bu:ontology/bu:signatories">
                     <xsl:for-each select="bu:ontology/bu:signatories/bu:signatory[bu:status/bu:value eq 'consented'][bu:person/@href ne ancestor::bu:ontology/bu:document/bu:owner/bu:person/@href]">
                         <i>
-                            <a href="member?uri={bu:person/@href}" title="{bu:status/@showAs}">
+                            <a href="{$chamber}/member?uri={bu:person/@href}" title="{bu:status/@showAs}">
                                 <xsl:value-of select="bu:person/@showAs"/>
                             </a>
                         </i>

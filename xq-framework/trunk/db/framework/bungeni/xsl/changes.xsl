@@ -16,6 +16,8 @@
     <!--PARAMS -->
     <xsl:param name="epub"/>
     <xsl:param name="serverport"/>
+    <xsl:param name="chamber"/>
+    <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri">
@@ -43,7 +45,7 @@
                         <xsl:value-of select="$doc-type"/>
                     </xsl:with-param>
                     <xsl:with-param name="tab-path">timeline</xsl:with-param>
-                    <xsl:with-param name="chamber" select="concat(bu:ontology/bu:document/bu:origin/bu:identifier,'/')"/>
+                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                     <xsl:with-param name="uri" select="$doc-uri"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
                 </xsl:call-template>

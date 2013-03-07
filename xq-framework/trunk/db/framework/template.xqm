@@ -87,9 +87,9 @@ declare function template:process-tmpl(
      $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
     (: process page meta and return :)
     return 
-       template:process-page-meta($route-map, $route-override, $proc-doc) 
+       (:local:treewalker($template/xh:html):)
+       template:process-page-meta($route-map, $route-override, $proc-doc)
 };
-
 
 (:~
 : Merges two XHTML templates together
@@ -286,7 +286,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     ) 
     (: set body classes :)
     else if ($content/ancestor::xh:body) then (
-		let $chamber-name := if($override/identifier eq 'AS_XIV') then "assembly" else 'senate'
+		let $chamber-name := if($override/identifier eq 'assembly') then $override/identifier else "senate"
 		return 
     		element { node-name($content/ancestor::xh:body) } {
     			attribute class { "template-portal-eXist " || $chamber-name },

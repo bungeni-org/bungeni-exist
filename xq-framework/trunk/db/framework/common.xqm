@@ -41,11 +41,18 @@ declare function cmn:get-vdex-db() as xs:string {
  };
 
 (:~
-Get the UI configuraiton document
+Get the UI configuraton document
 :)
 declare function cmn:get-ui-config() as document-node() {
   local:__get_app_doc__($config:UI-CONFIG)
   (: fn:doc(fn:concat($config:fw-app-root, $config:UI-CONFIG)) :)
+};
+
+(:~
+Get the PARLIAMENT configuraton document
+:)
+declare function cmn:get-parl-config() as document-node() {
+    doc($config:PARLIAMENT-CONFIG)
 };
 
 
@@ -123,7 +130,6 @@ Get the applicable menu for a route
 :)
 declare function cmn:get-menu-from-route($exist-path as xs:string) as node()? {
     let $doc := cmn:get-route($exist-path)
-    let $log := util:log("DEBUG",concat($exist-path, "++++++++++++++++++++++"))
       return cmn:get-ui-config()//menu[@for eq $doc/navigation/text()]
 };
 
@@ -458,7 +464,7 @@ declare function cmn:get-acl-permission-as-node-for-role($role-name as xs:string
 (:~
 Loads an XSLT file 
 :)
-declare function cmn:get-xslt($value as xs:string) as document-node() {
+declare function cmn:get-xslt($value as xs:string) as document-node()? {
     (: doc(fn:concat($config:fw-app-root, $value)) :)
     local:__get_app_doc__($value)
 };

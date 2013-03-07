@@ -16,6 +16,8 @@
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_addr_tmpls.xsl"/>
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_group_tmpls.xsl"/>
     <xsl:import href="resources/pipeline_xslt/bungeni/common/include_memb_tmpls.xsl"/>
+    <xsl:import href="resources/pipeline_xslt/bungeni/common/include_suppress.xsl"/>
+    
     
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>

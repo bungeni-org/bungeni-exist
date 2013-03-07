@@ -119,6 +119,16 @@
         </xsl:call-template> 
     </xsl:template>     
     
+    <xsl:template match="field[@name='group_role']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">
+                <xsl:text>groupRole</xsl:text>
+            </xsl:with-param>
+        </xsl:call-template> 
+    </xsl:template>     
+    
+    
+    
 
     <xsl:template match="group_addresses">
         <groupAddresses>

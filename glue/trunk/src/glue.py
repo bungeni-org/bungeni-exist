@@ -34,7 +34,12 @@ __status__ = "Development"
 __sax_parser_factory__ = "org.apache.xerces.jaxp.SAXParserFactoryImpl"
 
 
-from java.io import File
+from java.io import (
+    File,
+    OutputStreamWriter,
+    BufferedWriter,
+    FileOutputStream
+    )
 
 from java.lang import StringBuilder
 
@@ -392,6 +397,31 @@ def list_uniqifier(seq):
     seen_add = seen.add
     return [ x for x in seq if x not in seen and not seen_add(x)]
 
+
+def publish_parliament_info(config_file, parliament_cache_info):
+    cfg = TransformerConfig(config_file)
+    xml_parl_info = param_parl_info(cfg, parliament_cache_info.parl_info)
+    path_to_file = os.path.join(cfg.get_temp_files_folder(),"legislature_info.xml")
+    bwriter = BufferedWriter(
+        OutputStreamWriter(
+            FileOutputStream(path_to_file), "UTF8"
+            )
+        )
+    bwriter.append(xml_parl_info)
+    bwriter.flush()
+    bwriter.close() 
+    
+    wd_cfg = WebDavConfig(config_file)
+    xml_folder = wd_cfg.get_http_server_port() + wd_cfg.get_bungeni_xml_folder()
+    webdaver = WebDavClient(
+                wd_cfg.get_username(), 
+                wd_cfg.get_password(), 
+                xml_folder
+                )
+    up_stat = webdaver.pushFile(path_to_file)
+    return up_stat
+       
+
 def main_queue(config_file, afile, parliament_cache_info):
     """
     
@@ -416,29 +446,6 @@ def main_queue(config_file, afile, parliament_cache_info):
     __setup_output_dirs__(cfg)
     wd_cfg = WebDavConfig(config_file)
     in_queue = False
-    """
-    Get parliament information
-    """
-    print "[checkpoint] getting parliament info"
-    """
-    !+BICAMERAL
-    if its a bicameral legislature, then the parliament information must return 
-    a list with 2 maps containing info about the 2 chambers
-    otherwise a list with a map containing info about the chamber
-    """
-    """"
-    parl_info = get_parl_info(cfg)
-    
-    if parl_info == None:
-        print "XXXX PARL_INFO WAS NULL"
-        return in_queue
-    if len(parl_info) == 0:
-        print "XXXX PARL_INFO WAS 0"
-        return in_queue
-    if cfg.get_bicameral() and len(parl_info) < 2:
-        print "XXXX PARL_INFO WAS LESS THAN 2"
-        return in_queue
-    """
     transformer = Transformer(cfg)
     input_map = {
         "parliament-info" : param_parl_info(cfg, parliament_cache_info.parl_info),

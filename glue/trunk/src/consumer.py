@@ -32,6 +32,7 @@ from glue import (
     main_queue,
     get_parl_info,
     setup_consumer_directories,
+    publish_parliament_info
     )
 
 
@@ -79,9 +80,13 @@ class RabbitMQClient:
             self.channel.basicConsume(self.queueName, False, self.consumer)
             count = 0
             if declareOk.messageCount <= 0:
-                self.stdout.write(time.asctime(time.localtime(time.time())) + " NO MESSAGES \n")
+                self.stdout.write(
+                    time.asctime(time.localtime(time.time())) + " NO MESSAGES \n"
+                    )
             else:
-                self.stdout.write(time.asctime(time.localtime(time.time())) + " " + str(declareOk.messageCount) + " MESSAGES! \n")
+                self.stdout.write(
+                    time.asctime(time.localtime(time.time())) + " " + str(declareOk.messageCount) + " MESSAGES! \n"
+                    )
                 while (count < declareOk.messageCount):
                     delivery = QueueingConsumer.Delivery
                     delivery = self.consumer.nextDelivery()
@@ -111,7 +116,7 @@ class RabbitMQClient:
                     LOG.error("Error while closing connection", ex)
 
 
-class ParlInfoRunner(Thread):
+class ParlInfoGather(Thread):
     """
     This thread gets the parliament information and is run before the 
     main consumer thread
@@ -132,6 +137,24 @@ class ParlInfoRunner(Thread):
         finally:
             self.latch.countDown()
 
+class ParlInfoPublish(Thread):
+    """
+    This thread publishes the parliament info to bungeni
+    """
+    
+    def __init__(self, cd_latch, parl_info):
+        self.latch = cd_latch
+        self.parliament_cache_info = parl_info
+        self.publish_state = False
+        
+    def run(self):
+        try:
+            self.publish_state = publish_parliament_info(__config_file__, self.parliament_cache_info)
+        except Exception, e:
+            print "There was an exception getting the parliament info", e
+        finally:
+            self.latch.countDown()
+    
             
 class QueueRunner(Thread):
     
@@ -142,13 +165,77 @@ class QueueRunner(Thread):
     def run(self):
         try:
             rmq = RabbitMQClient()
-            rmq.consume_msgs(pc_info)
+            rmq.consume_msgs(self.parliament_cache_info)
         except Exception, e:
             print "There was an exception processing the queue", e
         finally:
             self.latch.countDown()
-            
 
+
+def parliament_info_gather():
+    pc_info = None
+    parl_info_continue = True
+    print "Parliament Info Gather Thread : Start"
+    while parl_info_continue:
+        time.sleep(int(__time_int__))
+        parl_latch = CountDownLatch(1)
+        p_thread = ParlInfoGather(parl_latch)
+        p_thread.start()
+        try:
+            parl_latch.await()
+            pc_info = p_thread.parl_info
+            if pc_info.is_cache_satisfied():
+                """
+                If its a bicameral legislature, the 2 chambers need to be created
+                first, this thread will continue until the 2 chambers have been created
+                and only then process other documents
+                """
+                #print "XXXX parl_info cache satisfied, exiting ", pc_info
+                parl_info_continue = False
+            #else:
+            #   print "XXX parl_info cache not satisfied, continuing", pc_info
+        except InterruptedException, e:
+            print "ParlInfoRunner was interrupted !", e
+    
+    print "Parliament Info Gather Thread : Stop"
+    return pc_info
+                    
+
+def parliament_info_publish(parliament_cache_info):
+    parl_push_continue = True
+    success = False
+    print "Parliament Info Publish Thread : Start"
+    while parl_push_continue:
+        time.sleep(int(__time_int__))
+        parl_latch = CountDownLatch(1)
+        p_thread = ParlInfoPublish(parl_latch, parliament_cache_info)
+        p_thread.start()
+        try:
+            parl_latch.await()
+            if p_thread.publish_state:
+                parl_push_continue = False
+                success = True
+        except InterruptedException, e:
+            print "ParlInfoRunner was interrupted !", e
+    
+    print "Parliament Info Publish Thread : Stop"
+    return success
+
+
+def consume_documents(parliament_cache_info):
+    print "Document consumer thread: Start"
+    while True:
+        time.sleep(int(__time_int__))
+        cd_latch = CountDownLatch(1)
+        qr_thread = QueueRunner(cd_latch, parliament_cache_info)
+        qr_thread.start()
+        try:
+            cd_latch.await()
+        except InterruptedException, e:
+            print "QueueRunner thread was interrupted !", e
+    print "Document consumer thread: Exit"
+        
+    
 
 if (len(sys.argv) >= 2):
     # process input command line options
@@ -161,48 +248,9 @@ else:
 
 # setup directories
 setup_consumer_directories(__config_file__)
-
-# ParliamentCacheInfo
-pc_info = None
-parl_info_continue = True
-print "Parliament Info Gather Thread : Start"
-while parl_info_continue:
-    time.sleep(int(__time_int__))
-    parl_latch = CountDownLatch(1)
-    p_thread = ParlInfoRunner(parl_latch)
-    p_thread.start()
-    try:
-        parl_latch.await()
-        pc_info = p_thread.parl_info
-        if pc_info.is_cache_satisfied():
-            """
-            If its a bicameral legislature, the 2 chambers need to be created
-            first, this thread will continue until the 2 chambers have been created
-            and only then process other documents
-            """
-            #print "XXXX parl_info cache satisfied, exiting ", pc_info
-            parl_info_continue = False
-        #else:
-        #   print "XXX parl_info cache not satisfied, continuing", pc_info
-    except InterruptedException, e:
-        print "ParlInfoRunner was interrupted !"
-
-print "Parliament Info Gather Thread : Stop"
-
-"""
-At this point we have the parliament information so we process the other messages in 
-the queue
-"""
-
-print "Document consumer thread: Start"
-while True:
-    time.sleep(int(__time_int__))
-    cd_latch = CountDownLatch(1)
-    qr_thread = QueueRunner(cd_latch, pc_info)
-    qr_thread.start()
-    try:
-        cd_latch.await()
-    except InterruptedException, e:
-        print "QueueRunner thread was interrupted !", e
-print "Document consumer thread: Exit"
-    
+# get chamber information
+cache_info = parliament_info_gather()
+# publish chamber information to exist
+if parliament_info_publish(cache_info):
+    # publish other documents to exist
+    consume_documents(cache_info)

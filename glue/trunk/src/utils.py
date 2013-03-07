@@ -172,7 +172,7 @@ class Transformer(object):
         self._params = HashMap()
         # sets the parliament info object
         for key in input_params.keys():
-            print "XXXXX SET_PARAM ", key, input_params[key]
+            #print "XXXXX SET_PARAM ", key, input_params[key]
             self._params.put(key, input_params[key])
 
     def xpath_get_unique_id(self):
@@ -226,7 +226,7 @@ class Transformer(object):
         self.xmldoc = sreader.read(input_file)
         doc_unique = self.xmldoc.selectSingleNode(self.xpath_get_unique_id())
         if doc_unique is None:
-            print "XXXXXX UNIQUE ID NULL FOR ", input_file
+            #print "XXXXXX UNIQUE ID NULL FOR ", input_file
             LOG.error("Unique ID was null !! for ", input_file)
             return "NULL_VALUE"
         return doc_unique.getValue()
@@ -283,7 +283,7 @@ class Transformer(object):
                 outFile = File(file_name)
                 #copy transformed file to disk
                 if os.path.isfile(file_name):
-                    print "XXXXXX ERROR_OUTFILE_EXISTS ", file_name
+                    print "ERROR_OUTFILE_EXISTS ", file_name
                 FileUtility.getInstance().copyFile(fis, outFile)
                 close_quietly(fis)
                 return [outFile, None]
@@ -334,12 +334,14 @@ class RepoSyncUploader(object):
         paths = coll.elements("file")
         for path in paths:
             path_name = path.getText()
+            self.upload_file(path_name)
+            """
             self.username = self.webdav_cfg.get_username()
             self.password = self.webdav_cfg.get_password()
             self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
             webdaver = WebDavClient(self.username, self.password, self.xml_folder)
             webdaver.pushFile(path_name)
-
+            """
 
 
 

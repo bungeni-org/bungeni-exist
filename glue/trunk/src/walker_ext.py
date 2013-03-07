@@ -442,7 +442,7 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     #truncate to first-3 characters only
                     truncated_prefix = output_file_name_wo_prefix[:3]
                     on_xml_file = truncated_prefix + "_"
-                    print "XXXXXX OUT_FILE_CALLBACK", on_xml_file
+                    #print "XXXXXX OUT_FILE_CALLBACK", on_xml_file
                     out_files = self.input_params["transformer"].run(
                          input_file_path,
                          self.input_params["main_config"].get_xml_output_folder() + on_xml_file ,

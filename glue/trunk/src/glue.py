@@ -418,6 +418,7 @@ def publish_parliament_info(config_file, parliament_cache_info):
                 wd_cfg.get_password(), 
                 xml_folder
                 )
+    webdaver.reset_remote_folder(xml_folder)
     up_stat = webdaver.pushFile(path_to_file)
     return up_stat
        

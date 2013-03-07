@@ -8,48 +8,40 @@
     <xsl:import href="include_tmpls.xsl" />
     
     <xsl:template match="field[@name='language']">
-        <language type="xs:string" >
-            <xsl:if test="@displayAs">
-                <xsl:attribute name="showAs"><xsl:value-of select="@displayAs" /></xsl:attribute>
-            </xsl:if>
-            <xsl:value-of select="." />
-        </language>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">language</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     
     <xsl:template match="field[@name='parliament_id']">
-        <parliamentId key="true" type="xs:integer">
-            <xsl:value-of select="." />
-        </parliamentId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">parliamentId</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='title']">
-        <title type="xs:string">
-            <xsl:value-of select="." />
-        </title>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">title</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='user_id']">
-        <userId type="xs:integer">
-            <xsl:value-of select="." />
-        </userId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">userId</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>    
     
     <xsl:template match="field[@name='saved_file']">
-        <savedFile type="xs:string">
-            <xsl:value-of select="." />
-        </savedFile>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">savedFile</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='status']">
-        <status type="xs:string">
-            <xsl:if test="@displayAs">
-                <xsl:attribute name="showAs">
-                    <xsl:value-of select="@displayAs" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:value-of select="." />
-        </status>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">status</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
 
 <!--
@@ -62,51 +54,46 @@
 -->
     
     <xsl:template match="field[@name='parliament_type']">
-        <legislatureType isA="TLCTerm" showAs="{data(@displayAs)}">
-            <value type="xs:string">
-                <xsl:value-of select="." />
-            </value>
-        </legislatureType>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">legislatureType</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
+   
     <xsl:template match="field[@name='type']">
-        <type isA="TLCTerm">
-            <value type="xs:string">
-                <xsl:value-of select="." />
-            </value>
-        </type>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">type</xsl:with-param>
+        </xsl:call-template>
     </xsl:template> 
     
     <xsl:template match="field[@name='tag']">
-        <tag isA="TLCTerm">
-            <value type="xs:string">
-                <xsl:value-of select="." />
-            </value>    
-        </tag>
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">tag</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>    
     
     <xsl:template match="field[@name='first_name']">
-        <firstName type="xs:string">
-            <xsl:value-of select="." />
-        </firstName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">firstName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>  
     
     <xsl:template match="field[@name='last_name']">
-        <lastName type="xs:string">
-            <xsl:value-of select="." />
-        </lastName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">lastName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>      
     
     <xsl:template match="field[@name='short_name']">
-        <shortName type="xs:string">
-            <xsl:value-of select="." />
-        </shortName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">shortName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="field[@name='full_name']">
-        <fullName type="xs:string">
-            <xsl:value-of select="." />
-        </fullName>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">fullName</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     
@@ -179,7 +166,7 @@
     </xsl:template>
     
     <xsl:template match="field[@name='notes']">
-        <notes type="xs:string">
+        <notes>
             <xsl:value-of select="." />
         </notes>
     </xsl:template>
@@ -201,7 +188,7 @@
     
     
     <xsl:template match="field[@name='body_text' or @name='body']">
-        <body type="xs:string">
+        <body>
             <xsl:value-of select="." />
         </body>
     </xsl:template>    
@@ -209,31 +196,31 @@
     
     
     <xsl:template match="field[@name='doc_id']">
-        <docId type="xs:integer">
-            <xsl:value-of select="." />
-        </docId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">docId</xsl:with-param>
+            <xsl:with-param name="key">true</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>    
     
     <xsl:template match="field[@name='attachment_id']">
-        <attachmentId type="xs:integer">
-            <xsl:value-of select="." />
-        </attachmentId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">attachmentId</xsl:with-param>
+            <xsl:with-param name="key">true</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>    
     
     <xsl:template match="field[@name='geolocation']">
-        <xsl:if test=". ne 'None'">
-            <geoLocation type="xs:string">
-                <xsl:value-of select="." />
-            </geoLocation>
-        </xsl:if>
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">geoLocation</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     
     
     <xsl:template match="field[@name='owner_id']">
-        <ownerId type="xs:integer">
-            <xsl:value-of select="." />
-        </ownerId>
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">ownerId</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     
@@ -253,8 +240,5 @@
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template> 
-    
-    
-    
     
 </xsl:stylesheet>

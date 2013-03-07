@@ -14,7 +14,15 @@
     <xsl:function name="bdates:parse-date">
         <xsl:param name="input-date"/>
         <xsl:variable name="arrInputDate" select="tokenize($input-date,'\s+')" />
-        <xsl:sequence select="concat($arrInputDate[1],'T',$arrInputDate[2])" />
+        <xsl:choose>
+            <!-- check if there is a time part -->
+            <xsl:when test="count($arrInputDate) eq 2">
+                <xsl:sequence select="concat($arrInputDate[1],'T',$arrInputDate[2])" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$arrInputDate[1]" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
     <xsl:function name="bdates:parse-datepart-only">

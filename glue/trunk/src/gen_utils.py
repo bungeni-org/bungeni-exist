@@ -40,7 +40,7 @@ class ParliamentCacheInfo:
         self.parl_info = p_info
     
     def is_cache_satisfied(self):
-        print "XXXX is_cache_satisfied ", self.parl_info
+        #print "XXXX is_cache_satisfied ", self.parl_info
         if self.parl_info is None:
             return False
         else:

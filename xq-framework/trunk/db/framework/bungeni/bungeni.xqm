@@ -389,11 +389,10 @@ declare function bun:xqy-list-membership($type as xs:string) {
 };
 
 
-declare function bun:xqy-list-membership-with-tabs($type as xs:string, $status as xs:string) {
+declare function bun:xqy-list-membership-with-tabs($chamber as xs:string, $type as xs:string, $status as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology/bu:membership[bu:docType/bu:value eq '",$type,"'", 
-                " and ",$status,"]",
+                "/bu:ontology/bu:membership[bu:origin/bu:identifier eq '",$chamber,"' and ",$status,"]",
                 "/bu:membershipType[bu:value eq 'member_of_parliament']",
                 "/ancestor::bu:ontology")
 };
@@ -434,9 +433,9 @@ declare function bun:list-membership($eval-query as xs:string, $sortby as xs:str
 };
 
 
-declare function bun:list-membership-with-tabs($type as xs:string, $status as xs:string, $sortby as xs:string) {
+declare function bun:list-membership-with-tabs($chamber as xs:string, $type as xs:string, $status as xs:string, $sortby as xs:string) {
     
-    let $eval-query := bun:xqy-list-membership-with-tabs($type, $status)
+    let $eval-query := bun:xqy-list-membership-with-tabs($chamber, $type, $status)
 
     return 
     if ($sortby = 'ln_desc') then (
@@ -563,7 +562,7 @@ declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string,
 :)
 declare function bun:get-documentitems(
             $view-rel-path as xs:string,
-            $chamber as xs:string,
+            $parliament as node(),
             $acl as xs:string,
             $type as xs:string,
             $parts as node(),
@@ -575,7 +574,7 @@ declare function bun:get-documentitems(
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     let $tab := xs:string(request:get-parameter("tab",'uc'))    
-    let $coll := bun:list-documentitems-with-acl-n-tabs($chamber, $acl, $type, $tab)
+    let $coll := bun:list-documentitems-with-acl-n-tabs($parliament/identifier/text(), $acl, $type, $tab)
     let $listings-filter := cmn:get-listings-config($type)
     let $getqrystr := xs:string(request:get-query-string())    
     
@@ -597,7 +596,7 @@ declare function bun:get-documentitems(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($chamber, $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($parliament/identifier/text(), $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
          }
          </tags>    
          <currentView>{$parts/current-view}</currentView>
@@ -627,7 +626,7 @@ declare function bun:get-documentitems(
             <parameters>
                 <param name="sortby" value="{$sortby}" />
                 <param name="listing-tab" value="{$tab}" />
-                <param name="chamber" value="{$chamber}" />
+                <param name="chamber" value="{$parliament/type/text()}" />
                 <param name="item-listing-rel-base" value="{$view-rel-path}" />
             </parameters>
            ) 
@@ -2692,7 +2691,8 @@ declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $
 :)
 declare function bun:get-parl-doc($acl as xs:string, 
             $doc-uri as xs:string, 
-            $parts as node()) as element()* {
+            $parts as node(),
+            $parliament as node()) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2712,7 +2712,12 @@ declare function bun:get-parl-doc($acl as xs:string,
                 bun:get-ref-assigned-grps($match, $parts/parent::node())
         }
     return
-        transform:transform($doc, $stylesheet,())
+        transform:transform($doc, $stylesheet,
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>
+        )
 };
 
 (:~
@@ -2758,7 +2763,8 @@ declare function bun:get-parl-doc-with-events($acl as xs:string,
 :)
 declare function bun:get-parl-doc-timeline($acl as xs:string, 
             $doc-uri as xs:string, 
-            $parts as node()) as element()* {
+            $parts as node(),
+            $parliament as node()) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2768,7 +2774,12 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
                     (: $parts/parent::node() returns all tabs of this doctype :)
                     bun:get-ref-timeline-activities($match, $parts/parent::node())
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>        
+        )
 };
 
 (:~ 
@@ -3249,7 +3260,7 @@ declare function bun:get-members(
     let $getqrystr := xs:string(request:get-query-string())  
     
     let $listings-filter := cmn:get-listings-config($parts/doctype) 
-    let $coll := bun:list-membership-with-tabs($parts/doctype, $listings-filter[@id eq $tab]/text(), $sortby)    
+    let $coll := bun:list-membership-with-tabs($chamber, $parts/doctype, $listings-filter[@id eq $tab]/text(), $sortby)    
     
     (: The line below is documented in bun:get-documentitems() :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset       
@@ -3263,7 +3274,7 @@ declare function bun:get-members(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($parts/doctype, $listing/text(), $sortby)) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($chamber, $parts/doctype, $listing/text(), $sortby)) }">{data($listing/@name)}</tag>
                     
         }
         </tags>          

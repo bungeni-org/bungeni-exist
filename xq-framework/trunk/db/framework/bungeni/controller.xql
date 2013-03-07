@@ -26,7 +26,7 @@ Change the path to the appcontroller to the appcontroller of your application
 
 :)
 import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "appcontroller.xqm";
-
+import module namespace cmn = "http://exist.bungeni.org/cmn" at "../common.xqm";
 import module namespace functx = "http://www.functx.com" at "../functx.xqm";
 
 (: xhtml 1.1 :)
@@ -48,12 +48,13 @@ declare variable $exist:controller external;
 (: The REL-PATH variable :)
 declare variable $REL-PATH := fn:concat($exist:root, '/', $exist:controller);
 
-
- 
+let $CHAMBER-REL-PATH := "/" || substring-after(functx:replace-first($exist:path,"/",""),"/")
+let $TYPE := substring-before(functx:replace-first($exist:path,"/",""),"/")
+let $PARLIAMENT := cmn:get-parl-config()/parliaments/parliament[type/text() eq $TYPE]
 let $ret := appcontroller:controller(
                 $exist:path, 
-                substring-before(functx:replace-first($exist:path,"/",""),"/"),
-                "/" || substring-after(functx:replace-first($exist:path,"/",""),"/"),
+                $PARLIAMENT,
+                $CHAMBER-REL-PATH,
                 $exist:root, 
                 $exist:controller, 
                 $exist:resource,

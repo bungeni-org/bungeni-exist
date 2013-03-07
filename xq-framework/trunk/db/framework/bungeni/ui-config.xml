@@ -15,734 +15,734 @@
             <navigation>home</navigation>
             <title>Home</title>
         </route>
-        <route href="/AS_XIV/home">
+        <route href="/assembly/home">
             <navigation>home</navigation>
             <title>Home</title>
         </route>
-        <route href="/SE_XIV/home">
+        <route href="/senate/home">
             <navigation>home</navigation>
             <title>Home</title>
         </route>
-        <route href="/AS_XIV/business">
+        <route href="/assembly/business">
             <title>Business</title>
             <navigation>business</navigation>
         </route>
-        <route href="/AS_XIV/members">
+        <route href="/assembly/members">
             <title>Members</title>
             <navigation>members</navigation>
         </route>
-        <route href="/SE_XIV/business">
+        <route href="/senate/business">
             <title>Business</title>
             <navigation>business</navigation>
         </route>
-        <route href="/SE_XIV/members">
+        <route href="/senate/members">
             <title>Members</title>
             <navigation>members</navigation>
         </route>
-        <route href="/AS_XIV/member">
+        <route href="/assembly/member">
             <title>Business | Member of Parliament</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/SE_XIV/member">
+        <route href="/senate/member">
             <title>Business | Member of Parliament</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>members</subnavigation>
         </route>
-        <route href="/AS_XIV/member-officesheld">
+        <route href="/assembly/member-officesheld">
             <title>Business | Member of Parliament</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/SE_XIV/member-officesheld">
+        <route href="/senate/member-officesheld">
             <title>Business | Member of Parliament</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/AS_XIV/member-parlactivities">
+        <route href="/assembly/member-parlactivities">
             <title>Business | Member of Parliament</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/SE_XIV/member-parlactivities">
+        <route href="/senate/member-parlactivities">
             <title>Business | Member of Parliament</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/AS_XIV/member-contacts">
+        <route href="/assembly/member-contacts">
             <title>Business | Member of Parliament</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/SE_XIV/member-contacts">
+        <route href="/senate/member-contacts">
             <title>Business | Member of Parliament</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>current</subnavigation>
         </route>
-        <route href="/AS_XIV/committees">
+        <route href="/assembly/committees">
             <title>Business | Committees </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committees">
+        <route href="/senate/committees">
             <title>Business | Committees </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/committee-text">
+        <route href="/assembly/committee-text">
             <title>Business | Committee's Profile</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committee-text">
+        <route href="/senate/committee-text">
             <title>Business | Committee's Profile</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/committee-members">
+        <route href="/assembly/committee-members">
             <title>Business | Committee's Members</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committee-members">
+        <route href="/senate/committee-members">
             <title>Business | Committee's Members</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/committee-assigneditems">
+        <route href="/assembly/committee-assigneditems">
             <title>Business | Committee's Assigned Items</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committee-assigneditems">
+        <route href="/senate/committee-assigneditems">
             <title>Business | Committee's Assigned Items</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/committee-sittings">
+        <route href="/assembly/committee-sittings">
             <title>Business | Committee's Sittings</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committee-sittings">
+        <route href="/senate/committee-sittings">
             <title>Business | Committee's Sittings</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/committee-staff">
+        <route href="/assembly/committee-staff">
             <title>Business | Committee's Staff</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committee-staff">
+        <route href="/senate/committee-staff">
             <title>Business | Committee's Staff</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/committee-contacts">
+        <route href="/assembly/committee-contacts">
             <title>Business | Committee's Staff</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/SE_XIV/committee-contacts">
+        <route href="/senate/committee-contacts">
             <title>Business | Committee's Staff</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>committees</subnavigation>
         </route>
-        <route href="/AS_XIV/politicalgroup-text">
+        <route href="/assembly/politicalgroup-text">
             <title>Business | Political Group's Profile</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/SE_XIV/politicalgroup-text">
+        <route href="/senate/politicalgroup-text">
             <title>Business | Political Group's Profile</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/AS_XIV/politicalgroup-members">
+        <route href="/assembly/politicalgroup-members">
             <title>Business | Political Group's Members</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/SE_XIV/politicalgroup-members">
+        <route href="/senate/politicalgroup-members">
             <title>Business | Political Group's Members</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/AS_XIV/politicalgroup-contacts">
+        <route href="/assembly/politicalgroup-contacts">
             <title>Business | Political Group's Staff</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/SE_XIV/politicalgroup-contacts">
+        <route href="/senate/politicalgroup-contacts">
             <title>Business | Political Group's Staff</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/AS_XIV/government-text">
+        <route href="/assembly/government-text">
             <title>Business | Government's Profile</title>
-            <navigation>/AS_XIV/home</navigation>
+            <navigation>/assembly/home</navigation>
         </route>
-        <route href="/SE_XIV/government-text">
+        <route href="/senate/government-text">
             <title>Business | Government's Profile</title>
-            <navigation>/SE_XIV/home</navigation>
+            <navigation>/senate/home</navigation>
         </route>
-        <route href="/AS_XIV/ministry-text">
+        <route href="/assembly/ministry-text">
             <title>Business | Ministry's Profile</title>
-            <navigation>/AS_XIV/home</navigation>
+            <navigation>/assembly/home</navigation>
         </route>
-        <route href="/SE_XIV/ministry-text">
+        <route href="/senate/ministry-text">
             <title>Business | Ministry's Profile</title>
-            <navigation>/SE_XIV/home</navigation>
+            <navigation>/senate/home</navigation>
         </route>
-        <route href="/AS_XIV/ministry-members">
+        <route href="/assembly/ministry-members">
             <title>Business | Ministry's Members</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/SE_XIV/ministry-members">
+        <route href="/senate/ministry-members">
             <title>Business | Ministry's Members</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/AS_XIV/ministry/contacts">
+        <route href="/assembly/ministry/contacts">
             <title>Business | Ministry's Staff</title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/SE_XIV/ministry/contacts">
+        <route href="/senate/ministry/contacts">
             <title>Business | Ministry's Staff</title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/AS_XIV/bills">
+        <route href="/assembly/bills">
             <title>Business | Bills</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bills">
+        <route href="/senate/bills">
             <title>Business | Bills</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-text">
+        <route href="/assembly/bill-text">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-text">
+        <route href="/senate/bill-text">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-version/text">
+        <route href="/assembly/bill-version/text">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-version/text">
+        <route href="/senate/bill-version/text">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-timeline">
+        <route href="/assembly/bill-timeline">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-timeline">
+        <route href="/senate/bill-timeline">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-assignedgroups">
+        <route href="/assembly/bill-assignedgroups">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-assignedgroups">
+        <route href="/senate/bill-assignedgroups">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-documents">
+        <route href="/assembly/bill-documents">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-documents">
+        <route href="/senate/bill-documents">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-version/documents">
+        <route href="/assembly/bill-version/documents">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-version/documents">
+        <route href="/senate/bill-version/documents">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-event">
+        <route href="/assembly/bill-event">
             <title>Business | Bill Event</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-event">
+        <route href="/senate/bill-event">
             <title>Business | Bill Event</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bill-attachment">
+        <route href="/assembly/bill-attachment">
             <title>Business | Bill Attachment</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bill-attachment">
+        <route href="/senate/bill-attachment">
             <title>Business | Bill Attachment</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/bills/rss">
+        <route href="/assembly/bills/rss">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/SE_XIV/bills/rss">
+        <route href="/senate/bills/rss">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>bills</subnavigation>
         </route>
-        <route href="/AS_XIV/questions">
+        <route href="/assembly/questions">
             <title>Business | Questions </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/questions">
+        <route href="/senate/questions">
             <title>Business | Questions </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-text">
+        <route href="/assembly/question-text">
             <title>Business | Question Text</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-text">
+        <route href="/senate/question-text">
             <title>Business | Question Text</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-version/text">
+        <route href="/assembly/question-version/text">
             <title>Business | Question Version Text</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-version/text">
+        <route href="/senate/question-version/text">
             <title>Business | Question Version Text</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-timeline">
+        <route href="/assembly/question-timeline">
             <title>Business | Question Timeline</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-timeline">
+        <route href="/senate/question-timeline">
             <title>Business | Question Timeline</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-assignedgroups">
+        <route href="/assembly/question-assignedgroups">
             <title>Business | Bill</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-assignedgroups">
+        <route href="/senate/question-assignedgroups">
             <title>Business | Bill</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-documents">
+        <route href="/assembly/question-documents">
             <title>Business | Attachments</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-documents">
+        <route href="/senate/question-documents">
             <title>Business | Attachments</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-version/documents">
+        <route href="/assembly/question-version/documents">
             <title>Business | Question Version Attachments</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-version/documents">
+        <route href="/senate/question-version/documents">
             <title>Business | Question Version Attachments</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-event">
+        <route href="/assembly/question-event">
             <title>Business | Question Event</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-event">
+        <route href="/senate/question-event">
             <title>Business | Question Event</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/question-attachment">
+        <route href="/assembly/question-attachment">
             <title>Business | Question Attachment</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/SE_XIV/question-attachment">
+        <route href="/senate/question-attachment">
             <title>Business | Question Attachment</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>questions</subnavigation>
         </route>
-        <route href="/AS_XIV/motions">
+        <route href="/assembly/motions">
             <title>Business | Motions </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motions">
+        <route href="/senate/motions">
             <title>Business | Motions </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-text">
+        <route href="/assembly/motion-text">
             <title>Business | Motion</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-text">
+        <route href="/senate/motion-text">
             <title>Business | Motion</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-version/text">
+        <route href="/assembly/motion-version/text">
             <title>Business | Motion Version Text</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-version/text">
+        <route href="/senate/motion-version/text">
             <title>Business | Motion Version Text</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-timeline">
+        <route href="/assembly/motion-timeline">
             <title>Business | Motion</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-timeline">
+        <route href="/senate/motion-timeline">
             <title>Business | Motion</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-assignedgroups">
+        <route href="/assembly/motion-assignedgroups">
             <title>Business | Motion</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-assignedgroups">
+        <route href="/senate/motion-assignedgroups">
             <title>Business | Motion</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-documents">
+        <route href="/assembly/motion-documents">
             <title>Business | Motion</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-documents">
+        <route href="/senate/motion-documents">
             <title>Business | Motion</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-version/documents">
+        <route href="/assembly/motion-version/documents">
             <title>Business | Motion Version Documents</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-version/documents">
+        <route href="/senate/motion-version/documents">
             <title>Business | Motion Version Documents</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-event">
+        <route href="/assembly/motion-event">
             <title>Business | Motion Event</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-event">
+        <route href="/senate/motion-event">
             <title>Business | Motion Event</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/motion-attachment">
+        <route href="/assembly/motion-attachment">
             <title>Business | Motion Attachment</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/SE_XIV/motion-attachment">
+        <route href="/senate/motion-attachment">
             <title>Business | Motion Attachment</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>motions</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocuments">
+        <route href="/assembly/tableddocuments">
             <title>Business | Tabled Documents </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocuments">
+        <route href="/senate/tableddocuments">
             <title>Business | Tabled Documents </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-text">
+        <route href="/assembly/tableddocument-text">
             <title>Business | Tabled document</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-text">
+        <route href="/senate/tableddocument-text">
             <title>Business | Tabled document</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-version/text">
+        <route href="/assembly/tableddocument-version/text">
             <title>Business | Tabled document Version Document</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-version/text">
+        <route href="/senate/tableddocument-version/text">
             <title>Business | Tabled document Version Document</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-timeline">
+        <route href="/assembly/tableddocument-timeline">
             <title>Business | Tabled document</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-timeline">
+        <route href="/senate/tableddocument-timeline">
             <title>Business | Tabled document</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-assignedgroups">
+        <route href="/assembly/tableddocument-assignedgroups">
             <title>Business | Tabled document</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-assignedgroups">
+        <route href="/senate/tableddocument-assignedgroups">
             <title>Business | Tabled document</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-documents">
+        <route href="/assembly/tableddocument-documents">
             <title>Business | Tabled document</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-documents">
+        <route href="/senate/tableddocument-documents">
             <title>Business | Tabled document</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-version/documents">
+        <route href="/assembly/tableddocument-version/documents">
             <title>Business | Tabled document Version Documents</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-version/documents">
+        <route href="/senate/tableddocument-version/documents">
             <title>Business | Tabled document Version Documents</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-event">
+        <route href="/assembly/tableddocument-event">
             <title>Business | Tabled document Event</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-event">
+        <route href="/senate/tableddocument-event">
             <title>Business | Tabled document Event</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/tableddocument-attachment">
+        <route href="/assembly/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/tableddocument-attachment">
+        <route href="/senate/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitems">
+        <route href="/assembly/agendaitems">
             <title>Business | Agenda items </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitems">
+        <route href="/senate/agendaitems">
             <title>Business | Agenda items </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-text">
+        <route href="/assembly/agendaitem-text">
             <title>Business | Agenda item</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-text">
+        <route href="/senate/agendaitem-text">
             <title>Business | Agenda item</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-version/text">
+        <route href="/assembly/agendaitem-version/text">
             <title>Business | Agenda item Version Document</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-version/text">
+        <route href="/senate/agendaitem-version/text">
             <title>Business | Agenda item Version Document</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-timeline">
+        <route href="/assembly/agendaitem-timeline">
             <title>Business | Agenda item</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-timeline">
+        <route href="/senate/agendaitem-timeline">
             <title>Business | Agenda item</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-assignedgroups">
+        <route href="/assembly/agendaitem-assignedgroups">
             <title>Business | Agenda item</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-assignedgroups">
+        <route href="/senate/agendaitem-assignedgroups">
             <title>Business | Agenda item</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-documents">
+        <route href="/assembly/agendaitem-documents">
             <title>Business | Agenda item</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-documents">
+        <route href="/senate/agendaitem-documents">
             <title>Business | Agenda item</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-version/documents">
+        <route href="/assembly/agendaitem-version/documents">
             <title>Business | Agenda item Version Documents</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-version/documents">
+        <route href="/senate/agendaitem-version/documents">
             <title>Business | Agenda item Version Documents</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-event">
+        <route href="/assembly/agendaitem-event">
             <title>Business | Agenda item Event</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-event">
+        <route href="/senate/agendaitem-event">
             <title>Business | Agenda item Event</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/agendaitem-attachment">
+        <route href="/assembly/agendaitem-attachment">
             <title>Business | AgendaItem Attachment</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/SE_XIV/agendaitem-attachment">
+        <route href="/senate/agendaitem-attachment">
             <title>Business | AgendaItem Attachment</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>agendaitems</subnavigation>
         </route>
-        <route href="/AS_XIV/whatson">
+        <route href="/assembly/whatson">
             <title>Business | What's on </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>whatson</subnavigation>
         </route>
-        <route href="/SE_XIV/whatson">
+        <route href="/senate/whatson">
             <title>Business | What's on </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>whatson</subnavigation>
         </route>
-        <route href="/AS_XIV/calendar">
+        <route href="/assembly/calendar">
             <title>Business | Sittings </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>calendar</subnavigation>
         </route>
-        <route href="/SE_XIV/calendar">
+        <route href="/senate/calendar">
             <title>Business | Sittings </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>calendar</subnavigation>
         </route>
-        <route href="/AS_XIV/sitting">
+        <route href="/assembly/sitting">
             <title>Business | Sitting Session</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>calendar</subnavigation>
         </route>
-        <route href="/SE_XIV/sitting">
+        <route href="/senate/sitting">
             <title>Business | Sitting Session</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>calendar</subnavigation>
         </route>
-        <route href="/AS_XIV/publications">
+        <route href="/assembly/publications">
             <title>Business | Publications </title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
-        <route href="/SE_XIV/publications">
+        <route href="/senate/publications">
             <title>Business | Publications </title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
-        <route href="/AS_XIV/report-text">
+        <route href="/assembly/report-text">
             <title>Business | Publication Report Text</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
-        <route href="/SE_XIV/report-text">
+        <route href="/senate/report-text">
             <title>Business | Publication Report Text</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
-        <route href="/AS_XIV/report-timeline">
+        <route href="/assembly/report-timeline">
             <title>Business | Publication Report Timeline</title>
-            <navigation>/AS_XIV/business</navigation>
+            <navigation>/assembly/business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
-        <route href="/SE_XIV/report-timeline">
+        <route href="/senate/report-timeline">
             <title>Business | Publication Report Timeline</title>
-            <navigation>/SE_XIV/business</navigation>
+            <navigation>/senate/business</navigation>
             <subnavigation>publications</subnavigation>
         </route>
-        <route href="/AS_XIV/politicalgroups">
+        <route href="/assembly/politicalgroups">
             <title>Business | Political Groups </title>
-            <navigation>/AS_XIV/members</navigation>
+            <navigation>/assembly/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
-        <route href="/SE_XIV/politicalgroups">
+        <route href="/senate/politicalgroups">
             <title>Business | Political Groups </title>
-            <navigation>/SE_XIV/members</navigation>
+            <navigation>/senate/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
         </route>
         <route href="/admin">
@@ -781,30 +781,30 @@
                 <nav>
                     <ul>
                         <li id="lower-hse">
-                            <a href="AS_XIV/home" name="/AS_XIV/home">National Assembly</a>
+                            <a href="assembly/home" name="/assembly/home">National Assembly</a>
                             <ul class="hse-list">
                                 <li>
-                                    <a href="AS_XIV/business" name="/AS_XIV/business">
+                                    <a href="assembly/business" name="/assembly/business">
                                         <i18n:text key="business">business</i18n:text>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="AS_XIV/members" name="/AS_XIV/members">
+                                    <a href="assembly/members" name="/assembly/members">
                                         <i18n:text key="members">members</i18n:text>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li id="upper-hse">
-                            <a href="SE_XIV/home" name="/SE_XIV/home">Senate</a>
+                            <a href="senate/home" name="/senate/home">Senate</a>
                             <ul class="hse-list">
                                 <li>
-                                    <a href="SE_XIV/business" name="/SE_XIV/business">
+                                    <a href="senate/business" name="/senate/business">
                                         <i18n:text key="business">members</i18n:text>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="SE_XIV/members" name="/SE_XIV/members">
+                                    <a href="senate/members" name="/senate/members">
                                         <i18n:text key="senators">senators(nt)</i18n:text>
                                     </a>
                                 </li>
@@ -838,134 +838,134 @@
                 </ul>
             </div>
         </menu>
-        <menu for="/AS_XIV/business" name="business">
+        <menu for="/assembly/business" name="business">
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
                 <ul id="portal-personaltools">
                     <li>
-                        <a href="AS_XIV/whatson" name="whatson">
+                        <a href="assembly/whatson" name="whatson">
                             <i18n:text key="whatson">what's on(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/committees" name="/AS_XIV/committees">
+                        <a href="assembly/committees" name="/assembly/committees">
                             <i18n:text key="committees">committees(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/bills" name="/AS_XIV/bills">
+                        <a href="assembly/bills" name="/assembly/bills">
                             <i18n:text key="bills">bills(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/questions" name="/AS_XIV/questions">
+                        <a href="assembly/questions" name="/assembly/questions">
                             <i18n:text key="questions">questions(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/motions" name="/AS_XIV/motions">
+                        <a href="assembly/motions" name="/assembly/motions">
                             <i18n:text key="motions">motions(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/tableddocuments" name="/AS_XIV/tableddocuments">
+                        <a href="assembly/tableddocuments" name="/assembly/tableddocuments">
                             <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/agendaitems" name="/AS_XIV/agendaitems">
+                        <a href="assembly/agendaitems" name="/assembly/agendaitems">
                             <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/calendar" name="/AS_XIV/calendar">
+                        <a href="assembly/calendar" name="/assembly/calendar">
                             <i18n:text key="calendar">calendar(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/publications" name="/AS_XIV/publications">
+                        <a href="assembly/publications" name="/assembly/publications">
                             <i18n:text key="publications">publications(nt)</i18n:text>
                         </a>
                     </li>
                 </ul>
             </div>
         </menu>
-        <menu for="/SE_XIV/business" name="business">
+        <menu for="/senate/business" name="business">
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
                 <ul id="portal-personaltools">
                     <li>
-                        <a href="SE_XIV/whatson" name="/SE_XIV/whatson">
+                        <a href="senate/whatson" name="/senate/whatson">
                             <i18n:text key="whatson">what's on(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/committees" name="/SE_XIV/committees">
+                        <a href="senate/committees" name="/senate/committees">
                             <i18n:text key="committees">committees(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/bills" name="/SE_XIV/bills">
+                        <a href="senate/bills" name="/senate/bills">
                             <i18n:text key="bills">bills(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/questions" name="/SE_XIV/questions">
+                        <a href="senate/questions" name="/senate/questions">
                             <i18n:text key="questions">questions(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/motions" name="/SE_XIV/motions">
+                        <a href="senate/motions" name="/senate/motions">
                             <i18n:text key="motions">motions(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/tableddocuments" name="/SE_XIV/tableddocuments">
+                        <a href="senate/tableddocuments" name="/senate/tableddocuments">
                             <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/agendaitems" name="/SE_XIV/agendaitems">
+                        <a href="senate/agendaitems" name="/senate/agendaitems">
                             <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/calendar" name="/SE_XIV/calendar">
+                        <a href="senate/calendar" name="/senate/calendar">
                             <i18n:text key="calendar">calendar(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/publications" name="/SE_XIV/publications">
+                        <a href="senate/publications" name="/senate/publications">
                             <i18n:text key="publications">publications(nt)</i18n:text>
                         </a>
                     </li>
                 </ul>
             </div>
         </menu>
-        <menu for="/AS_XIV/members" name="members">
+        <menu for="/assembly/members" name="members">
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
                 <ul id="portal-personaltools">
                     <li class="navigation">
-                        <a href="AS_XIV/members" name="/AS_XIV/current">
+                        <a href="assembly/members" name="/assembly/current">
                             <i18n:text key="members">current(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="AS_XIV/politicalgroups" name="/AS_XIV/politicalgroups">
+                        <a href="assembly/politicalgroups" name="/assembly/politicalgroups">
                             <i18n:text key="politicalgroups">political groups(nt)</i18n:text>
                         </a>
                     </li>
                 </ul>
             </div>
         </menu>
-        <menu for="/SE_XIV/members" name="members">
+        <menu for="/senate/members" name="members">
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
                 <ul id="portal-personaltools">
                     <li class="navigation">
-                        <a href="SE_XIV/members" name="/SE_XIV/current">
+                        <a href="senate/members" name="/senate/current">
                             <i18n:text key="members">current(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
-                        <a href="SE_XIV/politicalgroups" name="/SE_XIV/politicalgroups">
+                        <a href="senate/politicalgroups" name="/senate/politicalgroups">
                             <i18n:text key="politicalgroups">political groups(nt)</i18n:text>
                         </a>
                     </li>

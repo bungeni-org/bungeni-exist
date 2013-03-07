@@ -48,6 +48,8 @@ declare variable $config:VDEX := fn:concat($config:fw-root, "/", data($config:__
 
 declare variable $config:DEFAULT-LANG := data($config:__ACTIVE_APP__/default-lang);
 
+declare variable $config:PARLIAMENT-CONFIG := fn:concat($config:XML-COLLECTION, "/legislature_info.xml");
+
 (: Ontology files :)
 declare variable $config:xml-ontology-collection := fn:concat($config:XML-COLLECTION, "/ontology");
 

@@ -90,7 +90,7 @@
     <xsl:template match="doc" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
         <li>
-            <a href="member?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{bu:ontology/bu:membership/bu:origin/bu:identifier}/member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
@@ -118,7 +118,10 @@
                         <span class="labels">
                             <i18n:text key="date-start">start date(nt)</i18n:text>:</span>
                         <span>
-                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:startDate),$date-format,'en',(),())"/>
+                            <!-- 
+                                !+NOTE (7th March 2013) Disbaled as it received broken date formats e.g. "2013-01-07T"
+                            -->
+                            <!--xsl:value-of select="format-date(bu:ontology/bu:membership/bu:startDate,$date-format,'en',(),())"/-->
                         </span>
                     </div>
                     <div class="block">

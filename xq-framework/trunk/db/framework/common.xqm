@@ -51,7 +51,7 @@ declare function cmn:get-ui-config() as document-node() {
 (:~
 Get the PARLIAMENT configuraton document
 :)
-declare function cmn:get-parl-config() as document-node() {
+declare function cmn:get-parl-config() as document-node()? {
     doc($config:PARLIAMENT-CONFIG)
 };
 

@@ -34,7 +34,7 @@ declare function rou:func-name(
 
 :)
 
-declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER as xs:string) {
+declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER as xs:string?) {
         let 
             $parts := cmn:get-view-parts("/home"),
             $act-entries-tmpl :=  bun:get-government($parts,$CHAMBER),
@@ -84,7 +84,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($CONTROLLER-DOC/exist-path),
                                                 <route-override>
-                                                    <identifier>{$CONTROLLER-DOC/parliament/identifier}</identifier>
+                                                    {$CONTROLLER-DOC/parliament}
                                                 </route-override>, 
     									    (cmn:build-nav-node(
     									       $CONTROLLER-DOC/exist-path,

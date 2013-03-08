@@ -116,7 +116,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        <route-override>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
     								        (cmn:build-nav-node($EXIST-PATH,
     								                    (
@@ -154,7 +154,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
     								        <route-override>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
     								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"xml/listing-search-form.xml",'committee')))))
     								    )  
@@ -204,7 +204,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       $config:DEFAULT-TEMPLATE,
     									       cmn:get-route($EXIST-PATH),
         								        <route-override>
-                                                    <identifier>{$PARLIAMENT}</identifier>
+                                                    {$PARLIAMENT}
                                                 </route-override>,
     									       (cmn:build-nav-node($EXIST-PATH,
     									           (template:merge($EXIST-CONTROLLER, 
@@ -279,7 +279,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                $config:DEFAULT-TEMPLATE,
                                                cmn:get-route($override_path),
         								        <route-override>
-                                                    <identifier>{$PARLIAMENT}</identifier>
+                                                    {$PARLIAMENT}
                                                 </route-override>,
                                                cmn:build-nav-node($override_path,$act-entries-repl)
                                         )              
@@ -324,7 +324,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									       $config:DEFAULT-TEMPLATE,
     									       cmn:get-route($override_path),
         								        <route-override>
-                                                    <identifier>{$PARLIAMENT}</identifier>
+                                                    {$PARLIAMENT}
                                                 </route-override>,
     									       (cmn:build-nav-node($override_path,
     									           (template:merge($EXIST-CONTROLLER, 
@@ -495,7 +495,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
                                             <route-override>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
     								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "xml/listing-search-form.xml",'politicalgroup')))))
     								    )
@@ -516,7 +516,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 ) 
@@ -537,7 +537,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     	    									 
@@ -558,7 +558,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									 
@@ -580,7 +580,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )
@@ -601,7 +601,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    									 
@@ -622,7 +622,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    
@@ -644,7 +644,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     
@@ -665,7 +665,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 ) 
@@ -687,7 +687,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     	
@@ -709,7 +709,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )     									 
@@ -731,7 +731,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )
@@ -752,7 +752,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )    									 
@@ -774,7 +774,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  									 
@@ -817,7 +817,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)   
@@ -838,7 +838,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)         									
@@ -859,7 +859,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
                                             cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
                                         )    
@@ -880,7 +880,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
                                             cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
                                         )                                         
@@ -901,7 +901,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -943,7 +943,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)  									   									
@@ -964,7 +964,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    									
@@ -985,7 +985,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1026,7 +1026,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    									
@@ -1068,7 +1068,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1089,7 +1089,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    									
@@ -1111,7 +1111,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)  									
@@ -1153,7 +1153,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1175,7 +1175,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1196,7 +1196,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    									
@@ -1217,7 +1217,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)   
@@ -1238,7 +1238,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
                                             cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
                                         )     									
@@ -1260,7 +1260,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1281,7 +1281,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									) 									
@@ -1303,7 +1303,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1324,7 +1324,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1346,7 +1346,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )
@@ -1368,7 +1368,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 ) 
@@ -1389,7 +1389,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)  
@@ -1410,7 +1410,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
                                             cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
                                         )     									
@@ -1432,7 +1432,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1453,7 +1453,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									) 									
@@ -1495,7 +1495,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1517,7 +1517,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )
@@ -1539,7 +1539,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 ) 
@@ -1560,7 +1560,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									) 
@@ -1581,7 +1581,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>,
                                             cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
                                         )     									
@@ -1603,7 +1603,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  
@@ -1624,7 +1624,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)    									 
@@ -1645,7 +1645,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  
@@ -1683,7 +1683,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1704,7 +1704,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)       									
@@ -1726,7 +1726,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)
@@ -1748,7 +1748,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									)	
@@ -1800,7 +1800,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                <identifier>{$PARLIAMENT}</identifier>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
     									 )  

@@ -112,11 +112,6 @@
         <xsl:apply-templates />
     </xsl:template>
     
-    <xsl:template match="field[@name='sort_order']">
-        <xsl:call-template name="renderIntegerElement">
-            <xsl:with-param name="elementName">sortOrder</xsl:with-param>
-        </xsl:call-template>
-    </xsl:template>
     
     <xsl:template match="field[@name='title_name']">
         <xsl:call-template name="renderTLCTermString">

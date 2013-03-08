@@ -105,8 +105,6 @@
                     <xsl:value-of select="concat(
                         $uri-base, '/',
                         $user-type-uri-name, 
-                        $legislature-uri, 
-                        $parliament-uri, 
                         $group-uri, '/',
                         $content-type-uri-name, '/',
                         $membership_id, '/',
@@ -167,7 +165,13 @@
                     @name='end_date' or                     
                     @name='notes' ]" 
                 />     
-                <referenceToUser uri="{concat('/ontology/Person/',$full-user-identifier)}" />
+                <referenceToUser uri="{
+                    concat(
+                    $uri-base, '/',
+                    $user-type-uri-name, '/', 
+                    $full-user-identifier
+                    )
+                    }" />
                 <xsl:copy-of select="contained_groups" />                
                 <xsl:copy-of select="user/child::*" /> 
                 <xsl:copy-of select="province" />  

@@ -49,7 +49,7 @@ declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER as xs:string?)
     							   cmn:get-route($CONTROLLER-DOC/exist-path),
                                     <route-override>
                                         <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                        <identifier>{$CHAMBER}</identifier>
+                                        {$CHAMBER}
                                     </route-override>, 
     							   cmn:build-nav-node($CONTROLLER-DOC/exist-path, $act-entries-repl)
     							 )         

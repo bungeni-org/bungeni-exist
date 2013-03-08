@@ -7,7 +7,7 @@ jsoup https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/jsou
 jaxen https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/jaxen
 dom4j https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/dom4j
 xerces https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/xerces
-transformer -r2965 https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/transformer
+transformer -r2975 https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/transformer
 zip4j https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/zip4j
 sardine https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/sardine
 rabbitmq https://bungeni-editor.googlecode.com/svn/external_imports/trunk/libs/rabbitmq

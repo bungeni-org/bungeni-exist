@@ -70,7 +70,26 @@ ul.scheduling li {
 {
     display:inline;
 }
-#utility-nav li a 
+.assembly #utility-nav li a 
+{   
+   font-size:1.1em;
+   text-decoration: none;
+   padding:5px 10px 5px 10px;
+   border-bottom:1px;
+   border-bottom-style:solid;
+   text-shadow: 0px 2px 3px #dddddd;
+   color:#ee990d;
+}
+.assembly #utility-nav li.selected a ,
+.assembly #utility-nav li a:hover 
+{
+   background-color:#dddddd;
+   border-bottom-color:#ee990d;
+   border-bottom-style:solid;
+   text-shadow: 0px 2px 3px #d0d0d0;
+   color:#f79f0e;
+}
+.senate #utility-nav li a 
 {   
    font-size:1.1em;
    text-decoration: none;
@@ -80,8 +99,8 @@ ul.scheduling li {
    text-shadow: 0px 2px 3px #dddddd;
    color:#b22b14;
 }
-#utility-nav li.selected a ,
-#utility-nav li a:hover 
+.senate #utility-nav li.selected a ,
+.senate #utility-nav li a:hover 
 {
    background-color:#dddddd;
    border-bottom-color:#dd3519;

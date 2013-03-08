@@ -60,7 +60,7 @@ declare function cmn:get-parl-config() as document-node()? {
 Get a menu by name from the UI configuration document 
 :)
 declare function cmn:get-menu($menu-name as xs:string) as node() {
-    let $doc := cmn:get-ui-config()/ui/menugroups/menu[@name=$menu-name]
+    let $doc := cmn:get-ui-config()/ui/menugroups/menu[@name=$menu-name]        
       return $doc
 }; 
 
@@ -69,7 +69,7 @@ Get a route configuration from the exist path.
 The exist-path is passed from the appcontroller
 :)
 declare function cmn:get-route($exist-path as xs:string) as node() {
-    let $doc := cmn:get-ui-config()/ui/routes/route[@href eq $exist-path]
+    let $doc := cmn:get-ui-config()/ui/routes/route[@href eq $exist-path]      
        return $doc
 };
 
@@ -77,7 +77,7 @@ declare function cmn:get-route($exist-path as xs:string) as node() {
 Get a viewgroups configuration from the --------.
 :)
 declare function cmn:get-tabgroups($exist-path as xs:string) as node() {
-    let $doc := cmn:get-ui-config()/ui/viewgroups/views[@name eq $exist-path]
+    let $doc := cmn:get-ui-config()/ui/viewgroups/views[@name eq $exist-path]     
         return $doc
 };
 
@@ -143,7 +143,7 @@ declare function cmn:build-nav-tmpl($exist-path as xs:string, $app-tmpl as xs:st
      let $main-nav := cmn:get-menu("mainnav")
      let $sub-nav := cmn:get-menu-from-route($exist-path)
      let $tmpl := fw:app-tmpl($app-tmpl)
-     let $out := ($main-nav, $sub-nav, $tmpl)
+     let $out := ($main-nav, $sub-nav, $tmpl)      
      return $out
 };
 
@@ -168,14 +168,14 @@ The node parameter is the "cooked" page as a node
 :)
 declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) as node()+ {
      let $main-nav := cmn:get-menu("mainnav")
-     let $sub-nav := cmn:get-menu-from-route($exist-path)
+     let $sub-nav := cmn:get-menu-from-route($exist-path)      
      let $crumb := <crumb>
                         <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">
                         <span id="breadcrumbs-you-are-here">You are here: </span>
                         {local:build-breadcrumbs($exist-path)}
                         </div>
                     </crumb>
-     let $out := ($main-nav, $sub-nav,$crumb, $node )
+     let $out := ($main-nav, $sub-nav,$crumb, $node ) 
      return $out
 };
 

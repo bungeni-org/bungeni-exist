@@ -34,10 +34,10 @@ declare function rou:func-name(
 
 :)
 
-declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER as xs:string?) {
+declare function rou:get-home($CONTROLLER-DOC as node()) {
         let 
             $parts := cmn:get-view-parts("/home"),
-            $act-entries-tmpl :=  bun:get-government($parts,$CHAMBER),
+            $act-entries-tmpl :=  bun:get-government($parts,$CONTROLLER-DOC/parliament/identifier/text()),
             $act-entries-repl:= document {
     							template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     						 } 
@@ -49,10 +49,10 @@ declare function rou:get-home($CONTROLLER-DOC as node(), $CHAMBER as xs:string?)
     							   cmn:get-route($CONTROLLER-DOC/exist-path),
                                     <route-override>
                                         <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                        {$CHAMBER}
+                                        {$CONTROLLER-DOC/parliament}
                                     </route-override>, 
     							   cmn:build-nav-node($CONTROLLER-DOC/exist-path, $act-entries-repl)
-    							 )         
+    							 )   
 };
 
 declare function rou:get-parliament($CONTROLLER-DOC as node()) {

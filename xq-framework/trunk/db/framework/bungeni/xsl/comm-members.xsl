@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -12,6 +12,8 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:param name="mem-status"/>
+    <xsl:param name="chamber"/>
+    <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="ver_id" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
@@ -30,7 +32,7 @@
                     <xsl:value-of select="$doc-uri"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">members</xsl:with-param>
-                <xsl:with-param name="chamber" select="concat(bu:ontology/bu:group/bu:origin/bu:identifier,'/')"/>
+                <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads"/>
@@ -48,7 +50,7 @@
                         <div class="toggler-list list-active" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
                         </div>
                         <div class="sub-toggler" id="member-statuses">
-                            <span class="list-active">•&#160;<a href="committee-members?uri={$doc-uri}&amp;status=current">
+                            <span class="list-active">•&#160;<a href="{$chamber}/committee-members?uri={$doc-uri}&amp;status=current">
                                     <i18n:translate>
                                         <i18n:text key="current">current ({1}) (nt)</i18n:text>
                                         <i18n:param>
@@ -58,7 +60,7 @@
                                 </a>
                             </span>
                             &#160;
-                            <span class="list-inactive">•&#160;<a href="committee-members?uri={$doc-uri}&amp;status=past">
+                            <span class="list-inactive">•&#160;<a href="{$chamber}/committee-members?uri={$doc-uri}&amp;status=past">
                                     <i18n:translate>
                                         <i18n:text key="former">former ({1}) (nt)</i18n:text>
                                         <i18n:param>
@@ -92,7 +94,7 @@
     <!-- LIST-MEMBERS -->
     <xsl:template name="mem-list-details">
         <li>
-            <a href="member?uri={bu:person/@href}">
+            <a href="{$chamber}/member?uri={bu:person/@href}">
                 <xsl:value-of select="bu:person/@showAs"/>
             </a>
             <div class="struct-ib">/ <xsl:value-of select="bu:memberTitles/bu:memberTitle/bu:titleType/bu:titleName"/>

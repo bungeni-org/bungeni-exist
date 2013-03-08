@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -93,7 +93,7 @@
             <a href="{bu:ontology/bu:membership/bu:origin/bu:identifier}/member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:legislature/bu:shortName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:chamber/bu:fullName"/>
             </div>
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
@@ -118,10 +118,7 @@
                         <span class="labels">
                             <i18n:text key="date-start">start date(nt)</i18n:text>:</span>
                         <span>
-                            <!-- 
-                                !+NOTE (7th March 2013) Disbaled as it received broken date formats e.g. "2013-01-07T"
-                            -->
-                            <!--xsl:value-of select="format-date(bu:ontology/bu:membership/bu:startDate,$date-format,'en',(),())"/-->
+                            <xsl:value-of select="format-date(bu:ontology/bu:membership/bu:startDate,$date-format,'en',(),())"/>
                         </span>
                     </div>
                     <div class="block">

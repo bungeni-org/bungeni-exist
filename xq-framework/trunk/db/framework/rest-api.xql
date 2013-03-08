@@ -218,7 +218,7 @@ declare function local:get-attachment-hash-by-name($name as xs:string){
     collection('/db/bungeni-xml')/bu:ontology[@for='document']
     [bu:document[bu:docType[bu:value[. = 'Bill']]][bu:status[bu:value[. = 'received']]]]
     /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]]
-    [bu:name[.=$name]]/bu:fileHash/string()
+    [bu:name[.=$name]]/bu:attachmentHash/string()
 };
 
 (: 
@@ -255,7 +255,7 @@ declare
             let $pagedResult := for $i in subsequence($allResultsMatched, xs:integer($startItem), xs:integer($perPage))
                     return 
                         <attachment>
-                            <hash>{$i/bu:fileHash/string()}</hash>
+                            <hash>{$i/bu:attachmentHash/string()}</hash>
                             <name>{$i/bu:name/string()}</name>
                             <title>{$i/bu:title/string()}</title>
                             {if(not(empty($i/bu:description/string()))) then
@@ -299,7 +299,7 @@ declare
     %rest:form-param("page", "{$page}", "1") 
     %rest:form-param("perPage", "{$perPage}", "2") 
     %output:method("xml")
-    function local:test-get-search-attachmemnts($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
+    function local:expose-get-search-attachmemnts($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
       
        local:search-for-attachments($search, $page, $perPage)   
 };
@@ -318,6 +318,24 @@ declare
       util:parse(util:binary-to-string(util:binary-doc(concat("/db/bungeni-atts/", local:get-attachment-hash-by-name($name)))))
 };
 
+
+(: 
+ : Test expose GET attachment hash by name
+ :  :)
+declare
+    %rest:GET
+    %rest:path("/test/get/attachment/hash")
+    %rest:form-param("name", "{$name}","*")  
+    %output:method("xml")
+    function local:expose-get-attachment-hash-by-name($name as xs:string*){
+        
+        <attachmentDetails>
+            <hash>{local:get-attachment-hash-by-name($name)}</hash>      
+            <name>{$name}</name>
+        </attachmentDetails>
+    };
+
+
 (: 
  : Test GET attachment
  :  :)
@@ -326,7 +344,7 @@ declare
     %rest:path("/test/get/attachment")
     %rest:form-param("name", "{$name}","*")  
     %output:method("xml")
-    function local:test-get-attachment($name as xs:string*){
+    function local:expose-get-attachment($name as xs:string*){
         
       local:get-attachment($name)
 };
@@ -344,9 +362,27 @@ declare
     %output:method("xml")
     function local:push-document($username as xs:string*, $password as xs:string*, $documentname as xs:string*, $document as xs:string*){
         
-        let $login := xmldb:login("/db", $username, $password)
-        let $store-return-status := xmldb:store("/db", $documentname, $document)
-            return ()
+        try{
+            let $login := xmldb:login("/db/bungeni-xml", $username, $password)
+            let $store-return-status := xmldb:store("/db/bungeni-xml", $documentname, $document)
+                return
+                    <pushAttachment>
+                        <success>True</success>
+                        <attachmentName>{$documentname}</attachmentName>
+                    </pushAttachment> 
+        }
+        catch *{
+            
+            <pushAttachment>
+                <success>False</success>
+                <attachmentName>{$documentname}</attachmentName>
+                <error>
+                    <errorCode>{$err:code}</errorCode>
+                    <errorDescr>{$err:description}</errorDescr>
+                    <errorMod>{$err:module, "(", $err:line-number, ",", $err:column-number, ")"}</errorMod>
+                </error>
+            </pushAttachment> 
+        }
 };
 
 local:goodbye("unknown")

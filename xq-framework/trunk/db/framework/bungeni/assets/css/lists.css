@@ -121,26 +121,6 @@ ul.ls-timeline li > span {
     -webkit-background-clip: padding-box;
 }
 /*** mainnav ***/
- 
-/*** subnav ***/	     
-.submenu ul li a {
-    color:#ffffff;
-    float: left; 
-    text-decoration: none; 
-    padding: 5px 11px; 
-    text-align:center;
-}
-
-.submenu ul li a:visited {
-    color: #fff;
-    text-decoration: none;
-    }
-
-.submenu ul li a:hover, 
-.submenu ul li a.current {
-    color: #f79f0e;
-    text-decoration:underline;
-    } 
     
 /* global expand and collapse */
 ul.list-toggle-ctrl {

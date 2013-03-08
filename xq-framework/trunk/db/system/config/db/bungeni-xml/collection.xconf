@@ -46,5 +46,11 @@
         <create path="//bu:document/@type" type="xs:string"/>
         <create path="//bu:document/bu:publicationDate/@date" type="xs:date"/>
         <create path="//bu:bungeni/bu:parliament/@date" type="xs:date"/>
+        <!-- Range Indexes for ParliamentInformation -->
+        <create path="/parliaments/parliament/@id" type="xs:integer"/>
+        <create path="/parliaments/parliament/electionDate" type="xs:date"/>
+        <create path="/parliaments/parliament/forParliament" type="xs:string"/>
+        <create path="/parliaments/parliament/identifier" type="xs:string"/>
+        <create path="/parliaments/parliament/type" type="xs:string"/>
     </index>
 </collection>

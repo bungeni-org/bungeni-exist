@@ -286,7 +286,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
     ) 
     (: set body classes :)
     else if ($content/ancestor::xh:body) then (
-		let $chamber-name := if($override/identifier eq 'assembly') then $override/identifier else "senate"
+		let $chamber-name := if($override/parliament) then $override/parliament/type else "assembly"
 		return 
     		element { node-name($content/ancestor::xh:body) } {
     			attribute class { "template-portal-eXist " || $chamber-name },

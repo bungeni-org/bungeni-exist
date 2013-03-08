@@ -323,7 +323,7 @@ declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as
                 "/ancestor::bu:ontology")
 };
 
-declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber as xs:string, 
+declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber as xs:string?, 
                                                             $acl as xs:string, 
                                                             $type as xs:string, 
                                                             $tag as xs:string) {
@@ -389,7 +389,7 @@ declare function bun:xqy-list-membership($type as xs:string) {
 };
 
 
-declare function bun:xqy-list-membership-with-tabs($chamber as xs:string, $type as xs:string, $status as xs:string) {
+declare function bun:xqy-list-membership-with-tabs($chamber as xs:string?, $type as xs:string, $status as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology/bu:membership[bu:origin/bu:identifier eq '",$chamber,"' and ",$status,"]",
@@ -433,7 +433,7 @@ declare function bun:list-membership($eval-query as xs:string, $sortby as xs:str
 };
 
 
-declare function bun:list-membership-with-tabs($chamber as xs:string, $type as xs:string, $status as xs:string, $sortby as xs:string) {
+declare function bun:list-membership-with-tabs($chamber as xs:string?, $type as xs:string, $status as xs:string, $sortby as xs:string) {
     
     let $eval-query := bun:xqy-list-membership-with-tabs($chamber, $type, $status)
 
@@ -527,7 +527,7 @@ declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:
                             "return $match"))    
 };
 
-declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string,
+declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string?,
                                                         $acl as xs:string, 
                                                         $type as xs:string, 
                                                         $tag as xs:string) {
@@ -562,7 +562,7 @@ declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string,
 :)
 declare function bun:get-documentitems(
             $view-rel-path as xs:string,
-            $parliament as node(),
+            $parliament as node()?,
             $acl as xs:string,
             $type as xs:string,
             $parts as node(),
@@ -2791,7 +2791,7 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
 : @stylesheet 
 :   committee.xsl, home.xsl
 :)
-declare function bun:get-government($parts as node(), $chamber-id as xs:string) as element()* {
+declare function bun:get-government($parts as node(), $chamber-id as xs:string?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -3247,7 +3247,7 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
 
 declare function bun:get-members(
             $view-rel-path as xs:string,
-            $chamber as xs:string,
+            $chamber as xs:string?,
             $offset as xs:integer, 
             $limit as xs:integer, 
             $parts as node(),

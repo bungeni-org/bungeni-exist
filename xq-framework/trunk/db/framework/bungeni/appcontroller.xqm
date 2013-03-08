@@ -104,7 +104,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $parts := cmn:get-view-listing-parts('Membership', 'member'),
+                    $parts := cmn:get-view-listing-parts('MemberOfParliament', 'member'),
                     $act-entries-tmpl :=  bun:get-members($CONTROLLER-DOC/exist-res,$PARLIAMENT,$offset,$limit,$parts,$qry,$sty),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
@@ -568,7 +568,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $mem-status := xs:string(request:get-parameter("status","current")),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-group-members("public-view",$docnumber,$mem-status,$parts),
+                    $act-entries-tmpl :=  bun:get-group-members("public-view",$docnumber,$mem-status,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -589,7 +589,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl := bun:get-contacts-by-uri("public-view","Group",$docnumber,$parts),
+                    $act-entries-tmpl := bun:get-contacts-by-uri("public-view","Group",$docnumber,$parts, $PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -653,7 +653,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-parl-committee-sittings("public-view",$docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-committee-sittings("public-view",$docnumber,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -1671,7 +1671,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),     
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-member($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-member($docnumber,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -1692,7 +1692,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),   
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-member-officesheld($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-member-officesheld($docnumber,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -1714,7 +1714,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)), 
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-parl-activities("public-view",$docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-activities("public-view",$docnumber,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -1736,7 +1736,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),           
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","Membership",$docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","MemberOfParliament",$docnumber,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -1759,7 +1759,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $woview := xs:string(request:get-parameter("showing",'twk')),   
                     $tab := xs:string(request:get-parameter("tab",'sittings')),  
                     $mtype := xs:string(request:get-parameter("mtype",'any')), 
-                    $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$mtype,$parts),
+                    $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$mtype,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 

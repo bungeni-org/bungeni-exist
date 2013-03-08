@@ -961,7 +961,7 @@
                 <ul id="portal-personaltools">
                     <li class="navigation">
                         <a href="senate/members" name="/senate/current">
-                            <i18n:text key="members">current(nt)</i18n:text>
+                            <i18n:text key="senators">current(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
@@ -1359,7 +1359,7 @@
                 <xsl>xsl/changes.xsl</xsl>
             </view>
         </views>
-        <views name="Membership">
+        <views name="MemberOfParliament">
             <view id="listing" path="members" tag="listing">
                 <template>xml/members.xml</template>
                 <xsl>xsl/members.xsl</xsl>
@@ -1598,6 +1598,27 @@
             <listingfilters>
                 <listingfilter id="sittings" name="sittings">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
                 <listingfilter id="schedule" name="scheduled items">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+        </doctype>
+        <doctype category="membership" name="MemberOfParliament">
+            <orderbys>
+                <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last
+                    name [ascending]</orderby>
+                <orderby field="bu:membership/bu:lastName" order="descending" value="ln_desc" default="true">last name [descending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first
+                    name [ascending]</orderby>
+                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first
+                    name [descending]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First Name</searchin>
+                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last Name</searchin>
+                <searchin field="bu:membership/bu:description" name="ds" value="desc">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="current" name="current">empty(bu:endDate)</listingfilter>
+                <listingfilter id="former" name="former">not(empty(bu:endDate))</listingfilter>
             </listingfilters>
         </doctype>
         <doctype category="membership" name="Membership">

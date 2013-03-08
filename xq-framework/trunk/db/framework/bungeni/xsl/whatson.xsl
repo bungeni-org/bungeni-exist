@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -45,6 +45,8 @@
     <xsl:param name="listing-tab"/>
     <xsl:param name="meeting-type"/>
     <xsl:param name="whatson-view"/>
+    <xsl:param name="chamber"/>
+    <xsl:param name="chamber-id"/>    
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -75,7 +77,7 @@
                             <xsl:if test="@id eq $whatson-view">
                                 <xsl:attribute name="class">selected</xsl:attribute>
                             </xsl:if>
-                            <a href="whatson?tab={$listing-tab}&amp;showing={@id}&amp;mtype={$meeting-type}">
+                            <a href="{$chamber}/whatson?tab={$listing-tab}&amp;showing={@id}&amp;mtype={$meeting-type}">
                                 <i18n:text key="{@id}">whatsonview(nt)</i18n:text>
                             </a>
                         </li>
@@ -90,7 +92,7 @@
                             <xsl:if test="@id eq $listing-tab">
                                 <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                            <a href="whatson?tab={@id}">
+                            <a href="{$chamber}/whatson?tab={@id}">
                                 <i18n:text key="{@id}">tab(nt)</i18n:text>
                             </a>
                         </li>
@@ -262,7 +264,7 @@
     <xsl:template match="ref" mode="render-by-itemtype">
         <div class="schedule-block">
             <div class="left">
-                <a href="sitting?uri={@sitting}" title="i18n(sittinglink,go to sitting-nt)">
+                <a href="{$chamber}/sitting?uri={@sitting}" title="i18n(sittinglink,go to sitting-nt)">
                     <xsl:value-of select="format-dateTime(bu:startDate,'[F] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                 </a>
             </div>
@@ -285,12 +287,12 @@
                     </xsl:when>
                     <xsl:when test="$doc-type = 'Event'">
                         <xsl:variable name="event-href" select="bu:document/@uri"/>
-                        <a href="{lower-case($eventOf)}-event?uri={$event-href}">
+                        <a href="{$chamber}/{lower-case($eventOf)}-event?uri={$event-href}">
                             <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                         </a>
                     </xsl:when>
                     <xsl:otherwise>
-                        <a href="{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                        <a href="{$chamber}/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
                             <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                         </a>
                     </xsl:otherwise>
@@ -304,7 +306,7 @@
     <xsl:template match="ref" mode="render-by-date">
         <div class="schedule-block">
             <div class="left">
-                <a href="sitting?uri={@sitting}" title="i18n(sittinglink,go to sitting-nt)">
+                <a href="{$chamber}/sitting?uri={@sitting}" title="i18n(sittinglink,go to sitting-nt)">
                     <xsl:choose>
                         <xsl:when test=".[preceding-sibling::ref/bu:startDate/text() = bu:startDate/text()]"/>
                         <xsl:otherwise>
@@ -345,12 +347,12 @@
                                         </xsl:when>
                                         <xsl:when test="$doc-type = 'Event'">
                                             <xsl:variable name="event-href" select="bu:document/@uri"/>
-                                            <a href="{lower-case($eventOf)}-event?uri={$event-href}">
+                                            <a href="{$chamber}/{lower-case($eventOf)}-event?uri={$event-href}">
                                                 <xsl:value-of select="bu:document/bu:title"/>
                                             </a>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <a href="{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                            <a href="{$chamber}/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
                                                 <xsl:value-of select="bu:document/bu:title"/>
                                             </a>
                                         </xsl:otherwise>

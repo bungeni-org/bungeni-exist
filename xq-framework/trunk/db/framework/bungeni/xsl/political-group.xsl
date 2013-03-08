@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     
     <!-- Generic templates applied to document views -->
     <xsl:import href="tmpl-grp-generic.xsl"/>
@@ -13,6 +13,8 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
+    <xsl:param name="chamber"/>
+    <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
@@ -27,6 +29,7 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">profile</xsl:with-param>
+                <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>

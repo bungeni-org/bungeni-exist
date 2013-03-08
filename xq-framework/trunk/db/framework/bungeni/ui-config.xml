@@ -29,7 +29,7 @@
         </route>
         <route href="/assembly/members">
             <title>Members</title>
-            <navigation>members</navigation>
+            <navigation>/assembly/members</navigation>
         </route>
         <route href="/senate/business">
             <title>Business</title>
@@ -37,7 +37,7 @@
         </route>
         <route href="/senate/members">
             <title>Members</title>
-            <navigation>members</navigation>
+            <navigation>/senate/members</navigation>
         </route>
         <route href="/assembly/member">
             <title>Business | Member of Parliament</title>
@@ -779,7 +779,7 @@
         <menu for="/" name="mainnav">
             <div xmlns="http://www.w3.org/1999/xhtml" class="menu" id="mainnav">
                 <nav>
-                    <ul>
+                    <ul id="portal-globalnav">
                         <li id="lower-hse">
                             <a href="assembly/home" name="/assembly/home">National Assembly</a>
                             <ul class="hse-list">

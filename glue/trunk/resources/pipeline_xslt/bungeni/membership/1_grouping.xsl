@@ -165,13 +165,16 @@
                     @name='end_date' or                     
                     @name='notes' ]" 
                 />     
-                <referenceToUser uri="{
-                    concat(
-                    $uri-base, '/',
-                    $user-type-uri-name, '/', 
-                    $full-user-identifier
-                    )
-                    }" />
+                <referenceToUser isA="TLCPerson">
+                    <refersTo isA="TLCReference"  href="{
+                        concat(
+                        $uri-base, '/',
+                        $user-type-uri-name, '/', 
+                        $full-user-identifier
+                        )
+                        }" />
+                </referenceToUser>
+                
                 <xsl:copy-of select="contained_groups" />                
                 <xsl:copy-of select="user/child::*" /> 
                 <xsl:copy-of select="province" />  

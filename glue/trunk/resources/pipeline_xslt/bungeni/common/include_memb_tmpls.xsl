@@ -84,8 +84,16 @@
         <designation isA="TLCRole">
             <xsl:apply-templates />
         </designation>
+    </xsl:template>
+
+    <xsl:template match="title_type">
+        <desiginationDefinition isA="TLCTerm">
+            <xsl:apply-templates />
+        </desiginationDefinition>
     </xsl:template>    
     
+
+    <!--
     
     <xsl:template match="titletypes">
         <desiginationDefinitions>
@@ -98,9 +106,23 @@
             <xsl:apply-templates />
         </desiginationDefinition>
     </xsl:template>    
+    -->
     
+    <xsl:template match="title_type[parent::member_title]" >
+        <xsl:apply-templates />
+    </xsl:template>
     
-    <xsl:template match="title_type[parent::member_title]" />
+    <xsl:template match="field[@name='sort_order']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">sortOrder</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='title_name']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">titleName</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
     
     
     

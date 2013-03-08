@@ -1984,7 +1984,7 @@ declare function bun:get-sittings(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'])}</count>
         <documentType>groupsitting</documentType>
         <listingUrlPrefix>sittings/profile</listingUrlPrefix>        
         <offset>{$offset}</offset>
@@ -1993,7 +1993,7 @@ declare function bun:get-sittings(
         </paginator>
         <alisting>
         {
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'],$offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     local:get-sitting-items($match)
@@ -2101,21 +2101,21 @@ declare function local:validate-custom-date($from as xs:date, $to as xs:date) {
 declare function local:get-sitting-subset($sittings) {
     for $sitting in $sittings
         return 
-        if ($sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule) then (
-            for $eachitem in $sitting/bu:groupsitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
-            let $uri := <uri>{data($sitting/bu:groupsitting/@uri)}</uri>
-            let $startdate := $sitting/bu:groupsitting/bu:startDate
-            let $venue := $sitting/bu:groupsitting/bu:venue/bu:shortName/text()
-            let $title := $sitting/bu:legislature/bu:shortName
+        if ($sitting/bu:sitting/bu:itemSchedules/bu:itemSchedule) then (
+            for $eachitem in $sitting/bu:sitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
+            let $uri := <uri>{data($sitting/bu:sitting/@uri)}</uri>
+            let $startdate := $sitting/bu:sitting/bu:startDate
+            let $venue := $sitting/bu:sitting/bu:venue/bu:shortName/text()
+            let $title := $sitting/bu:chamber/bu:shortName
             return 
                 <ref sitting="{$uri}">
                     { $startdate, $eachitem, $title, <bu:venue>{$venue}</bu:venue>, collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq $eachitem/bu:document/@href, @internal-uri eq $eachitem/bu:document/@href]/parent::node() }
                 </ref>
         )
         else (
-            let $uri := <uri>{data($sitting/bu:groupsitting/@uri)}</uri>
-            let $startdate := $sitting/bu:groupsitting/bu:startDate
-            let $venue := $sitting/bu:groupsitting/bu:venue/bu:shortName/text()
+            let $uri := <uri>{data($sitting/bu:sitting/@uri)}</uri>
+            let $startdate := $sitting/bu:sitting/bu:startDate
+            let $venue := $sitting/bu:sitting/bu:venue/bu:shortName/text()
             let $title := $sitting/bu:legislature/bu:shortName
             return 
                 <ref sitting="{$uri}">
@@ -2147,11 +2147,11 @@ declare function local:grouped-sitting-items-by-date($sittings) {
 
 declare function local:grouped-sitting-meeting-type($dates-range,$mtype as xs:string) {
     if ($mtype eq 'any') then (
-        for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+        for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
         return $sittings
     ) else (
-       for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
-       where $sittings/bu:groupsitting/bu:meetingType[bu:value eq $mtype] 
+       for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+       where $sittings/bu:sitting/bu:meetingType[bu:value eq $mtype] 
        return $sittings    
     )
 };
@@ -2171,8 +2171,8 @@ declare function bun:get-whatson(
         $whatsonview as xs:string, 
         $tab as xs:string,
         $mtype as xs:string,
-        $parts as node()
-        ) as element() {
+        $parts as node(),
+        $parliament as node()?) as element() {
     
     (: stylesheet to transform :)  
     let $stylesheet := cmn:get-xslt($parts/xsl)
@@ -2190,7 +2190,7 @@ declare function bun:get-whatson(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting'])}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'])}</count>
         <documentType>groupsitting</documentType>
         <tags>
         {
@@ -2203,7 +2203,7 @@ declare function bun:get-whatson(
         <meetingtypes>
             <meetingtype>any</meetingtype>
         { 
-            for $node in distinct-values(collection("/db/bungeni-xml")/bu:ontology/bu:groupsitting/bu:meetingType/bu:value)
+            for $node in distinct-values(collection(cmn:get-lex-db())/bu:ontology/bu:sitting/bu:meetingType/bu:value)
             return <meetingtype>{string($node)}</meetingtype>
         } 
         </meetingtypes>
@@ -2294,7 +2294,7 @@ declare function bun:get-whatson(
                     )                     
              
             default return           
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
                 return 
                     if ($tab eq 'sittings') then (
                         <range>
@@ -2323,6 +2323,8 @@ declare function bun:get-whatson(
                 <param name="listing-tab" value="{$tab}" />
                 <param name="meeting-type" value="{$mtype}" />
                 <param name="whatson-view" value="{$whatsonview}" />
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />                   
             </parameters>
            )
 };
@@ -2345,8 +2347,7 @@ declare function bun:get-sitting($acl as xs:string,
     let $doc := 
             (:Returs a Sittings Document :)
             let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology[@for='groupsitting']/",
-                                            "bu:groupsitting[@uri eq '",$doc-uri,"']/",
+                                            "bu:ontology/bu:sitting[@uri eq '",$doc-uri,"']/",
                                             bun:xqy-docitem-perms($acl)))
             
             return
@@ -2370,19 +2371,18 @@ declare function bun:get-sittings-xml($acl as xs:string) as element()* {
 
     let $events := <data> {
             for $s in util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology[@for='groupsitting']/",
-                                            "bu:groupsitting/",
+                                            "bu:ontology/bu:sitting/",
                                             bun:xqy-generic-perms($acl),"/",
                                             "ancestor::bu:ontology"))
             return <event>
-                        <start_date>{replace($s/bu:groupsitting/bu:startDate/text(),"T", " ")}</start_date>
-                        <end_date>{replace($s/bu:groupsitting/bu:endDate/text(),"T", " ")}</end_date>
+                        <start_date>{replace($s/bu:sitting/bu:startDate/text(),"T", " ")}</start_date>
+                        <end_date>{replace($s/bu:sitting/bu:endDate/text(),"T", " ")}</end_date>
                         <text>
-                            &lt;a href="sitting?uri={data($s/bu:groupsitting/@uri)}"&gt;
-                                {$s/bu:legislature/bu:shortName/text()}
-                            &lt;/a&gt; @ {$s/bu:groupsitting/bu:venue/bu:shortName/text()}
+                            &lt;a href="sitting?uri={data($s/bu:sitting/@uri)}"&gt;
+                                {$s/bu:chamber/bu:shortName/text()}
+                            &lt;/a&gt; @ {$s/bu:sitting/bu:venue/bu:shortName/text()}
                         </text>
-                        <details>{$s/bu:legislature/bu:shortName/text()}</details>            
+                        <details>{$s/bu:chamber/bu:shortName/text()}</details>            
                    </event>
     }
     </data>
@@ -2406,7 +2406,7 @@ declare function local:get-sitting-items($sittingdoc as node()?) {
         {if ($sittingdoc) then $sittingdoc else $sittingdoc}
         <ref>
             {
-                for $eachitem in $sittingdoc/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
+                for $eachitem in $sittingdoc/bu:sitting/bu:itemSchedules/bu:itemSchedule
                 return 
                     collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq data($eachitem/bu:document/@href)]/ancestor::bu:ontology
             }
@@ -2512,7 +2512,9 @@ declare function bun:get-politicalgroups(
             <parameters>
                 <param name="sortby" value="{$sortby}" />
                 <param name="listing-tab" value="{$tab}" />
-                <param name="item-listing-rel-base" value="{$view-rel-path}" />                 
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />  
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />                   
             </parameters>
            )     
 };
@@ -2853,7 +2855,8 @@ declare function bun:get-group-members(
             $acl as xs:string, 
             $docid as xs:string, 
             $mem-status as xs:string?,
-            $parts as node()) as element()* {
+            $parts as node(),
+            $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2863,9 +2866,12 @@ declare function bun:get-group-members(
                         bun:get-ref-assigned-grps($match, $parts/parent::node())   
                 }     
     return
-        transform:transform($doc, $stylesheet, <parameters>
-                                                 <param name="mem-status" value="{$mem-status}" />
-                                               </parameters>)
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="mem-status" value="{$mem-status}" />
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />                  
+            </parameters>)
 };
 
 declare function bun:get-parl-committee(
@@ -2906,7 +2912,8 @@ declare function bun:get-ref-comm-members($docitem as node(), $docviews as node(
 declare function bun:get-parl-committee-sittings(
             $acl as xs:string, 
             $docid as xs:string, 
-            $parts as node()) as element()* {
+            $parts as node(),
+            $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2920,7 +2927,11 @@ declare function bun:get-parl-committee-sittings(
                         bun:get-ref-comm-sitting($match, $parts/parent::node())   
                 }     
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />                                                   
+            </parameters>)
 };
 
 declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node()) {
@@ -2928,9 +2939,9 @@ declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node(
         {$docitem}
         <ref>
         {
-            for $match in collection(cmn:get-lex-db())/bu:ontology[@for='groupsitting']
-            where data($match/bu:legislature/bu:group/@href) eq data($docitem/bu:group/@uri)
-            order by $match/bu:legislature/bu:statusDate descending
+            for $match in collection(cmn:get-lex-db())/bu:ontology[@for='sitting']
+            where data($match/bu:chamber/bu:group/@href) eq data($docitem/bu:group/@uri)
+            order by $match/bu:chamber/bu:statusDate descending
             return 
                 $match   
         }
@@ -3102,7 +3113,8 @@ declare function bun:get-excludes($docitem as node()?, $docviews as node()) {
 declare function bun:get-contacts-by-uri($acl as xs:string, 
                     $address-type as xs:string, 
                     $focal as xs:string,
-                    $parts as node()) {
+                    $parts as node(),
+                    $parliament as node()?) {
     let $stylesheet := cmn:get-xslt($parts/xsl), 
         $acl-filter := cmn:get-acl-permission-as-attr($acl),
         $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
@@ -3127,9 +3139,13 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                     </ref>
                 </doc>     
     return
-        transform:transform($doc, $stylesheet, <parameters>
-                                                 <param name="address_type" value="{$address-type}" />
-                                               </parameters>)       
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="address_type" value="{$address-type}" />
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />                                                    
+            </parameters>
+          )       
 };
 
 (:~
@@ -3327,7 +3343,7 @@ declare function bun:get-members(
        
 };
 
-declare function bun:get-member($memberid as xs:string, $parts as node()) as element()* {
+declare function bun:get-member($memberid as xs:string, $parts as node(), $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -3342,10 +3358,15 @@ declare function bun:get-member($memberid as xs:string, $parts as node()) as ele
                 </doc>
     
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>        
+        )
 };
 
-declare function bun:get-member-officesheld($memberid as xs:string?, $parts as node()*) as element()* {
+declare function bun:get-member-officesheld($memberid as xs:string?, $parts as node()*, $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -3358,7 +3379,7 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
                     {
                       for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
                       let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
-                      order by $doc/bu:memberTitles/bu:memberTitle/bu:titleType/bu:sortOrder ascending 
+                      order by $doc/bu:designations/bu:designation/bu:sortOrder ascending 
                       return 
                             element bu:office {
                                 ($doc, $group-name)
@@ -3368,10 +3389,15 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
                 </doc>
     
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>        
+        )
 };
 
-declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:string, $parts as node()) as element()* {
+declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:string, $parts as node(), $parliament as node()?) as element()* {
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl)
    
@@ -3391,7 +3417,12 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
     </doc> 
     
     return
-        transform:transform($doc, $stylesheet, ())    
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>           
+        )    
 };
 
 declare function bun:get-assigned-items($committeeid as xs:string, $parts as node()) as element()* {

@@ -13,10 +13,12 @@
     <xsl:include href="context_tabs.xsl"/>
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="address_type"/>
+    <xsl:param name="chamber"/>
+    <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="onto-type">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'Membership'">
+                <xsl:when test="$address_type eq 'MemberOfParliament'">
                     <xsl:value-of select="bu:ontology/bu:membership/bu:docType/bu:value"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -26,7 +28,7 @@
         </xsl:variable>
         <xsl:variable name="doc-type">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'Membership'">
+                <xsl:when test="$address_type eq 'MemberOfParliament'">
                     <xsl:value-of select="$address_type"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -36,7 +38,7 @@
         </xsl:variable>
         <xsl:variable name="doc-uri">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'Membership'">
+                <xsl:when test="$address_type eq 'MemberOfParliament'">
                     <xsl:value-of select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -46,7 +48,7 @@
         </xsl:variable>
         <xsl:variable name="contact-name">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'Membership'">
+                <xsl:when test="$address_type eq 'MemberOfParliament'">
                     <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName, ' (',bu:ontology/bu:membership/bu:title,')')"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -56,7 +58,7 @@
         </xsl:variable>
         <xsl:variable name="contact-name-title">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'Membership'">
+                <xsl:when test="$address_type eq 'MemberOfParliament'">
                     <xsl:value-of select="concat(bu:ontology/bu:membership/bu:salutation,', ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -68,7 +70,7 @@
             <div id="title-holder">
                 <h1 class="title">
                     <xsl:choose>
-                        <xsl:when test="$address_type eq 'Membership'">
+                        <xsl:when test="$address_type eq 'MemberOfParliament'">
                             <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -82,11 +84,12 @@
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
                 <xsl:with-param name="tab-path">contacts</xsl:with-param>
+                <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
-            <xsl:if test="$doc-type eq 'Membership'">
+            <xsl:if test="$doc-type eq 'MemberOfParliament'">
                 <xsl:call-template name="doc-formats">
                     <xsl:with-param name="render-group">contacts</xsl:with-param>
                     <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>

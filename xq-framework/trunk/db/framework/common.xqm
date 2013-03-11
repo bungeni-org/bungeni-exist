@@ -166,13 +166,13 @@ The mainnav is provided by default.
 The subnavigation is rendered based on the incoming request path
 The node parameter is the "cooked" page as a node
 :)
-declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) as node()+ {
+declare function cmn:build-nav-node($controller-data as node(), $node as node()) as node()+ {
      let $main-nav := cmn:get-menu("mainnav")
-     let $sub-nav := cmn:get-menu-from-route($exist-path)      
+     let $sub-nav := cmn:get-menu-from-route($controller-data/exist-path/text())      
      let $crumb := <crumb>
                         <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">
                         <span id="breadcrumbs-you-are-here">You are here: </span>
-                        {local:build-breadcrumbs($exist-path)}
+                        {local:build-breadcrumbs($controller-data)}
                         </div>
                     </crumb>
      let $out := ($main-nav, $sub-nav,$crumb, $node ) 
@@ -182,22 +182,28 @@ declare function cmn:build-nav-node($exist-path as xs:string, $node as node()) a
 (:~ 
 :   Builds the breadcrumbs
 :)
-declare function local:build-breadcrumbs($exist-path as xs:string) {
-    let $route := cmn:get-route($exist-path)
+declare function local:build-breadcrumbs($controller-data as node()?) {
+    let $route := cmn:get-route($controller-data/exist-path/text())
+    let $val := util:log('debug',$controller-data)
+    let $log := util:log('debug',concat($route/navigation/text(), "++++++++++++++++++++++++++++++++++"))
     
     return
-        	if ($route/navigation and not($route/subnavigation)) then (
-                        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
+        	if ($route/navigation/text() eq 'home') then (
+                <xh:a class="first" href="{$controller-data/parliament/type}/home"><i18n:text key="home">home</i18n:text></xh:a>
+            	    
+        	)    
+        	else if ($route/navigation and not($route/subnavigation)) then (
+                        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type}</xh:a>
                     ,  				
             	        <xh:a class="last" href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    
         	)
         	else (
-            	        <xh:a class="first" href="{cmn:get-route('/')/navigation}">{local:route-title(cmn:get-route('/')/navigation)}</xh:a>
+            	        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type}</xh:a>
             	    ,    			  				
-            	        <xh:a href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
+            	        <xh:a href=".{cmn:get-route($controller-data/exist-path)/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    ,   				
-            	        <xh:a class="last" href="{$route/subnavigation}">{local:route-title($route/subnavigation)}</xh:a>
+            	        <xh:a class="last" href="{$controller-data/parliament/type}/{$controller-data/exist-res}">{local:route-title($controller-data/exist-path)}</xh:a>
             	    (:
             	       !+FIX_THIS (ao, 8th Aug 2012) adding tertiary menus(tabs) to breadcrumbs need to find out the doctype currently
             	       nowhere to access it as local:route-title() return route info e.g. 'questions' and we need 'question' since that 
@@ -221,7 +227,7 @@ declare function cmn:whatson-range-limit() {
 (:~ 
 :   Retrieves the corresponding title for the route from <menugroups/>
 :)
-declare function local:route-title($navroute as element()) {
+declare function local:route-title($navroute as xs:string) {
     
     cmn:get-ui-config()//menugroups/menu//xh:a[@name eq $navroute]/i18n:text
     

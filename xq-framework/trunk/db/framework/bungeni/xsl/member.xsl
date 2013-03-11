@@ -15,7 +15,7 @@
     <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:membership/bu:docType/bu:value"/>
-        <xsl:variable name="user-uri" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
+        <xsl:variable name="user-uri" select="bu:ontology/bu:membership/bu:referenceToUser/bu:refersTo/@href"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:membership/@uri"/>
         <div id="main-wrapper">
             <div id="title-holder">

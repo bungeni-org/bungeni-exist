@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -49,39 +49,41 @@
                         </div>
                         <div class="toggler-list list-active" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
                         </div>
-                        <div class="sub-toggler" id="member-statuses">
-                            <span class="list-active">•&#160;<a href="{$chamber}/committee-members?uri={$doc-uri}&amp;status=current">
-                                    <i18n:translate>
-                                        <i18n:text key="current">current ({1}) (nt)</i18n:text>
-                                        <i18n:param>
-                                            <xsl:value-of select="count(bu:ontology/bu:members/bu:member[bu:membershipType/bu:value eq 'committee_member' and empty(bu:endDate)])"/>
-                                        </i18n:param>
-                                    </i18n:translate>
-                                </a>
-                            </span>
-                            &#160;
-                            <span class="list-inactive">•&#160;<a href="{$chamber}/committee-members?uri={$doc-uri}&amp;status=past">
-                                    <i18n:translate>
-                                        <i18n:text key="former">former ({1}) (nt)</i18n:text>
-                                        <i18n:param>
-                                            <xsl:value-of select="count(bu:ontology/bu:members/bu:member[bu:membershipType/bu:value eq 'committee_member' and not(empty(bu:endDate))])"/>
-                                        </i18n:param>
-                                    </i18n:translate>
-                                </a>
-                            </span>
-                        </div>
+                        <xsl:if test="bu:ontology/bu:group/bu:status/bu:value = 'active'">
+                            <div class="sub-toggler" id="member-statuses">
+                                <span class="list-active">•&#160;<a href="{$chamber}/committee-members?uri={$doc-uri}&amp;status=current">
+                                        <i18n:translate>
+                                            <i18n:text key="current">current ({1}) (nt)</i18n:text>
+                                            <i18n:param>
+                                                <xsl:value-of select="count(bu:ontology/bu:members/bu:member[bu:membershipType/bu:value eq 'committee_member' and empty(bu:endDate)])"/>
+                                            </i18n:param>
+                                        </i18n:translate>
+                                    </a>
+                                </span>
+                                &#160;
+                                <span class="list-inactive">•&#160;<a href="{$chamber}/committee-members?uri={$doc-uri}&amp;status=past">
+                                        <i18n:translate>
+                                            <i18n:text key="former">former ({1}) (nt)</i18n:text>
+                                            <i18n:param>
+                                                <xsl:value-of select="count(bu:ontology/bu:members/bu:member[bu:membershipType/bu:value eq 'committee_member' and not(empty(bu:endDate))])"/>
+                                            </i18n:param>
+                                        </i18n:translate>
+                                    </a>
+                                </span>
+                            </div>
+                        </xsl:if>
                     </div>
                     <ul id="list-toggle" class="ls-row clear">
                         <xsl:choose>
                             <xsl:when test="$mem-status = 'current'">
                                 <xsl:for-each select="bu:ontology/bu:members/bu:member[bu:membershipType/bu:value eq 'committee_member' and empty(bu:endDate)]">
-                                    <xsl:sort select="bu:memberTitles/bu:memberTitle/bu:titleType/bu:sortOrder" order="ascending" data-type="number"/>
+                                    <xsl:sort select="bu:designations/bu:designation/bu:sortOrder" order="ascending" data-type="number"/>
                                     <xsl:call-template name="mem-list-details"/>
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:for-each select="bu:ontology/bu:members/bu:member[bu:membershipType/bu:value eq 'committee_member' and not(empty(bu:endDate))]">
-                                    <xsl:sort select="bu:memberTitles/bu:memberTitle/bu:titleType/bu:sortOrder" order="ascending" data-type="number"/>
+                                    <xsl:sort select="bu:designations/bu:designation/bu:sortOrder" order="ascending" data-type="number"/>
                                     <xsl:call-template name="mem-list-details"/>
                                 </xsl:for-each>
                             </xsl:otherwise>
@@ -97,10 +99,10 @@
             <a href="{$chamber}/member?uri={bu:person/@href}">
                 <xsl:value-of select="bu:person/@showAs"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:memberTitles/bu:memberTitle/bu:titleType/bu:titleName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:designations/bu:designation/bu:titleName"/>
             </div>
             <div class="struct-ib">/ <i18n:text key="member-status">
-                    <xsl:value-of select="./bu:activeP"/>
+                    <xsl:value-of select="bu:activeStatus/bu:value"/>
                 </i18n:text>
             </div>
             <span class="tgl-pad-right">▼</span>

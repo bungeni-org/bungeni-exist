@@ -88,7 +88,7 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
-        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/@uri"/>
+        <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/bu:refersTo/@href"/>
         <li>
             <a href="{$chamber}/member?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="concat(bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>

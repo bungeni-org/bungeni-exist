@@ -43,6 +43,7 @@
             <xsl:call-template name="doc-formats">
                 <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
+                <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
             </xsl:call-template>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
@@ -95,10 +96,10 @@
         <h4 class="doc-status">
             <span>
                 <b>
-                    <i18n:text key="acronym">acronym(nt)</i18n:text>:&#160;</b>
+                    <i18n:text key="status">status(nt)</i18n:text>:&#160;</b>
             </span>
             <span>
-                <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>&#160;
+                <xsl:value-of select="bu:ontology/bu:group/bu:status/@showAs"/>&#160;
             </span>
             <span>
                 <b>

@@ -118,7 +118,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        <route-override>
                                                 {$PARLIAMENT}
                                             </route-override>,
-    								        (cmn:build-nav-node($EXIST-PATH,
+    								        (cmn:build-nav-node($CONTROLLER-DOC,
     								                    (
     								                        template:merge(
     								                          $EXIST-CONTROLLER, 
@@ -156,7 +156,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        <route-override>
                                                 {$PARLIAMENT}
                                             </route-override>,
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"xml/listing-search-form.xml",'committee')))))
+    								        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"xml/listing-search-form.xml",'committee')))))
     								    )  
                   
         (:~ ITEM LISTINGS :)        
@@ -206,7 +206,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         								        <route-override>
                                                     {$PARLIAMENT}
                                                 </route-override>,
-    									       (cmn:build-nav-node($EXIST-PATH,
+    									       (cmn:build-nav-node($CONTROLLER-DOC,
     									           (template:merge($EXIST-CONTROLLER, 
     									               $act-entries-repl, 
     									               bun:get-global-search-context($EXIST-PATH, 
@@ -497,7 +497,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 {$PARLIAMENT}
                                             </route-override>,
-    								        (cmn:build-nav-node($EXIST-PATH,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "xml/listing-search-form.xml",'politicalgroup')))))
+    								        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "xml/listing-search-form.xml",'politicalgroup')))))
     								    )
     	else if ($CHAMBER-REL-PATH eq "/politicalgroup-text" )
     		 then 
@@ -518,7 +518,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 ) 
     	else if ($CHAMBER-REL-PATH eq "/government-text" )
     		 then 
@@ -539,7 +539,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )     	    									 
     	else if ($CHAMBER-REL-PATH eq "/ministry-text" )
     		 then 
@@ -560,7 +560,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )     									 
     	else if ($CHAMBER-REL-PATH eq "/politicalgroup-members" )
     		 then 
@@ -582,7 +582,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )
     	else if ($CHAMBER-REL-PATH eq "/politicalgroup-contacts" )
     		 then 
@@ -603,7 +603,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )    									 
     	else if ($CHAMBER-REL-PATH eq "/committee-text" )
     		 then 
@@ -624,7 +624,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )    
     	else if ($CHAMBER-REL-PATH eq "/committee-members" )
     		 then 
@@ -646,7 +646,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )     
     	else if ($CHAMBER-REL-PATH eq "/committee-sittings" )
     		 then 
@@ -667,7 +667,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 ) 
     	else if ($CHAMBER-REL-PATH eq "/committee-staff" )
     		 then 
@@ -689,7 +689,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )     	
     	else if ($CHAMBER-REL-PATH eq "/committee-contacts" )
     		 then 
@@ -711,7 +711,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )     									 
     								    
     	else if ($CHAMBER-REL-PATH eq "/bill-text" )
@@ -733,7 +733,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )
     	else if ($CHAMBER-REL-PATH eq "/bill-version/text" )
     		 then 
@@ -754,7 +754,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )    									 
     									 
     	else if ($CHAMBER-REL-PATH eq "/bill-timeline" )
@@ -776,7 +776,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )  									 
     									 
     	else if ($CHAMBER-REL-PATH eq "/bill-assignedgroups" )
@@ -797,7 +797,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )    									 								
     									
     	else if ($CHAMBER-REL-PATH eq "/bill-documents" )
@@ -819,7 +819,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)   
     	else if ($CHAMBER-REL-PATH eq "/bill-version/documents" )
     		 then 
@@ -840,7 +840,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)         									
     	else if ($CHAMBER-REL-PATH eq "/bill-event" )
     		 then 
@@ -861,7 +861,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>,
-                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                                         )    
     	else if ($CHAMBER-REL-PATH eq "/bill-attachment" )
     		 then 
@@ -882,7 +882,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>,
-                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                                         )                                         
     	else if ($CHAMBER-REL-PATH eq "/question-text" )
     		 then 
@@ -903,7 +903,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>,
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/question-version/text" )
     		 then 
@@ -923,7 +923,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>,    									   
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    									
     									
     	else if ($CHAMBER-REL-PATH eq "/question-timeline" )
@@ -945,7 +945,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)  									   									
     	else if ($CHAMBER-REL-PATH eq "/question-assignedgroups" )
     		 then 
@@ -966,7 +966,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    									
     	else if ($CHAMBER-REL-PATH eq "/question-documents" )
     		 then 
@@ -987,7 +987,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/question-version/documents" )
     		 then 
@@ -1007,7 +1007,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    
     	else if ($CHAMBER-REL-PATH eq "/question-event" )
     		 then 
@@ -1028,7 +1028,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    									
     	else if ($CHAMBER-REL-PATH eq "/question-attachment" )
     		 then 
@@ -1048,7 +1048,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>,
-                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                                         )     									
     									
     	else if ($CHAMBER-REL-PATH eq "/motion-text" )
@@ -1070,7 +1070,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/motion-version/text" )
     		 then 
@@ -1091,7 +1091,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    									
     									
     	else if ($CHAMBER-REL-PATH eq "/motion-timeline" )
@@ -1113,7 +1113,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)  									
     									
     	else if ($CHAMBER-REL-PATH eq "/motion-version" )
@@ -1134,7 +1134,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 ) 								
     	else if ($CHAMBER-REL-PATH eq "/motion-assignedgroups" )
     		 then 
@@ -1155,7 +1155,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     									
     	else if ($CHAMBER-REL-PATH eq "/motion-documents" )
@@ -1177,7 +1177,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/motion-version/documents" )
     		 then 
@@ -1198,7 +1198,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    									
     	else if ($CHAMBER-REL-PATH eq "/motion-event" )
     		 then 
@@ -1219,7 +1219,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)   
     	else if ($CHAMBER-REL-PATH eq "/motion-attachment" )
     		 then 
@@ -1240,7 +1240,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>,
-                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                                         )     									
     									
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-text" )
@@ -1262,7 +1262,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-version/text" )
     		 then 
@@ -1283,7 +1283,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									) 									
     									
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-timeline" )
@@ -1305,7 +1305,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-assignedgroups" )
     		 then 
@@ -1326,7 +1326,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     									
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-documents" )
@@ -1348,7 +1348,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )
     									 
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-version" )
@@ -1370,7 +1370,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 ) 
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-event" )
     		 then 
@@ -1391,7 +1391,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)  
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-attachment" )
     		 then 
@@ -1412,7 +1412,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>,
-                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                                         )     									
         (: AGENDA ITEMS :)
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-text" )
@@ -1434,7 +1434,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-version/text" )
     		 then 
@@ -1455,7 +1455,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									) 									
     									
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-timeline" )
@@ -1476,7 +1476,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)  									
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-assignedgroups" )
     		 then 
@@ -1497,7 +1497,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     									
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-documents" )
@@ -1519,7 +1519,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )
     									 
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-version" )
@@ -1541,7 +1541,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 ) 
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-event" )
     		 then 
@@ -1562,7 +1562,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									) 
     	else if ($CHAMBER-REL-PATH eq "/agendaitem-attachment" )
     		 then 
@@ -1583,7 +1583,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>,
-                                            cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+                                            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                                         )     									
         (: REPORTS :)
     	else if ($CHAMBER-REL-PATH eq "/report-text" )
@@ -1605,7 +1605,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )  
     	else if ($CHAMBER-REL-PATH eq "/report-timeline" )
     		 then 
@@ -1626,7 +1626,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)    									 
         (: SITTINGS :)    									
     	else if ($CHAMBER-REL-PATH eq "/sitting" )
@@ -1647,14 +1647,14 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )  
         (: Utilities - Called from root path and meant to be generic calls :)
     	else if ($EXIST-PATH eq "/popout" )
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
-                    $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
+                    $parts := cmn:get-view-parts($EXIST-PATH),
                     $act-entries-tmpl :=  bun:get-doc-event-popout($docnumber,$parts)
                     return
                         i18n:process($act-entries-tmpl, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
@@ -1685,7 +1685,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     	else if ($CHAMBER-REL-PATH eq "/member-officesheld" )
     		 then 
@@ -1706,7 +1706,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)       									
 
     	else if ($CHAMBER-REL-PATH eq "/member-parlactivities" )
@@ -1728,7 +1728,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)
     									
     	else if ($CHAMBER-REL-PATH eq "/member-contacts" )
@@ -1750,7 +1750,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)	
     	else if ($CHAMBER-REL-PATH eq "/whatson")
     		 then 
@@ -1773,8 +1773,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    								        (cmn:build-nav-node(
-    								            $EXIST-PATH,
+    								        (cmn:build-nav-node($CONTROLLER-DOC,
     								            (
     								                template:merge($EXIST-PATH, 
     								                        $act-entries-repl, 
@@ -1805,7 +1804,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
-    									   cmn:build-nav-node($EXIST-PATH, $act-entries-repl)
+    									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									 )  
     									 
         (:~ UNMAPPED :)			       

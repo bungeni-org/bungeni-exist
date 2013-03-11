@@ -1170,7 +1170,7 @@ declare function bun:search-membership(
         {
             if($querystr ne "") then (
                 for $search-rs in util:eval($eval-query)
-                let $userid := data($search-rs/bu:membership/bu:referenceToUser/@uri)
+                let $userid := data($search-rs/bu:membership/bu:referenceToUser/bu:refersTo/@href)
                 let $expanded := kwic:expand($search-rs),
                 $config := <config xmlns="" width="160"/>                        
                 order by ft:score($search-rs) descending
@@ -1369,7 +1369,7 @@ declare function bun:search-global(
                     
                     let $eval-query := concat("subsequence(",$coll-members,"[ft:query(., '",$escaped,"*')]",",$query-offset,$query-limit)")
                     for $search-rs in util:eval($eval-query)
-                    let $userid := data($search-rs/bu:membership/bu:referenceToUser/@uri)
+                    let $userid := data($search-rs/bu:membership/bu:referenceToUser/bu:refersTo/@href)
                     let $expanded := kwic:expand($search-rs),
                     $config := <config xmlns="" width="160"/>
                     order by ft:score($search-rs) descending 
@@ -1863,7 +1863,7 @@ declare function bun:get-xcard-xml($docid as xs:string)
                     $user          
                 }
                 <membership>{
-                    collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$docid][1]/ancestor::bu:ontology             
+                    collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[bu:refersTo/@href=$docid][1]/ancestor::bu:ontology             
                 }</membership>
                 <ref>{
                     collection(cmn:get-lex-db())//bu:ontology[@for='address']/bu:address/bu:assignedTo[@uri eq $docid]/ancestor::bu:ontology
@@ -3130,7 +3130,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                             if($address-type eq 'Group') then 
                                 collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$focal][1]/ancestor::bu:ontology
                             else
-                                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$focal][1]/ancestor::bu:ontology
+                                collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[bu:refersTo/@href=$focal][1]/ancestor::bu:ontology
                         }
                     <ref>
                         {
@@ -3261,11 +3261,12 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
     
     let $doc := <doc>       
             {
-                collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:docType[bu:value eq 'Event']/ancestor::bu:document[@uri eq $eventid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/parent::bu:document[@internal-uri eq '/ontology/ke/Legislature/9/Chamber/AS_XIV/Bill/44/Event/48']/ancestor::bu:ontology
             }            
             <event>{$eventid}</event>
         </doc>  
-    
+    let $log := util:log('debug',$doc)
+    let $log := util:log('debug',$eventid || "+++++++++++++++++++++++++++++++++++++++++++++++++++++")
     return
         transform:transform($doc, 
                             $stylesheet, 
@@ -3322,7 +3323,7 @@ declare function bun:get-members(
                 <doc>
                     {$match}
                     <ref>
-                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/@uri)]/ancestor::bu:ontology}
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=data($match/bu:membership/bu:referenceToUser/bu:refersTo/@href)]/ancestor::bu:ontology}
                     </ref>                    
                 </doc>
         } 
@@ -3347,7 +3348,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[@uri=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3370,7 +3371,7 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[@uri=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3403,7 +3404,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
    
     (: return AN Member document with his/her activities :)
     let $doc := <doc>
-        { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[@uri=$memberid][1]/ancestor::bu:ontology }
+        { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology }
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          

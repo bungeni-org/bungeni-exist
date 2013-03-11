@@ -51,7 +51,7 @@ declare function rou:get-home($CONTROLLER-DOC as node()) {
                                         <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                         {$CONTROLLER-DOC/parliament}
                                     </route-override>, 
-    							   cmn:build-nav-node($CONTROLLER-DOC/exist-path, $act-entries-repl)
+    							   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     							 )   
 };
 
@@ -87,7 +87,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
                                                     {$CONTROLLER-DOC/parliament}
                                                 </route-override>, 
     									    (cmn:build-nav-node(
-    									       $CONTROLLER-DOC/exist-path,
+    									       $CONTROLLER-DOC,
     									       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 
     									           bun:get-listing-search-context(
     									               concat("/",  $parts/current-view),

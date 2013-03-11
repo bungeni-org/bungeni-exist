@@ -107,14 +107,14 @@
        document -->
    <xsl:template match="workflowEvent">
        <xsl:copy>
+           <xsl:variable name="event-docid" select="data(docId)" />
+           <xsl:variable name="event-type" select="child::type/value" />
+           <xsl:variable name="type-mappings" select="//custom/value" />
+           <xsl:variable name="event-uri-name" 
+               select="bctypes:get_content_type_uri_name($event-type, $type-mappings)" 
+           />
+           <xsl:variable name="legislature-full-uri" select="/custom/legislature-full-uri" />
            <xsl:attribute name="href">
-               <xsl:variable name="event-docid" select="data(docId)" />
-               <xsl:variable name="event-type" select="data(type/value)" />
-               <xsl:variable name="type-mappings" select="/custom/value" />
-               <xsl:variable name="event-uri-name" 
-                   select="bctypes:get_content_type_uri_name($event-type, $type-mappings)" 
-               />
-               <xsl:variable name="legislature-full-uri" select="/custom/legislature-full-uri" />
                <xsl:value-of select="concat($internal-doc-uri, '/', $event-uri-name,'/', $event-docid)" />
            </xsl:attribute>
            <xsl:attribute name="isA" select="string('TLCEvent')" />
@@ -123,8 +123,6 @@
    </xsl:template>
     
     
-    
    <xsl:template match="custom" />
-    
     
 </xsl:stylesheet>

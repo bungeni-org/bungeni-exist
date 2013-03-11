@@ -131,15 +131,21 @@
     
 
     <xsl:template match="group_addresses">
-        <groupAddresses>
+        <addresses>
             <xsl:apply-templates />    
-        </groupAddresses>
+        </addresses>
     </xsl:template>      
     
     <xsl:template match="group_address[parent::group_addresses]">
-        <groupAddress isA="TLCObject">
+        <xsl:call-template name="address" />
+        <!--
+        <address isA="TLCObject">
+            <xsl:attribute name="id">
+                <xsl:variable name="address_id" select="field[@name='address_id']" />
+                <xsl:value-of select="concat('address-', $address_id)" />
+            </xsl:attribute>
             <xsl:apply-templates />
-        </groupAddress>
+        </address> -->
     </xsl:template>      
     
     <xsl:template match="members">

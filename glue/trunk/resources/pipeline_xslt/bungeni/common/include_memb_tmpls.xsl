@@ -113,11 +113,6 @@
     </xsl:template>
     
     
-    <xsl:template match="field[@name='title_name']">
-        <xsl:call-template name="renderTLCTermString">
-            <xsl:with-param name="elementName">titleName</xsl:with-param>
-        </xsl:call-template>
-    </xsl:template>
     
     
     

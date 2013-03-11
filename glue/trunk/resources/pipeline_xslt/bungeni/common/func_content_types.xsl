@@ -110,7 +110,7 @@
             <xsl:variable name="tmp-content-type" select="$type-mappings//map[@from=$bungeni-content-type]/@uri-name" />
             <xsl:choose>
                 <xsl:when test="string-length($tmp-content-type) eq 0">
-                    <xsl:value-of select="$bungeni-content-type" />
+                    <xsl:value-of select="string('NOT_FOUND')" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="$tmp-content-type" />

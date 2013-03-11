@@ -182,15 +182,13 @@
     </xsl:template>
     
     <xsl:template match="user_addresses">
-        <userAddresses>
+        <addresses>
             <xsl:apply-templates />
-        </userAddresses>
+        </addresses>
     </xsl:template>    
     
     <xsl:template match="user_address">
-        <userAddress isA="TLCObject">
-            <xsl:apply-templates />
-        </userAddress>
+        <xsl:call-template name="address" />
     </xsl:template>   
     
     <!-- !+COMMON

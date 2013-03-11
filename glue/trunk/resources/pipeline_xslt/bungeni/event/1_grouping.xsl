@@ -53,39 +53,6 @@
         <xsl:variable name="language" select="field[@name='language']" />
         <xsl:variable name="doc_id" select="field[@name='doc_id']" />
         
-        
-        <!--
-        <xsl:variable name="uri-generator-type">
-            
-            <xsl:choose>
-                
-                <xsl:when test="field[@name='type_number']">
-                    <xsl:text>PROGRESSIVE</xsl:text>
-                </xsl:when>
-                
-                <xsl:otherwise>
-                    <xsl:text>PROGRESSIVE-INTERNAL</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        -->
-        <!--
-        <xsl:variable name="doc-uri">
-            <xsl:choose>
-                <xsl:when test="$uri-generator-type eq 'PROGRESSIVE'">
-                    <xsl:variable name="progressive-number" select="field[@name='type_number']" />
-                    <xsl:value-of select="concat(
-                        $parliament-full-uri, '/',
-                        $content-type-uri-name, '/',
-                        $progressive-number
-                        )" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>NO_URI</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        -->
         <xsl:variable name="internal-uri">
             <xsl:value-of select="concat(
                 $head-item-internal-uri, '/',
@@ -115,11 +82,6 @@
                         )" />
                 </xsl:attribute>
                 
-                <!--                
-                <xsl:if test="$uri-generator-type eq 'PROGRESSIVE'">
-                        <xsl:attribute name="uri" select="$doc-uri" />
-                </xsl:if> 
-                -->
                 
                 <xsl:attribute name="internal-uri" 
                     select="$internal-uri" />
@@ -176,30 +138,6 @@
                     @name='type_number' 
                     ]" />                  
                 
-                <!-- for <tableddocument> 
-                    <xsl:copy-of select="field[
-                    @name='tabled_document_id' or 
-                    @name='tabled_document_number' 
-                    ]" />    
-                    
-                    
-                    <xsl:copy-of select="field[
-                    @name='bill_id' or 
-                    @name='bill_type_id' or 
-                    @name='bill_number'
-                    ]" />
-                    
-                    <xsl:copy-of select="field[
-                    @name='motion_id' or 
-                    @name='motion_number'
-                    ]" />
-                -->
-                
-                <!-- for <motion> & <bill> !+FIX_THIS(ah,17-04-2012)
-                    <xsl:copy-of select="field[
-                    @name='publication_date' or
-                    @name='doc_type' 
-                    ]" />  -->
                 
                 <!-- for <event> -->
                 <xsl:copy-of select="field[
@@ -254,52 +192,7 @@
                         ] " /> <!-- was question_type and response_tyep -->
                 
                 <xsl:copy-of select="head" />        
-                
-
                 <!-- This is a reference to a group from the parliamentary item -->    
-                
-                <!--
-                <xsl:if test="group">
-                   <xsl:for-each select="group">
-                       
-                       <group isA="TLCReference">
-                           
-                           <xsl:variable name="group-id" select="field[@name='group_id']" />
-                           
-                           <xsl:variable name="group-type" select="field[@name='type']" />
-                           
-                           <xsl:variable name="group-identifier" select="field[@name='identifier']" />
-                           
-                           
-                           <xsl:variable name="group-type-element-name" select="translate(bctype:get_content_type_element_name(
-                               $group-type, 
-                               $type-mappings
-                               ),' ','')" />
-                           
-                           <xsl:variable name="group-type-uri-name" select="translate(bctype:get_content_type_uri_name(
-                               $group-type, 
-                               $type-mappings
-                               ),' ','')" />
-                           
-                           
-                           <xsl:attribute name="href" select="concat(
-                               $parliament-full-uri, '/',
-                               $group-type-uri-name, '/',
-                               $group-identifier
-                               )" />
-                           
-                           <xsl:copy-of select="field[@name='group_id' or 
-                               @name='short_name' or
-                               @name='full_name' or 
-                               @name='acronym' or 
-                               @name='status_date' or 
-                               @name='identifier' or 
-                               @name='type' or  
-                               @name='start_date' ]"/>                           
-                       </group>
-                       
-                   </xsl:for-each>
-                </xsl:if> -->
             </xsl:element>
             
             
@@ -334,40 +227,5 @@
         </xsl:call-template>
     </xsl:template>
 
-    <!--
-    <xsl:template match="owner">
-        <xsl:variable name="user-type-uri-name" select="bctype:get_content_type_uri_name('user', $type-mappings)" />
-        <xsl:variable name="first-name" select="data(field[@name='first_name'])" />
-        <xsl:variable name="last-name" select="data(field[@name='last_name'])" />
-        <xsl:variable name="user-id" select="data(field[@name='user_id'])" />
-        <xsl:variable name="yyyy-mm-dd-dob" select="bdates:parse-datepart-only(data(field[@name='date_of_birth']))" />
-        <xsl:variable name="user-identifier" select="busers:get_user_identifer(
-            $country-code, 
-            $last-name, 
-            $first-name, 
-            $user-id, 
-            $yyyy-mm-dd-dob
-            )" 
-        />
-        <xsl:variable name="user-uri" select="busers:get_user_uri(
-            concat(
-                $uri-base, '/',
-                $user-type-uri-name
-                ),
-            $user-identifier
-            )" />
-        <owner isA="TLCPerson">
-            <person href="{$user-uri}" showAs="{concat($last-name, ', ', $first-name)}" />
-            <role type="TLCConcept">
-                <value type="xs:string">
-                    <xsl:value-of select="bctype:get_content_type_uri_name(
-                        'member_of_parliament',
-                        $type-mappings
-                        )" />
-                </value>
-            </role>
-        </owner>
-    </xsl:template>
-        -->
     
 </xsl:stylesheet>

@@ -102,4 +102,16 @@
         </xsl:if>
     </xsl:template>
     
+    
+    <xsl:template name="address">
+        <address isA="TLCObject">
+            <xsl:attribute name="id">
+                <xsl:variable name="address_id" select="field[@name='address_id']" />
+                <xsl:value-of select="concat('address-', $address_id)" />
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </address>
+    </xsl:template>
+    
+    
 </xsl:stylesheet>

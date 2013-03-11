@@ -149,7 +149,7 @@ declare function bun:gen-pdf-output($docid as xs:string)
 :)
 declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string, $views as node())
 {
-    let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
+    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
     (: for timeline :)
     let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
     
@@ -2697,7 +2697,7 @@ declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $
 declare function bun:get-parl-doc($acl as xs:string, 
             $doc-uri as xs:string, 
             $parts as node(),
-            $parliament as node()) as element()* {
+            $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2829,7 +2829,7 @@ declare function bun:get-parl-group(
             $acl as xs:string, 
             $docid as xs:string, 
             $parts as node(),
-            $parliament as node()) as element()* {
+            $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 

@@ -59,13 +59,13 @@ declare function scriba:generate-content($pages as node()) {
         <content packageId="toc" packagePath="/" packageFile="toc.ncx" contentMediaType="application/x-dtbncx+xml" />
         <content packageId="cover" 
                 packagePath="/"
-                contentUrl="http://localhost:8088/exist/rest/db/apps/framework/bungeni/assets/images/cover.png"
+                contentUrl="http://{$server-name}:{$server-port}/exist/rest/db/apps/framework/bungeni/assets/images/cover.png"
                 packageFile="cover.png" 
                 isInSpine="false"
                 contentMediaType="image/png"/>      
         <content packageId="section-image" 
                 packagePath="/"
-                contentUrl="http://localhost:8088/exist/rest/db/apps/framework/bungeni/assets/images/bungeni-logo.png"
+                contentUrl="http://{$server-name}:{$server-port}/exist/rest/db/apps/framework/bungeni/assets/images/bungeni-logo.png"
                 packageFile="section-image.png" 
                 isInSpine="false"
                 contentMediaType="image/png"/>                

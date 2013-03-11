@@ -13,6 +13,7 @@ declare namespace request="http://exist-db.org/xquery/request";
 declare namespace ex="http://exist-db.org/xquery/ex";
 declare namespace bu="http://portal.bungeni.org/1.0/";
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
+declare namespace an='http://www.akomantoso.org/2.0';
 
 (:
  : This XQuery script provides a REST API based on RESTXQ extension
@@ -383,6 +384,55 @@ declare
                 </error>
             </pushAttachment> 
         }
+};
+
+declare 
+    %rest:POST
+    %rest:path("/amendment/details")
+    %rest:form-param("filename", "{$filename}","*")  
+    %output:method("xml")
+    function local:get-amendment-details-by-attachment-file-name($filename as xs:string*){
+    
+        let $documentsDetail := for $i in collection('/db/bungeni-xml')
+                [an:akomaNtoso/an:amendment/an:amendmentBody/an:meta/an:references/an:activeRef[@href=$filename]]
+            return
+                <amendmentDocument>
+                    <name>{util:document-name($i)}</name>
+                    <ref>{$i/an:akomaNtoso/an:amendment/an:amendmentBody/an:amendmentContent/
+                    an:block[@name='changeBlock']/an:mod/an:quotedStructure[1]/an:item/@id/string()}</ref>
+                </amendmentDocument>
+                
+        return <amendments>{$documentsDetail}</amendments>
+};
+
+declare 
+    %rest:GET
+    %rest:path("/test/get/amendment/details")
+    %rest:query-param("filename", "{$filename}","*")  
+    %output:method("xml")
+    function local:expose-get-amendment-details-by-attachment-file-name($filename as xs:string*){
+    
+        local:get-amendment-details-by-attachment-file-name($filename)
+};
+
+declare
+    %rest:POST
+    %rest:path("/amendment")
+    %rest:form-param("filename","{$filename}","*")
+    %output:method("xml")
+    function local:get-amendment-by-file-name($filename as xs:string*){
+  
+        doc(concat("/db/bungeni-xml/", $filename))
+};
+
+declare
+    %rest:GET
+    %rest:path("/test/get/amendment")
+    %rest:form-param("filename","{$filename}","*")
+    %output:method("xml")
+    function local:expose-get-amendment-by-file-name($filename as xs:string*){
+  
+        local:get-amendment-by-file-name($filename)
 };
 
 local:goodbye("unknown")

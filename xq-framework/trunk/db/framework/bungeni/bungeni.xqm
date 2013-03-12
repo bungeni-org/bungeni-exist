@@ -2101,36 +2101,40 @@ declare function local:validate-custom-date($from as xs:date, $to as xs:date) {
 declare function local:get-sitting-subset($sittings) {
     for $sitting in $sittings
         return 
-        if ($sitting/bu:sitting/bu:itemSchedules/bu:itemSchedule) then (
-            for $eachitem in $sitting/bu:sitting/bu:itemSchedules/bu:itemSchedule[bu:itemType/bu:value ne 'heading']
+        if ($sitting/bu:sitting/bu:scheduleItems/bu:scheduleItem) then (
             let $uri := <uri>{data($sitting/bu:sitting/@uri)}</uri>
             let $startdate := $sitting/bu:sitting/bu:startDate
             let $venue := $sitting/bu:sitting/bu:venue/bu:shortName/text()
             let $title := $sitting/bu:chamber/bu:shortName
             return 
                 <ref sitting="{$uri}">
-                    { $startdate, $eachitem, $title, <bu:venue>{$venue}</bu:venue>, collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq $eachitem/bu:document/@href, @internal-uri eq $eachitem/bu:document/@href]/parent::node() }
+                    {   $startdate, 
+                        for $eachitem in $sitting/bu:sitting/bu:scheduleItems/bu:scheduleItem
+                        return $eachitem, 
+                        $title, 
+                        <bu:venue>{$venue}</bu:venue> 
+                    }
                 </ref>
         )
         else (
             let $uri := <uri>{data($sitting/bu:sitting/@uri)}</uri>
             let $startdate := $sitting/bu:sitting/bu:startDate
             let $venue := $sitting/bu:sitting/bu:venue/bu:shortName/text()
-            let $title := $sitting/bu:legislature/bu:shortName
+            let $title := $sitting/bu:chamber/bu:shortName
             return 
                 <ref sitting="{$uri}">
-                    { $startdate, <bu:itemSchedule/>, $title, <bu:venue>{$venue}</bu:venue>}
+                    { $startdate, <bu:scheduleItem/>, $title, <bu:venue>{$venue}</bu:venue>}
                 </ref>        
         )
 };
 
 (: !+EXIST_20_UPG :)
 declare function local:grouped-sitting-items-by-itemtype($sittings) {
-    for $item in local:get-sitting-subset($sittings)
-    group by $key := $item/bu:itemSchedule/bu:itemType/bu:value
+    for $item in local:get-sitting-subset($sittings)/bu:scheduleItem
+    group by $key := $item/bu:sourceItem/bu:refersTo/bu:type/bu:value
     return 
         <doc title="{$key}">
-            {$item}
+            {$item/parent::node()}
         </doc>
 };
 
@@ -2145,12 +2149,12 @@ declare function local:grouped-sitting-items-by-date($sittings) {
         </doc>
 };
 
-declare function local:grouped-sitting-meeting-type($dates-range,$mtype as xs:string) {
+declare function local:grouped-sitting-meeting-type($chamber-id as xs:string?, $dates-range as node(),$mtype as xs:string) {
     if ($mtype eq 'any') then (
-        for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+        for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[bu:origin/bu:identifier eq $chamber-id][xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
         return $sittings
     ) else (
-       for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+       for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[bu:origin/bu:identifier eq $chamber-id][xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
        where $sittings/bu:sitting/bu:meetingType[bu:value eq $mtype] 
        return $sittings    
     )
@@ -2179,6 +2183,7 @@ declare function bun:get-whatson(
     let $f := request:get-parameter("f",substring-before(current-date() cast as xs:string,"+") cast as xs:date)
     let $t := request:get-parameter("t",substring-before(current-date() cast as xs:string,"+") cast as xs:date)
     let $listings-filter := cmn:get-listings-config('Groupsitting')
+    let $chamber-id := $parliament/identifier/text()
     
     let $view := if ($whatsonview ne 'none') 
         then 
@@ -2190,8 +2195,8 @@ declare function bun:get-whatson(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'])}</count>
-        <documentType>groupsitting</documentType>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='sitting']/bu:sitting[bu:origin/bu:identifier eq $parliament/identifier]/ancestor::bu:ontology)}</count>
+        <documentType>sitting</documentType>
         <tags>
         {
             for $listing in $listings-filter
@@ -2203,7 +2208,7 @@ declare function bun:get-whatson(
         <meetingtypes>
             <meetingtype>any</meetingtype>
         { 
-            for $node in distinct-values(collection(cmn:get-lex-db())/bu:ontology/bu:sitting/bu:meetingType/bu:value)
+            for $node in distinct-values(collection(cmn:get-lex-db())/bu:ontology/bu:sitting[bu:origin/bu:identifier eq $parliament/identifier]/bu:meetingType/bu:value)
             return <meetingtype>{string($node)}</meetingtype>
         } 
         </meetingtypes>
@@ -2216,7 +2221,7 @@ declare function bun:get-whatson(
             case 'old' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
                 return             
-                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
+                let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2229,7 +2234,7 @@ declare function bun:get-whatson(
                 
             case 'pwk' return 
                 let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
-                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
+                let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2243,7 +2248,7 @@ declare function bun:get-whatson(
             case 'twk' return
                 (: !+FIX_THIS (ao, 21-May-2012) Somehow current-date() returns like this 2012-05-21+03:00, we remove the timezone :)
                 let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
-                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype)              
+                let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype)              
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2256,7 +2261,7 @@ declare function bun:get-whatson(
   
             case 'nwk' return 
                 let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
-                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
+                let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2269,7 +2274,7 @@ declare function bun:get-whatson(
              
             case 'fut' return 
                 let $dates-range := local:old-future-sittings($whatsonview)
-                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype) 
+                let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2282,7 +2287,7 @@ declare function bun:get-whatson(
                     
             case 'custom' return 
                 let $dates-range := local:validate-custom-date($f, $t)
-                let $sittings := local:grouped-sitting-meeting-type($dates-range,$mtype)
+                let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype)
                 return 
                     if ($tab eq 'sittings') then (
                         $dates-range,
@@ -2406,9 +2411,9 @@ declare function local:get-sitting-items($sittingdoc as node()?) {
         {if ($sittingdoc) then $sittingdoc else $sittingdoc}
         <ref>
             {
-                for $eachitem in $sittingdoc/bu:sitting/bu:itemSchedules/bu:itemSchedule
+                for $eachitem in $sittingdoc/bu:sitting/bu:scheduleItems/bu:scheduleItem
                 return 
-                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq data($eachitem/bu:document/@href)]/ancestor::bu:ontology
+                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq data($eachitem/bu:sourceItem/bu:refersTo/@href)]/ancestor::bu:ontology
             }
         </ref>
     </doc>     

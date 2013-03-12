@@ -30,7 +30,9 @@ ul.scheduling li {
             display:inline-block;
             margin-right:10px;
             white-space:nowrap;
-            float:left }
+            float:left;
+            min-width:80px;
+        }
             .schedule-block .left a {
                 color:#DD3519 }            
         

@@ -22,7 +22,7 @@
                 <xsl:value-of select="bctype:get_content_type_uri_name($item_type, $type-mappings)" />
             </xsl:variable>
             <xsl:variable name="item_id" select="field[@name='item_id']" />
-            <sourceItem isA="TLCObject" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
+            <sourceItem isA="TLCObject" >
                 <refersTo isA="TLCReference" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
                     <type isA="TLCTerm">
                         <value type="xs:string">
@@ -35,6 +35,127 @@
         </scheduleItem>
     </xsl:template>    
     
+    <xsl:template match="itemvotes">
+        <votes>
+            <xsl:attribute name="id">
+                <xsl:variable name="schedule_id" select="parent::item_schedule/field[@name='schedule_id']" />
+                <xsl:value-of select="concat('votes-',$schedule_id)" />
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </votes>
+    </xsl:template>
+    
+    <xsl:template match="itemvote">
+        <vote>
+            <xsl:attribute name="id">
+                <xsl:variable name="vote_id" select="child::field[@name='vote_id']"></xsl:variable>
+                <xsl:variable name="schedule_id" select="ancestor::item_schedule/field[@name='schedule_id']"></xsl:variable>
+                <xsl:value-of select="concat('schedule-', $schedule_id, '-', 'vote-', $vote_id)" />
+            </xsl:attribute>
+            <xsl:apply-templates />
+        </vote>
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='votes_against']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">votesAgainst</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='votes_for']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">votesFor</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="field[@name='cast_votes']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">castVotes</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="field[@name='votes_abstained']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">abstainedVotes</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='eligible_votes']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">eligibleVotes</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='issue_item']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">issueItem</xsl:with-param>
+        </xsl:call-template>    
+    </xsl:template>
+    
+    <xsl:template match="field[@name='issue_sub_item']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">issueSubItem</xsl:with-param>
+        </xsl:call-template>    
+    </xsl:template>
+    
+    <xsl:template match="field[@name='document_uri']">
+        <xsl:call-template name="renderUriElement">
+            <xsl:with-param name="elementName">documentUri</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='result']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">outcome</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='majority_type']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">majorityType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='question']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">question</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='time']">
+        <time type="xs:time">
+            <xsl:value-of select="." />
+        </time>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='vote_id']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">voteId</xsl:with-param>
+            <xsl:with-param name="key">true</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='vote_type']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">voteType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="field[@name='attendance_type']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">attendanceType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="field[@name='activity_type']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">activityType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
     <xsl:template match="field[@name='item_type']" />
     
     <xsl:template match="field[@name='active']">
@@ -51,9 +172,9 @@
     </xsl:template>
     
     <xsl:template match="field[@name='item_uri']">
-        <bungeniUri type="xs:anyURI">
-            <xsl:value-of select="." />
-        </bungeniUri>
+        <xsl:call-template name="renderUriElement">
+            <xsl:with-param name="elementName">bungeniUri</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template match="field[@name='item_title']">
@@ -64,7 +185,7 @@
     
     <xsl:template match="field[@name='planned_order']">
         <xsl:call-template name="renderIntegerElement">
-            <xsl:with-param name="elementName" >plannedOrder</xsl:with-param>
+            <xsl:with-param name="elementName">plannedOrder</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 
@@ -104,15 +225,21 @@
     -->
     
     <xsl:template match="item_schedule[child::item_schedule]">
-        <scheduleItems>
+        <scheduleItems id="bungeniScheduleItems">
             <xsl:apply-templates />
         </scheduleItems>
     </xsl:template>
     
     <xsl:template match="itemdiscussions">
+      <xsl:if test="normalize-space(.) ne ''">  
         <discussions>
+            <xsl:attribute name="id">
+                <xsl:variable name="schedule_id" select="parent::item_schedule/field[@name='schedule_id']" />
+                <xsl:value-of select="concat('discussion-', $schedule_id)" />
+            </xsl:attribute>
             <xsl:apply-templates />
         </discussions>
+      </xsl:if>   
     </xsl:template>
     
     <xsl:template match="itemdiscussion">
@@ -151,23 +278,62 @@
     </xsl:template>
     
     <xsl:template match="reports">
-       <reports>
+       <reports id="bungeniReports">
         <xsl:apply-templates />
        </reports>
     </xsl:template>
     
     <xsl:template match="report[parent::reports]">
+        <xsl:apply-templates select="child::report"></xsl:apply-templates>
+    </xsl:template>
+    
+    <xsl:template match="report[parent::report]">
         <report>
+            <xsl:attribute name="id">
+                <xsl:value-of select="concat('report-', parent::report/field[@name='report_id'])" />
+            </xsl:attribute>
+            <xsl:apply-templates select="parent::report/field[@name='report_id']" />
             <xsl:apply-templates />
         </report>
     </xsl:template>
     
-    <xsl:template match="report[parent::report]">
-        <reportInfo>
-            <xsl:apply-templates />
-        </reportInfo>
+    <xsl:template match="field[@name='meeting_type']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">meetingType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="field[@name='convocation_type']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">convocationType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="field[@name='venue_id']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">venueId</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
+    <xsl:template match="field[@name='report_id']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">reportId</xsl:with-param>
+            <xsl:with-param name="key">true</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    
+    <xsl:template match="field[@name='sitting_id']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">sittingId</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='member_id']">
+        <xsl:call-template name="renderIntegerElement">
+            <xsl:with-param name="elementName">memberId</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
     
     
 

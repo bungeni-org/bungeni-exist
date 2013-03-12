@@ -377,6 +377,9 @@ declare
         }
 };
 
+(:
+ :DEPRECATED
+ :)
 declare 
     %rest:POST
     %rest:path("/amendment/details")
@@ -396,6 +399,45 @@ declare
         return <amendments>{$documentsDetail}</amendments>
 };
 
+(: 
+ : return's collection of amendments
+ :  :)
+declare 
+    %rest:POST
+    %rest:path("/amendments")
+    %rest:form-param("filename", "{$filename}","*")  
+    %output:method("xml")
+    function local:get-amendments-by-attachment-file-name($filename as xs:string*){
+    
+        let $amendmentDocuments := for $i in collection('/db/bungeni-xml')
+                [an:akomaNtoso/an:amendment/an:amendmentBody/an:meta/an:references/an:activeRef[@href=$filename]]
+            return
+                <amendmentDocument>
+                    <name>{util:document-name($i)}</name>
+                    <ref>{$i/an:akomaNtoso/an:amendment/an:amendmentBody/an:amendmentContent/
+                    an:block[@name='changeBlock']/an:mod/an:quotedStructure[1]/an:item/@id/string()}</ref>
+                    <document>{$i}</document>
+                </amendmentDocument>
+                
+        return <amendments>{$amendmentDocuments}</amendments>
+};
+
+(: 
+ : expose function return amendment collection
+ :  :)
+declare
+    %rest:GET
+    %rest:path("/test/get/amendments")
+    %rest:query-param("filename","{$filename}","*")
+    %output:method("xml")
+    function local:expose-get-amendments-by-attachment-file-name($filename as xs:string*){
+        
+        local:get-amendments-by-attachment-file-name($filename)
+};
+
+(:
+ : expose get amendment details by attachment file name	
+ :)
 declare 
     %rest:GET
     %rest:path("/test/get/amendment/details")
@@ -406,6 +448,9 @@ declare
         local:get-amendment-details-by-attachment-file-name($filename)
 };
 
+(:
+ : fetch amendment by file name	
+ :)
 declare
     %rest:POST
     %rest:path("/amendment")
@@ -416,6 +461,9 @@ declare
         doc(concat("/db/bungeni-xml/", $filename))
 };
 
+(:
+ :expose get amendment by file name
+ :)
 declare
     %rest:GET
     %rest:path("/test/get/amendment")

@@ -200,15 +200,12 @@ declare function local:get-mock-attachments() as node(){
 (: 
  : Retrieve collection of attachments
  : :)
-declare function local:get-attachments() as node(){
-    
-    let $doc := <collection>
-        {collection('/db/bungeni-xml')/bu:ontology[@for='document']
-        [bu:document[bu:docType[bu:value[. = 'Bill']]][bu:status[bu:value[. = 'received']]]]
-        /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]]}
-        </collection>
+declare function local:get-matched-attachments($match as xs:string) as node(){
         
-    return $doc
+    collection('/db/bungeni-xml')/bu:ontology[@for='document']
+    [bu:document[bu:docType[bu:value[. = 'Bill']]][bu:status[bu:value[. = 'received']]]]
+    /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]]
+    [bu:name[matches(., $match, 'i')]]
 };
 
 (: 
@@ -240,14 +237,8 @@ declare
                                     xs:integer(1)
                                 else
                                     ((xs:integer($page)-1)*xs:integer($perPage))+1
-    
-            let $allResultsMatched := for $j in local:get-attachments()/child::node()
-                return
-                    if (matches($j/bu:name/string(), $search, 'i')) then 
-                        $j
-                    else
-                        ()
-                        
+                    
+            let $allResultsMatched := local:get-matched-attachments($search)
             let $page := if(count($allResultsMatched) eq 1) then
                             xs:integer(1)
                         else

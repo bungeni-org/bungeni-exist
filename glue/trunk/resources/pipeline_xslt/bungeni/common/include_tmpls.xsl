@@ -62,7 +62,23 @@
         </xsl:if>  
     </xsl:template>
     
+    <xsl:template name="renderUriElement">
+        <xsl:param name="elementName" />
+        <xsl:variable name="nsp" select="normalize-space(.)" />
+        <xsl:if test="$nsp ne ''">
+            <xsl:if test="$nsp ne 'None'">
+                <xsl:element name="{$elementName}">
+                    <xsl:attribute name="type">
+                        <xsl:text>xs:anyURI</xsl:text>
+                    </xsl:attribute>
+                    <xsl:value-of select="." />
+                </xsl:element>
+            </xsl:if>
+        </xsl:if>  
+    </xsl:template>
     
+    
+
     <xsl:template name="renderIntegerElement">
         <xsl:param name="elementName" />
         <xsl:param name="key" select="string('false')" />

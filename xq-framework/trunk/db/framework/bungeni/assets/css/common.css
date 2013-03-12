@@ -245,6 +245,15 @@ div#doc-downloads {
     margin-left:15px;
 }
 
+.truncate {
+    padding:0;
+    margin:0;
+	width: 420px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 /* emblem */
 img.parl-emblem {
     display: block;
@@ -786,3 +795,14 @@ nav ul ul.mouseover ul {
 	top:0;
 }
 /*------------------------------*/
+
+#portal-breadcrumbs a {
+    text-decoration: none;
+}
+#portal-breadcrumbs a:after { 
+    content: "  \2192  "; /* &rarr; -- here must be in HEX */
+    font-size: 120%;
+}
+#portal-breadcrumbs a:last-child:after {
+    content: "";
+}

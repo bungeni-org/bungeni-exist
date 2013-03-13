@@ -388,7 +388,7 @@ declare
     function local:get-amendment-details-by-attachment-file-name($filename as xs:string*){
     
         let $documentsDetail := for $i in collection('/db/bungeni-xml')
-                [an:akomaNtoso/an:amendment/an:amendmentBody/an:meta/an:references/an:activeRef[@href=$filename]]
+                [an:akomaNtoso/an:amendment/an:meta/an:references/an:activeRef[@href=$filename]]
             return
                 <amendmentDocument>
                     <name>{util:document-name($i)}</name>
@@ -410,7 +410,7 @@ declare
     function local:get-amendments-by-attachment-file-name($filename as xs:string*){
     
         let $amendmentDocuments := for $i in collection('/db/bungeni-xml')
-                [an:akomaNtoso/an:amendment/an:amendmentBody/an:meta/an:references/an:activeRef[@href=$filename]]
+                [an:akomaNtoso/an:amendment/an:meta/an:references/an:activeRef[@href=$filename]]
             return
                 <amendmentDocument>
                     <name>{util:document-name($i)}</name>

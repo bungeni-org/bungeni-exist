@@ -52,7 +52,7 @@ class TransformerConfig(Config):
     def get_legislature_election_date(self):
         return self.__legislature__()["election_date"]
  
-    def __legislature__(self):
+    def __bungeni_custom__(self):
         import imp
         bc = imp.load_source(
                 "bungeni_custom", 
@@ -61,7 +61,20 @@ class TransformerConfig(Config):
                     "__init__.py"
                 )
             )
+        return bc        
+ 
+    def __legislature__(self):
+        bc = self.__bungeni_custom__()
         return bc.legislature
+    
+    def get_languages_info(self):
+        bc = self.__bungeni_custom__()
+        lang_info = {
+            "allowed_languages": bc.zope_i18n_allowed_languages,
+            "default_language": bc.default_language,
+            "right_to_left_languages": bc.right_to_left_languages
+        }
+        return lang_info
         
     def get_bicameral(self):
         #return self.get("general", "bicameral")

@@ -253,6 +253,80 @@ def param_type_mappings():
     return type_mappings.encode("UTF-8")
     
 
+def languages_info_xml(cfg):
+    lang_map = cfg.get_languages_info()
+    from babel import Locale
+    allowed_languages = lang_map["allowed_languages"].split(" ")
+    li_langs = None
+    if len(allowed_languages) > 0:
+        li_langs = StringBuilder()
+        li_langs.append("<languages>")
+        for lang in allowed_languages:
+            default_lang = False
+            right_to_left = False
+            if lang == lang_map["default_language"]:
+                default_lang = True
+            if lang in lang_map["right_to_left_languages"].split(" "):
+                right_to_left = True
+            li_langs.append(    
+            '<language id="%s" ' % lang 
+            )
+            if default_lang:
+                li_langs.append(
+                    ' default="true" '
+                )
+            if right_to_left:
+                li_langs.append(
+                    ' rtl="true" '
+                )
+            locale = Locale(lang)
+            if locale is not None:
+                li_langs.append(
+                    ' english-name="%s"' % locale.english_name
+                )
+                li_langs.append(
+                    ' display-name="%s"' % locale.display_name
+                )
+            li_langs.append(" />")
+        li_langs.append("</languages>")
+    if li_langs is None:
+        return li_langs
+    else:
+        return li_langs.toString()
+
+def publish_languages_info_xml(config_file):
+    up_stat = None
+    try :
+        cfg = TransformerConfig(config_file)
+        xml_lang_info = languages_info_xml(cfg)
+        path_to_file = os.path.join(
+            cfg.get_temp_files_folder(),
+            "lang_info.xml"
+            )
+        bwriter = BufferedWriter(
+            OutputStreamWriter(
+                FileOutputStream(path_to_file), "UTF8"
+                )
+            )
+        bwriter.append(xml_lang_info)
+        bwriter.flush()
+        bwriter.close() 
+            
+        wd_cfg = WebDavConfig(config_file)
+        xml_folder = wd_cfg.get_http_server_port() + wd_cfg.get_bungeni_xml_folder()
+        webdaver = WebDavClient(
+                wd_cfg.get_username(), 
+                wd_cfg.get_password(), 
+                xml_folder
+                )
+        webdaver.reset_remote_folder(
+            xml_folder
+            )
+        up_stat = webdaver.pushFile(path_to_file)
+    except Exception,e:
+        print "Error while getting languages info", e
+    return up_stat
+        
 def do_bind_attachments(cfg):
     # first we unzip the attachments using the GenericDirWalkerUNZIP 
     # so we get xml + attachments in a sub-folder
@@ -414,11 +488,12 @@ def publish_parliament_info(config_file, parliament_cache_info):
     wd_cfg = WebDavConfig(config_file)
     xml_folder = wd_cfg.get_http_server_port() + wd_cfg.get_bungeni_xml_folder()
     webdaver = WebDavClient(
-                wd_cfg.get_username(), 
-                wd_cfg.get_password(), 
-                xml_folder
-                )
-    webdaver.reset_remote_folder(xml_folder)
+            wd_cfg.get_username(), 
+            wd_cfg.get_password(), 
+            xml_folder
+            )
+    #already called in language publish
+    #webdaver.reset_remote_folder(xml_folder)
     up_stat = webdaver.pushFile(path_to_file)
     return up_stat
        

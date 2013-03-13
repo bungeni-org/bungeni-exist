@@ -32,7 +32,8 @@ from glue import (
     main_queue,
     get_parl_info,
     setup_consumer_directories,
-    publish_parliament_info
+    publish_parliament_info,
+    publish_languages_info_xml
     )
 
 
@@ -116,6 +117,23 @@ class RabbitMQClient:
                     LOG.error("Error while closing connection", ex)
 
 
+class LangInfoPublish(Thread):
+    
+    def __init__(self, cd_latch):
+        self.latch = cd_latch
+        self.publish_state = False
+        
+    def run(self):
+        try:
+            self.publish_state = publish_languages_info_xml(
+                __config_file__
+                )        
+        except Exception, e:
+            print "There was an exception getting the language info", e
+        finally:
+            self.latch.countDown()
+
+
 class ParlInfoGather(Thread):
     """
     This thread gets the parliament information and is run before the 
@@ -137,6 +155,7 @@ class ParlInfoGather(Thread):
         finally:
             self.latch.countDown()
 
+
 class ParlInfoPublish(Thread):
     """
     This thread publishes the parliament info to bungeni
@@ -157,6 +176,9 @@ class ParlInfoPublish(Thread):
     
             
 class QueueRunner(Thread):
+    """
+    This thread processes all the documents
+    """
     
     def __init__(self, cd_latch, pc_info):
         self.latch = cd_latch
@@ -170,6 +192,20 @@ class QueueRunner(Thread):
             print "There was an exception processing the queue", e
         finally:
             self.latch.countDown()
+
+
+def language_info_publish():
+    language_info_continue = True
+    while language_info_continue:
+        latch = CountDownLatch(1)
+        p_thread = LangInfoPublish(latch)
+        p_thread.start()
+        try:
+            latch.await()
+            if p_thread.publish_state:
+                language_info_continue = False
+        except InterruptedException, e:
+            print "Language info publication thread was interrupted", e
 
 
 def parliament_info_gather():
@@ -247,10 +283,16 @@ else:
     sys.exit()
 
 # setup directories
-setup_consumer_directories(__config_file__)
+setup_consumer_directories(
+    __config_file__
+    )
+# get language info
+language_info_publish()
 # get chamber information
 cache_info = parliament_info_gather()
 # publish chamber information to exist
-if parliament_info_publish(cache_info):
+if parliament_info_publish(
+        cache_info
+        ):
     # publish other documents to exist
     consume_documents(cache_info)

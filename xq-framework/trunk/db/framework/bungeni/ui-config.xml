@@ -815,24 +815,7 @@
                             </ul>
                         </li>
                     </ul>
-                </nav>                   
-                <!--ul id="portal-globalnav">
-                    <li>
-                        <a href="home" name="home">
-                            <i18n:text key="home">home</i18n:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="whatson" name="business">
-                            <i18n:text key="business">business</i18n:text>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="members" name="members">
-                            <i18n:text key="members">members</i18n:text>
-                        </a>
-                    </li>
-                </ul-->
+                </nav>
             </div>
         </menu>
         <menu for="home" name="home">

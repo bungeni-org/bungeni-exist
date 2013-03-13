@@ -73,6 +73,7 @@ declare variable $template:SERVER-PORT := request:get-server-port();
 :   An XHTML page which is the result of merging the template with the content snippets
 : 
 :)
+
 declare function template:process-tmpl(
         $rel-path as xs:string, 
         $request-rel-path as xs:string, 
@@ -81,14 +82,42 @@ declare function template:process-tmpl(
         $route-override as node(),
         $content as node()+
         ) { 
-    let $template := fn:doc(fn:concat($rel-path, "/", $template-name)),
-    $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id] ,
+    let $template := fn:doc(fn:concat($rel-path, "/", $template-name))
+    let $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id]
+    let $inject-langs := template:merge($request-rel-path, document {$template/xh:html}, document {local:inject-langs()})
     (: extracts top level content and content from within an id less container :)
-     $proc-doc := template:copy-and-replace($request-rel-path, $template/xh:html, $div-content)
+    let $proc-doc := template:copy-and-replace($request-rel-path, $inject-langs/xh:html, $div-content)
     (: process page meta and return :)
     return 
        (:local:treewalker($template/xh:html):)
        template:process-page-meta($route-map, $route-override, $proc-doc)
+};
+
+(:
+    Injects language-selector into the template
+:)
+declare function local:inject-langs() as node() {
+    <xh:div id="global-language">
+    {
+        element xh:ul {
+            attribute id { "portal-languageselector" },
+            let $langs := cmn:get-langs-config()/languages
+            for $lang in $langs/language
+            return 
+                element li {
+                    element a {
+                        attribute href { concat("switch?language=",data($lang/@id)) },
+                        attribute id { data($lang/@id) },
+                        attribute title { data($lang/@english-name) },
+                        attribute data-dir { if(xs:boolean(data($lang/@rtl))) then 'rtl' else 'ltr' },
+                        data($lang/@display-name)
+                    }
+                }
+        },
+        <xh:ul id="portal-personaltools">
+            <xh:li/>
+        </xh:ul>
+    }</xh:div>
 };
 
 (:~
@@ -220,17 +249,6 @@ declare function template:make-relative-uri($request-rel-path as xs:string, $uri
     )
 };
 
-declare function template:adjust-body-paths($exist-controller as xs:string, $attr as attribute()) as attribute() {
-    if(fn:local-name($attr) = "class")then
-            attribute { "class" } { 
-                "Ola"
-            }
-        else 
-            attribute { "class" } { 
-                "ssdsdssss"
-            }
-};
-
 declare function template:adjust-absolute-paths($exist-controller as xs:string, $attr as attribute()) as attribute() {
     if(fn:local-name($attr) = ("src", "href", "action") and not(starts-with($attr, "/") or starts-with($attr, "http://") or starts-with($attr, "https://") or starts-with($attr, "#")))then
             attribute {node-name($attr)} { 
@@ -285,11 +303,12 @@ declare function local:set-meta($route as element(), $override as element(), $co
 		   }</title>
     ) 
     (: set body classes :)
-    else if ($content/ancestor::xh:body) then (
+    else if ($content/self::xh:body) then (
 		let $chamber-name := if($override/parliament) then $override/parliament/type else "assembly"
 		return 
-    		element { node-name($content/ancestor::xh:body) } {
+    		element { node-name($content/self::xh:body) } {
     			attribute class { "template-portal-eXist " || $chamber-name },
+    			attribute  dir { if(cmn:get-langs-config()/languages/language[@id=template:set-lang()]/@rtl) then "rtl" else "ltr" },
     			$content/(@*, *)
     	   }
 	) 
@@ -311,20 +330,7 @@ declare function local:set-meta($route as element(), $override as element(), $co
 			)
 			else
 			  $content
-	)  
-    (:else if ($content/ancestor::xh:div[@id="mainnav"] and $content/self::xh:li) then (
-			if ($route/navigation) then (
-				if ($content/self::xh:li[xh:a/@name=$route/navigation/text()]) then (
-				    <xh:li class="selected">
-				        <xh:a class="current" href="{$content/xh:a/@href}">{$content/xh:a/i18n:text}</xh:a>
-				    </xh:li>
-				) 
-				else  
-				 $content
-			)
-			else
-			  $content
-	):)
+	)
     (:~
     Set the sub-navigation tab to the active one as specified in the route
     :)
@@ -418,7 +424,7 @@ declare function template:set-lang() {
 : @param doc
 :   The page content being processed by the template 
 :)
-declare function template:process-page-meta($route as element(), $override as element(), $doc as element()) as element() {
+declare function template:process-page-meta($route as element(), $override as element(), $doc as element()*) as element() {
 	let $metazed := local:set-meta($route, $override, $doc)
 	return
 	   i18n:process($metazed, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)

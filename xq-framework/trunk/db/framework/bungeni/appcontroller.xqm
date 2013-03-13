@@ -35,6 +35,7 @@ called appcontroller:controller() in the same pattern as below
 :)
 declare function appcontroller:controller($EXIST-PATH as xs:string,
                                 $PARLIAMENT as node()?,
+                                $BICAMERAL as xs:boolean,
                                 $CHAMBER-REL-PATH as xs:string,
                                 $EXIST-ROOT as xs:string, 
                                 $EXIST-CONTROLLER as xs:string, 
@@ -44,6 +45,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         let $CONTROLLER-DOC :=  <controller>
                                     <exist-path>{$EXIST-PATH}</exist-path>
                                     {$PARLIAMENT}
+                                    <bicameral>{$BICAMERAL}</bicameral>
                                     <chamber-rel-path>{$CHAMBER-REL-PATH}</chamber-rel-path>
                                     <exist-root>{$EXIST-ROOT}</exist-root>
                                     <exist-cont>{$EXIST-CONTROLLER}</exist-cont>

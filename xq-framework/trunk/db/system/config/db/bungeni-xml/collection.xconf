@@ -53,5 +53,11 @@
         <create path="/parliaments/parliament/forParliament" type="xs:string"/>
         <create path="/parliaments/parliament/identifier" type="xs:string"/>
         <create path="/parliaments/parliament/type" type="xs:string"/>
+        <!-- Range Indexes for LanguagesInformation -->
+        <create path="/languages/language/@id" type="xs:string"/>
+        <create path="/languages/language/@english-name" type="xs:string"/>
+        <create path="/languages/language/@display-name" type="xs:string"/>
+        <create path="/languages/language/@default" type="xs:string"/>
+        <create path="/languages/language/@rtl" type="xs:string"/>
     </index>
 </collection>

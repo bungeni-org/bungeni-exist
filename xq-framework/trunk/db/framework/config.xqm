@@ -50,6 +50,8 @@ declare variable $config:DEFAULT-LANG := data($config:__ACTIVE_APP__/default-lan
 
 declare variable $config:PARLIAMENT-CONFIG := fn:concat($config:XML-COLLECTION, "/legislature_info.xml");
 
+declare variable $config:LANGUAGES-CONFIG := fn:concat($config:XML-COLLECTION, "/lang_info.xml");
+
 (: Ontology files :)
 declare variable $config:xml-ontology-collection := fn:concat($config:XML-COLLECTION, "/ontology");
 

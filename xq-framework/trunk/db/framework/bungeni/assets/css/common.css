@@ -609,7 +609,6 @@ tbody tr.items:hover {
 nav {
     clear:both;
 	margin: 0 auto; 
-	text-align: left;
 }
 nav *,
 .submenu * {

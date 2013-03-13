@@ -55,6 +55,12 @@ declare function cmn:get-parl-config() as document-node()? {
     doc($config:PARLIAMENT-CONFIG)
 };
 
+(:~
+Get the LANGUAGES configuraton document
+:)
+declare function cmn:get-langs-config() as document-node()? {
+    doc($config:LANGUAGES-CONFIG)
+};
 
 (:~
 Get a menu by name from the UI configuration document 
@@ -167,9 +173,11 @@ The subnavigation is rendered based on the incoming request path
 The node parameter is the "cooked" page as a node
 :)
 declare function cmn:build-nav-node($controller-data as node(), $node as node()) as node()+ {
-     let $main-nav := cmn:get-menu("mainnav")
-     let $sub-nav := cmn:get-menu-from-route($controller-data/exist-path/text())      
-     let $crumb := <crumb>
+    let $main-nav := cmn:get-menu("mainnav")
+    let $val := util:log('debug',$main-nav)
+    let $log := util:log('debug', "++++++++++++++++++++++++++++++++++")     
+    let $sub-nav := cmn:get-menu-from-route($controller-data/exist-path/text())      
+    let $crumb := <crumb>
                         <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">
                         <span id="breadcrumbs-you-are-here">You are here: </span>
                         {local:build-breadcrumbs($controller-data)}
@@ -184,8 +192,6 @@ declare function cmn:build-nav-node($controller-data as node(), $node as node())
 :)
 declare function local:build-breadcrumbs($controller-data as node()?) {
     let $route := cmn:get-route($controller-data/exist-path/text())
-    let $val := util:log('debug',$controller-data)
-    let $log := util:log('debug',concat($route/navigation/text(), "++++++++++++++++++++++++++++++++++"))
     
     return
         	if ($route/navigation/text() eq 'home') then (
@@ -193,13 +199,13 @@ declare function local:build-breadcrumbs($controller-data as node()?) {
             	    
         	)    
         	else if ($route/navigation and not($route/subnavigation)) then (
-                        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type}</xh:a>
+                        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type/text()}</xh:a>
                     ,  				
             	        <xh:a class="last" href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    
         	)
         	else (
-            	        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type}</xh:a>
+            	        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type/text()}</xh:a>
             	    ,    			  				
             	        <xh:a href=".{cmn:get-route($controller-data/exist-path)/navigation}">{local:route-title($route/navigation)}</xh:a>
             	    ,   				

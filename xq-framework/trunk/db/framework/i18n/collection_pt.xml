@@ -191,4 +191,6 @@
     <msg key="representation">representação</msg>
     <msg key="elected/nominated">eleitos / nomeados</msg>
     <msg key="senators">senadores</msg>
+    <msg key="assembly-home">Assembléia Nacional</msg>
+    <msg key="senate-home">Senado</msg>
 </catalogue>

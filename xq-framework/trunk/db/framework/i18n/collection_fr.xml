@@ -190,4 +190,6 @@
     <msg key="representation">représentation</msg>
     <msg key="elected/nominated">élus / nommés</msg>
     <msg key="senators">sénateurs</msg>
+    <msg key="assembly-home">l'Assemblée Nationale</msg>
+    <msg key="senate-home">Sénat</msg>
 </catalogue>

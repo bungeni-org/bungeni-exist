@@ -81,9 +81,9 @@ declare function template:process-tmpl(
         $route-map as node(),
         $route-override as node(),
         $content as node()+
-        ) { 
+        ) {           
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name))
-    let $div-content := $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id]
+    let $div-content := $content/xh:ul[@id] | $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id]   
     let $inject-langs := template:merge($request-rel-path, document {$template/xh:html}, document {local:inject-langs()})
     (: extracts top level content and content from within an id less container :)
     let $proc-doc := template:copy-and-replace($request-rel-path, $inject-langs/xh:html, $div-content)

@@ -777,46 +777,42 @@
     </routes>
     <menugroups>
         <menu for="/" name="mainnav">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="menu" id="mainnav">
-                <nav>
-                    <ul id="portal-globalnav">
-                        <li id="lower-hse">
-                            <a href="assembly/home" name="/assembly/home">
-                                <i18n:text key="assembly-home">National Assembly</i18n:text>
+            <ul xmlns="http://www.w3.org/1999/xhtml" id="portal-globalnav">
+                <li id="lower-hse">
+                    <a href="assembly/home" name="/assembly/home">
+                        <i18n:text key="assembly-home">National Assembly</i18n:text>
+                    </a>
+                    <ul class="hse-list">
+                        <li>
+                            <a href="assembly/business" name="/assembly/business">
+                                <i18n:text key="business">business</i18n:text>
                             </a>
-                            <ul class="hse-list">
-                                <li>
-                                    <a href="assembly/business" name="/assembly/business">
-                                        <i18n:text key="business">business</i18n:text>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="assembly/members" name="/assembly/members">
-                                        <i18n:text key="members">members</i18n:text>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <li id="upper-hse">
-                            <a href="senate/home" name="/senate/home">
-                                <i18n:text key="senate-home">Senate</i18n:text>
+                        <li>
+                            <a href="assembly/members" name="/assembly/members">
+                                <i18n:text key="members">members</i18n:text>
                             </a>
-                            <ul class="hse-list">
-                                <li>
-                                    <a href="senate/business" name="/senate/business">
-                                        <i18n:text key="business">members</i18n:text>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="senate/members" name="/senate/members">
-                                        <i18n:text key="senators">senators(nt)</i18n:text>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
-                </nav>
-            </div>
+                </li>
+                <li id="upper-hse">
+                    <a href="senate/home" name="/senate/home">
+                        <i18n:text key="senate-home">Senate</i18n:text>
+                    </a>
+                    <ul class="hse-list">
+                        <li>
+                            <a href="senate/business" name="/senate/business">
+                                <i18n:text key="business">members</i18n:text>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="senate/members" name="/senate/members">
+                                <i18n:text key="senators">senators(nt)</i18n:text>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </menu>
         <menu for="home" name="home">
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">

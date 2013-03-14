@@ -66,8 +66,8 @@ declare function cmn:get-langs-config() as document-node()? {
 Get a menu by name from the UI configuration document 
 :)
 declare function cmn:get-menu($menu-name as xs:string) as node() {
-    let $doc := cmn:get-ui-config()/ui/menugroups/menu[@name=$menu-name]        
-      return $doc
+    let $doc := cmn:get-ui-config()/ui/menugroups/menu[@name=$menu-name]  
+    return $doc
 }; 
 
 (:~
@@ -173,7 +173,8 @@ The subnavigation is rendered based on the incoming request path
 The node parameter is the "cooked" page as a node
 :)
 declare function cmn:build-nav-node($controller-data as node(), $node as node()) as node()+ {
-    let $main-nav := cmn:get-menu("mainnav")
+    let $main-menu := cmn:get-menu("mainnav")
+    let $main-nav := cmn:get-chambers-menu($main-menu,$controller-data/bicameral/text())
     let $val := util:log('debug',$main-nav)
     let $log := util:log('debug', "++++++++++++++++++++++++++++++++++")     
     let $sub-nav := cmn:get-menu-from-route($controller-data/exist-path/text())      
@@ -185,6 +186,39 @@ declare function cmn:build-nav-node($controller-data as node(), $node as node())
                     </crumb>
      let $out := ($main-nav, $sub-nav,$crumb, $node ) 
      return $out
+};
+
+(:
+    For rendering the main-menu from ui-config
+    @param main-menu node() <menu name="mainnav"/>   
+    @param bicameral boolen true if bicameral
+
+    @return
+     regenerates main-menu omitting senate navigation if its unicameral parliament
+        <menu>
+            <ul>
+                <li/>
+                ...
+            </ul>
+        </menu>
+:)
+declare function cmn:get-chambers-menu($main-menu as node(), $bicameral as xs:boolean) {
+    
+    let $main-ul := $main-menu
+    return 
+        element {node-name($main-ul)} {
+            $main-ul/@*,
+            element {node-name($main-ul/xh:ul)} {
+            $main-ul/xh:ul/@*,
+                for $li in $main-ul/xh:ul/xh:li
+                return 
+                    if(not($bicameral)) then 
+                        $li[@id='lower-hse']
+                    else
+                        $li
+            }
+        }
+    
 };
 
 (:~ 

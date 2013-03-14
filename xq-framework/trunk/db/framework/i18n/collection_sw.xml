@@ -188,4 +188,7 @@
     <msg key="joint_committee">pamoja comittee</msg>
     <msg key="representation">uwakilishi</msg>
     <msg key="elected/nominated">waliochaguliwa/kuteuliwa</msg>
+    <msg key="senators">maseneta</msg>
+    <msg key="assembly-home">Bunge</msg>
+    <msg key="senate-home">Seneti</msg>
 </catalogue>

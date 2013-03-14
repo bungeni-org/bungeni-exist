@@ -177,4 +177,6 @@
     <msg key="representation">representación</msg>
     <msg key="elected/nominated">elegido / nombrado</msg>
     <msg key="senators">senadores</msg>
+    <msg key="assembly-home">Asamblea Nacional</msg>
+    <msg key="senate-home">Senado</msg>
 </catalogue>

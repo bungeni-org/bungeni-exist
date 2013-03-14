@@ -191,4 +191,6 @@
     <msg key="representation">التمثي</msg>
     <msg key="elected/nominated">انتخاب / تعيين</msg>
     <msg key="senators">أعضاء مجلس الشيوخ</msg>
+    <msg key="assembly-home">الجمعية الوطنية</msg>
+    <msg key="senate-home">مجلس الشيوخ</msg>
 </catalogue>

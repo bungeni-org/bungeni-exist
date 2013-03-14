@@ -190,4 +190,6 @@
     <msg key="representation">representation</msg>
     <msg key="elected/nominated">elected / nominated</msg>
     <msg key="senators">senators</msg>
+    <msg key="assembly-home">National Assembly</msg>
+    <msg key="senate-home">Senate</msg>
 </catalogue>

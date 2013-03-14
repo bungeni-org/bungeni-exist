@@ -58,7 +58,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
             fw:redirect(fn:concat(request:get-uri(), "/"))  
         else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/xml/index.xml") 
              then
-        	   rou:get-parliament($CONTROLLER-DOC)
+        	   rou:get-home($CONTROLLER-DOC)
 
     	else if ($CHAMBER-REL-PATH eq "/home" )
     		 then 

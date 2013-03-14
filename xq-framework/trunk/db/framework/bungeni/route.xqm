@@ -125,10 +125,11 @@ declare function rou:get-reports($CONTROLLER-DOC as node()) {
     rou:listing-documentitem($CONTROLLER-DOC, "Report")
 };
 
-declare function rou:get-pdf($CONTROLLER-DOC as node()) {
-                            
+declare function rou:get-pdf($CONTROLLER-DOC as node(), $views as node()) {
+      
+    let $parliament := $CONTROLLER-DOC/parliament
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-        $act-entries-tmpl :=  bun:gen-pdf-output($docnumber)
+        $act-entries-tmpl :=  bun:gen-pdf-output($parliament,$docnumber,$views)
     return $act-entries-tmpl                                  
 };
 

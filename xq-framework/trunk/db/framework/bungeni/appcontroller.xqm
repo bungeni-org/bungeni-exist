@@ -408,26 +408,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         (: PDF FO GENERATORS :)
     	else if ($CHAMBER-REL-PATH eq "/bill/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)
+                rou:get-pdf($CONTROLLER-DOC,cmn:get-views-for-type("Bill") )
     	else if ($CHAMBER-REL-PATH eq "/question/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)    
+                rou:get-pdf($CONTROLLER-DOC,cmn:get-views-for-type("Question") )    
     	else if ($CHAMBER-REL-PATH eq "/motion/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)  
+                rou:get-pdf($CONTROLLER-DOC,cmn:get-views-for-type("Motion") )  
     	else if ($CHAMBER-REL-PATH eq "/tableddocument/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)  
+                rou:get-pdf($CONTROLLER-DOC,cmn:get-views-for-type("TabledDocument") )  
     	else if ($CHAMBER-REL-PATH eq "/agendaitem/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)   
+                rou:get-pdf($CONTROLLER-DOC,cmn:get-views-for-type("AgendaItem") )   
     	else if ($CHAMBER-REL-PATH eq "/report/pdf")   
     		 then 
-                rou:get-pdf($CONTROLLER-DOC)                 
+                rou:get-pdf($CONTROLLER-DOC,cmn:get-views-for-type("Report") )                 
     	else if ($CHAMBER-REL-PATH eq "/member/pdf")   
     		 then 
-                let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:gen-member-pdf($memid)
+    		    let $views := cmn:get-views-for-type("MemberOfParliament") 
+                let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO))
+                let $act-entries-tmpl :=  bun:gen-member-pdf($CONTROLLER-DOC/parliament,$memid,$views)
                 return $act-entries-tmpl                           
           
         (:Get Ontology XML:)
@@ -1772,7 +1773,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        $config:DEFAULT-TEMPLATE,
     								        cmn:get-route($EXIST-PATH),
                                             <route-override>
-                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                                                 {$PARLIAMENT}
                                             </route-override>, 
     								        (cmn:build-nav-node($CONTROLLER-DOC,

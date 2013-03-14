@@ -109,31 +109,71 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-pdf-output($docid as xs:string)
+declare function bun:gen-pdf-output($parliament as node()?, $docid as xs:string, $views as node())
 {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt('fo/parl-doc.fo') 
+    (:let $stylesheet := cmn:get-xslt('fo/parl-doc.fo'):) 
+    let $stylesheet := cmn:get-xslt('xsl/xhtml2fo.xsl') 
     
-    let $doc := <doc>        
-            {
-                collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
-            }
-        </doc>      
-        
-    let $transformed := transform:transform($doc,$stylesheet,())
+    let $fop-config :=  <fop version="1.0">
+                           <base>http://localhost:8088/exist/apps/framework/bungeni</base>
+                        </fop>  
+                        
+    let $lang := template:set-lang()
+    
+    let $server-path := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps/framework/bungeni/" || $parliament/type/text()
+    
+    let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
+    
+    (: for timeline :)
+    let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
+    
+    let $pages := document {
+        for $view in $views/view[@tag eq 'tab']
+            return
+                if (data($view/@id) eq 'timeline') then (
+                        transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                </parameters>)
+                 )
+                 else (
+                        transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                </parameters>)                
+                 )
+         }    
+
+    let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="en">
+                    <head>
+                        <title>Bungeni Document</title>
+                    </head>
+                    <body>    
+                        {$pages}
+                    </body>
+                  </html>
+                  
+    let $transformed := transform:transform($xhtml,$stylesheet, <parameters>
+                                                                    <param name="base-url" value="{$server-path}"/>
+                                                                </parameters>)
      
     let $pdf := xslfo:render($transformed, "application/pdf", 
                                                             <parameters>
-                                                                <param name="keywords" value="Parlimentary, ddocument"/>
-                                                            </parameters>)
+                                                                <param name="keywords" value="Parlimentary, document"/>
+                                                            </parameters>,
+                                                            $fop-config)
+                                                            
+    let $output-nolang := functx:substring-before-last($docid, '/')
+    let $output := concat(replace(substring-after($output-nolang, '/'),'/','-'),".pdf")                                                            
     (: 
     Set the content disposition header with the file name and the return type as attachment 
     For some odd reason return the response stream binary fails the request, i have to send
     a valid xml document as the last thing returned from the response
     :) 
     let $header := 
-        response:set-header("Content-Disposition" , concat("attachment; filename=",  "output.pdf")) 
+        response:set-header("Content-Disposition" , concat("attachment; filename=",  $output)) 
     let $out := response:stream-binary($pdf, "application/pdf")     
     return <xml />    
     
@@ -256,7 +296,7 @@ declare function bun:get-image($hash as xs:string, $name as xs:string) {
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-member-pdf($memberid as xs:string) {
+declare function bun:gen-member-pdf($parliament as node()?,$memberid as xs:string,$views as node()) {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt('fo/member-info.fo') 

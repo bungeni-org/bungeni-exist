@@ -344,27 +344,27 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($CHAMBER-REL-PATH eq "/bills/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "Bill","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view", "Bill","user")
                     return $act-entries-tmpl
     	else if ($CHAMBER-REL-PATH eq "/questions/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view","Question","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view","Question","user")
                     return $act-entries-tmpl    
     	else if ($CHAMBER-REL-PATH eq "/motions/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "Motion","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view", "Motion","user")
                     return $act-entries-tmpl                     
     	else if ($CHAMBER-REL-PATH eq "/tableddocuments/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "TabledDocument","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view", "TabledDocument","user")
                     return $act-entries-tmpl  
     	else if ($CHAMBER-REL-PATH eq "/agendaitems/rss")
     		 then 
                 let
-                    $act-entries-tmpl :=  bun:get-atom-feed("public-view", "AgendaItem","user")
+                    $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view", "AgendaItem","user")
                     return $act-entries-tmpl                    
            
         (: ePUB GENERATORS :)

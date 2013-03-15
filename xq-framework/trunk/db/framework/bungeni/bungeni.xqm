@@ -34,6 +34,8 @@ Default Variables
 :)
 declare variable $bun:SORT-BY := 'bu:statusDate';
 
+declare variable $bun:SERVER-URL := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps";
+
 declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT := cmn:get-listings-config-limit();
 declare variable $bun:VISIBLEPAGES := cmn:get-listings-config-visiblepages();
@@ -103,70 +105,66 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 
 (:~
 :  Renders PDF output for parliamentary document using xslfo module
-: @param docid
+    @param controller contains context and parliament information
+    @param docid
+    @param views used to acculute all the tabs of this document
 :   The URI of the document
 :
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-pdf-output($parliament as node()?, $docid as xs:string, $views as node())
+declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string, $views as node())
 {
-
-    (: stylesheet to transform :)
-    (:let $stylesheet := cmn:get-xslt('fo/parl-doc.fo'):) 
+    (: stylesheet to transform :) 
     let $stylesheet := cmn:get-xslt('xsl/xhtml2fo.xsl') 
-    
-    let $fop-config :=  <fop version="1.0">
-                           <base>http://localhost:8088/exist/apps/framework/bungeni</base>
-                        </fop>  
-                        
-    let $lang := template:set-lang()
-    
-    let $server-path := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps/framework/bungeni/" || $parliament/type/text()
-    
-    let $doc := collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
-    
-    (: for timeline :)
-    let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
-    
-    let $pages := document {
-        for $view in $views/view[@tag eq 'tab']
-            return
-                if (data($view/@id) eq 'timeline') then (
-                        transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
-                                                <parameters>
-                                                    <param name="epub" value="true" />
-                                                </parameters>)
-                 )
-                 else (
-                        transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
-                                                <parameters>
-                                                    <param name="epub" value="true" />
-                                                </parameters>)                
-                 )
-         }    
+    let $server-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/" || $controller/parliament/type/text()
+    (: fop>base - this is prepended on @src of all the <img/> elements in the documents /> :)
+    let $fop-config :=  <fop version="1.1">
+                           <base>{$bun:SERVER-URL || $controller/exist-cont/text()}</base>       
+                            <font-base>/usr/share/fonts/truetype/msttcorefonts/</font-base>
+                            <renderers>
+                                <renderer mime="application/pdf">
+                                    <filterList>
+                                        <value>null</value>
+                                    </filterList>
+                                    <fonts>
+                                        <font embed-url="Arial.ttf" embedding-mode="full">
+                                            <font-triplet name="Arial" style="normal" weight="normal"/>
+                                        </font>
+                                    </fonts>
+                                </renderer>
+                            </renderers>   
+                          
+                        </fop>
 
-    let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="en">
+    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
+    let $title := $doc/bu:document/bu:title  
+    
+    let $lang := template:set-lang()    
+    let $orientation := local:get-orientation($lang)
+
+    let $pages := local:generate-pages($doc,$views,$lang,$orientation/xh/text())
+    
+    let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="{$lang}">
                     <head>
-                        <title>Bungeni Document</title>
+                        <title>{$title}</title>
                     </head>
                     <body>    
                         {$pages}
                     </body>
-                  </html>
-                  
+                  </html>  
+    
     let $transformed := transform:transform($xhtml,$stylesheet, <parameters>
                                                                     <param name="base-url" value="{$server-path}"/>
+                                                                    <param name="writing-mode" value="{$orientation/fo/text()}"/>
                                                                 </parameters>)
-     
-    let $pdf := xslfo:render($transformed, "application/pdf", 
-                                                            <parameters>
+    let $pdf := xslfo:render($transformed, "application/pdf", <parameters>
                                                                 <param name="keywords" value="Parlimentary, document"/>
                                                             </parameters>,
                                                             $fop-config)
-                                                            
+    let $log := util:log('debug',$pdf)            
     let $output-nolang := functx:substring-before-last($docid, '/')
-    let $output := concat(replace(substring-after($output-nolang, '/'),'/','-'),".pdf")                                                            
+    let $output := concat(replace(substring-after($output-nolang, '/'),'/','-'),"-",$lang,".pdf")
     (: 
     Set the content disposition header with the file name and the return type as attachment 
     For some odd reason return the response stream binary fails the request, i have to send
@@ -190,36 +188,17 @@ declare function bun:gen-pdf-output($parliament as node()?, $docid as xs:string,
 declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string, $views as node())
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
-    (: for timeline :)
-    let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
-    
-    let $pages := <pages>{
-        for $view in $views/view[@tag eq 'tab']
-            return
-                if (data($view/@id) eq 'timeline') then (
-                    <page id="i18n({$view/title/i18n:text/@key},chapter)">{
-                        transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
-                                                <parameters>
-                                                    <param name="epub" value="true" />
-                                                </parameters>)
-                     }</page>
-                 )
-                 else (
-                    <page id="i18n({$view/title/i18n:text/@key},chapter)">{
-                        transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
-                                                <parameters>
-                                                    <param name="epub" value="true" />
-                                                </parameters>)
-                     }</page>                 
-                 )
-         }</pages>
+    let $title := $doc/bu:document/bu:title
     
     let $lang := template:set-lang()
-    (: creating unique output filename based on URI and active LANGUAGE :)
+    let $orientation := local:get-orientation($lang)
+    
+    let $pages := local:generate-pages($doc,$views,$lang,$orientation/xh/text())
+    
+    (: creating unique output filename based on URI and active LANGUAGE :)    
     let $output-nolang := functx:substring-before-last($docid, '/')
     let $output := concat(replace(substring-after($output-nolang, '/'),'/','-'),"-",$lang,".epub")
     
-    let $title := $doc/bu:document/bu:title
     let $authors := <creators>
                         <creator role="aut">{data($doc/bu:document/bu:owner/bu:person/@showAs)}</creator>
             {
@@ -227,9 +206,8 @@ declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:stri
                     return 
                         <creator role="edt">{data($signatory/bu:person/@showAs)}</creator>
             }</creators>    
-            
-    let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)      
-    let $pages-abs-links := template:re-write-paths($exist-cont,$pages-i18n)
+                
+    let $pages-abs-links := template:re-write-paths($exist-cont,$pages)
     let $book := scriba:create-book($lang,$title,$authors,$pages-abs-links)
         
     let $epub := epub:scriba-ebook-maker($book)
@@ -237,6 +215,58 @@ declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:stri
     let $out := response:stream-binary($epub, "application/epub+zip")     
     return <xml />     
     
+};
+
+
+declare function local:generate-pages($doc as node()?, 
+                            $views as node(), 
+                            $lang as xs:string,
+                            $orientation as xs:string) {
+    
+    (: for timeline :)
+    let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
+    (: iterate the views with @tab and create all the html views to be rendered :)
+    let $pages := <div>{
+        for $view in $views/view[@tag eq 'tab']
+            return
+                if (data($view/@id) eq 'timeline') then (
+                    <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
+                        transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                </parameters>)
+                     }</div>
+                 )
+                 else (
+                    <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
+                        transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                </parameters>)
+                     }</div>                 
+                 )
+         }</div>
+         
+      let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)
+      return
+        $pages-i18n
+};
+
+declare function local:get-orientation($lang as xs:string) {
+
+    let $lang-node := cmn:get-langs-config()/languages/language[@id=$lang]
+    let $orientation := if(xs:boolean(data($lang-node/@rtl))) then 
+                            <orient>
+                                <fo>rl-tb</fo>
+                                <xh>rtl</xh>
+                            </orient>
+                       else
+                            <orient>
+                                <fo>lr-tb</fo>
+                                <xh>ltr</xh>
+                           </orient> 
+    return
+        $orientation
 };
 
 (:~
@@ -1789,13 +1819,14 @@ declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $t
 :   A qualified atom feed limited to 10 items
 :)
 declare function bun:get-atom-feed(
+            $controller as node()?,
             $acl as xs:string, 
             $doctype as xs:string, 
             $outputtype as xs:string
             ) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
     
-    let $server-path := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps/framework/bungeni"
+    let $server-path := $bun:SERVER-URL || $controller/exist-cont/text()
     
     let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
         <title>{concat(upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>

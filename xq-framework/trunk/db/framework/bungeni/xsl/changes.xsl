@@ -31,9 +31,11 @@
             </xsl:choose>
         </xsl:variable>
         <div id="main-wrapper">
-            <span id="popout-close" class="hide">
-                <i18n:text key="close">close(nt)</i18n:text>
-            </span>
+            <xsl:if test="$epub ne 'true'">
+                <span id="popout-close" class="hide">
+                    <i18n:text key="close">close(nt)</i18n:text>
+                </span>
+            </xsl:if>
             <div id="title-holder" class="theme-lev-1-only">
                 <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
@@ -64,7 +66,7 @@
                             <ul id="list-toggle" class="ls-timeline clear">
                                 <xsl:for-each select="ref/timeline">
                                     <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
-                                    <li style="text-align:left">
+                                    <li>
                                         <xsl:variable name="timeline-type">
                                             <xsl:choose>
                                                 <xsl:when test="bu:type/bu:value">

@@ -174,9 +174,7 @@ The node parameter is the "cooked" page as a node
 :)
 declare function cmn:build-nav-node($controller-data as node(), $node as node()) as node()+ {
     let $main-menu := cmn:get-menu("mainnav")
-    let $main-nav := cmn:get-chambers-menu($main-menu,$controller-data/bicameral/text())
-    let $val := util:log('debug',$main-nav)
-    let $log := util:log('debug', "++++++++++++++++++++++++++++++++++")     
+    let $main-nav := cmn:get-chambers-menu($main-menu,$controller-data/bicameral/text())   
     let $sub-nav := cmn:get-menu-from-route($controller-data/exist-path/text())      
     let $crumb := <crumb>
                         <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">

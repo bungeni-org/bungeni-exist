@@ -36,7 +36,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <xsl:param name="column-gap">12pt</xsl:param>
 
   <!-- writing-mode: lr-tb | rl-tb | tb-rl -->
-    <xsl:param name="writing-mode">lr-tb</xsl:param>
+    <xsl:param name="writing-mode"/>
 
   <!-- text-align: justify | start -->
     <xsl:param name="text-align">start</xsl:param>
@@ -54,6 +54,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
        Root
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
     <xsl:attribute-set name="root">
+        <xsl:attribute name="font-family">'Times New Roman',Arial</xsl:attribute>
         <xsl:attribute name="writing-mode">
             <xsl:value-of select="$writing-mode"/>
         </xsl:attribute>
@@ -170,7 +171,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </xsl:attribute-set>
     <xsl:attribute-set name="pre">
         <xsl:attribute name="font-size">0.83em</xsl:attribute>
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman',Arial</xsl:attribute>
         <xsl:attribute name="white-space">pre</xsl:attribute>
         <xsl:attribute name="space-before">1em</xsl:attribute>
         <xsl:attribute name="space-after">1em</xsl:attribute>
@@ -230,7 +231,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     </xsl:attribute-set>
     <xsl:param name="ul-label-2">o</xsl:param>
     <xsl:attribute-set name="ul-label-2">
-        <xsl:attribute name="font">0.67em monospace</xsl:attribute>
+        <xsl:attribute name="font">0.67em Arial</xsl:attribute>
         <xsl:attribute name="baseline-shift">0.25em</xsl:attribute>
     </xsl:attribute-set>
     <xsl:param name="ul-label-3">-</xsl:param>
@@ -326,16 +327,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <xsl:attribute name="font-style">italic</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="tt">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman',Arial</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="code">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman',Arial</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="kbd">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman',Arial</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="samp">
-        <xsl:attribute name="font-family">monospace</xsl:attribute>
+        <xsl:attribute name="font-family">'Times New Roman',Arial</xsl:attribute>
     </xsl:attribute-set>
     <xsl:attribute-set name="big">
         <xsl:attribute name="font-size">larger</xsl:attribute>
@@ -749,6 +750,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         <xsl:if test="@role = 'main'">
             <fo:block page-break-after="always"/>
         </xsl:if>
+    </xsl:template>
+    <xsl:template match="html:div[child::html:h1[@class='title']]">
+        <!-- need fo:block-container? or normal fo:block -->
+        <!-- Do nothing, i.e. remove the titles from the page -->
     </xsl:template>
     <xsl:template name="need-block-container">
         <xsl:choose>

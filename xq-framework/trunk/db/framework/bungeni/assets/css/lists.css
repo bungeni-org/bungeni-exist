@@ -27,7 +27,6 @@ ul.doc-versions {
 
 /* Listing of items */
 ul.ls-row {
-    text-align:left;
     margin:0 auto;
     margin-top:20px;
     display:block;
@@ -71,7 +70,6 @@ ul.ls-timeline {
     margin:0 auto;
     margin-top:10px;
     display:block;
-    padding:0 0 0 15px;
     width:96% !important;
     list-style-type: square;
 }

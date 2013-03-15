@@ -82,7 +82,7 @@ declare function scriba:generate-content($pages as node()) {
                 ]]>
         </content>                
         {
-        for $page at $pos in $pages/page
+        for $page at $pos in $pages/div
             return
                 <content packageId="bungeni_{$page/@id}" 
                         packagePath="{$pos} {functx:capitalize-first($page/@id)}" 

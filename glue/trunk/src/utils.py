@@ -91,6 +91,9 @@ class WebDavClient(object):
         except Exception,e:
             print COLOR.FAIL, e, '\nERROR Closing sardine ', COLOR.ENDC
 
+    def resource_exists(self, resource):
+        return self.sardine.exists(resource)
+
     def reset_remote_folder(self, put_folder):
         try:
             if self.sardine.exists(put_folder) is False:
@@ -98,12 +101,17 @@ class WebDavClient(object):
                 self.sardine.createDirectory(put_folder)
         except SardineException, e:
             print COLOR.FAIL, e.printStackTrace(), "\nERROR: Resource / Collection fault." , COLOR.ENDC
-            sys.exit()
+            #sys.exit()
         except HttpHostConnectException, e:
-            print COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , COLOR.ENDC
-            sys.exit()
+            pass
+            #print COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , COLOR.ENDC
+            #sys.exit()
 
     def pushFile(self, onto_file):
+        '''
+        This API pushes a file onto the webdav folder
+        and shuts down the connection at the end.
+        '''
         try:
             a_file = File(onto_file)
         except Exception, E:
@@ -131,10 +139,11 @@ class WebDavClient(object):
                 return False
             except HttpHostConnectException, e:
                 print COLOR.FAIL, e.printStackTrace(), "\nERROR: Clues... eXist is NOT runnning OR Wrong config info" , COLOR.ENDC
-                sys.exit()
+                return False
+                #sys.exit()
             finally:
                 close_quietly(inputStream)
-                self.shutdown()
+                #self.shutdown()
                  
         except FileNotFoundException, e:
             print COLOR.FAIL, e.getMessage(), "\nERROR: File deleted since last syn. Do a re-sync before uploading" , COLOR.ENDC
@@ -325,8 +334,15 @@ class RepoSyncUploader(object):
         self.username = self.webdav_cfg.get_username()
         self.password = self.webdav_cfg.get_password()
         self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
-        webdaver = WebDavClient(self.username, self.password, self.xml_folder)
-        up_stat = webdaver.pushFile(str(on_file))
+        webdaver = None
+        try:
+            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+            up_stat = webdaver.pushFile(str(on_file))
+        except Exception, e:
+            print "Exception while uploading file !", e
+        finally:
+            if webdaver is not None:
+                webdaver.shutdown()
         return up_stat
 
     def upload_files(self):
@@ -335,14 +351,6 @@ class RepoSyncUploader(object):
         for path in paths:
             path_name = path.getText()
             self.upload_file(path_name)
-            """
-            self.username = self.webdav_cfg.get_username()
-            self.password = self.webdav_cfg.get_password()
-            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_bungeni_xml_folder()
-            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
-            webdaver.pushFile(path_name)
-            """
-
 
 
 class PostTransform(object):
@@ -512,9 +520,16 @@ class POFilesTranslator(object):
         for catalogue in catalogues:
             self.username = self.webdav_cfg.get_username()
             self.password = self.webdav_cfg.get_password()
-            self.xml_folder = self.webdav_cfg.get_http_server_port()+self.webdav_cfg.get_fw_i18n_folder()
-            webdaver = WebDavClient(self.username, self.password, self.xml_folder)
-            webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder()+catalogue)
+            self.xml_folder = self.webdav_cfg.get_http_server_port() + self.webdav_cfg.get_fw_i18n_folder()
+            webdaver = None
+            try:
+                webdaver = WebDavClient(self.username, self.password, self.xml_folder)
+                webdaver.pushFile(self.po_cfg.get_i18n_catalogues_folder() + catalogue)
+            except Exception, e:
+                print "Exception while uploading catalogue", e
+            finally:
+                if webdaver is not None:
+                    webdaver.shutdown()
 
         
 def __md5_file(f, block_size=2**20):

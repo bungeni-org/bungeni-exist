@@ -483,6 +483,7 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
             atts_present = True
             att_path = os.path.join(folder_path, att)
             LOG.debug("uploading file : " + att_path)
+            webdaver = None
             try:
                 self.username = self.webdav_cfg.get_username()
                 self.password = self.webdav_cfg.get_password()
@@ -499,6 +500,9 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
             except HttpHostConnectException, e:
                 print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
                 break
+            finally:
+                if webdaver is not None:
+                    webdaver.shutdown()
         if atts_present == False:
             return True
         print "[checkpoint] ATTS upload"
@@ -509,6 +513,7 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
 
     def fn_callback(self, input_file_path):
         if GenericDirWalkerATTS.fn_callback(self, input_file_path)[0] == True:
+            webdaver = None
             try:
                 self.username = self.webdav_cfg.get_username()
                 self.password = self.webdav_cfg.get_password()
@@ -522,6 +527,9 @@ class ProcessedAttsFilesWalker(GenericDirWalkerATTS):
             except HttpHostConnectException, e:
                 print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
                 return (False, None)
+            finally:
+                if webdaver is not None:
+                    webdaver.shutdown()
         else:
             return (False,None)
 
@@ -645,7 +653,7 @@ class SyncXmlFilesWalker(GenericDirWalkerXML):
                     print COLOR.FAIL, os.path.basename(input_file_path), response.status, response.reason, COLOR.ENDC
             except socket.error, (code, message):
                 print COLOR.FAIL, code, message, '\nERROR: eXist is NOT runnning OR Wrong config info', COLOR.ENDC
-                sys.exit()
+                #sys.exit()
             finally:
                 close_quietly(response)
                 close_quietly(conn)

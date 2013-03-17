@@ -33,7 +33,8 @@ from glue import (
     get_parl_info,
     setup_consumer_directories,
     publish_parliament_info,
-    publish_languages_info_xml
+    publish_languages_info_xml,
+    is_exist_running
     )
 
 
@@ -271,7 +272,21 @@ def consume_documents(parliament_cache_info):
             print "QueueRunner thread was interrupted !", e
     print "Document consumer thread: Exit"
         
-    
+
+def exist_running():
+    print "Checking if exist is running ... "
+    exist_running = False
+    while exist_running == False:
+        try:
+            print "Attempting to connect to exist ... "
+            exist_running = is_exist_running(__config_file__)
+            print "exist connection returned ... ", exist_running
+        except Exception, e:
+            exist_running = False
+        if not exist_running:    
+            print "eXist isnt running yet ! waiting for exist to start"
+            time.sleep(int(__time_int__))
+    return exist_running
 
 if (len(sys.argv) >= 2):
     # process input command line options
@@ -286,6 +301,10 @@ else:
 setup_consumer_directories(
     __config_file__
     )
+
+# wait until exist starts
+exist_running()
+
 # get language info
 language_info_publish()
 # get chamber information

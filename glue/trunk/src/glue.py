@@ -48,6 +48,7 @@ from org.apache.log4j import (
     Logger
     )
 
+from org.apache.http.conn import HttpHostConnectException
 
 ### APP Imports ####
 
@@ -253,6 +254,36 @@ def param_type_mappings():
     return type_mappings.encode("UTF-8")
     
 
+def is_exist_running(config_file):
+    exist_running = True
+    webdaver = None
+    try:
+        wd_cfg = WebDavConfig(config_file)
+        xml_folder = wd_cfg.get_http_server_port() + wd_cfg.get_bungeni_xml_folder()
+        webdaver = WebDavClient(
+                wd_cfg.get_username(), 
+                wd_cfg.get_password(), 
+                xml_folder
+                )
+        webdaver.resource_exists(
+            xml_folder
+            )
+    except Exception, e:
+        # silent 
+        print "XXX Exception on connect"
+        exist_running = False
+    except HttpHostConnectException, e:
+        print "XXX HttpHostConnectException on connect"
+        exist_running = False
+    finally:
+        if webdaver is not None:
+            webdaver.shutdown()
+    print "XXX Exist Running", exist_running
+    return exist_running
+        
+    
+
+
 def languages_info_xml(cfg):
     lang_map = cfg.get_languages_info()
     from babel import Locale
@@ -296,6 +327,7 @@ def languages_info_xml(cfg):
 
 def publish_languages_info_xml(config_file):
     up_stat = None
+    webdaver = None
     try :
         cfg = TransformerConfig(config_file)
         xml_lang_info = languages_info_xml(cfg)
@@ -325,6 +357,9 @@ def publish_languages_info_xml(config_file):
         up_stat = webdaver.pushFile(path_to_file)
     except Exception,e:
         print "Error while getting languages info", e
+    finally:
+        if webdaver is not None:
+            webdaver.shutdown()
     return up_stat
         
 def do_bind_attachments(cfg):
@@ -380,22 +415,30 @@ def webdav_upload(cfg, wd_cfg):
     print COLOR.OKGREEN + "Commencing XML files upload to eXist via WebDav..." + COLOR.ENDC
     """ uploading xml documents """
     # first reset bungeni xmls folder
-    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
-    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
-    webdaver.shutdown()
-    # upload xmls at this juncture
-    rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
-    rsu.upload_files()
-    print COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + COLOR.ENDC
-    """ now uploading found attachments """
-    # first reset attachments folder
-    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
-    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
-    webdaver.shutdown()
-    # upload attachments at this juncture
-    pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
-    pafw.walk(cfg.get_attachments_output_folder())
-    print COLOR.OKGREEN + "Completed uploads to eXist !" + COLOR.ENDC
+    webdaver = None
+    try:
+        webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
+        webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
+        #webdaver.shutdown()
+        # upload xmls at this juncture
+        rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
+        rsu.upload_files()
+        print COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + COLOR.ENDC
+        """ now uploading found attachments """
+        # first reset attachments folder
+        webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
+        webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
+        #webdaver.shutdown()
+        # upload attachments at this juncture
+        pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
+        pafw.walk(cfg.get_attachments_output_folder())
+        print COLOR.OKGREEN + "Completed uploads to eXist !" + COLOR.ENDC
+    except Exception, e:
+        print "Exception while uploading via webdav : ", e
+    finally:
+        if webdaver is not None:
+            webdaver.shutdown()
+        
 
 def main_po_translate(config_file):
     """
@@ -487,16 +530,35 @@ def publish_parliament_info(config_file, parliament_cache_info):
     
     wd_cfg = WebDavConfig(config_file)
     xml_folder = wd_cfg.get_http_server_port() + wd_cfg.get_bungeni_xml_folder()
-    webdaver = WebDavClient(
-            wd_cfg.get_username(), 
-            wd_cfg.get_password(), 
-            xml_folder
-            )
-    #already called in language publish
-    #webdaver.reset_remote_folder(xml_folder)
-    up_stat = webdaver.pushFile(path_to_file)
+    webdaver = None
+    try:
+        webdaver = WebDavClient(
+                wd_cfg.get_username(), 
+                wd_cfg.get_password(), 
+                xml_folder
+                )
+        #already called in language publish
+        #webdaver.reset_remote_folder(xml_folder)
+        up_stat = webdaver.pushFile(path_to_file)
+    except Exception, e:
+        print "Error while publishing parliament info", e
+    finally:
+        if webdaver is not None:
+            webdaver.shutdown()
     return up_stat
        
+
+def webdav_reset_folder(wd_cfg, folder):
+    webdaver = None
+    try:
+        webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
+        webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+folder)
+    except Exception, e:
+        print "Error while resetting webdav folder !"
+    finally:
+        if webdaver is not None:
+            webdaver.shutdown()
+    
 
 def main_queue(config_file, afile, parliament_cache_info):
     """
@@ -653,9 +715,10 @@ def main_queue(config_file, afile, parliament_cache_info):
     print COLOR.OKGREEN + "Uploading XML file(s) to eXist via WebDav..." + COLOR.ENDC
     print "[checkpoint] at", time.localtime(time.time())
     # first reset bungeni xmls folder
-    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
-    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
-    webdaver.shutdown()
+    webdav_reset_folder(wd_cfg, wd_cfg.get_bungeni_xml_folder())
+    #webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
+    #webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_xml_folder())
+    #webdaver.shutdown()
     rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
     print "[checkpoint] uploading XML file"
     if in_queue == True:
@@ -665,9 +728,11 @@ def main_queue(config_file, afile, parliament_cache_info):
         return in_queue
 
     print COLOR.OKGREEN + "Uploading ATTACHMENT file(s) to eXist via WebDav..." + COLOR.ENDC
-    webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
-    webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
-    webdaver.shutdown()
+    
+    webdav_reset_folder(wd_cfg, wd_cfg.get_bungeni_atts_folder())
+    #webdaver = WebDavClient(wd_cfg.get_username(), wd_cfg.get_password())
+    #webdaver.reset_remote_folder(wd_cfg.get_http_server_port()+wd_cfg.get_bungeni_atts_folder())
+    #webdaver.shutdown()
     
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})

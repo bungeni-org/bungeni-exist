@@ -337,38 +337,39 @@ declare
 };
 
 (: 
- : Authenticate and save document to /db
+ : Authenticate and delete amendment document from /db/bungeni-xml
  :  :)
 declare 
-    %rest:POST
-    %rest:path("/update")
-    %rest:form-param("username", "{$username}","*")  
-    %rest:form-param("password", "{$password}","*")  
-    %rest:form-param("documentname", "{$documentname}","*")
-    %rest:form-param("document", "{$document}","*")  
+    %rest:DELETE
+    %rest:path("/amendment/remove/{$username}/{$password}/{$filename}")
     %output:method("xml")
-    function local:push-document($username as xs:string*, $password as xs:string*, $documentname as xs:string*, $document as xs:string*){
+    function local:pop-document($username as xs:string*, $password as xs:string*, $filename as xs:string*){
         
         try{
+            
+            let $password := if ($password eq "*") then 
+                                "" 
+                            else    
+                                $password
             let $login := xmldb:login("/db/bungeni-xml", $username, $password)
-            let $store-return-status := xmldb:store("/db/bungeni-xml", $documentname, $document)
+            let $store-return-status := xmldb:remove("/db/bungeni-xml", $filename)
                 return
-                    <pushAttachment>
+                    <popAttachment>
                         <success>True</success>
-                        <attachmentName>{$documentname}</attachmentName>
-                    </pushAttachment> 
+                        <attachmentName>{$filename}</attachmentName>
+                    </popAttachment> 
         }
         catch *{
             
-            <pushAttachment>
+            <popAttachment>
                 <success>False</success>
-                <attachmentName>{$documentname}</attachmentName>
+                <attachmentName>{$filename}</attachmentName>
                 <error>
                     <errorCode>{$err:code}</errorCode>
                     <errorDescr>{$err:description}</errorDescr>
                     <errorMod>{$err:module, "(", $err:line-number, ",", $err:column-number, ")"}</errorMod>
                 </error>
-            </pushAttachment> 
+            </popAttachment> 
         }
 };
 
@@ -411,7 +412,7 @@ declare
                     <name>{util:document-name($i)}</name>
                     <ref>{$i/an:akomaNtoso/an:amendment/an:amendmentBody/an:amendmentContent/
                     an:block[@name='changeBlock']/an:mod/an:quotedStructure[1]/an:item/@id/string()}</ref>
-                    <document>{$i}</document>
+                    {$i}
                 </amendmentDocument>
                 
         return <amendments>{$amendmentDocuments}</amendments>

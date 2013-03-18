@@ -285,7 +285,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 </route-override>,
                                                cmn:build-nav-node($override_path,$act-entries-repl)
                                         )              
-        else if ($EXIST-PATH eq "/search")
+        else if ($CHAMBER-REL-PATH eq "/search")
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
@@ -315,7 +315,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl :=  bun:search-criteria($acl,$offset,$limit,$qry,$sty,$type),
+                    $act-entries-tmpl :=  bun:search-criteria($PARLIAMENT,$acl,$offset,$limit,$qry,$sty,$type),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
     								 } 

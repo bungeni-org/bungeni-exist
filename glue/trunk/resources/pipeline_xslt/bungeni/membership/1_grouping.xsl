@@ -155,15 +155,15 @@
                 
                 <xsl:copy-of select="field[  
                     @name='status' or 
-                    @name='party_id' or 
                     @name='membership_type' or  
                     @name='member_election_type' or 
-                    @name='partymember' or 
                     @name='status' or 
                     @name='election_nomination_date' or 
                     @name='start_date' or 
                     @name='end_date' or                     
-                    @name='notes' ]" 
+                    @name='notes' or 
+                    @name='party'
+                    ]" 
                 />     
                 <referenceToUser isA="TLCPerson">
                     <refersTo isA="TLCReference"  href="{
@@ -182,7 +182,6 @@
                 <xsl:copy-of select="constituency" /> 
                 <xsl:copy-of select="changes | member_titles | titletypes"/>
                 <xsl:copy-of select="group" />
-                <xsl:copy-of select="party" />
                 <xsl:copy-of select="tags" />
                 <!-- PERMISSIONS -->
                 <xsl:copy-of select="permissions" />                  

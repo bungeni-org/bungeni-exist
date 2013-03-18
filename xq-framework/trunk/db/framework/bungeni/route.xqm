@@ -90,7 +90,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(),
     									       $CONTROLLER-DOC,
     									       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 
     									           bun:get-listing-search-context(
-    									               concat("/",  $parts/current-view),
+    									               $CONTROLLER-DOC,
     									               "xml/listing-search-form.xml",
     									               $doc-type
     									               )

@@ -208,7 +208,7 @@ declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:stri
             }</creators>    
                 
     let $pages-abs-links := template:re-write-paths($exist-cont,$pages)
-    let $book := scriba:create-book($lang,$title,$authors,$pages-abs-links)
+    let $book := scriba:create-book($lang,$orientation/xh/text(),$title,$authors,$pages-abs-links)
         
     let $epub := epub:scriba-ebook-maker($book)
     let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",  $output)) 
@@ -391,16 +391,15 @@ declare function bun:xqy-all-documentitems-with-acl($acl as xs:string) {
 : @return
 :   A string with embedded permissions ready for evaluation.
 :)
-declare function bun:xqy-list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
+declare function bun:xqy-list-documentitems-with-acl($chamber as xs:string, $acl as xs:string, $type as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
     
     (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
     make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='document']",
-                "/bu:document/bu:docType[bu:value eq '",$type,"']",
-                "/ancestor::bu:document",
+                "/bu:ontology/bu:document/bu:docType[bu:value eq '",$type,"']",
+                "/ancestor::bu:document[bu:origin/bu:identifier eq '",$chamber,"']",
                 "/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
@@ -415,8 +414,7 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber as xs:strin
     
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='document']",
-                "/bu:document[bu:origin/bu:identifier eq '",$chamber,"']",
+                "/bu:ontology/bu:document[bu:origin/bu:identifier eq '",$chamber,"']",
                 "/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
@@ -428,8 +426,7 @@ declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='document']",
-                "/bu:document",
+                "/bu:ontology/bu:document",
                 "/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
@@ -438,8 +435,7 @@ declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
 declare function bun:xqy-list-groupitem($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='group']",
-                "/bu:group[@type='",$type,"']",
+                "/bu:ontology/bu:group[@type='",$type,"']",
                 "/ancestor::bu:ontology")
 };
 
@@ -598,8 +594,8 @@ declare function bun:xqy-list-documentitems-with-acl-tmp($acl as xs:string, $typ
 : @return
 :   Evaluates xquery to return document(s) matching permission that was given
 :)
-declare function bun:list-documentitems-with-acl($acl as xs:string, $type as xs:string) {
-    let $eval-query := bun:xqy-list-documentitems-with-acl($acl, $type)
+declare function bun:list-documentitems-with-acl($chamber as xs:string, $acl as xs:string, $type as xs:string) {
+    let $eval-query := bun:xqy-list-documentitems-with-acl($chamber, $acl, $type)
     let $coll :=  util:eval($eval-query)
     let $sortord := xs:string(request:get-parameter("s","none"))
     let $orderby := cmn:get-orderby-config-name($type, $sortord)
@@ -716,7 +712,8 @@ declare function bun:get-documentitems(
 };
 
 declare function bun:search-criteria(
-        $parliament as node()?,
+        $chamber-id as xs:string?,
+        $chamber as xs:string?,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
@@ -727,9 +724,9 @@ declare function bun:search-criteria(
         if ($typeofdoc eq "Committee" or $typeofdoc eq "political-group") then
             bun:search-groupitems($acl, $typeofdoc, "committee-text", "xsl/committees.xsl", $offset, $limit, $querystr, $sortby)
         else if ($typeofdoc eq "Membership") then
-            bun:search-membership($acl, $typeofdoc, "member-text", "xsl/members.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-membership($chamber-id,$chamber,$acl, $typeofdoc, "member-text", "xsl/members.xsl", $offset, $limit, $querystr, $sortby)
         else
-            bun:search-documentitems($acl, $typeofdoc, "bill-text", "xsl/search-listing.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-documentitems($chamber-id,$chamber, $acl, $typeofdoc, "bill-text", "xsl/search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 (:~
@@ -778,6 +775,8 @@ declare function local:generate-qry-str($getqrystr) {
 :   search-listing.xsl
 :)
 declare function bun:search-documentitems(
+            $chamber-id as xs:string?,
+            $chamber as xs:string?,
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -800,7 +799,7 @@ declare function bun:search-documentitems(
     :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
     
-    let $xqy-coll-rs := bun:xqy-list-documentitems-with-acl($acl, $type)  
+    let $xqy-coll-rs := bun:xqy-list-documentitems-with-acl($chamber-id,$acl, $type)  
     let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
     let $eval-query := "subsequence(" || $coll-ft-search || ",$query-offset,$limit)"
         
@@ -812,7 +811,7 @@ declare function bun:search-documentitems(
                 count( if ($querystr ne "") then 
                             util:eval($coll-ft-search) 
                        else 
-                            bun:list-documentitems-with-acl($acl, $type)
+                            bun:list-documentitems-with-acl($chamber-id,$acl, $type)
                 )
              }</count>
              <currentView>search</currentView>
@@ -836,7 +835,7 @@ declare function bun:search-documentitems(
                         <kwic>{kwic:get-summary($expanded, ($expanded//exist:match)[1], $config)}</kwic>
                     </doc>
              ) else (
-                for $match in subsequence(bun:list-documentitems-with-acl($acl, $type),$query-offset,$limit)
+                for $match in subsequence(bun:list-documentitems-with-acl($chamber-id,$acl, $type),$query-offset,$limit)
                 return 
                     bun:get-reference($match)               
              )
@@ -850,6 +849,7 @@ declare function bun:search-documentitems(
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
+                <param name="chamber" value="{$chamber}" />
             </parameters>
            )
 };
@@ -1206,6 +1206,8 @@ declare function bun:search-groupitems(
 :   Similar to bun:search-documentitems()
 :)
 declare function bun:search-membership(
+            $chamber-id as xs:string?,
+            $chamber as xs:string?,
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -1519,21 +1521,15 @@ declare function local:build-search-objects($type as xs:string) {
 : @return 
 :   Returns re-written nodes and elements in the form listing-search-form.xml
 :)
-declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tmpl as element(), $type as xs:string)  {
+declare function local:rewrite-listing-search-form($CONTROLLER as node()?, $tmpl as element(), $type as xs:string)  {
 
     (: get the current doc-types search conf:)
     let $search-filter := cmn:get-searchins-config($type),
         $search-orderby := cmn:get-orderby-config($type),
         $qry := xs:string(request:get-parameter("q",'')),          
         $allparams := request:get-parameter-names()       
-
+        
     return
-      (:if ($tmpl/self::xh:form[@action eq "search"]) then 
-        element input {
-            attribute type { "hidden" },
-            attribute name { "type" },
-            attribute value { $type }
-        }:)   
       (: [Re]writing the doc_type with the one gotten from rou:listing-documentitem() :)    
       if ($tmpl/self::xh:input[@id eq "doc_type"]) then 
         element input {
@@ -1545,8 +1541,20 @@ declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tm
         element input {
             attribute type { "hidden" },
             attribute name { "exist_path" },
-            attribute value { $EXIST-PATH }
-        }       
+            attribute value { $CONTROLLER/exist-path/text() }
+        }   
+      else if($tmpl/self::xh:input[@id eq "chamber_id"]) then
+        element input {
+            attribute type { "hidden" },
+            attribute name { "chamber_id" },
+            attribute value { $CONTROLLER/parliament/identifier/text() }
+        }  
+      else if($tmpl/self::xh:input[@id eq "chamber"]) then
+        element input {
+            attribute type { "hidden" },
+            attribute name { "chamber" },
+            attribute value { $CONTROLLER/parliament/type/text() }
+        }          
       (: [Re]writing the search-field with search text :)    
       else if ($tmpl/self::xh:input[@id eq "search_for"]) then 
         element input {
@@ -1639,7 +1647,7 @@ declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tm
 		  		 {$tmpl/@*, 
 			         for $child in $tmpl/node()
 				        return if ($child instance of element())
-					       then local:rewrite-listing-search-form($EXIST-PATH, $child, $type)
+					       then local:rewrite-listing-search-form($CONTROLLER, $child, $type)
 					       else $child
 				 }
 
@@ -1703,12 +1711,12 @@ declare function local:rewrite-global-search-form($EXIST-PATH as xs:string, $tmp
 :   A Re-written search-form with relevant sort-by field and filter-options
 :)
 declare function bun:get-listing-search-context(
-                        $EXIST-CONTROLLER as xs:string, 
+                        $EXIST-CONTROLLER as node()?, 
                         $embed_tmpl as xs:string,
                         $doctype as xs:string) {
 
     (: get the template to be embedded :)
-    let $tmpl := fw:app-tmpl($embed_tmpl) 
+    let $tmpl := fw:app-tmpl($embed_tmpl)
     
     return
         document {
@@ -1857,7 +1865,7 @@ declare function bun:get-atom-feed(
         <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
         <link rel="self" href="/bills/rss" />
        {
-            for $i in subsequence(bun:list-documentitems-with-acl($acl, $doctype),0,10)
+            for $i in subsequence(bun:list-documentitems-with-acl($controller/parliament/identifier/text(),$acl, $doctype),0,10)
             order by $i/bu:document/bu:statusDate descending
             (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
             return 
@@ -2934,7 +2942,7 @@ declare function bun:get-parl-group(
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
     let $doc := document {
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri) eq $docid]/ancestor::bu:ontology
                     return
                         (: $parts/parent::node() returns all tabs of this doctype :)
                         bun:get-ref-assigned-grps($match, $parts/parent::node())   
@@ -2984,7 +2992,7 @@ declare function bun:get-parl-committee(
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
     let $doc := document {
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri)=$docid]/ancestor::bu:ontology
                     return
                         (: $parts/parent::node() returns all tabs of this doctype :)
                         bun:get-ref-comm-members($match, $parts/parent::node())   
@@ -3018,7 +3026,7 @@ declare function bun:get-parl-committee-sittings(
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
     let $doc := document {
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[@uri=$docid]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri)=$docid]/ancestor::bu:ontology
                     return
                         (: $parts/parent::node() returns all tabs of this doctype :)
                         bun:get-ref-comm-sitting($match, $parts/parent::node())   

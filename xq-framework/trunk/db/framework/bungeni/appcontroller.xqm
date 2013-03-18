@@ -126,7 +126,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								                          $EXIST-CONTROLLER, 
     								                          $act-entries-repl, 
     								                          bun:get-listing-search-context(
-    								                            $EXIST-PATH,
+    								                            $CONTROLLER-DOC,
     								                            "xml/listing-search-form.xml",
     								                            'Membership'
     								                            )
@@ -158,7 +158,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								        <route-override>
                                                 {$PARLIAMENT}
                                             </route-override>,
-    								        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH,"xml/listing-search-form.xml",'committee')))))
+    								        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($CONTROLLER-DOC,"xml/listing-search-form.xml",'committee')))))
     								    )  
                   
         (:~ ITEM LISTINGS :)        
@@ -285,7 +285,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 </route-override>,
                                                cmn:build-nav-node($override_path,$act-entries-repl)
                                         )              
-        else if ($CHAMBER-REL-PATH eq "/search")
+        else if ($EXIST-PATH eq "/search")
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
@@ -311,11 +311,15 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                       to re-route the navigation.
                     :)
                     $override_path := xs:string(request:get-parameter("exist_path","/search")),
+                    $chamber-id := xs:string(request:get-parameter("chamber_id","none")),
+                    $chamber := xs:string(request:get-parameter("chamber","none")),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
-                    $act-entries-tmpl :=  bun:search-criteria($PARLIAMENT,$acl,$offset,$limit,$qry,$sty,$type),
+                    $log := util:log('debug',$CONTROLLER-DOC),
+                    $log1 := util:log('debug',"++++++++++++++SEARCH RES++++++++++++++"),                  
+                    $act-entries-tmpl :=  bun:search-criteria($chamber-id,$chamber,$acl,$offset,$limit,$qry,$sty,$type),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -328,10 +332,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         								        <route-override>
                                                     {$PARLIAMENT}
                                                 </route-override>,
-    									       (cmn:build-nav-node($override_path,
+    									       (cmn:build-nav-node($CONTROLLER-DOC,
     									           (template:merge($EXIST-CONTROLLER, 
     									               $act-entries-repl, 
-    									               bun:get-listing-search-context($override_path, 
+    									               bun:get-listing-search-context($CONTROLLER-DOC, 
     									                   "xml/listing-search-form.xml",
     									                   $type))))
     									     )
@@ -500,7 +504,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                             <route-override>
                                                 {$PARLIAMENT}
                                             </route-override>,
-    								        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($EXIST-PATH, "xml/listing-search-form.xml",'politicalgroup')))))
+    								        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($CONTROLLER-DOC, "xml/listing-search-form.xml",'politicalgroup')))))
     								    )
     	else if ($CHAMBER-REL-PATH eq "/politicalgroup-text" )
     		 then 
@@ -1780,7 +1784,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     								                template:merge($EXIST-PATH, 
     								                        $act-entries-repl, 
     								                        bun:get-listing-search-context(
-    								                            $EXIST-PATH,
+    								                            $CONTROLLER-DOC,
     								                            "xml/listing-search-form.xml",'whatson'
     								                            )
     								                      )

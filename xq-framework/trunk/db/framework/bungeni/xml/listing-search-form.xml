@@ -3,6 +3,8 @@
     <form method="GET" action="search" id="ui_search" name="search_sort" autocomplete="off">
         <input type="hidden" id="doc_type" name="type" value=""/>
         <input type="hidden" id="exist_path" name="exist_path" value=""/>
+        <input type="hidden" id="chamber_id" name="chamber_id" value=""/>
+        <input type="hidden" id="chamber" name="chamber" value=""/>
         <label class="search_for" for="search_for">
             <i18n:text key="listing-search">Search text(nt)</i18n:text>:&#160;</label>
         <dl id="sb_box" class="dropdown">

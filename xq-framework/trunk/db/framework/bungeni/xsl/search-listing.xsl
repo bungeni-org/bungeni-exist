@@ -45,6 +45,8 @@
 
     <!-- +SORT_ORDER(ah,nov-2011) pass the sort ordr into the XSLT-->
     <xsl:param name="sortby"/>
+    <xsl:param name="chamber_id"/>
+    <xsl:param name="chamber"/>
 
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -146,11 +148,11 @@
             </xsl:choose>
         </xsl:variable>
         <li>
-            <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{$chamber}/{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </a>
             &#160;›&#160;
-            <a style="color:#2b92be" href="member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
+            <a style="color:#2b92be" href="{$chamber}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}" id="{bu:ontology/bu:document/bu:owner/bu:person/@href}">
                 <xsl:attribute name="title">Primary Sponsor</xsl:attribute>
                 <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             </a>

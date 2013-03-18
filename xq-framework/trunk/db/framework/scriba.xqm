@@ -131,7 +131,11 @@ declare function scriba:generate-content($pages as node()) {
  :
  : @return <book/> node
 :)
-declare function scriba:create-book($lang as xs:string, $title as xs:string, $authors as node(), $pages as node()) {
+declare function scriba:create-book($lang as xs:string, 
+                $orientation as xs:string,
+                $title as xs:string, 
+                $authors as node(), 
+                $pages as node()) {
             
      <book version="1.0">
         <metadata>
@@ -141,6 +145,7 @@ declare function scriba:create-book($lang as xs:string, $title as xs:string, $au
             <metaitem eletype="dc" elename="identifier" id="bungenibookid">bungeniId</metaitem>
             <metaitem eletype="dc" elename="subject">Legislation</metaitem>
             <metaitem eletype="dc" elename="date">%date%</metaitem>
+            <metaitem eletype="dc" elename="section-direction">{$orientation}</metaitem>
             <metaitem eletype="meta" elename="meta" name="cover" content="cover" destination="opf"/>       
             <metaitem eletype="meta" elename="meta" name="copyright" content="Bungeni Parliament" destination="opf"/>
             <metaitem eletype="meta" elename="meta" name="dtb:uid" content="bungeniId" destination="ncx"/>

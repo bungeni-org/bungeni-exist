@@ -349,6 +349,19 @@ declare function bun:gen-member-pdf($parliament as node()?,$memberid as xs:strin
     return <xml />     
 };
 
+declare function bun:get-all-by-role($roles-string as xs:string) as node()* {
+
+    let $eval-query :=  fn:concat("collection('",cmn:get-lex-db() ,"')",
+                        (: the first node in root element has the documents main permission :)
+                        "/bu:ontology/child::node()[1]/bu:permissions",
+                        "[",$roles-string,"]/ancestor::bu:ontology") 
+                  
+    let $log := util:log('debug',$eval-query)
+    return 
+        util:eval($eval-query)   
+
+};
+
 (:~
 :   Generates a xquery string with applied permissions
 : @param acl
@@ -703,6 +716,7 @@ declare function bun:get-documentitems(
 };
 
 declare function bun:search-criteria(
+        $parliament as node()?,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
@@ -1048,7 +1062,8 @@ declare function bun:adv-ft-search(
 : @return
 :   search results in a <doc/> document
 :)
-declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string) as element()* {
+declare function bun:adv-ft-search($coll-subset as node()*, 
+                                    $qryall as xs:string) as element()* {
         
         let $qryall-words := tokenize($qryall, '\s')
         let $query-node :=  <query>
@@ -1087,7 +1102,7 @@ declare function bun:adv-ft-search($coll-subset as node()*, $qryall as xs:string
                                     </bool>                                  
                                 )
                                 }                                                               
-                            </query>        
+                            </query>     
         for $search-rs in $coll-subset[ft:query(., $query-node)]
         let $expanded := kwic:expand($search-rs),
         $config := <config xmlns="" width="160"/>
@@ -1513,6 +1528,12 @@ declare function local:rewrite-listing-search-form($EXIST-PATH as xs:string, $tm
         $allparams := request:get-parameter-names()       
 
     return
+      (:if ($tmpl/self::xh:form[@action eq "search"]) then 
+        element input {
+            attribute type { "hidden" },
+            attribute name { "type" },
+            attribute value { $type }
+        }:)   
       (: [Re]writing the doc_type with the one gotten from rou:listing-documentitem() :)    
       if ($tmpl/self::xh:input[@id eq "doc_type"]) then 
         element input {

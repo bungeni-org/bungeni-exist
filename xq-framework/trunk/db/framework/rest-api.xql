@@ -70,13 +70,8 @@ declare
                                     if($pos lt $counter) then "and" else () )
                 
                 let $roles-string := fn:string-join($roles," ")
-             
-                (: get entire collection and apply given permission on the main document :)
-                let $eval-query :=  fn:concat("collection('",cmn:get-lex-db() ,"')",
-                                    (: the first node in root element has the documents main permission :)
-                                    "/bu:ontology/child::node()[1]/bu:permissions",
-                                    "[",$roles-string,"]/ancestor::bu:ontology")                   
-                let $coll :=  util:eval($eval-query)             
+                  
+                let $coll := bun:get-all-by-role($roles-string)            
             
                 (: get entire collection OR trim by group types mainly: document, group, membership... :)
                 let $coll-by-group :=  

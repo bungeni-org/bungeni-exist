@@ -53,6 +53,14 @@
         </xsl:call-template>
     </xsl:template>
     
+    <xsl:template match="field[@name='party']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">party</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    
+    
     <xsl:template match="field[@name='user_unique']">
         <userUnique type="xs:boolean" showAs="{data(@displayAs)}">
             <xsl:variable name="user_unique">

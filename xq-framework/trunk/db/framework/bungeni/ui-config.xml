@@ -770,8 +770,12 @@
             <navigation>home</navigation>
             <title>Search Settings</title>
         </route>
-        <route href="/search">
-            <navigation>business</navigation>
+        <route href="/assembly/search">
+            <navigation>/assembly/business</navigation>
+            <title>Search</title>
+        </route>
+        <route href="/senate/search">
+            <navigation>/senate/business</navigation>
             <title>Search</title>
         </route>
     </routes>

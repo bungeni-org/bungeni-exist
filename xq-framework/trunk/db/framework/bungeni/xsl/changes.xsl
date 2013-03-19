@@ -80,7 +80,7 @@
                                         <xsl:value-of select="format-dateTime(bu:chronoTime,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         <div class="struct-ib">&#160;/ 
                                             <xsl:value-of select="lower-case($timeline-type)"/> /
-                                            <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
+                                            <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:head/bu:type/bu:value"/>
                                             <xsl:variable name="doc-uri">
                                                 <xsl:choose>
                                                     <xsl:when test="bu:document/@uri">

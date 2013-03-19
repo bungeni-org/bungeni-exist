@@ -77,7 +77,7 @@
     <xsl:template name="doc-item-preface">
         <xsl:param name="doc-type"/>
         <h3 id="doc-heading" class="doc-headers">
-            BUNGENI PARLIAMENT
+            <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
         </h3>
         <h4 id="doc-item-desc" class="doc-headers">
             <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>

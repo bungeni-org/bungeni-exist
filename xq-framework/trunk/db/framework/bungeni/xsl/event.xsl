@@ -82,8 +82,8 @@
                         </ul>
                     </div>
                     <h3 id="doc-heading" class="doc-headers hang-left-titles">
-                        <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> BUNGENI
-                        PARLIAMENT </h3>
+                        <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
+                    </h3>
                     <h4 id="doc-item-desc" class="doc-headers hang-left-titles">
                         <xsl:value-of select="bu:ontology/bu:documents/bu:workflowEvents/bu:workflowEvent[@href=$event-uri]/bu:title"/>
                     </h4>

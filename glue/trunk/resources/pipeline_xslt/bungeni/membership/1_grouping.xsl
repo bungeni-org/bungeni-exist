@@ -177,9 +177,7 @@
                 
                 <xsl:copy-of select="contained_groups" />                
                 <xsl:copy-of select="user/child::*" /> 
-                <xsl:copy-of select="province" />  
-                <xsl:copy-of select="region" /> 
-                <xsl:copy-of select="constituency" /> 
+                <xsl:copy-of select="representation" />  
                 <xsl:copy-of select="changes | member_titles | titletypes"/>
                 <xsl:copy-of select="group" />
                 <xsl:copy-of select="tags" />

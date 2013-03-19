@@ -33,4 +33,6 @@
         <xsl:apply-templates/>
     </xsl:template>
     
+    <xsl:template match="custom" />
+    
 </xsl:stylesheet>

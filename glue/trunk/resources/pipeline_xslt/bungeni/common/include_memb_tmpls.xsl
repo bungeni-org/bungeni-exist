@@ -100,6 +100,18 @@
         </desiginationDefinition>
     </xsl:template>    
     
+    
+    <xsl:template match="representation">
+        <representations id="memberRepresentation">
+            <xsl:apply-templates />
+        </representations>
+    </xsl:template>
+    
+    <xsl:template match="field[@name='representation']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">representation</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
 
     <!--
     

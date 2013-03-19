@@ -74,4 +74,14 @@
         <xsl:value-of select="$current-parliament/electionDate" />
     </xsl:variable>
     
+    <xsl:variable name="parliament-type">
+        <xsl:value-of select="$current-parliament/type" />
+    </xsl:variable>
+    
+    <xsl:variable name="parliament-type-display">
+        <xsl:value-of select="$current-parliament/type/@displayAs" />
+    </xsl:variable>
+    
+    
+    
 </xsl:stylesheet>

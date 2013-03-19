@@ -18,6 +18,27 @@
         </legislature>
     </xsl:template>
     
+    <xsl:template name="incl_chamber">
+        <xsl:param name="parl-uri" />
+        <xsl:param name="parl-id" />
+        <xsl:param name="elect-date" />
+        <xsl:param name="country-code" />
+        <xsl:param name="type" />
+        <xsl:param name="type-display" />
+        
+        <chamber isA="TLCConcept" href="{$parl-uri}">
+            <parliamentId key="true" type="xs:integer" select="{$parl-id}" />
+            <electionDate type="xs:date" select="{$elect-date}"></electionDate> 
+            <country isA="TLCLocation">
+                <value type="xs:string"><xsl:value-of select="$country-code" /></value>
+            </country>
+            <type isA="TLCTerm" showAs="{$type-display}">
+                <value type="xs:string"><xsl:value-of select="$type" /></value>
+            </type>
+        </chamber>
+        
+    </xsl:template>
+    
     
     <xsl:template name="incl_origin">
         <xsl:param name="parl-id"></xsl:param>

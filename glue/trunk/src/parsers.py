@@ -209,6 +209,10 @@ class ParliamentInfoParams:
         parl_map["type"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("parliament_type")
             ).getText()
+        parl_map["type_display"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("parliament_type")
+            ).attribute("displayAs").value
+            
             
         return parl_map
 

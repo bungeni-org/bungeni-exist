@@ -144,7 +144,15 @@
                 <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
                 <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
             </xsl:call-template>
-            
+            <xsl:call-template name="incl_chamber">
+                <xsl:with-param name="parl-uri" select="$parliament-full-uri" />
+                <xsl:with-param name="parl-id" select="$parliament-id" />
+                <xsl:with-param name="elect-date" select="$parliament-election-date" />
+                <xsl:with-param name="country-code" select="$country-code" />
+                <xsl:with-param name="type" select="$parliament-type" />
+                <xsl:with-param name="type-display" select="$parliament-type-display" />
+            </xsl:call-template>
+            <!--
             <chamber isA="TLCConcept" href="{$parliament-full-uri}">
                 <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate> 
                 <xsl:copy-of select="field[  
@@ -156,7 +164,7 @@
                     @name='proportional_representation' or 
                     @name='status_date' ] | agenda_items" 
                 />                 
-            </chamber>
+            </chamber> -->
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <xsl:copy-of select="tags" />
                 <xsl:copy-of select="field[@name='timestamp']" />

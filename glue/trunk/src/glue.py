@@ -232,14 +232,15 @@ def param_parl_info(cfg, params):
              " <electionDate>%(election_date)s</electionDate>"
              " <forParliament>%(for_parl)s</forParliament>"
              " <identifier>%(identifier)s</identifier>"
-             " <type>%(type)s</type>"
+             '<type displayAs="%(type_display)s">%(type)s</type>'
              "</parliament>") %  
              {
               "parl_id" : param["parliament-id"],
               "election_date": param["parliament-election-date"],
               "identifier": param["identifier"],
               "for_parl": param["for-parliament"],
-              "type": param["type"]
+              "type": param["type"],
+              "type_display": param["type_display"]
               }
         )
     li_parl_params.append(

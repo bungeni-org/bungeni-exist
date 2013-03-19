@@ -158,11 +158,23 @@
                 -->               
                 
             </document>
+            
             <xsl:call-template name="incl_legislature">
                 <xsl:with-param name="leg-uri" select="$legislature-full-uri" />
                 <xsl:with-param name="leg-election-date" select="$legislature-election-date" />
                 <xsl:with-param name="leg-identifier" select="$legislature-identifier" />
             </xsl:call-template>
+            
+            <xsl:call-template name="incl_chamber">
+                <xsl:with-param name="parl-uri" select="$parliament-full-uri" />
+                <xsl:with-param name="parl-id" select="$parliament-id" />
+                <xsl:with-param name="elect-date" select="$parliament-election-date" />
+                <xsl:with-param name="country-code" select="$country-code" />
+                <xsl:with-param name="type" select="$parliament-type" />
+                <xsl:with-param name="type-display" select="$parliament-type-display" />
+            </xsl:call-template>
+            
+            <!--
             <chamber isA="TLCConcept" href="{$parliament-full-uri}">
                <parliamentId key="true" type="xs:integer" select="{$parliament-id}" />
                <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate> 
@@ -170,6 +182,7 @@
                     <value type="xs:string"><xsl:value-of select="$country-code" /></value>
                 </country>
             </chamber>
+            -->
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <xsl:copy-of select="tags" />
                 <xsl:copy-of select="field[@name='timestamp']" />

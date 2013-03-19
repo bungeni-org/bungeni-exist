@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -71,6 +71,7 @@
     <!-- remove the count display here -->
     <xsl:template match="count" mode="renderui1"/>
     <xsl:template match="doc" mode="renderui1">
+        <xsl:variable name="chamber-type" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-sub-type" select="bu:ontology/child::*/bu:docType/bu:value"/>
         <xsl:variable name="docIdentifier">
             <xsl:choose>
@@ -94,9 +95,11 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <a href="{$base-path}?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{$chamber-type}/{$base-path}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </a>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
+            </div>
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
                 <div class="black-full">
@@ -126,12 +129,13 @@
     <!-- remove the count display here -->
     <xsl:template match="count" mode="renderui2"/>
     <xsl:template match="doc" mode="renderui2">
+        <xsl:variable name="chamber-type" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:group/@uri"/>
         <li>
-            <a href="{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{$chamber-type}/{lower-case(bu:ontology/bu:group/bu:docType/bu:value)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:legislature/bu:parentGroup/bu:shortName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
             </div>
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">

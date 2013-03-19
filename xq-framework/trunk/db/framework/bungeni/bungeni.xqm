@@ -291,7 +291,7 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
     return
         if($attachedfile/bu:attachmentId cast as xs:integer eq $attid) then (
             response:stream-binary(
-                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:fileHash)) cast as xs:base64Binary,
+                util:binary-doc(concat(cmn:get-att-db(),'/',$attachedfile/bu:attachmentHash)) cast as xs:base64Binary,
                 $attachedfile/bu:mimetype/bu:value,
                 $attachedfile/bu:name),
             response:set-header("Content-Disposition" , concat("attachment; filename=",  $attachedfile/bu:name)),
@@ -391,7 +391,7 @@ declare function bun:xqy-all-documentitems-with-acl($acl as xs:string) {
 : @return
 :   A string with embedded permissions ready for evaluation.
 :)
-declare function bun:xqy-list-documentitems-with-acl($chamber as xs:string, $acl as xs:string, $type as xs:string) {
+declare function bun:xqy-list-documentitems-with-acl($chamber-id as xs:string, $acl as xs:string, $type as xs:string) {
   let $acl-filter := cmn:get-acl-permission-as-attr($acl)
     
     (:~ !+FIX_THIS_WARNING - parameterized XPath queries are broken in eXist 1.5 dev, converted this to an EVAL-ed query to 
@@ -399,13 +399,13 @@ declare function bun:xqy-list-documentitems-with-acl($chamber as xs:string, $acl
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology/bu:document/bu:docType[bu:value eq '",$type,"']",
-                "/ancestor::bu:document[bu:origin/bu:identifier eq '",$chamber,"']",
+                "/ancestor::bu:document[bu:origin/bu:identifier eq '",$chamber-id,"']",
                 "/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
 
-declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber as xs:string?, 
+declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber-id as xs:string?, 
                                                             $acl as xs:string, 
                                                             $type as xs:string, 
                                                             $tag as xs:string) {
@@ -414,7 +414,7 @@ declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber as xs:strin
     
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology/bu:document[bu:origin/bu:identifier eq '",$chamber,"']",
+                "/bu:ontology/bu:document[bu:origin/bu:identifier eq '",$chamber-id,"']",
                 "/bu:docType[bu:value eq '",$type,"']",
                 "/ancestor::bu:document/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
@@ -594,8 +594,8 @@ declare function bun:xqy-list-documentitems-with-acl-tmp($acl as xs:string, $typ
 : @return
 :   Evaluates xquery to return document(s) matching permission that was given
 :)
-declare function bun:list-documentitems-with-acl($chamber as xs:string, $acl as xs:string, $type as xs:string) {
-    let $eval-query := bun:xqy-list-documentitems-with-acl($chamber, $acl, $type)
+declare function bun:list-documentitems-with-acl($chamber-id as xs:string, $acl as xs:string, $type as xs:string) {
+    let $eval-query := bun:xqy-list-documentitems-with-acl($chamber-id, $acl, $type)
     let $coll :=  util:eval($eval-query)
     let $sortord := xs:string(request:get-parameter("s","none"))
     let $orderby := cmn:get-orderby-config-name($type, $sortord)
@@ -712,8 +712,7 @@ declare function bun:get-documentitems(
 };
 
 declare function bun:search-criteria(
-        $chamber-id as xs:string?,
-        $chamber as xs:string?,
+        $controller as node()?,
         $acl as xs:string, 
         $offset as xs:integer, 
         $limit as xs:integer, 
@@ -722,11 +721,11 @@ declare function bun:search-criteria(
         $typeofdoc as xs:string) as element() {
         
         if ($typeofdoc eq "Committee" or $typeofdoc eq "political-group") then
-            bun:search-groupitems($acl, $typeofdoc, "committee-text", "xsl/committees.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-groupitems($controller,$acl, $typeofdoc, "committee-text", "xsl/committees.xsl", $offset, $limit, $querystr, $sortby)
         else if ($typeofdoc eq "Membership") then
-            bun:search-membership($chamber-id,$chamber,$acl, $typeofdoc, "member-text", "xsl/members.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-membership($controller,$acl, $typeofdoc, "member-text", "xsl/members.xsl", $offset, $limit, $querystr, $sortby)
         else
-            bun:search-documentitems($chamber-id,$chamber, $acl, $typeofdoc, "bill-text", "xsl/search-listing.xsl", $offset, $limit, $querystr, $sortby)
+            bun:search-documentitems($controller, $acl, $typeofdoc, "bill-text", "xsl/search-listing.xsl", $offset, $limit, $querystr, $sortby)
 };
 
 (:~
@@ -775,8 +774,7 @@ declare function local:generate-qry-str($getqrystr) {
 :   search-listing.xsl
 :)
 declare function bun:search-documentitems(
-            $chamber-id as xs:string?,
-            $chamber as xs:string?,
+            $controller as node()?,
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -788,6 +786,7 @@ declare function bun:search-documentitems(
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($stylesheet)
+    let $chamber-id := $controller/parliament/identifier/text()
     let $getqrystr := xs:string(request:get-query-string())
     (: Escape all invalid characters :)
     let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`') 
@@ -849,7 +848,7 @@ declare function bun:search-documentitems(
             $stylesheet, 
             <parameters>
                 <param name="sortby" value="{$sortby}" />
-                <param name="chamber" value="{$chamber}" />
+                <param name="chamber" value="{$controller/parliament/type/text()}" />
             </parameters>
            )
 };
@@ -1131,6 +1130,7 @@ declare function bun:adv-ft-search($coll-subset as node()*,
 :   Similar to bun:search-documentitems()
 :)
 declare function bun:search-groupitems(
+            $controller as node()?,
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -1206,8 +1206,7 @@ declare function bun:search-groupitems(
 :   Similar to bun:search-documentitems()
 :)
 declare function bun:search-membership(
-            $chamber-id as xs:string?,
-            $chamber as xs:string?,
+            $controller as node()?,
             $acl as xs:string,
             $type as xs:string,
             $url-prefix as xs:string,
@@ -1527,9 +1526,9 @@ declare function local:rewrite-listing-search-form($CONTROLLER as node()?, $tmpl
     let $search-filter := cmn:get-searchins-config($type),
         $search-orderby := cmn:get-orderby-config($type),
         $qry := xs:string(request:get-parameter("q",'')),          
-        $allparams := request:get-parameter-names()       
+        $allparams := request:get-parameter-names()
         
-    return
+    return 
       (: [Re]writing the doc_type with the one gotten from rou:listing-documentitem() :)    
       if ($tmpl/self::xh:input[@id eq "doc_type"]) then 
         element input {
@@ -1641,9 +1640,9 @@ declare function local:rewrite-listing-search-form($CONTROLLER as node()?, $tmpl
                     }
                )
                 
-          }        
+          }                  
         else
-  		element { node-name($tmpl)}
+  		    element { node-name($tmpl)}
 		  		 {$tmpl/@*, 
 			         for $child in $tmpl/node()
 				        return if ($child instance of element())
@@ -1716,13 +1715,38 @@ declare function bun:get-listing-search-context(
                         $doctype as xs:string) {
 
     (: get the template to be embedded :)
-    let $tmpl := fw:app-tmpl($embed_tmpl)
+    let $xh-tmpl := fw:app-tmpl($embed_tmpl)
+    let $tmpl := local:form-rewrite($xh-tmpl,$EXIST-CONTROLLER/parliament/type/text())    
     
     return
         document {
-                local:rewrite-listing-search-form($EXIST-CONTROLLER, $tmpl/xh:div, $doctype)
+                local:rewrite-listing-search-form($EXIST-CONTROLLER, $tmpl, $doctype)
         }
 };
+
+(:
+    For purpose of re-writing the form element itself and put the correct 
+    chamber-path    
+:)
+declare function local:form-rewrite($tmpl as document-node(), $chamber as xs:string) as element() {
+
+        <div xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" id="search-form">
+        {
+            if ($tmpl/descendant-or-self::xh:form[@id eq "ui_search"]) then 
+            element xh:form {
+                attribute method { "GET" },
+                attribute action { $chamber || "/search" },
+                attribute name { "search_sort" },
+                attribute autocomplete { "off" },
+                $tmpl/(@*,*)
+            }  
+            else 
+                ()
+        }
+        </div>
+};
+
+
 declare function bun:get-global-search-context(
                         $EXIST-PATH as xs:string, 
                         $embed_tmpl as xs:string, 
@@ -2841,7 +2865,8 @@ declare function bun:get-parl-doc($acl as xs:string,
 :)
 declare function bun:get-parl-doc-with-events($acl as xs:string, 
             $doc-uri as xs:string, 
-            $parts as node()) as element()* {
+            $parts as node(),
+            $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2861,7 +2886,12 @@ declare function bun:get-parl-doc-with-events($acl as xs:string,
                 bun:get-ref-events($match, $parts/parent::node())
         }
     return
-        transform:transform($doc, $stylesheet, ())
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>           
+        )
 };
 
 (:~
@@ -3296,32 +3326,25 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
 
 
 
-declare function bun:get-doc-attachment($attid as xs:string, $parts as node()) as element()* {
+declare function bun:get-doc-attachment($acl as xs:string,
+                                        $doc-uri as xs:string, 
+                                        $attid as xs:integer, 
+                                        $parts as node()) as element()* {
 
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:attachments/bu:attachment[@href = $attid][1]/ancestor::bu:ontology
-    let $acl-filter := cmn:get-acl-permission-as-attr('Attachment','public-view')    
-    let $acl-filter-node := cmn:get-acl-permission-as-node('Attachment','public-view')
     
-    let $doc := <doc>      
-            { bun:treewalker-acl($acl-filter-node,<doc>{$docitem}</doc>) }
-            <ref>
-            {
-                let $uri := data(if ($docitem/bu:document/@uri) then ($docitem/bu:document/@uri) else ($docitem/bu:document/@internal-uri) )
-                return
-                    bun:xqy-list-attachments-with-acl($uri, $acl-filter)         
-            }            
-            </ref>
-            <attachment>{$attid}</attachment>
-        </doc>  
+    let $docitem := bun:documentitem-full-acl($acl, $doc-uri)
     
+    let $doc := <doc>{$docitem}</doc>  
+
     return
-        transform:transform($doc, 
-                            $stylesheet, 
+        transform:transform($doc, $stylesheet, 
                             <parameters>
                                 <param name="version" value="true" />
-                                <param name="attachment-uri" value="$attid" />
-                            </parameters>)
+                                <param name="attachment-id" value="{$attid}" />
+                            </parameters>
+       )
+                            
 };
 
 declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as element()* {

@@ -42,7 +42,7 @@
             </span-->
             <div id="title-holder">
                 <xsl:if test="$version eq 'true'">
-                    <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
+                    <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{$chamber}/{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
                 </xsl:if>
                 <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
@@ -148,7 +148,7 @@
                                             <!--a href="{lower-case($doc-type)}-event?uri={@uri}">
                                                 <xsl:value-of select="bu:title"/>
                                                 </a-->
-                                            <a href="{$chamber-id}/popout?uri={@uri}" rel="{$chamber-id}/{lower-case($doc-type)}-event?uri={@uri}" onclick="return false;">
+                                            <a href="{$chamber}/popout?uri={@uri}" rel="{$chamber-id}/{lower-case($doc-type)}-event?uri={@uri}" onclick="return false;">
                                                 <xsl:value-of select="bu:title"/>
                                             </a>
                                             <div class="struct-ib"> / <xsl:value-of select="format-dateTime(bu:statusDate,$datetime-format,'en',(),())"/>
@@ -166,7 +166,7 @@
                             <ul class="ls-row">
                                 <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
                                     <li>
-                                        <a href="{$chamber-id}/{lower-case($doc-type)}-attachment?uri={@href}">
+                                        <a href="{$chamber}/{lower-case($doc-type)}-attachment?uri={$doc-uri}&amp;id={bu:attachmentId}">
                                             <xsl:value-of select="bu:title"/>
                                         </a>&#160; /      
                                         download:&#160;

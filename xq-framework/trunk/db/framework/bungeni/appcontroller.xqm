@@ -283,9 +283,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         								        <route-override>
                                                     {$PARLIAMENT}
                                                 </route-override>,
-                                               cmn:build-nav-node($override_path,$act-entries-repl)
+                                               cmn:build-nav-node($CONTROLLER-DOC,$act-entries-repl)
                                         )              
-        else if ($EXIST-PATH eq "/search")
+        else if ($CHAMBER-REL-PATH eq "/search")
     		 then 
                 let 
                     $qry := xs:string(request:get-parameter("q",'')),
@@ -311,15 +311,13 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                       to re-route the navigation.
                     :)
                     $override_path := xs:string(request:get-parameter("exist_path","/search")),
-                    $chamber-id := xs:string(request:get-parameter("chamber_id","none")),
-                    $chamber := xs:string(request:get-parameter("chamber","none")),
                     $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
                     $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     $acl := "public-view",
                     $log := util:log('debug',$CONTROLLER-DOC),
                     $log1 := util:log('debug',"++++++++++++++SEARCH RES++++++++++++++"),                  
-                    $act-entries-tmpl :=  bun:search-criteria($chamber-id,$chamber,$acl,$offset,$limit,$qry,$sty,$type),
+                    $act-entries-tmpl :=  bun:search-criteria($CONTROLLER-DOC,$acl,$offset,$limit,$qry,$sty,$type),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -812,7 +810,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),      
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-parl-doc-with-events("public-view", $docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-parl-doc-with-events("public-view", $docnumber,$parts,$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     								 } 
@@ -874,8 +872,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $attid := xs:integer(request:get-parameter("id",0)),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-doc-attachment("public-view",$docnumber,$attid,$parts),
                     $act-entries-repl:= document {
                                         template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
                                     }
@@ -1041,8 +1040,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $attid := xs:integer(request:get-parameter("id",0)),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-doc-attachment("public-view",$docnumber,$attid,$parts),
                     $act-entries-repl:= document {
                                         template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
                                     }
@@ -1232,8 +1232,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $attid := xs:integer(request:get-parameter("id",0)), 
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-doc-attachment("public-view",$docnumber,$attid,$parts),
                     $act-entries-repl:= document {
                                         template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
                                     }
@@ -1403,9 +1404,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     	else if ($CHAMBER-REL-PATH eq "/tableddocument-attachment" )
     		 then 
                 let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)), 
+                    $attid := xs:integer(request:get-parameter("id",0)),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-doc-attachment("public-view",$docnumber,$attid,$parts),
                     $act-entries-repl:= document {
                                         template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
                                     }
@@ -1575,8 +1577,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
+                    $attid := xs:integer(request:get-parameter("id",0)),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-doc-attachment($docnumber,$parts),
+                    $act-entries-tmpl :=  bun:get-doc-attachment("public-view",$docnumber,$attid,$parts),
                     $act-entries-repl:= document {
                                         template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
                                     }

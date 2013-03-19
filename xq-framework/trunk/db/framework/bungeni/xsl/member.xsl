@@ -107,7 +107,7 @@
                                         <td class="labels fbottom">
                                             <i18n:text key="representation">representation</i18n:text>:</td>
                                         <td class="fbt">
-                                            <xsl:value-of select="bu:ontology/bu:membership/bu:representation/@showAs"/>
+                                            <xsl:value-of select="string-join(bu:ontology/bu:membership/bu:representations/bu:representation/@showAs,' » ')"/>
                                         </td>
                                     </tr>
                                     <tr>

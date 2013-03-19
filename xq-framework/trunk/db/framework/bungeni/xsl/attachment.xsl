@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -11,9 +11,9 @@
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:param name="attachment-uri"/>
+    <xsl:param name="attachment-id"/>
     <xsl:template match="doc">
-        <xsl:variable name="attachment-uri" select="attachment"/>
+        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
@@ -28,12 +28,12 @@
         <xsl:variable name="moevent-uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <div id="title-holder">
-                <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
+                <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{$chamber}/{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
                 <h1 class="title">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
                 <h2 class="sub-title">
-                    <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:title"/>
+                    <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[bu:attachmentId=$attachment-id]/bu:title"/>
                 </h2>
             </div>
             <div id="doc-downloads"/>
@@ -43,25 +43,25 @@
                         <ul class="doc-versions">
                             <xsl:if test="bu:ontology/bu:document[@uri, @internal-uri]">
                                 <li>
-                                    <a href="{lower-case($doc-type)}-text?uri={$doc-uri}">
+                                    <a href="{$chamber}/{lower-case($doc-type)}-text?uri={$doc-uri}">
                                         <i18n:text key="doc-{lower-case($doc-type)}">main(nt)</i18n:text>
                                     </a>
                                 </li>
                             </xsl:if>
-                            <xsl:variable name="total_versions" select="count(ref/bu:ontology/bu:document)"/>
+                            <xsl:variable name="total_attachments" select="count(bu:ontology/bu:attachments/attachment)"/>
                             <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
                                 <xsl:sort select="bu:statusDate" order="descending"/>
-                                <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
+                                <xsl:variable name="cur_pos" select="($total_attachments - position())+1"/>
                                 <li>
                                     <xsl:choose>
                                         <!-- if current URI is equal to this versions URI -->
-                                        <xsl:when test="$attachment-uri eq @href">
+                                        <xsl:when test="$attachment-id eq bu:attachmentId">
                                             <span>
                                                 <i18n:text key="doc-attachment">annex(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </span>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <a href="{lower-case($doc-type)}-attachment?uri={@href}">
+                                            <a href="{$chamber}/{lower-case($doc-type)}-attachment?uri={$doc-uri}&amp;id={bu:attachmentId}">
                                                 <i18n:text key="doc-attachment">annex(nt)</i18n:text> -<xsl:value-of select="$cur_pos"/>
                                             </a>
                                         </xsl:otherwise>
@@ -71,10 +71,10 @@
                         </ul>
                     </div>
                     <h3 id="doc-heading" class="doc-headers hang-left-titles">
-                        <!-- !#FIX_THIS WHEN WE HAVE PARLIAMENTARY INFO DOCUMENTS --> BUNGENI
-                        PARLIAMENT </h3>
+                        <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
+                    </h3>
                     <h4 id="doc-item-desc" class="doc-headers hang-left-titles">
-                        <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:title"/>
+                        <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[@href=$attachment-id]/bu:title"/>
                     </h4>
                     <p class="inline-centered">
                         <span>
@@ -83,7 +83,7 @@
                         </span>
                         &#160;                         
                         <span>
-                            <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:status/bu:value"/>
+                            <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[bu:attachmentId=$attachment-id]/bu:status/bu:value"/>
                         </span>
                         &#160;                         
                         <span>
@@ -93,19 +93,19 @@
                         </span>
                         &#160;                         
                         <span>
-                            <xsl:value-of select="format-dateTime(bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:statusDate,$datetime-format,'en',(),())"/>
+                            <xsl:value-of select="format-dateTime(bu:ontology/bu:attachments/bu:attachment[bu:attachmentId=$attachment-id]/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </p>
                     <div id="doc-content-area">
                         <div>
-                            <xsl:copy-of select="bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:description"/>
+                            <xsl:copy-of select="bu:ontology/bu:attachments/bu:attachment[bu:attachmentId=$attachment-id]/bu:description"/>
                         </div>
                         <!-- TO_BE_REVIEWED -->
                     </div>
                     <p class="inline-centered">
                         download:&#160;
-                        <a href="download?uri={$doc-uri}&amp;att={bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:attachmentId}">
-                            <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[@href=$attachment-uri]/bu:name"/>
+                        <a href="download?uri={$doc-uri}&amp;att={bu:ontology/bu:attachments/bu:attachment[bu:attachmentId=$attachment-id]/bu:attachmentId}">
+                            <xsl:value-of select="bu:ontology/bu:attachments/bu:attachment[bu:attachmentId=$attachment-id]/bu:name"/>
                         </a>
                     </p>
                 </div>

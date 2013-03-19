@@ -87,6 +87,7 @@
         </ul>
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
+        <xsl:variable name="chamber-type" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-type" select="bu:ontology/@for"/>
         <xsl:variable name="doc-sub-type" select="bu:ontology/child::*/bu:docType/bu:value"/>
         <xsl:variable name="docIdentifier">
@@ -107,22 +108,26 @@
                         <xsl:choose>
                             <xsl:when test="$doc-sub-type eq 'Event'">
                                 <!-- an event of some document -->
-                                <xsl:value-of select="concat(lower-case(bu:ontology/bu:document/bu:eventOf/bu:type/bu:value),'-event')"/>
+                                <xsl:value-of select="concat(lower-case(bu:ontology/bu:event/bu:eventOf/bu:head/bu:type/bu:value),'-event')"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="concat(lower-case($doc-sub-type),'-text')"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <a href="{$base-path}?uri={$docIdentifier}" id="{$docIdentifier}">
+                    <a href="{$chamber-type}/{$base-path}?uri={$docIdentifier}" id="{$docIdentifier}">
                         <!--!+FIX_THIS (ao, 11-Apr-2012) shortName / shortTitle since there is ongoing 
                             transition to use shortTitle but not yet applied to all document types currently 
                             only on document type event -->
                         <xsl:value-of select="(bu:ontology/child::*/bu:shortName,bu:ontology/child::*/bu:title)"/>
-                    </a> sponsored by <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
+                    </a>
+                    <div class="struct-ib">
+                        <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
+                    </div> / 
+                    sponsored by <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </xsl:when>
                 <xsl:when test="bu:ontology[@for eq 'membership']">
-                    <a href="member?uri={bu:ontology/bu:membership/bu:referenceToUser/@uri}" id="{$docIdentifier}">
+                    <a href="{$chamber-type}/member?uri={bu:ontology/bu:membership/bu:referenceToUser/@uri}" id="{$docIdentifier}">
                         <xsl:value-of select="concat(bu:ontology/bu:membership/bu:titles,'. ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
                     </a>
                     <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
@@ -130,7 +135,7 @@
                     <i> group type</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:docType/bu:value"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a href="{lower-case($doc-sub-type)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
+                    <a href="{$chamber-type}/{lower-case($doc-sub-type)}-text?uri={$docIdentifier}" id="{$docIdentifier}">
                         <xsl:value-of select="bu:ontology/child::*/bu:fullName"/>
                     </a>
                     <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
@@ -145,19 +150,7 @@
                     <i>status</i>&#160;<xsl:value-of select="bu:ontology/child::*/bu:status/bu:value"/>
                 </div>
                 <div class="search-snippet">
-                    <xsl:choose>
-                        <xsl:when test="kwic">
-                            <xsl:apply-templates select="kwic"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <!-- for parl docs -->
-                            <xsl:value-of select="substring(bu:ontology/document/bu:body,0,320)"/>
-                            <!-- for groups -->
-                            <xsl:value-of select="substring(bu:ontology/bu:group/bu:description,0,320)"/>
-                            <!-- for membership -->
-                            <xsl:value-of select="substring(bu:ontology/bu:membership/bu:description,0,320)"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:apply-templates select="kwic"/>
                 </div>
             </div>
         </li>

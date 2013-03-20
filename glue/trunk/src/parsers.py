@@ -46,16 +46,20 @@ class ParseXML(object):
     """
 
     __global_path__ = "//"
+    
 
     def __init__(self, xml_path):
         """
         Load the xml document from the path
         """
         try:
+            self.valid_file = False
             self.xmlfile = xml_path
             self.sreader = SAXReader()
             self.an_xml = File(xml_path)
+            self.valid_file = True
         except IOException, ioE:
+            self.valid_file = False
             print COLOR.FAIL, ioE, '\nERROR: IOErrorFound reading xml ', xml_path, COLOR.ENDC
 
     def doc_parse(self):

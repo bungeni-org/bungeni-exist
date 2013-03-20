@@ -243,7 +243,13 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         """
         if GenericDirWalkerXML.fn_callback(self, input_file_path)[0] == True:
             bunparse = ParseParliamentInfoXML(input_file_path)
-            bunparse.doc_parse()
+            if not bunparse.valid_file:
+                ## error while opening file
+                return (False, None)
+            parse_success = bunparse.doc_parse()
+            if not parse_success:
+                ## error while parsing file 
+                return (False, None)
             # check if its a parliament document
             the_parl_doc = bunparse.get_parliament_info(
                     self.input_params["main_config"].get_country_code()

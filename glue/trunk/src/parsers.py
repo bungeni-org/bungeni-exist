@@ -201,8 +201,10 @@ class ParliamentInfoParams:
         parl_map["for-parliament"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("type")
             ).getText()
+        # Since : http://code.google.com/p/bungeni-portal/source/detail?r=10757
+        #    "identifier" field was renamed to "principal_name"
         parl_map["identifier"] = parliament_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("identifier")
+            self.__cache_file_prefix__() + self._xpath_info_field("principal_name")
             ).getText()
         # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
         # bicameral legislatures 

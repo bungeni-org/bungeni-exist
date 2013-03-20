@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -35,12 +35,12 @@
             <div id="doc-downloads">
                 <ul class="ls-downloads">
                     <li>
-                        <a href="member/pdf?uri={$doc-uri}" title="get PDF document" class="pdf">
+                        <a href="{$chamber}/member/pdf?uri={$doc-uri}" title="get PDF document" class="pdf">
                             <em>PDF</em>
                         </a>
                     </li>
                     <li>
-                        <a href="member/xml?uri={$doc-uri}" title="get raw xml output" class="xml">
+                        <a href="{$chamber}/member/xml?uri={$doc-uri}" title="get raw xml output" class="xml">
                             <em>XML</em>
                         </a>
                     </li>

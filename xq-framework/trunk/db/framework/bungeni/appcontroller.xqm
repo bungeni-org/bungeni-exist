@@ -430,7 +430,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
     		    let $views := cmn:get-views-for-type("MemberOfParliament") 
                 let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO))
-                let $act-entries-tmpl :=  bun:gen-member-pdf($CONTROLLER-DOC/parliament,$memid,$views)
+                let $act-entries-tmpl :=  bun:gen-member-pdf($CONTROLLER-DOC,$memid,$views)
                 return $act-entries-tmpl                           
           
         (:Get Ontology XML:)
@@ -1643,7 +1643,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/sitting.xsl"),
+                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/sitting.xsl",$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/sitting.xml")/xh:div, $act-entries-tmpl)
     								 } 
@@ -1671,7 +1671,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     
     	else if ($CHAMBER-REL-PATH eq "/get-sittings-xml" )
     		 then 
-                let $act-entries-tmpl :=  bun:get-sittings-xml("public-view")
+                let $act-entries-tmpl :=  bun:get-sittings-xml("public-view",$PARLIAMENT)
                     return $act-entries-tmpl
                     
         (:~ MEMBER INFORMATION :)
@@ -1799,7 +1799,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     		 then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/calendar.xsl"),
+                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/calendar.xsl",$PARLIAMENT),
     		        $act-entries-repl:= document {
     									template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/calendar.xml")/xh:div, $act-entries-tmpl)
     								 } 

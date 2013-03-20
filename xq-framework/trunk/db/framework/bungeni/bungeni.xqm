@@ -118,24 +118,9 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string,
     (: stylesheet to transform :) 
     let $stylesheet := cmn:get-xslt('xsl/xhtml2fo.xsl') 
     let $server-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/" || $controller/parliament/type/text()
-    (: fop>base - this is prepended on @src of all the <img/> elements in the documents /> :)
-    let $fop-config :=  <fop version="1.1">
-                           <base>{$bun:SERVER-URL || $controller/exist-cont/text()}</base>       
-                            <font-base>/usr/share/fonts/truetype/msttcorefonts/</font-base>
-                            <renderers>
-                                <renderer mime="application/pdf">
-                                    <filterList>
-                                        <value>null</value>
-                                    </filterList>
-                                    <fonts>
-                                        <font embed-url="Arial.ttf" embedding-mode="full">
-                                            <font-triplet name="Arial" style="normal" weight="normal"/>
-                                        </font>
-                                    </fonts>
-                                </renderer>
-                            </renderers>   
-                          
-                        </fop>
+    let $base := $bun:SERVER-URL || $controller/exist-cont/text()
+    let $font-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/assets/fonts/"
+    let $fop-config :=  local:fop-config($base, $font-path)
 
     let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
     let $title := $doc/bu:document/bu:title  
@@ -162,7 +147,7 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string,
                                                                 <param name="keywords" value="Parlimentary, document"/>
                                                             </parameters>,
                                                             $fop-config)
-    let $log := util:log('debug',$pdf)            
+          
     let $output-nolang := functx:substring-before-last($docid, '/')
     let $output := concat(replace(substring-after($output-nolang, '/'),'/','-'),"-",$lang,".pdf")
     (: 
@@ -319,6 +304,37 @@ declare function bun:get-image($hash as xs:string, $name as xs:string) {
         )
 };
 
+(:
+    fop-configuration node
+:)
+declare function local:fop-config($base as xs:string, $font-path as xs:string) {
+    
+    (: fop-base - this is prepended on @src of all the <img/> elements in the documents /> :)
+    <fop version="1.1">
+        <base>{$base}</base>   
+        <font-base>{$font-path}</font-base>
+        <renderers>
+            <renderer mime="application/pdf">
+                <filterList>
+                    <value>null</value>
+                </filterList>
+                <fonts>
+                    <font embed-url="Arial.ttf" embedding-mode="full">
+                        <font-triplet name="Arial" style="normal" weight="normal"/>
+                    </font>
+                    <font embed-url="Arial_Bold.ttf" embedding-mode="full">
+                        <font-triplet name="Arial" style="normal" weight="bold"/>
+                    </font>   
+                    <font embed-url="Arial_Bold_Italic.ttf" embedding-mode="full">
+                        <font-triplet name="Arial" style="italic" weight="bold"/>
+                    </font>                                        
+                </fonts>
+            </renderer>
+        </renderers>   
+    </fop>
+
+};
+
 (:~
 :  Renders PDF output for MP profile using xslfo module
 : @param memberid
@@ -326,20 +342,44 @@ declare function bun:get-image($hash as xs:string, $name as xs:string) {
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-member-pdf($parliament as node()?,$memberid as xs:string,$views as node()) {
+declare function bun:gen-member-pdf($controller as node()?,$memberid as xs:string,$views as node()) {
 
-    (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt('fo/member-info.fo') 
-    
+    (: stylesheet to transform :) 
+    let $stylesheet := cmn:get-xslt('xsl/xhtml2fo.xsl') 
+    let $server-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/" || $controller/parliament/type/text()
+    let $base := $bun:SERVER-URL || $controller/exist-cont/text()
+    let $font-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/assets/fonts/"
+    let $fop-config :=  local:fop-config($base, $font-path)
+
+    let $lang := template:set-lang()    
+    let $orientation := local:get-orientation($lang)
+
     let $doc := <doc>        
             {
                 collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
             }
         </doc>
-        
+    let $title := $doc/bu:ontology/bu:membership/bu:title
+    
     let $transformed := transform:transform($doc,$stylesheet,())
-     
-    let $pdf := xslfo:render($transformed, "application/pdf", ())
+    
+    let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="{$lang}">
+                    <head>
+                        <title>{$title}</title>
+                    </head>
+                    <body>    
+                        {$transformed}
+                    </body>
+                  </html>  
+    
+    let $transformed := transform:transform($xhtml,$stylesheet, <parameters>
+                                                                    <param name="base-url" value="{$server-path}"/>
+                                                                    <param name="writing-mode" value="{$orientation/fo/text()}"/>
+                                                                </parameters>)
+    let $pdf := xslfo:render($transformed, "application/pdf", <parameters>
+                                                                <param name="keywords" value="Parlimentary, document"/>
+                                                            </parameters>,
+                                                            $fop-config)    
     
     let $header := 
         response:set-header("Content-Disposition" , concat("attachment; filename=",  "output.pdf"))  
@@ -1728,7 +1768,7 @@ declare function bun:get-listing-search-context(
     For purpose of re-writing the form element itself and put the correct 
     chamber-path    
 :)
-declare function local:form-rewrite($tmpl as document-node(), $chamber as xs:string) as element() {
+declare function local:form-rewrite($tmpl as document-node(), $chamber as xs:string?) as element() {
 
         <div xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" id="search-form">
         {
@@ -2468,15 +2508,17 @@ declare function bun:get-whatson(
 :)
 declare function bun:get-sitting($acl as xs:string, 
             $doc-uri as xs:string, 
-            $_tmpl as xs:string) as element()* {
+            $_tmpl as xs:string,
+            $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
 
+    let $identifier := $parliament/identifier/text()
     let $doc := 
             (:Returs a Sittings Document :)
             let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology/bu:sitting[@uri eq '",$doc-uri,"']/",
+                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
                                             bun:xqy-docitem-perms($acl)))
             
             return
@@ -2495,12 +2537,13 @@ declare function bun:strip-namespace($e as node()) {
   }
 };
 
-declare function bun:get-sittings-xml($acl as xs:string) as element()* {
+declare function bun:get-sittings-xml($acl as xs:string, $parliament as node()?) as element()* {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
+    let $identifier := $parliament/identifier/text()
     let $events := <data> {
             for $s in util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology/bu:sitting/",
+                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier eq '",$identifier,"']/",
                                             bun:xqy-generic-perms($acl),"/",
                                             "ancestor::bu:ontology"))
             return <event>

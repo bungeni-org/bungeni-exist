@@ -9,19 +9,16 @@
     <xsl:include href="merge_tags.xsl"/>
     <xsl:output indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
-    <xsl:template match="comment()">
-        <xsl:copy/>
-    </xsl:template>
-    <xsl:template match="node()|@*">
+    <xsl:template match="@*|*|processing-instruction()|comment()">
         <xsl:copy>
-            <xsl:apply-templates select="node()|@*"/>
+            <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="workflow">
         <workflow>
             <!-- 
                 !+NOTE (ao, 7th Jan 2013) Without the below <xsl:if/> the wf_merge_attrs 
-                failed on documents like group_assignment that didn't have <tags/> in the
+                failed on documents like group_assignment that didn't have  <tags/> in the
                 root node.
             -->
             <xsl:if test="./tags">
@@ -32,7 +29,7 @@
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./permActions"/>
             </xsl:call-template>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates/>
         </workflow>
     </xsl:template>
     <xsl:template match="state">
@@ -42,7 +39,7 @@
                     <xsl:with-param name="elemOriginAttr" select="./tags"/>
                 </xsl:call-template>
             </xsl:if>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates/>
         </state>
     </xsl:template>
     <xsl:template match="allow | deny">
@@ -50,7 +47,7 @@
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./roles"/>
             </xsl:call-template>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
     <xsl:template match="transition">
@@ -66,7 +63,7 @@
                     <xsl:with-param name="elemOriginAttr" select="./roles"/>
                 </xsl:call-template>
             </xsl:if>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
     <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr]"/>

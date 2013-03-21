@@ -43,10 +43,10 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li><a href="roles.html"><span>roles</span></a></li>            
             <li><a href="types.html"><span>types</span></a></li>
             <li><a href="vocabularies.html"><span>vocabularies</span></a></li>
-            <li class="hasmore"><a href="#config"><span>configuration</span></a>
+            <li class="hasmore"><a href="#config"><span>upload/save</span></a>
                 <ul class="dropdown">
                     <li><a id="show-popup" href="upload.html?t={$timestamp}">upload</a></li>
-                    <li class="last"><a class="confirm-delete" href="save.html?t={$timestamp}">save</a></li>
+                    <li class="last"><a class="confirm-delete" title="save back all the changes made" href="save.html?t={$timestamp}">save</a></li>
                 </ul>
             </li>
         </ul>
@@ -108,7 +108,7 @@ function app:get-type-parts($node as node(), $model as map(*), $active as xs:str
             let $name := request:get-parameter("doc", "none")
             let $pos := xs:integer(request:get-parameter("pos", 0))            
             
-            for $part in ('workflow', 'form', 'workspace', 'notification')
+            for $part in ('form', 'workflow', 'workspace', 'notification')
             return 
                 switch ($part)
                     case 'form' return 

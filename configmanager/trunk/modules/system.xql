@@ -61,18 +61,24 @@ declare function local:reverse-transform-configs() {
     
     let $filename := functx:substring-after-last($path, '/')
     return
-            if (contains($path,"/forms/")) then (
+            if (contains($path,"/forms/") and not(contains($path,"/.auto/"))) then (
                 $filename || " written? " || file:serialize(transform:transform(
                                                 transform:transform($doc, $step1forms,()), $step2forms,()), 
                                                 $appconfig:FS-PATH || "/forms/" || $filename,
                                                 "media-type=application/xml method=xml")         
             ) 
-            else if (contains($path,"/workflows/")) then (
+            else if (contains($path,"/workflows/") and not(contains($path,"/.auto/"))) then (
                $filename || " written? " || file:serialize(transform:transform(
                                                 $doc, $xslworkflow, ()),
                                                 $appconfig:FS-PATH || "/workflows/" || $filename,
                                                 "media-type=application/xml method=xml")
             )
+            else if (contains($path,"types.xml")) then (
+               $filename || " written? " || file:serialize(transform:transform(
+                                                $doc, $xslworkflow, ()),
+                                                $appconfig:FS-PATH || "/" || $filename,
+                                                "media-type=application/xml method=xml")
+            )            
             else
                 ()
 

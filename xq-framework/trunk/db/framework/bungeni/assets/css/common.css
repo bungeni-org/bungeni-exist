@@ -6,7 +6,7 @@ div#header {
     background-color:#434343;
     padding-top:0;
 }
-.assembly div#sub-header {
+.lower_house div#sub-header {
     clear:none;
     width:100%;
     margin:0;
@@ -14,7 +14,7 @@ div#header {
     height:27px;
     background-color:#f69e0d;
 }
-.senate div#sub-header {
+.higher_house div#sub-header {
     clear:none;
     width:100%;
     margin:0;

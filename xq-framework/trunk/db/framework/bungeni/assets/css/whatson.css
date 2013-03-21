@@ -72,7 +72,7 @@ ul.scheduling li {
 {
     display:inline;
 }
-.assembly #utility-nav li a 
+.lower_house #utility-nav li a 
 {   
    font-size:1.1em;
    text-decoration: none;
@@ -82,8 +82,8 @@ ul.scheduling li {
    text-shadow: 0px 2px 3px #dddddd;
    color:#ee990d;
 }
-.assembly #utility-nav li.selected a ,
-.assembly #utility-nav li a:hover 
+.lower_house #utility-nav li.selected a ,
+.lower_house #utility-nav li a:hover 
 {
    background-color:#dddddd;
    border-bottom-color:#ee990d;
@@ -91,7 +91,7 @@ ul.scheduling li {
    text-shadow: 0px 2px 3px #d0d0d0;
    color:#f79f0e;
 }
-.senate #utility-nav li a 
+.higher_house #utility-nav li a 
 {   
    font-size:1.1em;
    text-decoration: none;
@@ -101,8 +101,8 @@ ul.scheduling li {
    text-shadow: 0px 2px 3px #dddddd;
    color:#b22b14;
 }
-.senate #utility-nav li.selected a ,
-.senate #utility-nav li a:hover 
+.higher_house #utility-nav li.selected a ,
+.higher_house #utility-nav li a:hover 
 {
    background-color:#dddddd;
    border-bottom-color:#dd3519;

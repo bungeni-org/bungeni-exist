@@ -81,7 +81,7 @@ declare function template:process-tmpl(
         $route-map as node(),
         $route-override as node(),
         $content as node()+
-        ) {           
+        ) {   
     let $template := fn:doc(fn:concat($rel-path, "/", $template-name))
     let $div-content := $content/xh:ul[@id] | $content/xh:div[@id] | $content/xh:div[not(exists(@id))]/xh:div[@id]   
     let $inject-langs := template:merge($request-rel-path, document {$template/xh:html}, document {local:inject-langs()})
@@ -304,13 +304,11 @@ declare function local:set-meta($route as element(), $override as element(), $co
     ) 
     (: set body classes :)
     else if ($content/self::xh:body) then (
-		let $chamber-name := if($override/parliament) then $override/parliament/type else "assembly"
-		return 
-    		element { node-name($content/self::xh:body) } {
-    			attribute class { "template-portal-eXist " || $chamber-name },
-    			attribute  dir { if(cmn:get-langs-config()/languages/language[@id=template:set-lang()]/@rtl) then "rtl" else "ltr" },
-    			$content/(@*, *)
-    	   }
+    	element { node-name($content/self::xh:body) } {
+    		attribute class { "template-portal-eXist " || $override/parliament/type },
+    		attribute  dir { if(cmn:get-langs-config()/languages/language[@id=template:set-lang()]/@rtl) then "rtl" else "ltr" },
+    		$content/(@*, *)
+       }
 	) 
     (:~ 
     Set the navigation tab to the active one for the page - the condition to determine the active

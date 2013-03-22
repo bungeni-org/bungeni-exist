@@ -782,10 +782,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        List
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
-    <xsl:template match="html:ul">
-        <fo:list-block xsl:use-attribute-sets="ul">
-            <xsl:call-template name="process-common-attributes-and-children"/>
-        </fo:list-block>
+    <xsl:template match="html:ul[child::html:li]">
+        <!-- 
+            !+NOTE (ao, 22nd March 2013) added check if matched <ul/> node had <li/> children 
+           .FOP was strict and threw '"fo:list-block" is missing child elements error' 
+        -->
+        <xsl:if test="1=1">
+            <fo:list-block xsl:use-attribute-sets="ul">
+                <xsl:call-template name="process-common-attributes-and-children"/>
+            </fo:list-block>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="html:li//html:ul">
         <fo:list-block xsl:use-attribute-sets="ul-nested">

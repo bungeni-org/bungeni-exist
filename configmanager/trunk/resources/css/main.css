@@ -265,7 +265,6 @@ h1 {
 .InlineRoundBordersAlert .bfVerticalTable .xfHint, 
 .InlineRoundBordersAlert .bfVerticalTable .info {
     width:auto;
-    margin-left:10px;
 }
 
 .InlineRoundBordersAlert .xfGroupLabel {
@@ -314,11 +313,13 @@ h1 {
         padding:3px;
         background-color:#d5eef8;
     }
-
-.modesWrapper table {
+    
+.modesWrapper {
+    width:100%;
+}
+.modesWrapper > table {
     top:0;
     vertical-align:top;
-    padding-left:10px;
     width: 23%;
 }
 .modesWrapper .xfRepeatHeader {

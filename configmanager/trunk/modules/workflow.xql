@@ -56,7 +56,7 @@ declare function local:states($doctype) as node() * {
             <li>
                 <a class="editlink" href="state.html?type={$type}&amp;doc={$doctype}&amp;pos={$docpos}&amp;attr={$pos}&amp;node={data($state/@id)}">{data($state/@title)}</a>
                 &#160;
-                <a class="delete" href="/exist/restxq/workflow/{$docname}/state/{$pos}" title="Delete state"><i class="icon-cancel-circled"></i></a>
+                <a class="delete" href="/exist/restxq/workflow/{$docname}/state/{data($state/@id)}" title="Delete state"><i class="icon-cancel-circled"></i></a>
             </li>
 };
 
@@ -94,7 +94,14 @@ declare function local:render-row($doctype as xs:string, $nodename as xs:string,
                             <span>{$dest}&#160;</span>                            
     return 
     <tr>
-        <td><a class="editlink" href="transition-edit.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}&amp;nodepos={$pos}">{data($transition/@title)}</a></td>
+        <td>
+            { 
+                if(contains($transition/sources/source,$NODENAME)) then
+                    <a class="editlink" href="transition-edit.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}&amp;nodepos={$pos}">{data($transition/@title)}</a>
+                else
+                    <span>{data($transition/@title)}</span>             
+            }
+        </td>
         <td>{$sources}</td>
         <td>{$destinations}</td>
     </tr>
@@ -641,7 +648,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Workflow tags</xf:label>
                             <xf:repeat id="r-tags" nodeset="tags/tag[position() != last()]" appearance="compact">
-                                <xf:select1 ref="." appearance="minimal" incremental="true">
+                                <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
                                     <xf:hint>a Hint for this control</xf:hint>
                                     <xf:alert>invalid: empty or non-unique tags</xf:alert>
                                     <xf:hint>tags should be unique</xf:hint>   
@@ -651,8 +658,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                                     </xf:itemset>
                                 </xf:select1>
                                 &#160;
-                                <xf:trigger>
-                                    <xf:label>delete</xf:label>
+                                <xf:trigger src="resources/images/delete.png">
+                                    <xf:label>X</xf:label>
                                     <xf:action>
                                         <xf:delete at="index('r-tags')[position()]"></xf:delete>                                 
                                     </xf:action>
@@ -674,7 +681,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                             <!-- view mode -->
                             <xf:group appearance="bf:verticalTable">
                                 <xf:label>View</xf:label>    
-                                <xf:repeat id="r-viewfieldattrs" nodeset="allow[@permission eq '.View']/roles/role[position() != last()]" startindex="1" appearance="compact">
+                                <xf:repeat id="r-viewfieldattrs" nodeset="allow[@permission eq '.View']/roles/role[position() != last()]"  startindex="1" appearance="compact">
                                     <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
                                         <xf:label>grant view on roles...</xf:label>
                                         <xf:help>help for select1</xf:help>
@@ -684,8 +691,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -705,7 +712,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                             <!-- edit mode -->
                             <xf:group appearance="bf:verticalTable">
                                 <xf:label>Edit</xf:label>    
-                                <xf:repeat id="r-editwfieldattrs" nodeset="allow[@permission eq '.Edit']/roles/role[position() != last()]" startindex="1" appearance="compact">
+                                <xf:repeat id="r-editfieldattrs" nodeset="allow[@permission eq '.Edit']/roles/role[position() != last()]" appearance="compact">
                                     <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
                                         <xf:label>grant edit on roles...</xf:label>
                                         <xf:help>help for select1</xf:help>
@@ -715,8 +722,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -746,8 +753,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -777,8 +784,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-deletefieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -800,7 +807,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                     <hr/>
                     <xf:group appearance="bf:horizontalTable">
                         <xf:trigger>
-                            <xf:label>Save</xf:label>
+                            <xf:label>Update</xf:label>
                             <xf:action>
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:delete nodeset="instance()/allow[count(roles/role) = 1]" /> 
@@ -1408,27 +1415,8 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
 
-                    <xf:instance id="i-globalroles" xmlns="">
-                        <data>
-                            <roles originAttr="roles">
-                                <role>CommitteeMember</role>
-                                <role>Minister</role>
-                                <role>Owner</role>
-                                <role>Clerk.HeadClerk</role>
-                                <role>Signatory</role>
-                                <role>Anonymous</role>
-                                <role>MP</role>
-                                <role>Authenticated</role>
-                                <role>Speaker</role>
-                                <role>PoliticalGroupMember</role>
-                                <role>Admin</role>
-                                <role>Government</role>
-                                <role>Clerk.QuestionClerk</role>
-                                <role>Translator</role>
-                                <role>Clerk</role>
-                                <role>ALL</role>
-                            </roles>                        
-                        </data>
+                    <xf:instance id="i-allroles" xmlns="">
+                        {appconfig:roles()}
                     </xf:instance>
 
                     <xf:instance id="i-originrole" xmlns="">
@@ -1441,7 +1429,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                     
                     <xf:bind nodeset="instance()/transition[last()]">
                         <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
-                        <xf:bind id="b-order" nodeset="@order" type="xf:integer" constraint="(. &lt; 100) and (. &gt; 0)" />
+                        <!--xf:bind id="b-order" nodeset="@order" type="xf:integer" constraint="(. &lt; 100) and (. &gt; 0)" /-->
                         <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
                         <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
                     </xf:bind>
@@ -1501,7 +1489,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                 <div style="width:100%;margin-top:10px;">               
                     <xf:group ref="instance()/transition[last()]" appearance="bf:horizontalTable">                    
                         <xf:label><h1>transition | <xf:output value="@title" class="transition-inline"/></h1></xf:label>
-                        <xf:label><h3>{$NODENAME} &#8594; </h3></xf:label>
+                        <xf:label><h3>{$NODENAME} &#8594; <xf:output value="destinations/destination" class="transition-inline"/></h3></xf:label>
                         <xf:group appearance="bf:verticalTable" style="width:70%">
                             <xf:label><h3>properties</h3></xf:label>
                             <xf:input id="transition-id" bind="b-title" incremental="true">
@@ -1509,14 +1497,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                                 <xf:hint>type transition title</xf:hint>
                                 <xf:help>... and no spaces in between words</xf:help>
                                 <xf:alert>enter more than 3 characters...</xf:alert>
-                            </xf:input> 
-                            <xf:input id="transition-order" ref="@order" incremental="true">
-                                <xf:label>Order</xf:label>
-                                <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
-                                <xf:help>Enter an integer between 1 and 100 </xf:help>
-                                <xf:hint>order of this descriptor</xf:hint>
-                                <xf:message ev:event="xforms-readonly" level="ephemeral">NOTE: That number is taken already.</xf:message>
-                            </xf:input>                            
+                            </xf:input>                           
                             <xf:select1 ref="destinations/destination" appearance="minimal" incremental="true">
                                 <xf:label>Destination</xf:label>
                                 <xf:hint>select a destination</xf:hint>
@@ -1575,13 +1556,13 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                                     <xf:label>select a role</xf:label>
                                     <xf:help>help for roles</xf:help>
                                     <xf:alert>invalid: cannot have duplicates</xf:alert>
-                                    <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
+                                    <xf:itemset nodeset="instance('i-allroles')/role">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
                                     </xf:itemset>
                                 </xf:select1>
-                                <xf:trigger>
-                                    <xf:label>delete</xf:label>
+                                <xf:trigger src="resources/images/delete.png">
+                                    <xf:label>X</xf:label>
                                     <xf:action>
                                         <xf:delete at="index('r-transitionattrs')[position()]"></xf:delete>
                                     </xf:action>
@@ -1599,7 +1580,6 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                         </xf:group>                          
                     
                     </xf:group>
-                     
                     <hr/>
                     <xf:trigger>
                         <xf:label>add transition</xf:label>
@@ -1647,28 +1627,9 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
 
-                    <xf:instance id="i-globalroles" xmlns="">
-                        <data>
-                            <roles originAttr="roles">
-                                <role>CommitteeMember</role>
-                                <role>Minister</role>
-                                <role>Owner</role>
-                                <role>Clerk.HeadClerk</role>
-                                <role>Signatory</role>
-                                <role>Anonymous</role>
-                                <role>MP</role>
-                                <role>Authenticated</role>
-                                <role>Speaker</role>
-                                <role>PoliticalGroupMember</role>
-                                <role>Admin</role>
-                                <role>Government</role>
-                                <role>Clerk.QuestionClerk</role>
-                                <role>Translator</role>
-                                <role>Clerk</role>
-                                <role>ALL</role>
-                            </roles>                        
-                        </data>
-                    </xf:instance>                   
+                    <xf:instance id="i-allroles" xmlns="">
+                        {appconfig:roles()}
+                    </xf:instance>                  
                     
                     <xf:bind nodeset="instance()/transition[{$NODEPOS}]">
                         <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
@@ -1773,7 +1734,8 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                 <div style="width:100%;margin-top:10px;">               
                     <xf:group ref="instance()/transition[{$NODEPOS}]" appearance="bf:horizontalTable">                    
                         <xf:label><h1>transition | <xf:output value="@title" class="transition-inline"/></h1></xf:label>
-                        <xf:label>{local:arrow-direction($DOCNAME,$NODEPOS,$NODENAME)}</xf:label>
+                        <xf:label><h3>{$NODENAME} &#8594; <xf:output value="destinations/destination" class="transition-inline"/></h3>
+                        </xf:label>
                         <xf:group appearance="bf:verticalTable" style="width:70%">
                             <xf:label><h3>properties</h3></xf:label>
                             <xf:input id="transition-id" bind="b-title" incremental="true">
@@ -1849,13 +1811,13 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                     <xf:label>select a role</xf:label>
                                     <xf:help>help for roles</xf:help>
                                     <xf:alert>invalid: cannot have duplicates</xf:alert>
-                                    <xf:itemset nodeset="instance('i-globalroles')/roles/role">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
+                                    <xf:itemset nodeset="instance('i-allroles')/role">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
                                     </xf:itemset>
                                 </xf:select1>
-                                <xf:trigger>
-                                    <xf:label>delete</xf:label>
+                                <xf:trigger src="resources/images/delete.png">
+                                    <xf:label>X</xf:label>
                                     <xf:action>
                                         <xf:delete at="index('r-transitionattrs')[position()]"></xf:delete>
                                     </xf:action>
@@ -1887,14 +1849,14 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                 <xf:case id="delete">
                                    <!-- don't display the delete trigger unless we have at lease one person -->
                                    <xf:trigger ref="instance()/transition[{$NODEPOS}]">
-                                      <xf:label>delete transition</xf:label>
+                                      <xf:label>remove transition</xf:label>
                                       <xf:action ev:event="DOMActivate">
                                          <xf:toggle case="confirm" />
                                       </xf:action>
                                    </xf:trigger>
                                 </xf:case>
                                 <xf:case id="confirm">
-                                   <h2>Are you sure you want to delete this transition?</h2>
+                                   <h2>Are you sure you want to remove this transition?</h2>
                                    <!--div id="content-for-deletion">
                                       <p>transition name: <xf:output ref="instance()/transition[{$NODEPOS}]/@title" /></p>
                                    </div-->

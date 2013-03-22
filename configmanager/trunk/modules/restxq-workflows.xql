@@ -36,15 +36,14 @@ function cmrest:workflows() {
  :)
 declare 
     %rest:DELETE
-    %rest:path("/workflow/{$doc}/state/{$pos}")
-function cmrest:delete-state($doc as xs:string,$pos as xs:integer) {
+    %rest:path("/workflow/{$doc}/state/{$id}")
+function cmrest:delete-state($doc as xs:string,$id as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
-    let $state-name := data($doc/state[$pos]/@id)
     return (
-        update delete $doc/state[$pos],
-        update delete $doc/facet[starts-with(@name,$state-name)],
+        update delete $doc/state[@id eq $id],
+        update delete $doc/facet[starts-with(@name,$id)],
         $doc
     )
 };

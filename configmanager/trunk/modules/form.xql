@@ -362,6 +362,8 @@ function form:field-edit($node as node(), $model as map(*)) {
  
                     <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/.auto/_rendertypes.xml"/>
 
+                    <xf:instance id="i-vocabularies" src="{$form:REST-BC-LIVE}/forms/.auto/_vocabularies.xml"/>
+
                     <xf:bind nodeset=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
@@ -466,8 +468,17 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:hint>Unique field name</xf:hint>
                                     <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
                                     <xf:help>help with name of field</xf:help>
-                                </xf:input> 
-                                
+                                </xf:input>  
+                                <xf:select1 id="input-vocab-field" ref="@vocabulary" appearance="minimal" incremental="true">
+                                    <xf:label>vocabulary</xf:label>
+                                    <xf:hint>select a vocabulary for this field</xf:hint>
+                                    <xf:help>help for vocabularies</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-vocabularies')/vocabulary">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>
                                 <xf:input id="input-req-field" ref="@required">
                                     <xf:label>required</xf:label>
                                     <xf:hint>Enabling this means it is a required field</xf:hint>
@@ -522,8 +533,8 @@ function form:field-edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -556,8 +567,8 @@ function form:field-edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -590,8 +601,8 @@ function form:field-edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -624,8 +635,8 @@ function form:field-edit($node as node(), $model as map(*)) {
                                             <xf:value ref="@name"></xf:value>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:trigger>
-                                        <xf:label>delete</xf:label>
+                                    <xf:trigger src="resources/images/delete.png">
+                                        <xf:label>X</xf:label>
                                         <xf:action>
                                             <xf:delete at="index('r-listingfieldattrs')[position()]"></xf:delete>
                                         </xf:action>
@@ -747,6 +758,8 @@ function form:field-add($node as node(), $model as map(*)) {
                     <xf:instance id="i-allroles" xmlns="">
                         {appconfig:roles()}
                     </xf:instance>
+                    
+                    <xf:instance id="i-vocabularies" src="{$form:REST-BC-LIVE}/forms/.auto/_vocabularies.xml"/>                    
 
                     <xf:instance id="i-originrole" xmlns="">
                         <data>
@@ -852,7 +865,17 @@ function form:field-add($node as node(), $model as map(*)) {
                                     <xf:hint>Enter be the field title</xf:hint>
                                     <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
                                     <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
-                                </xf:input>                                 
+                                </xf:input>    
+                                <xf:select1 id="input-vocab-field" ref="@vocabulary" appearance="minimal" incremental="true">
+                                    <xf:label>vocabulary</xf:label>
+                                    <xf:hint>select a vocabulary for this field</xf:hint>
+                                    <xf:help>help for vocabularies</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-vocabularies')/vocabulary">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>                                
                                 <xf:input id="input-req-field" ref="@required">
                                     <xf:label>required</xf:label>
                                     <xf:hint>Enabling this means it is a required field</xf:hint>

@@ -13,6 +13,14 @@
     </xsl:template>
     <xsl:template match="field" priority="3">
         <xsl:copy>
+            <!-- 
+                !+NOTE (ao, 22nd March 2013) ensure all fields have
+                have a @vocabulary attribute by putting blank one on those 
+                that don't have.
+            -->
+            <xsl:if test="not(field/@vocabulary)">
+                <xsl:attribute name="vocabulary"/>
+            </xsl:if>
             <xsl:apply-templates select="@*"/>
             <modes>
                 <xsl:apply-templates select="node()"/>

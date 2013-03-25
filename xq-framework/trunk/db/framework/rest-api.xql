@@ -133,7 +133,7 @@ declare
                 (: strip classified nodes :)
                 let $ontology_strip := functx:remove-elements-deep($ontology_strip_deep,
                                     ('bu:bungeni','bu:legislature','bu:versions', 'bu:permissions', 
-                                    'bu:audits', 'bu:attachments'))
+                                    'bu:audits', 'bu:attachments', 'bu:signitories','bu:changes', 'bu:workflowEvents'))
                                                       
                 return 
                     (   <total>{count($ontology_rs)}</total>,

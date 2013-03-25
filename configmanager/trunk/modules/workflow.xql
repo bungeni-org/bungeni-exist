@@ -434,11 +434,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
                     
-                    <xf:instance id="i-boolean" src="{$workflow:REST-CXT-MODELTMPL}/boolean.xml"/>                    
-                    
-                    <xf:instance id="i-alltags" src="{$workflow:REST-CXT-MODELTMPL}/_tags.xml"/>
-                    
-                    <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>                    
+                    <xf:instance id="i-boolean" src="{$workflow:REST-CXT-MODELTMPL}/boolean.xml"/>                 
                     
                     <xf:instance id="i-allroles" xmlns="">
                         {appconfig:roles()}
@@ -462,9 +458,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="feature/@enabled" type="xf:boolean" />
-                        
-                        <xf:bind nodeset="tags/tag" type="xf:string" constraint="count(instance()/tags/tag) eq count(distinct-values(instance()/tags/tag))" />
-                        
+                     
                         <xf:bind id="view" nodeset="allow[@permission eq '.View']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.View']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
                         <xf:bind id="view" nodeset="allow[@permission eq '.Edit']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Edit']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
                         <xf:bind id="view" nodeset="allow[@permission eq '.Add']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Add']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
@@ -549,8 +543,6 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:action if="'{$init}' eq 'true'">
                             <xf:setvalue ref="instance()/@name" value="'{$docname}'"/>
                         </xf:action>
-                        <!-- remove the tags node if there is jus the template tag we insert -->
-                        <xf:delete nodeset="instance()/tags[string-length(tag/text()) &lt; 1]" />   
                         
                         <!-- drop and add workflow features -->
                         <xf:message level="ephemeral">drop all &lt;xmp&gt;&lt;feature&gt;&lt;/xmp&gt; nodes on workflow</xf:message>
@@ -573,12 +565,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:action if="empty(instance()/allow[@permission eq '.Delete'])">
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;allow permission=".Delete"&gt;&lt;/xmp&gt; node on workflow</xf:message>
                             <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-grants')/allow[@permission eq '.Delete']" />
-                        </xf:action>                        
-                        
-                        <xf:action if="empty(instance()/tags)">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;tags&gt;&lt;/xmp&gt; node on workflow</xf:message>
-                            <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-tags')/tags" />
-                        </xf:action>                             
+                        </xf:action>                           
                     </xf:action>
 
             </xf:model>
@@ -644,33 +631,6 @@ function workflow:edit($node as node(), $model as map(*)) {
                                         </xf:input>
                                 }                                
                             </xf:group>
-                        </xf:group>
-                        <xf:group appearance="bf:verticalTable">
-                            <xf:label>Workflow tags</xf:label>
-                            <xf:repeat id="r-tags" nodeset="tags/tag[position() != last()]" appearance="compact">
-                                <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                    <xf:hint>a Hint for this control</xf:hint>
-                                    <xf:alert>invalid: empty or non-unique tags</xf:alert>
-                                    <xf:hint>tags should be unique</xf:hint>   
-                                    <xf:itemset nodeset="instance('i-alltags')/tag">
-                                        <xf:label ref="."></xf:label>                                       
-                                        <xf:value ref="."></xf:value>
-                                    </xf:itemset>
-                                </xf:select1>
-                                &#160;
-                                <xf:trigger src="resources/images/delete.png">
-                                    <xf:label>X</xf:label>
-                                    <xf:action>
-                                        <xf:delete at="index('r-tags')[position()]"></xf:delete>                                 
-                                    </xf:action>
-                                </xf:trigger>                                  
-                            </xf:repeat>                                       
-                            <xf:trigger>
-                                <xf:label>add tag</xf:label>
-                                <xf:action>
-                                    <xf:insert nodeset="./tags/tag"></xf:insert>
-                                </xf:action>
-                            </xf:trigger>
                         </xf:group>  
                     </xf:group>                    
                     <hr/>
@@ -852,7 +812,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <ul class="clearfix">
                             {local:states($docname)}
                         </ul>
-                        <a class="button-link" href="state-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;attr={($laststate+1)}">add state</a>                 
+                        <a class="button-link" href="state-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;attr=0">add state</a>                 
                     </div> 
                  </div>
                 <div id="facets" class="tab_content">
@@ -873,9 +833,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
     let $DOCNAME := xs:string(request:get-parameter("doc",""))
     let $DOCPOS := xs:integer(request:get-parameter("pos",0))
     let $NODE := xs:string(request:get-parameter("node",""))
-    let $ATTR := xs:integer(request:get-parameter("attr",0))    
+    let $ATTR-ID := xs:integer(request:get-parameter("attr",0)) 
     
     let $WF-DOC := $appconfig:CONFIGS-FOLDER || "/workflows/" || $DOCNAME || ".xml"
+    let $ATTR := if($ATTR-ID != 0) then $ATTR-ID else count(doc($WF-DOC)/workflow/state)    
     let $RETRIEVED-NAME := data(doc($WF-DOC)/workflow/state[$ATTR]/@id)    
     
     let $NODENAME := if($NODE eq 'new') then $RETRIEVED-NAME else $NODE
@@ -887,13 +848,15 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                     <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
 
                     <xf:instance id="i-alltags" src="{$workflow:REST-CXT-MODELTMPL}/_tags.xml"/>
+                    
+                    <xf:instance id="i-actions" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_actions.xml"/>
 
-                    <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>
-
+                    <xf:instance id="i-actions-node" src="{$workflow:REST-CXT-MODELTMPL}/actions.xml"/>
+                    
                     <xf:bind nodeset="./state[{$ATTR}]">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
-                        <xf:bind nodeset="tags/tag" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/tags/tag) eq count(distinct-values(instance()/state[{$ATTR}]/tags/tag))" />
+                        <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />                  
                     </xf:bind>
                     <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />
@@ -976,16 +939,14 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet[position() >= {$no-existing-facets}]" />
                             else
                                 ()
-                        }                    
-                        <!-- remove the tags node if there is jus the template tag we insert -->
-                        <!--xf:delete nodeset="instance()/state[{$ATTR}]/tags[string-length(tag/text()) &lt; 1]" /-->                    
-                        <xf:action if="not(empty(instance()/state[{$ATTR}]/tags))">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;tag&gt;&lt;/xmp&gt; node</xf:message>
-                            <xf:insert nodeset="instance()/state[{$ATTR}]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" /> 
+                        }               
+                        <xf:action if="instance()/state[{$ATTR}]/actions/action[last()] ne ''">
+                            <xf:message level="ephemeral">inserted an &lt;xmp&gt;&lt;action&gt;&lt;/xmp&gt; node</xf:message>
+                            <xf:insert nodeset="instance()/state[{$ATTR}]/actions/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions/action" /> 
                         </xf:action>                       
-                        <xf:action if="empty(instance()/state[{$ATTR}]/tags)">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;tags&gt;&lt;/xmp&gt; node</xf:message>
-                            <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-tags')/tags" />
+                        <xf:action if="empty(instance()/state[{$ATTR}]/actions)">
+                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;actions&gt;&lt;/xmp&gt; node</xf:message>
+                            <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions" />
                         </xf:action> 
                         {
                             (: if <facet/>s don't exist, add them :)
@@ -1007,9 +968,12 @@ function workflow:state-edit($node as node(), $model as map(*)) {
             
             </div>    	
             <div style="width: 100%; height: 100%;">
-                <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}#tabstates">
-                    <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
-                </a>
+                <div class="commit-holder">
+                    <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}#tabstates">
+                        <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
+                    </a>
+                    <a class="commit" href="system/commit/workflow/{$DOCNAME}">commit workflow</a>
+                </div>                  
                 <br/>              
                 <h1>state | <xf:output value="./state[{$ATTR}]/@title" class="transition-inline"/></h1>
                 <br/>                
@@ -1041,36 +1005,36 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 <xf:label ref="."></xf:label>
                                                 <xf:value ref="."></xf:value>
                                             </xf:itemset>
-                                        </xf:select1>   
+                                        </xf:select1>                                          
                                         <xf:input id="state-version" ref="@version">
                                             <xf:label>Version</xf:label>
                                             <xf:hint>support versioning</xf:hint>
                                         </xf:input>   
                                     </xf:group>
                                     <xf:group appearance="bf:verticalTable">
-                                        <xf:label>tags</xf:label>
-                                        <xf:repeat id="r-statetags" nodeset="./tags/tag[position() != last()]" appearance="compact">
+                                        <xf:label>actions</xf:label>
+                                        <xf:repeat id="r-stateactions" nodeset="./actions/action[position() != last()]" appearance="compact">
                                             <xf:select1 ref="." appearance="minimal" incremental="true">
                                                 <xf:hint>a Hint for this control</xf:hint>
                                                 <xf:alert>invalid: emtpy or non-unique tags</xf:alert>
                                                 <xf:hint>tags should be unique</xf:hint>   
-                                                <xf:itemset nodeset="instance('i-alltags')/tag">
+                                                <xf:itemset nodeset="instance('i-actions')/action">
                                                     <xf:label ref="."></xf:label>                                       
-                                                    <xf:value ref="."></xf:value>
+                                                    <xf:value ref="@name"></xf:value>
                                                 </xf:itemset>
                                             </xf:select1>
                                             &#160;
-                                            <xf:trigger>
-                                                <xf:label>delete</xf:label>
+                                            <xf:trigger src="resources/images/delete.png">
+                                                <xf:label>X</xf:label>
                                                 <xf:action>
-                                                    <xf:delete at="index('r-statetags')[position()]"></xf:delete>                                 
+                                                    <xf:delete at="index('r-stateactions')[position()]"></xf:delete>                                 
                                                 </xf:action>
                                             </xf:trigger>                                  
                                         </xf:repeat>                                       
                                         <xf:trigger>
-                                            <xf:label>add tag</xf:label>
+                                            <xf:label>add action</xf:label>
                                             <xf:action>
-                                                <xf:insert ev:event="DOMActivate" nodeset="./tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag"/>
+                                                <xf:insert ev:event="DOMActivate" nodeset="./actions/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions/action"/>
                                             </xf:action>
                                         </xf:trigger>
                                     </xf:group>
@@ -1164,9 +1128,9 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 <xf:label>Save</xf:label>
                                                 <xf:action>
                                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/tags/tag[last() > 1]" at="last()" />
-                                                    <!-- remove the tags node if there is jus the template tag we insert -->
-                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/tags[string-length(tag/text()) &lt; 2]" />
+                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/actions/action[last() > 1]" at="last()" />
+                                                    <!-- remove the actions node if there is jus the template action we insert -->
+                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/actions[string-length(action/text()) &lt; 2]" />
                                                     <!--xf:delete nodeset="instance()/state[{$ATTR}]/facet[not(contains(instance()/facet/@name,@ref))]" /-->
                                                     {
                                                         let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
@@ -1179,13 +1143,12 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                             <xf:setvalue ref="instance()/state[{$ATTR}]/facet[{$pos}]/@ref" value="concat('.',instance()/facet[{$pos}]/@name)"/>
                                                     }                                                
                                                     <xf:send submission="s-add"/>
-                                                    <xf:insert nodeset="instance()/state[{$ATTR}]/tags/child::*" at="last()" position="after" origin="instance('i-tags')/tags/tag" />
+                                                    <xf:insert nodeset="instance()/state[{$ATTR}]/actions/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions/action" />
                                                 </xf:action>                                
-                                            </xf:trigger>                                          
+                                            </xf:trigger>
                                         </xf:group>                                 
                                     </div>    
-                                </div>                                
-                                
+                                </div>                                                                
                             </div>                       
                         </div>
                     </div>
@@ -1211,24 +1174,16 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         else
                             <xf:instance id="i-workflow" src="{$workflow:REST-CXT-MODELTMPL}/workflow.xml"/>
                     }
+                    
+                    <xf:instance id="i-actions" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_actions.xml"/>
 
-                    <xf:instance id="i-alltags" src="{$workflow:REST-CXT-MODELTMPL}/_tags.xml"/>
+                    <xf:instance id="i-actions-node" src="{$workflow:REST-CXT-MODELTMPL}/actions.xml"/>
 
-                    <xf:instance id="i-tags" src="{$workflow:REST-CXT-MODELTMPL}/tags.xml"/>
-
-                    <xf:instance id="i-state" xmlns="">
-                        <data>
-                            <state permissions_from_state="" id="" title="" version="false">
-                                <tags originAttr="tags">
-                                    <tag/>
-                                </tags>
-                            </state>                        
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="i-state" src="{$workflow:REST-CXT-MODELTMPL}/state.xml"/>
 
                     <xf:bind nodeset="instance()/state[last()]">
                         <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
-                        <xf:bind nodeset="tags/tag" type="xf:string" constraint="count(instance()/state[last()]/tags/tag) eq count(distinct-values(instance()/state[last()]/tags/tag))" />
+                        <xf:bind nodeset="actions/action" type="xf:string" constraint="count(instance()/state[last()]/actions/action) eq count(distinct-values(instance()/state[last()]/actions/action))" />
                         <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                     </xf:bind>
                     
@@ -1273,7 +1228,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">Workflow state added successfully. Hold on, loading permissions...</xf:message>
                             <script type="text/javascript">
-                                document.location.href = 'state.html?type={$TYPE}&#38;amp;doc={$DOCNAME}&#38;amp;pos={$DOCPOS}&#38;amp;attr={($ATTR)}&#38;amp;node=new';
+                                document.location.href = 'state.html?type={$TYPE}&#38;amp;doc={$DOCNAME}&#38;amp;pos={$DOCPOS}&#38;amp;attr=0&#38;amp;node=new';
                             </script>                             
                         </xf:action>
     
@@ -1330,36 +1285,36 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                                 <xf:label ref="."></xf:label>
                                                 <xf:value ref="."></xf:value>
                                             </xf:itemset>
-                                        </xf:select1>   
+                                        </xf:select1>                                           
                                         <xf:input id="state-version" ref="@version">
                                             <xf:label>Version</xf:label>
                                             <xf:hint>support versioning</xf:hint>
                                         </xf:input>   
                                     </xf:group>
                                     <xf:group appearance="bf:verticalTable">
-                                        <xf:repeat id="r-statetags" nodeset="./tags/tag[position() != last()]" appearance="compact">
+                                        <xf:repeat id="r-stateactions" nodeset="./actions/action[position() != last()]" appearance="compact">
                                             <xf:select1 ref="." appearance="minimal" incremental="true">
                                                 <xf:label>tags</xf:label>
                                                 <xf:hint>a Hint for this control</xf:hint>
                                                 <xf:alert>invalid: empty or non-unique tags</xf:alert>
                                                 <xf:hint>tags should be unique</xf:hint>   
-                                                <xf:itemset nodeset="instance('i-alltags')/tag">
+                                                <xf:itemset nodeset="instance('i-actions')/action">
                                                     <xf:label ref="."></xf:label>                                       
-                                                    <xf:value ref="."></xf:value>
+                                                    <xf:value ref="@name"></xf:value>
                                                 </xf:itemset>
                                             </xf:select1>
                                             &#160;
-                                            <xf:trigger>
-                                                <xf:label>delete</xf:label>
+                                            <xf:trigger src="resources/images/delete.png">
+                                                <xf:label>X</xf:label>
                                                 <xf:action>
-                                                    <xf:delete at="index('r-statetags')[position()]"></xf:delete>                                 
+                                                    <xf:delete at="index('r-stateactions')[position()]"></xf:delete>                                 
                                                 </xf:action>
                                             </xf:trigger>                                  
                                         </xf:repeat>                                       
                                         <xf:trigger>
-                                            <xf:label>add tag</xf:label>
+                                            <xf:label>add action</xf:label>
                                             <xf:action>
-                                                <xf:insert nodeset="./tags/tag"></xf:insert>
+                                                <xf:insert nodeset="./actions/action"></xf:insert>
                                             </xf:action>
                                         </xf:trigger>
                                     </xf:group>
@@ -1369,8 +1324,6 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                     <xf:label>Save</xf:label>
                                     <xf:action>
                                         <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                        <!-- removes any tag node thats empty -->
-                                        <xf:delete nodeset="instance()/state[last()]/tags[count(tag) gt 1]/tag[last()]" />
                                         <xf:send submission="s-add"/>
                                     </xf:action>                                
                                 </xf:trigger>   
@@ -1399,37 +1352,17 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-conditions" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_conditions.xml"/>                     
 
-                    <xf:instance id='i-transition' xmlns="">
-                        <data>
-                           <transition title="" condition="" require_confirmation="false" trigger="manual" order="0"  note="Add a note">
-                              <sources originAttr="source">
-                                 <source/>
-                              </sources>
-                              <destinations originAttr="destination">
-                                 <destination/>
-                              </destinations>
-                              <roles originAttr="roles">
-                                 <role/>
-                              </roles>
-                           </transition>                        
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="i-transition" src="{$workflow:REST-CXT-MODELTMPL}/transition.xml"/> 
 
                     <xf:instance id="i-allroles" xmlns="">
                         {appconfig:roles()}
                     </xf:instance>
 
-                    <xf:instance id="i-originrole" xmlns="">
-                        <data>
-                            <roles>
-                               <role>ALL</role>                               
-                            </roles>
-                        </data>
-                    </xf:instance>                     
+                    <xf:instance id="i-originrole" src="{$workflow:REST-CXT-MODELTMPL}/roles.xml"/>                    
                     
                     <xf:bind nodeset="instance()/transition[last()]">
                         <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
-                        <!--xf:bind id="b-order" nodeset="@order" type="xf:integer" constraint="(. &lt; 100) and (. &gt; 0)" /-->
+                        <!--xf:bind nodeset="roles/role" type="xf:string" required="true()" constraint="count(instance()/transition[last()]/roles/role) eq count(distinct-values(instance()/transition[last()]/roles/role))" /-->
                         <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
                         <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
                     </xf:bind>
@@ -1715,14 +1648,14 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                     </xf:submission>                    
 
                     <xf:action ev:event="xforms-ready" >    
-                        <xf:action if="not(empty(instance()/transition[{$NODEPOS}]/roles))">
+                        <xf:action if="empty(instance()/transition[{$NODEPOS}]/roles)">
                             <xf:message level="ephemeral">appended a template &lt;role/&gt; node</xf:message>
-                            <xf:insert nodeset="instance()/transition[{$ATTR}]/roles/child::*" at="last()" position="after" origin="instance('i-originrole')/roles/role" /> 
+                            <xf:insert nodeset="instance()/transition[{$NODEPOS}]/roles/child::*" at="last()" position="after" origin="instance('i-originrole')/roles/role" /> 
                         </xf:action>                       
-                        <xf:action if="empty(instance()/transition[{$NODEPOS}]/tags)">
+                        <!--xf:action if="empty(instance()/transition[{$NODEPOS}]/tags)">
                             <xf:message level="ephemeral">added &lt;roles/&gt; node</xf:message>
                             <xf:insert nodeset="instance()/transition[{$NODEPOS}]/child::*" at="last()" position="after" origin="instance('i-originrole')/roles" />
-                        </xf:action>                      
+                        </xf:action-->                      
                     </xf:action>
                 </xf:model>
             </div>
@@ -1743,15 +1676,9 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                 <xf:hint>transition name</xf:hint>
                                 <xf:help>... and no spaces in between words</xf:help>
                                 <xf:alert>enter more than 3 characters...</xf:alert>
-                            </xf:input> 
-                            <xf:range ref="@order" start="1" step="1" end="100" incremental="true">
-                                <xf:label>Order</xf:label>
-                                <xf:hint>ordering used on display</xf:hint>
-                                <xf:alert>Invalid number. Valid range 1 &lt;&gt; 100</xf:alert>
-                                <xf:help>Enter an integer between 1 and 100 </xf:help>      
-                            </xf:range>                        
+                            </xf:input>                       
                             <xf:output bind="b-order">
-                                <xf:label/>                                
+                                <xf:label>Order</xf:label>                                
                             </xf:output>     
                             <xf:select1 ref="destinations/destination" appearance="minimal" incremental="true">
                                 <xf:label>Destination</xf:label>

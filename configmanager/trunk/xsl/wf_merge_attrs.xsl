@@ -42,6 +42,11 @@
                     <xsl:with-param name="elemOriginAttr" select="./tags"/>
                 </xsl:call-template>
             </xsl:if>
+            <xsl:if test="./actions">
+                <xsl:call-template name="merge_tags">
+                    <xsl:with-param name="elemOriginAttr" select="./actions" />
+                </xsl:call-template>
+            </xsl:if>
             <xsl:apply-templates/>
         </state>
     </xsl:template>
@@ -71,5 +76,5 @@
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr]"/>
+    <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr] | actions[@originAttr]"/>
 </xsl:stylesheet>

@@ -3,8 +3,9 @@
     <property name="project.version" value="0.1.4"/>
     <property name="project.app" value="configmanager"/>
     <property name="build.dir" value="build"/>
+    <property name="working.dir" value="working" />
     <target name="xar">
         <mkdir dir="${build.dir}"/>
-        <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="${build.dir}/*"/>
+        <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="${build.dir}/*;${working.dir}"/>
     </target>
 </project>

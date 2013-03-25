@@ -44,7 +44,7 @@
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->
-    <xsl:template mode="preserve" match="@tags | @roles | @source | @destination | @permission_actions"/>
+    <xsl:template mode="preserve" match="@tags | @roles | @source | @destination | @permission_actions | @actions"/>
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
     </xsl:template>
@@ -63,6 +63,7 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+    
     <xsl:template match="transition">
         <xsl:copy>
             <xsl:if test="not(@order)">
@@ -75,6 +76,7 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+    
     <xsl:template match="@source">
         <xsl:element name="sources">
             <xsl:attribute name="originAttr">source</xsl:attribute>
@@ -85,6 +87,7 @@
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
+    
     <xsl:template match="@destination">
         <xsl:element name="destinations">
             <xsl:attribute name="originAttr">destination</xsl:attribute>
@@ -95,6 +98,18 @@
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
+    
+    <xsl:template match="@actions">
+        <xsl:element name="actions">
+            <xsl:attribute name="originAttr">actions</xsl:attribute>
+            <xsl:for-each select="tokenize(., '\s+')">
+                <action>
+                    <xsl:value-of select="."/>
+                </action>
+            </xsl:for-each>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template match="@permission_actions">
         <xsl:element name="permActions">
             <xsl:attribute name="originAttr">permission_actions</xsl:attribute>

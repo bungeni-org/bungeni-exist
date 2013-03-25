@@ -46,8 +46,8 @@
         </state>
     </xsl:template>
     <xsl:template match="allow | deny">
-        <xsl:call-template name="copy-attrs" />
         <xsl:element name="{name()}">
+            <xsl:call-template name="copy-attrs" />
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./roles"/>
             </xsl:call-template>

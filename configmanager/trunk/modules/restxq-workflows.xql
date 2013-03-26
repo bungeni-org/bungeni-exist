@@ -6,6 +6,7 @@ xquery version "3.0";
 module namespace cmrest = "http://exist-db.org/apps/configmanager/rest";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
+import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
 declare namespace rest="http://exquery.org/ns/restxq";
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
@@ -64,4 +65,54 @@ function cmrest:delete-facet($doc as xs:string,$pos as xs:integer) {
         update delete $doc/state/facet[@ref eq "." || $facet-name],
         $doc
     )
+};
+
+(:~
+ : Retrieve a workflow identified by a name.
+ :)
+declare 
+    %rest:GET
+    %rest:path("/workflow/{$name}")
+function cmrest:get-workflow($name as xs:string) {
+    collection($appconfig:FORM-FOLDER)/descriptor[@name = $name]
+};
+
+(:~
+ : Delete a workflow identified by its name.
+ :)
+declare
+    %rest:DELETE
+    %rest:path("/workflow/{$name}")
+function cmrest:delete-workflow($name as xs:string) {
+    xmldb:remove($appconfig:WF-FOLDER, $name || ".xml"),
+    cmrest:workflows()
+};
+
+(:~
+ : COMMIT a workflow to the filesystem. Every workflow is committed in company of types.xml
+ :)
+declare 
+    (: 
+        !+NOTE (ao, 26th Mar 2013) Using GET instead of POST/PUT because both seem unstable on the
+        current eXist-builds and unpredictable. Once tested and confirmed to be fixed, this should 
+        be updated appropriately with the corresponding JScript files that makes this rest requests,
+        currently in custom.js
+    :)
+    %rest:GET
+    %rest:path("/workflow/commit/{$name}")
+function cmrest:commit-workflow($name as xs:string) {
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $name || ".xml")/workflow
+    let $types := doc($appconfig:TYPES-XML)/types
+    (: workflow XSLT:)
+    let $xslworkflow := appconfig:get-xslt("wf_merge_attrs.xsl")   
+    
+    let $null := file:serialize($types,$appconfig:FS-PATH || "/types.xml" ,
+                                                "media-type=application/xml method=xml")
+    let $status := file:serialize(transform:transform($doc, $xslworkflow, ()),
+                                                $appconfig:FS-PATH || "/workflows/" || $name || ".xml",
+                                                "media-type=application/xml method=xml")
+    return 
+        $status
 };

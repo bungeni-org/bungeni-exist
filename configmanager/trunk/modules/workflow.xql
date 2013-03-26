@@ -572,6 +572,13 @@ function workflow:edit($node as node(), $model as map(*)) {
             
             </div>
             
+            <div class="commit-holder">
+                <a href="type.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}">
+                    <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
+                </a>
+                <a class="commit" href="/exist/restxq/workflow/commit/{$docname}" title="save this file back to the filesystem">commit workflow</a>
+            </div>   
+                
             <div id="tabs_container">
                 <ul id="tabs">
                     <li id="tabdetails" class="active"><a href="#details">Properties</a></li>
@@ -856,8 +863,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                     <xf:bind nodeset="./state[{$ATTR}]">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
-                        <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />
-                        <xf:bind nodeset="@version" type="xf:boolean" required="true()" />                  
+                        <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />                
                     </xf:bind>
                     <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />
                     <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />                  
@@ -972,10 +978,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                     <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}#tabstates">
                         <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
                     </a>
-                    <a class="commit" href="system/commit/workflow/{$DOCNAME}">commit workflow</a>
+                    <a class="commit" href="/exist/restxq/workflow/commit/{$DOCNAME}" title="save this file back to the filesystem">commit workflow</a>
                 </div>                  
                 <br/>              
-                <h1>state | <xf:output value="./state[{$ATTR}]/@title" class="transition-inline"/></h1>
+                <h1>state | <xf:output value="./state[{$ATTR}]/@id" class="transition-inline"/></h1>
                 <br/>                
                 <div style="width: 100%;">
                     <br/>
@@ -985,18 +991,18 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <xf:group ref="./state[{$ATTR}]" appearance="bf:horizontalTable"> 
                                     <xf:group appearance="bf:verticalTable">
                                         <xf:label>properties</xf:label>
-                                        <xf:input id="state-title" ref="@title" incremental="true">
-                                            <xf:label>Title</xf:label>
-                                            <xf:hint>edit title of the workflow</xf:hint>
-                                            <xf:help>... and no spaces in between words</xf:help>
-                                            <xf:alert>enter more than 3 characters...</xf:alert>
-                                        </xf:input>                                       
                                         <xf:input id="state-id" ref="@id" incremental="true">
                                             <xf:label>ID</xf:label>
                                             <xf:hint>edit id of the workflow</xf:hint>
                                             <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
                                             <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
-                                        </xf:input>                                   
+                                        </xf:input>                                         
+                                        <xf:input id="state-title" ref="@title" incremental="true">
+                                            <xf:label>Title</xf:label>
+                                            <xf:hint>edit title of the workflow</xf:hint>
+                                            <xf:help>... and no spaces in between words</xf:help>
+                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                        </xf:input>                                                                         
                                         <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
                                             <xf:label>Permission from state</xf:label>
                                            <xf:hint>where to derive permissions for state</xf:hint>
@@ -1005,11 +1011,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 <xf:label ref="."></xf:label>
                                                 <xf:value ref="."></xf:value>
                                             </xf:itemset>
-                                        </xf:select1>                                          
-                                        <xf:input id="state-version" ref="@version">
-                                            <xf:label>Version</xf:label>
-                                            <xf:hint>support versioning</xf:hint>
-                                        </xf:input>   
+                                        </xf:select1> 
                                     </xf:group>
                                     <xf:group appearance="bf:verticalTable">
                                         <xf:label>actions</xf:label>
@@ -1184,7 +1186,6 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     <xf:bind nodeset="instance()/state[last()]">
                         <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
                         <xf:bind nodeset="actions/action" type="xf:string" constraint="count(instance()/state[last()]/actions/action) eq count(distinct-values(instance()/state[last()]/actions/action))" />
-                        <xf:bind nodeset="@version" type="xf:boolean" required="true()" />
                     </xf:bind>
                     
                     <!--xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)"/>
@@ -1256,7 +1257,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
                 </a>
                 <br/>              
-                <h1>state | <xf:output value="instance()/state[last()]/@title" class="transition-inline"/></h1>
+                <h1>state | <xf:output value="instance()/state[last()]/@id" class="transition-inline"/></h1>
                 <br/>                
                 <div style="width: 100%;">
                     <br/>
@@ -1264,19 +1265,19 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         <div style="width:90%;">
                             <div style="width:100%;">
                                 <xf:group ref="instance()/state[last()]" appearance="bf:horizontalTable"> 
-                                    <xf:group appearance="bf:verticalTable">     
-                                        <xf:input id="state-title" ref="@title" incremental="true">
-                                            <xf:label>Title</xf:label>
-                                            <xf:hint>enter title of the state</xf:hint>
-                                            <xf:help>... and no spaces in between words</xf:help>
-                                            <xf:alert>enter more than 3 characters...</xf:alert>
-                                        </xf:input>                                     
+                                    <xf:group appearance="bf:verticalTable">   
                                         <xf:input id="state-id" ref="@id" incremental="true">
                                             <xf:label>ID</xf:label>
                                             <xf:hint>enter id of the new state</xf:hint>
                                             <xf:help>... and no spaces in between words or non-alphabets other than _</xf:help>
                                             <xf:alert>unique / not too short / lower-case a-z / use underscore to avoid spaces</xf:alert>
-                                        </xf:input>                                     
+                                        </xf:input>                                      
+                                        <xf:input id="state-title" ref="@title" incremental="true">
+                                            <xf:label>Title</xf:label>
+                                            <xf:hint>enter title of the state</xf:hint>
+                                            <xf:help>... and no spaces in between words</xf:help>
+                                            <xf:alert>enter more than 3 characters...</xf:alert>
+                                        </xf:input>                                                                        
                                         <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
                                             <xf:label>Permission from state</xf:label>
                                            <xf:hint>where to derive permissions for state</xf:hint>
@@ -1285,11 +1286,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                                 <xf:label ref="."></xf:label>
                                                 <xf:value ref="."></xf:value>
                                             </xf:itemset>
-                                        </xf:select1>                                           
-                                        <xf:input id="state-version" ref="@version">
-                                            <xf:label>Version</xf:label>
-                                            <xf:hint>support versioning</xf:hint>
-                                        </xf:input>   
+                                        </xf:select1>  
                                     </xf:group>
                                     <xf:group appearance="bf:verticalTable">
                                         <xf:repeat id="r-stateactions" nodeset="./actions/action[position() != last()]" appearance="compact">
@@ -1660,9 +1657,12 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                 </xf:model>
             </div>
             <div style="width: 100%; height: 100%;">
-                <a href="state.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;node={$NODENAME}">
-                    <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
-                </a>
+                <div class="commit-holder">
+                    <a href="state.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;node={$NODENAME}">
+                        <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
+                    </a>
+                    <a class="commit" href="/exist/restxq/workflow/commit/{$DOCNAME}" title="save this file back to the filesystem">commit workflow</a>
+                </div>
                 <br/>    
                 <div style="width:100%;margin-top:10px;">               
                     <xf:group ref="instance()/transition[{$NODEPOS}]" appearance="bf:horizontalTable">                    

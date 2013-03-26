@@ -74,8 +74,7 @@ declare function local:reverse-transform-configs() {
                                                 "media-type=application/xml method=xml")
             )
             else if (contains($path,"types.xml")) then (
-               $filename || " written? " || file:serialize(transform:transform(
-                                                $doc, $xslworkflow, ()),
+               $filename || " written? " || file:serialize($doc,
                                                 $appconfig:FS-PATH || "/" || $filename,
                                                 "media-type=application/xml method=xml")
             )            

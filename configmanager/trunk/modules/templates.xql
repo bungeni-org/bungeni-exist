@@ -11,6 +11,7 @@ module namespace templates="http://exist-db.org/xquery/templates";
 import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 
 declare namespace expath="http://expath.org/ns/pkg";
+declare namespace bf="http://betterform.sourceforge.net/xforms";
 
 declare variable $templates:CONFIG_STOP_ON_ERROR := "stop-on-error";
 declare variable $templates:CONFIG_APP_ROOT := "app-root";

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:custom="http://bungeni-exist.googlecode.com/custom_functions" exclude-result-prefixes="xsl custom" version="2.0">
     <!--
         Ashok Hariharan
@@ -18,12 +19,7 @@
     </xsl:function>
     <xsl:function name="custom:get_modes_from_group">
         <xsl:param name="cur-group"/>
-        <xsl:value-of select="normalize-space(
-            string-join(
-             custom:__get_modes_from_group($cur-group),
-             ' '
-                )
-            )"/>
+        <xsl:value-of select="normalize-space(             string-join(              custom:__get_modes_from_group($cur-group),              ' '                 )             )"/>
     </xsl:function>
     <xsl:function name="custom:__get_roles_from_group">
         <xsl:param name="nodes"/>
@@ -33,12 +29,7 @@
     </xsl:function>
     <xsl:function name="custom:get_roles_from_group">
         <xsl:param name="cur-group"/>
-        <xsl:value-of select="replace(normalize-space(
-            string-join(
-                distinct-values(custom:__get_roles_from_group($cur-group)),
-                ' '
-                )
-            ),' ALL','')"/>
+        <xsl:value-of select="replace(normalize-space(             string-join(                 distinct-values(custom:__get_roles_from_group($cur-group)),                 ' '                 )             ),' ALL','')"/>
     </xsl:function>
     
     
@@ -78,8 +69,7 @@
     <!-- suppress empty vocabulary attributes -->
     <xsl:template match="@vocabulary">
         <xsl:if test="normalize-space(.)">
-            <xsl:attribute name="vocabulary" select="." />
+            <xsl:attribute name="vocabulary" select="."/>
         </xsl:if>
     </xsl:template>
-    
 </xsl:stylesheet>

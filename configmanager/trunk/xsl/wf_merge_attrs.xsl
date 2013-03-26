@@ -7,8 +7,8 @@
         Update: currently updated to bungeni_custom r10268
     -->
     <xsl:include href="merge_tags.xsl"/>
-    <xsl:include href="copy_attrs.xsl" />
-    <xsl:output indent="yes" encoding="UTF-8"/>
+    <xsl:include href="copy_attrs.xsl"/>
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
     <xsl:template match="@*|*|processing-instruction()|comment()">
         <xsl:copy>
@@ -17,7 +17,7 @@
     </xsl:template>
     <xsl:template match="workflow">
         <workflow>
-            <xsl:call-template name="copy-attrs" />
+            <xsl:call-template name="copy-attrs"/>
             <!-- 
                 !+NOTE (ao, 7th Jan 2013) Without the below <xsl:if/> the wf_merge_attrs 
                 failed on documents like group_assignment that didn't have  <tags/> in the
@@ -36,7 +36,7 @@
     </xsl:template>
     <xsl:template match="state">
         <state>
-            <xsl:call-template name="copy-attrs" />
+            <xsl:call-template name="copy-attrs"/>
             <xsl:if test="./tags">
                 <xsl:call-template name="merge_tags">
                     <xsl:with-param name="elemOriginAttr" select="./tags"/>
@@ -44,7 +44,7 @@
             </xsl:if>
             <xsl:if test="./actions">
                 <xsl:call-template name="merge_tags">
-                    <xsl:with-param name="elemOriginAttr" select="./actions" />
+                    <xsl:with-param name="elemOriginAttr" select="./actions"/>
                 </xsl:call-template>
             </xsl:if>
             <xsl:apply-templates/>
@@ -52,7 +52,7 @@
     </xsl:template>
     <xsl:template match="allow | deny">
         <xsl:element name="{name()}">
-            <xsl:call-template name="copy-attrs" />
+            <xsl:call-template name="copy-attrs"/>
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./roles"/>
             </xsl:call-template>
@@ -61,7 +61,7 @@
     </xsl:template>
     <xsl:template match="transition">
         <xsl:element name="transition">
-            <xsl:call-template name="copy-attrs" />
+            <xsl:call-template name="copy-attrs"/>
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./sources"/>
             </xsl:call-template>

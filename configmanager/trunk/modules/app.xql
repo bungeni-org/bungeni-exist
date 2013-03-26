@@ -4,6 +4,7 @@ module namespace app="http://exist-db.org/apps/configmanager/templates";
 declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
 declare namespace xf="http://www.w3.org/2002/xforms";
 declare namespace ev="http://www.w3.org/2001/xml-events" ;
+declare namespace bf="http://betterform.sourceforge.net/xforms" ;
 
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";

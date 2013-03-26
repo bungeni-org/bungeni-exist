@@ -83,4 +83,42 @@ $(document).ready(function(){
         return false;
         
     });  
+    
+    // commit
+    $(".commit").live('click', function() {
+        var href = $(this).attr('href');
+        
+        $.ajax({
+            type: "GET",
+            url: href,
+            dataType: "html",
+            success: function(data) {
+                // message|warning|error|fatal - increasing order of severity
+                if(data = 'true') {
+                    require(["dojox/widget/Toaster", "dijit/registry", "dojo/parser", "dojo/on", "dojo/dom", "dojo/domReady!"],
+                        function(Toaster, registry, parser, on, dom) {
+                        parser.parse();
+                        registry.byId('betterformMessageToaster').positionDirection = 'br-down';
+                        registry.byId('betterformMessageToaster').setContent('The document + types.xml saved successfully!', 'error');
+                        registry.byId('betterformMessageToaster').show();
+                    });
+                }
+                else {
+                    require(["dojox/widget/Toaster", "dijit/registry", "dojo/parser", "dojo/on", "dojo/dom", "dojo/domReady!"],
+                        function(Toaster, registry, parser, on, dom) {
+                        parser.parse();
+                        registry.byId('betterformMessageToaster').positionDirection = 'br-down';
+                        registry.byId('betterformMessageToaster').setContent('The document + types.xml saved successfully!', 'warning');
+                        registry.byId('betterformMessageToaster').show();
+                    });                    
+                }
+            },
+            error: function() {
+                alert("There was an error. Try again please!");
+            }
+        });        
+        
+        return false;
+        
+    });   
 });

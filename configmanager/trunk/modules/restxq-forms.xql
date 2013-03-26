@@ -82,22 +82,26 @@ function cmrest:delete-field($doc as xs:string,$field as xs:string) {
 };
 
 (:~
- : Retrieve a workflow identified by a name.
+ : COMMIT a form to the filesystem. Every form is committed in the company of types.xml
  :)
 declare 
     %rest:GET
-    %rest:path("/workflow/{$name}")
-function cmrest:get-workflow($name as xs:string) {
-    collection($appconfig:FORM-FOLDER)/descriptor[@name = $name]
-};
+    %rest:path("/form/commit/{$name}")
+function cmrest:commit-form($name as xs:string) {
 
-(:~
- : Delete a workflow identified by its name.
- :)
-declare
-    %rest:DELETE
-    %rest:path("/workflow/{$name}")
-function cmrest:delete-workflow($name as xs:string) {
-    xmldb:remove($appconfig:WF-FOLDER, $name || ".xml"),
-    cmrest:workflows()
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $doc := doc($appconfig:FORM-FOLDER || "/" || $name || ".xml")/descriptor
+    let $types := doc($appconfig:TYPES-XML)/types
+    (: form XSLTs:)
+    let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
+    let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")  
+    
+    let $null := file:serialize($types,$appconfig:FS-PATH || "/types.xml" ,
+                                                "media-type=application/xml method=xml")
+    let $status :=  file:serialize(transform:transform(
+                                                transform:transform($doc, $step1forms,()), $step2forms,()), 
+                                                $appconfig:FS-PATH || "/forms/" || $name || ".xml",
+                                                "media-type=application/xml method=xml")  
+    return 
+        $status
 };

@@ -218,6 +218,13 @@ function form:edit($node as node(), $model as map(*)) {
             
             </div>
             
+            <div class="commit-holder">
+                <a href="type.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}">
+                    <img src="resources/images/back_arrow.png" title="back to form" alt="back to type"/>
+                </a>
+                <a class="commit" href="/exist/restxq/form/commit/{$docname}" title="save this file back to the filesystem">commit form</a>
+            </div>            
+            
             <div id="tabs_container">
                 <ul id="tabs">
                     <li id="tabdetails" class="active"><a href="#details">Form details</a></li>
@@ -450,9 +457,13 @@ function form:field-edit($node as node(), $model as map(*)) {
             
             <div>       
                 <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']" class="fieldEdit">
-                        <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
-                            <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
-                        </a>
+                        <div class="commit-holder">
+                            <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
+                                <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
+                            </a>
+                            <a class="commit" href="/exist/restxq/form/commit/{$docname}" title="save this file back to the filesystem">commit form</a>
+                        </div>  
+                        
                         <h1><xf:output ref="@label"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">

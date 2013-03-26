@@ -169,7 +169,7 @@ declare function local:get-facets() as node()* {
 :)
 declare function local:generated-facets($roles as node()+, $perm-actions as node()+,$name as xs:string*) {
 
-    for $role in $roles/role[./@name ne 'ALL' and data(./@name) ne '']
+    for $role in appconfig:roles()/role
     group by $key := data($role/@name)
     return
         (:<roles keys="{$role/@key}" name="{$role[1]/@name}" state-id="{$name}" />:)
@@ -292,7 +292,7 @@ declare function local:new-facets($generated-facets as node()+) {
 
 (:
     Generates <facet/>s the first time a state is created. Puts the all the 
-    available options but as false i.e. not set but permissible
+    roles but as false i.e. not set but permissible
 :)
 declare function local:gen-facets() as node()* {
 
@@ -303,15 +303,8 @@ declare function local:gen-facets() as node()* {
     let $perm-actions := $doc/permActions/permAction
     let $global-actions := string-join($perm-actions,' ')    
     let $name := data($doc/state[$state-pos]/@id)
-    let $roles :=   <roles> 
-                    {
-                        for $role in $doc/allow/roles/role
-                        return 
-                        <role key="{$role/ancestor::allow/@permission}" name="{$role}" />
-                    }
-                    </roles>
                     
-    for $role in $roles/role[./@name ne 'ALL' and data(./@name) ne '']
+    for $role in appconfig:roles()/role
     group by $key := data($role/@name)
     return 
         <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}" role="{data($role[1]/@name)}">
@@ -322,25 +315,25 @@ declare function local:gen-facets() as node()* {
                     switch($perm)
             
                     case '.View' return
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
+                        <allow permission="{$perm/text()}">
                             <roles originAttr="roles">
                                 <role/>
                             </roles>
                         </allow>
                     case '.Edit' return
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
+                        <allow permission="{$perm/text()}">
                             <roles originAttr="roles">
                                 <role/>
                             </roles>
                         </allow>
                     case '.Add' return 
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
+                        <allow permission="{$perm/text()}">
                             <roles originAttr="roles">
                                 <role/>
                             </roles>
                         </allow>
                     case '.Delete' return
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
+                        <allow permission="{$perm/text()}">
                             <roles originAttr="roles">
                                 <role/>
                             </roles>
@@ -865,10 +858,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />                
                     </xf:bind>
-                    <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />                  
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" />                  
+                    <xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" />                  
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" />
+                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" />                  
                     
                     <xf:instance id="i-facets">
                         <data xmlns="">
@@ -1049,8 +1042,8 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                     <div style="float:left;width:60%;">
                                         <table class="listingTable" style="width:100%;">
                                             <tr>                      			 
-                                                <th>transition name</th>
-                                                <th>source(s)</th>
+                                                <th>transition title</th>
+                                                <th>source</th>
                                                 <th>destination</th>
                                             </tr>
                                             {local:transition-to-from($DOCNAME, $NODENAME)}

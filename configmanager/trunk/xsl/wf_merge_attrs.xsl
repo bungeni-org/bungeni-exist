@@ -76,5 +76,14 @@
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
+    
     <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr] | actions[@originAttr]"/>
+    
+        
+    <xsl:template match="@permissions_from_state">
+        <xsl:if test="normalize-space(.)">
+            <xsl:attribute name="permissions_from_state" select="." />
+        </xsl:if>
+    </xsl:template>
+    
 </xsl:stylesheet>

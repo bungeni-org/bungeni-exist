@@ -731,9 +731,14 @@ div.ulisting a.greyed {
 /* END OF BREADCRUMBS
 -------------------------------------------------------------- */
 
+.warning {
+    font-style:italic;
+    color:#c46600;
+}
 
 /* TOASTER
 -------------------------------------------------------------- */
 .dijitToasterClip {
-    position: fixed !important;
+    position: absolute !important;
+    bottom:0 !important;
 }

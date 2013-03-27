@@ -24,6 +24,29 @@ declare function local:get-custom-roles() as node() * {
     doc($appconfig:SYS-FOLDER || '/acl/roles.xml')/roles
 };
 
+declare function local:occurrences() {
+
+    for $instance in collection($appconfig:CONFIGS-COLLECTION)
+    let $name := request:get-parameter("doc", "none")
+    let $in-coll := util:collection-name($instance)
+    let $path := document-uri($instance)
+    let $where := functx:substring-after-last($in-coll,'/')
+    let $doc-name := substring-before(util:document-name($instance),".")
+    where $instance//child::node()[. eq $name or contains(data(./@name), "_"||$name)]
+    return
+        <li>
+            {   
+            if (contains($path, "workflows")) then 
+                <span>workflow - <a title="{$where}" class="deep" href="workflow.html?type=doc&amp;doc={$doc-name}&amp;pos=0#tabfacets">{$doc-name}<i class="icon-edit add"></i></a></span>
+            else if (contains($path, "forms")) then 
+                <span>form - <a title="{$where}" href="form.html?type=doc&amp;doc={$doc-name}&amp;pos=0">{$doc-name}<i class="icon-edit add"></i></a></span>
+            else
+                ()
+            }
+        </li>
+
+};
+
 declare 
 function role:roles($node as node(), $model as map(*)) { 
         <div>
@@ -257,8 +280,8 @@ function role:edit($node as node(), $model as map(*)) {
                             </xf:trigger>     
                         </xf:group>                        
                     </div>
-                    <br/>                    
                     <hr/>
+                    <br/>
                     <xf:group id="typeButtons" appearance="bf:horizontalTable">
                         <xf:trigger>
                             <xf:label>Save</xf:label>
@@ -267,36 +290,56 @@ function role:edit($node as node(), $model as map(*)) {
                                 <xf:send submission="s-add"/>
                             </xf:action>                       
                         </xf:trigger>
-                        <xf:group appearance="bf:verticalTable">                      
-                             <xf:switch>
-                                <xf:case id="delete">
-                                   <xf:trigger ref="instance()/child::*">
-                                      <xf:label>delete</xf:label>
-                                      <xf:action ev:event="DOMActivate">
-                                         <xf:toggle case="confirm" />
-                                      </xf:action>
-                                   </xf:trigger>
-                                </xf:case>
-                                <xf:case id="confirm">
-                                   <h2>Are you sure you want to delete this role?</h2>
-                                   <xf:group appearance="bf:horizontalTable">
-                                       <xf:trigger>
-                                          <xf:label>Delete</xf:label>
-                                          <xf:action ev:event="DOMActivate">
-                                            <xf:delete nodeset="instance()/role[@id eq '{$name}']"/>
-                                            <xf:send submission="s-delete"/>
-                                            <xf:toggle case="delete" />
-                                          </xf:action>
-                                       </xf:trigger>
-                                       <xf:trigger>
-                                            <xf:label>Cancel</xf:label>
-                                            <xf:toggle case="delete" ev:event="DOMActivate" />
-                                       </xf:trigger>
-                                    </xf:group>
-                                </xf:case>
-                             </xf:switch>   
-                        </xf:group>                        
+                        {
+                            if(local:occurrences()) then 
+                                ()
+                            else 
+                                <xf:group appearance="bf:verticalTable">                      
+                                     <xf:switch>
+                                        <xf:case id="delete">
+                                           <xf:trigger ref="instance()/child::*">
+                                              <xf:label>delete</xf:label>
+                                              <xf:action ev:event="DOMActivate">
+                                                 <xf:toggle case="confirm" />
+                                              </xf:action>
+                                           </xf:trigger>
+                                        </xf:case>
+                                        <xf:case id="confirm">
+                                           <h2>Are you sure you want to delete this role?</h2>
+                                           <xf:group appearance="bf:horizontalTable">
+                                               <xf:trigger>
+                                                  <xf:label>Delete</xf:label>
+                                                  <xf:action ev:event="DOMActivate">
+                                                    <xf:delete nodeset="instance()/role[@id eq '{$name}']"/>
+                                                    <xf:send submission="s-delete"/>
+                                                    <xf:toggle case="delete" />
+                                                  </xf:action>
+                                               </xf:trigger>
+                                               <xf:trigger>
+                                                    <xf:label>Cancel</xf:label>
+                                                    <xf:toggle case="delete" ev:event="DOMActivate" />
+                                               </xf:trigger>
+                                            </xf:group>
+                                        </xf:case>
+                                     </xf:switch>   
+                                </xf:group> 
+                        }
                     </xf:group>
+                    <hr/>
+                    <h1>participation</h1>
+                    <div style="width:100%;">
+                        <div class="ulisting">
+                            {
+                                if(local:occurrences()) then 
+                                    <span class="warning">&#8211; NB: <b>deleting this role will only be possible once the facets / states and forms it features in below are removed first</b> &#8211;</span>
+                                else  
+                                    "none - can be safely deleted"
+                            }
+                            <ul class="clearfix ulfields">
+                                {local:occurrences()}
+                            </ul>                 
+                        </div> 
+                    </div>                  
                 </xf:group>
             </div>
             <!-- ######################### View end ################################## -->  

@@ -120,8 +120,10 @@ declare
                 (: finally search the subset collection if and only if there are is a search param given :)    
                 let $ontology_rs := 
                     switch($search)
-                        case "none"
-                            return $coll-by-statusdate
+                        case "none" return
+                            for $ontology in $coll-by-statusdate
+                            return
+                                <doc>{$ontology}</doc>                        
                         default
                             return
                                 bun:adv-ft-search($coll-by-statusdate, $search)                          

@@ -54,14 +54,14 @@ function cmrest:delete-state($doc as xs:string,$id as xs:string) {
  :)
 declare 
     %rest:DELETE
-    %rest:path("/workflow/{$doc}/facet/{$pos}")
-function cmrest:delete-facet($doc as xs:string,$pos as xs:integer) {
+    %rest:path("/workflow/{$doc}/facet/{$name}")
+function cmrest:delete-facet($doc as xs:string,$name as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
-    let $facet-name := data($doc/facet[$pos]/@name)
+    let $facet-name := data($doc/facet[@name eq $name]/@name)
     return (
-        update delete $doc/facet[$pos],
+        update delete $doc/facet[@name eq $name],
         update delete $doc/state/facet[@ref eq "." || $facet-name],
         $doc
     )

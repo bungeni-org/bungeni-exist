@@ -47,7 +47,7 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li class="hasmore"><a href="#config"><span>upload/save</span></a>
                 <ul class="dropdown">
                     <li><a id="show-popup" href="upload.html?t={$timestamp}">upload</a></li>
-                    <li class="last"><a class="confirm-delete" title="save back all the changes made" href="save.html?t={$timestamp}">save</a></li>
+                    <li class="last"><a class="confirm-delete" title="commit all your changes back to bungeni" href="save.html?t={$timestamp}">commit</a></li>
                 </ul>
             </li>
         </ul>

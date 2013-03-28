@@ -26,7 +26,7 @@ declare function local:get-custom-roles() as node() * {
 
 declare function local:occurrences() {
 
-    for $instance in collection($appconfig:CONFIGS-COLLECTION)
+    for $instance in collection($appconfig:CONFIGS-FOLDER)
     let $name := request:get-parameter("doc", "none")
     let $in-coll := util:collection-name($instance)
     let $path := document-uri($instance)
@@ -37,9 +37,9 @@ declare function local:occurrences() {
         <li>
             {   
             if (contains($path, "workflows")) then 
-                <span>workflow - <a title="{$where}" class="deep" href="workflow.html?type=doc&amp;doc={$doc-name}&amp;pos=0#tabfacets">{$doc-name}<i class="icon-edit add"></i></a></span>
+                <span>workflow - <a title="{$path}" href="workflow.html?type=doc&amp;doc={$doc-name}&amp;pos=0#tabfacets">{$doc-name}<i class="icon-edit add"></i></a></span>
             else if (contains($path, "forms")) then 
-                <span>form - <a title="{$where}" href="form.html?type=doc&amp;doc={$doc-name}&amp;pos=0">{$doc-name}<i class="icon-edit add"></i></a></span>
+                <span>form - <a title="{$path}" href="form.html?type=doc&amp;doc={$doc-name}&amp;pos=0">{$doc-name}<i class="icon-edit add"></i></a></span>
             else
                 ()
             }

@@ -150,18 +150,22 @@ declare function local:workflow() {
     let $doc := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")/workflow
     return 
         $doc
-    
+};
+
+declare function local:workflow-template() as node() * {
+    let $workflow := doc($appconfig:MODEL-TEMPLATES || "/workflow.xml")/workflow
+    return $workflow
 };
 
 (:
     Wrapper function to retrieve the existing facets
 :)
-declare function local:get-facets() as node()* {
+declare function local:get-facets($global as xs:boolean) as node()* {
 
     let $WF-DOC := local:workflow()
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state) 
     return 
-        local:existing-facets($ATTR)        
+        local:existing-facets($ATTR,$global)        
 };
 
 (:
@@ -216,11 +220,11 @@ declare function local:generated-facets($perm-actions as node()+,$name as xs:str
     that belong to the given state position. It tries to incorporate any new global 
     permission changes that might have been enabled or disabled since last modifications
 :)
-declare function local:existing-facets($stateid as xs:integer) {
+declare function local:existing-facets($stateid as xs:integer, $global as xs:boolean) {
 
     let $WF-DOC := local:workflow()    
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state)
-    let $NAME := data($WF-DOC/state[$ATTR]/@id)
+    let $NAME := if($global) then "global" else data($WF-DOC/state[$ATTR]/@id)
     
     for $facete in $WF-DOC/facet
     let $role : = data($facete/@role)    
@@ -237,13 +241,13 @@ declare function local:existing-facets($stateid as xs:integer) {
 (: This method does a diff between existing-facets and generated ones to return any
     new roles that have been added since last modifications to state facets were made 
 :)
-declare function local:new-facets($GENERATED-FACETS as node()+) {
+declare function local:new-facets($GENERATED-FACETS as node()+, $global as xs:boolean) {
 
     let $WF-DOC := local:workflow()
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state) 
     for $facetg in $GENERATED-FACETS
     return
-    if (some $facete in local:existing-facets($ATTR) satisfies $facete/@name = $facetg/@name) then 
+    if (some $facete in local:existing-facets($ATTR,$global) satisfies $facete/@name = $facetg/@name) then 
         ()
     else 
         $facetg
@@ -252,17 +256,20 @@ declare function local:new-facets($GENERATED-FACETS as node()+) {
 (:
     Generates <facet/>s the first time a state is created. Puts the all the 
     roles but as false i.e. not set but permissible
+    @param global if the facent being made is for global-grant or state
 :)
-declare function local:gen-facets() as node()* {
+declare function local:gen-facets($global as xs:boolean) as node()* {
 
     let $docname := xs:string(request:get-parameter("doc","none"))
 
-    let $WF-DOC := local:workflow()
+    let $WF-DOC := if($global) then local:workflow-template() else local:workflow()
+    let $log := util:log('debug',$WF-DOC)
+    let $log1 := util:log('debug',"+++++++++++++++++++++++++++++++++++++++++++")
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state)     
     
     let $perm-actions := $WF-DOC/permActions/permAction
     let $global-actions := string-join($perm-actions,' ')    
-    let $name := data($WF-DOC/state[$ATTR]/@id)
+    let $name := if($global) then "global" else data($WF-DOC/state[$ATTR]/@id)
                     
     for $role in appconfig:roles()/role
     group by $key := data($role/@name)
@@ -345,6 +352,8 @@ function workflow:edit($node as node(), $model as map(*)) {
     let $init := xs:string(request:get-parameter("init",""))
     let $laststate := count(doc($wf-doc)/workflow/state)
     let $showing := xs:string(request:get-parameter("tab","fields"))
+    
+    let $no-existing-facets := count(local:get-facets(true()))
     return 
         (: Element to pop up :)
     	<div>
@@ -360,33 +369,21 @@ function workflow:edit($node as node(), $model as map(*)) {
                     
                     <xf:instance id="URL-container" xmlns="">
                        <URL/>
-                    </xf:instance>                    
+                    </xf:instance>  
                     
-                    <xf:instance id="i-grants">
-                        <data>
-                            <allow permission=".Add">
-                                <roles originAttr="roles">
-                                    <role/>
-                                </roles>
-                            </allow>
-                            <allow permission=".Edit">
-                                <roles originAttr="roles">
-                                    <role/>
-                                </roles>
-                            </allow>
-                            <allow permission=".View">
-                                <roles originAttr="roles">
-                                    <role/>
-                                </roles>
-                            </allow>
-                            <allow permission=".Delete">
-                                <roles originAttr="roles">
-                                    <role/>
-                                </roles>
-                            </allow>                          
+                    <xf:instance id="i-facets">
+                        <data xmlns="">
+                            { 
+                                (: if <facet/>s exist, get them :)
+                                if(not(empty(local:workflow()/facet[starts-with(./@name, "global")]))) then 
+                                    (local:get-facets(true()),local:new-facets(local:gen-facets(true()),true()))
+                                (: else generate them :)
+                                else
+                                    local:gen-facets(true())
+                            }
                         </data>
-                    </xf:instance>
-                    
+                    </xf:instance>                    
+                                        
                     <xf:instance id="i-boolean" src="{$workflow:REST-CXT-MODELTMPL}/boolean.xml"/>                 
                     
                     <xf:instance id="i-allroles" xmlns="">
@@ -399,23 +396,10 @@ function workflow:edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>
 
-                    <xf:instance id="i-tmplrole" xmlns="">
-                        <data>
-                            <roles>
-                               <role/>                               
-                            </roles>
-                        </data>
-                    </xf:instance> 
-
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="feature/@enabled" type="xf:boolean" />
-                     
-                        <xf:bind id="view" nodeset="allow[@permission eq '.View']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.View']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
-                        <xf:bind id="view" nodeset="allow[@permission eq '.Edit']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Edit']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
-                        <xf:bind id="view" nodeset="allow[@permission eq '.Add']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Add']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>
-                        <xf:bind id="view" nodeset="allow[@permission eq '.Delete']/roles/role" type="xs:string" constraint="(instance()/allow[@permission eq '.Delete']/roles[count(role) eq count(distinct-values(role)) and count(role[text() = '']) lt 2])"/>                     
                     </xf:bind>
                     
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
@@ -493,6 +477,20 @@ function workflow:edit($node as node(), $model as map(*)) {
                     </xf:submission>                    
                     
                     <xf:action ev:event="xforms-ready" >
+                        {
+                            (: if facet references don't exist on the workflow, add them :)
+                            if(empty(local:workflow()/facet[starts-with(./@name, "global")])) then 
+                                for $facet at $pos in local:gen-facets(true())
+                                let $allow := $facet/allow
+                                where starts-with($facet/@name, "global")
+                                return
+                                    <xf:insert nodeset="instance()/self::*" at="last()" position="after" origin="instance('i-facet')/facet" />
+                            (: the new <facet/>s to be added now :)
+                            else if (not(empty(local:new-facets(local:gen-facets(true()),true())))) then 
+                                <xf:insert nodeset="instance()/self::*" at="last()" position="after" origin="instance('i-facet')/facet" />
+                            else
+                                ()
+                        }                      
                         <xf:action if="'{$init}' eq 'true'">
                             <xf:setvalue ref="instance()/@name" value="'{$docname}'"/>
                         </xf:action>
@@ -500,25 +498,17 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <!-- drop and add workflow features -->
                         <xf:message level="ephemeral">drop all &lt;xmp&gt;&lt;feature&gt;&lt;/xmp&gt; nodes on workflow</xf:message>
                         <xf:delete nodeset="instance()/feature"/>
-                        <xf:insert nodeset="instance()/allow[last()]" at="1" position="after" origin="instance('i-features')/features/feature" />                       
-                        
-                        <!-- add workflow permissions -->
-                        <xf:action if="empty(instance()/allow[@permission eq '.View'])">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;allow permission=".View"&gt;&lt;/xmp&gt; node on workflow</xf:message>
-                            <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-grants')/allow[@permission eq '.View']" />
-                        </xf:action>
-                        <xf:action if="empty(instance()/allow[@permission eq '.Add'])">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;allow permission=".Add"&gt;&lt;/xmp&gt; node on workflow</xf:message>
-                            <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-grants')/allow[@permission eq '.Add']" />
-                        </xf:action>                        
-                        <xf:action if="empty(instance()/allow[@permission eq '.Edit'])">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;allow permission=".Edit"&gt;&lt;/xmp&gt; node on workflow</xf:message>
-                            <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-grants')/allow[@permission eq '.Edit']" />
-                        </xf:action>          
-                        <xf:action if="empty(instance()/allow[@permission eq '.Delete'])">
-                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;allow permission=".Delete"&gt;&lt;/xmp&gt; node on workflow</xf:message>
-                            <xf:insert nodeset="instance()/child::*" at="1" position="before" origin="instance('i-grants')/allow[@permission eq '.Delete']" />
-                        </xf:action>                           
+                        <xf:insert nodeset="instance()/permActions" at="1" position="after" origin="instance('i-features')/features/feature" />   
+                        {
+                            (: if <facet/>s don't exist, add them :)
+                            if(empty(local:workflow()/facet[starts-with(./@name, "global")])) then 
+                                <xf:insert nodeset="instance()/permActions" at="last()" position="after" origin="instance('i-facets')/facet" />
+                            (: if there are new <role/>s added, incorporate them :)
+                            else if (not(empty(local:new-facets(local:gen-facets(true()),true())))) then 
+                                <xf:insert nodeset="instance()/facet[starts-with(./@name, 'global')]" at="last()" position="after" origin="instance('i-facets')/facet[position() >= {$no-existing-facets}]" />                                
+                            else
+                                ()
+                        }                        
                     </xf:action>
 
             </xf:model>
@@ -542,8 +532,8 @@ function workflow:edit($node as node(), $model as map(*)) {
             
             <div id="tabs_content_container">          
                 <div id="details" class="tab_content" style="display: block;">
+                    <h2>Workflow Properties</h2>
                     <xf:group ref="." appearance="bf:horizontalTable">
-                        <xf:label>Workflow Properties</xf:label>
                         <xf:input id="wf-title" ref="@title" incremental="true">
                             <xf:label>Title</xf:label>
                             <xf:hint>edit title of the workflow</xf:hint>
@@ -557,173 +547,99 @@ function workflow:edit($node as node(), $model as map(*)) {
                     </xf:group>
                     <hr/>
                     <xf:group ref="." appearance="bf:horizontalTable" style="width:500px;">
-                        <xf:label>Features &amp; Tags</xf:label>
-                        <xf:group appearance="bf:horizontalTable" style="width:500px;">
-                            <xf:label>features</xf:label>
-                            <xf:group appearance="bf:verticalTable">
-                                <xf:label>Workflowed</xf:label>  
-                                {
-                                    for $feature in local:all-feature()/feature[@workflow eq 'True']
-                                    return document {                                       
-                                            <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
-                                                <xf:label>{data($feature/@name)} </xf:label>
-                                                <xf:hint>click to enabled this feature</xf:hint>
-                                            </xf:input>,
-                                            <xf:trigger appearance="minimal" class="feature-workflow">
-                                                <xf:label>{data($feature/@name)} workflow&#160;</xf:label>
-                                                <xf:hint>click to go the feature workflow</xf:hint>
-                                                <xf:action ev:event="DOMActivate">
-                                                    <xf:setvalue ref="instance('URL-container')" value="index.html"/>
-                                                    <xf:load ref="instance('URL-container')"/>
-                                                </xf:action>
-                                                <xf:message level="ephemeral">The link trigger was clicked</xf:message>
-                                            </xf:trigger>                                        
-                                    }
-                                }
-                            </xf:group>
-                            <xf:group appearance="bf:verticalTable">
-                                <xf:label>Non-workflowed</xf:label>
-                                {
-                                    for $feature in local:all-feature()/feature[@workflow eq 'False']
-                                    return 
-                                        <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
+                        <xf:label>Features</xf:label>
+                        <xf:group appearance="bf:verticalTable">
+                            <xf:label>Workflowed</xf:label>  
+                            {
+                                for $feature in local:all-feature()/feature[@workflow eq 'True']
+                                return document {                                       
+                                        <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
                                             <xf:label>{data($feature/@name)} </xf:label>
-                                        </xf:input>
-                                }                                
-                            </xf:group>
-                        </xf:group>  
+                                            <xf:hint>click to enabled this feature</xf:hint>
+                                        </xf:input>,
+                                        <xf:trigger appearance="minimal" class="feature-workflow">
+                                            <xf:label>{data($feature/@name)} workflow&#160;</xf:label>
+                                            <xf:hint>click to go the feature workflow</xf:hint>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:setvalue ref="instance('URL-container')" value="index.html"/>
+                                                <xf:load ref="instance('URL-container')"/>
+                                            </xf:action>
+                                            <xf:message level="ephemeral">The link trigger was clicked</xf:message>
+                                        </xf:trigger>                                        
+                                }
+                            }
+                        </xf:group>
+                        <xf:group appearance="bf:verticalTable">
+                            <xf:label>Non-workflowed</xf:label>
+                            {
+                                for $feature in local:all-feature()/feature[@workflow eq 'False']
+                                return 
+                                    <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
+                                        <xf:label>{data($feature/@name)} </xf:label>
+                                    </xf:input>
+                            }                                
+                        </xf:group>
                     </xf:group>                    
                     <hr/>
-                    <xf:group ref=".">
-                        <xf:group appearance="compact" class="modesWrapper">
-                            <xf:label>Global Grants</xf:label>
-                            
-                            <!-- view mode -->
-                            <xf:group appearance="bf:verticalTable">
-                                <xf:label>View</xf:label>    
-                                <xf:repeat id="r-viewfieldattrs" nodeset="allow[@permission eq '.View']/roles/role[position() != last()]"  startindex="1" appearance="compact">
-                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                        <xf:label>grant view on roles...</xf:label>
-                                        <xf:help>help for select1</xf:help>
-                                        <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-allroles')/role">
-                                            <xf:label ref="@name"></xf:label>
-                                            <xf:value ref="@name"></xf:value>
-                                        </xf:itemset>
-                                    </xf:select1>
-                                    <xf:trigger src="resources/images/delete.png">
-                                        <xf:label>X</xf:label>
-                                        <xf:action>
-                                            <xf:delete at="index('r-viewfieldattrs')[position()]"></xf:delete>
-                                        </xf:action>
-                                    </xf:trigger>                                         
-                                </xf:repeat>
-                                <br/>
-                                <xf:group appearance="minimal">
-                                    <xf:trigger>
-                                       <xf:label>add role</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="allow[@permission eq '.View']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
-                                       </xf:action>
-                                    </xf:trigger>     
-                                </xf:group>
-                            </xf:group>
-                            
-                            <!-- edit mode -->
-                            <xf:group appearance="bf:verticalTable">
-                                <xf:label>Edit</xf:label>    
-                                <xf:repeat id="r-editfieldattrs" nodeset="allow[@permission eq '.Edit']/roles/role[position() != last()]" appearance="compact">
-                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                        <xf:label>grant edit on roles...</xf:label>
-                                        <xf:help>help for select1</xf:help>
-                                        <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-allroles')/role">
-                                            <xf:label ref="@name"></xf:label>
-                                            <xf:value ref="@name"></xf:value>
-                                        </xf:itemset>
-                                    </xf:select1>
-                                    <xf:trigger src="resources/images/delete.png">
-                                        <xf:label>X</xf:label>
-                                        <xf:action>
-                                            <xf:delete at="index('r-editfieldattrs')[position()]"></xf:delete>
-                                        </xf:action>
-                                    </xf:trigger>                                         
-                                </xf:repeat>
-                                <br/>
-                                <xf:group appearance="minimal">
-                                    <xf:trigger>
-                                       <xf:label>add role</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="allow[@permission eq '.Edit']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
-                                       </xf:action>
-                                    </xf:trigger>     
-                                </xf:group>
-                            </xf:group>
-                            
-                            <!-- add -->
-                            <xf:group appearance="bf:verticalTable">
-                                <xf:label>Add</xf:label>    
-                                <xf:repeat id="r-addwfieldattrs" nodeset="allow[@permission eq '.Add']/roles/role[position() != last()]" startindex="1" appearance="compact">
-                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                        <xf:label>grant add on roles...</xf:label>
-                                        <xf:help>help for select1</xf:help>
-                                        <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-allroles')/role">
-                                            <xf:label ref="@name"></xf:label>
-                                            <xf:value ref="@name"></xf:value>
-                                        </xf:itemset>
-                                    </xf:select1>
-                                    <xf:trigger src="resources/images/delete.png">
-                                        <xf:label>X</xf:label>
-                                        <xf:action>
-                                            <xf:delete at="index('r-addfieldattrs')[position()]"></xf:delete>
-                                        </xf:action>
-                                    </xf:trigger>                                         
-                                </xf:repeat>
-                                <br/>
-                                <xf:group appearance="minimal">
-                                    <xf:trigger>
-                                       <xf:label>add role</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="allow[@permission eq '.Add']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
-                                       </xf:action>
-                                    </xf:trigger>     
-                                </xf:group>
-                            </xf:group>
-                                 
-                            <!-- delete -->
-                            <xf:group appearance="bf:verticalTable">
-                                <xf:label>Delete</xf:label>    
-                                <xf:repeat id="r-deletewfieldattrs" nodeset="allow[@permission eq '.Delete']/roles/role[position() != last()]" startindex="1" appearance="compact">
-                                    <xf:select1 ref="." appearance="minimal" incremental="true" class="xmediumWidth">
-                                        <xf:label>grant delete on roles...</xf:label>
-                                        <xf:help>help for select1</xf:help>
-                                        <xf:alert>invalid: cannot be empty</xf:alert>
-                                        <xf:itemset nodeset="instance('i-allroles')/role">
-                                            <xf:label ref="@name"></xf:label>
-                                            <xf:value ref="@name"></xf:value>
-                                        </xf:itemset>
-                                    </xf:select1>
-                                    <xf:trigger src="resources/images/delete.png">
-                                        <xf:label>X</xf:label>
-                                        <xf:action>
-                                            <xf:delete at="index('r-deletefieldattrs')[position()]"></xf:delete>
-                                        </xf:action>
-                                    </xf:trigger>                                         
-                                </xf:repeat>
-                                <br/>
-                                <xf:group appearance="minimal">
-                                    <xf:trigger>
-                                       <xf:label>add role</xf:label>
-                                       <xf:action>
-                                           <xf:insert nodeset="allow[@permission eq '.Delete']/roles/role" at="last()" position="after" origin="instance('i-tmplrole')/roles/role"/>
-                                       </xf:action>
-                                    </xf:trigger>     
-                                </xf:group>
-                            </xf:group>
-                                                                   
-                        </xf:group>             
-                    </xf:group>
+                    <div  style="width:50%;">
+                        <h2>Global Grants</h2>
+                        <table class="listingTable">
+                            <thead>
+                                <tr>
+                                    <th>Roles</th>        
+                                    <th>View</th>
+                                    <th>Edit</th>
+                                    <th>Add</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, "global")]))) then 
+                                                    (local:get-facets(true()),local:new-facets(local:gen-facets(true()),true()))
+                                                else
+                                                    local:gen-facets(true())
+                                for $facet at $pos in $facets
+                                let $allow := $facet/allow
+                                order by $facet/@role ascending
+                                return
+                                    <tr>
+                                        <td id="foo" class="one">
+                                            {data($facet/@role)}
+                                        </td>
+                                        <td class="permView">
+                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
+                                                <xf:item>
+                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                </xf:item>                                                            
+                                            </xf:select>
+                                        </td>
+                                        <td>
+                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
+                                                <xf:item>
+                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                </xf:item>                                                            
+                                            </xf:select>
+                                        </td>
+                                        <td>
+                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
+                                                <xf:item>
+                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                </xf:item>                                                            
+                                            </xf:select>
+                                        </td>                                                        
+                                        <td>
+                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
+                                                <xf:item>
+                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                </xf:item>                                                            
+                                            </xf:select>
+                                        </td>
+                                    </tr>                                                          
+                            }                                                                                                                                             
+                            </tbody> 
+                        </table>                                                   
+                    </div>
                     <hr/>
                     <xf:group appearance="bf:horizontalTable">
                         <xf:trigger>
@@ -732,6 +648,15 @@ function workflow:edit($node as node(), $model as map(*)) {
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:delete nodeset="instance()/allow[count(roles/role) = 1]" /> 
                                 <!--xf:delete nodeset="instance()/allow/roles/role[string-length(.) lt 2]" /--> 
+                                {
+                                    let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, "global")]))) then 
+                                                        (local:get-facets(true()),local:new-facets(local:gen-facets(true()),true()))
+                                                    else
+                                                        local:gen-facets(true())   
+                                    for $facet at $pos in $facets                                   
+                                    return
+                                        <xf:setvalue ref="instance()/facet[@name eq {$facet/@name}]/@ref" value="concat('.',instance('i-facets')/facet[@name eq {$facet/@name}]/@name)"/>
+                                }                                 
                                 <xf:send submission="s-add"/>
                             </xf:action>                                
                         </xf:trigger>  
@@ -777,7 +702,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                  </div>
                 <div id="facets" class="tab_content">
                     <div class="ulisting">
-                        <h2>Facets</h2>
+                        <h2>Generated Facets</h2>
                         <ul class="clearfix">
                             {local:facets($docname)}
                         </ul>
@@ -798,11 +723,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
     
     let $WF-DOC := local:workflow()
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state)    
-    let $RETRIEVED-NAME := data($WF-DOC/state[$ATTR]/@id)   
-    let $log := util:log('debug',$ATTR || "+++++++++++++++++++++++++++++++++")
+    let $RETRIEVED-NAME := data($WF-DOC/state[$ATTR]/@id)
     
     let $NODENAME := if($NODE eq 'new') then $RETRIEVED-NAME else $NODE
-    let $no-existing-facets := count(local:get-facets())
+    let $no-existing-facets := count(local:get-facets(false()))
     return
     	<div>
             <div style="display:none">
@@ -830,10 +754,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                             { 
                                 (: if <facet/>s exist, get them :)
                                 if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
-                                    (local:get-facets(),local:new-facets(local:gen-facets()))
+                                    (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
                                 (: else generate them :)
                                 else
-                                    local:gen-facets()
+                                    local:gen-facets(false())
                             }
                         </data>
                     </xf:instance>   
@@ -890,13 +814,13 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         {
                             (: if facet references don't exist on the current state, add them :)
                             if(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)])) then 
-                                for $facet at $pos in local:gen-facets()
+                                for $facet at $pos in local:gen-facets(false())
                                 let $allow := $facet/allow
                                 where starts-with($facet/@name, $NODENAME)
                                 return
                                     <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet" />
                             (: the new <facet/>s to be added now :)
-                            else if (not(empty(local:new-facets(local:gen-facets())))) then 
+                            else if (not(empty(local:new-facets(local:gen-facets(false()),false())))) then 
                                 <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet" />
                             else
                                 ()
@@ -919,7 +843,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" />
                             ):) 
                             (: if there are new <role/>s added, incorporate them :)
-                            else if (not(empty(local:new-facets(local:gen-facets())))) then 
+                            else if (not(empty(local:new-facets(local:gen-facets(false()),false())))) then 
                                 <xf:insert nodeset="instance()/facet[starts-with(./@name, {$NODENAME})]" at="last()" position="after" origin="instance('i-facets')/facet[position() >= {$no-existing-facets}]" />                                
                             else
                                 ()
@@ -1021,8 +945,9 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <br/>
                                 <h1>Manage Permissions</h1>
                                 <div style="width:100%;" class="clearfix">
-                                    <div style="float:left;width:60%;">
+                                    <div style="float:left;width:50%;">
                                         <xf:group>
+                                            <xf:label>State permissions</xf:label>
                                             <table class="listingTable">
                                                 <thead>
                                                     <tr>
@@ -1036,9 +961,9 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 <tbody>
                                                 {
                                                     let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
-                                                                        (local:get-facets(),local:new-facets(local:gen-facets()))
+                                                                        (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
                                                                     else
-                                                                        local:gen-facets()
+                                                                        local:gen-facets(false())
                                                     for $facet at $pos in $facets
                                                     let $allow := $facet/allow
                                                     order by $facet/@role ascending
@@ -1091,12 +1016,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                     <!--xf:delete nodeset="instance()/state[{$ATTR}]/facet[not(contains(instance()/facet/@name,@ref))]" /-->
                                                     {
                                                         let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
-                                                                            (local:get-facets(),local:new-facets(local:gen-facets()))
+                                                                            (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
                                                                         else
-                                                                            local:gen-facets()   
-                                                        for $facet at $pos in $facets
-                                                        let $log := util:log('debug', $facet/@name)
-                                                        let $logs := util:log('debug', "++++++++++++++++++++++++++++++++")                                                        
+                                                                            local:gen-facets(false())   
+                                                        for $facet at $pos in $facets                                                       
                                                         return
                                                             <xf:setvalue ref="instance()/state[{$ATTR}]/facet[{$pos}]/@ref" value="concat('.',instance('i-facets')/facet[{$pos}]/@name)"/>
                                                     }                                                
@@ -1105,7 +1028,37 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 </xf:action>                                
                                             </xf:trigger>
                                         </xf:group>                                 
-                                    </div>    
+                                    </div>  
+                                    
+                                    <div style="float:left;width:40%;margin-left:10px;">
+                                        <xf:group>
+                                            <xf:label>Feature Facets</xf:label>
+                                            <table class="listingTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>These are workflowed features</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td id="foo" class="one">
+                                                            <select>
+                                                                <option value="event.public">event.public</option>
+                                                            </select>
+                                                            <xf:trigger>
+                                                                <xf:label>add event</xf:label>
+                                                                <xf:action>
+                                                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/actions[string-length(action/text()) &lt; 2]" />                                             
+                                                                    <xf:send submission="s-add"/>
+                                                                </xf:action>                                
+                                                            </xf:trigger>                                                            
+                                                        </td>
+                                                    </tr>                                                                                                                                                                                               
+                                                </tbody>
+                                            </table>                                          
+                                        </xf:group>                                 
+                                    </div>                                    
                                 </div>                                                                
                             </div>                       
                         </div>
@@ -1142,18 +1095,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     <xf:bind nodeset="instance()/state[last()]">
                         <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
                         <xf:bind nodeset="actions/action" type="xf:string" constraint="count(instance()/state[last()]/actions/action) eq count(distinct-values(instance()/state[last()]/actions/action))" />
-                    </xf:bind>
-                    
-                    <!--xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)"/>
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)"/>                  
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" relevant="data(../../@show) = 'true'" readonly="not(matches(instance()/state[last()]/@id, '^[a-z_]+$') and string-length(instance()/state[last()]/@id) &gt; 2)" />                  
-                    
-                    <xf:instance id="i-facets">
-                        <data xmlns="">
-                            {local:gen-facets()}
-                        </data>
-                    </xf:instance-->                     
+                    </xf:bind>                    
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 

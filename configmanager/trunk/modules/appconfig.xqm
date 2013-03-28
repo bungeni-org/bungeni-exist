@@ -42,6 +42,8 @@ declare variable $appconfig:TYPES-XML := $appconfig:CONFIGS-FOLDER || "/" || "ty
 
 declare variable $appconfig:UI-XML := $appconfig:FORM-FOLDER || "/" || "ui.xml";
 
+declare variable $appconfig:MODEL-TEMPLATES := $appconfig:ROOT || "/" || "model_templates";
+
 declare variable $appconfig:XSL := $appconfig:ROOT || "/" || "xsl";
 
 declare variable $appconfig:CSS := $appconfig:ROOT || "/" || "resources/css";

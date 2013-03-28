@@ -60,7 +60,13 @@
                 <xsl:attribute name="permissions_from_state"/>
             </xsl:if>
             <xsl:apply-templates select="@*" mode="preserve"/>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:if test="not(@actions)">
+                <xsl:element name="actions">
+                    <xsl:attribute name="originAttr">actions</xsl:attribute>
+                    <xsl:element name="action"/>
+                </xsl:element>
+            </xsl:if>
+            <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
     <xsl:template match="transition">

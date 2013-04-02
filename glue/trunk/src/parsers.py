@@ -104,6 +104,27 @@ class ParseXML(object):
             close_quietly(writer)
             
 
+class ParseBungeniTypesXML(ParseXML):
+    
+    def xpath_doc_archetypes(self):
+        return self.__global_path__ + "doc"
+    
+    def xpath_group_archetypes(self):
+        return self.__global_path__ + "group"
+
+    def xpath_member_archetypes(self):
+        return self.__global_path__ + "member"
+    
+    def get_docs(self):
+        return self.doc_dom().selectNodes(self.xpath_doc_archetypes())
+    
+    def get_groups(self):
+        return self.doc_dom().selectNodes(self.xpath_group_archetypes())
+    
+    def get_members(self):
+        return self.doc_dom().selectNodes(self.xpath_member_archetypes())
+    
+
 class ParseBungeniXML(ParseXML):
     
     """

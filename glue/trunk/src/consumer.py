@@ -34,7 +34,8 @@ from glue import (
     setup_consumer_directories,
     publish_parliament_info,
     publish_languages_info_xml,
-    is_exist_running
+    is_exist_running,
+    write_type_mappings
     )
 
 
@@ -117,6 +118,15 @@ class RabbitMQClient:
             except Exception, ex:
                     LOG.error("Error while closing connection", ex)
 
+
+class PipelineMappingGenerate(Thread):
+    
+    def __init__(self, cd_latch):
+        self.latch = cd_latch
+        self.pipeline_generated = False
+
+    def run(self):
+        pass
 
 class LangInfoPublish(Thread):
     
@@ -305,13 +315,16 @@ setup_consumer_directories(
 # wait until exist starts
 exist_running()
 
-# get language info
-language_info_publish()
-# get chamber information
-cache_info = parliament_info_gather()
-# publish chamber information to exist
-if parliament_info_publish(
-        cache_info
-        ):
-    # publish other documents to exist
-    consume_documents(cache_info)
+# generate the type mappings
+if write_type_mappings(__config_file__):
+    # get language info
+    language_info_publish()
+    # get chamber information
+    cache_info = parliament_info_gather()
+    # publish chamber information to exist
+    if parliament_info_publish(cache_info):
+        # publish other documents to exist
+        consume_documents(cache_info)
+else:
+    print "ERROR !!!! : unable to generate type_mappings from bungeni_custom , ABORTING !"
+    sys.exit()

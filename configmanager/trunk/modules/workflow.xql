@@ -28,6 +28,14 @@ declare function local:get-workflow($doctype) as node() * {
     return $workflow
 };
 
+declare function local:external-facet($feature-name as xs:string) {
+
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $feature-name || ".xml")/workflow/facet
+    for $facet in $doc
+    return 
+        <facet for="{$feature-name}" name="{$feature-name}.{$facet/@name}"/>
+};
+
 (: creates the output for all document facets :)
 declare function local:facets($doctype) as node() * {
     let $facets := local:get-workflow($doctype)/facet
@@ -147,7 +155,7 @@ declare function local:get-permissions() {
 declare function local:workflow() {
 
     let $docname := xs:string(request:get-parameter("doc","none"))
-    let $doc := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")/workflow
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $docname || ".xml")/workflow
     return 
         $doc
 };
@@ -263,8 +271,6 @@ declare function local:gen-facets($global as xs:boolean) as node()* {
     let $docname := xs:string(request:get-parameter("doc","none"))
 
     let $WF-DOC := if($global) then local:workflow-template() else local:workflow()
-    let $log := util:log('debug',$WF-DOC)
-    let $log1 := util:log('debug',"+++++++++++++++++++++++++++++++++++++++++++")
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state)     
     
     let $perm-actions := $WF-DOC/permActions/permAction
@@ -762,11 +768,21 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>   
                     
+                    <xf:instance id="i-feature-facets">
+                        <data xmlns="">
+                            { 
+                                local:external-facet('event'),
+                                local:external-facet('attachment'),
+                                local:external-facet('signatory')
+                            }
+                        </data>
+                    </xf:instance>                      
+                    
                     <xf:instance id="i-facet">
                         <data>
                             <facet ref=""/>
                         </data>
-                    </xf:instance>                
+                    </xf:instance>
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
@@ -819,9 +835,9 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 where starts-with($facet/@name, $NODENAME)
                                 return
                                     <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet" />
-                            (: the new <facet/>s to be added now :)
+                            (: the new <facet/>s thereafter, to be added now :)
                             else if (not(empty(local:new-facets(local:gen-facets(false()),false())))) then 
-                                <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet" />
+                                <xf:insert nodeset="instance()/state[{$ATTR}]/facet[starts-with(@ref,'.')]" at="last()" position="after" origin="instance('i-facet')/facet" />
                             else
                                 ()
                         }       
@@ -848,6 +864,22 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                             else
                                 ()
                         }
+                        <!-- setting the values on the empty <facet/> nodes created above -->
+                        {
+                            let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
+                                                (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
+                                            else
+                                                local:gen-facets(false()) 
+                            (:  in a new state, the facets should match 1=1 the facet references. 
+                            :)
+                            let $new-state :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then false() else true()
+                            for $facet at $pos in $facets 
+                            return 
+                                if($new-state) then
+                                    <xf:setvalue ref="instance()/state[{$ATTR}]/facet[{$pos}]/@ref" value="concat('.',instance('i-facets')/facet[{$pos}]/@name)"/>
+                                else
+                                    ()
+                        }                           
                     </xf:action>
             </xf:model>
             
@@ -896,9 +928,8 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                         <xf:label>actions</xf:label>
                                         <xf:repeat id="r-stateactions" nodeset="./actions/action[position() != last()]" appearance="compact">
                                             <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                <xf:hint>a Hint for this control</xf:hint>
                                                 <xf:alert>invalid: emtpy or non-unique tags</xf:alert>
-                                                <xf:hint>tags should be unique</xf:hint>   
+                                                <xf:hint>actions should be unique</xf:hint>   
                                                 <xf:itemset nodeset="instance('i-actions')/action">
                                                     <xf:label ref="."></xf:label>                                       
                                                     <xf:value ref="@name"></xf:value>
@@ -969,7 +1000,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                     order by $facet/@role ascending
                                                     return
                                                         <tr>
-                                                            <td id="foo" class="one">
+                                                            <td class="one">
                                                                 {data($facet/@role)}
                                                             </td>
                                                             <td class="permView">
@@ -1013,50 +1044,41 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                     <xf:delete nodeset="instance()/state[{$ATTR}]/actions/action[last() > 1]" at="last()" />
                                                     <!-- remove the actions node if there is jus the template action we insert -->
                                                     <xf:delete nodeset="instance()/state[{$ATTR}]/actions[string-length(action/text()) &lt; 2]" />
-                                                    <!--xf:delete nodeset="instance()/state[{$ATTR}]/facet[not(contains(instance()/facet/@name,@ref))]" /-->
-                                                    {
-                                                        let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
-                                                                            (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
-                                                                        else
-                                                                            local:gen-facets(false())   
-                                                        for $facet at $pos in $facets                                                       
-                                                        return
-                                                            <xf:setvalue ref="instance()/state[{$ATTR}]/facet[{$pos}]/@ref" value="concat('.',instance('i-facets')/facet[{$pos}]/@name)"/>
-                                                    }                                                
                                                     <xf:send submission="s-add"/>
-                                                    <xf:insert nodeset="instance()/state[{$ATTR}]/actions/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions/action" />
+                                                    <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions" />
                                                 </xf:action>                                
                                             </xf:trigger>
                                         </xf:group>                                 
                                     </div>  
                                     
                                     <div style="float:left;width:40%;margin-left:10px;">
-                                        <xf:group>
+                                        <xf:group ref="./state[{$ATTR}]">
                                             <xf:label>Feature Facets</xf:label>
-                                            <table class="listingTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>These are workflowed features</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td id="foo" class="one">
-                                                            <select>
-                                                                <option value="event.public">event.public</option>
-                                                            </select>
-                                                            <xf:trigger>
-                                                                <xf:label>add event</xf:label>
-                                                                <xf:action>
-                                                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/actions[string-length(action/text()) &lt; 2]" />                                             
-                                                                    <xf:send submission="s-add"/>
-                                                                </xf:action>                                
-                                                            </xf:trigger>                                                            
-                                                        </td>
-                                                    </tr>                                                                                                                                                                                               
-                                                </tbody>
-                                            </table>                                          
+                                            <span class="warning">&#160;These are workflowed features</span>
+                                            <xf:repeat id="r-featurefacets" nodeset="./facet[not(starts-with(./@ref,'.'))]" appearance="compact">
+                                                <xf:select1 ref="@ref" appearance="minimal" incremental="true">
+                                                    <xf:hint>a Hint for this control</xf:hint>
+                                                    <xf:alert>invalid: emtpy or non-unique feature-facet</xf:alert>
+                                                    <xf:itemset nodeset="instance('i-feature-facets')/facet">
+                                                        <xf:label ref="@name"></xf:label>                                       
+                                                        <xf:value ref="@name"></xf:value>
+                                                    </xf:itemset>                                                  
+                                                </xf:select1>
+                                                &#160;
+                                                <xf:trigger src="resources/images/delete.png">
+                                                    <xf:label>X</xf:label>
+                                                    <xf:action>
+                                                        <xf:delete at="index('r-featurefacets')[position()]"></xf:delete>                                 
+                                                    </xf:action>
+                                                </xf:trigger>                                  
+                                            </xf:repeat>   
+                                            <xf:trigger>
+                                                <xf:label>facet +</xf:label>
+                                                <xf:action>
+                                                    <xf:insert ev:event="DOMActivate" nodeset="./facet" at="last()" position="after" origin="instance('i-facet')/facet"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                            <hr/>                                           
                                         </xf:group>                                 
                                     </div>                                    
                                 </div>                                                                

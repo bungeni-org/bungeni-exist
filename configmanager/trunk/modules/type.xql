@@ -321,7 +321,7 @@ function type:add($node as node(), $model as map(*)) {
                 <xf:instance id="i-controller" src="{$type:REST-CXT-APP}/model_templates/controller.xml"/>        
                 
                 <xf:bind nodeset="instance()/{$type}[last()]">
-                    <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$')" />
+                    <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/{$type}/@name) eq count(distinct-values(instance()/{$type}/@name))" />
                     <xf:bind id="typenable" nodeset="@enabled" type="xf:boolean" required="true()"/>
                 </xf:bind>
                 

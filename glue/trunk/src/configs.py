@@ -45,6 +45,9 @@ class TransformerConfig(Config):
 
     def get_bungeni_custom(self):
         return self.get("general", "bungeni_custom_folder")
+    
+    def get_types_xml_from_bungeni_custom(self):
+        return os.path.join(self.get_bungeni_custom(), "types.xml")
  
     def get_legislature_start_date(self):
         return self.__legislature__()["start_date"]

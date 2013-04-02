@@ -17,7 +17,7 @@
         /path/to/jython2.5.2/bin/easy_install polib
 """
 
-import os.path, sys, errno, getopt, shutil
+import os.path, sys, errno, getopt, shutil, codecs
 import time
 
 __author__ = "Ashok Hariharan and Anthony Oduor"
@@ -60,8 +60,12 @@ from configs import (
 
 from gen_utils import (
     COLOR,
+    mkdir_p,
+    get_module_dir,
     get_module_file,
-    ParliamentCacheInfo
+    ParliamentCacheInfo,
+    typename_to_camelcase,
+    typename_to_propercase,
     )
 
 from utils import (
@@ -73,6 +77,7 @@ from utils import (
     )
 
 from parsers import (
+    ParseBungeniTypesXML,
     ParseBungeniXML
     )
 
@@ -97,14 +102,6 @@ def __empty_output_dir__(folder):
             os.unlink(file_path)
         except Exception, e:
             print e
-
-def mkdir_p(path):
-    try:
-        os.makedirs(path)
-    except os.error : # Python >2.5
-        if os.error.errno == errno.EEXIST:
-            pass
-        else: raise
 
 def __setup_tmp_dir__(cfg):
     if not os.path.isdir(cfg.get_temp_files_folder()):
@@ -133,10 +130,6 @@ def __setup_output_dirs__(cfg):
         mkdir_p(cfg.get_xml_output_folder())
     else:
         __empty_output_dir__(cfg.get_xml_output_folder())        
-    #if not os.path.isdir(cfg.get_ontoxml_output_folder()):
-    #    mkdir_p(cfg.get_ontoxml_output_folder())
-    #else:
-    #    __empty_output_dir__(cfg.get_ontoxml_output_folder())
     if not os.path.isdir(cfg.get_attachments_output_folder()):
         mkdir_p(cfg.get_attachments_output_folder())
     else:
@@ -253,8 +246,62 @@ def param_type_mappings():
     type_mappings_file = get_module_file("type_mappings.xml")
     type_mappings = open(type_mappings_file, "r").read()
     return type_mappings.encode("UTF-8")
-    
 
+def __type_mapping_element(type, map_str):
+    name = type.attributeValue("name")
+    enabled = type.attributeValue("enabled")
+    if enabled == "true":
+        return map_str % (
+            name, 
+            typename_to_propercase(name), 
+            typename_to_camelcase(name)
+        )
+    else:
+        return None
+    
+def generate_type_mappings(config_file):
+    cfg = TransformerConfig(config_file)
+    parser = ParseBungeniTypesXML(cfg.get_types_xml_from_bungeni_custom())
+    if parser.doc_parse():
+        li_map_doc = []
+        li_map_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
+        li_map_doc.append("<!-- AUTO GENERATED type mappings from bungeni to glue types -->")
+        li_map_doc.append("<value>")
+        map_str = '   <map from="%s" uri-name="%s" element-name="%s" />'
+        doc_types = parser.get_docs()
+        for doc_type in doc_types:
+            map_elem = __type_mapping_element(doc_type, map_str)
+            if map_elem is not None:
+                li_map_doc.append(map_elem)
+        groups = parser.get_groups()
+        for group in groups:
+            map_elem = __type_mapping_element(group, map_str)
+            if map_elem is not None:
+                li_map_doc.append(map_elem)
+        members = parser.get_members()
+        for member in members:
+            map_elem = __type_mapping_element(member, map_str)
+            if map_elem is not None:
+                li_map_doc.append(map_elem)        
+        li_map_doc.append("</value>")
+        return ("\n".join(li_map_doc)).encode("UTF-8")
+    return None
+
+def write_type_mappings(config_file):
+    '''
+    Generates the type_mappings file
+    '''
+    type_mappings = generate_type_mappings(config_file)
+    if type_mappings is not None:
+        print "TYPE MAPPINGS = ", type_mappings
+        ftype_mappings = codecs.open(os.path.join(get_module_dir(), "type_mappings.xml"), "w", "utf-8")
+        ftype_mappings.write(type_mappings)
+        ftype_mappings.flush()
+        ftype_mappings.close()
+        return True
+    return False
+                          
+    
 def is_exist_running(config_file):
     exist_running = True
     webdaver = None

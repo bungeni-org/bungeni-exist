@@ -342,8 +342,11 @@ declare
  : Authenticate and delete amendment document from /db/bungeni-xml
  :  :)
 declare 
-    %rest:DELETE
-    %rest:path("/amendment/remove/{$username}/{$password}/{$filename}")
+    %rest:POST
+    %rest:path("/amendment/remove")	
+    %rest:form-param("username","{$username}")
+    %rest:form-param("password","{$password}")
+    %rest:form-param("filename","{$filename}")
     %output:method("xml")
     function local:pop-document($username as xs:string*, $password as xs:string*, $filename as xs:string*){
         
@@ -373,7 +376,49 @@ declare
                 </error>
             </popAttachment> 
         }
-};
+  };
+
+(:
+ : Authenticate and save amendment document from /db/bungeni-xml
+ :)
+declare
+    %rest:POST
+    %rest:path("/amendment/save")
+    %rest:form-param("username","{$username}")
+    %rest:form-param("password","{$password}")
+    %rest:form-param("filename","{$filename}")
+    %rest:form-param("document","{$document}")
+    %output:method("xml")
+    function local:push-document($username as xs:string*, $password as xs:string*, $filename as xs:string*, $document as xs:string*){
+        
+         try{
+            
+            let $password := if ($password eq "*") then 
+                                "" 
+                            else    
+                                $password
+            let $login := xmldb:login("/db/bungeni-xml", $username, $password)
+            let $store-return-status := xmldb:store("/db/bungeni-xml", $filename, $document)
+                return
+                    <pushAmendment>
+                        <success>True</success>
+                        <amendmentName>{$filename}</amendmentName>
+                    </pushAmendment> 
+        }
+        catch *{
+            
+            <pushAmendment>
+                <success>False</success>
+                <amendmentName>{$filename}</amendmentName>
+                <error>
+                    <errorCode>{$err:code}</errorCode>
+                    <errorDescr>{$err:description}</errorDescr>
+                    <errorMod>{$err:module, "(", $err:line-number, ",", $err:column-number, ")"}</errorMod>
+                </error>
+            </pushAmendment> 
+        }
+ };
+
 
 (:
  :DEPRECATED

@@ -65,6 +65,15 @@ br {
     
 } 
 
+#transitionSources a.down,
+#transitionSources a.up {
+    color:#2B92BE;
+}
+#transitionSources a.down i:hover,
+#transitionSources a.up i:hover {
+    color:#35B3E9 !important;
+}
+
 /*listing table (list-items.xql) styles*/
 .listingTable{
     border:none;
@@ -592,7 +601,9 @@ div.ulisting li {
   font: 200 20px/1.5 sans-serif;
   border-bottom: 1px solid #ccc;
 }
-
+div.ulisting li:hover {
+  background-color:#f8f8f8;
+}
 div.ulisting li:last-child {
   border: none;
 }
@@ -659,6 +670,29 @@ html[xmlns] .clearfix {
 
 div.ulisting a.greyed {
     color:#aaa;
+}
+
+.choiceInput {
+    margin-right:15px !important;
+}
+.choiceInput .dijitButtonNode {
+    border:0 none !important;
+    margin-left:-2px;
+}
+.choiceInput .dijitTextBox {
+    border:0 none !important;
+}
+.choiceInput .dijitInputContainer {
+    border-right:1px solid #cccccc;
+}
+.choiceInput .xfValue {
+    border-right:0 none !important;
+}
+.choiceInput .dijitArrowButtonInner {
+    border-top:1px solid #cccccc;
+    border-right:1px solid #cccccc;
+    border-bottom:1px solid #cccccc;
+    border-left:0 none;
 }
 
 /* BREADCRUMBS

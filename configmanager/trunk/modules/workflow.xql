@@ -21,7 +21,11 @@ declare variable $workflow:REST-CXT-APP :=  $workflow:CXT || $appconfig:REST-APP
 declare variable $workflow:REST-BC-LIVE :=  $workflow:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 declare variable $workflow:REST-CXT-MODELTMPL := $workflow:REST-CXT-APP || "/model_templates";
 
+declare variable $workflow:TYPE := xs:string(request:get-parameter("type",""));
+declare variable $workflow:DOCNAME := xs:string(request:get-parameter("doc",""));
+declare variable $workflow:NODENAME := xs:string(request:get-parameter("node",""));
 declare variable $workflow:ATTR-ID := xs:integer(request:get-parameter("attr",0));
+declare variable $workflow:DOCPOS := xs:integer(request:get-parameter("pos",0));
 
 declare function local:get-workflow($doctype) as node() * {
     let $workflow := doc($appconfig:WF-FOLDER || "/" || $doctype || ".xml")/workflow
@@ -74,46 +78,43 @@ declare function local:get-form($docname as xs:string) as node() * {
 };
 
 (: creates the output for all document transitions sources :)
-declare function local:transition-to-from($doctype, $nodename) as node() * {
-
-    for $transition at $pos in local:get-workflow($doctype)/transition
-    where $transition/sources/source[. = $nodename] | $transition/destinations/destination[. = $nodename]
+declare function local:transition-src($doctype as xs:string, 
+                                        $nodename as xs:string,
+                                        $source as xs:boolean) as node() * {
+    for $transition at $pos in local:get-workflow($doctype)/transition                 
+    where $transition/sources/source[. = $nodename]
+    order by $transition/@order ascending
     return
-        local:render-row($doctype, $nodename, $pos, $transition)
+        <tr>
+            <td><a class="editlink" title="edit transition" href="transition-edit.html?type={$workflow:TYPE}&amp;doc={$workflow:DOCNAME}&amp;pos={$workflow:DOCPOS}&amp;attr={$workflow:ATTR-ID}&amp;from={$workflow:NODENAME}&amp;nodepos={$pos}">{data($transition/@title)}</a></td>
+            <td><span>{$transition/destinations/destination/text()}&#160;</span></td>
+            <td title="{data($transition/@order)}">
+                    <span style="float:right;">
+                        <a class="up" href="{$workflow:RESTXQ}/workflow/{$workflow:DOCNAME}/{$workflow:NODENAME}/transition/{data($transition/@order)}/up"><i class="icon-up"/></a>
+                        <a class="down" href="{$workflow:RESTXQ}/form/{$workflow:DOCNAME}/{$workflow:NODENAME}/transition/{data($transition/@order)}/down"><i class="icon-down"/></a>
+                    </span>
+            </td>
+        </tr>        
 };
 
-(: reused to render the destination and source transition tables below :)
-declare function local:render-row($doctype as xs:string, $nodename as xs:string, $pos as xs:integer, $transition as node()) as node() * {
-    let $TYPE := xs:string(request:get-parameter("type",""))
-    let $DOCNAME := xs:string(request:get-parameter("doc",""))
-    let $DOCPOS := xs:integer(request:get-parameter("pos",0))
-    let $NODENAME := xs:string(request:get-parameter("node",""))
-    let $ATTR := xs:string(request:get-parameter("attr",""))
+declare function local:transition-dest($doctype as xs:string, 
+                                        $nodename as xs:string,
+                                        $source as xs:boolean) as node() * {
+    for $transition at $pos in local:get-workflow($doctype)/transition
+    
     let $sources :=  for $src in $transition/sources/source
                     return 
                         if($src/text() = $nodename) then
                             <span class="xposeGreen">{$src/text()}</span>
                         else
                             <span>{$src}&#160;</span>
-    let $destinations :=  for $dest in $transition/destinations/destination
-                    return 
-                        if($dest/text() = $nodename) then
-                            <span class="xposeGreen">&#160;{$dest/text()}</span>
-                        else
-                            <span>{$dest}&#160;</span>                            
-    return 
-    <tr>
-        <td>
-            { 
-                if(contains($transition/sources/source,$NODENAME)) then
-                    <a class="editlink" href="transition-edit.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}&amp;nodepos={$pos}">{data($transition/@title)}</a>
-                else
-                    <span>{data($transition/@title)}</span>             
-            }
-        </td>
-        <td>{$sources}</td>
-        <td>{$destinations}</td>
-    </tr>
+                            
+    where $transition/destinations/destination[. = $nodename]
+    return
+        <tr>
+            <td><span>{data($transition/@title)}</span></td>
+            <td>{$sources}</td>
+        </tr>        
 };
 
 (: creates the output for all document transitions sources :)
@@ -957,14 +958,26 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <h1>Manage Transitions</h1>
                                 <div style="width:100%;" class="clearfix">
                                     <div style="float:left;width:60%;">
+                                        <h4 style="text-align:right;">&#8592;</h4>
                                         <table class="listingTable" style="width:100%;">
                                             <tr>                      			 
-                                                <th>transition title</th>
-                                                <th>source</th>
-                                                <th>destination</th>
+                                                <th style="width:40%">transition title</th>
+                                                <th>source state</th>
                                             </tr>
-                                            {local:transition-to-from($DOCNAME, $NODENAME)}
+                                            {local:transition-dest($DOCNAME, $NODENAME, true())}
                                         </table> 
+                                        <div style="margin-top:15px;"/>
+                                        <h4 style="text-align:right;">&#8594;</h4>   
+                                        <table id="transitionSources" class="listingTable" style="width:100%;">
+                                            <thead>
+                                                <tr>                      			 
+                                                    <th style="width:40%">transition title</th>
+                                                    <th>destinations state</th>
+                                                    <th style="width:8%">order</th>
+                                                </tr>
+                                            </thead>
+                                            {local:transition-src($DOCNAME, $NODENAME, true())}
+                                        </table>                                         
                                         <div id="popup" style="display:none;">
                                             <div id="popupcontent" class="popupcontent"></div>
                                         </div>                                           
@@ -1261,6 +1274,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
     let $DOCPOS := xs:integer(request:get-parameter("pos",0))
     let $NODENAME := xs:string(request:get-parameter("from",""))
     let $ATTR := xs:string(request:get-parameter("attr",""))
+    let $ORDER-NO := count(local:get-workflow($workflow:DOCNAME)/transition/sources/source[. = $NODENAME])+1
     return
     	<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
             <div style="display:none;">
@@ -1338,16 +1352,10 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                 <br/>    
                 <div style="width:100%;margin-top:10px;">               
                     <xf:group ref="instance()/transition[last()]" appearance="bf:horizontalTable">                    
-                        <xf:label><h1>transition | <xf:output value="@title" class="transition-inline"/></h1></xf:label>
-                        <xf:label><h3>{$NODENAME} &#8594; <xf:output value="destinations/destination" class="transition-inline"/></h3></xf:label>
+                        <xf:label><h1>{$NODENAME} &#8594; <xf:output value="destinations/destination" class="transition-inline"/></h1></xf:label>                    
+                        <xf:label><h3>transition | <xf:output value="@title" class="transition-inline"/></h3></xf:label>
                         <xf:group appearance="bf:verticalTable" style="width:70%">
-                            <xf:label><h3>properties</h3></xf:label>
-                            <xf:input id="transition-id" bind="b-title" incremental="true">
-                                <xf:label>Transition Title</xf:label>
-                                <xf:hint>type transition title</xf:hint>
-                                <xf:help>... and no spaces in between words</xf:help>
-                                <xf:alert>enter more than 3 characters...</xf:alert>
-                            </xf:input>                           
+                            <xf:label><h3>properties</h3></xf:label>                           
                             <xf:select1 ref="destinations/destination" appearance="minimal" incremental="true">
                                 <xf:label>Destination</xf:label>
                                 <xf:hint>select a destination</xf:hint>
@@ -1356,7 +1364,13 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                                     <xf:label ref="."></xf:label>
                                     <xf:value ref="."></xf:value>
                                 </xf:itemset>
-                            </xf:select1>                              
+                            </xf:select1>       
+                            <xf:input id="transition-id" bind="b-title" incremental="true">
+                                <xf:label>Transition Title</xf:label>
+                                <xf:hint>type transition title</xf:hint>
+                                <xf:help>... and no spaces in between words</xf:help>
+                                <xf:alert>enter more than 3 characters...</xf:alert>
+                            </xf:input>                            
                             <xf:select1 ref="@trigger" appearance="minimal" incremental="true">
                                 <xf:label>Triggered</xf:label>
                                 <xf:hint>how this transition is triggered</xf:hint>
@@ -1435,6 +1449,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                         <xf:label>add transition</xf:label>
                         <xf:action>
                             <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                            <xf:setvalue ref="instance()/transition[last()]/@order" value="'{$ORDER-NO}'"/>
                             <xf:send submission="s-add"/>
                         </xf:action>                                
                     </xf:trigger>                    
@@ -1585,21 +1600,12 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                 </div>
                 <br/>    
                 <div style="width:100%;margin-top:10px;">               
-                    <xf:group ref="instance()/transition[{$NODEPOS}]" appearance="bf:horizontalTable">                    
-                        <xf:label><h1>transition | <xf:output value="@title" class="transition-inline"/></h1></xf:label>
-                        <xf:label><h3>{$NODENAME} &#8594; <xf:output value="destinations/destination" class="transition-inline"/></h3>
+                    <xf:group ref="instance()/transition[{$NODEPOS}]" appearance="bf:horizontalTable">                  
+                        <xf:label><h1>{$NODENAME} &#8594; <xf:output value="destinations/destination" class="transition-inline"/></h1>
+                        <xf:label><h3>transition | <xf:output value="@title" class="transition-inline"/></h3></xf:label>
                         </xf:label>
                         <xf:group appearance="bf:verticalTable" style="width:70%">
                             <xf:label><h3>properties</h3></xf:label>
-                            <xf:input id="transition-id" bind="b-title" incremental="true">
-                                <xf:label>Transition Title</xf:label>
-                                <xf:hint>transition name</xf:hint>
-                                <xf:help>... and no spaces in between words</xf:help>
-                                <xf:alert>enter more than 3 characters...</xf:alert>
-                            </xf:input>                       
-                            <xf:output bind="b-order">
-                                <xf:label>Order</xf:label>                                
-                            </xf:output>     
                             <xf:select1 ref="destinations/destination" appearance="minimal" incremental="true">
                                 <xf:label>Destination</xf:label>
                                 <xf:hint>select a destination</xf:hint>
@@ -1608,7 +1614,16 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                     <xf:label ref="."></xf:label>
                                     <xf:value ref="."></xf:value>
                                 </xf:itemset>
-                            </xf:select1>                               
+                            </xf:select1>                              
+                            <xf:input id="transition-id" bind="b-title" incremental="true">
+                                <xf:label>Transition Title</xf:label>
+                                <xf:hint>transition name</xf:hint>
+                                <xf:help>... and no spaces in between words</xf:help>
+                                <xf:alert>enter more than 3 characters...</xf:alert>
+                            </xf:input>                       
+                            <xf:output bind="b-order">
+                                <xf:label>Order</xf:label>                                
+                            </xf:output>                             
                             <xf:select1 ref="@trigger" appearance="minimal" incremental="true">
                                 <xf:label>Triggered</xf:label>
                                 <xf:hint>how this transition is triggered</xf:hint>

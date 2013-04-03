@@ -105,6 +105,21 @@ declare function local:get-form($docname as xs:string) as node() * {
     doc($appconfig:FORM-FOLDER || '/' || $docname || '.xml')
 };
 
+(:
+    Returns a list of fields from the archetype given
+:)
+declare function local:fieldset($archetype as xs:string) {
+
+    <fields>
+    {
+        let $doc := doc($appconfig:UI-XML)/ui
+        for $field in $doc/descriptor[@name eq $archetype]/field
+        return
+            <field>{$field/@*}</field>
+    }
+    </fields>
+};
+
 declare function local:mode() as xs:string {
     let $doc := request:get-parameter("doc", "nothing")
 
@@ -328,42 +343,13 @@ function form:field-edit($node as node(), $model as map(*)) {
                  <xf:model id="fieldedit">
                     <xf:instance id="i-field" src="{$form:REST-BC-LIVE}/forms/{$docname}.xml"/> 
                     
-                    <xf:instance id="i-modes" xmlns="">
-                        <data>
-                            <view show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </view>
-                            <edit show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </edit>
-                            <add show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </add>
-                            <listing show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </listing> 
-                        </data>
-                    </xf:instance>     
+                    <xf:instance id="i-modes" src="{$form:REST-CXT-APP}/model_templates/modes.xml"/>     
                     
                     <xf:instance id="i-allroles" xmlns="">
                         {appconfig:roles()}
                     </xf:instance>
 
-                    <xf:instance id="i-originrole" xmlns="">
-                        <data>
-                            <roles>
-                               <role>ALL</role>                               
-                            </roles>
-                        </data>
-                    </xf:instance>                     
+                    <xf:instance id="i-originrole" src="{$form:REST-CXT-APP}/model_templates/originrole.xml"/>                    
                     
                     <xf:instance id="i-valuetypes" src="{$form:REST-BC-LIVE}/forms/.auto/_valuetypes.xml"/> 
  
@@ -372,7 +358,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                     <xf:instance id="i-vocabularies" src="{$form:REST-BC-LIVE}/forms/.auto/_vocabularies.xml"/>
 
                     <xf:bind nodeset=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
+                        <xf:bind nodeset="@name" type="xf:string" readonly="boolean-from-string('true')" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()" />
@@ -464,9 +450,16 @@ function form:field-edit($node as node(), $model as map(*)) {
                             <a class="commit" href="/exist/restxq/form/commit/{$docname}" title="save this file back to the filesystem">commit form</a>
                         </div>  
                         
-                        <h1><xf:output ref="@label"/></h1>                    
+                        <h1><xf:output ref="@name"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
+                                <xf:input id="field-name" ref="@name" incremental="true">
+                                    <xf:label>field name</xf:label>
+                                    <xf:hint>Unique field name</xf:hint>
+                                    <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
+                                    <xf:help>help with name of field</xf:help>
+                                </xf:input>  
+                                
                                 <xf:input id="label-name" ref="@label" incremental="true">
                                     <xf:label>label</xf:label>
                                     <xf:hint>Label used for this field</xf:hint>
@@ -474,12 +467,6 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:help>help with label of field</xf:help>
                                 </xf:input> 
                                 
-                                <xf:input id="field-name" ref="@name" incremental="true">
-                                    <xf:label>field name</xf:label>
-                                    <xf:hint>Unique field name</xf:hint>
-                                    <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
-                                    <xf:help>help with name of field</xf:help>
-                                </xf:input>  
                                 <xf:select1 id="input-vocab-field" ref="@vocabulary" appearance="minimal" incremental="true">
                                     <xf:label>vocabulary</xf:label>
                                     <xf:hint>select a vocabulary for this field</xf:hint>
@@ -714,57 +701,13 @@ function form:field-add($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>                    
                     
-                    <xf:instance id="i-modes" xmlns="">
-                        <data>
-                            <view show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </view>
-                            <edit show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </edit>
-                            <add show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </add>
-                            <listing show="true">
-                                <roles>
-                                    <role>ALL</role>
-                                </roles>
-                            </listing> 
-                        </data>
-                    </xf:instance>     
+                    <xf:instance id="i-modes" src="{$form:REST-CXT-APP}/model_templates/modes.xml"/>    
                     
-                    <xf:instance id="i-fieldtmpl" xmlns="">
-                        <data>
-                            <field name="" label="" required="false" value_type="" render_type="" vocabulary="">
-                                <view show="true">
-                                    <roles>
-                                        <role>ALL</role>
-                                    </roles>
-                                </view>
-                                <edit show="true">
-                                    <roles>
-                                        <role>ALL</role>
-                                    </roles>
-                                </edit>
-                                <add show="true">
-                                    <roles>
-                                        <role>ALL</role>
-                                    </roles>
-                                </add>
-                                <listing show="true">
-                                    <roles>
-                                        <role>ALL</role>
-                                    </roles>
-                                </listing>                             
-                            </field>
-                        </data>
-                    </xf:instance>                    
+                    <xf:instance id="i-fieldtmpl" src="{$form:REST-CXT-APP}/model_templates/field.xml"/>                  
+ 
+                    <xf:instance id="i-fieldset" xmlns="">
+                        {local:fieldset($type)}
+                    </xf:instance> 
  
                     <xf:instance id="i-allroles" xmlns="">
                         {appconfig:roles()}
@@ -772,20 +715,14 @@ function form:field-add($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-vocabularies" src="{$form:REST-BC-LIVE}/forms/.auto/_vocabularies.xml"/>                    
 
-                    <xf:instance id="i-originrole" xmlns="">
-                        <data>
-                            <roles>
-                               <role>ALL</role>                               
-                            </roles>
-                        </data>
-                    </xf:instance>                     
+                    <xf:instance id="i-originrole" src="{$form:REST-CXT-APP}/model_templates/originrole.xml"/>                    
                     
                     <xf:instance id="i-valuetypes" src="{$form:REST-BC-LIVE}/forms/.auto/_valuetypes.xml"/> 
                     
                     <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/.auto/_rendertypes.xml"/>
 
                     <xf:bind nodeset="./field[last()]">
-                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
+                        <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" relevant="true()" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
@@ -861,22 +798,34 @@ function form:field-add($node as node(), $model as map(*)) {
                        <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
                             <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
                         </a>
-                        <h1><xf:output ref="@label"/></h1>                    
+                        <h1><xf:output ref="@name"/></h1>                    
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
+                                <xf:select1 id="field-name" class="choiceInput" ref="@name" selection="open" incremental="true">
+                                    <xf:label>field name</xf:label>
+                                    <xf:hint>Enter be the field title</xf:hint>
+                                    <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
+                                    <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
+                                    <xf:itemset nodeset="instance('i-fieldset')/field">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
+                                    </xf:itemset>
+                                    <xf:action ev:event="xforms-value-changed">
+                                        <xf:setvalue ref="instance()/field[last()]/@label" value="instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@label"/>
+                                        <xf:setvalue ref="instance()/field[last()]/@vocabulary" value="instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@vocabulary"/>
+                                        <xf:setvalue ref="instance()/field[last()]/@required" value="boolean-from-string(instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@required)"/>
+                                        <xf:setvalue ref="instance()/field[last()]/@value_type" value="instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@value_type"/>
+                                        <xf:setvalue ref="instance()/field[last()]/@render_type" value="instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@render_type"/>
+                                    </xf:action>                                    
+                                </xf:select1>                                
+                                
                                 <xf:input id="label-name" ref="@label" incremental="true">
                                     <xf:label>label</xf:label>
                                     <xf:hint>Label used for this field</xf:hint>
                                     <xf:alert>invalid label name</xf:alert>
                                     <xf:help>help with label of field</xf:help>
                                 </xf:input> 
-                                
-                                <xf:input id="field-name" ref="@name" incremental="true">
-                                    <xf:label>field name</xf:label>
-                                    <xf:hint>Enter be the field title</xf:hint>
-                                    <xf:alert>invalid: must be 3+ characters, A-z and _, unique name in the form</xf:alert>
-                                    <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
-                                </xf:input>    
+                                   
                                 <xf:select1 id="input-vocab-field" ref="@vocabulary" appearance="minimal" incremental="true">
                                     <xf:label>vocabulary</xf:label>
                                     <xf:hint>select a vocabulary for this field</xf:hint>

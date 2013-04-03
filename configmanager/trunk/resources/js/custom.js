@@ -36,7 +36,32 @@ $(document).ready(function(){
         return false;
     });
     
-    // moving nodes up and down (reordering)
+    // moving nodes up and down (reordering) in <table>
+    $("table#transitionSources tbody tr:first .up,table#transitionSources tbody tr:last .down").hide();
+    $(".up, .down").click(function(){
+        var row = $(this).parents("tr:first");
+        var href = $(this).attr('href');
+        if ($(this).is(".up")) {
+            $("table#transitionSources tbody tr:first .up").show();
+            $.get(href,function(data,status) {
+                if (status == "success")
+                    row.insertBefore(row.prev());
+                    row.find(".down").show();
+                    $("table#transitionSources tbody tr:first .up,table#transitionSources tbody tr:last .down").hide();
+            });
+        } else {        
+            $.get(href,function(data,status){             
+                if (status == "success") {                
+                    row.insertAfter(row.next());   
+                    row.find(".up").show();
+                    $("table#transitionSources tbody tr:first .up,table#transitionSources tbody tr:last .down").hide();
+                }
+            });
+        }
+        return false;
+    });
+    
+    // moving nodes up and down (reordering) in <ul>
     $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
     $(".up, .down").click(function(){
         var row = $(this).parents("li:first");

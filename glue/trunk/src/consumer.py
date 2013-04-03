@@ -35,7 +35,7 @@ from glue import (
     publish_parliament_info,
     publish_languages_info_xml,
     is_exist_running,
-    write_type_mappings
+    types_all_config
     )
 
 
@@ -70,6 +70,7 @@ class RabbitMQClient:
         self.exchangeName = "bungeni_serialization_output_queue"
         self.queueName = "bungeni_serialization_output_queue"
         self.factory = ConnectionFactory()
+        # !+HARCODED host
         self.factory.setHost("localhost")
         self.conn = self.factory.newConnection()
         self.channel = self.conn.createChannel()
@@ -314,9 +315,8 @@ setup_consumer_directories(
 
 # wait until exist starts
 exist_running()
-
 # generate the type mappings
-if write_type_mappings(__config_file__):
+if types_all_config(__config_file__):
     # get language info
     language_info_publish()
     # get chamber information

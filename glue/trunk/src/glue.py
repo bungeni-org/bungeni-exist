@@ -53,6 +53,9 @@ from org.apache.http.conn import HttpHostConnectException
 ### APP Imports ####
 
 from configs import (
+    __pipeline_configs_file,
+    __type_mappings_file,
+    __pipelines_file,
     TransformerConfig,
     WebDavConfig,
     PoTranslationsConfig
@@ -61,8 +64,11 @@ from configs import (
 from gen_utils import (
     COLOR,
     mkdir_p,
+    __setup_tmp_dir__,
+    __setup_tmp_dirs__,
+    __setup_output_dirs__,
+    __setup_cache_dirs__,
     get_module_dir,
-    get_module_file,
     ParliamentCacheInfo,
     typename_to_camelcase,
     typename_to_propercase,
@@ -78,6 +84,7 @@ from utils import (
 
 from parsers import (
     ParseBungeniTypesXML,
+    ParsePipelineConfigsXML,
     ParseBungeniXML
     )
 
@@ -93,54 +100,14 @@ from walker_ext import (
      SyncXmlFilesWalker
     )
 
+
 LOG = Logger.getLogger("glue")
-
-def __empty_output_dir__(folder):
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
-        try:
-            os.unlink(file_path)
-        except Exception, e:
-            print e
-
-def __setup_tmp_dir__(cfg):
-    if not os.path.isdir(cfg.get_temp_files_folder()):
-        mkdir_p(cfg.get_temp_files_folder())
-    
-def __setup_tmp_dirs__(cfg):
-
-    if not os.path.isdir(cfg.get_po_files_folder()):
-        mkdir_p(cfg.get_po_files_folder())
-
-    if not os.path.isdir(cfg.get_i18n_catalogues_folder()):
-        mkdir_p(cfg.get_i18n_catalogues_folder())
-
-def __setup_cache_dirs__(cfg):
-
-    if not os.path.isdir(cfg.get_cache_file_folder()):
-        mkdir_p(cfg.get_cache_file_folder())
-    else:
-        ### clear the cache file during every run of the consumer
-        __empty_output_dir__(cfg.get_cache_file_folder())
-    
-
-def __setup_output_dirs__(cfg):
-        
-    if not os.path.isdir(cfg.get_xml_output_folder()):
-        mkdir_p(cfg.get_xml_output_folder())
-    else:
-        __empty_output_dir__(cfg.get_xml_output_folder())        
-    if not os.path.isdir(cfg.get_attachments_output_folder()):
-        mkdir_p(cfg.get_attachments_output_folder())
-    else:
-        __empty_output_dir__(cfg.get_attachments_output_folder())
-    if not os.path.isdir(cfg.get_temp_files_folder()):
-        mkdir_p(cfg.get_temp_files_folder())
 
 def setup_consumer_directories(config_file):
     cfg = TransformerConfig(config_file)
     __setup_tmp_dir__(cfg)
     __setup_cache_dirs__(cfg)
+
 
 def get_parl_info(config_file):
     """
@@ -243,13 +210,11 @@ def param_parl_info(cfg, params):
     return li_parl_params.toString()
 
 def param_type_mappings():
-    type_mappings_file = get_module_file("type_mappings.xml")
+    type_mappings_file = __type_mappings_file()
     type_mappings = open(type_mappings_file, "r").read()
     return type_mappings.encode("UTF-8")
 
-def __type_mapping_element(type, map_str):
-    name = type.attributeValue("name")
-    enabled = type.attributeValue("enabled")
+def __type_mapping_element_impl(name, enabled, map_str):
     if enabled == "true":
         return map_str % (
             name, 
@@ -258,50 +223,135 @@ def __type_mapping_element(type, map_str):
         )
     else:
         return None
-    
-def generate_type_mappings(config_file):
-    cfg = TransformerConfig(config_file)
-    parser = ParseBungeniTypesXML(cfg.get_types_xml_from_bungeni_custom())
-    if parser.doc_parse():
-        li_map_doc = []
-        li_map_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
-        li_map_doc.append("<!-- AUTO GENERATED type mappings from bungeni to glue types -->")
-        li_map_doc.append("<value>")
-        map_str = '   <map from="%s" uri-name="%s" element-name="%s" />'
-        doc_types = parser.get_docs()
-        for doc_type in doc_types:
-            map_elem = __type_mapping_element(doc_type, map_str)
-            if map_elem is not None:
-                li_map_doc.append(map_elem)
-        groups = parser.get_groups()
-        for group in groups:
-            map_elem = __type_mapping_element(group, map_str)
-            if map_elem is not None:
-                li_map_doc.append(map_elem)
-        members = parser.get_members()
-        for member in members:
-            map_elem = __type_mapping_element(member, map_str)
-            if map_elem is not None:
-                li_map_doc.append(map_elem)        
-        li_map_doc.append("</value>")
-        return ("\n".join(li_map_doc)).encode("UTF-8")
-    return None
 
-def write_type_mappings(config_file):
+def __type_mapping_element(type, map_str):
+    name = type.attributeValue("name")
+    enabled = type.attributeValue("enabled")
+    return __type_mapping_element_impl(name, enabled, map_str)
+
+def generate_type_mappings(parser_buneni_types, parser_pipe_configs):
+    li_map_doc = []
+    li_map_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
+    li_map_doc.append("<!-- AUTO GENERATED type mappings from bungeni to glue types -->")
+    li_map_doc.append("<value>")
+    map_str = '   <map from="%s" uri-name="%s" element-name="%s" />'
+    doc_types = parser_buneni_types.get_docs()
+    for doc_type in doc_types:
+        map_elem = __type_mapping_element(doc_type, map_str)
+        if map_elem is not None:
+            li_map_doc.append(map_elem)
+    groups = parser_buneni_types.get_groups()
+    for group in groups:
+        map_elem = __type_mapping_element(group, map_str)
+        if map_elem is not None:
+            li_map_doc.append(map_elem)
+    members = parser_buneni_types.get_members()
+    for member in members:
+        map_elem = __type_mapping_element(member, map_str)
+        if map_elem is not None:
+            li_map_doc.append(map_elem)
+    itype_configs = parser_pipe_configs.get_config_internal()
+    for itype in itype_configs:
+        name = itype.attributeValue("for")
+        enabled = "true"
+        map_elem = __type_mapping_element_impl(name, enabled, map_str) 
+        if map_elem is not None:
+            li_map_doc.append(map_elem)           
+    li_map_doc.append("</value>")
+    return ("\n".join(li_map_doc)).encode("UTF-8")
+
+def write_type_mappings(config, parser_bungeni_types, parser_pipe_configs):
     '''
     Generates the type_mappings file
     '''
-    type_mappings = generate_type_mappings(config_file)
+    type_mappings = generate_type_mappings(parser_bungeni_types, parser_pipe_configs)
     if type_mappings is not None:
         print "TYPE MAPPINGS = ", type_mappings
-        ftype_mappings = codecs.open(os.path.join(get_module_dir(), "type_mappings.xml"), "w", "utf-8")
+        ftype_mappings = codecs.open(__type_mappings_file(), "w", "utf-8")
         ftype_mappings.write(type_mappings)
         ftype_mappings.flush()
         ftype_mappings.close()
         return True
     return False
-                          
-    
+
+def types_all_config(config_file):
+    cfg = TransformerConfig(config_file)
+    parser_bungeni_types = ParseBungeniTypesXML(cfg.get_types_xml_from_bungeni_custom())
+    parser_bungeni_types.doc_parse()
+    parser_pipe_configs = ParsePipelineConfigsXML(__pipeline_configs_file())
+    parser_pipe_configs.doc_parse()
+    print "Writing type mappings..."
+    if write_type_mappings(cfg, parser_bungeni_types, parser_pipe_configs):
+        # write pipelines
+        print "Writing pipelines ...."
+        if write_pipelines(cfg, parser_bungeni_types, parser_pipe_configs):
+            return True
+    return False    
+
+def __pipeline_element(type, parse_pipe_configs, map_str):
+    archetype_name = type.name
+    name = type.attributeValue("name")
+    enabled = type.attributeValue("enabled")
+    sub_archetype = type.attributeValue("archetype")
+    if enabled == "true":
+        use_archetype = archetype_name
+        if sub_archetype is not None:
+            use_archetype = sub_archetype
+        #     <pipelineConfig for="doc" type="archetype" 
+        #         pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" /> 
+        pipe_config = parse_pipe_configs.get_config_for(use_archetype)
+        # '   <pipeline for="%s" pipeline="%s" archetype="%s" />'
+        return map_str % (
+            name, 
+            pipe_config.attributeValue("pipeline"), 
+            use_archetype
+        )
+    else:
+        return None
+
+
+def generate_pipelines(config, parser_bungeni_types, parser_pipe_configs):
+    '''
+    Generates the pipelines for available types
+    '''
+    li_pipe_doc = []
+    li_pipe_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
+    li_pipe_doc.append("<!-- AUTO GENERATED PIPELINE -->")
+    li_pipe_doc.append("<pipelines>")
+    map_str = '   <pipeline for="%s" pipeline="%s" archetype="%s" />'
+    types = parser_bungeni_types.get_all()
+    for type in types:
+        pipe = __pipeline_element(type, parser_pipe_configs, map_str)
+        if pipe is not None:
+            li_pipe_doc.append(pipe)
+    # now generate internal type pipelines
+    for ipipe in parser_pipe_configs.get_config_internal():
+        type = ipipe.attributeValue("for")
+        pipeline = ipipe.attributeValue("pipeline")
+        pipe = map_str % (type, pipeline, type)
+        li_pipe_doc.append(pipe)
+    #
+    # !+HACK_ALERT (the below is purely a hack to account for the fact that the "event" type is inconsistently described in 
+    # bungeni configuration. "event" is an archetype but is explicitly described via an attribute. Additionally when event
+    # archetyped events get serialized, they get serialized with an "event" type instead of the specific type name !
+    #
+    li_pipe_doc.append(map_str % ("event", parser_pipe_configs.get_config_for("event").attributeValue("pipeline"), "event"))    
+    li_pipe_doc.append("</pipelines>")
+    return ("\n".join(li_pipe_doc)).encode("UTF-8")
+
+
+def write_pipelines(config, parser_bungeni_types, parser_pipe_configs):
+    pipelines = generate_pipelines(config, parser_bungeni_types, parser_pipe_configs)
+    if pipelines is not None:
+        print "PIPELINES  = ", pipelines
+        fpipes = codecs.open(__pipelines_file(), "w", "utf-8")
+        fpipes.write(pipelines)
+        fpipes.flush()
+        fpipes.close()
+        return True
+    return False
+            
+            
 def is_exist_running(config_file):
     exist_running = True
     webdaver = None

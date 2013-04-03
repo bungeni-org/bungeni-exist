@@ -6,6 +6,7 @@ Created on Feb 19, 2013
 
 
 from org.apache.log4j import Logger
+import os
 
 LOG = Logger.getLogger("glue")
 
@@ -71,11 +72,9 @@ def mkdir_p(path):
         else: raise
 
 def get_module_dir():
-    import os
     return os.path.dirname(os.path.realpath(__file__))
 
 def get_module_file(file_name):
-    import os
     return os.path.join(get_module_dir(),file_name)
 
 def typename_to_camelcase(value):
@@ -96,5 +95,47 @@ def typename_to_propercase(value):
     """
     li_value = value.split("_")
     return "".join(x.title() for x in li_value)
+
+def __empty_output_dir__(folder):
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            os.unlink(file_path)
+        except Exception, e:
+            print e
+
+def __setup_tmp_dir__(cfg):
+    if not os.path.isdir(cfg.get_temp_files_folder()):
+        mkdir_p(cfg.get_temp_files_folder())
+    
+def __setup_tmp_dirs__(cfg):
+
+    if not os.path.isdir(cfg.get_po_files_folder()):
+        mkdir_p(cfg.get_po_files_folder())
+
+    if not os.path.isdir(cfg.get_i18n_catalogues_folder()):
+        mkdir_p(cfg.get_i18n_catalogues_folder())
+
+def __setup_cache_dirs__(cfg):
+
+    if not os.path.isdir(cfg.get_cache_file_folder()):
+        mkdir_p(cfg.get_cache_file_folder())
+    else:
+        ### clear the cache file during every run of the consumer
+        __empty_output_dir__(cfg.get_cache_file_folder())
+    
+
+def __setup_output_dirs__(cfg):
+        
+    if not os.path.isdir(cfg.get_xml_output_folder()):
+        mkdir_p(cfg.get_xml_output_folder())
+    else:
+        __empty_output_dir__(cfg.get_xml_output_folder())        
+    if not os.path.isdir(cfg.get_attachments_output_folder()):
+        mkdir_p(cfg.get_attachments_output_folder())
+    else:
+        __empty_output_dir__(cfg.get_attachments_output_folder())
+    if not os.path.isdir(cfg.get_temp_files_folder()):
+        mkdir_p(cfg.get_temp_files_folder())
 
     

@@ -104,6 +104,7 @@ class ParseXML(object):
             close_quietly(writer)
             
 
+
 class ParseBungeniTypesXML(ParseXML):
     
     def xpath_doc_archetypes(self):
@@ -115,6 +116,9 @@ class ParseBungeniTypesXML(ParseXML):
     def xpath_member_archetypes(self):
         return self.__global_path__ + "member"
     
+    def xpath_all_archetypes(self):
+        return self.__global_path__ + "*[name() = 'doc' or name() = 'group' or name() = 'member']"
+    
     def get_docs(self):
         return self.doc_dom().selectNodes(self.xpath_doc_archetypes())
     
@@ -124,6 +128,30 @@ class ParseBungeniTypesXML(ParseXML):
     def get_members(self):
         return self.doc_dom().selectNodes(self.xpath_member_archetypes())
     
+    def get_all(self):
+        return self.doc_dom().selectNodes(self.xpath_all_archetypes())
+
+class ParsePipelineConfigsXML(ParseXML):
+    
+    def xpath_config_for(self, name):
+        return self.__global_path__ + ("pipelineConfig[@for='%s']" % name)
+    
+    def xpath_config_internal(self):
+        return self.__global_path__ + ("pipelineConfig[@type='internal']")
+
+    def get_config_for(self, name):
+        return self.doc_dom().selectSingleNode(self.xpath_config_for(name))
+    
+    def get_config_internal(self):
+        return self.doc_dom().selectNodes(self.xpath_config_internal())
+
+class ParsePipelineXML(ParseXML): 
+    
+    def xpath_pipelines(self):
+        return self.__global_path__ + "pipeline"
+    
+    def get_pipelines(self):
+        return self.doc_dom().selectNodes(self.xpath_pipelines())
 
 class ParseBungeniXML(ParseXML):
     

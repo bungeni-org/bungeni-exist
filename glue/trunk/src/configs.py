@@ -9,6 +9,25 @@ All config related classes are placed here
 import os
 import ConfigParser
 
+from parsers import ParsePipelineXML
+from gen_utils import get_module_dir
+
+# system file
+__pipeline_configs__ = "pipeline_config.xml"
+# auto generate file
+__type_mappings__ = "type_mappings.xml"
+__pipelines__ = "pipelines.xml"
+
+def __type_mappings_file():
+    return os.path.join(get_module_dir(), __type_mappings__)
+
+def __pipelines_file():
+    return os.path.join(get_module_dir(), __pipelines__)
+
+def __pipeline_configs_file():
+    return os.path.join(get_module_dir(), __pipeline_configs__)
+
+
 class Config(object):
     """
     Provides access to the configuration file via ConfigParser
@@ -103,7 +122,23 @@ class TransformerConfig(Config):
 
     def get_cache_file_folder(self):
         return self.get("general","cache_file_folder")
-
+    
+    def get_pipelines(self):
+        '''
+        WARNING : This can be called only after type_all_configs() has been called in the consumer
+        This is a bit of hack - since the pipelines originally used to be part of configuration ini, 
+        the API was left as is, but the pipelines are instead returned from auto-generated configuration 
+        '''
+        if len(self.dict_pipes) == 0:
+            parse_pipe = ParsePipelineXML(__pipelines_file())
+            parse_pipe.doc_parse()
+            for pipe in parse_pipe.get_pipelines():
+                type_name = pipe.attributeValue("for")
+                pipe = pipe.attributeValue("pipeline")
+                self.dict_pipes[type_name] = pipe
+        return self.dict_pipes
+    
+    '''
     def get_pipelines(self):
         # list of key,values pairs as tuples 
         if len(self.dict_pipes) == 0:
@@ -111,7 +146,7 @@ class TransformerConfig(Config):
             for l_pipe in l_pipes:
                 self.dict_pipes[l_pipe[0]] = l_pipe[1]
         return self.dict_pipes
-
+    '''
 
 class WebDavConfig(Config):
     """

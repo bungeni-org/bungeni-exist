@@ -27,4 +27,7 @@
    <map from="committee_staff" uri-name="CommitteeStaff" element-name="committeeStaff" />
    <map from="minister" uri-name="Minister" element-name="minister" />
    <map from="member_of_parliament" uri-name="MemberOfParliament" element-name="memberOfParliament" />
+   <map from="address" uri-name="Address" element-name="address" />
+   <map from="sitting" uri-name="Sitting" element-name="sitting" />
+   <map from="user" uri-name="User" element-name="user" />
 </value>

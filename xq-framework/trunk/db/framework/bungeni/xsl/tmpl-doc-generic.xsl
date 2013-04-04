@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -41,6 +41,7 @@
                 <xsl:with-param name="doc-uri" select="$doc-uri"/>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="ver-uri" select="$ver-uri"/>
+                <xsl:with-param name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
             </xsl:call-template>
             <xsl:if test="$epub ne 'true'">
                 <!-- Renders tab-feature to the view -->
@@ -111,9 +112,10 @@
         <xsl:param name="doc-type"/>
         <xsl:param name="doc-uri"/>
         <xsl:param name="ver-uri"/>
+        <xsl:param name="chamber"/>
         <div id="title-holder">
             <xsl:if test="$version eq 'true'">
-                <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
+                <a class="big-dbl-arrow" title="go back to {lower-case($doc-type)} documents" href="{$chamber}/{lower-case($doc-type)}-documents?uri={$doc-uri}">«&#160;</a>
             </xsl:if>
             <h1 class="title">
                 <xsl:if test="bu:ontology/bu:document/bu:progressiveNumber">#<xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>:</xsl:if>

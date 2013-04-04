@@ -1484,6 +1484,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
     									   cmn:get-route($EXIST-PATH),
                                             <route-override>
                                                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                                                {$PARLIAMENT}
                                             </route-override>, 
     									   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     									)  									

@@ -3573,7 +3573,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
    
     (: return AN Member document with his/her activities :)
     let $doc := <doc>
-        { collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology }
+        { collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'MemberOfParliament']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology }
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          
@@ -3587,12 +3587,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
     </doc> 
     
     return
-        transform:transform($doc, $stylesheet, 
-            <parameters>
-                <param name="chamber" value="{$parliament/type/text()}" />
-                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
-            </parameters>           
-        )    
+        transform:transform($doc, $stylesheet,())    
 };
 
 declare function bun:get-assigned-items($committeeid as xs:string, $parts as node()) as element()* {

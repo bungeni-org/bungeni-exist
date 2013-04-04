@@ -617,7 +617,7 @@ nav ul ul.mouseover {
 nav ul li:hover > ul.mouseover {
 	display: block;
 }
-nav ul {
+nav ul ul {
     padding:0;
     margin:0;
 	background: #efefef; 
@@ -628,6 +628,8 @@ nav ul {
 	list-style: none;
 	position: relative;
 	display: inline-table;
+	height: 14px;
+	line-height:14px;
 }
 nav ul:after {
 	content: ""; 
@@ -693,9 +695,6 @@ nav ul > li > a {
 		
 /* HOUSE TOP-NAVS */	
 nav ul ul.hse-list {
-    height:14px;
-}
-nav ul ul.hse-list {
     margin:0;
     padding:0 0 4px 0;
     display:inline-block;
@@ -712,7 +711,6 @@ nav ul ul.hse-list li a {
     margin:0;
     color:#dedede;   
     background-color:transparent;
-    font-size:.9em;
     font-size-adjust:0.49;
 } 
 nav ul ul.hse-list li a:hover {

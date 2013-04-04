@@ -37,7 +37,7 @@ declare function rou:func-name(
 declare function rou:get-home($CONTROLLER-DOC as node()) {
         let 
             $parts := cmn:get-view-parts("/home"),
-            $act-entries-tmpl :=  bun:get-government($parts,$CONTROLLER-DOC/parliament/identifier/text()),
+            $act-entries-tmpl :=  bun:get-parliament($parts,$CONTROLLER-DOC/parliament/identifier/text()),
             $act-entries-repl:= document {
     							template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     						 } 

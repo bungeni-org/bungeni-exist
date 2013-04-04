@@ -394,9 +394,7 @@ declare function bun:get-all-by-role($roles-string as xs:string) as node()* {
     let $eval-query :=  fn:concat("collection('",cmn:get-lex-db() ,"')",
                         (: the first node in root element has the documents main permission :)
                         "/bu:ontology/child::node()[1]/bu:permissions",
-                        "[",$roles-string,"]/ancestor::bu:ontology") 
-                  
-    let $log := util:log('debug',$eval-query)
+                        "[",$roles-string,"]/ancestor::bu:ontology")
     return 
         util:eval($eval-query)   
 
@@ -2974,7 +2972,7 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
 : @stylesheet 
 :   committee.xsl, home.xsl
 :)
-declare function bun:get-government($parts as node(), $chamber-id as xs:string?) as element()* {
+declare function bun:get-parliament($parts as node(), $chamber-id as xs:string?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2984,7 +2982,7 @@ declare function bun:get-government($parts as node(), $chamber-id as xs:string?)
                         where multiple parliament info are present. Pending support for closing and opening
                         parliaments.
                     :)
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Government']/preceding-sibling::bu:origin[bu:identifier eq $chamber-id]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Parliament']/preceding-sibling::bu:origin[bu:identifier eq $chamber-id]/ancestor::bu:ontology
                     return
                         $match  
                 }</doc>   

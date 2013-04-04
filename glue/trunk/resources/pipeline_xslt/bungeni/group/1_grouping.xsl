@@ -37,7 +37,7 @@
         <xsl:variable name="group_principal_id" select="field[@name='group_principal_id']" />
         <xsl:variable name="group_id" select="field[@name='group_id']" />
         
-        <xsl:variable name="group_identifier" select="field[@name='identifier']" />
+        <xsl:variable name="group_identifier" select="field[@name='principal_name']" />
 
         <!--
         <xsl:variable name="full-group-identifier" select="translate(concat(

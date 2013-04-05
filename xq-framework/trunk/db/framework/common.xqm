@@ -209,6 +209,7 @@ declare function cmn:get-chambers-menu($main-menu as node(), $bicameral as xs:bo
             element {node-name($main-ul/xh:ul)} {
             $main-ul/xh:ul/@*,
                 for $li in $main-ul/xh:ul/xh:li
+                order by $li/@data-order ascending
                 return 
                     if(not($bicameral)) then 
                         $li[@id='lower-hse']

@@ -782,7 +782,7 @@
     <menugroups>
         <menu for="/" name="mainnav">
             <ul xmlns="http://www.w3.org/1999/xhtml" id="portal-globalnav">
-                <li id="lower-hse">
+                <li data-order="1" id="lower-hse">
                     <a href="lower_house/home" name="/lower_house/home">
                         <i18n:text key="assembly-home">National Assembly</i18n:text>
                     </a>
@@ -799,7 +799,7 @@
                         </li>
                     </ul>
                 </li>
-                <li id="upper-hse">
+                <li data-order="2" id="upper-hse">
                     <a href="higher_house/home" name="/higher_house/home">
                         <i18n:text key="senate-home">Senate</i18n:text>
                     </a>

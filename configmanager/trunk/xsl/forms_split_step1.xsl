@@ -11,6 +11,23 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+    <xsl:template match="descriptor" priority="1">
+        <xsl:copy>
+            <xsl:if test="not(@label)">
+                <xsl:attribute name="label"/>
+            </xsl:if>
+            <xsl:if test="not(@container_label)">
+                <xsl:attribute name="container_label"/>
+            </xsl:if>
+            <xsl:if test="not(@sort_on)">
+                <xsl:attribute name="sort_on"/>
+            </xsl:if>
+            <xsl:if test="not(@sort_dir)">
+                <xsl:attribute name="sort_dir"/>
+            </xsl:if>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
     <xsl:template match="field" priority="3">
         <xsl:copy>
             <!-- 

@@ -152,6 +152,8 @@ function form:edit($node as node(), $model as map(*)) {
                             <xf:instance id="i-form" src="{$form:REST-BC-LIVE}/forms/{$docname}.xml"/> 
                     } 
                     
+                     <xf:instance id="i-sortorder" src="{$form:REST-CXT-APP}/model_templates/sortorder.xml"/>
+                    
                     <xf:instance id="i-constraints" src="{$form:REST-BC-LIVE}/forms/.auto/_constraints.xml"/> 
                     
                     <xf:instance id="i-validations" src="{$form:REST-BC-LIVE}/forms/.auto/_validations.xml"/>
@@ -173,7 +175,7 @@ function form:edit($node as node(), $model as map(*)) {
                     </xf:instance>                        
 
                     <xf:bind nodeset=".[@name eq '{$docname}']">
-                        <xf:bind nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 100) and (. &gt; 0)" />
+                        <xf:bind id="order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 101) and (. &gt; 0)" />
                         <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
                     </xf:bind>
 
@@ -251,31 +253,64 @@ function form:edit($node as node(), $model as map(*)) {
                 <div id="details" class="tab_content" style="display: block;">
                     <xf:group ref="." class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
                         <xf:group appearance="bf:verticalTable">
-                            <xf:output ref="@name">
-                                <xf:label>Form:</xf:label>
-                            </xf:output>
-                            
-                            <xf:select1 id="descriptor-archetype" ref="@archetype" appearance="minimal" incremental="true">
-                                <xf:label>archetype</xf:label>
-                                <xf:hint>select parent type</xf:hint>
-                                <xf:help>help for archtypes</xf:help>
-                                <xf:alert>invalid</xf:alert>
-                                <xf:itemset nodeset="instance('i-archetypes')/archetypes/arche">
-                                    <xf:label ref="."></xf:label>
-                                    <xf:value ref="."></xf:value>
-                                </xf:itemset>
-                            </xf:select1>                            
-                            
-                            <xf:input id="descriptor-order" ref="@order" incremental="true">
-                                <xf:label>Order</xf:label>
-                                <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
-                                <xf:help>Enter an integer between 1 and 100 </xf:help>
-                                <xf:hint>order of this descriptor</xf:hint>
-                                <xf:message ev:event="xforms-readonly" level="ephemeral">NOTE: That number is taken already.</xf:message>
-                            </xf:input>
+                            <xf:group appearance="bf:horizontalTable">
+                                <xf:label><h2>Form Properties</h2></xf:label>      
+                                <xf:select1 id="descriptor-archetype" ref="@archetype" appearance="minimal" incremental="true" class="xsmallWidth">
+                                    <xf:label>archetype</xf:label>
+                                    <xf:hint>select parent type</xf:hint>
+                                    <xf:help>help for archtypes</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-archetypes')/archetypes/arche">
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="."></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <xf:input id="descriptor-order" bind="order" incremental="true" class="xsmallWidth">
+                                    <xf:label>Order</xf:label>
+                                    <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
+                                    <xf:help>Enter an integer between 1 and 100 </xf:help>
+                                    <xf:hint>order of this descriptor</xf:hint>
+                                </xf:input>                                  
+                                <xf:input id="descriptor-label" ref="@label" incremental="true">
+                                    <xf:label>label</xf:label>
+                                    <xf:alert>Invalid text.</xf:alert>
+                                    <xf:help>Enter text to be shown</xf:help>
+                                    <xf:hint>shown on menu</xf:hint>
+                                </xf:input>                            
+                                
+                                <xf:input id="descriptor-container-label" ref="@container_label" incremental="true">
+                                    <xf:label>container label</xf:label>
+                                    <xf:alert>Invalid text.</xf:alert>
+                                    <xf:help>Enter text to be shown</xf:help>
+                                    <xf:hint>shown on menu lists</xf:hint>
+                                </xf:input>                                
+                            </xf:group>                        
+                            <xf:group appearance="bf:horizontalTable">
+                                <xf:label>default sort field</xf:label>      
+                                <xf:select1 id="descriptor-sort-on" ref="@sort_on" appearance="minimal" incremental="true">
+                                    <xf:label>sort on</xf:label>
+                                    <xf:hint>select field to sort on</xf:hint>
+                                    <xf:help>help for sort on field</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance()/field">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="@name"></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>    
+                                <xf:select1 id="descriptor-order-dir" ref="@sort_dir" appearance="minimal" incremental="true" class="xsmallWidth">
+                                    <xf:label>sot direction</xf:label>
+                                    <xf:hint>select order</xf:hint>
+                                    <xf:help>help for order direction</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-sortorder')/dir">
+                                        <xf:label ref="@name"></xf:label>
+                                        <xf:value ref="."></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>                               
+                            </xf:group>                                                 
                          </xf:group>
                     </xf:group>
-                   
+                    <div style="margin-bottom:10px;"/>                       
                     <xf:group>
                         <xf:label><h3>Manage integrity checks</h3></xf:label>
                         <xf:group appearance="bf:horizontalTable">   

@@ -213,6 +213,9 @@ h1 {
 .xshortestWidth select {
     width:50px;
 }
+.xsmallWidth input {
+    width:80px;
+}
 .xsmallWidth select {
     width:90px;
 }

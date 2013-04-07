@@ -16,6 +16,7 @@ from gen_utils import get_module_dir
 __pipeline_configs__ = "pipeline_config.xml"
 # auto generate file
 __type_mappings__ = "type_mappings.xml"
+__logical_mappings__ = "logical_mappings.xml"
 __pipelines__ = "pipelines.xml"
 
 def __type_mappings_file():
@@ -27,6 +28,8 @@ def __pipelines_file():
 def __pipeline_configs_file():
     return os.path.join(get_module_dir(), __pipeline_configs__)
 
+def __logical_mappings_file():
+    return os.path.join(get_module_dir(), __logical_mappings__)
 
 class Config(object):
     """

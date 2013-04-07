@@ -145,6 +145,14 @@ class ParsePipelineConfigsXML(ParseXML):
     def get_config_internal(self):
         return self.doc_dom().selectNodes(self.xpath_config_internal())
 
+class ParseLogicalTypesXML(ParseXML):
+    
+    def xpath_types(self):
+        return self.__global_path__ + "types/type"
+    
+    def get_types(self):
+        return self.doc_dom().selectNodes(self.xpath_types())
+
 class ParsePipelineXML(ParseXML): 
     
     def xpath_pipelines(self):

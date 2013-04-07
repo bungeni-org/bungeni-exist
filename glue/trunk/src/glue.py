@@ -56,6 +56,7 @@ from configs import (
     __pipeline_configs_file,
     __type_mappings_file,
     __pipelines_file,
+    __logical_mappings_file,
     TransformerConfig,
     WebDavConfig,
     PoTranslationsConfig
@@ -85,6 +86,7 @@ from utils import (
 from parsers import (
     ParseBungeniTypesXML,
     ParsePipelineConfigsXML,
+    ParseLogicalTypesXML,
     ParseBungeniXML
     )
 
@@ -214,22 +216,30 @@ def param_type_mappings():
     type_mappings = open(type_mappings_file, "r").read()
     return type_mappings.encode("UTF-8")
 
-def __type_mapping_element_impl(name, enabled, map_str):
+def __type_mapping_element_impl(name, enabled, map_str, logical_mappings):
     if enabled == "true":
+        pname = ""
+        cname = ""
+        if name in logical_mappings.keys():
+            pname = typename_to_propercase(logical_mappings[name])
+            cname = typename_to_camelcase(logical_mappings[name])
+        else:
+            pname = typename_to_propercase(name)
+            cname = typename_to_camelcase(name)
         return map_str % (
             name, 
-            typename_to_propercase(name), 
-            typename_to_camelcase(name)
+            pname, 
+            cname
         )
     else:
         return None
 
-def __type_mapping_element(type, map_str):
+def __type_mapping_element(type, map_str, logical_mappings):
     name = type.attributeValue("name")
     enabled = type.attributeValue("enabled")
-    return __type_mapping_element_impl(name, enabled, map_str)
+    return __type_mapping_element_impl(name, enabled, map_str, logical_mappings)
 
-def generate_type_mappings(parser_buneni_types, parser_pipe_configs):
+def generate_type_mappings(logical_mappings, parser_buneni_types, parser_pipe_configs):
     li_map_doc = []
     li_map_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
     li_map_doc.append("<!-- AUTO GENERATED type mappings from bungeni to glue types -->")
@@ -237,34 +247,48 @@ def generate_type_mappings(parser_buneni_types, parser_pipe_configs):
     map_str = '   <map from="%s" uri-name="%s" element-name="%s" />'
     doc_types = parser_buneni_types.get_docs()
     for doc_type in doc_types:
-        map_elem = __type_mapping_element(doc_type, map_str)
+        map_elem = __type_mapping_element(doc_type, map_str, logical_mappings)
         if map_elem is not None:
             li_map_doc.append(map_elem)
     groups = parser_buneni_types.get_groups()
     for group in groups:
-        map_elem = __type_mapping_element(group, map_str)
+        map_elem = __type_mapping_element(group, map_str, logical_mappings)
         if map_elem is not None:
             li_map_doc.append(map_elem)
     members = parser_buneni_types.get_members()
     for member in members:
-        map_elem = __type_mapping_element(member, map_str)
+        map_elem = __type_mapping_element(member, map_str, logical_mappings)
         if map_elem is not None:
             li_map_doc.append(map_elem)
     itype_configs = parser_pipe_configs.get_config_internal()
     for itype in itype_configs:
         name = itype.attributeValue("for")
         enabled = "true"
-        map_elem = __type_mapping_element_impl(name, enabled, map_str) 
+        map_elem = __type_mapping_element_impl(name, enabled, map_str, logical_mappings) 
         if map_elem is not None:
             li_map_doc.append(map_elem)           
+    #!+HACK_ALERT(event)
+    li_map_doc.append(map_str % ("event", "Event", "event"))
     li_map_doc.append("</value>")
     return ("\n".join(li_map_doc)).encode("UTF-8")
+
+def load_logical_mappings():
+    map_parse = ParseLogicalTypesXML(__logical_mappings_file())
+    map_parse.doc_parse()
+    logical_mappings = {}
+    for type_elem in map_parse.get_types():
+        name = type_elem.attributeValue("name")
+        logical = type_elem.attributeValue("logical")
+        logical_mappings[name] = logical
+    return logical_mappings
+    
 
 def write_type_mappings(config, parser_bungeni_types, parser_pipe_configs):
     '''
     Generates the type_mappings file
     '''
-    type_mappings = generate_type_mappings(parser_bungeni_types, parser_pipe_configs)
+    logical_mappings = load_logical_mappings()
+    type_mappings = generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_configs)
     if type_mappings is not None:
         print "TYPE MAPPINGS = ", type_mappings
         ftype_mappings = codecs.open(__type_mappings_file(), "w", "utf-8")

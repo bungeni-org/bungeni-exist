@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types>
+   <type name="assembly_bill" logical="bill" />
+   <type name="assembly_motion" logical="motion" />
+   <type name="assembly_question" logical="question" />
+   <type name="assembly_tabled_document" logical="tabled_document" />
+   <type name="assembly_test_event" logical="test_event" />
+   <type name="senate_bill" logical="bill" />
+   <type name="senate_motion" logical="motion" />
+   <type name="senate_question" logical="question" />
+   <type name="senate_tabled_document" logical="tabled_document" />
+   <type name="senate_test_event" logical="test_event" />
+</types>

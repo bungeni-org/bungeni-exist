@@ -2,16 +2,16 @@
 <!-- AUTO GENERATED type mappings from bungeni to glue types -->
 <value>
    <map from="agenda_item" uri-name="AgendaItem" element-name="agendaItem" />
-   <map from="assembly_bill" uri-name="AssemblyBill" element-name="assemblyBill" />
-   <map from="assembly_motion" uri-name="AssemblyMotion" element-name="assemblyMotion" />
-   <map from="assembly_question" uri-name="AssemblyQuestion" element-name="assemblyQuestion" />
-   <map from="assembly_tabled_document" uri-name="AssemblyTabledDocument" element-name="assemblyTabledDocument" />
-   <map from="assembly_test_event" uri-name="AssemblyTestEvent" element-name="assemblyTestEvent" />
-   <map from="senate_bill" uri-name="SenateBill" element-name="senateBill" />
-   <map from="senate_motion" uri-name="SenateMotion" element-name="senateMotion" />
-   <map from="senate_question" uri-name="SenateQuestion" element-name="senateQuestion" />
-   <map from="senate_tabled_document" uri-name="SenateTabledDocument" element-name="senateTabledDocument" />
-   <map from="senate_test_event" uri-name="SenateTestEvent" element-name="senateTestEvent" />
+   <map from="assembly_bill" uri-name="Bill" element-name="bill" />
+   <map from="assembly_motion" uri-name="Motion" element-name="motion" />
+   <map from="assembly_question" uri-name="Question" element-name="question" />
+   <map from="assembly_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
+   <map from="assembly_test_event" uri-name="TestEvent" element-name="testEvent" />
+   <map from="senate_bill" uri-name="Bill" element-name="bill" />
+   <map from="senate_motion" uri-name="Motion" element-name="motion" />
+   <map from="senate_question" uri-name="Question" element-name="question" />
+   <map from="senate_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
+   <map from="senate_test_event" uri-name="TestEvent" element-name="testEvent" />
    <map from="report" uri-name="Report" element-name="report" />
    <map from="bicameral_document" uri-name="BicameralDocument" element-name="bicameralDocument" />
    <map from="office" uri-name="Office" element-name="office" />
@@ -30,4 +30,5 @@
    <map from="address" uri-name="Address" element-name="address" />
    <map from="sitting" uri-name="Sitting" element-name="sitting" />
    <map from="user" uri-name="User" element-name="user" />
+   <map from="event" uri-name="Event" element-name="event" />
 </value>

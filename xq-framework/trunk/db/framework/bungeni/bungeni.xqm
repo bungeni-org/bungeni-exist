@@ -2357,7 +2357,7 @@ declare function bun:get-whatson(
     let $doc := <docs> 
         <paginator>
         (: Count the total number of groups :)
-        <count>{count(collection(cmn:get-lex-db())/bu:ontology[@for='sitting']/bu:sitting[bu:origin/bu:identifier eq $parliament/identifier]/ancestor::bu:ontology)}</count>
+        <count>{count(collection(cmn:get-lex-db())/bu:ontology/bu:sitting[bu:origin/bu:identifier eq $parliament/identifier]/ancestor::bu:ontology)}</count>
         <documentType>sitting</documentType>
         <tags>
         {
@@ -2549,10 +2549,10 @@ declare function bun:get-sittings-xml($acl as xs:string, $parliament as node()?)
                         <end_date>{replace($s/bu:sitting/bu:endDate/text(),"T", " ")}</end_date>
                         <text>
                             &lt;a href="sitting?uri={data($s/bu:sitting/@uri)}"&gt;
-                                {$s/bu:chamber/bu:shortName/text()}
+                                {$s/bu:sitting/bu:shortName/text()}
                             &lt;/a&gt; @ {$s/bu:sitting/bu:venue/bu:shortName/text()}
                         </text>
-                        <details>{$s/bu:chamber/bu:shortName/text()}</details>            
+                        <details>{$s/bu:sitting/bu:shortName/text()}</details>            
                    </event>
     }
     </data>
@@ -3399,7 +3399,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
         collection and perform PostTransform on them...
     
     :)
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology[@for='document']/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid][1]/ancestor::bu:ontology
+    let $docitem := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid][1]/ancestor::bu:ontology
     
     let $doc := <doc>      
             { $docitem }
@@ -3430,12 +3430,10 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
     
     let $doc := <doc>       
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/parent::bu:document[@internal-uri eq '/ontology/ke/Legislature/9/Chamber/AS_XIV/Bill/44/Event/48']/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/parent::bu:document[@internal-uri eq $eventid]/ancestor::bu:ontology
             }            
             <event>{$eventid}</event>
-        </doc>  
-    let $log := util:log('debug',$doc)
-    let $log := util:log('debug',$eventid || "+++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        </doc>
     return
         transform:transform($doc, 
                             $stylesheet, 

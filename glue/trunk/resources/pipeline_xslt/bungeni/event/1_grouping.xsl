@@ -225,6 +225,7 @@
                 <parliament-uri><xsl:value-of select="$parliament-uri" /></parliament-uri>
                 <legislature-full-uri><xsl:value-of select="$legislature-full-uri" /></legislature-full-uri>
                 <parliament-full-uri><xsl:value-of select="$parliament-full-uri" /></parliament-full-uri>
+                <head-item-type-name><xsl:value-of select="$head-type-uri-name" /></head-item-type-name>
                 <head-item-internal-uri><xsl:value-of select="$head-item-internal-uri" /></head-item-internal-uri>
                 <event-id><xsl:value-of select="$doc_id" /></event-id>
             </custom>

@@ -59,11 +59,22 @@
         </xsl:call-template>
     </xsl:template>
     
-   
     <xsl:template match="field[@name='type']">
-        <xsl:call-template name="renderTLCTermString">
-            <xsl:with-param name="elementName">type</xsl:with-param>
-        </xsl:call-template>
+        <xsl:choose>
+            <xsl:when test="//custom/head-item-type-name">
+                <!-- value retrieved from mappings -->
+                <xsl:variable name="head-type-uri-name" select="//custom/head-item-type-name" />
+                <xsl:call-template name="renderEventOfTLCTermString">
+                    <xsl:with-param name="elementName">type</xsl:with-param>
+                    <xsl:with-param name="head-uri-name" select="$head-type-uri-name" />
+                </xsl:call-template>                
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="renderTLCTermString">
+                    <xsl:with-param name="elementName">type</xsl:with-param>
+                </xsl:call-template>                
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template> 
     
     <xsl:template match="field[@name='tag']">

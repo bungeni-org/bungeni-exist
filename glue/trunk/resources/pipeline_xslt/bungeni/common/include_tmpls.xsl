@@ -121,6 +121,22 @@
         </xsl:if>  
     </xsl:template>
     
+    <xsl:template name="renderEventOfTLCTermString">
+        <xsl:param name="elementName" />
+        <xsl:param name="head-uri-name" />
+        <xsl:variable name="nsp" select="normalize-space(.)" />
+        <xsl:if test="$nsp ne ''">
+            <xsl:element name="{$elementName}">
+                <xsl:attribute name="isA">TLCTerm</xsl:attribute>
+                <xsl:if test="@displayAs">
+                    <xsl:attribute name="showAs"><xsl:value-of select="@displayAs" /></xsl:attribute>
+                </xsl:if>
+                <value type="xs:string">
+                    <xsl:value-of select="$head-uri-name" />
+                </value>            
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>    
     
     
     <xsl:template name="renderTLCTermString">

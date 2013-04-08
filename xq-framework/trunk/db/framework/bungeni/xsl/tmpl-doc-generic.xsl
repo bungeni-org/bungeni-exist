@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -19,11 +19,11 @@
         document as opposed to main document. -->
     <xsl:param name="version"/>
     <xsl:param name="epub"/>
-    <xsl:param name="chamber"/>
     <xsl:param name="chamber-id"/>
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">
@@ -41,7 +41,7 @@
                 <xsl:with-param name="doc-uri" select="$doc-uri"/>
                 <xsl:with-param name="doc-type" select="$doc-type"/>
                 <xsl:with-param name="ver-uri" select="$ver-uri"/>
-                <xsl:with-param name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
+                <xsl:with-param name="chamber" select="$chamber"/>
             </xsl:call-template>
             <xsl:if test="$epub ne 'true'">
                 <!-- Renders tab-feature to the view -->
@@ -88,10 +88,12 @@
                         <xsl:with-param name="ver-uri" select="$ver-uri"/>
                         <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
                         <xsl:with-param name="doc-uri" select="$doc-uri"/>
+                        <xsl:with-param name="chamber" select="$chamber"/>
                     </xsl:call-template>
                     <!-- The header information on the documents -->
                     <xsl:call-template name="doc-item-preface">
                         <xsl:with-param name="doc-type" select="$doc-type"/>
+                        <xsl:with-param name="chamber" select="$chamber"/>
                     </xsl:call-template>
                     <!-- The body section of the document -->
                     <xsl:call-template name="doc-item-body">
@@ -137,6 +139,7 @@
         <xsl:param name="ver-uri"/>
         <xsl:param name="doc-type"/>
         <xsl:param name="doc-uri"/>
+        <xsl:param name="chamber"/>
         <xsl:if test="$version eq 'true'">
             <div class="rounded-eigh tab_container hanging-menu">
                 <ul class="doc-versions">
@@ -155,7 +158,7 @@
                                     </span>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <a href="{lower-case($doc-type)}-version/text?uri={@uri}">
+                                    <a href="{$chamber}/{lower-case($doc-type)}-version/text?uri={@uri}">
                                                     Version-<xsl:value-of select="$cur_pos"/>
                                     </a>
                                 </xsl:otherwise>
@@ -171,6 +174,7 @@
     <!-- DOC-ITEM-PREFACE -->
     <xsl:template name="doc-item-preface">
         <xsl:param name="doc-type"/>
+        <xsl:param name="chamber"/>
         <h3 id="doc-heading" class="doc-headers">
             <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
         </h3>
@@ -182,10 +186,14 @@
             <xsl:with-param name="doc-type" select="$doc-type"/>
         </xsl:call-template>
         <!-- Call sponsor where applicable -->
-        <xsl:call-template name="doc-item-sponsor"/>
+        <xsl:call-template name="doc-item-sponsor">
+            <xsl:with-param name="chamber" select="$chamber"/>
+        </xsl:call-template>
         
         <!-- Call secondary sponsors where applicable -->
-        <xsl:call-template name="doc-item-sponsors"/>
+        <xsl:call-template name="doc-item-sponsors">
+            <xsl:with-param name="chamber" select="$chamber"/>
+        </xsl:call-template>
     </xsl:template>
     
     <!-- DOC-ITEM-NUMBER -->
@@ -201,6 +209,7 @@
     
     <!-- DOC-ITEM-SPONSOR -->
     <xsl:template name="doc-item-sponsor">
+        <xsl:param name="chamber"/>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
                 <a href="{$chamber}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
@@ -212,6 +221,7 @@
     
     <!-- DOC-ITEM-SIGNATORIES -->
     <xsl:template name="doc-item-sponsors">
+        <xsl:param name="chamber"/>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="sponsors">sponsors(nt)</i18n:text>: ( 
             <xsl:choose>

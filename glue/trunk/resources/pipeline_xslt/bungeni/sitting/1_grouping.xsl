@@ -136,6 +136,7 @@
                 </docType>                 
                 
                 <xsl:copy-of select="field[ 
+                    @name='short_name' or 
                     @name='sitting_id' or
                     @name='parent_group_id' or 
                     @name='min_num_members' or 

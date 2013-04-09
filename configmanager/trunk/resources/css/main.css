@@ -303,6 +303,9 @@ h1 {
     background-color: #F2F2F2 !important;
 }
 
+.InlineRoundBordersAlert .bfHorizontalTable td {
+    padding-right: 5px;
+}
 .InlineRoundBordersAlert td, td span {
     /*position: relative;*/
 }

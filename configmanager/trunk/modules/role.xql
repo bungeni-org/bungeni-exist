@@ -249,7 +249,7 @@ function role:edit($node as node(), $model as map(*)) {
                     <div style="width:100%;">
                         <xf:group appearance="bf:horizontalTable">
                             <xf:repeat id="r-subroles" nodeset="subrole" appearance="compact">
-                                <xf:input ref="@id" incremental="true">
+                                <xf:input ref="@name" incremental="true">
                                     <xf:label>id:</xf:label>
                                     <xf:hint>{$name}.</xf:hint>
                                     <xf:help>should be attached to role is using a dot</xf:help>

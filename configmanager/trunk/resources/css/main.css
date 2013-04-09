@@ -34,6 +34,13 @@ br {
     width:100%;
 }
 
+.config-logo {
+    margin-top:3px;
+    margin-right:10px;
+    float:left;
+    width:32px;
+}
+
 #content {
     height:100%;
     display:block;
@@ -594,29 +601,40 @@ div.ulisting {
   margin: 0 10px;
 }
 
-div.ulisting ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+div.ulisting > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+} 
+div.ulisting ul ul {
+    list-style-type:none;
+    
+}
+div.ulisting ul ul li:before {
+    content: "\02C6 \0020";
 }
 
-div.ulisting li {
+div.ulisting > ul > li,
+div.ulisting > ul ul li {
   font: 200 20px/1.5 sans-serif;
   border-bottom: 1px solid #ccc;
 }
-div.ulisting li:hover {
+div.ulisting > ul ul li:last-child {
+  border-bottom: 0 none;
+}
+div.ulisting > ul > li:hover {
   background-color:#f8f8f8;
 }
-div.ulisting li:last-child {
+div.ulisting > ul > li:last-child {
   border: none;
 }
-div.ulisting li a.edit,
-div.ulisting li a.delete {
+div.ulisting > ul > li a.edit,
+div.ulisting > ul > li a.delete {
   font-size:15px;
   color:#888;
 }
 
-div.ulisting li a:first-child {
+div.ulisting ul > li a:first-child {
   text-decoration: none;
   -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
   -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
@@ -646,8 +664,13 @@ div.sysroles h4 {
     color:#aaa;
 }
 div.sysroles li {
-  font-size: 12px;
-  border-bottom: 1px solid #ccc;
+    font-size: 12px;
+    width:130px;
+    display: block; 
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #ccc;  
 }
 div.sysroles li:last-child {
   border: none;

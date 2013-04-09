@@ -21,7 +21,7 @@ declare variable $role:REST-CXT-APP :=  $role:CXT || $appconfig:REST-APP-ROOT;
 declare variable $role:REST-BC-LIVE :=  $role:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
 
 declare function local:get-custom-roles() as node() * {
-    doc($appconfig:SYS-FOLDER || '/acl/roles.xml')/roles
+    doc($appconfig:CONFIGS-FOLDER || '/roles.xml')/roles
 };
 
 declare function local:occurrences() {
@@ -72,12 +72,12 @@ function role:roles($node as node(), $model as map(*)) {
 };
 
 declare function local:get-system-roles() {
-    let $allroles := doc($appconfig:SYS-FOLDER || '/.auto/_roles.xml')/roles
-    let $customroles := doc($appconfig:SYS-FOLDER || '/acl/roles.xml')/roles
+    let $allroles := doc($appconfig:CONFIGS-FOLDER || '/.auto/_roles.xml')/roles
+    let $customroles := doc($appconfig:CONFIGS-FOLDER || '/roles.xml')/roles
     for $role in $allroles/role/@name
     return 
         if(every $sysrole in distinct-values($customroles//@id) satisfies $sysrole != data($role)) then 
-            <li>
+            <li title="{data($role)}">
                 {data($role)}
             </li>           
         else
@@ -105,7 +105,7 @@ function role:edit($node as node(), $model as map(*)) {
     return
         <div>
             <xf:model id="master">
-                <xf:instance id="i-customroles" src="{$role:REST-BC-LIVE}/sys/acl/roles.xml"/>
+                <xf:instance id="i-customroles" src="{$role:REST-BC-LIVE}/roles.xml"/>
                   
                  <xf:instance id="i-boolean" src="{$role:REST-CXT-APP}/model_templates/boolean.xml"/>
                 
@@ -163,7 +163,7 @@ function role:edit($node as node(), $model as map(*)) {
                 </xf:submission> 
                 
                 <xf:submission id="s-add" method="put" replace="none" ref="instance()">
-                    <xf:resource value="'{$role:REST-BC-LIVE}/sys/acl/roles.xml'"/>
+                    <xf:resource value="'{$role:REST-BC-LIVE}/roles.xml'"/>
                     
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -193,7 +193,7 @@ function role:edit($node as node(), $model as map(*)) {
                 </xf:submission>    
                 
                 <xf:submission id="s-delete" method="put" replace="none" ref="instance()">
-                    <xf:resource value="'{$role:REST-BC-LIVE}/sys/acl/roles.xml'"/>
+                    <xf:resource value="'{$role:REST-BC-LIVE}/roles.xml'"/>
 
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -356,7 +356,7 @@ function role:add($node as node(), $model as map(*)) {
     return
         <div>
             <xf:model id="master">
-                <xf:instance id="i-customroles" src="{$role:REST-BC-LIVE}/sys/acl/roles.xml"/>
+                <xf:instance id="i-customroles" src="{$role:REST-BC-LIVE}/roles.xml"/>
                   
                  <xf:instance id="i-boolean" src="{$role:REST-CXT-APP}/model_templates/boolean.xml"/>
                 
@@ -414,7 +414,7 @@ function role:add($node as node(), $model as map(*)) {
                 </xf:submission> 
                 
                 <xf:submission id="s-add" method="put" replace="none" ref="instance()">
-                    <xf:resource value="'{$role:REST-BC-LIVE}/sys/acl/roles.xml'"/>
+                    <xf:resource value="'{$role:REST-BC-LIVE}/roles.xml'"/>
                     
                     <xf:header>
                         <xf:name>username</xf:name>
@@ -458,13 +458,13 @@ function role:add($node as node(), $model as map(*)) {
                 <div style="margin-top:10px;" />
                 <xf:group ref="role[last()]">
                     <xf:group appearance="bf:verticalTable">
-                        <xf:input ref="@id" class="xsmallWidth" incremental="true">
+                        <xf:input ref="@id" incremental="true">
                             <xf:label>id:</xf:label>
                             <xf:hint>Unique ID for this role</xf:hint>
                             <xf:help>help for select1</xf:help>
                             <xf:alert>must be unique / no spaces</xf:alert>
                         </xf:input>                     
-                        <xf:input ref="@title" class="xsmallWidth" incremental="true">
+                        <xf:input ref="@title" incremental="true">
                             <xf:label>title:</xf:label>
                             <xf:hint>Title for this role</xf:hint>
                             <xf:help>help for select1</xf:help>

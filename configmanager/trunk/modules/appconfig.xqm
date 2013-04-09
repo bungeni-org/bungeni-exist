@@ -38,17 +38,17 @@ declare variable $appconfig:VOCABS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" ||
 
 declare variable $appconfig:NOTIF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@notif);
 
-declare variable $appconfig:TYPES-XML := $appconfig:CONFIGS-FOLDER || "/" || "types.xml";
+declare variable $appconfig:TYPES-XML := $appconfig:CONFIGS-FOLDER || "/types.xml";
 
-declare variable $appconfig:UI-XML := $appconfig:FORM-FOLDER || "/" || "ui.xml";
+declare variable $appconfig:UI-XML := $appconfig:FORM-FOLDER || "/ui.xml";
 
-declare variable $appconfig:MODEL-TEMPLATES := $appconfig:ROOT || "/" || "model_templates";
+declare variable $appconfig:MODEL-TEMPLATES := $appconfig:ROOT || "/model_templates";
 
-declare variable $appconfig:XSL := $appconfig:ROOT || "/" || "xsl";
+declare variable $appconfig:XSL := $appconfig:ROOT || "/xsl";
 
-declare variable $appconfig:CSS := $appconfig:ROOT || "/" || "resources/css";
+declare variable $appconfig:CSS := $appconfig:ROOT || "/resources/css";
 
-declare variable $appconfig:IMAGES := $appconfig:ROOT || "/" || "resources/images";
+declare variable $appconfig:IMAGES := $appconfig:ROOT || "/resources/images";
 
 declare variable $appconfig:FS-PATH := $appconfig:doc/ce-config/configs/fs-path/text();
 
@@ -128,8 +128,8 @@ declare function appconfig:three-in-one($flattened as node()) {
 declare function appconfig:roles() {
 
     <roles> {
-        let $autoroles := doc($appconfig:SYS-FOLDER || '/.auto/_roles.xml')/roles
-        let $customroles := doc($appconfig:SYS-FOLDER || '/acl/roles.xml')/roles
+        let $autoroles := doc($appconfig:CONFIGS-FOLDER || '/.auto/_roles.xml')/roles
+        let $customroles := doc($appconfig:CONFIGS-FOLDER || '/roles.xml')/roles
         let $allroles := for $role in ($autoroles/role/@name, $customroles//@id) return data($role)
         
         for $role in distinct-values($allroles)

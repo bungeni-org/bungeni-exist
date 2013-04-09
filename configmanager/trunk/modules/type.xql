@@ -36,6 +36,17 @@ declare function local:get-types() {
         local:wrap-type($archetype)
 };
 
+(: GET ALL TEH WORKFLOWS :)
+declare function local:get-workflows() {
+    <workflows>
+    {
+        for $workflow in collection($appconfig:WF-FOLDER)/workflow
+        return  
+            <workflow name="{data($workflow/@name)}"/>
+    }
+    </workflows>
+};
+
 (:
     Encapsulates each of the 3 archtypes into their own column for rendering
   @param archetype
@@ -111,6 +122,16 @@ function type:edit($node as node(), $model as map(*)) {
                             <member name="member_member" workflow="group_membership" enabled="false"/>
                         </group>
                     </data>
+                </xf:instance>
+                
+                <xf:instance xmlns="" id="i-groupmember">
+                    <data>
+                        <member name="{concat($name,'_')}" enabled="true" workflow="group_membership"/>
+                    </data>
+                </xf:instance> 
+                
+                <xf:instance xmlns="" id="i-workflows">
+                    {local:get-workflows()}
                 </xf:instance>
                 
                 <xf:instance id="i-vars" src="{$type:REST-CXT-APP}/model_templates/vars.xml"/>
@@ -231,70 +252,122 @@ function type:edit($node as node(), $model as map(*)) {
                 </xf:action>        
             </xf:model>
             <!-- ######################### Views start ################################## -->
-            <p>Edit the type information || Click on the left to update parts</p>
-            <xf:group appearance="compact">
-                <xf:group>
-                    <xf:group appearance="bf:verticalTable">
-                        <xf:select1 id="c-enabled" bind="typenable" appearance="minimal" class="xsmallWidth" incremental="true">
-                            <xf:label>type status:</xf:label>
-                            <xf:hint>a Hint for this control</xf:hint>
-                            <xf:help>help for select1</xf:help>
-                            <xf:alert>invalid</xf:alert>
-                            <xf:itemset nodeset="instance('i-boolean')/bool">
-                                <xf:label ref="@name"></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>
-                    </xf:group>
+            <xf:group ref="./{$type}[{$pos}]">
+                <xf:group appearance="bf:verticalTable">
+                    <xf:select1 id="c-enabled" bind="typenable" appearance="minimal" class="xsmallWidth" incremental="true">
+                        <xf:label>type status:</xf:label>
+                        <xf:hint>a Hint for this control</xf:hint>
+                        <xf:help>help for select1</xf:help>
+                        <xf:alert>invalid</xf:alert>
+                        <xf:itemset nodeset="instance('i-boolean')/bool">
+                            <xf:label ref="@name"></xf:label>
+                            <xf:value ref="."></xf:value>
+                        </xf:itemset>
+                    </xf:select1>
+                </xf:group>
+                <hr/>                  
+                {
+                if ($type eq 'group') then (             
+                <xf:group appearance="bf:verticalTable">
+                    <xf:group appearance="bf:horizontalTable">
+                        <xf:label>member types</xf:label>
+                        <xf:repeat id="r-groupmembers" nodeset="member" appearance="compact">
+                            <xf:input ref="@name" incremental="true">
+                                <xf:label>name</xf:label>
+                                <xf:hint>{$name}_member.</xf:hint>
+                                <xf:help>should be attached to role is using a dot</xf:help>
+                                <xf:message ev:event="xforms-invalid" level="ephemeral">member name must start with `{$name}_` and avoid spaces</xf:message>
+                            </xf:input>  
+                            <xf:select1 ref="@enabled" appearance="minimal" class="xsmallWidth" incremental="true">
+                                <xf:label>type status</xf:label>
+                                <xf:hint>a Hint for this control</xf:hint>
+                                <xf:help>help for select1</xf:help>
+                                <xf:alert>invalid</xf:alert>
+                                <xf:itemset nodeset="instance('i-boolean')/bool">
+                                    <xf:label ref="@name"></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1>                            
+                            <xf:select1 ref="@workflow" appearance="minimal" class="xmediumWidth" incremental="true">
+                                <xf:label>workflow</xf:label>
+                                <xf:hint>the workflow that handles this</xf:hint>
+                                <xf:help>pick from the list of workflow</xf:help>
+                                <xf:alert>invalid</xf:alert>
+                                <xf:itemset nodeset="instance('i-workflows')/workflow">
+                                    <xf:label ref="@name"></xf:label>
+                                    <xf:value ref="@name"></xf:value>
+                                </xf:itemset>
+                            </xf:select1> 
+                            <xf:trigger src="resources/images/delete.png">
+                                <xf:label>delete</xf:label>
+                                <xf:action>
+                                    <xf:delete at="index('r-groupmembers')[position()]"></xf:delete>
+                                </xf:action>
+                            </xf:trigger>                                         
+                        </xf:repeat>
+                    </xf:group>   
                     <br/>
-                    <xf:group id="typeButtons" appearance="bf:horizontalTable">
+                    <xf:group appearance="minimal">
                         <xf:trigger>
-                            <xf:label>update</xf:label>
-                            <xf:action if="'{$type}' = 'doc'">
-                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                <xf:send submission="s-add"/>
-                            </xf:action>
-                            <xf:action if="'{$type}' = 'group'">
-                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                <xf:send submission="s-add"/>
-                            </xf:action>
-                            <xf:action>
-                                <xf:setvalue ref="instance('i-vars')/renameDoc" value="concat(instance()/{$type}[{$pos}]/@name,'.xml')"/>
-                                <xf:load show="none" targetid="secondary-menu">
-                                    <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc,'')"/>
-                                </xf:load>
-                            </xf:action>                            
-                        </xf:trigger>
-                        <xf:group appearance="bf:verticalTable">                      
-                             <xf:switch>
-                                <xf:case id="delete">
-                                   <xf:trigger ref="instance()/{$type}">
-                                      <xf:label>delete</xf:label>
+                           <xf:label>add member type</xf:label>
+                           <xf:action>
+                               <xf:insert nodeset="member" at="last()" position="after" origin="instance('i-groupmember')/member"/>
+                               <xf:setfocus control="r-groupmembers"/>
+                           </xf:action>
+                        </xf:trigger>     
+                    </xf:group>                        
+                </xf:group>                    
+                ) else ()
+                }
+                <hr/>                  
+                <xf:group id="typeButtons" appearance="bf:horizontalTable">
+                    <xf:trigger>
+                        <xf:label>update</xf:label>
+                        <xf:action if="'{$type}' = 'doc'">
+                            <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                            <xf:send submission="s-add"/>
+                        </xf:action>
+                        <xf:action if="'{$type}' = 'group'">
+                            <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                            <xf:send submission="s-add"/>
+                        </xf:action>
+                        <xf:action>
+                            <xf:setvalue ref="instance('i-vars')/renameDoc" value="concat(instance()/{$type}[{$pos}]/@name,'.xml')"/>
+                            <xf:load show="none" targetid="secondary-menu">
+                                <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc,'')"/>
+                            </xf:load>
+                        </xf:action>                            
+                    </xf:trigger>
+                    
+                    <xf:group appearance="bf:verticalTable">                      
+                         <xf:switch>
+                            <xf:case id="delete">
+                               <xf:trigger ref="instance()/{$type}">
+                                  <xf:label>delete</xf:label>
+                                  <xf:action ev:event="DOMActivate">
+                                     <xf:toggle case="confirm" />
+                                  </xf:action>
+                               </xf:trigger>
+                            </xf:case>
+                            <xf:case id="confirm">
+                               <h2>Are you sure you want to delete this doctype?</h2>
+                               <xf:group appearance="bf:horizontalTable">
+                                   <xf:trigger>
+                                      <xf:label>Delete</xf:label>
                                       <xf:action ev:event="DOMActivate">
-                                         <xf:toggle case="confirm" />
+                                        <xf:delete nodeset="instance()/descendant-or-self::*[data(@name) eq '{$name}']"/>
+                                        <xf:send submission="s-delete"/>
+                                        <xf:toggle case="delete" />
                                       </xf:action>
                                    </xf:trigger>
-                                </xf:case>
-                                <xf:case id="confirm">
-                                   <h2>Are you sure you want to delete this doctype?</h2>
-                                   <xf:group appearance="bf:horizontalTable">
-                                       <xf:trigger>
-                                          <xf:label>Delete</xf:label>
-                                          <xf:action ev:event="DOMActivate">
-                                            <xf:delete nodeset="instance()/descendant-or-self::*[data(@name) eq '{$name}']"/>
-                                            <xf:send submission="s-delete"/>
-                                            <xf:toggle case="delete" />
-                                          </xf:action>
-                                       </xf:trigger>
-                                       <xf:trigger>
-                                            <xf:label>Cancel</xf:label>
-                                            <xf:toggle case="delete" ev:event="DOMActivate" />
-                                       </xf:trigger>
-                                    </xf:group>
-                                </xf:case>
-                             </xf:switch>   
-                        </xf:group>                        
-                    </xf:group>
+                                   <xf:trigger>
+                                        <xf:label>Cancel</xf:label>
+                                        <xf:toggle case="delete" ev:event="DOMActivate" />
+                                   </xf:trigger>
+                                </xf:group>
+                            </xf:case>
+                         </xf:switch>   
+                    </xf:group>                        
                 </xf:group>
             </xf:group>
             <!-- ######################### Views end ################################## -->  

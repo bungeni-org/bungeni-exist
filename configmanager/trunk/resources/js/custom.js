@@ -38,21 +38,28 @@ $(document).ready(function(){
     
     // moving nodes up and down (reordering) in <table>
     $("table#transitionSources tbody tr:first .up,table#transitionSources tbody tr:last .down").hide();
-    $(".up, .down").click(function(){
+    $("tr .up, tr .down").click(function(){
         var row = $(this).parents("tr:first");
         var href = $(this).attr('href');
         if ($(this).is(".up")) {
             $("table#transitionSources tbody tr:first .up").show();
-            $.get(href,function(data,status) {
-                if (status == "success")
+            $.ajax({
+                type: "GET",
+                url: href+(row.index()+1),
+                data: "nothing",
+                success: function(data) {                      
                     row.insertBefore(row.prev());
                     row.find(".down").show();
                     $("table#transitionSources tbody tr:first .up,table#transitionSources tbody tr:last .down").hide();
+                }
             });
-        } else {        
-            $.get(href,function(data,status){             
-                if (status == "success") {                
-                    row.insertAfter(row.next());   
+        } else {      
+            $.ajax({
+                type: "GET",
+                url: href+(row.index()+1),
+                data: "nothing",
+                success: function(data) {                      
+                    row.insertAfter(row.next());
                     row.find(".up").show();
                     $("table#transitionSources tbody tr:first .up,table#transitionSources tbody tr:last .down").hide();
                 }
@@ -63,7 +70,7 @@ $(document).ready(function(){
     
     // moving nodes up and down (reordering) in <ul>
     $("ul.ulfields li:first .up,ul.ulfields li:last .down").hide();
-    $(".up, .down").click(function(){
+    $("li .up, li .down").click(function(){
         var row = $(this).parents("li:first");
         var href = $(this).attr('href');
         if ($(this).is(".up")) {

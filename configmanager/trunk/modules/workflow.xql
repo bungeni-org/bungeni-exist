@@ -90,8 +90,8 @@ declare function local:transition-src($doctype as xs:string,
             <td><span>{$transition/destinations/destination/text()}&#160;</span></td>
             <td title="{data($transition/@order)}">
                     <span style="float:right;">
-                        <a class="up" href="{$workflow:RESTXQ}/workflow/{$workflow:DOCNAME}/{$workflow:NODENAME}/transition/{data($transition/@order)}/up"><i class="icon-up"/></a>
-                        <a class="down" href="{$workflow:RESTXQ}/form/{$workflow:DOCNAME}/{$workflow:NODENAME}/transition/{data($transition/@order)}/down"><i class="icon-down"/></a>
+                        <a class="up" href="{$workflow:RESTXQ}/workflow/{$workflow:DOCNAME}/{$workflow:NODENAME}/transition/up/"><i class="icon-up"/></a>
+                        <a class="down" href="{$workflow:RESTXQ}/workflow/{$workflow:DOCNAME}/{$workflow:NODENAME}/transition/down/"><i class="icon-down"/></a>
                     </span>
             </td>
         </tr>        

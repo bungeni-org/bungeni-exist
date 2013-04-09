@@ -3,7 +3,7 @@ xquery version "3.0";
 (: 
  : Defines all the RestXQ endpoints used by the XForms.
  :)
-module namespace cmrest = "http://exist-db.org/apps/configmanager/rest";
+module namespace cmwfrest = "http://exist-db.org/apps/configmanager/rest";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
 import module namespace functx = "http://www.functx.com" at "functx.xqm";
@@ -15,14 +15,12 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 declare variable $ce:data := $config:app-root || "/config_editor/bungeni_custom/workflows";
 :)
 
-(:~
- : List all workflows and return them as XML.
- :)
+(: List all workflows and return them as XML. :)
 declare
     %rest:GET
     %rest:path("/workflows")
     %rest:produces("application/xml", "text/xml")
-function cmrest:workflows() {
+function cmwfrest:workflows() {
     <workflows>
     {
         for $workflow in collection($appconfig:WF-FOLDER)/workflow
@@ -32,13 +30,11 @@ function cmrest:workflows() {
     </workflows>
 };
 
-(:~
- : DELETE a state in a workflow
- :)
+(: DELETE a state in a workflow :)
 declare 
     %rest:DELETE
     %rest:path("/workflow/{$doc}/state/{$id}")
-function cmrest:delete-state($doc as xs:string,$id as xs:string) {
+function cmwfrest:delete-state($doc as xs:string,$id as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
@@ -49,13 +45,11 @@ function cmrest:delete-state($doc as xs:string,$id as xs:string) {
     )
 };
 
-(:~
- : DELETE a facet in a workflow
- :)
+(: DELETE a facet in a workflow :)
 declare 
     %rest:DELETE
     %rest:path("/workflow/{$doc}/facet/{$name}")
-function cmrest:delete-facet($doc as xs:string,$name as xs:string) {
+function cmwfrest:delete-facet($doc as xs:string,$name as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
@@ -67,30 +61,61 @@ function cmrest:delete-facet($doc as xs:string,$name as xs:string) {
     )
 };
 
-(:~
- : Retrieve a workflow identified by a name.
- :)
+(: Retrieve a workflow identified by a name. :)
 declare 
     %rest:GET
     %rest:path("/workflow/{$name}")
-function cmrest:get-workflow($name as xs:string) {
+function cmwfrest:get-workflow($name as xs:string) {
     collection($appconfig:FORM-FOLDER)/descriptor[@name = $name]
 };
 
-(:~
- : Delete a workflow identified by its name.
- :)
+(: Delete a workflow identified by its name. :)
 declare
     %rest:DELETE
     %rest:path("/workflow/{$name}")
-function cmrest:delete-workflow($name as xs:string) {
+function cmwfrest:delete-workflow($name as xs:string) {
     xmldb:remove($appconfig:WF-FOLDER, $name || ".xml"),
-    cmrest:workflows()
+    cmwfrest:workflows()
 };
 
-(:~
- : COMMIT a workflow to the filesystem. Every workflow is committed in company of types.xml
- :)
+(: Change transition order in the workflow's state :)
+declare 
+    %rest:GET
+    %rest:path("/workflow/{$doc}/{$state}/transition/{$dir}/{$order}")
+function cmwfrest:move-transition($doc as xs:string,
+                                $state as xs:string,
+                                $order as xs:integer,
+                                $dir as xs:string) {
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    return
+        switch ($dir)
+        
+            case 'up' return 
+                let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
+                let $relegate := $doc/transition[sources/source eq $state and @order = xs:integer($order)]
+                let $promote := $doc/transition[sources/source eq $state and @order = (xs:integer($order)-1)]
+                return (
+                    update replace $relegate/@order with (xs:integer($order)-1),                
+                    update replace $promote/@order with xs:integer($order),
+                    $doc
+                )
+                    
+            case 'down' return 
+                let $doc := doc($appconfig:WF-FOLDER || "/" || $doc || ".xml")/workflow
+                let $promote := $doc/transition[sources/source eq $state and @order = (xs:integer($order)+1)]                
+                let $relegate := $doc/transition[sources/source eq $state and @order = xs:integer($order)]
+                return (
+                    update replace $promote/@order with xs:integer($order),                
+                    update replace $relegate/@order with (xs:integer($order)+1),                
+                    $doc
+                )        
+                    
+            default return           
+                () 
+};
+
+(: COMMIT a workflow to the filesystem. Every workflow is committed in company of types.xml :)
 declare 
     (: 
         !+NOTE (ao, 26th Mar 2013) Using GET instead of POST/PUT because both seem unstable on the
@@ -100,7 +125,7 @@ declare
     :)
     %rest:GET
     %rest:path("/workflow/commit/{$name}")
-function cmrest:commit-workflow($name as xs:string) {
+function cmwfrest:commit-workflow($name as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:WF-FOLDER || "/" || $name || ".xml")/workflow

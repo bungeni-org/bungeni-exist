@@ -29,7 +29,7 @@ declare variable $type:REST-BC-LIVE :=  $type:CXT || $appconfig:REST-BUNGENI-CUS
 declare function local:get-types() {
     let $d := doc($appconfig:TYPES-XML)/types
     let $flattened := <grouped>{appconfig:flatten($d)}</grouped>
-    for $archetype at $pos in appconfig:three-in-one($flattened)/child::*
+    for $archetype at $pos in appconfig:three-in-one($flattened)/child::*[@key ne 'member']
     let $count := count(appconfig:three-in-one($flattened)/child::*)
     order by $archetype/@key ascending
     return  
@@ -58,6 +58,25 @@ declare function local:wrap-type($archetype as node()) {
                         <a class="{if(data($type/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($type/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($type)}&amp;doc={data($type/@name)}&amp;pos={$pos}">{data($type/@name)}<i class="icon-plus new"></i></a>
                     else                     
                         <a class="{if(data($type/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($type/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($type)}&amp;doc={data($type/@name)}&amp;pos={$pos}">{data($type/@name)}</a>
+                }
+                {
+                    if($type/child::*) then 
+                        <ul>
+                        {
+                            for $member in $type/child::*
+                            return
+                                <li>
+                                    {
+                                      if($type-added eq xs:string(node-name($type)) and $pos eq $count) then 
+                                          <a class="{if(data($member/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($member/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($member)}&amp;doc={data($member/@name)}&amp;pos={$pos}">{data($member/@name)}<i class="icon-plus new"></i></a>
+                                      else                     
+                                          <a class="{if(data($member/@enabled) = 'true') then 'deep' else 'greyed' }" title="{if (data($member/@enabled) = 'true') then 'enabled' else 'disabled' }" href="type.html?type={node-name($member)}&amp;doc={data($member/@name)}&amp;pos={$pos}">{data($member/@name)}</a>                                        
+                                    }
+                                </li>
+                        }
+                        </ul>
+                    else    
+                        ()
                 }
                 </li>
             }

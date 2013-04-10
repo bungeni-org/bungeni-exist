@@ -74,7 +74,7 @@ declare function cmn:get-menu($menu-name as xs:string) as node() {
 Get a route configuration from the exist path.
 The exist-path is passed from the appcontroller
 :)
-declare function cmn:get-route($exist-path as xs:string) as node() {
+declare function cmn:get-route($exist-path as xs:string) {
     let $doc := cmn:get-ui-config()/ui/routes/route[@href eq $exist-path]      
        return $doc
 };

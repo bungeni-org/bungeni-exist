@@ -1,24 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
     <!--
         Ashok Hariharan
         14 Nov 2012
         Serializes Bungeni Workflow XML to a more usable XML format
         Update: currently updated to bungeni_custom r10268
+        10 Apr 2013
+        This is now split into 2 chained templates
     -->
     <xsl:include href="split_attr_tags.xsl"/>
     <xsl:include href="split_attr_roles.xsl"/>
     <xsl:output indent="yes"/>
     <xsl:param name="docname"/>
+    
     <xsl:template match="comment()">
         <xsl:copy/>
     </xsl:template>
+    
     <xsl:template match="*">
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="preserve"/>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates select="@*|node()" />
         </xsl:copy>
     </xsl:template>
+    
     <xsl:template match="workflow">
         <xsl:copy>
             <!-- Option to pass-in the form-id as a parameter from XQuery -->
@@ -41,6 +45,31 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+    
+    <xsl:template match="allow[parent::facet] | deny[parent::facet]">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" mode="preserve" />
+            <xsl:apply-templates select="@*|node()" />
+        </xsl:copy>
+    </xsl:template>
+    
+    <!-- template to match global permission declarations -->
+    <xsl:template match="allow[parent::workflow] | deny[parent::workflow]">
+        <xsl:variable name="matched-node" select="." />
+        <xsl:variable name="roles-list" select="tokenize(normalize-space(@roles), '\s+')" />
+        <xsl:for-each select="$roles-list">
+            <xsl:element name="facet">
+                <xsl:attribute name="name" select="concat('global_',.)" />
+                <xsl:for-each select="$matched-node">
+                    <xsl:copy >
+                        <xsl:apply-templates select="@*" mode="preserve" />
+                        <xsl:apply-templates select="@*|node()" />
+                    </xsl:copy>
+                </xsl:for-each>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->

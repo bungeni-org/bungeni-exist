@@ -59,12 +59,21 @@
         <xsl:variable name="roles-list" select="tokenize(normalize-space(@roles), '\s+')" />
         <xsl:for-each select="$roles-list">
             <xsl:element name="facet">
-                <xsl:attribute name="name" select="concat('global_',.)" />
+                <xsl:variable name="role-name" select="." />
+                <xsl:attribute name="name" select="concat('global_',$role-name)" />
                 <xsl:for-each select="$matched-node">
-                    <xsl:copy >
+                    <xsl:element name="{local-name()}">
+                        <xsl:apply-templates select="@*" mode="preserve" />
+                        <roles originAttr="roles">
+                            <role><xsl:value-of select="$role-name" /></role>
+                        </roles>
+                    </xsl:element>
+                    <!--
+                    <xsl:copy>
                         <xsl:apply-templates select="@*" mode="preserve" />
                         <xsl:apply-templates select="@*|node()" />
                     </xsl:copy>
+                    -->
                 </xsl:for-each>
             </xsl:element>
         </xsl:for-each>

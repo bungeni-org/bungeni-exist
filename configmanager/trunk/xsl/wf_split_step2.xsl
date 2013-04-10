@@ -22,8 +22,25 @@
                     </xsl:for-each>
                 </facet>
             </xsl:for-each-group>
-            <xsl:apply-templates select="*[not(name() eq 'facet') and not(name() eq 'permActions')]|text()|processing-instruction()|comment()" />
+            
+            <!-- we dont want to match permActions in the workflow element again -->
+            
+            <xsl:apply-templates select="
+                *[not(self::permActions[parent::workflow])] | 
+                text() | 
+                processing-instruction() | 
+                comment()" />
+            
+            <!--
+            <xsl:apply-templates select="
+                *[not(self::permActions[parent::workflow] or self::facet[parent::workflow and starts-with(@role,'global_')])] | 
+                text() | 
+                processing-instruction() | 
+                comment()" /> -->
         </xsl:element>
     </xsl:template>
+    
+    <!-- suppress the global facet, it has been handled using the for_each above -->
+    <xsl:template match="facet[parent::workflow and starts-with(@name, 'global_')]" />
     
 </xsl:stylesheet>

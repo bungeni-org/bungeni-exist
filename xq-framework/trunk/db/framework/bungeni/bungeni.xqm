@@ -113,7 +113,7 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string, $views as node())
+declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string)
 {
     (: stylesheet to transform :) 
     let $stylesheet := cmn:get-xslt('xsl/xhtml2fo.xsl') 
@@ -124,6 +124,8 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string,
 
     let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
     let $title := $doc/bu:document/bu:title  
+    let $doc-type := $doc/bu:document/bu:docType/bu:value
+    let $views := cmn:get-views-for-type($doc-type)    
     
     let $lang := template:set-lang()    
     let $orientation := local:get-orientation($lang)
@@ -170,10 +172,12 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string,
 : @return
 :   A ePUB document
 :)
-declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string, $views as node())
+declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string)
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
     let $title := $doc/bu:document/bu:title
+    let $doc-type := $doc/bu:document/bu:docType/bu:value
+    let $views := cmn:get-views-for-type($doc-type)
     
     let $lang := template:set-lang()
     let $orientation := local:get-orientation($lang)
@@ -342,7 +346,7 @@ declare function local:fop-config($base as xs:string, $font-path as xs:string) {
 : @return
 :   A PDF document for download
 :)
-declare function bun:gen-member-pdf($controller as node()?,$memberid as xs:string,$views as node()) {
+declare function bun:gen-member-pdf($controller as node()?,$memberid as xs:string) {
 
     (: stylesheet to transform :) 
     let $stylesheet := cmn:get-xslt('xsl/xhtml2fo.xsl') 
@@ -360,6 +364,8 @@ declare function bun:gen-member-pdf($controller as node()?,$memberid as xs:strin
             }
         </doc>
     let $title := $doc/bu:ontology/bu:membership/bu:title
+    let $doc-type := $doc/bu:ontologoy/bu:membership/bu:docType/bu:value
+    let $views := cmn:get-views-for-type($doc-type)    
     
     let $transformed := transform:transform($doc,$stylesheet,())
     
@@ -1917,17 +1923,20 @@ declare function bun:get-atom-feed(
             ) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
     
+    let $chamber-id := $controller/parliament/identifier/text()
+    let $chamber := $controller/parliament/type/text()   
+    let $chamber-name := data($controller/parliament/type/@displayAs)   
     let $server-path := $bun:SERVER-URL || $controller/exist-cont/text()
     
     let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
-        <title>{concat(upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>
+        <title>{concat($chamber-name, " ", upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>
         <id>http://portal.bungeni.org/1.0/</id>
         <updated>{current-dateTime()}</updated>
-        <generator uri="http://exist.sourceforge.net/" version="1.4.5">eXist XML Database</generator>      
+        <generator uri="http://sourceforge.net/projects/exist/" version="2.0">eXist XML Database</generator>      
         <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
-        <link rel="self" href="/bills/rss" />
+        <link rel="self" href="{$server-path}/{$chamber}/bills/rss" />
        {
-            for $i in subsequence(bun:list-documentitems-with-acl($controller/parliament/identifier/text(),$acl, $doctype),0,10)
+            for $i in subsequence(bun:list-documentitems-with-acl($chamber-id,$acl, $doctype),0,10)
             order by $i/bu:document/bu:statusDate descending
             (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
             return 
@@ -1942,10 +1951,10 @@ declare function bun:get-atom-feed(
                        }
                        </summary>,
                        if ($outputtype = 'user')  then (
-                            <link rel="alternate" type="application/xhtml" href="{$server-path}/{lower-case($doctype)}-text?uri={$i/bu:document/@uri}"/>
+                            <link rel="alternate" type="application/xhtml" href="{$server-path}/{$chamber}/{lower-case($doctype)}-text?uri={$i/bu:document/@uri}"/>
                         )  (: "service" output :)
                         else (
-                            <link rel="alternate" type="application/xml" href="{$server-path}/{lower-case($doctype)}-xml?uri={$i/bu:document/@uri}"/>
+                            <link rel="alternate" type="application/xml" href="{$server-path}/{$chamber}/{lower-case($doctype)}-xml?uri={$i/bu:document/@uri}"/>
                         )  
                     }
                     <content type='html'>{$i/bu:document/bu:body/node()}</content>

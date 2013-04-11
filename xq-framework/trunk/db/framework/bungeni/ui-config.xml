@@ -14,85 +14,85 @@
         <route href="/">
             <title>Home</title>
             <navigation>home</navigation>
-            <action>rou:get-home($CONTROLLER-DOC)</action>
+            <action>rou:get-home</action>
         </route>
         <route href="/lower_house/home">
             <title>Home</title>
             <navigation>home</navigation>
-            <action>rou:get-home($CONTROLLER-DOC)</action>
+            <action>rou:get-home</action>
         </route>
         <route href="/higher_house/home">
             <title>Home</title>
             <navigation>home</navigation>
-            <action>rou:get-home($CONTROLLER-DOC)</action>
+            <action>rou:get-home</action>
         </route>
         <route href="/lower_house/business">
             <title>Business</title>
             <navigation>business</navigation>
-            <action>rou:get-whatson($CONTROLLER-DOC)</action>
+            <action>rou:get-whatson</action>
         </route>
         <route href="/lower_house/members">
             <title>Members</title>
             <navigation>/lower_house/members</navigation>
-            <action>rou:get-members($CONTROLLER-DOC)</action>
+            <action>rou:get-members</action>
         </route>
         <route href="/higher_house/business">
             <title>Business</title>
             <navigation>business</navigation>
-            <action>rou:get-whatson($CONTROLLER-DOC)</action>
+            <action>rou:get-whatson</action>
         </route>
         <route href="/higher_house/members">
             <title>Members</title>
             <navigation>/higher_house/members</navigation>
-            <action>rou:get-members($CONTROLLER-DOC)</action>
+            <action>rou:get-members</action>
         </route>
         <route href="/lower_house/member">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member($CONTROLLER-DOC)</action>
+            <action>rou:member</action>
         </route>
         <route href="/higher_house/member">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>members</subnavigation>
-            <action>rou:member($CONTROLLER-DOC)</action>
+            <action>rou:member</action>
         </route>
         <route href="/lower_house/member-officesheld">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-officesheld($CONTROLLER-DOC)</action>
+            <action>rou:member-officesheld</action>
         </route>
         <route href="/higher_house/member-officesheld">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-officesheld($CONTROLLER-DOC)</action>
+            <action>rou:member-officesheld</action>
         </route>
         <route href="/lower_house/member-parlactivities">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-parlactivities($CONTROLLER-DOC)</action>
+            <action>rou:member-parlactivities</action>
         </route>
         <route href="/higher_house/member-parlactivities">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-parlactivities($CONTROLLER-DOC)</action>
+            <action>rou:member-parlactivities</action>
         </route>
         <route href="/lower_house/member-contacts">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-contacts($CONTROLLER-DOC)</action>
+            <action>rou:member-contacts</action>
         </route>
         <route href="/higher_house/member-contacts">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-contacts($CONTROLLER-DOC)</action>
+            <action>rou:member-contacts</action>
         </route>
         <route href="/lower_house/committees">
             <title>Business | Committees </title>
@@ -108,23 +108,25 @@
             <title>Business | Committee's Profile</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>committees</subnavigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/higher_house/committee-text">
             <title>Business | Committee's Profile</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>committees</subnavigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/lower_house/committee-members">
             <title>Business | Committee's Members</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:committee</action>
         </route>
         <route href="/higher_house/committee-members">
             <title>Business | Committee's Members</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:committee</action>
         </route>
         <route href="/lower_house/committee-assigneditems">
             <title>Business | Committee's Assigned Items</title>
@@ -150,33 +152,37 @@
             <title>Business | Committee's Staff</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:committee</action>
         </route>
         <route href="/higher_house/committee-staff">
             <title>Business | Committee's Staff</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:committee</action>
         </route>
         <route href="/lower_house/committee-contacts">
             <title>Business | Committee's Staff</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:committee</action>
         </route>
         <route href="/higher_house/committee-contacts">
             <title>Business | Committee's Staff</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:committee</action>
         </route>
         <route href="/lower_house/politicalgroup-text">
             <title>Business | Political Group's Profile</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/higher_house/politicalgroup-text">
             <title>Business | Political Group's Profile</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/lower_house/politicalgroup-members">
             <title>Business | Political Group's Members</title>
@@ -201,22 +207,22 @@
         <route href="/lower_house/government-text">
             <title>Business | Government's Profile</title>
             <navigation>/lower_house/home</navigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/higher_house/government-text">
             <title>Business | Government's Profile</title>
             <navigation>/higher_house/home</navigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/lower_house/ministry-text">
             <title>Business | Ministry's Profile</title>
             <navigation>/lower_house/home</navigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/higher_house/ministry-text">
             <title>Business | Ministry's Profile</title>
             <navigation>/higher_house/home</navigation>
-            <action>rou:group($CONTROLLER-DOC)</action>
+            <action>rou:group</action>
         </route>
         <route href="/lower_house/ministry-members">
             <title>Business | Ministry's Members</title>
@@ -242,503 +248,533 @@
             <title>Business | Bills</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:get-bills($CONTROLLER-DOC)</action>
+            <action>rou:get-bills</action>
         </route>
         <route href="/higher_house/bills">
             <title>Business | Bills</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:get-bills($CONTROLLER-DOC)</action>
+            <action>rou:get-bills</action>
         </route>
         <route href="/lower_house/bill-text">
             <title>Business | Bill</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/higher_house/bill-text">
             <title>Business | Bill</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/bill-version/text">
             <title>Business | Bill</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/higher_house/bill-version/text">
             <title>Business | Bill</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/lower_house/bill-timeline">
             <title>Business | Bill</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/higher_house/bill-timeline">
             <title>Business | Bill</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/lower_house/bill-documents">
             <title>Business | Bill</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/higher_house/bill-documents">
             <title>Business | Bill</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/lower_house/bill-version/documents">
             <title>Business | Bill</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/higher_house/bill-version/documents">
             <title>Business | Bill</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/lower_house/bill-event">
             <title>Business | Bill Event</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/bill-event">
             <title>Business | Bill Event</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/bill-attachment">
             <title>Business | Bill Attachment</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
         </route>
         <route href="/higher_house/bill-attachment">
             <title>Business | Bill Attachment</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
         </route>
         <route href="/lower_house/bills/rss">
             <title>Business | Bill</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>bills</subnavigation>
+            <action>rou:atom-rss</action>
         </route>
         <route href="/higher_house/bills/rss">
             <title>Business | Bill</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>bills</subnavigation>
+            <action>rou:atom-rss</action>
         </route>
         <route href="/lower_house/questions">
             <title>Business | Questions </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:get-questions($CONTROLLER-DOC)</action>
+            <action>rou:get-questions</action>
         </route>
         <route href="/higher_house/questions">
             <title>Business | Questions </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:get-questions($CONTROLLER-DOC)</action>
+            <action>rou:get-questions</action>
         </route>
         <route href="/lower_house/question-text">
             <title>Business | Question Text</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/higher_house/question-text">
             <title>Business | Question Text</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/question-version/text">
             <title>Business | Question Version Text</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/higher_house/question-version/text">
             <title>Business | Question Version Text</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/lower_house/question-timeline">
             <title>Business | Question Timeline</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/higher_house/question-timeline">
             <title>Business | Question Timeline</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/lower_house/question-documents">
             <title>Business | Attachments</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/higher_house/question-documents">
             <title>Business | Attachments</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/lower_house/question-version/documents">
             <title>Business | Question Version Attachments</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/higher_house/question-version/documents">
             <title>Business | Question Version Attachments</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/lower_house/question-event">
             <title>Business | Question Event</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/question-event">
             <title>Business | Question Event</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/question-attachment">
             <title>Business | Question Attachment</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
         </route>
         <route href="/higher_house/question-attachment">
             <title>Business | Question Attachment</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/questions/rss">
+            <title>Business | Questions</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/questions/rss">
+            <title>Business | Questions</title>
+            <action>rou:atom-rss</action>
         </route>
         <route href="/lower_house/motions">
             <title>Business | Motions </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:get-motions($CONTROLLER-DOC)</action>
+            <action>rou:get-motions</action>
         </route>
         <route href="/higher_house/motions">
             <title>Business | Motions </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:get-motions($CONTROLLER-DOC)</action>
+            <action>rou:get-motions</action>
         </route>
         <route href="/lower_house/motion-text">
             <title>Business | Motion</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/higher_house/motion-text">
             <title>Business | Motion</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/motion-version/text">
             <title>Business | Motion Version Text</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/higher_house/motion-version/text">
             <title>Business | Motion Version Text</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/lower_house/motion-timeline">
             <title>Business | Motion</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/higher_house/motion-timeline">
             <title>Business | Motion</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/lower_house/motion-documents">
             <title>Business | Motion</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/higher_house/motion-documents">
             <title>Business | Motion</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/lower_house/motion-version/documents">
             <title>Business | Motion Version Documents</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/higher_house/motion-version/documents">
             <title>Business | Motion Version Documents</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/lower_house/motion-event">
             <title>Business | Motion Event</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/motion-event">
             <title>Business | Motion Event</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/motion-attachment">
             <title>Business | Motion Attachment</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
         </route>
         <route href="/higher_house/motion-attachment">
             <title>Business | Motion Attachment</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/motions/rss">
+            <title>Business | Motions</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/motions/rss">
+            <title>Business | Motions</title>
+            <action>rou:atom-rss</action>
         </route>
         <route href="/lower_house/tableddocuments">
             <title>Business | Tabled Documents </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:get-tableddocuments($CONTROLLER-DOC)</action>
+            <action>rou:get-tableddocuments</action>
         </route>
         <route href="/higher_house/tableddocuments">
             <title>Business | Tabled Documents </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:get-tableddocuments($CONTROLLER-DOC)</action>
+            <action>rou:get-tableddocuments</action>
         </route>
         <route href="/lower_house/tableddocument-text">
             <title>Business | Tabled document</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/higher_house/tableddocument-text">
             <title>Business | Tabled document</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/tableddocument-version/text">
             <title>Business | Tabled document Version Document</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/higher_house/tableddocument-version/text">
             <title>Business | Tabled document Version Document</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/lower_house/tableddocument-timeline">
             <title>Business | Tabled document</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/higher_house/tableddocument-timeline">
             <title>Business | Tabled document</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/lower_house/tableddocument-documents">
             <title>Business | Tabled document</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/higher_house/tableddocument-documents">
             <title>Business | Tabled document</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/lower_house/tableddocument-version/documents">
             <title>Business | Tabled document Version Documents</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/higher_house/tableddocument-version/documents">
             <title>Business | Tabled document Version Documents</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/lower_house/tableddocument-event">
             <title>Business | Tabled document Event</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/tableddocument-event">
             <title>Business | Tabled document Event</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
         </route>
         <route href="/higher_house/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/tableddocuments/rss">
+            <title>Business | Tabled Documents</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/tableddocuments/rss">
+            <title>Business | Tabled Documents</title>
+            <action>rou:atom-rss</action>
         </route>
         <route href="/lower_house/agendaitems">
             <title>Business | Agenda items </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:get-agendaitems($CONTROLLER-DOC)</action>
+            <action>rou:get-agendaitems</action>
         </route>
         <route href="/higher_house/agendaitems">
             <title>Business | Agenda items </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:get-agendaitems($CONTROLLER-DOC)</action>
+            <action>rou:get-agendaitems</action>
         </route>
         <route href="/lower_house/agendaitem-text">
             <title>Business | Agenda item</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/higher_house/agendaitem-text">
             <title>Business | Agenda item</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/agendaitem-version/text">
             <title>Business | Agenda item Version Document</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/higher_house/agendaitem-version/text">
             <title>Business | Agenda item Version Document</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:version-text($CONTROLLER-DOC)</action>
+            <action>rou:version-text</action>
         </route>
         <route href="/lower_house/agendaitem-timeline">
             <title>Business | Agenda item</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/higher_house/agendaitem-timeline">
             <title>Business | Agenda item</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/lower_house/agendaitem-documents">
             <title>Business | Agenda item</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/higher_house/agendaitem-documents">
             <title>Business | Agenda item</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-documents($CONTROLLER-DOC)</action>
+            <action>rou:document-documents</action>
         </route>
         <route href="/lower_house/agendaitem-version/documents">
             <title>Business | Agenda item Version Documents</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/higher_house/agendaitem-version/documents">
             <title>Business | Agenda item Version Documents</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:version-documents($CONTROLLER-DOC)</action>
+            <action>rou:version-documents</action>
         </route>
         <route href="/lower_house/agendaitem-event">
             <title>Business | Agenda item Event</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/agendaitem-event">
             <title>Business | Agenda item Event</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-event($CONTROLLER-DOC)</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/agendaitem-attachment">
             <title>Business | AgendaItem Attachment</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
         </route>
         <route href="/higher_house/agendaitem-attachment">
             <title>Business | AgendaItem Attachment</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-attachment($CONTROLLER-DOC)</action>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/agendaitems/rss">
+            <title>Business | Agenda Items</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/agendaitems/rss">
+            <title>Business | Agenda Items</title>
+            <action>rou:atom-rss</action>
         </route>
         <route href="/lower_house/whatson">
             <title>Business | What's on </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>whatson</subnavigation>
-            <action>rou:get-whatson($CONTROLLER-DOC)</action>
+            <action>rou:get-whatson</action>
         </route>
         <route href="/higher_house/whatson">
             <title>Business | What's on </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>whatson</subnavigation>
-            <action>rou:get-whatson($CONTROLLER-DOC)</action>
+            <action>rou:get-whatson</action>
         </route>
         <route href="/lower_house/calendar">
             <title>Business | Sittings </title>
@@ -764,49 +800,49 @@
             <title>Business | Publications </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>publications</subnavigation>
-            <action>rou:get-reports($CONTROLLER-DOC)</action>
+            <action>rou:get-reports</action>
         </route>
         <route href="/higher_house/publications">
             <title>Business | Publications </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>publications</subnavigation>
-            <action>rou:get-reports($CONTROLLER-DOC)</action>
+            <action>rou:get-reports</action>
         </route>
         <route href="/lower_house/report-text">
             <title>Business | Publication Report Text</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>publications</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/higher_house/report-text">
             <title>Business | Publication Report Text</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>publications</subnavigation>
-            <action>rou:document-text($CONTROLLER-DOC)</action>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/report-timeline">
             <title>Business | Publication Report Timeline</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>publications</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/higher_house/report-timeline">
             <title>Business | Publication Report Timeline</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>publications</subnavigation>
-            <action>rou:document-timeline($CONTROLLER-DOC)</action>
+            <action>rou:document-timeline</action>
         </route>
         <route href="/lower_house/politicalgroups">
             <title>Business | Political Groups </title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
-            <action>rou:get-politicalgroups($CONTROLLER-DOC)</action>
+            <action>rou:get-politicalgroups</action>
         </route>
         <route href="/higher_house/politicalgroups">
             <title>Business | Political Groups </title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
-            <action>rou:get-politicalgroups($CONTROLLER-DOC)</action>
+            <action>rou:get-politicalgroups</action>
         </route>
         <route href="/admin">
             <title>Admin Section</title>
@@ -1141,6 +1177,10 @@
                 <template>xml/bills.xml</template>
                 <xsl>xsl/legislativeitem-listing.xsl</xsl>
             </view>
+            <view id="rss" path="bills/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
             <view id="text" path="bill-text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -1192,6 +1232,10 @@
                 <template>xml/questions.xml</template>
                 <xsl>xsl/legislativeitem-listing.xsl</xsl>
             </view>
+            <view id="rss" path="questions/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
             <view id="text" path="question-text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -1242,6 +1286,10 @@
             <view id="listing" path="motions" tag="listing">
                 <template>xml/motions.xml</template>
                 <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="rss" path="motions/rss" tag="listing">
+                <template/>
+                <xsl/>
             </view>
             <view id="text" path="motion-text" tag="tab">
                 <title>
@@ -1298,6 +1346,10 @@
                 <template>xml/tableddocuments.xml</template>
                 <xsl>xsl/legislativeitem-listing.xsl</xsl>
             </view>
+            <view id="rss" path="tableddocuments/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
             <view id="text" path="tableddocument-text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -1346,6 +1398,10 @@
                 <template>xml/agendaitems.xml</template>
                 <xsl>xsl/legislativeitem-listing.xsl</xsl>
             </view>
+            <view id="rss" path="agendaitems/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
             <view id="text" path="agendaitem-text" tag="tab">
                 <title>
                     <i18n:text key="tab-text">text(nt)</i18n:text>
@@ -1393,6 +1449,10 @@
             <view id="listing" path="publications" tag="listing">
                 <template>xml/legislativeitem-generic.xml</template>
                 <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="rss" path="publications/rss" tag="listing">
+                <template/>
+                <xsl/>
             </view>
             <view id="text" path="report-text" tag="tab">
                 <title>

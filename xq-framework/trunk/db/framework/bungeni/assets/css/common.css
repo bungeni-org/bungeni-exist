@@ -495,8 +495,12 @@ div.row div.b-right input.button {
 #adv-search-wrapper {
     margin:0 auto;
     width:96%;
-    height:50%;
+    height:75%;
     padding:5px;
+}
+
+.chamber-options {
+    height:70px !important;
 }
 
 .checkall {

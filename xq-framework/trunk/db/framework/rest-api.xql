@@ -154,7 +154,7 @@ declare
     function local:documents($country-code as xs:string, $type as xs:string) {
         <docs>
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq $type]
+                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq $type]/parent::node()
             }
         </docs>
 };

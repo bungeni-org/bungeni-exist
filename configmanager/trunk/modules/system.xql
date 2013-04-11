@@ -94,12 +94,14 @@ declare function local:split-form($form-path as xs:string) {
 };
 
 declare function local:split-workflow($wf-path as xs:string) {
-    let $xsl := appconfig:get-xslt("wf_split_attrs.xsl")
+    let $step1 := appconfig:get-xslt("wf_split_step1.xsl")
+    let $step2 := appconfig:get-xslt("wf_split_step2.xsl")
     let $doc := doc($wf-path)
-    return transform:transform($doc, $xsl, 
-            <parameters>
-               <param name="docname" value="{util:document-name($doc)}" />
-            </parameters>)        
+    let $step1_doc := transform:transform($doc, $step1, 
+                            <parameters>
+                               <param name="docname" value="{util:document-name($doc)}" />
+                            </parameters>)      
+    return transform:transform($step1_doc, $step2, ())        
 };
 
 declare

@@ -112,6 +112,29 @@ declare function rou:group($CONTROLLER-DOC as node()) {
          )
 };
 
+declare function rou:committee($CONTROLLER-DOC as node()) {
+
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
+    let $mem-status := xs:string(request:get-parameter("status","current"))
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$mem-status,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-repl:= document {
+        					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+        				 } 
+    return 
+        template:process-tmpl(
+    	   $CONTROLLER-DOC/rel-path, 
+    	   $CONTROLLER-DOC/exist-cont, 
+    	   $config:DEFAULT-TEMPLATE,
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+        )
+};
+
 declare function rou:get-members($CONTROLLER-DOC as node()) {
 
     let $qry := xs:string(request:get-parameter("q",''))
@@ -497,11 +520,29 @@ declare function rou:get-reports($CONTROLLER-DOC as node()) {
     rou:listing-documentitem($CONTROLLER-DOC, "Report")
 };
 
-declare function rou:get-pdf($CONTROLLER-DOC as node(), $views as node()) {
+declare function rou:atom-rss($CONTROLLER-DOC as node()) {
+
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $doc-type := data($parts/parent::node()/@name)
+    let $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view", $doc-type,"user")
+    return 
+        $act-entries-tmpl        
+};
+
+declare function rou:epub($CONTROLLER-DOC as node()) {
+
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
+    let $act-entries-tmpl :=  bun:gen-epub-output($CONTROLLER-DOC/exist-cont,$docnumber)
+    return 
+        $act-entries-tmpl
+};
+
+declare function rou:get-pdf($CONTROLLER-DOC as node()) {
       
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-        $act-entries-tmpl :=  bun:gen-pdf-output($CONTROLLER-DOC,$docnumber,$views)
-    return $act-entries-tmpl                                  
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
+    let $act-entries-tmpl :=  bun:gen-pdf-output($CONTROLLER-DOC,$docnumber)
+    return 
+        $act-entries-tmpl                                  
 };
 
 declare function rou:get-xml($CONTROLLER-DOC as node()) {

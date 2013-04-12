@@ -17,12 +17,135 @@ declare namespace an='http://www.akomantoso.org/2.0';
 
 (:
  : This XQuery script provides a REST API based on RESTXQ extension
- :
+ : Searches based on Bungeni types, the type parameter is a bungeni type
  : @author Anthony Oduor <aowino@googlemail.com>
  : 
- : http://localhost:8088/exist/restxq/ontology?group=document&type=Bill?offset=1&limit=5
+ : http://localhost:8088/exist/restxq/ontology_bungeni?group=document&type=bill?offset=1&limit=5
  :
 :)
+
+declare
+    %rest:path("/ontology_bungeni")
+    %rest:POST("{$body}")    
+    %rest:form-param("role", "{$role}", "bungeni.Anonymous")     
+    %rest:form-param("group", "{$group}", "*")    
+    %rest:form-param("type", "{$type}", "*")
+    %rest:form-param("offset", "{$offset}", 1)
+    %rest:form-param("limit", "{$limit}", 10) (: set a default and then return next offset for next batch :)   
+    %rest:form-param("search", "{$search}", "none")
+    %rest:form-param("status", "{$status}", "*")
+    %rest:form-param("daterange", "{$daterange}", "*")
+    %output:method("json")
+    (: Cascading collection based on parameters given, default apply when not given explicitly by client :)
+    function local:bungeni-documents(
+        $body as xs:string*,
+        $role as xs:string*,        
+        $group as xs:string*,
+        $type as xs:string*, 
+        $offset as xs:int*,
+        $limit as xs:int*,
+        $search as xs:string*,
+        $status as xs:string*,
+        $daterange as xs:string*) {
+        <docs>
+            <role>{$role}</role>         
+            <group>{$group}</group>           
+            <type>{$type}</type>   
+            <offset>{$offset}</offset>
+            <next-offset>{($offset+$limit)}</next-offset>
+            <limit>{$limit}</limit>
+            <search>{$search}</search>
+            <status>{$status}</status>
+            <daterange>{$daterange}</daterange>
+            {
+                let $acl-filter-attr := cmn:get-acl-permission-as-attr-for-role($role)
+                let $acl-filter-node := cmn:get-acl-permission-as-node-for-role($role)
+                
+                let $token-roles := tokenize($role,",")
+                let $roles :=   for $arole at $pos in $token-roles
+                                let $counter := count($token-roles)
+                                return (
+                                    fn:concat("bu:control[",cmn:get-acl-permission-as-attr-for-role($arole),"]"),
+                                    if($pos lt $counter) then "and" else () )
+                
+                let $roles-string := fn:string-join($roles," ")
+                  
+                let $coll := bun:get-all-by-role($roles-string)            
+            
+                (: get entire collection OR trim by group types mainly: document, group, membership... :)
+                let $coll-by-group :=  
+                    switch($group)
+                        case "*"
+                            return $coll
+                        default
+                            return
+                                for $dgroup in tokenize($group,",")
+                                return $coll[@for=$dgroup]   
+                
+                (: from $coll-by-group get collection by docTypes mainly: Bill, Question, Motion... :)
+                let $coll-by-doctype := 
+                    switch($type)
+                        case "*"
+                            return $coll-by-group
+                        default
+                            return
+                                for $dtype in tokenize($type,",")
+                                return $coll-by-group/child::*/bu:type[bu:value=$dtype]/ancestor::bu:ontology
+                                
+                (: trim $coll-by-doctype subset by bu:status :)
+                let $coll-by-status := 
+                    switch($status)
+                        case "*"
+                            return $coll-by-doctype
+                        default
+                            return
+                                for $dstatus in $coll-by-doctype
+                                where $dstatus/child::*/bu:status/bu:value eq $status 
+                                return $dstatus  
+                                
+                (: trim $coll-by-status subset by bu:statusDate :)
+                let $coll-by-statusdate := 
+                    switch($daterange)
+                        case "*"
+                            return $coll-by-status
+                        default
+                            return
+                                for $match in $coll-by-status
+                                let $dates := tokenize($daterange,",")
+                                return 
+                                    $match/child::*[xs:dateTime(bu:statusDate) gt xs:dateTime(concat($dates[1],"T00:00:00"))]
+                                    [xs:dateTime(bu:statusDate) lt xs:dateTime(concat($dates[2],"T23:59:59"))]/ancestor::bu:ontology                        
+
+                (: finally search the subset collection if and only if there are is a search param given :)    
+                let $ontology_rs := 
+                    switch($search)
+                        case "none" return
+                            for $ontology in $coll-by-statusdate
+                            return
+                                <doc>{$ontology}</doc>                        
+                        default
+                            return
+                                bun:adv-ft-search($coll-by-statusdate, $search)                          
+                  
+                (: strip nodes with failing permissions recursively to all nodes :)
+                let $ontology_strip_deep := for $doc in $ontology_rs
+                                            return bun:treewalker-acl($acl-filter-node,document{$doc})                                 
+                        
+                (: strip classified nodes :)
+                let $ontology_strip := functx:remove-elements-deep($ontology_strip_deep,
+                                    ('bu:bungeni','bu:legislature','bu:versions', 'bu:permissions', 
+                                    'bu:audits', 'bu:attachments', 'bu:signatories','bu:changes', 'bu:workflowEvents'))
+                                                      
+                return 
+                    (   <total>{count($ontology_rs)}</total>,
+                        subsequence($ontology_strip,$offset,$limit)
+                     )                  
+                    (:$acl-filter-node:)
+                    (:<count>{count($ontology_rs)}</count>:)
+            }
+        </docs>
+};
+
 
 declare
     %rest:path("/ontology")

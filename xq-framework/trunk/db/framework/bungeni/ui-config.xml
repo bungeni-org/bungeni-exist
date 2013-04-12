@@ -16,19 +16,19 @@
             <navigation>home</navigation>
             <action>rou:get-home</action>
         </route>
-        <route href="/lower_house/home">
+        <route href="/lower_house">
             <title>Home</title>
             <navigation>home</navigation>
             <action>rou:get-home</action>
         </route>
-        <route href="/higher_house/home">
+        <route href="/higher_house">
             <title>Home</title>
             <navigation>home</navigation>
             <action>rou:get-home</action>
         </route>
         <route href="/lower_house/business">
             <title>Business</title>
-            <navigation>business</navigation>
+            <navigation>/lower_house/business</navigation>
             <action>rou:get-whatson</action>
         </route>
         <route href="/lower_house/members">
@@ -38,7 +38,7 @@
         </route>
         <route href="/higher_house/business">
             <title>Business</title>
-            <navigation>business</navigation>
+            <navigation>/higher_house/business</navigation>
             <action>rou:get-whatson</action>
         </route>
         <route href="/higher_house/members">
@@ -881,8 +881,8 @@
     <menugroups>
         <menu for="/" name="mainnav">
             <ul xmlns="http://www.w3.org/1999/xhtml" id="portal-globalnav">
-                <li data-order="2" id="lower-hse">
-                    <a href="lower_house/home" name="/lower_house/home">
+                <li data-order="1" id="lower-hse">
+                    <a href="lower_house" name="/lower_house/">
                         <i18n:text key="assembly-home">National Assembly</i18n:text>
                     </a>
                     <ul class="hse-list">
@@ -898,8 +898,8 @@
                         </li>
                     </ul>
                 </li>
-                <li data-order="1" id="upper-hse">
-                    <a href="higher_house/home" name="/higher_house/home">
+                <li data-order="2" id="upper-hse">
+                    <a href="higher_house" name="/higher_house/">
                         <i18n:text key="senate-home">Senate</i18n:text>
                     </a>
                     <ul class="hse-list">
@@ -1504,6 +1504,10 @@
             </view>
         </views>
         <views name="Popout">
+            <view id="n/a" path="business">
+                <template>xml/whatson.xml</template>
+                <xsl>xsl/whatson.xsl</xsl>
+            </view>
             <view id="n/a" path="whatson">
                 <template>xml/whatson.xml</template>
                 <xsl>xsl/whatson.xsl</xsl>

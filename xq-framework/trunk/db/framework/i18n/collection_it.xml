@@ -200,6 +200,6 @@
     <msg key="representation">rappresentazione</msg>
     <msg key="elected/nominated">eletti / nominati</msg>
     <msg key="senators">senatori</msg>
-    <msg key="assembly-home">Assemblea Nazionale</msg>
-    <msg key="senate-home">Senato</msg>
+    <msg key="lower_house">Assemblea Nazionale</msg>
+    <msg key="higher_house">Senato</msg>
 </catalogue>

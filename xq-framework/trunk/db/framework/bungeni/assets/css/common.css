@@ -11,7 +11,7 @@ div#header {
     width:100%;
     margin:0;
     margin-top:-3px;
-    height:27px;
+    height:20px;
     background-color:#f69e0d;
 }
 .higher_house div#sub-header {
@@ -19,7 +19,7 @@ div#header {
     width:100%;
     margin:0;
     margin-top:-3px;
-    height:27px;
+    height:20px;
     background-color:#b22b14;
 }
 
@@ -477,6 +477,13 @@ div.row div.b-left {
     padding-right:20px;
     border-right:1px solid #c1c1c0;
  }
+div.row div.b-chambers {
+    float: left;
+    width: 180px;
+    text-align: right;
+    padding-right: 20px;
+    border-right: 1px solid #C1C1C0;
+}
 div.row div.b-right {
     width:200px;
     float: right;
@@ -642,7 +649,8 @@ nav ul:after {
 }
 nav > ul > li {
     width:320px;
-	float: left;
+    display:inline-block;
+    white-space:nowrap;
 }
 
 /* Defaults */
@@ -724,9 +732,9 @@ nav ul ul.hse-list li a:hover {
 /*** subnav ***/	     
 .submenu ul li a {
     color:#ffffff;
-    float: left; 
     text-decoration: none; 
-    padding: 5px 11px; 
+    padding: 5px; 
+    line-height:20px;
     text-align:center;
 }
 

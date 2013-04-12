@@ -189,6 +189,8 @@
     <msg key="representation">uwakilishi</msg>
     <msg key="elected/nominated">waliochaguliwa/kuteuliwa</msg>
     <msg key="senators">maseneta</msg>
-    <msg key="assembly-home">Bunge</msg>
-    <msg key="senate-home">Seneti</msg>
+    <msg key="lower_house">Bunge</msg>
+    <msg key="higher_house">Seneti</msg>
+    <msg key="chamber-filter">Chuja kwa chumba</msg>
+    <msg key="chamber-both">Zote</msg>
 </catalogue>

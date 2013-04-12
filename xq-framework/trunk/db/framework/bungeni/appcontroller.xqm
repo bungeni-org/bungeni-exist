@@ -75,7 +75,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 return $act-entries-tmpl
             else if ($EXIST-PATH eq "" ) then
                 fw:redirect(fn:concat(request:get-uri(), "/")) 
-            else  if($EXIST-PATH eq "" or $EXIST-PATH eq "/" or $EXIST-PATH eq "/xml/index.xml") then
+            else  if($EXIST-PATH eq "/" or $EXIST-PATH eq "/xml/index.xml") then 
                 rou:get-home($CONTROLLER-DOC)                
             else if ($EXIST-PATH eq "/popout" ) then 
                 let 
@@ -157,10 +157,12 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $config:DEFAULT-TEMPLATE, 
                     cmn:get-route($EXIST-PATH),
                     <null/>,
-                    cmn:rewrite-tmpl($EXIST-PATH, bun:get-advanced-search-context($EXIST-CONTROLLER,"xml/advanced-search.xml"))
+                    cmn:rewrite-tmpl($EXIST-PATH, bun:get-advanced-search-context($CONTROLLER-DOC,"xml/advanced-search.xml"))
                 ) 
             else if ($EXIST-PATH eq "/search-adv") then 
-                let 
+                let                
+                    $chamber := xs:string(request:get-parameter("chamber",'')),                
+                
                     $qryall := xs:string(request:get-parameter("qa",'')),
                     $qryexact := xs:string(request:get-parameter("qe",'')),
                     $qryhas := xs:string(request:get-parameter("qh",'')),
@@ -181,7 +183,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
                     
                     $acl := "public-view",
-                    $act-entries-tmpl :=  bun:advanced-search($qryall,
+                    $act-entries-tmpl :=  bun:advanced-search($chamber,
+                                                            $qryall,
                                                             $qryexact,
                                                             $qryhas,
                                                             $parenttypes,                                                            
@@ -399,7 +402,9 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                    fw:redirect-rel($EXIST-PATH, "bungeni/user-config.xql")        								        
             else if ($PARLIAMENT) then 
             (: FOR ROUTED APPLICATION REQUESTS :)
-                util:eval($action || '($CONTROLLER-DOC)')                    
+                util:eval($action || '($CONTROLLER-DOC)')  
+            else  if($CHAMBER-REL-PATH eq "/") then 
+                rou:get-home($CONTROLLER-DOC)                  
             else
                 fw:ignore()
 };

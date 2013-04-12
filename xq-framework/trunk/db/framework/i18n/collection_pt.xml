@@ -191,6 +191,8 @@
     <msg key="representation">representação</msg>
     <msg key="elected/nominated">eleitos / nomeados</msg>
     <msg key="senators">senadores</msg>
-    <msg key="assembly-home">Assembléia Nacional</msg>
-    <msg key="senate-home">Senado</msg>
+    <msg key="lower_house">Assembléia Nacional</msg>
+    <msg key="higher_house">Senado</msg>
+    <msg key="chamber-filter">Filtrar por câmara</msg>
+    <msg key="chamber-both">Tanto</msg>
 </catalogue>

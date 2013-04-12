@@ -912,7 +912,8 @@ declare function bun:search-documentitems(
 : @stylesheet 
 :   advanced-search.xsl
 :)
-declare function bun:advanced-search($qryall as xs:string,
+declare function bun:advanced-search($chamber as xs:string,
+            $qryall as xs:string,
             $qryexact as xs:string?,
             $qryhas as xs:string?, 
             $parent-types as xs:string*,
@@ -930,6 +931,18 @@ declare function bun:advanced-search($qryall as xs:string,
     let $getqrystr := xs:string(request:get-query-string())    
     let $search-filter := cmn:get-doctypes()
     
+    let $subset-chambers-coll :=    if($chamber ne "") then (
+                                        (:  if chamber is filled then we need to acknowledge that this is a bicameral 
+                                            setup and provide the collection subset filtered by the option chosen :)
+                                        if ($chamber eq "both") then (
+                                            collection(cmn:get-lex-db())/bu:ontology
+                                        ) 
+                                        else 
+                                            collection(cmn:get-lex-db())/bu:ontology/child::*[1]/bu:origin[bu:identifier eq $chamber]/ancestor::bu:ontology
+                                    )
+                                    else 
+                                        collection(cmn:get-lex-db())/bu:ontology
+    
     let $subset-parents-coll :=    if(not(empty($parent-types))) then (
                                         (: iterate through the all known (distinctly)categories from config :)
                                         for $category in distinct-values($search-filter/@category)
@@ -937,7 +950,7 @@ declare function bun:advanced-search($qryall as xs:string,
                                             for $ptype in $parent-types
                                                 return
                                                     if($ptype eq $category) then 
-                                                        collection(cmn:get-lex-db())/bu:ontology[@for=$category]
+                                                        $subset-chambers-coll[@for=$category]
                                                     else ()
                                     )
                                     else ()
@@ -953,12 +966,12 @@ declare function bun:advanced-search($qryall as xs:string,
                                                 a child node 
                                             :)
                                             if(($filter/@name eq $filter/@category) and $dtype eq $filter/@name) then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@for=$filter/@name]
+                                                $subset-chambers-coll[@for=$filter/@name]
                                             (: check for ontology type only, which represents a category of a particular 
                                                 type of documents 
                                             :)
                                             else if($dtype eq $filter/@name) then 
-                                                collection(cmn:get-lex-db())/bu:ontology[@for=$filter/@category]/bu:document/bu:docType[bu:value=$filter/@name]/ancestor::bu:ontology                                       
+                                                $subset-chambers-coll[@for=$filter/@category]/bu:document/bu:docType[bu:value=$filter/@name]/ancestor::bu:ontology                                       
                                             else ()
                                     )
                                     else ()    
@@ -1806,14 +1819,14 @@ declare function bun:get-global-search-context(
         }
 };
 
-declare function bun:get-advanced-search-context($EXIST-PATH as xs:string, $embed_tmpl as xs:string) {
+declare function bun:get-advanced-search-context($CONTROLLER-DOC as node()?, $embed_tmpl as xs:string) {
 
     (: get the template to be embedded :)
     let $tmpl := fw:app-tmpl($embed_tmpl)
     
     return
         document {
-                local:rewrite-advanced-search-form($EXIST-PATH, $tmpl/xh:div)
+                local:rewrite-advanced-search-form($CONTROLLER-DOC, $tmpl/xh:div)
         }
 };
 
@@ -1827,77 +1840,118 @@ declare function bun:get-advanced-search-context($EXIST-PATH as xs:string, $embe
 : @return
 :   A Re-written advanced search form
 :)
-declare function local:rewrite-advanced-search-form($EXIST-PATH as xs:string, $tmpl as element())  {
+declare function local:rewrite-advanced-search-form($CONTROLLER-DOC as node()?, $tmpl as element())  {
 
     let $search-filter := cmn:get-doctypes()
     (: queries the xml repository for available doctypes so as to show only those present :)
     let $current-types := string-join(distinct-values(collection(cmn:get-lex-db())/bu:ontology/child::*/bu:docType[@isA='TLCTerm']/bu:value)," ")
     
-    return
-    (: writing the search categories and doctypes :)    
-    if ($tmpl/self::xh:div[@id eq "search-groups"]) then 
-    element div {
-        attribute id { "search-groups" },
-        attribute class { "b-left" },
-        (: loops through categories filtering duplicates :)
-        for $category in distinct-values($search-filter/@category) 
-            return 
-                element div {
-                    attribute class {"category-block"},
-                    element span {
-                        attribute class {"ul-list-header"},
-                        <i18n:text key="{concat('cate-',$category)}">{$category}(nt)</i18n:text>,
-                        element br {},
-                        element span {
-                            attribute class {"checkall"},
-                            <i18n:text key="select-all">check all(nt)</i18n:text>
-                        },
-                        element input {
-                            attribute type {"checkbox"},
-                            attribute name {"types"},
-                            attribute value {$category}
-                        }
+    return 
+    if ($tmpl/self::xh:fieldset[@id eq 'bicameral-filter']) then (
+        let $legis-info := cmn:get-parl-config()
+        let $bicameral := if(count($legis-info/parliaments/parliament) > 1) then true() else false()
+        return
+            if ($bicameral) then 
+                element fieldset {
+                    element legend {
+                        <i18n:text key="chamber-filter">Filter by chamber(nt)</i18n:text>
                     },
-                    element ul {
-                        for $doctype in $search-filter
-                            return  
-                                if($doctype/@category eq $category and contains($current-types,$doctype/@name)) then (
+                    element div {
+                        attribute class {"row chamber-options"},
+                        element div {
+                            attribute class {"b-chambers"},
+                            element ul {
+                                element li {
+                                    <i18n:text key="chamber-both">Both(nt)</i18n:text>,
+                                    element input {
+                                        attribute type { "radio" },
+                                        attribute name { "chamber" },
+                                        attribute value { "both" },
+                                        attribute checked { "checked" }
+                                    }
+                                },                            
+                                let $ref-chamber := xs:string(request:get-parameter("referrer",''))
+                                for $chamber in $legis-info/parliaments/parliament 
+                                return 
                                     element li {
-                                        <i18n:text key="{concat('doc-',lower-case($doctype/@name))}">{lower-case($doctype/@name)}(nt)</i18n:text>,
+                                        data($chamber/type/@displayAs),
                                         element input {
-                                            attribute type {"checkbox"},
-                                            attribute name {"docs"},
-                                            attribute value {$doctype/@name}
+                                            attribute type { "radio" },
+                                            attribute name { "chamber" },
+                                            attribute value { $chamber/identifier/text() }
                                         }
                                     }
-                                )                             
-                                else ()
+                            }
+                        }
                     }
                 }
-    }   
+            else
+                ()
+    )
+    else if ($tmpl/self::xh:div[@id eq "search-groups"]) then 
+    (: writing the search categories and doctypes :)      
+        element div {
+            attribute id { "search-groups" },
+            attribute class { "b-left" },
+            (: loops through categories filtering duplicates :)
+            for $category in distinct-values($search-filter/@category) 
+                return 
+                    element div {
+                        attribute class {"category-block"},
+                        element span {
+                            attribute class {"ul-list-header"},
+                            <i18n:text key="{concat('cate-',$category)}">{$category}(nt)</i18n:text>,
+                            element br {},
+                            element span {
+                                attribute class {"checkall"},
+                                <i18n:text key="select-all">check all(nt)</i18n:text>
+                            },
+                            element input {
+                                attribute type {"checkbox"},
+                                attribute name {"types"},
+                                attribute value {$category}
+                            }
+                        },
+                        element ul {
+                            for $doctype in $search-filter
+                                return  
+                                    if($doctype/@category eq $category and contains($current-types,$doctype/@name)) then (
+                                        element li {
+                                            <i18n:text key="{concat('doc-',lower-case($doctype/@name))}">{lower-case($doctype/@name)}(nt)</i18n:text>,
+                                            element input {
+                                                attribute type {"checkbox"},
+                                                attribute name {"docs"},
+                                                attribute value {$doctype/@name}
+                                            }
+                                        }
+                                    )                             
+                                    else ()
+                        }
+                    }
+        }   
     (: render the status dropdown :)
     else if ($tmpl/self::xh:select[@id eq "status"]) then 
-    element select {
-        attribute id { "status" },
-        attribute name { "std" },
-        element option {
-            attribute value {"none"},
-            attribute selected {"selected"},
-            <i18n:text key="status-default">select one(nt)</i18n:text>
-        },
-        for $status in distinct-values(collection(cmn:get-lex-db())/bu:ontology/child::*/bu:status[@isA='TLCTerm']/bu:value)
-            return 
+        element select {
+            attribute id { "status" },
+            attribute name { "std" },
             element option {
-                attribute value {$status},
-                $status
-            }
-    } 
+                attribute value {"none"},
+                attribute selected {"selected"},
+                <i18n:text key="status-default">select one(nt)</i18n:text>
+            },
+            for $status in distinct-values(collection(cmn:get-lex-db())/bu:ontology/child::*/bu:status[@isA='TLCTerm']/bu:value)
+                return 
+                element option {
+                    attribute value {$status},
+                    $status
+                }
+        } 
     else
       element { node-name($tmpl)}
       		 {$tmpl/@*,
     	         for $child in $tmpl/node()
     		        return if ($child instance of element())
-    			       then local:rewrite-advanced-search-form($EXIST-PATH, $child)
+    			       then local:rewrite-advanced-search-form($CONTROLLER-DOC/exist-cont, $child)
     			       else $child
     		 }
 
@@ -2346,7 +2400,7 @@ declare function bun:get-whatson(
         $whatsonview as xs:string, 
         $tab as xs:string,
         $mtype as xs:string,
-        $parts as node(),
+        $parts as node()?,
         $parliament as node()?) as element() {
     
     (: stylesheet to transform :)  

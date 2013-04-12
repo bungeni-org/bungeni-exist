@@ -11,24 +11,7 @@
                 <form method="GET" action="search-adv" id="ui_search" name="search_sort">
                     <input type="hidden" id="exist_path" name="exist_path" value="/search-adv"/>
                     <input name="st" type="hidden" value="adv"/>
-                    <fieldset>
-                        <legend>&#160;<i18n:text key="filter-chamber">Filter by chamber(nt)</i18n:text>&#160;</legend>
-                        <div class="row chamber-options">
-                            <div class="b-left">
-                                <div class="category-block">
-                                    <span class="ul-list-header">both<br/>
-                                        <input type="checkbox" name="types" value="document"/>
-                                    </span>
-                                    <ul>
-                                        <li>Lower House<input type="checkbox" name="docs" value="lower_house"/>
-                                        </li>
-                                        <li>Higher House<input type="checkbox" name="docs" value="higher_house"/>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
+                    <fieldset id="bicameral-filter"/>
                     <fieldset>
                         <legend>&#160;<i18n:text key="find-docs-with">Find documents with(nt)</i18n:text>&#160;</legend>
                         <div class="row">

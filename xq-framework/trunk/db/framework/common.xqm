@@ -220,40 +220,36 @@ declare function cmn:get-chambers-menu($main-menu as node(), $bicameral as xs:bo
     
 };
 
+(: accumulates path strings :)
+declare function local:build($prefix, $tokens)
+{
+    if (fn:exists($tokens)) then
+        let $str := fn:concat($prefix, $tokens[1])
+        let $display-name := replace($str,fn:concat('^.*','/'),'')
+        let $home-substr := substring-before($str, '/')
+        let $home := if ($home-substr eq "") then () else concat($home-substr,"/")
+        return ( 
+            <xh:a href="{$home}{$display-name}">
+                <i18n:text key="{$display-name}">{$display-name}(nt)</i18n:text>
+            </xh:a>,
+            local:build($str, fn:subsequence($tokens, 2))
+        )
+    else 
+        ()
+};
+
 (:~ 
 :   Builds the breadcrumbs
 :)
 declare function local:build-breadcrumbs($controller-data as node()?) {
-    let $route := cmn:get-route($controller-data/exist-path/text())
-    
+    let $route := cmn:get-route($controller-data/exist-path/text()) 
+    let $tokenize-route := tokenize($route/navigation, '/')
+    let $append := insert-before($tokenize-route,count($tokenize-route)+1,$route/subnavigation/text())
+    let $join-with-delimiter := string-join($append, ">/")
+    (:removing the first occurence of '>/' so that the built paths are relative to the framework's root :)
+    let $breadcrumb-tree := fn:replace($join-with-delimiter, fn:concat('(^.*?)', ">/"),fn:concat('$1',""))
     return
-        	if ($route/navigation/text() eq 'home') then (
-                <xh:a class="first" href="{$controller-data/parliament/type}/home"><i18n:text key="home">home</i18n:text></xh:a>
-            	    
-        	)    
-        	else if ($route/navigation and not($route/subnavigation)) then (
-                        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type/text()}</xh:a>
-                    ,  				
-            	        <xh:a class="last" href="{$route/navigation}">{local:route-title($route/navigation)}</xh:a>
-            	    
-        	)
-        	else (
-            	        <xh:a class="first" href="{$controller-data/parliament/type}/home">{$controller-data/parliament/type/text()}</xh:a>
-            	    ,    			  				
-            	        <xh:a href=".{cmn:get-route($controller-data/exist-path)/navigation}">{local:route-title($route/navigation)}</xh:a>
-            	    ,   				
-            	        <xh:a class="last" href="{$controller-data/parliament/type}/{$controller-data/exist-res}">{local:route-title($controller-data/exist-path)}</xh:a>
-            	    (:
-            	       !+FIX_THIS (ao, 8th Aug 2012) adding tertiary menus(tabs) to breadcrumbs need to find out the doctype currently
-            	       nowhere to access it as local:route-title() return route info e.g. 'questions' and we need 'question' since that 
-            	       is what ui/doctypes/doctype is identified by.
-            	    ,
-            	    if (1 eq 1) then
-            	           <xh:a class="last" href="{$route/subnavigation}?tab={data(cmn:get-listings-config('question')[@id eq 'uc']/@id)}">{data(cmn:get-listings-config('question')[@id eq 'uc']/@name)}</xh:a> 
-            	    else
-            	       ():)
-            	          
-           )
+        local:build("", fn:tokenize($breadcrumb-tree, ">"))
 };
 
 (:~ 

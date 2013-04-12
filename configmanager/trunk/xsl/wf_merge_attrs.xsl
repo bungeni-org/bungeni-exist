@@ -100,13 +100,16 @@
         </state>
     </xsl:template>
     <xsl:template match="allow | deny">
-        <xsl:element name="{name()}">
-            <xsl:call-template name="copy-attrs"/>
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./roles"/>
-            </xsl:call-template>
-            <xsl:apply-templates/>
-        </xsl:element>
+        <!-- do not process the element if it has empty roles -->
+        <xsl:if test="not(roles/role[not(normalize-space()) and not(child::*)])">
+            <xsl:element name="{name()}">
+                <xsl:call-template name="copy-attrs"/>
+                <xsl:call-template name="merge_tags">
+                    <xsl:with-param name="elemOriginAttr" select="./roles"/>
+                </xsl:call-template>
+                <xsl:apply-templates/>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="transition">
         <xsl:element name="transition">

@@ -5,6 +5,7 @@ declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
 declare namespace xf="http://www.w3.org/2002/xforms";
 declare namespace bf="http://betterform.sourceforge.net/xforms" ;
 declare namespace ev="http://www.w3.org/2001/xml-events" ;
+declare namespace ce="http://bungeni.org/configeditor" ;
 
 import module namespace templates="http://exist-db.org/xquery/templates" at "templates.xql";
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
@@ -136,15 +137,6 @@ declare function local:arrow-direction($doctype as xs:string, $nodepos as xs:int
             <h4 title="Arrow points to the destination">{$title} &#8594; {$state}</h4>
 };
 
-declare function local:mode() as xs:string {
-    let $doc := request:get-parameter("doc", "nothing")
-
-    let $mode := if($doc eq "undefined") then "new"
-                 else "edit"
-
-    return $mode
-};
-
 declare function local:get-permissions() {
 
     let $docname := xs:string(request:get-parameter("doc","none"))
@@ -188,7 +180,7 @@ declare function local:generated-facets($perm-actions as node()+,$name as xs:str
     group by $key := data($role/@name)
     return
         (:<roles keys="{$role/@key}" name="{$role[1]/@name}" state-id="{$name}" />:)
-        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}" role="{data($role[1]/@name)}">
+        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}">
             {
                 for $perm at $pos in $perm-actions
                 let $beshown := string-length(data($role[@key eq $perm]/@name))
@@ -235,8 +227,7 @@ declare function local:existing-facets($stateid as xs:integer, $global as xs:boo
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state)
     let $NAME := if($global) then "global" else data($WF-DOC/state[$ATTR]/@id)
     
-    for $facete in $WF-DOC/facet
-    let $role : = data($facete/@role)    
+    for $facete in $WF-DOC/facet   
     where starts-with($facete/@name, $NAME)
     return
         element facet {
@@ -281,7 +272,7 @@ declare function local:gen-facets($global as xs:boolean) as node()* {
     for $role in appconfig:roles()/role
     group by $key := data($role/@name)
     return 
-        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}" role="{data($role[1]/@name)}">
+        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}">
             {
                 for $perm at $pos in $perm-actions
                 let $beshown := string-length(data($role[@key eq $perm]/@name))
@@ -332,7 +323,7 @@ declare function local:all-feature() {
             if($feats-wf[@name eq data($feature/@name)]) then 
                 element feature {
                     attribute name { data($feature/@name) },
-                    attribute workflow { data($feature/@workflow) },
+                    attribute ce:workflow { data($feature/@workflow) },
                     attribute enabled { if(data($feats-wf[@name eq data($feature/@name)]/@enabled)) then xs:string(data($feats-wf[@name eq data($feature/@name)]/@enabled)) else "false" },
                     (: if there are parameters, show them :)
                     $feats-wf[@name eq data($feature/@name)]/child::* 
@@ -341,7 +332,7 @@ declare function local:all-feature() {
             else 
                 element feature {
                     attribute name { data($feature/@name) },
-                    attribute workflow { data($feature/@workflow) },
+                    attribute ce:workflow { data($feature/@workflow) },
                     attribute enabled { "false" }
                 } 
     }
@@ -558,7 +549,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Workflowed</xf:label>  
                             {
-                                for $feature in local:all-feature()/feature[@workflow eq 'True']
+                                for $feature in local:all-feature()/feature[@ce:workflow eq 'True']
                                 return document {                                       
                                         <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
                                             <xf:label>{data($feature/@name)} </xf:label>
@@ -579,7 +570,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Non-workflowed</xf:label>
                             {
-                                for $feature in local:all-feature()/feature[@workflow eq 'False']
+                                for $feature in local:all-feature()/feature[@ce:workflow eq 'False']
                                 return 
                                     <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
                                         <xf:label>{data($feature/@name)} </xf:label>
@@ -608,37 +599,37 @@ function workflow:edit($node as node(), $model as map(*)) {
                                                     local:gen-facets(true())
                                 for $facet at $pos in $facets
                                 let $allow := $facet/allow
-                                order by $facet/@role ascending
+                                order by $facet/@name ascending
                                 return
                                     <tr>
                                         <td id="foo" class="one">
-                                            {data($facet/@role)}
+                                            {substring-after($facet/@name,'_')}
                                         </td>
                                         <td class="permView">
                                             <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
                                                 <xf:item>
-                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                    <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                 </xf:item>                                                            
                                             </xf:select>
                                         </td>
                                         <td>
                                             <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
                                                 <xf:item>
-                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                    <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                 </xf:item>                                                            
                                             </xf:select>
                                         </td>
                                         <td>
                                             <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
                                                 <xf:item>
-                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                    <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                 </xf:item>                                                            
                                             </xf:select>
                                         </td>                                                        
                                         <td>
                                             <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
                                                 <xf:item>
-                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                    <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                 </xf:item>                                                            
                                             </xf:select>
                                         </td>
@@ -748,7 +739,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                     
                     <xf:bind nodeset="./state[{$ATTR}]">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
-                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
+                        <xf:bind nodeset="@id" type="xf:string" required="true()" readonly="boolean-from-string('true')" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />                
                     </xf:bind>
                     <!--xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" />
@@ -1010,37 +1001,37 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                                         local:gen-facets(false())
                                                     for $facet at $pos in $facets
                                                     let $allow := $facet/allow
-                                                    order by $facet/@role ascending
+                                                    order by $facet/@name ascending
                                                     return
                                                         <tr>
                                                             <td class="one">
-                                                                {data($facet/@role)}
+                                                                {substring-after($facet/@name,'_')}
                                                             </td>
                                                             <td class="permView">
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
+                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>
                                                             <td>
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
+                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>
                                                             <td>
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
+                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>                                                        
                                                             <td>
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
+                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>
@@ -1128,7 +1119,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     <xf:instance id="i-state" src="{$workflow:REST-CXT-MODELTMPL}/state.xml"/>
 
                     <xf:bind nodeset="instance()/state[last()]">
-                        <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
+                        <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and not(starts-with(.,'global')) and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
                         <xf:bind nodeset="actions/action" type="xf:string" constraint="count(instance()/state[last()]/actions/action) eq count(distinct-values(instance()/state[last()]/actions/action))" />
                     </xf:bind>                    
 

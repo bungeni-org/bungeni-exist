@@ -49,13 +49,11 @@
         <route href="/lower_house/member">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member</action>
         </route>
         <route href="/higher_house/member">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
-            <subnavigation>members</subnavigation>
             <action>rou:member</action>
         </route>
         <route href="/lower_house/member-officesheld">

@@ -248,8 +248,12 @@ declare function local:build-breadcrumbs($controller-data as node()?) {
     let $join-with-delimiter := string-join($append, ">/")
     (:removing the first occurence of '>/' so that the built paths are relative to the framework's root :)
     let $breadcrumb-tree := fn:replace($join-with-delimiter, fn:concat('(^.*?)', ">/"),fn:concat('$1',""))
-    return
+    return (
         local:build("", fn:tokenize($breadcrumb-tree, ">"))
+        (:<xh:a href="{$controller-data/parliament/type/text()}/{$controller-data/exist-res/text()}?{request:get-query-string()}">
+            <i18n:text key="texts">{$route/title/text()}</i18n:text>
+        </xh:a>:)
+        )
 };
 
 (:~ 

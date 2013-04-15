@@ -115,7 +115,7 @@ declare function local:fieldset($archetype as xs:string) {
         let $doc := doc($appconfig:UI-XML)/ui
         for $field in $doc/descriptor[@name eq $archetype]/field
         return
-            <field>{$field/@*}</field>
+            $field
     }
     </fields>
 };
@@ -851,6 +851,10 @@ function form:field-add($node as node(), $model as map(*)) {
                                         <xf:setvalue ref="instance()/field[last()]/@required" value="boolean-from-string(instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@required)"/>
                                         <xf:setvalue ref="instance()/field[last()]/@value_type" value="instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@value_type"/>
                                         <xf:setvalue ref="instance()/field[last()]/@render_type" value="instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/@render_type"/>
+                                        <xf:setvalue ref="instance()/field[last()]/view/@show" value="boolean-from-string(instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/view/@show)"/>
+                                        <xf:setvalue ref="instance()/field[last()]/edit/@show" value="boolean-from-string(instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/edit/@show)"/>
+                                        <xf:setvalue ref="instance()/field[last()]/add/@show" value="boolean-from-string(instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/add/@show)"/>
+                                        <xf:setvalue ref="instance()/field[last()]/listing/@show" value="boolean-from-string(instance('i-fieldset')/field[@name eq instance()/field[last()]/@name]/listing/@show)"/>
                                     </xf:action>                                    
                                 </xf:select1>                                
                                 
@@ -923,7 +927,7 @@ function form:field-add($node as node(), $model as map(*)) {
                                         <xf:itemset nodeset="instance('i-allroles')/role">
                                             <xf:label ref="@name"></xf:label>
                                             <xf:value ref="@name"></xf:value>
-                                        </xf:itemset>
+                                        </xf:itemset>                                          
                                     </xf:select1>
                                     <xf:trigger>
                                         <xf:label>delete</xf:label>
@@ -1053,6 +1057,11 @@ function form:field-add($node as node(), $model as map(*)) {
                                 <xf:label>Save</xf:label>
                                 <xf:action>
                                     <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                    <!-- set a default false() if the modes haven't been set -->
+                                    <xf:setvalue ref="instance()/field[last()]/view[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:setvalue ref="instance()/field[last()]/edit[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:setvalue ref="instance()/field[last()]/add[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:setvalue ref="instance()/field[last()]/listing[@show eq '']/@show" value="boolean-from-string('false')"/>
                                     <xf:send submission="s-add"/>
                                 </xf:action>                              
                             </xf:trigger>                  

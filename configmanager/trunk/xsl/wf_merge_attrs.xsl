@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
     <!--
         Ashok Hariharan
@@ -10,13 +11,11 @@
         if we wrap that in a not() we get all the facets which dont
         have valid role content a.k.a all empty facets
     -->
-    <xsl:output method="xml" indent="yes" encoding="UTF-8" />
-    <xsl:strip-space elements="*" />
-    
-    <xsl:key name="empty-facets" match="facet[parent::workflow and not(descendant::role[normalize-space() or child::*])]" use="@name" />
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+    <xsl:strip-space elements="*"/>
+    <xsl:key name="empty-facets" match="facet[parent::workflow and not(descendant::role[normalize-space() or child::*])]" use="@name"/>
     <xsl:include href="merge_tags.xsl"/>
     <xsl:include href="copy_attrs.xsl"/>
-    
     <xsl:template match="@*|*|processing-instruction()|comment()">
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
@@ -65,24 +64,11 @@
     
     <!-- we dont want the default template matcher to handle the global facet, so add a dummy matcher, 
         this is handled by the for_each in the workflow template -->
-    <xsl:template match="facet[
-        parent::workflow and 
-        starts-with(@name,'global_')
-        ]"/>
+    <xsl:template match="facet[         parent::workflow and          starts-with(@name,'global_')         ]"/>
     <!-- Remove empty facets -->
-    <xsl:template match="facet[
-        parent::workflow and 
-        not(starts-with(@name,'global_')) and 
-        not(descendant::role[normalize-space() or child::*])
-        ]" />
+    <xsl:template match="facet[         parent::workflow and          not(starts-with(@name,'global_')) and          not(descendant::role[normalize-space() or child::*])         ]"/>
     <!-- Remove references to empty facets -->
-    <xsl:template match="facet[
-        parent::state and 
-        @ref and 
-        boolean(key('empty-facets', translate(@ref,'.','')))
-        ]" />
-    
-    
+    <xsl:template match="facet[         parent::state and          @ref and          boolean(key('empty-facets', translate(@ref,'.','')))         ]"/>
     <xsl:template match="state">
         <state>
             <xsl:call-template name="copy-attrs"/>

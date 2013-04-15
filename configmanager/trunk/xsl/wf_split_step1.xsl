@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
     <!--
         Ashok Hariharan
@@ -11,61 +12,43 @@
     <xsl:include href="split_attr_roles.xsl"/>
     <xsl:output indent="yes"/>
     <xsl:param name="docname"/>
-    
     <xsl:template match="comment()">
         <xsl:copy/>
     </xsl:template>
-    
     <xsl:template match="*">
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="preserve"/>
-            <xsl:apply-templates select="@*|node()" />
+            <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
-    
     <xsl:template match="workflow">
         <xsl:copy>
-            <!-- Option to pass-in the form-id as a parameter from XQuery -->
-            <xsl:variable name="wfname">
-                <xsl:choose>
-                    <xsl:when test="not($docname)">
-                        <xsl:variable name="filename" select="tokenize(base-uri(),'/')"/>
-                        <xsl:variable name="wfname" select="tokenize($filename[last()],'\.')"/>
-                        <xsl:value-of select="$wfname[1]"/>
-                    </xsl:when>
-                    <!-- XQuery transform passed in a param -->
-                    <xsl:when test="$docname">
-                        <xsl:variable name="wfname" select="tokenize($docname[last()],'\.')"/>
-                        <xsl:value-of select="$wfname[1]"/>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:attribute name="name" select="$wfname"/>
+            <xsl:apply-templates select="@*" mode="preserve"/>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="allow[parent::facet] | deny[parent::facet]">
+        <xsl:copy>
             <xsl:apply-templates select="@*" mode="preserve"/>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="allow[parent::facet] | deny[parent::facet]">
-        <xsl:copy>
-            <xsl:apply-templates select="@*" mode="preserve" />
-            <xsl:apply-templates select="@*|node()" />
-        </xsl:copy>
-    </xsl:template>
-    
     <!-- template to match global permission declarations -->
     <xsl:template match="allow[parent::workflow] | deny[parent::workflow]">
-        <xsl:variable name="matched-node" select="." />
-        <xsl:variable name="roles-list" select="tokenize(normalize-space(@roles), '\s+')" />
+        <xsl:variable name="matched-node" select="."/>
+        <xsl:variable name="roles-list" select="tokenize(normalize-space(@roles), '\s+')"/>
         <xsl:for-each select="$roles-list">
             <xsl:element name="facet">
-                <xsl:variable name="role-name" select="." />
-                <xsl:attribute name="name" select="concat('global_',$role-name)" />
+                <xsl:variable name="role-name" select="."/>
+                <xsl:attribute name="name" select="concat('global_',$role-name)"/>
                 <xsl:for-each select="$matched-node">
                     <xsl:element name="{local-name()}">
-                        <xsl:apply-templates select="@*" mode="preserve" />
+                        <xsl:apply-templates select="@*" mode="preserve"/>
                         <roles originAttr="roles">
-                            <role><xsl:value-of select="$role-name" /></role>
+                            <role>
+                                <xsl:value-of select="$role-name"/>
+                            </role>
                         </roles>
                     </xsl:element>
                     <!--

@@ -396,9 +396,7 @@ function type:add($node as node(), $model as map(*)) {
                 
                 <xf:instance xmlns="" id="i-typegroup">
                     <data>
-                        <group name="" workflow="group" enabled="false">
-                            <member name="member_member" workflow="group_membership" enabled="false"/>
-                        </group>
+                        <group name="" workflow="group" enabled="false"/>
                     </data>
                 </xf:instance>
                 

@@ -253,5 +253,11 @@
         </xsl:call-template>    
     </xsl:template>
     
+    <xsl:template match="field[@name='principal_id']">
+        <principalId type="xs:integer" key="true">
+            <xsl:value-of select="." />
+        </principalId>
+    </xsl:template>
+    
     
 </xsl:stylesheet>

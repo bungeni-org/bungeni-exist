@@ -46,7 +46,11 @@
         <xsl:if test="$parl-id">
             <origin>
                 <internalID type="xs:string" key="true"><xsl:value-of select="$parl-id" /></internalID>
-                <identifier type="xs:string" isA="TLCTerm"><xsl:value-of select="$parl-identifier" /></identifier>
+                <identifier isA="TLCTerm">
+                    <value type="xs:string">
+                    <xsl:value-of select="$parl-identifier" />
+                    </value>
+                </identifier>
             </origin>
         </xsl:if>    
     </xsl:template>

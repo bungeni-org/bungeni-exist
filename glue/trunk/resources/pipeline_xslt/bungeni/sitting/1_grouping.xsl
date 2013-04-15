@@ -133,7 +133,10 @@
                 
                 <docType isA="TLCTerm">
                     <value type="xs:string"><xsl:value-of select="$content-type-uri-name" /></value>
-                </docType>                 
+                </docType> 
+
+                <!-- inject a type field so the type parameter gets rendered -->
+                <field name="type"><xsl:value-of select="$bungeni-content-type" /></field>
                 
                 <xsl:copy-of select="field[ 
                     @name='short_name' or 

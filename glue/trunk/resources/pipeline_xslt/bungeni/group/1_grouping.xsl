@@ -115,7 +115,9 @@
                     <xsl:value-of select="$group_identifier" />
                 </groupIdentifier>
                 
-                <xsl:copy-of select="field[ @name='parent_group_id' or 
+                <xsl:copy-of select="field[ 
+                    @name='parent_group_id' or
+                    @name='type' or
                     @name='committee_id' or 
                     @name='acronym' or 
                     @name='short_name' or

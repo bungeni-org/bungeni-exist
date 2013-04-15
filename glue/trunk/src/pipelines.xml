@@ -6,14 +6,13 @@
    <pipeline for="assembly_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
    <pipeline for="assembly_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
    <pipeline for="assembly_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="assembly_test_event" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" />
    <pipeline for="senate_bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
    <pipeline for="senate_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
    <pipeline for="senate_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
    <pipeline for="senate_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="senate_test_event" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" />
    <pipeline for="report" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
    <pipeline for="bicameral_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
+   <pipeline for="event_response" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" />
    <pipeline for="office" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
    <pipeline for="office_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
    <pipeline for="political_group" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />

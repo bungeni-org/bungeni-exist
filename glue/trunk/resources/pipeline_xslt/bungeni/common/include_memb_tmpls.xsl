@@ -25,9 +25,10 @@
     </xsl:template>  
     
     
+    <!-- this has the bungeni "type" name and is standardized across all documents -->
     <xsl:template match="field[@name='membership_type']">
         <xsl:call-template name="renderTLCTermString">
-            <xsl:with-param name="elementName">membershipType</xsl:with-param>
+            <xsl:with-param name="elementName">type</xsl:with-param>
         </xsl:call-template>
     </xsl:template>      
     

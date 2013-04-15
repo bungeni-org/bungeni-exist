@@ -6,14 +6,13 @@
    <map from="assembly_motion" uri-name="Motion" element-name="motion" />
    <map from="assembly_question" uri-name="Question" element-name="question" />
    <map from="assembly_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
-   <map from="assembly_test_event" uri-name="TestEvent" element-name="testEvent" />
    <map from="senate_bill" uri-name="Bill" element-name="bill" />
    <map from="senate_motion" uri-name="Motion" element-name="motion" />
    <map from="senate_question" uri-name="Question" element-name="question" />
    <map from="senate_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
-   <map from="senate_test_event" uri-name="TestEvent" element-name="testEvent" />
    <map from="report" uri-name="Report" element-name="report" />
    <map from="bicameral_document" uri-name="BicameralDocument" element-name="bicameralDocument" />
+   <map from="event_response" uri-name="EventResponse" element-name="eventResponse" />
    <map from="office" uri-name="Office" element-name="office" />
    <map from="political_group" uri-name="PoliticalGroup" element-name="politicalGroup" />
    <map from="committee" uri-name="Committee" element-name="committee" />

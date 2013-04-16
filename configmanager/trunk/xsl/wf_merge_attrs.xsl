@@ -23,6 +23,7 @@
     </xsl:template>
     <xsl:template match="workflow">
         <workflow>
+            
             <xsl:call-template name="copy-attrs"/>
             <!-- 
                 !+NOTE (ao, 7th Jan 2013) Without the below <xsl:if/> the wf_merge_attrs 
@@ -58,30 +59,59 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:for-each-group>
+            
+            <!-- handle all other facets -->
+            <xsl:for-each-group select="facet[parent::workflow and not(starts-with(@name, 'global_'))]" group-by="@original-name">
+                <facet name="{current-grouping-key()}">
+                    <xsl:for-each select="current-group()">
+                        <xsl:for-each select="allow">
+                            <xsl:copy>
+                                <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
+                            </xsl:copy>
+                        </xsl:for-each>     
+                    </xsl:for-each>
+                </facet>
+            </xsl:for-each-group>
+            
             <xsl:apply-templates/>
         </workflow>
     </xsl:template>
     
     <!-- we dont want the default template matcher to handle the global facet, so add a dummy matcher, 
         this is handled by the for_each in the workflow template -->
-    <xsl:template match="facet[         parent::workflow and          starts-with(@name,'global_')         ]"/>
+    <xsl:template match="facet[         
+        parent::workflow and          
+        starts-with(@name,'global_')         
+        ]"/>
     <!-- Remove empty facets -->
-    <xsl:template match="facet[         parent::workflow and          not(starts-with(@name,'global_')) and          not(descendant::role[normalize-space() or child::*])         ]"/>
+    <xsl:template match="facet[         
+        parent::workflow and          
+        not(starts-with(@name,'global_')) and          
+        not(descendant::role[normalize-space() or child::*])         
+        ]"/>
     <!-- Remove references to empty facets -->
-    <xsl:template match="facet[         parent::state and          @ref and          boolean(key('empty-facets', translate(@ref,'.','')))         ]"/>
+    <xsl:template match="facet[         
+        parent::state and          
+        @ref and          
+        boolean(key('empty-facets', translate(@ref,'.','')))         
+        ]"/>
     <xsl:template match="state">
         <state>
+            
             <xsl:call-template name="copy-attrs"/>
+            
             <xsl:if test="./tags">
                 <xsl:call-template name="merge_tags">
                     <xsl:with-param name="elemOriginAttr" select="./tags"/>
                 </xsl:call-template>
             </xsl:if>
+            
             <xsl:if test="./actions">
                 <xsl:call-template name="merge_tags">
                     <xsl:with-param name="elemOriginAttr" select="./actions"/>
                 </xsl:call-template>
             </xsl:if>
+            
             <xsl:apply-templates/>
         </state>
     </xsl:template>
@@ -99,7 +129,7 @@
     </xsl:template>
     <xsl:template match="transition">
         <xsl:element name="transition">
-            <xsl:call-template name="copy-attrs"/>
+            <xsl:copy-of select="@*[not(. = '')]" />
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./sources"/>
             </xsl:call-template>
@@ -114,10 +144,20 @@
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="permActions[@originAttr] | roles[@originAttr]  | sources[@originAttr] | destinations[@originAttr] | tags[@originAttr] | actions[@originAttr]"/>
+    
+    <xsl:template match="
+        permActions[@originAttr] | 
+        roles[@originAttr]  | 
+        sources[@originAttr] | 
+        destinations[@originAttr] | 
+        tags[@originAttr] | 
+        actions[@originAttr]
+        "/>
+    
     <xsl:template match="@permissions_from_state">
         <xsl:if test="normalize-space(.)">
             <xsl:attribute name="permissions_from_state" select="."/>
         </xsl:if>
     </xsl:template>
+    
 </xsl:stylesheet>

@@ -9,6 +9,7 @@
                 </role>
             </xsl:for-each>
             <!-- !+NOTE blank role not shown but used as template node in XForms -->
+            <!-- Is this even required now ?? (AH,2013-04-16) -->
             <role>ALL</role>
         </xsl:element>
     </xsl:template>

@@ -3,6 +3,7 @@
     <xsl:template name="merge_tags">
         <xsl:param name="elemOriginAttr"/>
         <xsl:variable name="attrName" select="$elemOriginAttr/@originAttr"/>
+        <xsl:if test="$elemOriginAttr/*[normalize-space()]">
         <xsl:attribute name="{$attrName}">
             <xsl:for-each select="$elemOriginAttr/*">
                 <xsl:choose>
@@ -17,5 +18,6 @@
                 </xsl:choose>
             </xsl:for-each>
         </xsl:attribute>
+        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

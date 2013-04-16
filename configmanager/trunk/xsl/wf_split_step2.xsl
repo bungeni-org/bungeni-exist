@@ -20,7 +20,7 @@
             </xsl:for-each-group>
             
             <!-- process all other facets -->
-            <xsl:for-each select="facet[parent::worfklow and not(starts-with(@name, 'global_'))]">
+            <xsl:for-each select="facet[parent::workflow and not(starts-with(@name, 'global_'))]">
                 
                 <!-- we split each facet by role so a facet for a state becomes a facet per role 
                 this allows easier grid editing of facet permissions -->
@@ -53,6 +53,8 @@
         </xsl:element>
     </xsl:template>
     
-    <!-- suppress the global facet, it has been handled using the for_each above -->
+    <!-- suppress the global and state facets, it has been handled using the for_each above -->
     <xsl:template match="facet[parent::workflow and starts-with(@name, 'global_')]"/>
+    <xsl:template match="facet[parent::workflow and not(starts-with(@name, 'global_'))]"/>
+    
 </xsl:stylesheet>

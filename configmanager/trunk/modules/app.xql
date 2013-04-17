@@ -58,9 +58,9 @@ declare
     %templates:default("active", "form") 
 function app:get-secondary-menu($node as node(), $model as map(*), $active as xs:string) {
     <div id="secondary-menu">
-        <ul class="secondary">
+        <!--ul class="secondary">
             <li><a href="#">add new type</a></li>
-        </ul>
+        </ul-->
     </div>
 };
 

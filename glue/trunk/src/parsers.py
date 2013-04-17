@@ -116,8 +116,14 @@ class ParseBungeniTypesXML(ParseXML):
     def xpath_member_archetypes(self):
         return self.__global_path__ + "member"
     
+    def xpath_event_archetypes(self):
+        return self.__global_path__ + "event"
+    
     def xpath_all_archetypes(self):
-        return self.__global_path__ + "*[name() = 'doc' or name() = 'group' or name() = 'member']"
+        return self.__global_path__ + "*[ name() = 'doc' or name() = 'group' or name() = 'member' or name() = 'event' ]"
+    
+    def get_events(self):
+        return self.doc_dom().selectNodes(self.xpath_event_archetypes())
     
     def get_docs(self):
         return self.doc_dom().selectNodes(self.xpath_doc_archetypes())

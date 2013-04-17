@@ -5,6 +5,23 @@
             <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
         </xsl:copy>
     </xsl:template>
+    
+    <xsl:variable name="allpermissions" select="data(/workflow/permActions/permAction)" />
+    
+    <!-- injects blank templates for permissions which havent been set, 
+        this allows the grid-ui to populate correctly based on the xml model -->
+    <xsl:template name="missing-permission-template-injector">
+        <xsl:variable name="facet-perms" select="data(./allow/@permission)" />
+        <xsl:variable name="missing-perms" select="distinct-values($allpermissions[not(. = $facet-perms)])" />
+        <xsl:for-each select="$missing-perms">
+            <allow permission="{.}">
+                <roles originAttr="roles">
+                    <role/>
+                </roles>
+            </allow>
+        </xsl:for-each>
+    </xsl:template>
+    
     <xsl:template match="workflow">
         <xsl:element name="workflow">
             <xsl:apply-templates select="@*"/>
@@ -16,6 +33,8 @@
                     <xsl:for-each select="current-group()">
                         <xsl:apply-templates/>
                     </xsl:for-each>
+                    <!-- inject missing permissions -->
+                    <xsl:call-template name="missing-permission-template-injector" />
                 </facet>
             </xsl:for-each-group>
             
@@ -38,6 +57,8 @@
                                     </roles>
                                 </allow>
                             </xsl:for-each>
+                            <!-- inject missing permissions -->
+                            <xsl:call-template name="missing-permission-template-injector" />
                         </xsl:for-each>
                     </facet>
                 </xsl:for-each-group>

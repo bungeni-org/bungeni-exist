@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<descriptor archetype="doc" name="new" order="99" note="" label="" container_label="" sort_on="" sort_dir="desc"/>
+<descriptor name="new" order="99" note="" label="" container_label="" sort_on="" sort_dir="desc"/>

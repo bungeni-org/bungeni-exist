@@ -72,4 +72,11 @@
             <xsl:attribute name="vocabulary" select="."/>
         </xsl:if>
     </xsl:template>
+    
+    <xsl:template match="@sort_on">
+        <xsl:if test="normalize-space(.)">
+            <xsl:attribute name="sort_on" select="."/>
+        </xsl:if>
+    </xsl:template>
+    
 </xsl:stylesheet>

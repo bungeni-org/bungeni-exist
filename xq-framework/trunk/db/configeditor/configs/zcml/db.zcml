@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configure xmlns="http://namespaces.zope.org/zope" xmlns:db="http://namespaces.objectrealms.net/rdb">
-    <include file="meta.zcml" package="bungeni.alchemist"/>
-    <db:engine echo="false" name="bungeni-db" url="postgres://localhost/bungeni"/>
-</configure>

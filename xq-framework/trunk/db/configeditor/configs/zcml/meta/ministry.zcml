@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configure xmlns="http://namespaces.zope.org/zope" xmlns:i18n="http://namespaces.zope.org/i18n" i18n_domain="bungeni">
-    <grant permission="bungeni.ministry.Add" role="bungeni.Clerk"/>
-    <grant permission="bungeni.ministry.Edit" role="bungeni.Clerk"/>
-    <grant permission="bungeni.ministry.Delete" role="bungeni.Clerk"/>
-</configure>

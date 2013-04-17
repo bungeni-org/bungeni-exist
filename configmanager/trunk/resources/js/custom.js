@@ -31,6 +31,7 @@ $(document).ready(function(){
                     var importedSVGRootElement = document.importNode(svgDoc.documentElement,true);
                     //append the imported SVG root element to the appropriate HTML element
                     $("#graphviz").append(importedSVGRootElement);
+                    $("#graphviz").append('<a target="_blank" class="ext-links" href="'+href+'">open on new tab</a>');
                 }
             });        
         }   

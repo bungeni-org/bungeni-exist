@@ -402,11 +402,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
-                    <xf:instance id="tmp">
-                        <data xmlns="">
-                            <wantsToClose>false</wantsToClose>
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="tmp"  src="{$workflow:REST-CXT-MODELTMPL}/tmp.xml"/>
 
                     <xf:submission id="s-add"
                                    method="put"
@@ -525,6 +521,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                     <li id="tabdetails" class="active"><a href="#details">Properties</a></li>
                     <li id="tabstates" ><a href="#states">States</a></li>
                     <li id="tabfacets" ><a href="#facets">Facets</a></li>
+                    <li id="tabgraphviz" data-type="/exist/restxq/workflow/graphviz/{$docname}" ><a href="#graphviz">Diagram</a></li>
                 </ul>
             </div>
             
@@ -706,6 +703,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         </ul>
                     </div>
                 </div>               
+                <div id="graphviz" class="tab_content"/>
             </div>                 
         </div>
 };
@@ -778,11 +776,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
-                    <xf:instance id="tmp">
-                        <data xmlns="">
-                            <wantsToClose>false</wantsToClose>
-                        </data>
-                    </xf:instance>                   
+                    <xf:instance id="tmp"  src="{$workflow:REST-CXT-MODELTMPL}/tmp.xml"/>                   
 
                     <xf:submission id="s-add"
                                    method="put"
@@ -833,9 +827,9 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                             else
                                 ()
                         }       
-                        <xf:action if="empty(instance()/state[{$ATTR}]/actions)">
+                        <xf:action if="not(exists(instance()/state[{$ATTR}]/actions))">
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;actions&gt;&lt;/xmp&gt; node</xf:message>
-                            <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions" />
+                            <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" context="instance()/state[{$ATTR}]" at="last()" position="after" origin="instance('i-actions-node')/actions" />
                         </xf:action>                         
                         <xf:action if="instance()/state[{$ATTR}]/actions/action[last()] ne ''">
                             <xf:message level="ephemeral">inserted an &lt;xmp&gt;&lt;action&gt;&lt;/xmp&gt; node</xf:message>
@@ -1117,19 +1111,15 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     <xf:instance id="i-actions-node" src="{$workflow:REST-CXT-MODELTMPL}/actions.xml"/>
 
                     <xf:instance id="i-state" src="{$workflow:REST-CXT-MODELTMPL}/state.xml"/>
+                    
+                    <xf:instance id="i-transition" src="{$workflow:REST-CXT-MODELTMPL}/transition.xml" />
 
                     <xf:bind nodeset="instance()/state[last()]">
                         <xf:bind nodeset="@id" type="xf:string" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and not(starts-with(.,'global')) and count(instance()/state/@id) eq count(distinct-values(instance()/state/@id))" />
                         <xf:bind nodeset="actions/action" type="xf:string" constraint="count(instance()/state[last()]/actions/action) eq count(distinct-values(instance()/state[last()]/actions/action))" />
                     </xf:bind>                    
 
-                    <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
-
-                    <xf:instance id="tmp">
-                        <data xmlns="">
-                            <wantsToClose>false</wantsToClose>
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="tmp"  src="{$workflow:REST-CXT-MODELTMPL}/tmp.xml"/>
 
                     <xf:submission id="s-add"
                                    method="put"
@@ -1170,8 +1160,15 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     <xf:action ev:event="xforms-ready">  
                         <!-- insert a blank template state -->                
                         <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-state')/state" />
-                        <!--xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" /--> 
-                        <xf:setfocus control="state-title" />
+                        <!--xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" /-->
+                        
+                        <!--    if there is no transition means that its the first state so add transition with 
+                                transition with an empty source -->
+                        <xf:action if="not(exists(instance()/transition))">
+                            <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;transition&gt;&lt;/xmp&gt; node</xf:message>
+                            <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-transition')/transition" />
+                        </xf:action>                         
+                        <xf:setfocus ev:event="DOMActivate" control="state-id" />
                     </xf:action>                
             </xf:model>
             
@@ -1245,6 +1242,18 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                     <xf:label>Save</xf:label>
                                     <xf:action>
                                         <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                        <xf:action if="count(instance()/state) = 1">
+                                            <xf:setvalue ref="instance()/transition/destinations/destination" value="instance()/state[last()]/@id"/>
+                                            <xf:setvalue ref="instance()/transition/@trigger" value="'automatic'"/>
+                                            <xf:setvalue ref="instance()/transition/@title" value="'from none'"/>
+                                            <xf:setvalue ref="instance()/transition/@note" value="'initial transition from none'"/>
+                                            <xf:delete nodeset="instance()/transition/roles"/>
+                                            <xf:delete nodeset="instance()/transition/@condition"/>
+                                            <xf:delete nodeset="instance()/transition/@order"/>
+                                            <xf:delete nodeset="instance()/transition/@require_confirmation"/>
+                                            <!-- remove the actions node if there is jus the template action we insert -->
+                                            <xf:delete nodeset="instance()/state[last()]/actions[string-length(action/text()) &lt; 2]" />                                            
+                                        </xf:action>
                                         <xf:send submission="s-add"/>
                                     </xf:action>                                
                                 </xf:trigger>   
@@ -1291,11 +1300,7 @@ function workflow:transition-add($node as node(), $model as map(*)) {
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
-                    <xf:instance id="tmp">
-                        <data xmlns="">
-                            <wantsToClose>false</wantsToClose>
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="tmp"  src="{$workflow:REST-CXT-MODELTMPL}/tmp.xml"/>
                     
                     <xf:submission id="s-add" method="put" replace="none" ref="instance()">
                         <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>
@@ -1355,13 +1360,18 @@ function workflow:transition-add($node as node(), $model as map(*)) {
                                     <xf:label ref="."></xf:label>
                                     <xf:value ref="."></xf:value>
                                 </xf:itemset>
-                            </xf:select1>       
+                            </xf:select1>            
                             <xf:input id="transition-id" bind="b-title" incremental="true">
                                 <xf:label>Transition Title</xf:label>
                                 <xf:hint>type transition title</xf:hint>
                                 <xf:help>... and no spaces in between words</xf:help>
                                 <xf:alert>enter more than 3 characters...</xf:alert>
-                            </xf:input>                            
+                            </xf:input>         
+                            <xf:textarea id="transition-note" ref="@note" incremental="true">
+                                <xf:label>Transition Note</xf:label>
+                                <xf:hint>add a note...</xf:hint>
+                                <xf:alert>invalid</xf:alert>
+                            </xf:textarea>                              
                             <xf:select1 ref="@trigger" appearance="minimal" incremental="true">
                                 <xf:label>Triggered</xf:label>
                                 <xf:hint>how this transition is triggered</xf:hint>
@@ -1467,22 +1477,6 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
 
                     <xf:instance id="i-originrole" src="{$workflow:REST-CXT-MODELTMPL}/roles.xml"/>
 
-                    <xf:instance id='i-transition' xmlns="">
-                        <data>
-                           <transition title="" condition="" require_confirmation="false" trigger="manual" order="0"  note="Add a note">
-                              <sources originAttr="source">
-                                 <source/>
-                              </sources>
-                              <destinations originAttr="destination">
-                                 <destination/>
-                              </destinations>
-                              <roles originAttr="roles">
-                                 <role/>
-                              </roles>
-                           </transition>                        
-                        </data>
-                    </xf:instance>
-
                     <xf:instance id="i-allroles" xmlns="">
                         {appconfig:roles()}
                     </xf:instance>                  
@@ -1498,11 +1492,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
 
                     <xf:instance id="i-controller" src="{$workflow:REST-CXT-MODELTMPL}/controller.xml"/>
 
-                    <xf:instance id="tmp">
-                        <data xmlns="">
-                            <wantsToClose>false</wantsToClose>
-                        </data>
-                    </xf:instance>
+                    <xf:instance id="tmp"  src="{$workflow:REST-CXT-MODELTMPL}/tmp.xml"/>
                     
                     <xf:submission id="s-add" method="put" replace="none" ref="instance()">
                         <xf:resource value="'{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml'"/>

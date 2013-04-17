@@ -41,7 +41,14 @@
             <xsl:when test="sources/source">
                 <xsl:for-each select="sources/source">
                     <xsl:variable name="from" select="."/>
-                    <edge from="{$from}" to="{$to}" label="{$title}" fontname="Arial" fontsize="9"/>
+                    <xsl:choose>
+                        <xsl:when test="$from eq ''">
+                            <edge from="start" to="{$to}" label="{$title}" fontname="Arial" fontsize="9"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <edge from="{$from}" to="{$to}" label="{$title}" fontname="Arial" fontsize="9"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>

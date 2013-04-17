@@ -236,7 +236,7 @@ function role:edit($node as node(), $model as map(*)) {
                 <div style="margin-top:10px;" />
                 <xf:group ref="role[@id eq '{$name}']">
                     <xf:group appearance="bf:verticalTable">
-                        <xf:input bind="roletitle" class="xsmallWidth" incremental="true">
+                        <xf:input bind="roletitle" incremental="true">
                             <xf:label>title:</xf:label>
                             <xf:hint>a Hint for this control</xf:hint>
                             <xf:help>help for select1</xf:help>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configure xmlns="http://namespaces.zope.org/zope" i18n_domain="bungeni">
-    <grant permission="bungeni.translation.Add" role="bungeni.Translator"/>
-    <grant permission="bungeni.translation.Add" role="bungeni.Owner"/>
-</configure>

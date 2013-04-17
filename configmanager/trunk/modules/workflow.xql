@@ -1160,9 +1160,14 @@ function workflow:state-add($node as node(), $model as map(*)) {
                     </xf:submission>
 
                     <xf:action ev:event="xforms-ready">  
-                        <!-- insert a blank template state -->                
-                        <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-state')/state" />
-                        <!--xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" /-->
+                        <xf:action if="exists(instance()/state)">
+                            <!-- subsequent states - this blank state routine is applied -->
+                            <xf:insert nodeset="instance()/state" at="last()" position="after" origin="instance('i-state')/state" />
+                        </xf:action>   
+                        <xf:action if="not(exists(instance()/state))">
+                            <!-- first state - this blank state routine is applied -->
+                            <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-state')/state" />
+                        </xf:action>   
                         
                         <!--    if there is no transition means that its the first state so add transition with 
                                 transition with an empty source -->

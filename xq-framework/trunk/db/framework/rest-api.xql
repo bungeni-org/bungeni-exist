@@ -318,6 +318,7 @@ declare function local:get-mock-attachments() as node(){
 };
 
 (: 
+ : DEPRECATED
  : Retrieve collection of attachments
  : :)
 declare function local:get-matched-attachments($match as xs:string) as node(){
@@ -328,7 +329,15 @@ declare function local:get-matched-attachments($match as xs:string) as node(){
     [bu:name[matches(., $match, 'i')]]
 };
 
+declare function local:get-matched-attachments-by-name($match as xs:string, $docType as xs:string, $status as xs:string){
+    
+    collection('/db/bungeni-xml')/bu:ontology[@for='document']
+    [bu:document[bu:docType[bu:value[. = $docType]]][bu:status[.=$status]]]
+    /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]][bu:name[matches(., $match, 'i')]]
+};
+
 (: 
+ : DEPRECATED
  : Retrieve an attachment by name
  :  :)
 declare function local:get-attachment-hash-by-name($name as xs:string){
@@ -338,6 +347,15 @@ declare function local:get-attachment-hash-by-name($name as xs:string){
     /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]]
     [bu:name[.=$name]]/bu:attachmentHash/string()
 };
+
+declare function local:get-attachment-hash($name as xs:string, $docType as xs:string, $status as xs:string){
+    
+    collection('/db/bungeni-xml')/bu:ontology[@for='document']
+    [bu:document[bu:docType[bu:value[. = $docType]]][bu:status[.=$status]]]
+    /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]][bu:name[.=$name]]
+    /bu:attachmentHash/string()
+};
+
 
 (: 
  : Search for attachments by partial name
@@ -349,8 +367,10 @@ declare
     %rest:form-param("search", "{$search}","")  
     %rest:form-param("page", "{$page}", "1") 
     %rest:form-param("perPage", "{$perPage}", "2") 
+    %rest:form-param("docType", "{$docType}", "Bill") 
+    %rest:form-param("status", "{$status}", "submitted") 
     %output:method("xml")
-    function local:search-for-attachments($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
+    function local:search-for-attachments($search as xs:string*, $page as xs:string*, $perPage as xs:string*, $docType as xs:string*, $status as xs:string*){
         
         try{
             let $startItem := if (xs:integer($page) eq 1) then
@@ -358,7 +378,7 @@ declare
                                 else
                                     ((xs:integer($page)-1)*xs:integer($perPage))+1
                     
-            let $allResultsMatched := local:get-matched-attachments($search)
+            let $allResultsMatched := local:get-matched-attachments-by-name($search, $docType, $status)
             let $page := if(count($allResultsMatched) eq 1) then
                             xs:integer(1)
                         else
@@ -410,10 +430,12 @@ declare
     %rest:form-param("search", "{$search}","")  
     %rest:form-param("page", "{$page}", "1") 
     %rest:form-param("perPage", "{$perPage}", "2") 
+    %rest:form-param("docType", "{$docType}","Bill") 
+    %rest:form-param("status", "{$status}","submitted") 
     %output:method("xml")
-    function local:expose-get-search-attachmemnts($search as xs:string*, $page as xs:string*, $perPage as xs:string*){
+    function local:expose-get-search-attachmemnts($search as xs:string*, $page as xs:string*, $perPage as xs:string*, $docType as xs:string*, $status as xs:string*){
       
-       local:search-for-attachments($search, $page, $perPage)   
+       local:search-for-attachments($search, $page, $perPage, $docType, $status)   
 };
 
 (: 
@@ -424,10 +446,12 @@ declare
     %rest:POST
     %rest:path("/attachment")
     %rest:form-param("name", "{$name}","*")  
+    %rest:form-param("docType", "{$docType}","Bill") 
+    %rest:form-param("status", "{$status}","submitted") 
     %output:method("xml")
-    function local:get-attachment($name as xs:string*){
+    function local:get-attachment($name as xs:string*, $docType as xs:string*, $status as xs:string*){
         
-      util:parse(util:binary-to-string(util:binary-doc(concat("/db/bungeni-atts/", local:get-attachment-hash-by-name($name)))))
+      util:parse(util:binary-to-string(util:binary-doc(concat("/db/bungeni-atts/", local:get-attachment-hash($name, $docType, $status)))))
 };
 
 
@@ -455,10 +479,12 @@ declare
     %rest:GET
     %rest:path("/test/get/attachment")
     %rest:form-param("name", "{$name}","*")  
+    %rest:form-param("docType", "{$docType}","Bill") 
+    %rest:form-param("status", "{$status}","submitted") 
     %output:method("xml")
-    function local:expose-get-attachment($name as xs:string*){
+    function local:expose-get-attachment($name as xs:string*, $docType as xs:string*, $status as xs:string*){
         
-      local:get-attachment($name)
+      local:get-attachment($name, $docType, $status)
 };
 
 (: 
@@ -466,7 +492,7 @@ declare
  :  :)
 declare 
     %rest:POST
-    %rest:path("/amendment/remove")	
+    %rest:path("/amendment/remove")    
     %rest:form-param("username","{$username}")
     %rest:form-param("password","{$password}")
     %rest:form-param("filename","{$filename}")

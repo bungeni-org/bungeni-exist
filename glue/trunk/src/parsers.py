@@ -22,6 +22,8 @@ from java.util import (
 
 from org.dom4j import (
     DocumentException,
+    QName,
+    Namespace
     )
 
 from org.dom4j.io import (
@@ -107,6 +109,19 @@ class ParseXML(object):
 
 class ParseBungeniTypesXML(ParseXML):
     
+    def __init__(self, xml_path):
+        super(ParseBungeniTypesXML, self).__init__(xml_path)
+        self.namespaces = {"ce": "http://bungeni.org/config_editor"}
+    
+    def qname(self, prefix, name):
+        return QName(
+            name, 
+            Namespace(prefix, self.namespaces[prefix])
+        )
+        
+    def xpath_ce_types(self):
+        return self.__global_path__ + "*[@ce:type]"
+    
     def xpath_doc_archetypes(self):
         return self.__global_path__ + "doc"
     
@@ -122,6 +137,12 @@ class ParseBungeniTypesXML(ParseXML):
     def xpath_all_archetypes(self):
         return self.__global_path__ + "*[ name() = 'doc' or name() = 'group' or name() = 'member' or name() = 'event' ]"
     
+    def get_ce_types_map(self):
+        xpath = self.doc_dom().createXPath(self.xpath_ce_types())
+        xpath.setNamespaceURIs(self.namespaces)
+        return xpath.selectNodes(self.doc_dom())
+        
+        
     def get_events(self):
         return self.doc_dom().selectNodes(self.xpath_event_archetypes())
     
@@ -151,6 +172,7 @@ class ParsePipelineConfigsXML(ParseXML):
     def get_config_internal(self):
         return self.doc_dom().selectNodes(self.xpath_config_internal())
 
+'''
 class ParseLogicalTypesXML(ParseXML):
     
     def xpath_types(self):
@@ -158,7 +180,8 @@ class ParseLogicalTypesXML(ParseXML):
     
     def get_types(self):
         return self.doc_dom().selectNodes(self.xpath_types())
-
+'''
+    
 class ParsePipelineXML(ParseXML): 
     
     def xpath_pipelines(self):

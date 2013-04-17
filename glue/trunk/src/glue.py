@@ -239,23 +239,26 @@ def __type_mapping_element(type, map_str, logical_mappings):
     enabled = type.attributeValue("enabled")
     return __type_mapping_element_impl(name, enabled, map_str, logical_mappings)
 
-def generate_type_mappings(logical_mappings, parser_buneni_types, parser_pipe_configs):
+def generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_configs):
     li_map_doc = []
     li_map_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
     li_map_doc.append("<!-- AUTO GENERATED type mappings from bungeni to glue types -->")
     li_map_doc.append("<value>")
     map_str = '   <map from="%s" uri-name="%s" element-name="%s" />'
-    doc_types = parser_buneni_types.get_docs()
+    doc_types = parser_bungeni_types.get_docs()
     for doc_type in doc_types:
         map_elem = __type_mapping_element(doc_type, map_str, logical_mappings)
         if map_elem is not None:
             li_map_doc.append(map_elem)
-    groups = parser_buneni_types.get_groups()
+    events = parser_bungeni_types.get_events()
+    for event in events:
+        map_elem = __type_mapping_element(event, map_str, logical_mappings)
+    groups = parser_bungeni_types.get_groups()
     for group in groups:
         map_elem = __type_mapping_element(group, map_str, logical_mappings)
         if map_elem is not None:
             li_map_doc.append(map_elem)
-    members = parser_buneni_types.get_members()
+    members = parser_bungeni_types.get_members()
     for member in members:
         map_elem = __type_mapping_element(member, map_str, logical_mappings)
         if map_elem is not None:
@@ -272,7 +275,19 @@ def generate_type_mappings(logical_mappings, parser_buneni_types, parser_pipe_co
     li_map_doc.append("</value>")
     return ("\n".join(li_map_doc)).encode("UTF-8")
 
-def load_logical_mappings():
+def load_logical_mappings(cfg, parser_bungeni_types):
+    
+    logical_mappings = {}
+    parser_bungeni_types.doc_parse()
+    ce_types = parser_bungeni_types.get_ce_types_map()
+    for ce_type in ce_types:
+        name = ce_type.attributeValue("name")
+        # namespaced attribute, so use a qualified name
+        logical = ce_type.attributeValue(parser_bungeni_types.qname("ce", "type"))
+        logical_mappings[name] = logical
+    return logical_mappings
+    
+    '''
     map_parse = ParseLogicalTypesXML(__logical_mappings_file())
     map_parse.doc_parse()
     logical_mappings = {}
@@ -281,13 +296,14 @@ def load_logical_mappings():
         logical = type_elem.attributeValue("logical")
         logical_mappings[name] = logical
     return logical_mappings
+    '''
     
 
 def write_type_mappings(config, parser_bungeni_types, parser_pipe_configs):
     '''
     Generates the type_mappings file
     '''
-    logical_mappings = load_logical_mappings()
+    logical_mappings = load_logical_mappings(config, parser_bungeni_types)
     type_mappings = generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_configs)
     if type_mappings is not None:
         print "TYPE MAPPINGS = ", type_mappings
@@ -300,8 +316,10 @@ def write_type_mappings(config, parser_bungeni_types, parser_pipe_configs):
 
 def types_all_config(config_file):
     cfg = TransformerConfig(config_file)
+    # parse the bungeni types.xml file to get all the bungeni types
     parser_bungeni_types = ParseBungeniTypesXML(cfg.get_types_xml_from_bungeni_custom())
     parser_bungeni_types.doc_parse()
+    # parse the pipeline configs file
     parser_pipe_configs = ParsePipelineConfigsXML(__pipeline_configs_file())
     parser_pipe_configs.doc_parse()
     print "Writing type mappings..."

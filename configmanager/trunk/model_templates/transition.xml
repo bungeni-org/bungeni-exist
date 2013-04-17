@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-    <transition title="" condition="" require_confirmation="false" trigger="manual" order="0" note="Add a note">
+    <transition title="" condition="" require_confirmation="false" trigger="manual" order="0" note="">
         <sources originAttr="source">
             <source/>
         </sources>

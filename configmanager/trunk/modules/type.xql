@@ -394,6 +394,12 @@ function type:add($node as node(), $model as map(*)) {
                     </data>
                 </xf:instance>
                 
+                <xf:instance xmlns="" id="i-typeevent">
+                    <data>
+                        <event archetype="event" name="" enabled="false"/>
+                    </data>
+                </xf:instance>                
+                
                 <xf:instance xmlns="" id="i-typegroup">
                     <data>
                         <group name="" workflow="group" enabled="false"/>
@@ -402,11 +408,7 @@ function type:add($node as node(), $model as map(*)) {
                 
                 <xf:instance id="i-vars" src="{$type:REST-CXT-APP}/model_templates/vars.xml"/>
                 
-                <xf:instance id="tmp">
-                    <data xmlns="">
-                        <wantsToClose>false</wantsToClose>
-                    </data>
-                </xf:instance>
+                <xf:instance id="tmp" src="{$type:REST-CXT-APP}/model_templates/tmp.xml"/>
                 
                 <xf:instance id="i-controller" src="{$type:REST-CXT-APP}/model_templates/controller.xml"/>        
                 
@@ -478,6 +480,9 @@ function type:add($node as node(), $model as map(*)) {
                     <xf:action if="'{$type}' = 'doc'">
                         <xf:insert nodeset="instance()/doc" at="last()" position="after" origin="instance('i-typedoc')/doc" />
                     </xf:action>
+                    <xf:action if="'{$type}' = 'event'">
+                        <xf:insert nodeset="instance()/event" context="instance()" at="last()" position="after" origin="instance('i-typeevent')/event" />
+                    </xf:action>                    
                     <xf:action if="'{$type}' = 'group'">
                         <xf:insert nodeset="instance()/group" at="last()" position="after" origin="instance('i-typegroup')/group" />
                     </xf:action>  
@@ -510,17 +515,11 @@ function type:add($node as node(), $model as map(*)) {
                             <xf:action if="'doc' = 'doc'">
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:send submission="s-add"/>
-                            </xf:action>
+                            </xf:action>                          
                             <xf:action if="'group' = 'group'">
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                 <xf:send submission="s-add"/>
-                            </xf:action>
-                            <!--xf:action>
-                                <xf:setvalue ref="instance('i-vars')/renameDoc" value="concat(instance()/{$type}[{$pos}]/@name,'.xml')"/>
-                                <xf:load show="none" targetid="secondary-menu">
-                                    <xf:resource value="concat('{$type:REST-CXT-APP}/doc_actions/rename.xql?doc={$name}.xml&amp;rename=',instance('i-vars')/renameDoc,'')"/>
-                                </xf:load>
-                            </xf:action-->                            
+                            </xf:action>                          
                         </xf:trigger>
                     </xf:group>
                 </xf:group>

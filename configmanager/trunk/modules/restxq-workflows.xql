@@ -6,6 +6,7 @@ xquery version "3.0";
 module namespace cmwfrest = "http://exist-db.org/apps/configmanager/rest";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
+import module namespace gv = "http://kitwallace.co.uk/ns/graphviz" at "graphviz.xqm";
 import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
 declare namespace rest="http://exquery.org/ns/restxq";
@@ -41,6 +42,7 @@ function cmwfrest:delete-state($doc as xs:string,$id as xs:string) {
     return (
         update delete $doc/state[@id eq $id],
         update delete $doc/facet[starts-with(@name,$id)],
+        update delete $doc/transition[destinations/destination eq $id],
         $doc
     )
 };
@@ -113,6 +115,27 @@ function cmwfrest:move-transition($doc as xs:string,
                     
             default return           
                 () 
+};
+
+(: GRAPHVIZ generate workflow diagram :)
+declare 
+    %rest:GET
+    %rest:path("/workflow/graphviz/{$name}")
+function cmwfrest:graphviz-workflow($name as xs:string) {
+
+    util:declare-option("exist:serialize", "method=xhtml media-type=application/xhtml+xml"),
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $name || ".xml")
+
+    let $xsl := doc('/db/apps/configmanager/xsl/wf_to_dotml.xsl')
+    let $dotml := transform:transform($doc, $xsl, ())
+    let $log := util:log('debug',$doc)
+    let $svg :=  let $graph := gv:dotml-to-dot($dotml)
+                 return  
+                    gv:dot-to-svg($graph)
+    return
+        $svg
 };
 
 (: COMMIT a workflow to the filesystem. Every workflow is committed in company of types.xml :)

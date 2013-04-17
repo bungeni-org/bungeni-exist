@@ -16,7 +16,25 @@ $(document).ready(function(){
     });    
     
     //  When user clicks on tab, this code will be executed
-    $("#tabs li").click(function() {
+    $("#tabs li").click(function() {    
+        // generate graphviz SVG
+        if($(this).attr("id") == 'tabgraphviz') {
+            var href = $(this).attr('data-type');      
+            $.ajax({
+                type: "GET",
+                url: href,
+                data: "nothing",
+                dataType: "xml",
+                success: function(svgDoc) {
+                    $("#graphviz").empty();
+                    //import contents of the svg document into this document
+                    var importedSVGRootElement = document.importNode(svgDoc.documentElement,true);
+                    //append the imported SVG root element to the appropriate HTML element
+                    $("#graphviz").append(importedSVGRootElement);
+                }
+            });        
+        }   
+    
         //  First remove class "active" from currently active tab
         $("#tabs li").removeClass('active');
  
@@ -114,7 +132,7 @@ $(document).ready(function(){
         
         return false;
         
-    });  
+    });   
     
     // commit
     $(".commit").live('click', function() {

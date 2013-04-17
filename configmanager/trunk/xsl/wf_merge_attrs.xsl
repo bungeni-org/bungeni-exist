@@ -13,7 +13,10 @@
     -->
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
+    
     <xsl:key name="empty-facets" match="facet[parent::workflow and not(descendant::role[normalize-space() or child::*])]" use="@name"/>
+    <xsl:key name="facets-on-states" match="facet[@original-name]" use="@original-name" />
+    
     <xsl:include href="merge_tags.xsl"/>
     <xsl:include href="copy_attrs.xsl"/>
     <xsl:template match="@*|*|processing-instruction()|comment()">
@@ -64,10 +67,15 @@
             <xsl:for-each-group select="facet[parent::workflow and not(starts-with(@name, 'global_'))]" group-by="@original-name">
                 <facet name="{current-grouping-key()}">
                     <xsl:for-each select="current-group()">
-                        <xsl:for-each select="allow">
+                        <xsl:for-each select="allow[roles/role[. ne '']]">
+                           <xsl:element name="allow">
+                            <xsl:attribute name="permission" select="@permission"></xsl:attribute>
+                            <xsl:attribute name="roles" select="distinct-values(./roles/role)" />
+                           </xsl:element>
+                           <!--
                             <xsl:copy>
                                 <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
-                            </xsl:copy>
+                            </xsl:copy> -->
                         </xsl:for-each>     
                     </xsl:for-each>
                 </facet>
@@ -95,6 +103,8 @@
         @ref and          
         boolean(key('empty-facets', translate(@ref,'.','')))         
         ]"/>
+    <xsl:template match="facet[@original-name]" />
+    <xsl:template match="facet[starts-with(@ref, '.')]" />
     <xsl:template match="state">
         <state>
             
@@ -113,6 +123,9 @@
             </xsl:if>
             
             <xsl:apply-templates/>
+            <xsl:if test="key('facets-on-states', @id)">
+                <facet ref="{concat('.', @id)}" />
+            </xsl:if>
         </state>
     </xsl:template>
     <xsl:template match="allow | deny">
@@ -132,6 +145,7 @@
             <xsl:copy-of select="@*[not(. = '')]" />
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./sources"/>
+                <xsl:with-param name="checkEmptyAttribute" select="0" />
             </xsl:call-template>
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./destinations"/>

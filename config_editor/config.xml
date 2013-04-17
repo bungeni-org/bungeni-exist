@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Edit configuration for config_editor -->
-<ce-config app-name="config-editor">
-    <name>Bungeni Configuration Editor</name>
-    <configs-collection>/db/config_editor/bungeni_custom</configs-collection>
-    <config-forms>/db/config_editor/bungeni_custom/forms</config-forms>
-    <config-workflows>/db/config_editor/bungeni_custom/workflows</config-workflows>
-    <bungeni-custom-fs-path>&#160;</bungeni-custom-fs-path>
-</ce-config>

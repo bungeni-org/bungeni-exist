@@ -70,7 +70,7 @@ br {
 .transition-inline.xfOutput label{
     display:none;
     
-} 
+}
 
 #transitionSources a.down,
 #transitionSources a.up {
@@ -461,14 +461,26 @@ ul.ulfields li span a {
     width: 100%;
 }
 #tabs_container {
-    border-bottom: 1px solid #ccc;
     width: 98%;
 }
 #tabs_content_container {
     border: 1px solid #ccc;
-    border-top: none;
     padding: 10px;
-    width: 96%;
+    min-width: 96%;
+    /* position and float make the div expand for the graphviz when needed*/
+    position: relative;
+    float:left;
+}
+a.ext-links {
+    background: transparent url(../images/ext-link.png) no-repeat center left;
+    padding-left:12px;
+    color: #0492BE;
+    top:0;
+    right:0;
+    margin-right:5px;
+    position:absolute;
+    target-name:new;
+    target-new:tab;    
 }
 .tab_content {
     display: none;

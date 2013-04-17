@@ -520,8 +520,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                 <ul id="tabs">
                     <li id="tabdetails" class="active"><a href="#details">Properties</a></li>
                     <li id="tabstates" ><a href="#states">States</a></li>
+                    <li id="tabgraphviz" data-type="/exist/restxq/workflow/graphviz/{$docname}" ><a href="#graphviz">Diagram</a></li>                    
                     <li id="tabfacets" ><a href="#facets">Facets</a></li>
-                    <li id="tabgraphviz" data-type="/exist/restxq/workflow/graphviz/{$docname}" ><a href="#graphviz">Diagram</a></li>
                 </ul>
             </div>
             
@@ -695,6 +695,9 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <a class="button-link" href="state-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;attr=0">add state</a>                 
                     </div> 
                  </div>
+                <div id="graphviz" class="tab_content">
+                    <h2>loading...</h2>
+                </div>
                 <div id="facets" class="tab_content">
                     <div class="ulisting">
                         <h2>Generated Facets</h2>
@@ -702,8 +705,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                             {local:facets($docname)}
                         </ul>
                     </div>
-                </div>               
-                <div id="graphviz" class="tab_content"/>
+                </div>
             </div>                 
         </div>
 };
@@ -1051,7 +1053,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                     
                                     <div style="float:left;width:40%;margin-left:10px;">
                                         <xf:group ref="./state[{$ATTR}]">
-                                            <xf:label>Feature Facets</xf:label>
+                                            <xf:label>Feature Permissions</xf:label>
                                             <span class="warning">&#160;These are workflowed features</span>
                                             <xf:repeat id="r-featurefacets" nodeset="./facet[not(starts-with(./@ref,'.'))]" appearance="compact">
                                                 <xf:select1 ref="@ref" appearance="minimal" incremental="true">

@@ -12,6 +12,7 @@
    <map from="senate_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
    <map from="report" uri-name="Report" element-name="report" />
    <map from="bicameral_document" uri-name="BicameralDocument" element-name="bicameralDocument" />
+   <map from="event_response" uri-name="EventResponse" element-name="eventResponse" />
    <map from="office" uri-name="Office" element-name="office" />
    <map from="political_group" uri-name="PoliticalGroup" element-name="politicalGroup" />
    <map from="committee" uri-name="Committee" element-name="committee" />

@@ -86,7 +86,6 @@ from utils import (
 from parsers import (
     ParseBungeniTypesXML,
     ParsePipelineConfigsXML,
-    ParseLogicalTypesXML,
     ParseBungeniXML
     )
 
@@ -253,6 +252,8 @@ def generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_c
     events = parser_bungeni_types.get_events()
     for event in events:
         map_elem = __type_mapping_element(event, map_str, logical_mappings)
+        if map_elem is not None:
+            li_map_doc.append(map_elem)
     groups = parser_bungeni_types.get_groups()
     for group in groups:
         map_elem = __type_mapping_element(group, map_str, logical_mappings)

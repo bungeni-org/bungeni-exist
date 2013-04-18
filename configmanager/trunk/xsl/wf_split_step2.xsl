@@ -11,7 +11,10 @@
     <!-- injects blank templates for permissions which havent been set, 
         this allows the grid-ui to populate correctly based on the xml model -->
     <xsl:template name="missing-permission-template-injector">
-        <xsl:variable name="facet-perms" select="data(./allow/@permission)" />
+        <xsl:param name="for-role" />
+        <!-- look for all permissions where the role is applied to the permission -->
+        <xsl:variable name="facet-perms" select="data(./allow[roles/role[. eq $for-role]]/@permission)" />
+        <!-- take a difference product between all valid permissions and all applicable permissions -->
         <xsl:variable name="missing-perms" select="distinct-values($allpermissions[not(. = $facet-perms)])" />
         <xsl:for-each select="$missing-perms">
             <allow permission="{.}">
@@ -58,7 +61,9 @@
                                 </allow>
                             </xsl:for-each>
                             <!-- inject missing permissions -->
-                            <xsl:call-template name="missing-permission-template-injector" />
+                            <xsl:call-template name="missing-permission-template-injector" >
+                                <xsl:with-param name="for-role" select="$role-name" />
+                            </xsl:call-template>
                         </xsl:for-each>
                     </facet>
                 </xsl:for-each-group>

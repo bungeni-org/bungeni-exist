@@ -166,74 +166,43 @@ declare function local:get-facets($global as xs:boolean) as node()* {
     let $WF-DOC := local:workflow()
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state) 
     return 
-        local:existing-facets($ATTR,$global)        
+        if ($global) then 
+            local:existing-global-facets()
+        else 
+            local:existing-facets($ATTR)        
 };
 
-(:
-    The functions generates <facet/>s based on the allowed roles in the workflow,
-    It forms the basis when adding a new state and also used to incorporate new changes to existing 
-    <facet/>s in subsequent renderings
-:)
-declare function local:generated-facets($perm-actions as node()+,$name as xs:string*) {
-
-    for $role in appconfig:roles()/role
-    group by $key := data($role/@name)
-    return
-        (:<roles keys="{$role/@key}" name="{$role[1]/@name}" state-id="{$name}" />:)
-        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}">
-            {
-                for $perm at $pos in $perm-actions
-                let $beshown := string-length(data($role[@key eq $perm]/@name))
-                return
-                    switch($perm)
-            
-                    case '.View' return
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
-                            <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
-                            </roles>
-                        </allow>
-                    case '.Edit' return
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
-                            <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
-                            </roles>
-                        </allow>
-                    case '.Add' return 
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
-                            <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
-                            </roles>
-                        </allow>
-                    case '.Delete' return
-                        <allow permission="{$perm/text()}" show="{if($beshown gt 2) then 'true' else 'false'}">
-                            <roles originAttr="roles">
-                                <role>{data($role[@key eq $perm]/@name)}</role>
-                            </roles>
-                        </allow>
-                    default return
-                        ()                   
-            }
-        </facet>
-};
 (:
     This method retrives all the existing facets in the current workflow
-    that belong to the given state position. It tries to incorporate any new global 
-    permission changes that might have been enabled or disabled since last modifications
+    that belong to the given state position. It tries to incorporate any new permission 
+    changes that might have been enabled or disabled since last modifications
 :)
-declare function local:existing-facets($stateid as xs:integer, $global as xs:boolean) {
+declare function local:existing-facets($stateid as xs:integer) {
 
     let $WF-DOC := local:workflow()    
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state)
-    let $NAME := if($global) then "global" else data($WF-DOC/state[$ATTR]/@id)
+    let $NAME := data($WF-DOC/state[$ATTR]/@id)
+    
+    for $facete in $WF-DOC/facet[@original-name eq $NAME]
+    return
+        element facet {
+            attribute name { $facete/@name },
+            attribute role { $facete/@role },
+            attribute original-name { $NAME },
+            $facete/allow
+        }       
+};
+
+declare function local:existing-global-facets() {
+
+    let $WF-DOC := local:workflow()
+    let $NAME := "global"
     
     for $facete in $WF-DOC/facet   
     where starts-with($facete/@name, $NAME)
     return
         element facet {
             attribute name { $facete/@name },
-            attribute role { $facete/@role },
-           
             $facete/allow
         }       
 };
@@ -247,10 +216,19 @@ declare function local:new-facets($GENERATED-FACETS as node()+, $global as xs:bo
     let $ATTR := if($workflow:ATTR-ID != 0) then $workflow:ATTR-ID else count($WF-DOC/state) 
     for $facetg in $GENERATED-FACETS
     return
-    if (some $facete in local:existing-facets($ATTR,$global) satisfies $facete/@name = $facetg/@name) then 
-        ()
-    else 
-        $facetg
+        switch ($global)
+        case true() return
+            if (some $facete in local:existing-global-facets() satisfies ($facete/@name = $facetg/@name)) then 
+                ()
+            else 
+                $facetg
+        case false() return
+            if (some $facete in local:existing-facets($ATTR) satisfies ($facete/@name = $facetg/@name)) then 
+                ()
+            else 
+                $facetg
+        default return
+            ()
 };
 
 (:
@@ -272,8 +250,19 @@ declare function local:gen-facets($global as xs:boolean) as node()* {
     for $role in appconfig:roles()/role
     group by $key := data($role/@name)
     return 
-        <facet name="{$name}_{replace(data($role[1]/@name),'[.]','')}">
+        (:
+            @original-name is added here because each facet is made of `stateid_roleid` and since 
+            stateid also permit underscores, retrieving facets using that prefix brought problems 
+            original-name allows all the local facets of a state while its in eXist-db be quickly 
+            pulled and rendered on the grid.
+        :)
+        element facet         
             {
+                attribute name { $name || "_" || data($role[1]/@name) },
+                (: the `global_` facet does not need to have @original-name nor @role :)
+                if($global) then () else attribute original-name { $name },
+                if($global) then () else attribute role { data($role[1]/@name) },
+                
                 for $perm at $pos in $perm-actions
                 let $beshown := string-length(data($role[@key eq $perm]/@name))
                 return
@@ -305,8 +294,7 @@ declare function local:gen-facets($global as xs:boolean) as node()* {
                         </allow>
                     default return
                         ()                   
-            }
-        </facet>        
+            }     
 };
 
 declare function local:all-feature() {
@@ -374,7 +362,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                             { 
                                 (: if <facet/>s exist, get them :)
                                 if(not(empty(local:workflow()/facet[starts-with(./@name, "global")]))) then 
-                                    (local:get-facets(true()),local:new-facets(local:gen-facets(true()),true()))
+                                    (local:new-facets(local:gen-facets(true()),true()))
                                 (: else generate them :)
                                 else
                                     local:gen-facets(true())
@@ -499,7 +487,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                                 <xf:insert nodeset="instance()/permActions" at="last()" position="after" origin="instance('i-facets')/facet" />
                             (: if there are new <role/>s added, incorporate them :)
                             else if (not(empty(local:new-facets(local:gen-facets(true()),true())))) then 
-                                <xf:insert nodeset="instance()/facet[starts-with(./@name, 'global')]" at="last()" position="after" origin="instance('i-facets')/facet[position() >= {$no-existing-facets}]" />                                
+                                <xf:insert nodeset="instance()/facet[starts-with(./@name, 'global')]" at="last()" position="after" origin="instance('i-facets')/facet" />                                
                             else
                                 ()
                         }                        
@@ -741,17 +729,13 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" readonly="boolean-from-string('true')" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />                
-                    </xf:bind>
-                    <!--xf:bind nodeset="./facet/allow[@permission eq '.View']/roles/role" constraint="boolean-from-string('true')" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Edit']/roles/role" constraint="boolean-from-string('true')" />                  
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Add']/roles/role" constraint="boolean-from-string('true')" />
-                    <xf:bind nodeset="./facet/allow[@permission eq '.Delete']/roles/role" constraint="boolean-from-string('true')" /-->                  
+                    </xf:bind>                
                     
                     <xf:instance id="i-facets">
                         <data xmlns="">
                             { 
                                 (: if <facet/>s exist, get them :)
-                                if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
+                                if(not(empty(local:workflow()/facet[@original-name eq $NODENAME]))) then 
                                     (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
                                 (: else generate them :)
                                 else
@@ -813,22 +797,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         </xf:action>
                     </xf:submission>
 
-                    <xf:action ev:event="xforms-ready" >  
-                        <!-- Add the facets for a new state -->
-                        {
-                            (: if facet references don't exist on the current state, add them :)
-                            if(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)])) then 
-                                for $facet at $pos in local:gen-facets(false())
-                                let $allow := $facet/allow
-                                where starts-with($facet/@name, $NODENAME)
-                                return
-                                    <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-facet')/facet" />
-                            (: the new <facet/>s thereafter, to be added now :)
-                            else if (not(empty(local:new-facets(local:gen-facets(false()),false())))) then 
-                                <xf:insert nodeset="instance()/state[{$ATTR}]/facet[starts-with(@ref,'.')]" at="last()" position="after" origin="instance('i-facet')/facet" />
-                            else
-                                ()
-                        }       
+                    <xf:action ev:event="xforms-ready" >    
                         <xf:action if="not(exists(instance()/state[{$ATTR}]/actions))">
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;actions&gt;&lt;/xmp&gt; node</xf:message>
                             <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" context="instance()/state[{$ATTR}]" at="last()" position="after" origin="instance('i-actions-node')/actions" />
@@ -839,7 +808,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         </xf:action>                       
                         {
                             (: if <facet/>s don't exist, add them :)
-                            if(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)])) then 
+                            if(empty(local:workflow()/facet[@original-name eq $NODENAME])) then 
                                 <xf:insert nodeset="instance()/feature" at="last()" position="after" origin="instance('i-facets')/facet" />
                             (: if <facet/>s exist on the current state, replace them :)
                             (:if(local:workflow()/facet[starts-with(./@name, $NODENAME)]) then (
@@ -848,26 +817,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                             ):) 
                             (: if there are new <role/>s added, incorporate them :)
                             else if (not(empty(local:new-facets(local:gen-facets(false()),false())))) then 
-                                <xf:insert nodeset="instance()/facet[starts-with(./@name, {$NODENAME})]" at="last()" position="after" origin="instance('i-facets')/facet[position() >= {$no-existing-facets}]" />                                
+                                <xf:insert nodeset="instance()/facet[@original-name eq {$NODENAME}]" at="last()" position="after" origin="instance('i-facets')/facet" />                                 
                             else
                                 ()
-                        }
-                        <!-- setting the values on the empty <facet/> nodes created above -->
-                        {
-                            let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
-                                                (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
-                                            else
-                                                local:gen-facets(false()) 
-                            (:  in a new state, the facets should match 1=1 the facet references. 
-                            :)
-                            let $new-state :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then false() else true()
-                            for $facet at $pos in $facets 
-                            return 
-                                if($new-state) then
-                                    <xf:setvalue ref="instance()/state[{$ATTR}]/facet[{$pos}]/@ref" value="concat('.',instance('i-facets')/facet[{$pos}]/@name)"/>
-                                else
-                                    ()
-                        }                           
+                        }                         
                     </xf:action>
             </xf:model>
             
@@ -991,7 +944,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 </thead>
                                                 <tbody>
                                                 {
-                                                    let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, $NODENAME)]))) then 
+                                                    let $facets :=  if(not(empty(local:workflow()/facet[@original-name eq $NODENAME]))) then 
                                                                         (local:get-facets(false()),local:new-facets(local:gen-facets(false()),false()))
                                                                     else
                                                                         local:gen-facets(false())
@@ -1001,33 +954,33 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                     return
                                                         <tr>
                                                             <td class="one">
-                                                                {substring-after($facet/@name,'_')}
+                                                                {data($facet/@role)}
                                                             </td>
                                                             <td class="permView">
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
+                                                                        <xf:value>{data($facet/@role)}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>
                                                             <td>
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
+                                                                        <xf:value>{data($facet/@role)}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>
                                                             <td>
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
+                                                                        <xf:value>{data($facet/@role)}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>                                                        
                                                             <td>
                                                                 <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
                                                                     <xf:item>
-                                                                        <xf:value>{substring-after($facet/@name,'_')}</xf:value>
+                                                                        <xf:value>{data($facet/@role)}</xf:value>
                                                                     </xf:item>                                                            
                                                                 </xf:select>
                                                             </td>

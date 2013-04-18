@@ -8,7 +8,7 @@
             <destination/>
         </destinations>
         <roles originAttr="roles">
-            <role>ALL</role>
+            <role/>
         </roles>
     </transition>
 </data>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -89,18 +89,26 @@
     </xsl:template>
     <xsl:template match="doc" mode="renderui">
         <xsl:variable name="docIdentifier" select="bu:ontology/bu:membership/bu:referenceToUser/bu:refersTo/@href"/>
+        <xsl:variable name="representation">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:membership/bu:representations">
+                    / <xsl:value-of select="bu:ontology/bu:membership/bu:representations/bu:representation/@showAs"/>
+                </xsl:when>
+                <xsl:otherwise/>
+            </xsl:choose>
+        </xsl:variable>
         <li>
             <a href="{$chamber}/member?uri={$docIdentifier}" id="{$docIdentifier}">
-                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:lastName,', ', bu:ontology/bu:membership/bu:firstName)"/>
+                <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,', ', bu:ontology/bu:membership/bu:referenceToUser/bu:firstName)"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:ontology/bu:membership/bu:group/bu:type/bu:value"/> / <xsl:value-of select="bu:ontology/bu:chamber/bu:fullName"/>
+            <div class="struct-ib"> (<xsl:value-of select="bu:ontology/bu:membership/bu:party/@showAs"/>) <xsl:value-of select="$representation"/>
             </div>
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
                 <div style="min-height:110px;">
                     <p class="imgonlywrap photo-listing" style="float:left;">
                         <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
-                        <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:lastName,'_', bu:ontology/bu:membership/bu:firstName)}" alt="Photo of M.P" align="left"/>
+                        <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,'_', bu:ontology/bu:membership/bu:referenceToUser/bu:firstName)}" alt="Photo of M.P" align="left"/>
                     </p>
                     <div class="block">
                         <span class="labels">id:</span>

@@ -205,13 +205,15 @@ div#doc-downloads {
     font-weight: normal;
     text-decoration: none;
     cursor:pointer;
-    float:left;
  }
- .list-active {
-    color: #494949;
- } 
- .list-inactive {
+ .sub-toggler {
+    text-align: right;
+ }
+ .list-dot {
     color: #AAAAA9;
+ } 
+ .list-dot.current {
+    color: #494949;
  }  
  .search-bar {
     float:right;  
@@ -800,7 +802,11 @@ nav ul ul.mouseover ul {
 	left: 100%; 
 	top:0;
 }
+
 /*------------------------------*/
+.dhx_cal_event a {
+    color:#fff3a1;
+}
 
 #portal-breadcrumbs a {
     text-decoration: none;

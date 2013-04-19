@@ -406,6 +406,18 @@
             <subnavigation>questions</subnavigation>
             <action>rou:document-timeline</action>
         </route>
+        <route href="/lower_house/question-events">
+            <title>Business | Question Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/question-events">
+            <title>Business | Question Events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
         <route href="/lower_house/question-documents">
             <title>Business | Attachments</title>
             <navigation>/lower_house/business</navigation>
@@ -510,6 +522,18 @@
             <subnavigation>motions</subnavigation>
             <action>rou:document-timeline</action>
         </route>
+        <route href="/lower_house/motion-events">
+            <title>Business | Motion Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/motion-events">
+            <title>Business | Motion Events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
         <route href="/lower_house/motion-documents">
             <title>Business | Motion</title>
             <navigation>/lower_house/business</navigation>
@@ -610,6 +634,18 @@
         </route>
         <route href="/higher_house/tableddocument-timeline">
             <title>Business | Tabled document</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/lower_house/tableddocument-events">
+            <title>Business | Tabled document Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/tableddocument-events">
+            <title>Business | Tabled document Events</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
             <action>rou:document-timeline</action>
@@ -1267,6 +1303,13 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="question-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/events.xsl</xsl>
+            </view>
             <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="question-documents" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -1321,6 +1364,13 @@
                 </title>
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="motion-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/events.xsl</xsl>
             </view>
             <view path="motion-version">
                 <template>xml/version.xml</template>
@@ -1380,6 +1430,13 @@
                 </title>
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="tableddocument-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/events.xsl</xsl>
             </view>
             <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="tableddocument-documents" tag="tab">
                 <title>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -313,13 +313,22 @@
                             </li>
                             <xsl:for-each select="bu:scheduleItem">
                                 <xsl:variable name="subDocIdentifier" select="bu:sourceItem/bu:refersTo/@href"/>
-                                <li>
-                                    <xsl:variable name="doc-type" select="bu:sourceItem/bu:refersTo/bu:type/bu:value"/>
-                                    <xsl:variable name="eventOf" select="bu:sourceItem/bu:eventOf/bu:type/bu:value"/>
-                                    <a class="truncate" href="{$chamber}/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
-                                        <xsl:value-of select="bu:title"/>
-                                    </a>
-                                </li>
+                                <xsl:choose>
+                                    <xsl:when test="bu:sourceItem/bu:refersTo/bu:type/bu:value eq 'NOT_FOUND'">
+                                        <li>
+                                            <xsl:value-of select="bu:title"/>
+                                        </li>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <li>
+                                            <xsl:variable name="doc-type" select="bu:sourceItem/bu:refersTo/bu:type/bu:value"/>
+                                            <xsl:variable name="eventOf" select="bu:sourceItem/bu:eventOf/bu:type/bu:value"/>
+                                            <a class="truncate" href="{$chamber}/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                                <xsl:value-of select="bu:title"/>
+                                            </a>
+                                        </li>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:for-each>
                         </ul>
                     </xsl:when>

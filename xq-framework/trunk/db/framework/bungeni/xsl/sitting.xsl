@@ -25,7 +25,7 @@
             <div id="title-holder">
                 <h1 class="title">
                     <i18n:text key="Sitting">Sitting(nt)</i18n:text>:&#160;                  
-                    <xsl:value-of select="bu:ontology/bu:chamber/bu:shortName"/>
+                    <xsl:value-of select="bu:ontology/bu:sitting/bu:shortName"/>
                     -&#160;<xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/@showAs) then                          data(bu:ontology/bu:sitting/bu:activityType/@showAs) else                          bu:ontology/bu:sitting/bu:activityType/bu:value"/>                      
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
@@ -36,34 +36,34 @@
                         <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
                     </h3>
                     <h4 id="doc-item-desc" class="doc-headers">
-                        <xsl:value-of select="bu:ontology/bu:chamber/bu:shortName"/>
+                        <xsl:value-of select="bu:ontology/bu:sitting/bu:shortName"/>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
                         <i18n:text key="sitting-activity">sitting activity(nt)</i18n:text>: <i>
-                            <xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/bu:value/@showAs) then                                  data(bu:ontology/bu:sitting/bu:activityType/bu:value/@showAs) else                                  bu:ontology/bu:sitting/bu:activityType/bu:value"/>
+                            <xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/@showAs) then                                  data(bu:ontology/bu:sitting/bu:activityType/@showAs) else                                  bu:ontology/bu:sitting/bu:activityType/bu:value"/>
                         </i>
                     </h4>
                     <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
                         <i18n:text key="sitting-convocation">sitting convocation(nt)</i18n:text>: <i>
-                            <xsl:value-of select="if (bu:ontology/bu:sitting/bu:convocationType/bu:value/@showAs) then                                  data(bu:ontology/bu:sitting/bu:convocationType/bu:value/@showAs) else                                  bu:ontology/bu:sitting/bu:convocationType/bu:value"/>
+                            <xsl:value-of select="if (bu:ontology/bu:sitting/bu:convocationType/@showAs) then                                  data(bu:ontology/bu:sitting/bu:convocationType/@showAs) else                                  bu:ontology/bu:sitting/bu:convocationType/bu:value"/>
                         </i>
                     </h4>
-                    <h4 class="doc-status">
+                    <div class="txt-center">
                         <span>
                             <b class="camel-txt">
-                                <i18n:text key="sitting-venue">Venue(nt)</i18n:text>:</b>
+                                <i18n:text key="sitting-venue">Venue(nt)</i18n:text>:</b>&#160;
                         </span>
                         <span>
                             <xsl:value-of select="bu:ontology/bu:sitting/bu:venue/bu:shortName"/>
                         </span>
                         <span>
-                            <b class="camel-txt">
-                                <i18n:text key="date-on">Type(nt)</i18n:text>:</b>
+                            &#160;<b class="camel-txt">
+                                <i18n:text key="date-on">Type(nt)</i18n:text>:</b>&#160;
                         </span>
                         <span>
                             <xsl:value-of select="format-dateTime(bu:ontology/bu:sitting/bu:startDate,$datetime-format,'en',(),())"/>
                         </span>
-                    </h4>
+                    </div>
                     <div id="doc-content-area">
                         <xsl:choose>
                             <xsl:when test="ref/bu:ontology">
@@ -89,12 +89,12 @@
                                                     </xsl:when>
                                                     <xsl:when test="$doc-type = 'Event'">
                                                         <xsl:variable name="event-href" select="bu:document/@uri"/>
-                                                        <a href="../bungeni/{lower-case($eventOf)}-event?uri={$event-href}">
+                                                        <a href="{lower-case($eventOf)}-event?uri={$event-href}">
                                                             <xsl:value-of select="bu:document/bu:title"/>
                                                         </a>
                                                     </xsl:when>
                                                     <xsl:otherwise>
-                                                        <a href="../bungeni/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                                        <a href="{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
                                                             <xsl:value-of select="bu:document/bu:title"/>
                                                         </a>
                                                     </xsl:otherwise>

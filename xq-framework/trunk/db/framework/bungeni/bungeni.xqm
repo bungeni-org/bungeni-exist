@@ -506,7 +506,7 @@ declare function bun:xqy-search-group() {
 declare function bun:xqy-list-membership($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology/bu:membership/bu:membershipType[bu:value eq 'member_of_parliament']",
+                "/bu:ontology/bu:membership/bu:docType[bu:value eq 'MemberOfParliament']",
                 "/ancestor::bu:ontology")
 };
 
@@ -515,7 +515,7 @@ declare function bun:xqy-list-membership-with-tabs($chamber as xs:string?, $type
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology/bu:membership[bu:origin/bu:identifier eq '",$chamber,"' and ",$status,"]",
-                "/bu:membershipType[bu:value eq 'member_of_parliament']",
+                "/bu:docType[bu:value eq 'MemberOfParliament']",
                 "/ancestor::bu:ontology")
 };
 
@@ -2219,7 +2219,7 @@ declare function bun:get-sittings(
         <alisting>
         {
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'],$offset,$limit)
-                order by $match/bu:legislature/bu:statusDate descending
+                order by $match/bu:sitting/bu:statusDate descending
                 return 
                     local:get-sitting-items($match)
         } 
@@ -2641,7 +2641,7 @@ declare function local:get-sitting-items($sittingdoc as node()?) {
             {
                 for $eachitem in $sittingdoc/bu:sitting/bu:scheduleItems/bu:scheduleItem
                 return 
-                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq data($eachitem/bu:sourceItem/bu:refersTo/@href)]/ancestor::bu:ontology
+                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq data($eachitem/bu:sourceItem/bu:refersTo/@href)]/ancestor::bu:ontology
             }
         </ref>
     </doc>     
@@ -3179,8 +3179,8 @@ declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node(
         <ref>
         {
             for $match in collection(cmn:get-lex-db())/bu:ontology[@for='sitting']
-            where data($match/bu:chamber/bu:group/@href) eq data($docitem/bu:group/@uri)
-            order by $match/bu:chamber/bu:statusDate descending
+            where data($match/bu:sitting/bu:sittingOf/bu:refersTo/@href) eq data($docitem/bu:group/@uri)
+            order by $match/bu:sitting/bu:statusDate descending
             return 
                 $match   
         }
@@ -3286,7 +3286,7 @@ declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews 
                 let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}
                 let $changes := for $change in $docitem//bu:changes/child::* return element timeline { attribute id {$change/@id }, element bu:chronoTime { $change/bu:activeDate/text() }, $change/child::*}                
                 
-                for $eachitem in ($wfevents, $audits, $changes) 
+                for $eachitem in ($wfevents, $audits) 
                 where $eachitem/bu:chronoTime/text() ne ""
                 order by $eachitem/bu:chronoTime descending
                 return $eachitem   

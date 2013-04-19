@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -51,14 +51,14 @@
                     </div>
                     <ul id="list-toggle" class="ls-row clear">
                         <xsl:for-each select="ref/bu:ontology">
-                            <xsl:sort select="bu:legislature/bu:statusDate" order="descending"/>
+                            <xsl:sort select="bu:sitting/bu:statusDate" order="descending"/>
                             <li>
-                                <a href="{$chamber}/sitting?uri={bu:groupsitting/@uri}" title="{bu:legislature/bu:group/bu:combinedName}">
-                                    <xsl:value-of select="bu:legislature/bu:shortName"/>
+                                <a href="{$chamber}/sitting?uri={bu:sitting/@uri}" title="{bu:legislature/bu:group/bu:combinedName}">
+                                    <xsl:value-of select="bu:sitting/bu:shortName"/>
                                 </a>
-                                <div class="struct-ib">/ <xsl:value-of select="bu:groupsitting/bu:meetingType"/>
+                                <div class="struct-ib">/ <xsl:value-of select="bu:sitting/bu:meetingType"/>
                                 </div>
-                                <div class="struct-ib">/ <xsl:value-of select="bu:groupsitting/bu:activityType/bu:value/@showAs"/>
+                                <div class="struct-ib">/ <xsl:value-of select="bu:sitting/bu:activityType/@showAs"/>
                                 </div>
                                 <span class="tgl-pad-right">▼</span>
                                 <div class="doc-toggle">
@@ -67,21 +67,21 @@
                                             <span class="labels">
                                                 <i18n:text key="Start Date">start date(nt)</i18n:text>:</span>
                                             <span>
-                                                <xsl:value-of select="format-dateTime(bu:groupsitting/bu:startDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                                <xsl:value-of select="format-dateTime(bu:sitting/bu:startDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                             </span>
                                         </div>
                                         <div class="block">
                                             <span class="labels">
                                                 <i18n:text key="End Date">end date(nt)</i18n:text>:</span>
                                             <span>
-                                                <xsl:value-of select="format-dateTime(bu:groupsitting/bu:endDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                                <xsl:value-of select="format-dateTime(bu:sitting/bu:endDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                             </span>
                                         </div>
                                         <div class="block">
                                             <span class="labels">
                                                 <i18n:text key="Convocation Type">convocation type(nt)</i18n:text>:</span>
                                             <span>
-                                                <xsl:value-of select="bu:groupsitting/bu:convocationType/bu:value/@showAs"/>
+                                                <xsl:value-of select="bu:sitting/bu:convocationType/@showAs"/>
                                             </span>
                                         </div>
                                     </div>

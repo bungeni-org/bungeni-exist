@@ -290,6 +290,18 @@
             <subnavigation>bills</subnavigation>
             <action>rou:document-timeline</action>
         </route>
+        <route href="/lower_house/bill-events">
+            <title>Business | Bill Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/bill-events">
+            <title>Business | Bill Events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
         <route href="/lower_house/bill-documents">
             <title>Business | Bill</title>
             <navigation>/lower_house/business</navigation>
@@ -1089,7 +1101,7 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/committee.xsl</xsl>
             </view>
-            <view check-for="[bu:member/bu:membershipType[bu:value eq 'committee_member']/child::node()]" id="members" path="committee-members" tag="tab">
+            <view check-for="[bu:member/bu:type[bu:value eq 'committee_member']/child::node()]" id="members" path="committee-members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
@@ -1103,7 +1115,7 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/comm-sittings.xsl</xsl>
             </view>
-            <view check-for="[bu:member/bu:membershipType[bu:value eq 'committee_staff']/child::node()]" id="staff" path="committee-staff" tag="tab">
+            <view check-for="[bu:member/bu:type[bu:value eq 'committee_staff']/child::node()]" id="staff" path="committee-staff" tag="tab">
                 <title>
                     <i18n:text key="tab-staff">staff(nt)</i18n:text>
                 </title>
@@ -1192,6 +1204,13 @@
                 </title>
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="bill-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/events.xsl</xsl>
             </view>
             <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="bill-documents" tag="tab">
                 <title>

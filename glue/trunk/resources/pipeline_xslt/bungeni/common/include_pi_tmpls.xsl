@@ -72,7 +72,7 @@
     </xsl:template>
     
 
-    <xsl:template match="field[@name='audit_id'][parent::audit]">
+    <xsl:template match="field[@name='audit_id'][parent::audit] | field[@name='audit_id'][parent::change[parent::changes]] | field[@name='audit_id'][parent::version]">
         <xsl:call-template name="renderIntegerElement">
             <xsl:with-param name="elementName">auditId</xsl:with-param>
         </xsl:call-template>   

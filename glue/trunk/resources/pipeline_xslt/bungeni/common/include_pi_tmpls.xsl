@@ -3,9 +3,11 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:bdates="http://www.bungeni.org/xml/dates/1.0"
     xmlns:bctypes="http://www.bungeni.org/xml/contenttypes/1.0"
+    xmlns:bstrings="http://www.bungeni.org/xml/strings/1.0"
     exclude-result-prefixes="xs"
     version="2.0">
     <xsl:import href="func_content_types.xsl" />
+    <xsl:import href="func_strings.xsl" />
     <xsl:import href="include_tmpls.xsl"/>
     
     
@@ -52,7 +54,22 @@
         </auditAction>
     </xsl:template>
     
+    <xsl:template match="change[parent::audit]">
+        <xsl:apply-templates />
+    </xsl:template>
     
+    <!-- generic matcher for extended fields -->
+    <xsl:template match="*[starts-with(name(), '_vp_')]">
+        <xsl:variable name="ext-field-value" select="data(field[@name='value'])" />
+        <xsl:variable name="ext-field-name" select="data(field[@name='name'])" />
+       <xsl:variable name="ccase-name" select="bstrings:uscorename-to-camel-case($ext-field-name)" />
+        <xsl:element name="{$ccase-name}">
+            <xsl:attribute name="type">xs:string</xsl:attribute>
+            <xsl:value-of select="$ext-field-value" />
+        </xsl:element>
+    </xsl:template>
+    
+
     <xsl:template match="field[@name='audit_id']">
         <xsl:call-template name="renderIntegerElement">
             <xsl:with-param name="elementName">auditId</xsl:with-param>

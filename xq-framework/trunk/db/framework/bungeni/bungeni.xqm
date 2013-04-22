@@ -3283,8 +3283,7 @@ declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews 
                 : !+FIX_THIS (ao, 8th Aug 2012) workflowEvents dont have permissions with them...
                 : currently using 'internal' to hide them from anonymous :)
                 let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, element bu:chronoTime { $event/bu:statusDate/text() }, $event/child::*}
-                let $audits := for $audit in $docitem//bu:audits/child::*[bu:status/bu:value ne 'draft'][bu:status/bu:value ne 'working_draft'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}
-                let $changes := for $change in $docitem//bu:changes/child::* return element timeline { attribute id {$change/@id }, element bu:chronoTime { $change/bu:activeDate/text() }, $change/child::*}                
+                let $audits := for $audit in $docitem/bu:document/bu:audits/child::*[bu:auditAction/bu:value eq 'workflow'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}             
                 
                 for $eachitem in ($wfevents, $audits) 
                 where $eachitem/bu:chronoTime/text() ne ""
@@ -3460,21 +3459,26 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
         Bungeni DB everytime, the doc_id is initialized. Since postTransform uses the parent bu:docId in the 
         event document to find the parent doc, chances are it could find more than two documents in the 
         collection and perform PostTransform on them...
-    
+        !+FIXED (ao, 22 Apr 2013) PosTransform is no longer done on Events 
     :)
-    let $docitem := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid][1]/ancestor::bu:ontology
+    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid]/ancestor::bu:ontology
+    let $foundevent := if($match) then true() else false()
     
+    let $docitem := if(not($foundevent)) then (
+                        document { bun:documentitem-full-acl('public-view', $eventid) } 
+                     )
+                     else (
+                        let $acl-filter := cmn:get-acl-permission-as-node('Event','public-view')
+                        return bun:treewalker-acl($acl-filter, document {$match})
+                     )
+                        
+    let $latest := if(not($foundevent)) then max($docitem/bu:ontology/bu:document//bu:workflowEvents/bu:workflowEvent/bu:docId) else ()             
+    let $currenturi := if(not($foundevent)) then data($docitem/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:docId = $latest]/@href) else $eventid
+                        
     let $doc := <doc>      
             { $docitem }
-            <ref>
-            {
-                let $uri := data(if ($docitem/bu:document/@uri) then ($docitem/bu:document/@uri) else ($docitem/bu:document/@internal-uri) )
-                let $acl-filter := cmn:get-acl-permission-as-attr('Event','public-view')
-                return
-                    bun:xqy-list-events-with-acl($uri, $acl-filter)           
-            }            
-            </ref>
-            <event>{$eventid}</event>
+            <ref/>
+            <event>{$currenturi}</event>
         </doc>  
     
     return
@@ -3482,7 +3486,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
                             $stylesheet, 
                             <parameters>
                                 <param name="version" value="true" />
-                                <param name="event-uri" value="$eventid" />
+                                <param name="event-uri" value="$currenturi" />
                             </parameters>)
 };
 

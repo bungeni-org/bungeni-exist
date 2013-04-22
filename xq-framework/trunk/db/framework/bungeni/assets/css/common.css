@@ -68,6 +68,12 @@ div#main-wrapper {
     font: bold 50px 'Times New Roman',serif;
 }
 
+.medium-dbl-arrow {
+    float:left;
+    line-height: 18px !important;
+    font: bold 40px 'Times New Roman',serif;
+}
+
 h1.title {
     text-shadow: 0px 1px 0px #c1c1c0;
     font-weight:normal;
@@ -229,6 +235,14 @@ div#doc-downloads {
 }
 .hide {
     display:none;
+}
+
+.doc-views-section {
+    margin:0 auto;
+    margin-bottom:5px;
+    height:22px;
+    width:97%;
+    background-color:#dedede;
 }
 
 .version-align {

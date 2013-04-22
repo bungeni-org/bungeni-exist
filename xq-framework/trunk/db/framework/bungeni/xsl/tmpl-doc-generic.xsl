@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -80,8 +80,6 @@
             </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <!-- Document Emblem -->
-                    <xsl:call-template name="doc-item-emblem"/>                    
                     <!-- If there is a versions node in this document, there are
                         rendered at this juncture -->
                     <xsl:call-template name="doc-item-versions">
@@ -89,7 +87,10 @@
                         <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
                         <xsl:with-param name="doc-uri" select="$doc-uri"/>
                         <xsl:with-param name="chamber" select="$chamber"/>
-                    </xsl:call-template>
+                    </xsl:call-template>                    
+
+                    <!-- Document Emblem -->
+                    <xsl:call-template name="doc-item-emblem"/>                    
                     <!-- The header information on the documents -->
                     <xsl:call-template name="doc-item-preface">
                         <xsl:with-param name="doc-type" select="$doc-type"/>
@@ -141,31 +142,31 @@
         <xsl:param name="doc-uri"/>
         <xsl:param name="chamber"/>
         <xsl:if test="$version eq 'true'">
-            <div class="rounded-eigh tab_container hanging-menu">
-                <ul class="doc-versions">
-                    <li>
-                        <a href="{$chamber}/{$doc-type}-text?uri={$doc-uri}">current</a>
-                    </li>
-                    <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
-                    <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
-                        <xsl:sort select="bu:statusDate" order="descending"/>
-                        <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
-                        <li>
-                            <xsl:choose>
-                                            <!-- if current URI is equal to this versions URI -->
-                                <xsl:when test="$ver-uri eq @uri">
-                                    <span>version-<xsl:value-of select="$cur_pos"/>
-                                    </span>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <a href="{$chamber}/{lower-case($doc-type)}-version/text?uri={@uri}">
-                                                    Version-<xsl:value-of select="$cur_pos"/>
-                                    </a>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </li>
-                    </xsl:for-each>
-                </ul>
+            <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
+            <div class="doc-views-section">
+                <form onsubmit="redirectTo();">
+                    <label for="versionText" class="inline">
+                        There are <xsl:value-of select="$total_versions"/> versions:
+                    </label>
+                    <div class="inline">
+                        <select name="uri" id="versionText">
+                            <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
+                                <xsl:sort select="bu:statusDate" order="descending"/>
+                                <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
+                                <option value="{@uri}">
+                                    <xsl:if test="$ver-uri eq @uri">
+                                        <!-- if current URI is equal to this versions URI -->
+                                        <xsl:attribute name="selected">selected</xsl:attribute>
+                                    </xsl:if>
+                                    <xsl:value-of select="concat(bu:title,' (',format-dateTime(bu:statusDate,$datetime-format,'en',(),()),')')"/>
+                                </option>
+                            </xsl:for-each>
+                        </select>
+                    </div>
+                    <div class="inline">
+                        <input type="submit" name="submit" id="submit" value="Go"/>
+                    </div>
+                </form>
             </div>
         </xsl:if>
     </xsl:template>

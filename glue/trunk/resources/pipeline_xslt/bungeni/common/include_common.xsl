@@ -135,9 +135,42 @@
     </xsl:template>
     
     <xsl:template match="permission">
+        <xsl:variable name="bungeni-content-type" >
+            <xsl:choose>
+                <xsl:when test="parent::permissions[parent::document]">
+                    <xsl:value-of select="data(//custom/bungeni_doc_type)" />     
+                </xsl:when>
+                <xsl:when test="parent::permissions[parent::signatory]">
+                    <xsl:value-of select="string('signatory')" />
+                </xsl:when>
+                <xsl:when test="parent::permissions[parent::member] | parent::permissions[parent::user] | parent::permissions[parent::owner]">
+                    <xsl:value-of select="string('user')" />
+                </xsl:when>
+                <xsl:when test="parent::permissions[parent::item_signatorie]">
+                    <xsl:value-of select="string('signatory')" />
+                </xsl:when>
+                
+                <xsl:when test="parent::permissions[parent::sa_event]">
+                    <xsl:value-of select="parent::permissions/parent::sa_event/field[@name='type']"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="concat('NOT_FOUND',name(parent::permissions/parent::node()))"></xsl:value-of>                    
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="render-permission">
+            <xsl:with-param name="bungeni-content-type" select="$bungeni-content-type" />
+          </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template name="render-permission">
+        <xsl:param name="bungeni-content-type"></xsl:param>
+        <!-- debug
+        <found><xsl:value-of select="$bungeni-content-type"></xsl:value-of></found>
+        -->
+        <!--
         <xsl:variable name="bungeni-content-type" select="data(//custom/bungeni_doc_type)" />
-        <xsl:variable name="content-type-uri-name" select="data(/ontology/document/docType[@isA='TLCTerm']/value)" />
-        
+        -->
         <xsl:variable name="perm-content-type-view" select="concat('bungeni.',$bungeni-content-type,'.View')" />
         <xsl:variable name="perm-content-type-edit" select="concat('bungeni.',$bungeni-content-type,'.View')" />
         <!--

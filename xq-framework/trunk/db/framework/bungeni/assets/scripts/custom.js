@@ -229,6 +229,10 @@ $(document).ready(function () {
          $(this).closest('form').trigger('submit');
     });	
     
+    function redirectTo() {
+        return false;
+    }    
+    
     /*
 	$(".tab_content").hide(); //Hide all content
 	$("ul.tabbernav li:first").addClass("active").show(); //Activate first tab

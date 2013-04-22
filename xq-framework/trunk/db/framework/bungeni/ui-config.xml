@@ -294,13 +294,13 @@
             <title>Business | Bill Events</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/bill-events">
             <title>Business | Bill Events</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/bill-documents">
             <title>Business | Bill</title>
@@ -325,18 +325,6 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
             <action>rou:version-documents</action>
-        </route>
-        <route href="/lower_house/bill-event">
-            <title>Business | Bill Event</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>bills</subnavigation>
-            <action>rou:document-event</action>
-        </route>
-        <route href="/higher_house/bill-event">
-            <title>Business | Bill Event</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>bills</subnavigation>
-            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/bill-attachment">
             <title>Business | Bill Attachment</title>
@@ -410,13 +398,13 @@
             <title>Business | Question Events</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/question-events">
             <title>Business | Question Events</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/question-documents">
             <title>Business | Attachments</title>
@@ -441,18 +429,6 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
             <action>rou:version-documents</action>
-        </route>
-        <route href="/lower_house/question-event">
-            <title>Business | Question Event</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>questions</subnavigation>
-            <action>rou:document-event</action>
-        </route>
-        <route href="/higher_house/question-event">
-            <title>Business | Question Event</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>questions</subnavigation>
-            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/question-attachment">
             <title>Business | Question Attachment</title>
@@ -526,13 +502,13 @@
             <title>Business | Motion Events</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/motion-events">
             <title>Business | Motion Events</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/motion-documents">
             <title>Business | Motion</title>
@@ -557,18 +533,6 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
             <action>rou:version-documents</action>
-        </route>
-        <route href="/lower_house/motion-event">
-            <title>Business | Motion Event</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>motions</subnavigation>
-            <action>rou:document-event</action>
-        </route>
-        <route href="/higher_house/motion-event">
-            <title>Business | Motion Event</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>motions</subnavigation>
-            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/motion-attachment">
             <title>Business | Motion Attachment</title>
@@ -642,13 +606,13 @@
             <title>Business | Tabled document Events</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/higher_house/tableddocument-events">
             <title>Business | Tabled document Events</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-timeline</action>
+            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/tableddocument-documents">
             <title>Business | Tabled document</title>
@@ -673,18 +637,6 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
             <action>rou:version-documents</action>
-        </route>
-        <route href="/lower_house/tableddocument-event">
-            <title>Business | Tabled document Event</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-event</action>
-        </route>
-        <route href="/higher_house/tableddocument-event">
-            <title>Business | Tabled document Event</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-event</action>
         </route>
         <route href="/lower_house/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
@@ -1246,7 +1198,7 @@
                     <i18n:text key="tab-events">events(nt)</i18n:text>
                 </title>
                 <template>xml/changes.xml</template>
-                <xsl>xsl/events.xsl</xsl>
+                <xsl>xsl/event.xsl</xsl>
             </view>
             <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="bill-documents" tag="tab">
                 <title>
@@ -1254,10 +1206,6 @@
                 </title>
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
-            </view>
-            <view path="bill-event">
-                <template>xml/documents.xml</template>
-                <xsl>xsl/event.xsl</xsl>
             </view>
             <view path="bill-attachment">
                 <template>xml/documents.xml</template>
@@ -1308,7 +1256,7 @@
                     <i18n:text key="tab-events">events(nt)</i18n:text>
                 </title>
                 <template>xml/changes.xml</template>
-                <xsl>xsl/events.xsl</xsl>
+                <xsl>xsl/event.xsl</xsl>
             </view>
             <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="question-documents" tag="tab">
                 <title>
@@ -1316,10 +1264,6 @@
                 </title>
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
-            </view>
-            <view path="question-event">
-                <template>xml/documents.xml</template>
-                <xsl>xsl/event.xsl</xsl>
             </view>
             <view path="question-attachment">
                 <template>xml/documents.xml</template>
@@ -1370,7 +1314,7 @@
                     <i18n:text key="tab-events">events(nt)</i18n:text>
                 </title>
                 <template>xml/changes.xml</template>
-                <xsl>xsl/events.xsl</xsl>
+                <xsl>xsl/event.xsl</xsl>
             </view>
             <view path="motion-version">
                 <template>xml/version.xml</template>
@@ -1382,10 +1326,6 @@
                 </title>
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
-            </view>
-            <view path="motion-event">
-                <template>xml/documents.xml</template>
-                <xsl>xsl/event.xsl</xsl>
             </view>
             <view path="motion-attachment">
                 <template>xml/documents.xml</template>
@@ -1436,7 +1376,7 @@
                     <i18n:text key="tab-events">events(nt)</i18n:text>
                 </title>
                 <template>xml/changes.xml</template>
-                <xsl>xsl/events.xsl</xsl>
+                <xsl>xsl/event.xsl</xsl>
             </view>
             <view check-for="[bu:versions/child::node() or bu:workflowEvents/child::node() or bu:attachments/child::node()]" id="attachments" path="tableddocument-documents" tag="tab">
                 <title>
@@ -1448,10 +1388,6 @@
             <view path="tableddocument-version">
                 <template>xml/version.xml</template>
                 <xsl>xsl/version.xsl</xsl>
-            </view>
-            <view path="tableddocument-event">
-                <template>xml/documents.xml</template>
-                <xsl>xsl/event.xsl</xsl>
             </view>
             <view path="tableddocument-attachment">
                 <template>xml/documents.xml</template>

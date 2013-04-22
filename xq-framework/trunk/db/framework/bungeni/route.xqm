@@ -333,7 +333,7 @@ declare function rou:document-documents($CONTROLLER-DOC as node()) {
 
 declare function rou:document-event($CONTROLLER-DOC as node()) {
 
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))  
+    let $docnumber := xs:string(request:get-parameter("uri",''))  
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
     let $act-entries-tmpl :=  bun:get-doc-event($docnumber,$parts)
     let $act-entries-repl := document {

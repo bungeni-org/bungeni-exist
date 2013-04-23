@@ -1969,7 +1969,7 @@ declare function local:rewrite-advanced-search-form($CONTROLLER-DOC as node()?, 
 : @return
 :   A qualified atom feed limited to 10 items
 :)
-declare function bun:get-atom-feed(
+declare function bun:get-documents-feed(
             $controller as node()?,
             $acl as xs:string, 
             $doctype as xs:string, 
@@ -1991,6 +1991,64 @@ declare function bun:get-atom-feed(
         <link rel="self" href="{$server-path}/{$chamber}/bills/rss" />
        {
             for $i in subsequence(bun:list-documentitems-with-acl($chamber-id,$acl, $doctype),0,10)
+            order by $i/bu:document/bu:statusDate descending
+            (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
+            return 
+            (   <entry>
+                    <id>{data($i/bu:document/@uri)}</id>
+                    <title>{$i/bu:document/bu:title/node()}</title>
+                    {
+                       <summary> 
+                       {
+                           $i/bu:document/@type,
+                           $i/bu:document/bu:title/node()
+                       }
+                       </summary>,
+                       if ($outputtype = 'user')  then (
+                            <link rel="alternate" type="application/xhtml" href="{$server-path}/{$chamber}/{lower-case($doctype)}-text?uri={$i/bu:document/@uri}"/>
+                        )  (: "service" output :)
+                        else (
+                            <link rel="alternate" type="application/xml" href="{$server-path}/{$chamber}/{lower-case($doctype)}-xml?uri={$i/bu:document/@uri}"/>
+                        )  
+                    }
+                    <content type='html'>{$i/bu:document/bu:body/node()}</content>
+                    <published>{$i/bu:document/bu:publicationDate/node()}</published>
+                    <updated>{$i/bu:document/bu:statusDate/node()}</updated>                           
+                </entry>
+            )
+       }
+    </feed>
+    
+    return 
+        $feed
+};
+
+(:~
+:   Generates Atom FEED for Bungeni Sittings.
+:    
+: @param outputtype
+:   Can either be a "user" or "service" request.
+: @return
+:   A qualified atom feed limited to 10 items
+:)
+declare function bun:get-sittings-feed($controller as node()?, $outputtype as xs:string) as element() {
+    util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
+    
+    let $chamber-id := $controller/parliament/identifier/text()
+    let $chamber := $controller/parliament/type/text()   
+    let $chamber-name := data($controller/parliament/type/@displayAs)   
+    let $server-path := $bun:SERVER-URL || $controller/exist-cont/text()
+    
+    let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
+        <title>{concat($chamber-name, " ", upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>
+        <id>http://portal.bungeni.org/1.0/</id>
+        <updated>{current-dateTime()}</updated>
+        <generator uri="http://sourceforge.net/projects/exist/" version="2.0">eXist XML Database</generator>      
+        <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
+        <link rel="self" href="{$server-path}/{$chamber}/bills/rss" />
+       {
+            for $i in subsequence(collection(cmn:get-lex-db())/bu:ontology/bu:sitting,0,10)
+            
             order by $i/bu:document/bu:statusDate descending
             (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
             return 
@@ -3405,18 +3463,23 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
 :
 : @stylesheet [document-type]/version/text e.g question/version/text
 :)
-declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $parts as node()) as element()* {
-    
-    let $doc-uri := xps:substring-before($version-uri, "@")
-    let $acl-permissions := cmn:get-acl-permissions($acl)
+declare function bun:get-doc-version($acl as xs:string, $uri as xs:string, $parts as node()) as element()* {
     
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($parts/xsl)
+    let $stylesheet := cmn:get-xslt($parts/xsl)    
+    
+    let $parent-uri := xps:substring-before($uri, "@")
+    let $foundversions := if($parent-uri) then true() else false()
+    let $doc-uri := if($foundversions) then $parent-uri else $uri
+    
+    let $docitem := bun:documentitem-full-acl($acl, $doc-uri)
+    
+    let $latest := if(not($foundversions)) then max($docitem/bu:document/bu:versions/bu:version/bu:auditId) else ()
+    let $currenturi := if(not($foundversions)) then data($docitem/bu:document/bu:versions/bu:version[bu:auditId = $latest]/@uri) else $uri
     
     let $doc := <doc>
-                    {bun:documentitem-full-acl($acl, $doc-uri)}
+                    {$docitem}
                     <ref/>
-                    <version>{$version-uri}</version>
                 </doc>   
     
     return
@@ -3424,6 +3487,7 @@ declare function bun:get-doc-ver($acl as xs:string, $version-uri as xs:string, $
                             $stylesheet, 
                             <parameters>
                                 <param name="version" value="true" />
+                                <param name="version-uri" value="{$currenturi}" />
                             </parameters>)
 };
 
@@ -3454,13 +3518,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    (:
-        !+FIX_THIS (ao, 23 Aug 2012) Added ...$eventid][1] in the xquery below because in tests where one resets 
-        Bungeni DB everytime, the doc_id is initialized. Since postTransform uses the parent bu:docId in the 
-        event document to find the parent doc, chances are it could find more than two documents in the 
-        collection and perform PostTransform on them...
-        !+FIXED (ao, 22 Apr 2013) PosTransform is no longer done on Events 
-    :)
+
     let $match := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid]/ancestor::bu:ontology
     let $foundevent := if($match) then true() else false()
     
@@ -3474,7 +3532,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
                         
     let $latest := if(not($foundevent)) then max($docitem/bu:ontology/bu:document//bu:workflowEvents/bu:workflowEvent/bu:docId) else ()             
     let $currenturi := if(not($foundevent)) then data($docitem/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:docId = $latest]/@href) else $eventid
-                        
+          
     let $doc := <doc>      
             { $docitem }
             <ref/>

@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
                 <xd:b>Created on:</xd:b> Nov 18, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Event for Parliamentary Document from Bungeni</xd:p>
+            <xd:p> Version for Parliamentary Document from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:param name="event-uri"/>
-    <xsl:param name="no-of-events"/>
+    <xsl:param name="version-uri"/>
     <xsl:template match="doc">
-        <xsl:variable name="event-uri" select="event"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
         <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-uri">
@@ -36,26 +34,26 @@
                 </h1>
             </div>
             <!-- 
-               !+FIX_THIS (ao, 7th-May-2012) This can be enabled if we decide to have events on 
-               their own tab.
+                !+FIX_THIS (ao, 7th-May-2012) This can be enabled if we decide to have events on 
+                their own tab.
             -->
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
-                <xsl:with-param name="tab-path">events</xsl:with-param>
+                <xsl:with-param name="tab-path">versions</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <div id="doc-downloads"/>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <xsl:call-template name="doc-events">
-                        <xsl:with-param name="event-uri" select="$event-uri"/>
+                    <xsl:call-template name="doc-versions">
+                        <xsl:with-param name="version-uri" select="$version-uri"/>
                         <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
                         <xsl:with-param name="doc-uri" select="$doc-uri"/>
                         <xsl:with-param name="chamber" select="$chamber"/>
                     </xsl:call-template>
-                    <xsl:variable name="render-doc" select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href=$event-uri]"/>
+                    <xsl:variable name="render-doc" select="bu:ontology/bu:document/bu:versions/bu:version[@uri=$version-uri]"/>
                     <h3 id="doc-heading" class="doc-headers">
                         <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
                     </h3>
@@ -91,25 +89,25 @@
         </div>
     </xsl:template>
     
-    <!-- DOC-EVENTS -->
-    <xsl:template name="doc-events">
-        <xsl:param name="event-uri"/>
+    <!-- DOC-VERSIONS -->
+    <xsl:template name="doc-versions">
+        <xsl:param name="version-uri"/>
         <xsl:param name="doc-type"/>
         <xsl:param name="doc-uri"/>
         <xsl:param name="chamber"/>
-        <xsl:variable name="total_events" select="count(bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent)"/>
+        <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
         <div class="doc-views-section">
             <form onsubmit="redirectTo();">
                 <label for="eventText" class="inline">
-                    There are <xsl:value-of select="$total_events"/> events:
+                    There are <xsl:value-of select="$total_versions"/> versions:
                 </label>
                 <div class="inline">
                     <select name="uri" id="eventText">
-                        <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
+                        <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
                             <xsl:sort select="bu:statusDate" order="descending"/>
-                            <xsl:variable name="cur_pos" select="($total_events - position())+1"/>
-                            <option value="{@href}">
-                                <xsl:if test="$event-uri eq @href">
+                            <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
+                            <option value="{@uri}">
+                                <xsl:if test="$version-uri eq @uri">
                                     <!-- if current URI is equal to this versions URI -->
                                     <xsl:attribute name="selected">selected</xsl:attribute>
                                 </xsl:if>

@@ -381,7 +381,7 @@ declare function rou:version-text($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))       
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-doc-ver("public-view", $docnumber,$parts)
+    let $act-entries-tmpl :=  bun:get-doc-version("public-view", $docnumber,$parts)
     let $act-entries-repl:= document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     					 } 
@@ -398,28 +398,6 @@ declare function rou:version-text($CONTROLLER-DOC as node()) {
     	   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     	)
 
-};
-
-declare function rou:version-documents($CONTROLLER-DOC as node()) {
-
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)) 
-    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-doc-ver("public-view", $docnumber,$parts)
-    let $act-entries-repl:= document {
-        					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
-        				 } 
-    return 
-        template:process-tmpl(
-    	   $CONTROLLER-DOC/rel-path, 
-    	   $CONTROLLER-DOC/exist-cont, 
-    	   $config:DEFAULT-TEMPLATE,
-           cmn:get-route($CONTROLLER-DOC/exist-path),
-            <route-override>
-                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                {$CONTROLLER-DOC/parliament}
-            </route-override>,
-           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
-        )
 };
 
 declare function rou:get-politicalgroups($CONTROLLER-DOC as node()) {
@@ -525,7 +503,16 @@ declare function rou:atom-rss($CONTROLLER-DOC as node()) {
 
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
     let $doc-type := data($parts/parent::node()/@name)
-    let $act-entries-tmpl :=  bun:get-atom-feed($CONTROLLER-DOC,"public-view", $doc-type,"user")
+    let $act-entries-tmpl :=  bun:get-documents-feed($CONTROLLER-DOC,"public-view", $doc-type,"user")
+    return 
+        $act-entries-tmpl        
+};
+
+declare function rou:sitting-rss($CONTROLLER-DOC as node()) {
+
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $doc-type := data($parts/parent::node()/@name)
+    let $act-entries-tmpl :=  bun:get-sittings-feed($CONTROLLER-DOC,"user")
     return 
         $act-entries-tmpl        
 };

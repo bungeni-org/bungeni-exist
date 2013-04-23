@@ -56,7 +56,6 @@ from configs import (
     __pipeline_configs_file,
     __type_mappings_file,
     __pipelines_file,
-    __logical_mappings_file,
     TransformerConfig,
     WebDavConfig,
     PoTranslationsConfig
@@ -271,13 +270,21 @@ def generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_c
         map_elem = __type_mapping_element_impl(name, enabled, map_str, logical_mappings) 
         if map_elem is not None:
             li_map_doc.append(map_elem)           
-    #!+HACK_ALERT(event)
+    #!+HACK_ALERT(event, doc)
     li_map_doc.append(map_str % ("event", "Event", "event"))
     li_map_doc.append("</value>")
     return ("\n".join(li_map_doc)).encode("UTF-8")
 
 def load_logical_mappings(cfg, parser_bungeni_types):
+    logical_mappings = {}
+    archetypes = parser_bungeni_types.get_nonbase_archetypes()
+    for type in archetypes:
+        name = type.attributeValue("name")
+        logical = type.attributeValue("archetype")
+        logical_mappings[name] = logical
+    return logical_mappings
     
+    """
     logical_mappings = {}
     parser_bungeni_types.doc_parse()
     ce_types = parser_bungeni_types.get_ce_types_map()
@@ -287,6 +294,7 @@ def load_logical_mappings(cfg, parser_bungeni_types):
         logical = ce_type.attributeValue(parser_bungeni_types.qname("ce", "type"))
         logical_mappings[name] = logical
     return logical_mappings
+    """
     
     '''
     map_parse = ParseLogicalTypesXML(__logical_mappings_file())
@@ -332,22 +340,28 @@ def types_all_config(config_file):
     return False    
 
 def __pipeline_element(type, parse_pipe_configs, map_str):
-    archetype_name = type.name
+    # get element name
+    base_type = type.name
+    print "archetype_Name XXXX ", base_type
     name = type.attributeValue("name")
     enabled = type.attributeValue("enabled")
     sub_archetype = type.attributeValue("archetype")
     if enabled == "true":
-        use_archetype = archetype_name
-        if sub_archetype is not None:
-            use_archetype = sub_archetype
+        #use_archetype = base_type
+        if sub_archetype is None:
+            sub_archetype = ""
+        #    use_archetype = sub_archetype
         #     <pipelineConfig for="doc" type="archetype" 
         #         pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" /> 
-        pipe_config = parse_pipe_configs.get_config_for(use_archetype)
+        pipe_config = parse_pipe_configs.get_config_for(base_type)
         # '   <pipeline for="%s" pipeline="%s" archetype="%s" />'
+        print "XXXX  VALS " , name, pipe_config.attributeValue("pipeline"), base_type
+
         return map_str % (
             name, 
-            pipe_config.attributeValue("pipeline"), 
-            use_archetype
+            pipe_config.attributeValue("pipeline"),
+            sub_archetype, 
+            base_type
         )
     else:
         return None
@@ -361,7 +375,7 @@ def generate_pipelines(config, parser_bungeni_types, parser_pipe_configs):
     li_pipe_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
     li_pipe_doc.append("<!-- AUTO GENERATED PIPELINE -->")
     li_pipe_doc.append("<pipelines>")
-    map_str = '   <pipeline for="%s" pipeline="%s" archetype="%s" />'
+    map_str = '   <pipeline for="%s" pipeline="%s" archetype="%s" basetype="%s" />'
     types = parser_bungeni_types.get_all()
     for type in types:
         pipe = __pipeline_element(type, parser_pipe_configs, map_str)
@@ -371,14 +385,14 @@ def generate_pipelines(config, parser_bungeni_types, parser_pipe_configs):
     for ipipe in parser_pipe_configs.get_config_internal():
         type = ipipe.attributeValue("for")
         pipeline = ipipe.attributeValue("pipeline")
-        pipe = map_str % (type, pipeline, type)
+        pipe = map_str % (type, pipeline, type, "")
         li_pipe_doc.append(pipe)
     #
     # !+HACK_ALERT (the below is purely a hack to account for the fact that the "event" type is inconsistently described in 
     # bungeni configuration. "event" is an archetype but is explicitly described via an attribute. Additionally when event
     # archetyped events get serialized, they get serialized with an "event" type instead of the specific type name !
     #
-    li_pipe_doc.append(map_str % ("event", parser_pipe_configs.get_config_for("event").attributeValue("pipeline"), "event"))    
+    li_pipe_doc.append(map_str % ("event", parser_pipe_configs.get_config_for("event").attributeValue("pipeline"), "event", "doc"))    
     li_pipe_doc.append("</pipelines>")
     return ("\n".join(li_pipe_doc)).encode("UTF-8")
 
@@ -955,7 +969,6 @@ if __name__ == "__main__":
       --synchronize - synchronizes with a xml db
       --upload - uploades to a xml db
     """
-    
     script_path = os.path.dirname(os.path.realpath(__file__))
     if (len(sys.argv) > 1):
         #from org.apache.log4j import PropertyConfigurator

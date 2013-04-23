@@ -111,17 +111,22 @@ class ParseBungeniTypesXML(ParseXML):
     
     def __init__(self, xml_path):
         super(ParseBungeniTypesXML, self).__init__(xml_path)
-        self.namespaces = {"ce": "http://bungeni.org/config_editor"}
-    
+        #self.namespaces = {"ce": "http://bungeni.org/config_editor"}
+   
+    def xpath_nonbase_archetypes(self):
+        return self.__global_path__ + "*[@archetype != 'doc' and @archetype != 'event']"
+   
+    """
     def qname(self, prefix, name):
         return QName(
             name, 
             Namespace(prefix, self.namespaces[prefix])
         )
-        
+    """
+    """    
     def xpath_ce_types(self):
-        return self.__global_path__ + "*[@ce:type]"
-    
+        return self.__global_path__ + "*[@type]"
+    """
     def xpath_doc_archetypes(self):
         return self.__global_path__ + "doc"
     
@@ -137,11 +142,12 @@ class ParseBungeniTypesXML(ParseXML):
     def xpath_all_archetypes(self):
         return self.__global_path__ + "*[ name() = 'doc' or name() = 'group' or name() = 'member' or name() = 'event' ]"
     
+    """
     def get_ce_types_map(self):
         xpath = self.doc_dom().createXPath(self.xpath_ce_types())
         xpath.setNamespaceURIs(self.namespaces)
         return xpath.selectNodes(self.doc_dom())
-        
+    """    
         
     def get_events(self):
         return self.doc_dom().selectNodes(self.xpath_event_archetypes())
@@ -155,6 +161,9 @@ class ParseBungeniTypesXML(ParseXML):
     def get_members(self):
         return self.doc_dom().selectNodes(self.xpath_member_archetypes())
     
+    def get_nonbase_archetypes(self):
+        return self.doc_dom().selectNodes(self.xpath_nonbase_archetypes())
+        
     def get_all(self):
         return self.doc_dom().selectNodes(self.xpath_all_archetypes())
 

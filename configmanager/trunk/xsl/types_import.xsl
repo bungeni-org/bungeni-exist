@@ -47,4 +47,25 @@
         </xsl:copy>
     </xsl:template>
     
+    
+    <xsl:template match="doc[not(@archetype)]">
+        <xsl:copy>
+            <xsl:copy-of select="@*[. ne '']"/>
+            <xsl:attribute name="archetype" select="string('doc')" />
+            <xsl:apply-templates />
+            
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="event[not(@archetype)]">
+        <xsl:copy>
+            <xsl:copy-of select="@*[. ne '']"/>
+            <xsl:attribute name="archetype" select="string('event')" />
+            <xsl:apply-templates />
+            
+        </xsl:copy>
+    </xsl:template>
+    
+    
+    
 </xsl:stylesheet>

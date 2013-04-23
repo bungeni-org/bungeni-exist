@@ -39,23 +39,6 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 <p>
                     Welcome to administrator panel for Bungeni XML Repository portal 
                 </p>
-
-                <p>
-                    <b>Introduction</b> - The Admin panel is based on <a href="http://www.betterform.de" target="_new">betterFORM</a>'s implementation 
-                    of <a href="http://www.w3.org/TR/xforms/" target="_new">XForms</a>. The Configuration document is 
-                    loaded on the browser for manipulation. On this arrangement, changes made 
-                    and applied need to be saved in order for the changes to take effect.
-                </p>      
-                <p>
-                    <b>apply changes</b> - saves any alterations made on the input fields unto loaded copy
-                    <br />
-                    <b>save document</b> - saves changes applied back to original document. clicking this
-                    ensures the all changes made and applied will now take effect on the application.
-                </p>  
-                <p>
-                    <b>Simplified sequence of actions</b> - [addition/alteration/edit/updates] &#8594; <i>apply changes</i> &#8594; <i>save changes</i>
-                </p>
-                
                 <p>
                     <b>MISC NOTES</b>
                 </p>

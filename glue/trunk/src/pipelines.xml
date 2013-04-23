@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- AUTO GENERATED PIPELINE -->
 <pipelines>
-   <pipeline for="agenda_item" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="assembly_bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="assembly_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="assembly_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="assembly_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="senate_bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="senate_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="senate_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="senate_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="report" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="bicameral_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="doc" />
-   <pipeline for="event_response" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" />
-   <pipeline for="office" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="office_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
-   <pipeline for="political_group" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="political_group_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
-   <pipeline for="committee" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="committee_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
-   <pipeline for="committee_staff" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
-   <pipeline for="joint_committee" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="government" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="ministry" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="minister" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
-   <pipeline for="parliament" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="group" />
-   <pipeline for="member_of_parliament" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="member" />
-   <pipeline for="address" pipeline="configfiles/configs/config_bungeni_address.xml" archetype="address" />
-   <pipeline for="sitting" pipeline="configfiles/configs/config_bungeni_sitting.xml" archetype="sitting" />
-   <pipeline for="user" pipeline="configfiles/configs/config_bungeni_user.xml" archetype="user" />
-   <pipeline for="event" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" />
+   <pipeline for="bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="agenda_item" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="assembly_bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="bill" basetype="doc" />
+   <pipeline for="assembly_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="motion" basetype="doc" />
+   <pipeline for="assembly_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="question" basetype="doc" />
+   <pipeline for="assembly_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="tabled_document" basetype="doc" />
+   <pipeline for="senate_bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="bill" basetype="doc" />
+   <pipeline for="senate_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="motion" basetype="doc" />
+   <pipeline for="senate_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="question" basetype="doc" />
+   <pipeline for="senate_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="tabled_document" basetype="doc" />
+   <pipeline for="report" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="bicameral_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="event_response" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
+   <pipeline for="office" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="office_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="political_group" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="political_group_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="committee" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="committee_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="committee_staff" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="joint_committee" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="government" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="ministry" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="minister" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="parliament" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="member_of_parliament" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="address" pipeline="configfiles/configs/config_bungeni_address.xml" archetype="address" basetype="" />
+   <pipeline for="sitting" pipeline="configfiles/configs/config_bungeni_sitting.xml" archetype="sitting" basetype="" />
+   <pipeline for="user" pipeline="configfiles/configs/config_bungeni_user.xml" archetype="user" basetype="" />
+   <pipeline for="event" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="doc" />
 </pipelines>

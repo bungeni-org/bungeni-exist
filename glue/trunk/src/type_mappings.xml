@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- AUTO GENERATED type mappings from bungeni to glue types -->
 <value>
+   <map from="bill" uri-name="Bill" element-name="bill" />
+   <map from="motion" uri-name="Motion" element-name="motion" />
+   <map from="question" uri-name="Question" element-name="question" />
+   <map from="tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
    <map from="agenda_item" uri-name="AgendaItem" element-name="agendaItem" />
    <map from="assembly_bill" uri-name="Bill" element-name="bill" />
    <map from="assembly_motion" uri-name="Motion" element-name="motion" />

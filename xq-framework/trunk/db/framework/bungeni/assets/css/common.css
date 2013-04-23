@@ -240,9 +240,13 @@ div#doc-downloads {
 .doc-views-section {
     margin:0 auto;
     margin-bottom:5px;
-    height:22px;
-    width:97%;
+    padding:4px 0;
+    height:auto;
+    width:96%;
     background-color:#dedede;
+}
+.doc-views-section form select {
+    width:60%;   
 }
 
 .version-align {

@@ -25,6 +25,9 @@
             <xsl:if test="not(@sort_dir)">
                 <xsl:attribute name="sort_dir"/>
             </xsl:if>
+            <xsl:if test="not(@name)">
+                <xsl:attribute name="name" select="replace(tokenize(base-uri(),'/')[last()], '.xml', '')" />
+            </xsl:if>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>

@@ -23,8 +23,10 @@
     </xsl:template>
     <xsl:template match="workflow">
         <xsl:copy>
+            <xsl:attribute name="name" select="replace(tokenize(base-uri(),'/')[last()], '.xml', '')" />
             <xsl:apply-templates select="@*" mode="preserve"/>
             <xsl:apply-templates select="@*|node()"/>
+            
         </xsl:copy>
     </xsl:template>
     <xsl:template match="allow[parent::facet] | deny[parent::facet]">

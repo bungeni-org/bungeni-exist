@@ -73,13 +73,16 @@
                                                 <xsl:when test="bu:auditFor/bu:value">
                                                     <i18n:text key="cate-document">document</i18n:text>
                                                 </xsl:when>
+                                                <xsl:when test="bu:auditAction/bu:value">
+                                                    <xsl:value-of select="bu:auditAction/bu:value"/>
+                                                </xsl:when>
                                                 <xsl:otherwise>
                                                     <xsl:value-of select="bu:type/bu:value"/>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </xsl:variable>
                                         <xsl:value-of select="format-dateTime(bu:chronoTime,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                        <div class="struct-ib">&#160;/ 
+                                        <div class="struct-ib truncate">&#160;/ 
                                             <xsl:value-of select="lower-case($timeline-type)"/> /
                                             <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:head/bu:type/bu:value"/>
                                             <xsl:variable name="doc-uri">
@@ -124,8 +127,20 @@
                                                 </xsl:when>
                                                 <xsl:when test="bu:auditAction/bu:value">
                                                     <span class="timeline-action">
-                                                        <xsl:value-of select="$show-status"/>
+                                                        <xsl:value-of select="$show-status"/>:
                                                     </span>
+                                                    <xsl:choose>
+                                                        <xsl:when test="bu:changeNote">
+                                                            <a href="{$chamber}/bill-versions?uri={@uri}">
+                                                                <xsl:value-of select="bu:changeNote"/>
+                                                            </a>
+                                                        </xsl:when>
+                                                        <xsl:otherwise>
+                                                            <a href="{$chamber}/bill-versions?uri={@uri}">
+                                                                <i18n:text key="New Version">new version(nt)</i18n:text>
+                                                            </a>
+                                                        </xsl:otherwise>
+                                                    </xsl:choose>
                                                 </xsl:when>
                                                 <xsl:otherwise>
                                                     <span class="timeline-action">

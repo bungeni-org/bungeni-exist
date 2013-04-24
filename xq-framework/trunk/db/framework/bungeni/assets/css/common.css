@@ -267,9 +267,12 @@ div#doc-downloads {
 .truncate {
     padding:0;
     margin:0;
-	width: 420px;
+	width: 70%;
+	display:inline;
 	white-space: nowrap;
 	overflow: hidden;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;	
 	text-overflow: ellipsis;
 }
 

@@ -1,5 +1,11 @@
+xquery version "3.0";
+
 module namespace adm = "http://exist.bungeni.org/adm";
 declare namespace xhtml="http://www.w3.org/1999/xhtml" ;
+
+
+declare variable $adm:CXT := request:get-context-path();
+declare variable $adm:UI-CONFIG :=  $adm:CXT || "/rest/db/apps/framework/bungeni/ui-config.xml";
 
 (:~
 :  Renders the admin's main menu

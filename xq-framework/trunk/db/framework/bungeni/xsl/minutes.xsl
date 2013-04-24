@@ -6,20 +6,20 @@
                 <xd:b>Created on:</xd:b> Oct 31, 2011</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill attachments from Bungeni</xd:p>
+            <xd:p> Bill changes from Bungeni</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
-    <xsl:include href="context_downloads.xsl"/>     
-    <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
-        document as opposed to main document. -->
-    <xsl:param name="serverport"/>
+    <xsl:include href="context_downloads.xsl"/>
+    
+    <!--PARAMS -->
     <xsl:param name="epub"/>
+    <xsl:param name="serverport"/>
+    <xsl:param name="chamber"/>
     <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
-        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">
@@ -31,23 +31,24 @@
             </xsl:choose>
         </xsl:variable>
         <div id="main-wrapper">
-            <!--
-                !+NOTES see popout.xsl why this is disabled for now
-            -->
-            <!--span id="popout-close" class="hide">
-                <i18n:text key="close">close(nt)</i18n:text>
-            </span-->
-            <div id="title-holder">
+            <xsl:if test="$epub ne 'true'">
+                <span id="popout-close" class="hide">
+                    <i18n:text key="close">close(nt)</i18n:text>
+                </span>
+            </xsl:if>
+            <div id="title-holder" class="theme-lev-1-only">
                 <h1 class="title">
                     <xsl:if test="bu:ontology/bu:document/bu:progressiveNumber">#<xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>:</xsl:if>
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
             </div>
             <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group" select="$doc-type"/>
-                <xsl:with-param name="uri" select="$doc-uri"/>
-                <xsl:with-param name="tab-path">attachments</xsl:with-param>
+                <xsl:with-param name="tab-group">
+                    <xsl:value-of select="$doc-type"/>
+                </xsl:with-param>
+                <xsl:with-param name="tab-path">minutes</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
+                <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
@@ -60,17 +61,25 @@
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <ul id="list-toggle" class="ls-timeline clear">
-                        <xsl:for-each select="bu:ontology/bu:attachments/bu:attachment">
-                            <xsl:sort select="bu:statusDate" order="descending"/>
+                        <xsl:for-each select="ref/bu:discussions/bu:discussion">
+                            <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
                             <li>
-                                <a href="{$chamber}/{lower-case($doc-type)}-attachment?uri={$doc-uri}&amp;id={bu:attachmentId}">
-                                    <xsl:value-of select="bu:title"/>
-                                </a>&#160; /      
-                                download:&#160;
-                                <a href="download?uri={$doc-uri}&amp;att={bu:attachmentId}">
-                                    <xsl:value-of select="bu:name"/>
-                                </a>
-                                <div class="struct-ib"> / <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                <xsl:variable name="timeline-type">
+                                    <xsl:choose>
+                                        <xsl:when test="bu:auditFor/bu:value">
+                                            <i18n:text key="cate-document">document</i18n:text>
+                                        </xsl:when>
+                                        <xsl:when test="bu:auditAction/bu:value">
+                                            <xsl:value-of select="bu:auditAction/bu:value"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="bu:type/bu:value"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
+                                <xsl:value-of select="format-dateTime(bu:chronoTime,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                <div class="struct-ib">
+                                    <xsl:copy-of select="bu:body/child::node()"/>
                                 </div>
                             </li>
                         </xsl:for-each>

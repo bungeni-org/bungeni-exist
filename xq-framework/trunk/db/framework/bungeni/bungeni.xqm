@@ -2000,7 +2000,7 @@ declare function bun:get-documents-feed(
                     {
                        <summary> 
                        {
-                           $i/bu:document/@type,
+                           $i/bu:document/bu:docType/bu:value/node(),
                            $i/bu:document/bu:title/node()
                        }
                        </summary>,
@@ -2031,7 +2031,7 @@ declare function bun:get-documents-feed(
 : @return
 :   A qualified atom feed limited to 10 items
 :)
-declare function bun:get-sittings-feed($controller as node()?, $outputtype as xs:string) as element() {
+declare function bun:get-sittings-feed($controller as node()?, $acl as xs:string, $outputtype as xs:string  ) as element() {
     util:declare-option("exist:serialize", "media-type=application/atom+xml method=xml"),
     
     let $chamber-id := $controller/parliament/identifier/text()
@@ -2040,38 +2040,35 @@ declare function bun:get-sittings-feed($controller as node()?, $outputtype as xs
     let $server-path := $bun:SERVER-URL || $controller/exist-cont/text()
     
     let $feed := <feed xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom">
-        <title>{concat($chamber-name, " ", upper-case(substring($doctype, 1, 1)), substring($doctype, 2))}s Atom</title>
+        <title>{$chamber-name} sittings Atom</title>
         <id>http://portal.bungeni.org/1.0/</id>
         <updated>{current-dateTime()}</updated>
         <generator uri="http://sourceforge.net/projects/exist/" version="2.0">eXist XML Database</generator>      
         <id>urn:uuid:31337-4n70n9-w00t-l33t-5p3364</id>
-        <link rel="self" href="{$server-path}/{$chamber}/bills/rss" />
+        <link rel="self" href="{$server-path}/{$chamber}/sittings/rss" />
        {
-            for $i in subsequence(collection(cmn:get-lex-db())/bu:ontology/bu:sitting,0,10)
+            let $sittings-coll := util:eval(concat("collection('",cmn:get-lex-db(),"')/",
+                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$chamber-id,"']/",
+                                            bun:xqy-docitem-perms($acl)))   
+            for $i in subsequence($sittings-coll/ancestor::bu:ontology,0,10)
             
-            order by $i/bu:document/bu:statusDate descending
+            order by $i/bu:sitting/bu:statusDate descending
             (:let $path :=  substring-after(substring-before(base-uri($i),'/.feed.atom'),'/db/bungeni-xml'):)
             return 
             (   <entry>
-                    <id>{data($i/bu:document/@uri)}</id>
-                    <title>{$i/bu:document/bu:title/node()}</title>
+                    <id>{data($i/bu:sitting/@uri)}</id>
+                    <title>{$i/bu:sitting/bu:shortName/node()}</title>
                     {
                        <summary> 
                        {
-                           $i/bu:document/@type,
-                           $i/bu:document/bu:title/node()
+                          $i/bu:sitting/bu:shortName/node()  || " - " || data($i/bu:sitting/bu:activityType/@showAs)
                        }
                        </summary>,
-                       if ($outputtype = 'user')  then (
-                            <link rel="alternate" type="application/xhtml" href="{$server-path}/{$chamber}/{lower-case($doctype)}-text?uri={$i/bu:document/@uri}"/>
-                        )  (: "service" output :)
-                        else (
-                            <link rel="alternate" type="application/xml" href="{$server-path}/{$chamber}/{lower-case($doctype)}-xml?uri={$i/bu:document/@uri}"/>
-                        )  
+                       <link rel="alternate" type="application/xhtml" href="{$server-path}/{$chamber}/sitting?uri={$i/bu:sitting/@uri}"/> 
                     }
-                    <content type='html'>{$i/bu:document/bu:body/node()}</content>
-                    <published>{$i/bu:document/bu:publicationDate/node()}</published>
-                    <updated>{$i/bu:document/bu:statusDate/node()}</updated>                           
+                    <content type='html'>{$i/bu:sitting/bu:body/node()}</content>
+                    <published>{$i/bu:sitting/bu:startDate/node()}</published>
+                    <updated>{$i/bu:sitting/bu:statusDate/node()}</updated>                           
                 </entry>
             )
        }
@@ -2637,7 +2634,7 @@ declare function bun:get-sitting($acl as xs:string,
     let $doc := 
             (:Returs a Sittings Document :)
             let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
+                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
                                             bun:xqy-docitem-perms($acl)))
             
             return
@@ -3084,6 +3081,38 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
         )
 };
 
+declare function bun:get-parl-doc-minutes(  $acl as xs:string, 
+                                            $doc-uri as xs:string, 
+                                            $parts as node(),
+                                            $parliament as node()) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $identifier := $parliament/identifier/text()
+    
+    let $match := bun:documentitem-full-acl($acl, $doc-uri)
+    let $doc-internal-uri := data($match/bu:document/@internal-uri)
+    
+    let $sitting := util:eval(concat("collection('",cmn:get-lex-db(),"')/",
+                                "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and bu:scheduleItems/bu:scheduleItem/bu:sourceItem/bu:refersTo/@href eq '",$doc-internal-uri,"']/",
+                                bun:xqy-docitem-perms($acl),"/ancestor::bu:sitting/bu:scheduleItems/bu:scheduleItem/bu:discussions"))
+                                
+    let $doc := <doc>
+                    {$match}
+                    <ref>
+                        {$sitting}
+                    </ref>
+                    {bun:get-excludes($match, $parts/parent::node())}
+                </doc> 
+    return
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>        
+        )
+};
+
 (:~ 
 :   Used to retrieve a government info
 :
@@ -3341,24 +3370,13 @@ declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews 
                 : !+FIX_THIS (ao, 8th Aug 2012) workflowEvents dont have permissions with them...
                 : currently using 'internal' to hide them from anonymous :)
                 let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, element bu:chronoTime { $event/bu:statusDate/text() }, $event/child::*}
-                let $audits := for $audit in $docitem/bu:document/bu:audits/child::*[bu:auditAction/bu:value eq 'workflow'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}             
+                let $audits := for $audit in $docitem/bu:document/bu:audits/child::*[bu:auditAction/bu:value eq 'workflow'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}
+                let $versions := for $version in $docitem/bu:document/bu:versions/child::* return element timeline { attribute id {$version/@id }, attribute uri { $version/@uri }, element bu:chronoTime { $version/bu:statusDate/text() }, $version/child::*}
                 
-                for $eachitem in ($wfevents, $audits) 
+                for $eachitem in ($wfevents, $versions) 
                 where $eachitem/bu:chronoTime/text() ne ""
                 order by $eachitem/bu:chronoTime descending
-                return $eachitem   
-
-                (:for $per-event in $docitem/bu:legislativeItem/bu:wfevents/bu:wfevent
-                let $docitem := $per-event/ancestor::bu:ontology,
-                    $ln := ($per-event/@href),
-                    $foruri := ($docitem/bu:legislativeItem/@uri),
-                    $type := ($docitem/bu:document/@type),
-                    $merged := (collection(cmn:get-lex-db())/bu:ontology/child::*[@uri eq $ln]/parent::node()):)
-                (: !+FIX_THIS (ao, 10 Apr 2012) sort does not take effect at the moment due to merging above and
-                    also the fact that dateActive may not be present in all documents :)
-                (:order by $merged/bu:ontology/child::*/bu:changes/bu:change/bu:dateActive ascending
-                return
-                    $merged:)
+                return $eachitem
             }
         </ref>
         {bun:get-excludes($docitem, $docviews)}
@@ -3379,12 +3397,20 @@ declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews 
 declare function bun:get-excludes($docitem as node()?, $docviews as node()) {
     <exclude>
         {
-            for $view in $docviews/view
+            let $collection-api := fn:concat("collection('",cmn:get-lex-db() ,"')")
+            for $view in $docviews/view[@tag eq 'tab']
             return
                 (: must have @check-for attribute first! :)
                 if($view/@check-for) then (
                     (: putting a evaluate condition to @check-for... :)
-                    if(not(empty(util:eval(concat("$docitem","//*",$view/@check-for))))) then 
+                    if(starts-with($view/@check-for, "global|")) then 
+                        (
+                            if(not(empty(util:eval(fn:replace(substring-after($view/@check-for,"global|"),"@COLLECTION",$collection-api))))) then 
+                                ()
+                            else    
+                                <tab>{data($view/@id)}</tab>
+                        )
+                    else if(not(empty(util:eval(concat("$docitem","/*",$view/@check-for))))) then 
                         ()
                     else 
                         <tab>{data($view/@id)}</tab>   
@@ -3480,6 +3506,7 @@ declare function bun:get-doc-version($acl as xs:string, $uri as xs:string, $part
     let $doc := <doc>
                     {$docitem}
                     <ref/>
+                    {bun:get-excludes($docitem, $parts/parent::node())}
                 </doc>   
     
     return
@@ -3522,22 +3549,23 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
     let $match := collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href = $eventid]/ancestor::bu:ontology
     let $foundevent := if($match) then true() else false()
     
-    let $docitem := if(not($foundevent)) then (
-                        document { bun:documentitem-full-acl('public-view', $eventid) } 
+    let $doc-node := if(not($foundevent)) then (
+                        bun:documentitem-full-acl('public-view', $eventid) 
                      )
                      else (
                         let $acl-filter := cmn:get-acl-permission-as-node('Event','public-view')
-                        return bun:treewalker-acl($acl-filter, document {$match})
+                        return bun:treewalker-acl($acl-filter, $match)
                      )
-                        
+    let $docitem := document {  $doc-node }                
     let $latest := if(not($foundevent)) then max($docitem/bu:ontology/bu:document//bu:workflowEvents/bu:workflowEvent/bu:docId) else ()             
     let $currenturi := if(not($foundevent)) then data($docitem/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:docId = $latest]/@href) else $eventid
           
     let $doc := <doc>      
-            { $docitem }
-            <ref/>
-            <event>{$currenturi}</event>
-        </doc>  
+                    { $docitem }
+                    <ref/>
+                    <event>{$currenturi}</event>
+                    {bun:get-excludes($doc-node, $parts/parent::node())}
+                </doc>  
     
     return
         transform:transform($doc, 

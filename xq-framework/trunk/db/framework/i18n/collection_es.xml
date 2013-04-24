@@ -128,6 +128,7 @@
     <msg key="tab-details">details</msg>
     <msg key="tab-assigned">assigned groups</msg>
     <msg key="tab-documents">documents</msg>
+    <msg key="tab-metadata">metadatos</msg>
     <msg key="tab-type">type</msg>
     <msg key="tab-desc">description</msg>
     <msg key="tab-date">date</msg>

@@ -314,6 +314,18 @@
             <subnavigation>bills</subnavigation>
             <action>rou:document-documents</action>
         </route>
+        <route href="/lower_house/bill-minutes">
+            <title>Business | Bill Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
+        <route href="/higher_house/bill-minutes">
+            <title>Business | Bill Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
         <route href="/lower_house/bill-attachment">
             <title>Business | Bill Attachment</title>
             <navigation>/lower_house/business</navigation>
@@ -325,6 +337,18 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
             <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/bill-metadata">
+            <title>Business | Bill Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/bill-metadata">
+            <title>Business | Bill Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/bills/rss">
             <title>Business | Bill</title>
@@ -406,6 +430,18 @@
             <subnavigation>questions</subnavigation>
             <action>rou:document-documents</action>
         </route>
+        <route href="/lower_house/question-minutes">
+            <title>Business | Question Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
+        <route href="/higher_house/question-minutes">
+            <title>Business | Question Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
         <route href="/lower_house/question-attachment">
             <title>Business | Question Attachment</title>
             <navigation>/lower_house/business</navigation>
@@ -417,6 +453,18 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
             <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/question-metadata">
+            <title>Business | Question Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/question-metadata">
+            <title>Business | Question Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/questions/rss">
             <title>Business | Questions</title>
@@ -498,6 +546,18 @@
             <subnavigation>motions</subnavigation>
             <action>rou:document-documents</action>
         </route>
+        <route href="/lower_house/motion-minutes">
+            <title>Business | Motion Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
+        <route href="/higher_house/motion-minutes">
+            <title>Business | Motion Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
         <route href="/lower_house/motion-attachment">
             <title>Business | Motion Attachment</title>
             <navigation>/lower_house/business</navigation>
@@ -509,6 +569,18 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
             <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/motion-metadata">
+            <title>Business | Motion Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/motion-metadata">
+            <title>Business | Motion Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/motions/rss">
             <title>Business | Motions</title>
@@ -590,6 +662,18 @@
             <subnavigation>tableddocuments</subnavigation>
             <action>rou:document-documents</action>
         </route>
+        <route href="/lower_house/tableddocument-minutes">
+            <title>Business | Tabled document Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
+        <route href="/higher_house/tableddocument-minutes">
+            <title>Business | Tabled document Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
         <route href="/lower_house/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
             <navigation>/lower_house/business</navigation>
@@ -601,6 +685,18 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
             <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/tableddocument-metadata">
+            <title>Business | Tabled document Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/tableddocument-metadata">
+            <title>Business | Tabled document Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>tabledocuments</subnavigation>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/tableddocuments/rss">
             <title>Business | Tabled Documents</title>
@@ -658,6 +754,18 @@
             <subnavigation>agendaitems</subnavigation>
             <action>rou:document-documents</action>
         </route>
+        <route href="/lower_house/agendaitem-minutes">
+            <title>Business | Agendaitem Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
+        <route href="/higher_house/agendaitem-minutes">
+            <title>Business | Agendaitem Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+            <action>rou:document-minutes</action>
+        </route>
         <route href="/lower_house/agendaitem-event">
             <title>Business | Agenda item Event</title>
             <navigation>/lower_house/business</navigation>
@@ -693,6 +801,18 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
             <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/agendaitem-metadata">
+            <title>Business | Agendaitem Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/agendaitem-metadata">
+            <title>Business | Agendaitem Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+            <action>rou:document-text</action>
         </route>
         <route href="/lower_house/agendaitems/rss">
             <title>Business | Agenda Items</title>
@@ -1155,12 +1275,26 @@
                 <template>xml/bill.xml</template>
                 <xsl>xsl/event.xsl</xsl>
             </view>
-            <view check-for="[parent::bu:attachments/child::node()]" id="attachments" path="bill-documents" tag="tab">
+            <view check-for="[parent::node()/bu:attachments/child::node()]" id="attachments" path="bill-documents" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="bill-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view id="metadata" path="bill-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
             </view>
             <view path="bill-attachment">
                 <template>xml/documents.xml</template>
@@ -1210,6 +1344,20 @@
                 </title>
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="question-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view id="metadata" path="question-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
             </view>
             <view path="question-attachment">
                 <template>xml/documents.xml</template>
@@ -1264,6 +1412,20 @@
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
             </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="motion-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/motion.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view id="metadata" path="motion-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/motion.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
+            </view>
             <view path="motion-attachment">
                 <template>xml/documents.xml</template>
                 <xsl>xsl/attachment.xsl</xsl>
@@ -1313,6 +1475,20 @@
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
             </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="tableddocument-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view id="metadata" path="tableddocument-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
+            </view>
             <view path="tableddocument-attachment">
                 <template>xml/documents.xml</template>
                 <xsl>xsl/attachment.xsl</xsl>
@@ -1354,6 +1530,20 @@
                 </title>
                 <template>xml/documents.xml</template>
                 <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="agendaitem-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view id="metadata" path="agendaitem-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
             </view>
             <view path="agendaitem-event">
                 <template>xml/documents.xml</template>

@@ -33,7 +33,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
             
             <xf:instance xmlns="" 
                 id="ui-config" 
-                src="../ui-config.xml" />    
+                src="{$adm:UI-CONFIG}" />    
                 
             <xf:instance id="tmpl-route" xmlns="">
                 <route/>
@@ -41,7 +41,7 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                 
              <xf:submission id="save-form" 
                 replace="none" 
-                resource="../ui-config.xml" 
+                resource="{$adm:UI-CONFIG}" 
                 method="put">
              </xf:submission>
    

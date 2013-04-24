@@ -1,4 +1,4 @@
-xquery version "1.0";
+xquery version "3.0";
 
 import module namespace adm = "http://exist.bungeni.org/adm" at "admin.xqm";
 
@@ -33,11 +33,11 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
         "master" model used by the subform
         -->
         <xf:model id="master">
-            <xf:instance xmlns="" id="ui-config" src="../ui-config.xml" />
+            <xf:instance xmlns="" id="ui-config" src="{$adm:UI-CONFIG}" />
     
              <xf:submission id="save-form" 
                 replace="none" 
-                resource="../ui-config.xml" 
+                resource="{$adm:UI-CONFIG}" 
                 method="put">
              </xf:submission>
              

@@ -133,6 +133,7 @@
     <msg key="tab-details">détails</msg>
     <msg key="tab-assigned">groupes assignés</msg>
     <msg key="tab-documents">documents</msg>
+    <msg key="tab-metadata">métadonnées</msg>
     <msg key="tab-type">type</msg>
     <msg key="tab-desc">description</msg>
     <msg key="tab-date">date</msg>

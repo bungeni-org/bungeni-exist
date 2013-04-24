@@ -47,4 +47,16 @@
             </modes>
         </xsl:copy>
     </xsl:template>
+    
+    <xsl:template match="container">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <xsl:if test="not(@name)">
+                <xsl:attribute name="name" />
+            </xsl:if>
+            <xsl:if test="not(@note)">
+                <xsl:attribute name="note" />
+            </xsl:if>
+        </xsl:copy>
+    </xsl:template>
 </xsl:stylesheet>

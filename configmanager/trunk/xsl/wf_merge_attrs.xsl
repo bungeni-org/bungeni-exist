@@ -123,11 +123,12 @@
                     <xsl:with-param name="elemOriginAttr" select="./actions"/>
                 </xsl:call-template>
             </xsl:if>
-            
-            <xsl:apply-templates/>
+
             <xsl:if test="key('facets-on-states', @id)">
                 <facet ref="{concat('.', @id)}" />
             </xsl:if>
+            
+            <xsl:apply-templates/>
         </state>
     </xsl:template>
     <xsl:template match="allow | deny">

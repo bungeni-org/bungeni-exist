@@ -158,6 +158,12 @@ function form:edit($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-validations" src="{$form:REST-BC-LIVE}/forms/.auto/_validations.xml"/>
                     
+                    <xf:instance id="i-container" xmlns="">
+                        <data>
+                            <container match="" name="" note=""/>                  
+                        </data>
+                    </xf:instance>                    
+                    
                     <xf:instance id="i-integrity" xmlns="">
                         <data>
                             <integrity constraints="" validations=""/>                        
@@ -174,9 +180,14 @@ function form:edit($node as node(), $model as map(*)) {
                         </data>
                     </xf:instance>                        
 
-                    <xf:bind nodeset=".[@name eq '{$docname}']">
+                    <xf:bind nodeset="instance()">
                         <xf:bind id="order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 101) and (. &gt; 0)" />
-                        <xf:bind nodeset="@archetype" type="xf:string" required="true()" />
+                        {
+                            if($type eq 'group') then
+                                <xf:bind id="containermatch" nodeset="container/@match" type="xf:string" required="false()" constraint="matches(., '^[a-z_.]+[^.]$')" />
+                            else
+                                ()
+                        }
                     </xf:bind>
 
                     <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>
@@ -246,44 +257,27 @@ function form:edit($node as node(), $model as map(*)) {
                 <ul id="tabs">
                     <li id="tabdetails" class="active"><a href="#details">Form details</a></li>
                     <li id="tabfields" ><a href="#fields">Fields</a></li>
+                    {
+                        if($type eq 'group') then
+                            <li id="tabcontainers" ><a href="#containers">Containers</a></li>
+                        else
+                            ()
+                    }
                 </ul>
             </div>
             
             <div id="tabs_content_container">
                 <div id="details" class="tab_content" style="display: block;">
-                    <xf:group ref="." class="{if(local:mode()='edit') then 'suppressInfo' else ''}">
+                    <xf:group ref=".">
                         <xf:group appearance="bf:verticalTable">
                             <xf:group appearance="bf:horizontalTable">
-                                <xf:label><h2>Form Properties</h2></xf:label>      
-                                <xf:select1 id="descriptor-archetype" ref="@archetype" appearance="minimal" incremental="true" class="xsmallWidth">
-                                    <xf:label>archetype</xf:label>
-                                    <xf:hint>select parent type</xf:hint>
-                                    <xf:help>help for archtypes</xf:help>
-                                    <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-archetypes')/archetypes/arche">
-                                        <xf:label ref="."></xf:label>
-                                        <xf:value ref="."></xf:value>
-                                    </xf:itemset>
-                                </xf:select1>
+                                <xf:label><h2>Form Properties</h2></xf:label>
                                 <xf:input id="descriptor-order" bind="order" incremental="true" class="xsmallWidth">
                                     <xf:label>Order</xf:label>
                                     <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
                                     <xf:help>Enter an integer between 1 and 100 </xf:help>
                                     <xf:hint>order of this descriptor</xf:hint>
-                                </xf:input>                                  
-                                <xf:input id="descriptor-label" ref="@label" incremental="true">
-                                    <xf:label>label</xf:label>
-                                    <xf:alert>Invalid text.</xf:alert>
-                                    <xf:help>Enter text to be shown</xf:help>
-                                    <xf:hint>shown on menu</xf:hint>
-                                </xf:input>                            
-                                
-                                <xf:input id="descriptor-container-label" ref="@container_label" incremental="true">
-                                    <xf:label>container label</xf:label>
-                                    <xf:alert>Invalid text.</xf:alert>
-                                    <xf:help>Enter text to be shown</xf:help>
-                                    <xf:hint>shown on menu lists</xf:hint>
-                                </xf:input>                                
+                                </xf:input>                             
                             </xf:group>                        
                             <xf:group appearance="bf:horizontalTable">
                                 <xf:label>default sort field</xf:label>      
@@ -348,7 +342,6 @@ function form:edit($node as node(), $model as map(*)) {
                                 <xf:refresh ev:event="DOMActivate" model="m-form"/>
                             </xf:action>
                         </xf:trigger>
-                      
                     </xf:group>                    
                 </div>
                 <div id="fields" class="tab_content">
@@ -359,6 +352,66 @@ function form:edit($node as node(), $model as map(*)) {
                         <a class="button-link" href="field-add.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}&amp;node=field&amp;after={$lastfield}">add field</a>
                     </div>
                 </div>
+                {
+                    if($type eq 'group') then
+                        <div id="containers" class="tab_content">
+                            <h2>Containers</h2>
+                            <xf:group appearance="bf:verticalTable" ref=".">
+                                <xf:group appearance="bf:horizontalTable">
+                                    <xf:repeat id="r-containers" nodeset="instance()/container" appearance="compact">
+                                        <xf:input ref="@match" incremental="true">
+                                           <xf:label>match</xf:label>
+                                           <xf:hint>e.g. agenda_item.group_id</xf:hint>
+                                           <xf:help>you need to know the schema and correct fieldname</xf:help>
+                                           <xf:alert>invalid: must contain '.' in between and avoid spaces</xf:alert>
+                                        </xf:input>  
+                                        <xf:input ref="@name" incremental="true">
+                                           <xf:label>name</xf:label>
+                                           <xf:hint>name for this match</xf:hint>
+                                           <xf:help>string name to identify this match</xf:help>
+                                        </xf:input>
+                                        <xf:textarea ref="@note" incremental="true">
+                                            <xf:label>notes</xf:label>
+                                            <xf:hint>note for this match</xf:hint>
+                                            <xf:help>details about this match</xf:help>
+                                        </xf:textarea>                                
+                                        <xf:trigger src="resources/images/delete.png">
+                                           <xf:label>delete</xf:label>
+                                           <xf:action>
+                                               <xf:delete at="index('r-containers')[position()]"></xf:delete>
+                                           </xf:action>
+                                        </xf:trigger>                                         
+                                    </xf:repeat> 
+                               </xf:group>
+                                <br/>
+                                <xf:group appearance="minimal">
+                                    <xf:trigger>
+                                       <xf:label>add container</xf:label>
+                                       <xf:action>
+                                           <xf:insert nodeset="container" at="last()" position="after" origin="instance('i-container')/container"/>
+                                           <xf:setfocus control="r-containers"/>
+                                       </xf:action>
+                                    </xf:trigger>     
+                                </xf:group>                        
+                            </xf:group>
+                            <hr/>
+                            <xf:group id="dialogButtons" appearance="bf:horizontalTable">
+                                <xf:label/>
+                                <xf:trigger>
+                                    <xf:label>Save</xf:label>                                          
+                                    <xf:action>
+                                        <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                        <xf:delete nodeset="instance()/integrity[@constraints = '' and @validations = '']"/>
+                                        <xf:send submission="s-save"/>
+                                        <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-integrity')/integrity" />
+                                        <xf:refresh ev:event="DOMActivate" model="m-form"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </xf:group>                            
+                        </div>
+                    else
+                        ()
+                }                
             </div>                 
         </div>
 };
@@ -392,7 +445,7 @@ function form:field-edit($node as node(), $model as map(*)) {
 
                     <xf:instance id="i-vocabularies" src="{$form:REST-BC-LIVE}/forms/.auto/_vocabularies.xml"/>
 
-                    <xf:bind nodeset=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']">
+                    <xf:bind nodeset="./field[@name eq '{$fieldname}']">
                         <xf:bind nodeset="@name" type="xf:string" readonly="boolean-from-string('true')" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
                         <xf:bind nodeset="@label" type="xf:string" required="true()" />
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
@@ -417,10 +470,10 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <role>Clerk</role>
                                 </roles>
                         -->
-                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
-                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="view" nodeset="view/roles/role" required="true()" type="xs:string" constraint="(instance()/field[@name eq '{$fieldname}']/view/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/view/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="edit" nodeset="edit/roles/role" required="true()" type="xs:string" constraint="(instance()/field[@name eq '{$fieldname}']/edit/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/edit/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="add" nodeset="add/roles/role" required="true()" type="xs:string" constraint="(instance()/field[@name eq '{$fieldname}']/add/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/add/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
+                        <xf:bind id="listing" nodeset="listing/roles/role" required="true()" type="xs:string" constraint="(instance()/field[@name eq '{$fieldname}']/listing/roles[count(role) eq count(distinct-values(role)) and count(role[text() = 'ALL']) lt 2]) or (instance()/.[@name eq '{$docname}']/field[@name eq '{$fieldname}']/listing/roles[count(role) eq 2 and count(role[text() = 'ALL']) = 2])"/>
                         
                     </xf:bind>
                     
@@ -477,7 +530,7 @@ function form:field-edit($node as node(), $model as map(*)) {
             </div>
             
             <div>       
-                <xf:group id="g-field" ref=".[@name eq '{$docname}']/field[@name eq '{$fieldname}']" class="fieldEdit">
+                <xf:group id="g-field" ref="./field[@name eq '{$fieldname}']" class="fieldEdit">
                         <div class="commit-holder">
                             <a href="form.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}#tabfields">
                                 <img src="resources/images/back_arrow.png" title="back to form" alt="back to workflow states"/>
@@ -539,7 +592,7 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     <xf:hint>external value show on input forms</xf:hint>
                                     <xf:help>help for select1</xf:help>
                                     <xf:alert>invalid</xf:alert>
-                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[@name eq instance()[@name eq '{$docname}']/field[@name eq '{$fieldname}']/@value_type]">
+                                    <xf:itemset nodeset="instance('i-valuetypes')/valueType[@name eq instance()/field[@name eq '{$fieldname}']/@value_type]">
                                         <xf:label ref="@rendertype"></xf:label>
                                         <xf:value ref="@rendertype"></xf:value>
                                     </xf:itemset>

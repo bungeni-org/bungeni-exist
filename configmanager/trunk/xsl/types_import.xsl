@@ -6,66 +6,33 @@
     <xsl:output omit-xml-declaration="yes"/>
     <!-- types.xml importer -->
     
+
     <xsl:template match="@*|*|processing-instruction()|comment()">
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()|processing-instruction()|comment()"/>
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="doc[not(@descriptor)]">
+    <xsl:template match="doc | event">
         <xsl:copy>
             <xsl:copy-of select="@*[. ne '']"/>
-            <xsl:attribute name="descriptor" select="@name" />
+            <xsl:if test="not(@descriptor)">
+                <xsl:attribute name="descriptor" select="@name" />
+            </xsl:if>
+            <xsl:if test="not(@workflow)">
+                <xsl:attribute name="workflow" select="@name" />
+            </xsl:if>
+            <xsl:if test="not(@archetype)">
+                <xsl:attribute name="archetype" select="string('doc')" />
+            </xsl:if>
+            <xsl:if test="not(@label)">
+                <xsl:attribute name="label" select="@name" />
+            </xsl:if>
+            <xsl:if test="not(@container_label)">
+                <xsl:attribute name="container_label" select="concat(@name, 's')" />
+            </xsl:if>
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-
-    <xsl:template match="event[not(@descriptor)]">
-        <xsl:copy>
-            <xsl:copy-of select="@*[. ne '']"/>
-            <xsl:attribute name="descriptor" select="@name" />
-            <xsl:apply-templates />
-            
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="doc[not(@workflow)]">
-        <xsl:copy>
-            <xsl:copy-of select="@*[. ne '']"/>
-            <xsl:attribute name="workflow" select="@name" />
-            <xsl:apply-templates />
-            
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="event[not(@workflow)]">
-        <xsl:copy>
-            <xsl:copy-of select="@*[. ne '']"/>
-            <xsl:attribute name="workflow" select="@name" />
-            <xsl:apply-templates />
-            
-        </xsl:copy>
-    </xsl:template>
-    
-    
-    <xsl:template match="doc[not(@archetype)]">
-        <xsl:copy>
-            <xsl:copy-of select="@*[. ne '']"/>
-            <xsl:attribute name="archetype" select="string('doc')" />
-            <xsl:apply-templates />
-            
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="event[not(@archetype)]">
-        <xsl:copy>
-            <xsl:copy-of select="@*[. ne '']"/>
-            <xsl:attribute name="archetype" select="string('event')" />
-            <xsl:apply-templates />
-            
-        </xsl:copy>
-    </xsl:template>
-    
-    
     
 </xsl:stylesheet>

@@ -311,7 +311,7 @@ declare function local:all-feature() {
             if($feats-wf[@name eq data($feature/@name)]) then 
                 element feature {
                     attribute name { data($feature/@name) },
-                    attribute ce:workflow { data($feature/@workflow) },
+                    attribute workflow { data($feature/@workflow) },
                     attribute enabled { if(data($feats-wf[@name eq data($feature/@name)]/@enabled)) then xs:string(data($feats-wf[@name eq data($feature/@name)]/@enabled)) else "false" },
                     (: if there are parameters, show them :)
                     $feats-wf[@name eq data($feature/@name)]/child::* 
@@ -320,7 +320,7 @@ declare function local:all-feature() {
             else 
                 element feature {
                     attribute name { data($feature/@name) },
-                    attribute ce:workflow { data($feature/@workflow) },
+                    attribute workflow { data($feature/@workflow) },
                     attribute enabled { "false" }
                 } 
     }
@@ -377,13 +377,10 @@ function workflow:edit($node as node(), $model as map(*)) {
                     </xf:instance>
                     
                     <xf:instance id="i-features" xmlns="">
-                        <data>
-                            {local:all-feature()}                        
-                        </data>
+                        {local:all-feature()}
                     </xf:instance>
 
                     <xf:bind nodeset=".">
-                        <xf:bind nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind nodeset="feature/@enabled" type="xf:boolean" />
                     </xf:bind>
@@ -480,7 +477,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <!-- drop and add workflow features -->
                         <xf:message level="ephemeral">drop all &lt;xmp&gt;&lt;feature&gt;&lt;/xmp&gt; nodes on workflow</xf:message>
                         <xf:delete nodeset="instance()/feature"/>
-                        <xf:insert nodeset="instance()/permActions" at="1" position="after" origin="instance('i-features')/features/feature" />   
+                        <xf:insert nodeset="instance()/permActions" at="1" position="after" origin="instance('i-features')/feature" />   
                         {
                             (: if <facet/>s don't exist, add them :)
                             if(empty(local:workflow()/facet[starts-with(./@name, "global")])) then 
@@ -534,7 +531,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Workflowed</xf:label>  
                             {
-                                for $feature in local:all-feature()/feature[@ce:workflow eq 'True']
+                                for $feature in local:all-feature()/feature[@workflow eq 'True']
                                 return document {                                       
                                         <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
                                             <xf:label>{data($feature/@name)} </xf:label>
@@ -555,7 +552,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Non-workflowed</xf:label>
                             {
-                                for $feature in local:all-feature()/feature[@ce:workflow eq 'False']
+                                for $feature in local:all-feature()/feature[@workflow eq 'False']
                                 return 
                                     <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
                                         <xf:label>{data($feature/@name)} </xf:label>
@@ -629,7 +626,6 @@ function workflow:edit($node as node(), $model as map(*)) {
                             <xf:label>Update</xf:label>
                             <xf:action>
                                 <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                <xf:delete nodeset="instance()/allow[count(roles/role) = 1]" /> 
                                 <!--xf:delete nodeset="instance()/allow/roles/role[string-length(.) lt 2]" /--> 
                                 {
                                     let $facets :=  if(not(empty(local:workflow()/facet[starts-with(./@name, "global")]))) then 

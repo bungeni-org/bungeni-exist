@@ -37,27 +37,40 @@ declare function local:get-types() {
         local:wrap-type($archetype)
 };
 
-declare function local:base-types() {
-    <basetypes>{
+declare function local:arche-types() {
+    <archetypes>{
         let $types := doc($appconfig:TYPES-XML)/types
-        let $base-types := distinct-values($types/doc/@ce:type)
+        let $base-types := distinct-values($types/doc/@archetype)
         for $base-type in $base-types
         return 
-            element basetype {
+            element archetype {
                 $base-type
             }
-    }</basetypes>
+    }</archetypes>
 };
 
-(: GET ALL TEH WORKFLOWS :)
-declare function local:get-workflows() {
-    <workflows>
-    {
+(: GET ALL TEH FORM NAMES :)
+declare function local:descriptors() {
+    <descriptors>{
+        for $descriptor in collection($appconfig:FORM-FOLDER)/descriptor
+        order by util:document-name($descriptor) ascending
+        return 
+            element descriptor {
+                substring-before(util:document-name($descriptor),'.')
+            }
+    }</descriptors>
+};
+
+(: GET ALL TEH WORKFLOW NAMES :)
+declare function local:workflows() {
+    <workflows>{
         for $workflow in collection($appconfig:WF-FOLDER)/workflow
-        return  
-            <workflow name="{data($workflow/@name)}"/>
-    }
-    </workflows>
+        order by util:document-name($workflow) ascending
+        return 
+            element workflow {
+                substring-before(util:document-name($workflow),'.')
+            }
+    }</workflows>
 };
 
 (:
@@ -141,13 +154,17 @@ function type:edit($node as node(), $model as map(*)) {
                     </data>
                 </xf:instance> 
                 
-                <xf:instance xmlns="" id="i-basetypes">
-                    {local:base-types()}
+                <xf:instance xmlns="" id="i-archetypes">
+                    {local:arche-types()}
                 </xf:instance>                
                 
+                <xf:instance xmlns="" id="i-descriptors">
+                    {local:descriptors()}
+                </xf:instance>      
+                
                 <xf:instance xmlns="" id="i-workflows">
-                    {local:get-workflows()}
-                </xf:instance>
+                    {local:workflows()}
+                </xf:instance>  
                 
                 <xf:instance id="i-vars" src="{$type:REST-CXT-APP}/model_templates/vars.xml"/>
                 
@@ -160,8 +177,12 @@ function type:edit($node as node(), $model as map(*)) {
                 <xf:instance id="i-controller" src="{$type:REST-CXT-APP}/model_templates/controller.xml"/>        
                 
                 <xf:bind nodeset="instance()/{$TYPE}[{$pos}]">
-                    <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) > 0 and string-length(replace(.,' ','')) = string-length(.)" />
-                    <xf:bind id="typebasetype" nodeset="@ce:type" required="false()" type="xf:string" constraint="(string-length(.) &gt; 1 and matches(., '^[a-z_]+$')) or (string-length(.) &lt; 1)" />                    
+                    <xf:bind id="typename" nodeset="@name" type="xf:string" readonly="true()" required="true()" constraint="string-length(.) > 0 and string-length(replace(.,' ','')) = string-length(.)" />
+                    <xf:bind id="typelabel" nodeset="@label" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z ]+$')" />
+                    <xf:bind id="typecontainerlabel" nodeset="@container_label" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z ]+$')" />
+                    <xf:bind id="typearchetype" nodeset="@archetype" required="false()" type="xf:string" constraint="(string-length(.) &gt; 1 and matches(., '^[a-z_]+$')) or (string-length(.) &lt; 1)" />
+                    <xf:bind id="typedescriptor" nodeset="@descriptor" required="true()" type="xf:string" constraint="string-length(.) &gt; 1 and matches(., '^[a-z_]+$')" />
+                    <xf:bind id="typeworkflow" nodeset="@workflow" required="true()" type="xf:string" constraint="string-length(.) &gt; 1 and matches(., '^[a-z_]+$')" />                    
                     <xf:bind id="typenable" nodeset="@enabled" type="xf:boolean" required="true()"/>
                 </xf:bind>
                 
@@ -268,11 +289,25 @@ function type:edit($node as node(), $model as map(*)) {
                 </xf:action>        
             </xf:model>
             <!-- ######################### Views start ################################## -->
-            <xf:group ref="./{$TYPE}[{$pos}]">
+            <h2>Edit {$TYPE}-type</h2>
+            <xf:group appearance="compact" ref="./{$TYPE}[{$pos}]">
                 <xf:group appearance="bf:verticalTable">
-                    <xf:select1 id="c-enabled" bind="typenable" appearance="minimal" class="xsmallWidth" incremental="true">
+                    <xf:input bind="typename" id="type-label" incremental="true">
+                        <xf:label>name:</xf:label>
+                    </xf:input>                
+                    <xf:input bind="typelabel" id="type-label" incremental="true">
+                        <xf:label>label:</xf:label>
+                        <xf:hint>Used in menus</xf:hint>
+                        <xf:alert>invalid label - non-alphabets disallowed</xf:alert>
+                    </xf:input>
+                    <xf:input bind="typecontainerlabel" id="type-containerlabel" incremental="true">
+                        <xf:label>container label:</xf:label>
+                        <xf:hint>Label on the folder containing this doc-type</xf:hint>
+                        <xf:alert>invalid container label - non-alphabets disallowed</xf:alert>
+                    </xf:input>                
+                    <xf:select1 bind="typenable" id="c-enabled" appearance="minimal" class="xsmallWidth" incremental="true">
                         <xf:label>type status:</xf:label>
-                        <xf:hint>a Hint for this control</xf:hint>
+                        <xf:hint>enable this {$TYPE}-type in Bungeni</xf:hint>
                         <xf:help>help for select1</xf:help>
                         <xf:alert>invalid</xf:alert>
                         <xf:itemset nodeset="instance('i-boolean')/bool">
@@ -282,16 +317,38 @@ function type:edit($node as node(), $model as map(*)) {
                     </xf:select1>
                     {
                     if($TYPE eq 'doc') then 
-                        <xf:select1 bind="typebasetype" class="choiceInput" selection="open" appearance="minimal" incremental="true">
-                            <xf:label>base type:</xf:label>
-                            <xf:hint>choose doc base-type from dropdown or add a newone</xf:hint>
-                            <xf:help>denotes the original type this document is derived from</xf:help>
-                            <xf:alert>invalid type name / empty space(s)</xf:alert>
-                            <xf:itemset nodeset="instance('i-basetypes')/basetype">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>
+                        <xf:group appearance="bf:verticalTable">
+                            <xf:select1 bind="typearchetype" class="choiceInput" selection="open" appearance="minimal" incremental="true">
+                                <xf:label>archetype:</xf:label>
+                                <xf:hint>choose doc base-type from dropdown or add a newone</xf:hint>
+                                <xf:help>denotes the original type this document is derived from</xf:help>
+                                <xf:alert>invalid type name / empty space(s)</xf:alert>
+                                <xf:itemset nodeset="instance('i-archetypes')/archetype">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:select1 bind="typedescriptor" class="choiceInput" selection="open" appearance="minimal" incremental="true">
+                                <xf:label>descriptor:</xf:label>
+                                <xf:hint>choose doc base-type from dropdown or add a new base-type</xf:hint>
+                                <xf:help>denotes the original type this document is derived from</xf:help>
+                                <xf:alert>invalid type name / empty space(s)</xf:alert>
+                                <xf:itemset nodeset="instance('i-descriptors')/descriptor">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1>                         
+                            <xf:select1 bind="typeworkflow" class="choiceInput" selection="open" appearance="minimal" incremental="true">
+                                <xf:label>workflow:</xf:label>
+                                <xf:hint>choose doc base-type from dropdown or add a new base-type</xf:hint>
+                                <xf:help>denotes the original type this document is derived from</xf:help>
+                                <xf:alert>invalid type name / empty space(s)</xf:alert>
+                                <xf:itemset nodeset="instance('i-workflows')/workflow">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1> 
+                        </xf:group>
                     else ()
                     }
                 </xf:group>
@@ -324,8 +381,8 @@ function type:edit($node as node(), $model as map(*)) {
                                     <xf:help>pick from the list of workflow</xf:help>
                                     <xf:alert>invalid</xf:alert>
                                     <xf:itemset nodeset="instance('i-workflows')/workflow">
-                                        <xf:label ref="@name"></xf:label>
-                                        <xf:value ref="@name"></xf:value>
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="."></xf:value>
                                     </xf:itemset>
                                 </xf:select1> 
                                 <xf:trigger src="resources/images/delete.png">
@@ -418,19 +475,27 @@ function type:add($node as node(), $model as map(*)) {
                 
                 <xf:instance id="i-boolean" src="{$type:REST-CXT-APP}/model_templates/boolean.xml"/>                
                 
-                <xf:instance xmlns="" id="i-basetypes">
-                    {local:base-types()}
-                </xf:instance>                
+                <xf:instance xmlns="" id="i-archetypes">
+                    {local:arche-types()}
+                </xf:instance>   
+                
+                <xf:instance xmlns="" id="i-descriptors">
+                    {local:descriptors()}
+                </xf:instance>      
+                
+                <xf:instance xmlns="" id="i-workflows">
+                    {local:workflows()}
+                </xf:instance>                 
                 
                 <xf:instance xmlns="" id="i-typedoc">
                     <data>
-                        <doc name="" enabled="false" ce:type=""/>
+                        <doc name="" enabled="false" archetype="doc" label="" container_label="" descriptor="" workflow=""/>
                     </data>
                 </xf:instance>
                 
                 <xf:instance xmlns="" id="i-typeevent">
                     <data>
-                        <event archetype="event" name="" enabled="false"/>
+                        <event name="" enabled="false" archetype="event" label="" container_label="" descriptor="" workflow=""/>
                     </data>
                 </xf:instance>                
                 
@@ -448,7 +513,11 @@ function type:add($node as node(), $model as map(*)) {
                 
                 <xf:bind nodeset="instance()/{$TYPE}[last()]">
                     <xf:bind id="typename" nodeset="@name" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[a-z_]+$') and count(instance()/{$TYPE}/@name) eq count(distinct-values(instance()/{$TYPE}/@name))" />
-                    <xf:bind id="typebasetype" nodeset="@ce:type" required="false()" type="xf:string" constraint="(string-length(.) &gt; 1 and matches(., '^[a-z_]+$')) or (string-length(.) &lt; 1)" />
+                    <xf:bind id="typelabel" nodeset="@label" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z ]+$')" />
+                    <xf:bind id="typecontainerlabel" nodeset="@container_label" type="xf:string" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z ]+$')" />
+                    <xf:bind id="typearchetype" nodeset="@archetype" required="false()" type="xf:string" constraint="(string-length(.) &gt; 1 and matches(., '^[a-z_]+$')) or (string-length(.) &lt; 1)" />
+                    <xf:bind id="typedescriptor" nodeset="@descriptor" required="true()" type="xf:string" constraint="string-length(.) &gt; 1 and matches(., '^[a-z_]+$')" />
+                    <xf:bind id="typeworkflow" nodeset="@workflow" required="true()" type="xf:string" constraint="string-length(.) &gt; 1 and matches(., '^[a-z_]+$')" />
                     <xf:bind id="typenable" nodeset="@enabled" type="xf:boolean" required="true()"/>
                 </xf:bind>
                 
@@ -524,18 +593,28 @@ function type:add($node as node(), $model as map(*)) {
                     <xf:setfocus control="type-name"/>
                 </xf:action>        
             </xf:model>
-            <!-- ######################### Views start ################################## -->
-            <p>Enter {$TYPE}-type information || Click on the left to update parts</p>
+            <!-- ######################### View start ################################## -->
+            <h2>Add {$TYPE}-type</h2>
             <xf:group appearance="compact" ref="instance()/doc[last()]">
                 <xf:group appearance="bf:verticalTable">
                     <xf:input bind="typename" id="type-name" incremental="true">
                         <xf:label>name:</xf:label>
                         <xf:hint>Unique / no spaces / lower-case alphabets only</xf:hint>
-                        <xf:alert>invalid type name / duplicate / empty space(s)</xf:alert>
-                    </xf:input>                  
+                        <xf:alert>invalid name - duplicate / empty space(s) disallowded</xf:alert>
+                    </xf:input>   
+                    <xf:input bind="typelabel" id="type-label" incremental="true">
+                        <xf:label>label:</xf:label>
+                        <xf:hint>Used in menus</xf:hint>
+                        <xf:alert>invalid label - non-alphabets disallowed</xf:alert>
+                    </xf:input>
+                    <xf:input bind="typecontainerlabel" id="type-containerlabel" incremental="true">
+                        <xf:label>container label:</xf:label>
+                        <xf:hint>Label on the folder containing this doc-type</xf:hint>
+                        <xf:alert>invalid container label - non-alphabets disallowed</xf:alert>
+                    </xf:input>                      
                     <xf:select1 id="c-enabled" bind="typenable" appearance="minimal" class="xsmallWidth" incremental="true">
                         <xf:label>type status:</xf:label>
-                        <xf:help>help for select1</xf:help>
+                        <xf:help>enable this {$TYPE}-type in Bungeni</xf:help>
                         <xf:alert>invalid</xf:alert>
                         <xf:itemset nodeset="instance('i-boolean')/bool">
                             <xf:label ref="@name"></xf:label>
@@ -544,16 +623,38 @@ function type:add($node as node(), $model as map(*)) {
                     </xf:select1>
                     {
                     if($TYPE eq 'doc') then 
-                        <xf:select1 bind="typebasetype" class="choiceInput" selection="open" appearance="minimal" incremental="true">
-                            <xf:label>base type:</xf:label>
-                            <xf:hint>choose doc base-type from dropdown or add a new base-type</xf:hint>
-                            <xf:help>denotes the original type this document is derived from</xf:help>
-                            <xf:alert>invalid type name / empty space(s)</xf:alert>
-                            <xf:itemset nodeset="instance('i-basetypes')/basetype">
-                                <xf:label ref="."></xf:label>
-                                <xf:value ref="."></xf:value>
-                            </xf:itemset>
-                        </xf:select1>
+                        <xf:group appearance="bf:verticalTable">
+                            <xf:select1 bind="typearchetype" class="choiceInput" selection="open" appearance="minimal" incremental="true">
+                                <xf:label>archetype:</xf:label>
+                                <xf:hint>choose doc base-type from dropdown or add a new base-type</xf:hint>
+                                <xf:help>denotes the original type this document is derived from</xf:help>
+                                <xf:alert>invalid type name / empty space(s)</xf:alert>
+                                <xf:itemset nodeset="instance('i-archetypes')/archetype">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:select1 bind="typedescriptor" class="choiceInput" selection="open" appearance="minimal" incremental="true">
+                                <xf:label>descriptor:</xf:label>
+                                <xf:hint>choose doc base-type from dropdown or add a new base-type</xf:hint>
+                                <xf:help>denotes the original type this document is derived from</xf:help>
+                                <xf:alert>invalid type name / empty space(s)</xf:alert>
+                                <xf:itemset nodeset="instance('i-descriptors')/descriptor">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1>                         
+                            <xf:select1 bind="typeworkflow" class="choiceInput" selection="open" appearance="minimal" incremental="true">
+                                <xf:label>workflow:</xf:label>
+                                <xf:hint>choose doc base-type from dropdown or add a new base-type</xf:hint>
+                                <xf:help>denotes the original type this document is derived from</xf:help>
+                                <xf:alert>invalid type name / empty space(s)</xf:alert>
+                                <xf:itemset nodeset="instance('i-workflows')/workflow">
+                                    <xf:label ref="."></xf:label>
+                                    <xf:value ref="."></xf:value>
+                                </xf:itemset>
+                            </xf:select1>
+                        </xf:group>
                     else ()
                     }                    
                     <br/>
@@ -566,7 +667,7 @@ function type:add($node as node(), $model as map(*)) {
                     </xf:group>
                 </xf:group>
             </xf:group>
-            <!-- ######################### Views end ################################## -->  
+            <!-- ######################### View end ################################## -->  
         </div>
 };
 

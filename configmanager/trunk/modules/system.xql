@@ -40,6 +40,9 @@ declare function local:transform-configs($file-paths) {
         else if (contains($store,"/workflows/")) then (
             xmldb:store($collection, $resource, local:split-workflow($store), "application/xml")  
         )
+        else if (contains($store,"types.xml")) then (
+            xmldb:store($collection, $resource, local:import-typesxml($store), "application/xml")
+        )          
         else
             ()
 };
@@ -104,6 +107,13 @@ declare function local:split-workflow($wf-path as xs:string) {
     return transform:transform($step1_doc, $step2, ())        
 };
 
+declare function local:import-typesxml($typesxml-path as xs:string) {
+    let $xslt := appconfig:get-xslt("types_import.xsl")
+    let $doc := doc($typesxml-path)   
+    return 
+        transform:transform($doc, $xslt, ())        
+};
+
 declare
 function sysmanager:upload-form($node as node(), $model as map(*)) {
 
@@ -152,7 +162,7 @@ function sysmanager:store($node as node(), $model as map(*)) {
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     (: 
     The custom folder is imported into a structure that looks like this :
-    app-root
+    /db/
         +--bungeni-configuration
                 +--live
                     +-bungeni_custom

@@ -8,11 +8,9 @@
         10 Apr 2013
         This is now split into 2 chained templates
     -->
-
     <xsl:include href="split_attr_tags.xsl"/>
     <xsl:include href="split_attr_roles.xsl"/>
     <xsl:include href="split_attr_param_value.xsl"/>
-
     <xsl:output indent="yes"/>
     <xsl:param name="docname"/>
     <xsl:template match="comment()">
@@ -26,10 +24,9 @@
     </xsl:template>
     <xsl:template match="workflow">
         <xsl:copy>
-            <xsl:attribute name="name" select="replace(tokenize(base-uri(),'/')[last()], '.xml', '')" />
+            <xsl:attribute name="name" select="replace(tokenize(base-uri(),'/')[last()], '.xml', '')"/>
             <xsl:apply-templates select="@*" mode="preserve"/>
             <xsl:apply-templates select="@*|node()"/>
-            
         </xsl:copy>
     </xsl:template>
     <xsl:template match="allow[parent::facet] | deny[parent::facet]">

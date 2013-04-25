@@ -13,20 +13,14 @@
     </xsl:template>
     <xsl:template match="descriptor" priority="1">
         <xsl:copy>
-            <xsl:if test="not(@label)">
-                <xsl:attribute name="label"/>
-            </xsl:if>
-            <xsl:if test="not(@container_label)">
-                <xsl:attribute name="container_label"/>
+            <xsl:if test="not(@order)">
+                <xsl:attribute name="order"/>
             </xsl:if>
             <xsl:if test="not(@sort_on)">
                 <xsl:attribute name="sort_on"/>
             </xsl:if>
             <xsl:if test="not(@sort_dir)">
                 <xsl:attribute name="sort_dir"/>
-            </xsl:if>
-            <xsl:if test="not(@name)">
-                <xsl:attribute name="name" select="replace(tokenize(base-uri(),'/')[last()], '.xml', '')" />
             </xsl:if>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
@@ -47,15 +41,14 @@
             </modes>
         </xsl:copy>
     </xsl:template>
-    
     <xsl:template match="container">
         <xsl:copy>
-            <xsl:apply-templates select="@*" />
+            <xsl:apply-templates select="@*"/>
             <xsl:if test="not(@name)">
-                <xsl:attribute name="name" />
+                <xsl:attribute name="name"/>
             </xsl:if>
             <xsl:if test="not(@note)">
-                <xsl:attribute name="note" />
+                <xsl:attribute name="note"/>
             </xsl:if>
         </xsl:copy>
     </xsl:template>

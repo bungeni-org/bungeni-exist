@@ -8,8 +8,11 @@
         10 Apr 2013
         This is now split into 2 chained templates
     -->
+
     <xsl:include href="split_attr_tags.xsl"/>
     <xsl:include href="split_attr_roles.xsl"/>
+    <xsl:include href="split_attr_param_value.xsl"/>
+
     <xsl:output indent="yes"/>
     <xsl:param name="docname"/>
     <xsl:template match="comment()">
@@ -67,7 +70,7 @@
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->
-    <xsl:template mode="preserve" match="@tags | @roles | @source | @destination | @permission_actions | @actions"/>
+    <xsl:template mode="preserve" match="@tags | @roles | @source | @destination | @permission_actions | @actions | @value[parent::parameter]"/>
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
     </xsl:template>

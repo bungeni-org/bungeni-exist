@@ -3,22 +3,22 @@
     
     <!-- feature registry -->    
     
-    <feature name="signatory" enabled="true">
+    <feature name="signatory" enabled="true" workflow="true">
         <parameter name="min_signatories" type="xs:integer" />
         <parameter name="max_signatories" type="xs:integer" />
         <parameter name="open_states" type="ncStates" />
     </feature>
     
-    <feature name="event" enabled="true">
+    <feature name="event" enabled="true" workflow="true">
         <parameter name="types" value="ncEventTypes" />
     </feature>
     
-    <feature name="schedule" enabled="true">
+    <feature name="schedule" enabled="true" >
         <parameter name="schedulable_states" value="ncStates" />
         <parameter name="scheduled_states" value="ncStates" />
     </feature>
     
-    <feature name="download" enabled="true">
+    <feature name="download" enabled="true" >
         <parameter name="allowed_types" value="ncDownTypes"/>
     </feature>
     
@@ -26,7 +26,7 @@
 
     <feature name="version" enabled="true" />
 
-    <feature name="attachment" enabled="true" />
+    <feature name="attachment" enabled="true" workflow="true" />
 
     <feature name="workspace" enabled="true" />
 

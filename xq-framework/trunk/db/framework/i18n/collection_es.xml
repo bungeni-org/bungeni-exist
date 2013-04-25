@@ -48,6 +48,7 @@
     <msg key="list-t-members">Members of Parliament</msg>
     <msg key="list-t-pts">Political-groups</msg>
     <msg key="uc">under consideration ({1})</msg>
+    <msg key="recent">reciente ({1})</msg>
     <msg key="list-tab-cur">current</msg>
     <msg key="list-tab-gaz">gazette</msg>
     <msg key="past">past ({1})</msg>

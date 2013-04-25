@@ -1557,7 +1557,7 @@
         <views name="Report">
             <view id="listing" path="publications" tag="listing">
                 <template>xml/legislativeitem-generic.xml</template>
-                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+                <xsl>xsl/reports.xsl</xsl>
             </view>
             <view id="rss" path="publications/rss" tag="listing">
                 <template/>
@@ -1885,8 +1885,7 @@
                     No.</searchin>
             </searchins>
             <listingfilters>
-                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
-                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+                <listingfilter id="uc" name="recent">contains(bu:tags/bu:tag/bu:value,'public')</listingfilter>
             </listingfilters>
             <acl name="public-view">
                 <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>

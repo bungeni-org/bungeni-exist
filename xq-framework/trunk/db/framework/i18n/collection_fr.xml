@@ -49,6 +49,7 @@
     <msg key="list-t-members">Les membres du Parlement</msg>
     <msg key="list-t-pts">Groupes politiques</msg>
     <msg key="uc">à l&amp;#39;étude ({1})</msg>
+    <msg key="recent">récents ({1})</msg>
     <msg key="list-tab-cur">courant</msg>
     <msg key="list-tab-gaz">gazette</msg>
     <msg key="past">passé ({1})</msg>

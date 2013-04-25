@@ -52,6 +52,7 @@
     <msg key="list-t-members">Membri del Parlamento</msg>
     <msg key="list-t-pts">Gruppi-politici</msg>
     <msg key="uc">sotto considerazione ({1})</msg>
+    <msg key="recent">recente ({1})</msg>
     <msg key="list-tab-cur">corrente</msg>
     <msg key="list-tab-gaz">gazzetta</msg>
     <msg key="past">passato ({1})</msg>

@@ -49,6 +49,7 @@
     <msg key="list-t-members">Membros do Parlamento</msg>
     <msg key="list-t-pts">Políticos-grupos</msg>
     <msg key="uc">em consideração ({1})</msg>
+    <msg key="recent">recente ({1})</msg>
     <msg key="list-tab-cur">atual</msg>
     <msg key="list-tab-gaz">gazeta</msg>
     <msg key="past">passado ({1})</msg>

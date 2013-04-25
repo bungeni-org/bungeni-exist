@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="xs" version="2.0">
     
     <!-- Generic templates applied to document views -->
     <xsl:import href="tmpl-doc-generic.xsl"/>
@@ -23,6 +23,8 @@
     <!-- DOC-ITEM-PREFACE -->
     <xsl:template name="doc-item-preface">
         <xsl:param name="doc-type"/>
+        <xsl:param name="chamber"/>
+        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <h3 id="doc-heading" class="doc-headers">
             <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
         </h3>
@@ -32,12 +34,26 @@
             <xsl:with-param name="doc-type" select="$doc-type"/>
         </xsl:call-template>
         <!-- Call sponsor where applicable -->
-        <xsl:call-template name="doc-item-sponsor"/>
+        <xsl:call-template name="doc-item-sponsor">
+            <xsl:with-param name="chamber" select="$chamber"/>
+        </xsl:call-template>
         
         <!-- Call secondary sponsors where applicable -->
-        <xsl:call-template name="doc-item-sponsors"/>
+        <xsl:call-template name="doc-item-sponsors">
+            <xsl:with-param name="chamber" select="$chamber"/>
+        </xsl:call-template>
     </xsl:template>
-    <xsl:template name="doc-item-sponsors"/>
+    <xsl:template name="doc-item-sponsor">
+        <xsl:param name="chamber"/>
+        <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+            <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
+                <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
+            </i>
+        </h4>
+    </xsl:template>
+    <xsl:template name="doc-item-sponsors">
+        <xsl:param name="chamber"/>
+    </xsl:template>
     <xsl:template name="doc-item-number">
         <xsl:param name="doc-type"/>
     </xsl:template>

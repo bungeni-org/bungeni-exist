@@ -49,6 +49,7 @@
     <msg key="list-t-members">أعضاء البرلمان</msg>
     <msg key="list-t-pts">مجموعات السياسية</msg>
     <msg key="uc">قيد النظر ({1})</msg>
+    <msg key="recent">الزوار ({1})</msg>
     <msg key="list-tab-cur">تيار</msg>
     <msg key="list-tab-gaz">جريدة رسمية</msg>
     <msg key="past">السابقة ({1})</msg>

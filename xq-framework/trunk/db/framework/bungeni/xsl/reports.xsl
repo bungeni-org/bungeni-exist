@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:bun="http://exist.bungeni.org/bun" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -9,11 +9,11 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Oct 5, 2011</xd:p>
+                <xd:b>Created on:</xd:b> Apr 25, 2013</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
             <xd:p>
-                Lists legis-items from Bungeni 
+                Reports listings 
             </xd:p>
         </xd:desc>
     </xd:doc>
@@ -23,21 +23,19 @@
         THE INPUT DOCUMENT LOOKS LIKE THIS 
         
         <docs>
-        <paginator>
-        <count>3</count>
-        <documentType>bill</documentType>
-        <listingUrlPrefix>bill/text</listingUrlPrefix>
-        <offset>3</offset>
-        <limit>3</limit>
-        </paginator>
-        <alisting>
-        <doc>
-        <bu:ontology .../>
-        <ref>
-        <bu:ontology/>
-        </ref>
-        </doc>
-        </alisting>
+            <paginator>
+                <count>3</count>
+                <documentType>bill</documentType>
+                <listingUrlPrefix>bill/text</listingUrlPrefix>
+                <offset>3</offset>
+                <limit>3</limit>
+            </paginator>
+            <alisting>
+                <doc>
+                    <bu:ontology .../>
+                    </ref>
+                </doc>
+            </alisting>
         </docs>
     -->
     <!-- INPUT PARAMETERS -->
@@ -47,7 +45,6 @@
     <xsl:param name="listing-tab"/>
     <xsl:param name="item-listing-rel-base"/>
     <xsl:param name="chamber"/>
-    <xsl:param name="chamber-id"/>
     
     <!-- CONVENIENCE VARIABLES -->
     <xsl:variable name="input-document-type" select="/docs/paginator/documentType"/>
@@ -74,9 +71,9 @@
                             <xsl:if test="@id eq $listing-tab">
                                 <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                            <a href="{$item-listing-rel-base}?tab={@id}">
+                            <a href="{$chamber}/{$item-listing-rel-base}?tab={@id}">
                                 <i18n:translate>
-                                    <i18n:text key="{@id}">Text to translate with ({1})</i18n:text>
+                                    <i18n:text key="{@name}">Text to translate with ({1})</i18n:text>
                                     <i18n:param>
                                         <xsl:value-of select="@count"/>
                                     </i18n:param>
@@ -152,9 +149,11 @@
         </xsl:variable>
         <!--div border="0" style="border-style:none !important;height:18px;width:18px;background:transparent url(assets/bungeni/images/breadcrumbs.png) no-repeat left -197px"/-->
         <li>
-            <a href="{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
+            <a href="{$chamber}/{$listing-url-prefix}?uri={$docIdentifier}" id="{$docIdentifier}">
                 <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
             </a>
+            &#160;›&#160;
+            <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
             <span class="tgl-pad-right">▼&#160;&#160;</span>
             <div class="doc-toggle">
                 <div class="black-full">

@@ -398,7 +398,7 @@ function form:edit($node as node(), $model as map(*)) {
                             <xf:group id="dialogButtons" appearance="bf:horizontalTable">
                                 <xf:label/>
                                 <xf:trigger>
-                                    <xf:label>Save</xf:label>                                          
+                                    <xf:label>Save Changes</xf:label>                                          
                                     <xf:action>
                                         <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
                                         <xf:delete nodeset="instance()/integrity[@constraints = '' and @validations = '']"/>

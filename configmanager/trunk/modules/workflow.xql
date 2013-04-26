@@ -344,7 +344,7 @@ function workflow:edit($node as node(), $model as map(*)) {
         (: Element to pop up :)
     	<div>
             <div style="display:none">
-                <xf:model>
+                <xf:model id="master">
                     {
                         (: if adding a new workflow is true :)
                         if($init eq "true") then 
@@ -513,6 +513,7 @@ function workflow:edit($node as node(), $model as map(*)) {
             <div id="tabs_content_container">          
                 <div id="details" class="tab_content" style="display: block;">
                     <h2>Workflow Properties</h2>
+                   
                     <xf:group ref="." appearance="bf:horizontalTable">
                         <xf:input id="wf-title" ref="@title" incremental="true">
                             <xf:label>Title</xf:label>
@@ -531,21 +532,26 @@ function workflow:edit($node as node(), $model as map(*)) {
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Workflowed</xf:label>  
                             {
-                                for $feature in local:all-feature()/feature[@workflow eq 'True']
+                                for $feature at $pos in local:all-feature()/feature
+                                where $feature/@workflow eq 'True'
                                 return document {                                       
                                         <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
-                                            <xf:label>{data($feature/@name)} </xf:label>
-                                            <xf:hint>click to enabled this feature</xf:hint>
-                                        </xf:input>,
-                                        <xf:trigger appearance="minimal" class="feature-workflow">
-                                            <xf:label>{data($feature/@name)} workflow&#160;</xf:label>
-                                            <xf:hint>click to go the feature workflow</xf:hint>
-                                            <xf:action ev:event="DOMActivate">
-                                                <xf:setvalue ref="instance('URL-container')" value="index.html"/>
-                                                <xf:load ref="instance('URL-container')"/>
-                                            </xf:action>
-                                            <xf:message level="ephemeral">The link trigger was clicked</xf:message>
-                                        </xf:trigger>                                        
+                                            <xf:label>
+                                                <xf:trigger appearance="minimal" class="{data($feature/@name)} feature-workflow">
+                                                    <xf:label>{data($feature/@name)}&#160;</xf:label>
+                                                    <xf:hint>click to go the feature workflow</xf:hint>
+                                                    <xf:action ev:event="DOMActivate">
+                                                        <!--xf:setvalue ref="instance('URL-container')" value="#"/>
+                                                        <xf:load ref="instance('URL-container')"/-->
+                                                        <xf:load show="embed" targetid="embeddedForm">
+                                                            <xf:resource value="'feature-subform.html?index={$pos}'"/>
+                                                        </xf:load>
+                                                    </xf:action>
+                                                    <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
+                                                </xf:trigger>                                            
+                                            </xf:label>
+                                            <xf:hint>click to enable this feature</xf:hint>
+                                        </xf:input>                                        
                                 }
                             }
                         </xf:group>
@@ -1680,5 +1686,71 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                     </xf:group>
                 </div>
             </div>
+        </div>
+};
+
+
+
+
+declare
+function workflow:feature-subform($node as node(), $model as map(*)) {
+
+    let $index := xs:integer(request:get-parameter("index",6))
+    return 
+        (: Element to pop up :)
+    	<div>
+            <div style="display:none">
+                <xf:model id="m-forfeature" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+                   <xf:instance xmlns="" id="i-feature-params">
+                       <feature/>
+                   </xf:instance>
+                    <xf:instance xmlns="" id="i-parameter-values">
+                        <data>
+                            <parameter name="">
+                                <values originAttr="value">
+                                    <value/>
+                                </values>
+                            </parameter>
+                        </data>
+                    </xf:instance>                   
+                   <xf:bind id="b-param-name" nodeset="@name" readonly="true()" type="xs:string"/>
+                   <xf:submission id="s-load-from-master" resource="model:master#instance('i-workflow')/workflow/feature[{$index}]" replace="instance" method="get">
+                       <xf:message ev:event="xforms-submit-done" level="ephemeral">feature's parameters editor loaded</xf:message>
+                   </xf:submission>
+                   <xf:submission id="s-update-master" resource="model:master#instance('i-workflow')/workflow/feature[{$index}]" replace="none" method="post">
+                       <xf:message ev:event="xforms-submit-done" level="ephemeral">feature's parameters saved</xf:message>
+                       <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
+                   </xf:submission>
+                   <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+                </xf:model>
+            </div>
+            <div>
+                <xf:group appearance="minimal">
+                   <xf:label id="editing-subform">Parameters edit subform</xf:label>
+                   <xf:action ev:event="betterform-variable-changed" />
+                   <xf:repeat id="r-parameters" model="m-forfeature" nodeset="instance('i-feature-params')/parameter">
+                       <xf:group ref="." appearance="bf:verticalTable">
+                           <xf:output bind="b-param-name"/>
+                           <xf:group appearance="bf:horizontalTable">
+                                <xf:select1 model="m-forfeature" ref="values/value" appearance="compact" incremental="true">
+                                    <xf:alert>invalid: emtpy or duplicate parameters</xf:alert>
+                                    <xf:hint>parameters should be unique</xf:hint>   
+                                    <xf:itemset model="master" nodeset="instance('i-workflow')/state[@id ne '']">
+                                        <xf:label ref="@title"/>                                       
+                                        <xf:value ref="@id"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xf:group>                         
+                       </xf:group>
+                   </xf:repeat>
+                   <xf:group appearance="minimal">
+                       <xf:trigger appearance="triggerMiddleColumn">
+                           <xf:label>apply changes</xf:label>
+                           <xf:hint>Click apply to update the parameters</xf:hint>
+                           <xf:send submission="s-update-master"/>
+                       </xf:trigger>
+                   </xf:group>
+                </xf:group>
+            </div>                 
         </div>
 };

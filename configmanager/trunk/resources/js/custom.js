@@ -6,9 +6,46 @@ $(document).ready(function(){
         // timeout because of http://stackoverflow.com/questions/2060019/how-to-trigger-click-on-page-load
         setTimeout(function() {
             $("#tabs li#"+tabSelect).trigger('click');
-        },10);        
-        
+        },10);
     }
+    
+    // POPUP to load subform --BEGIN
+    function deselect() {
+        $(".pop").slideFadeToggle(function() { 
+            $("#contact").removeClass("selected");
+        });    
+    }
+    $(function() {
+        $(".attachment a, .event a, .signatory a, .schedule a").live('click', function() {
+            if($(this).hasClass("selected")) {
+                deselect();               
+            } else {
+                $(this).addClass("selected");
+                
+                $(".pop").slideFadeToggle(function() { 
+                    //$("#itemto").focus();
+                });
+                
+                $('.pop').css('left',event.pageX);
+                $('.pop').css('top',event.pageY);
+                $('.pop').css('display','inline');     
+                $(".pop").css("position", "absolute");
+                
+                $(this).removeClass("selected");
+            }
+            return false;
+        });
+    
+        $(".close").live('click', function() {
+            deselect();
+            return false;
+        });
+    });
+    // POPUP to load subform --END
+    
+    $.fn.slideFadeToggle = function(easing, callback) {
+        return this.animate({ opacity: 'toggle', height: 'toggle' }, "fast", easing, callback);
+    };    
     
     // Adding confirmation dialog for Saving configuration back to File-System
     $("a.confirm-delete").click(function() {

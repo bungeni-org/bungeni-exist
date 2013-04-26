@@ -6,26 +6,4 @@
         <permAction>.Add</permAction>
         <permAction>.Delete</permAction>
     </permActions>
-
-    <!-- global grants -->
-    <allow permission=".Add">
-        <roles originAttr="roles">
-            <role/>
-        </roles>
-    </allow>
-    <allow permission=".Edit">
-        <roles originAttr="roles">
-            <role/>
-        </roles>
-    </allow>
-    <allow permission=".View">
-        <roles originAttr="roles">
-            <role/>
-        </roles>
-    </allow>
-    <allow permission=".Delete">
-        <roles originAttr="roles">
-            <role/>
-        </roles>
-    </allow>
 </workflow>

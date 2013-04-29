@@ -44,6 +44,8 @@ declare variable $appconfig:UI-XML := $appconfig:FORM-FOLDER || "/ui.xml";
 
 declare variable $appconfig:MODEL-TEMPLATES := $appconfig:ROOT || "/model_templates";
 
+declare variable $appconfig:XML-RESOURCES := $appconfig:ROOT || "/resources/xml";
+
 declare variable $appconfig:XSL := $appconfig:ROOT || "/xsl";
 
 declare variable $appconfig:CSS := $appconfig:ROOT || "/resources/css";
@@ -58,6 +60,8 @@ declare variable $appconfig:REST-CONFIGS-COLLECTION-LIVE :=  "/rest/" ||$appconf
 declare variable $appconfig:REST-BUNGENI-CUSTOM-LIVE :=  $appconfig:REST-CONFIGS-COLLECTION-LIVE || "/bungeni_custom" ;
 
 declare variable $appconfig:REST-APP-ROOT := "/rest" || $config:app-root ;
+
+declare variable $appconfig:REST-XML-RESOURCES := "/rest" || $appconfig:XML-RESOURCES ;
 
 (: THis may be used internally to sudo to admin :)
 declare variable $appconfig:admin-username := "admin";

@@ -16,7 +16,7 @@ $(document).ready(function(){
         });    
     }
     $(function() {
-        $(".attachment a, .event a, .signatory a, .schedule a").live('click', function() {
+        $(".event a, .signatory a, .schedule a, .download a").live('click', function(event) {
             if($(this).hasClass("selected")) {
                 deselect();               
             } else {

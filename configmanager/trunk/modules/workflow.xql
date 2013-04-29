@@ -20,6 +20,7 @@ declare variable $workflow:CXT := request:get-context-path();
 declare variable $workflow:RESTXQ := request:get-context-path() || "/restxq";
 declare variable $workflow:REST-CXT-APP :=  $workflow:CXT || $appconfig:REST-APP-ROOT;
 declare variable $workflow:REST-BC-LIVE :=  $workflow:CXT || $appconfig:REST-BUNGENI-CUSTOM-LIVE;
+declare variable $workflow:REST-XML-RESOURCES :=  $workflow:CXT || $appconfig:REST-XML-RESOURCES;
 declare variable $workflow:REST-CXT-MODELTMPL := $workflow:REST-CXT-APP || "/model_templates";
 
 declare variable $workflow:TYPE := xs:string(request:get-parameter("type",""));
@@ -39,6 +40,17 @@ declare function local:external-facet($feature-name as xs:string) {
     for $facet in $doc
     return 
         <facet for="{$feature-name}" name="{$feature-name}.{$facet/@name}"/>
+};
+
+(: returns all the states nodes :)
+declare function local:workflow-states($doctype) as node() * {
+    let $states := local:get-workflow($doctype)/state
+    for $state at $pos in $states
+        return
+            element state { 
+                attribute id { data($state/@id) },
+                attribute title { data($state/@title) }
+            }
 };
 
 (: creates the output for all document facets :)
@@ -303,24 +315,29 @@ declare function local:all-feature() {
         let $type := xs:string(request:get-parameter("type","doc"))
         let $docname := xs:string(request:get-parameter("doc","none"))
         let $wf-doc := $appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml"
+        let $features-xml := $appconfig:XML-RESOURCES || "/features.xml" 
+        let $features-schema := doc($features-xml)
         let $featurename :=if (doc-available($wf-doc) and $type ne 'doc') then $docname else $type
         let $feats-tmpl := doc($appconfig:CONFIGS-FOLDER || "/workflows/.auto/" || "_features.xml")//features[@for eq $featurename]
         let $feats-wf := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")//feature   
-        for $feature in $feats-tmpl/feature    
+        for $feature in $feats-tmpl/feature 
+        let $name := $features-schema/feature/@name
+        let $params := if($features-schema/features/feature[@name eq $feature/@name]/parameter) then 'true' else 'false'
         return 
             if($feats-wf[@name eq data($feature/@name)]) then 
                 element feature {
                     attribute name { data($feature/@name) },
                     attribute workflow { data($feature/@workflow) },
+                    attribute params { $params },
                     attribute enabled { if(data($feats-wf[@name eq data($feature/@name)]/@enabled)) then xs:string(data($feats-wf[@name eq data($feature/@name)]/@enabled)) else "false" },
                     (: if there are parameters, show them :)
                     $feats-wf[@name eq data($feature/@name)]/child::* 
-
                 }
             else 
                 element feature {
                     attribute name { data($feature/@name) },
                     attribute workflow { data($feature/@workflow) },
+                    attribute params { $params },
                     attribute enabled { "false" }
                 } 
     }
@@ -533,36 +550,65 @@ function workflow:edit($node as node(), $model as map(*)) {
                             <xf:label>Workflowed</xf:label>  
                             {
                                 for $feature at $pos in local:all-feature()/feature
-                                where $feature/@workflow eq 'True'
-                                return document {                                       
-                                        <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
-                                            <xf:label>
-                                                <xf:trigger appearance="minimal" class="{data($feature/@name)} feature-workflow">
-                                                    <xf:label>{data($feature/@name)}&#160;</xf:label>
-                                                    <xf:hint>click to go the feature workflow</xf:hint>
-                                                    <xf:action ev:event="DOMActivate">
-                                                        <!--xf:setvalue ref="instance('URL-container')" value="#"/>
-                                                        <xf:load ref="instance('URL-container')"/-->
-                                                        <xf:load show="embed" targetid="embeddedForm">
-                                                            <xf:resource value="'feature-subform.html?index={$pos}'"/>
-                                                        </xf:load>
-                                                    </xf:action>
-                                                    <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
-                                                </xf:trigger>                                            
-                                            </xf:label>
-                                            <xf:hint>click to enable this feature</xf:hint>
-                                        </xf:input>                                        
-                                }
+                                return     
+                                    if ($feature/@workflow eq 'True') then (
+                                            if($feature/@params eq 'true') then 
+                                                <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
+                                                    <xf:label>
+                                                        <xf:trigger appearance="minimal" class="{data($feature/@name)} feature-workflow">
+                                                            <xf:label>{data($feature/@name)}&#160;</xf:label>
+                                                            <xf:hint>click to go the feature workflow</xf:hint>
+                                                            <xf:action ev:event="DOMActivate">
+                                                                <!--xf:setvalue ref="instance('URL-container')" value="#"/>
+                                                                <xf:load ref="instance('URL-container')"/-->
+                                                                <xf:load show="embed" targetid="embeddedForm">
+                                                                    <xf:resource value="'feature-subform.html?index={$pos}&amp;feature={data($feature/@name)}'"/>
+                                                                </xf:load>
+                                                            </xf:action>
+                                                            <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
+                                                        </xf:trigger>                                            
+                                                    </xf:label>
+                                                    <xf:hint>click to enable this feature</xf:hint>
+                                                </xf:input>
+                                            else
+                                                <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
+                                                    <xf:label>{data($feature/@name)} </xf:label>
+                                                </xf:input>                                    
+                                    )
+                                    else
+                                        ()
                             }
                         </xf:group>
                         <xf:group appearance="bf:verticalTable">
                             <xf:label>Non-workflowed</xf:label>
                             {
-                                for $feature in local:all-feature()/feature[@workflow eq 'False']
+                                for $feature at $pos in local:all-feature()/feature
                                 return 
-                                    <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
-                                        <xf:label>{data($feature/@name)} </xf:label>
-                                    </xf:input>
+                                    if($feature/@workflow eq 'False') then
+                                        (
+                                            if($feature/@params eq 'true') then 
+                                                <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled" incremental="true">
+                                                    <xf:label>
+                                                        <xf:trigger appearance="minimal" class="{data($feature/@name)} feature-workflow">
+                                                            <xf:label>{data($feature/@name)}&#160;</xf:label>
+                                                            <xf:hint>click to go the feature workflow</xf:hint>
+                                                            <xf:action ev:event="DOMActivate">
+                                                                <xf:load show="embed" targetid="embeddedForm">
+                                                                    <xf:resource value="'feature-subform.html?index={$pos}&amp;feature={data($feature/@name)}'"/>
+                                                                </xf:load>
+                                                            </xf:action>
+                                                            <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
+                                                        </xf:trigger>                                            
+                                                    </xf:label>
+                                                    <xf:hint>click to enable this feature</xf:hint>
+                                                </xf:input>
+                                            else
+                                                <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
+                                                    <xf:label>{data($feature/@name)} </xf:label>
+                                                </xf:input>
+                                        )
+                                    else
+                                        ()
                             }                                
                         </xf:group>
                     </xf:group>                    
@@ -1689,31 +1735,41 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
         </div>
 };
 
-
-
-
 declare
 function workflow:feature-subform($node as node(), $model as map(*)) {
 
     let $index := xs:integer(request:get-parameter("index",6))
+    let $feature-name := xs:string(request:get-parameter("feature",""))
     return 
         (: Element to pop up :)
     	<div>
             <div style="display:none">
-                <xf:model id="m-forfeature" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+                <xf:model id="m-feature" ev:event="xforms-revalidate" ev:defaultAction="cancel">
                    <xf:instance xmlns="" id="i-feature-params">
                        <feature/>
                    </xf:instance>
+                   
                     <xf:instance xmlns="" id="i-parameter-values">
                         <data>
-                            <parameter name="">
-                                <values originAttr="value">
-                                    <value/>
-                                </values>
-                            </parameter>
+                            <parameter name="" value=""/>
                         </data>
-                    </xf:instance>                   
+                    </xf:instance> 
+                    
+                    <xf:instance id="i-downtypes" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_downtypes.xml"/>
+                    
+                    <xf:instance id="i-features-schema" src="{$workflow:REST-XML-RESOURCES}/features.xml"/>
+                    
+                    <xf:instance xmlns="" id="i-states">
+                        <states>
+                            {local:workflow-states('assembly_bill')}
+                        </states>
+                    </xf:instance>
+                    
                    <xf:bind id="b-param-name" nodeset="@name" readonly="true()" type="xs:string"/>
+                   <xf:bind id="b-param-values" nodeset="@value" type="xs:string"/>
+                   <xf:bind id="b-min-signatories" nodeset="parameter[@name = 'min_signatories']/@value" type="xs:integer"/>
+                   <xf:bind id="b-max-signatories" nodeset="parameter[@name = 'max_signatories']/@value" type="xs:integer"/>
+                   
                    <xf:submission id="s-load-from-master" resource="model:master#instance('i-workflow')/workflow/feature[{$index}]" replace="instance" method="get">
                        <xf:message ev:event="xforms-submit-done" level="ephemeral">feature's parameters editor loaded</xf:message>
                    </xf:submission>
@@ -1722,33 +1778,106 @@ function workflow:feature-subform($node as node(), $model as map(*)) {
                        <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
                    </xf:submission>
                    <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
+                   
+                    <xf:action ev:event="xforms-ready" >                   
+                        <xf:action if="not(instance()/parameter)">
+                            <xf:insert nodeset="instance()/child::*" context="instance()" at="1" position="after" origin="instance('i-features-schema')/feature[@name = '{$feature-name}']/parameter" />
+                        </xf:action>
+                       <xf:action if="'{$feature-name}' = 'signatory'">
+                           <xf:action if="not(contains(instance()/parameter/@name,'min_signatories'))">
+                                <xf:insert nodeset="instance()/child::*" context="instance()" at="1" position="after" origin="instance('i-features-schema')/feature[@name = '{$feature-name}']/parameter[@name = 'min_signatories']" />
+                            </xf:action>  
+                           <xf:action if="not(contains(instance()/parameter/@name,'max_signatories'))">
+                                <xf:insert nodeset="instance()/child::*" context="instance()" at="1" position="after" origin="instance('i-features-schema')/feature[@name = '{$feature-name}']/parameter[@name = 'max_signatories']" />
+                            </xf:action>                            
+                        </xf:action>                        
+                    </xf:action>                   
                 </xf:model>
             </div>
             <div>
                 <xf:group appearance="minimal">
-                   <xf:label id="editing-subform">Parameters edit subform</xf:label>
+                   <xf:label id="editing-subform">Manage parameters: {$feature-name}</xf:label>
                    <xf:action ev:event="betterform-variable-changed" />
-                   <xf:repeat id="r-parameters" model="m-forfeature" nodeset="instance('i-feature-params')/parameter">
-                       <xf:group ref="." appearance="bf:verticalTable">
-                           <xf:output bind="b-param-name"/>
-                           <xf:group appearance="bf:horizontalTable">
-                                <xf:select1 model="m-forfeature" ref="values/value" appearance="compact" incremental="true">
-                                    <xf:alert>invalid: emtpy or duplicate parameters</xf:alert>
-                                    <xf:hint>parameters should be unique</xf:hint>   
-                                    <xf:itemset model="master" nodeset="instance('i-workflow')/state[@id ne '']">
-                                        <xf:label ref="@title"/>                                       
-                                        <xf:value ref="@id"/>
-                                    </xf:itemset>
-                                </xf:select1>
-                            </xf:group>                         
-                       </xf:group>
-                   </xf:repeat>
-                   <xf:group appearance="minimal">
+                   {
+                    switch($feature-name)
+                        case "signatory" return
+                           <xf:group model="m-feature" ref="instance('i-feature-params')" appearance="bf:verticalTable">
+                               <xf:output ref="parameter[@name = 'open_states']/@value"/>
+                               <xf:group appearance="bf:verticalTable">
+                                    <xf:select model="m-feature" ref="parameter[@name = 'open_states']/@value" appearance="minimal" incremental="true">
+                                        <xf:label>select states:</xf:label>
+                                        <xf:alert>invalid: emtpy or duplicate parameters</xf:alert>
+                                        <xf:hint>parameters should be unique</xf:hint>   
+                                        <xf:itemset nodeset="instance('i-states')/state">
+                                            <xf:label ref="@title"/>                                       
+                                            <xf:value ref="@id"/>
+                                        </xf:itemset>
+                                    </xf:select>
+                                    <xf:input model="m-feature" id="min-signatories" bind="b-min-signatories" incremental="true" class="xsmallWidth">
+                                        <xf:label>min signatories:</xf:label>
+                                        <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
+                                        <xf:help>Enter an integer between 1 and 100 </xf:help>
+                                        <xf:hint>minimum no. of signatories required</xf:hint>
+                                    </xf:input> 
+                                    <xf:input model="m-feature" id="max-signatories" bind="b-max-signatories" incremental="true" class="xsmallWidth">
+                                        <xf:label>max signatories:</xf:label>
+                                        <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
+                                        <xf:help>Enter an integer between 1 and 100 </xf:help>
+                                        <xf:hint>maximum no. of signatories required</xf:hint>
+                                    </xf:input>                                     
+                                </xf:group>                         
+                           </xf:group>  
+                        case "event" return 
+                            ()                       
+                        case "schedule" return
+                           <xf:repeat id="r-parameters" model="m-feature" nodeset="instance('i-feature-params')/parameter">
+                               <xf:group ref="." appearance="bf:verticalTable">
+                                   <xf:output bind="b-param-name"/>
+                                   <xf:output bind="b-param-values"/>
+                                   <xf:group appearance="bf:horizontalTable">
+                                        <xf:select model="m-feature" ref="@value" appearance="minimal" incremental="true">
+                                            <xf:alert>invalid: emtpy or duplicate parameters</xf:alert>
+                                            <xf:hint>parameters should be unique</xf:hint>   
+                                            <xf:itemset nodeset="instance('i-states')/state">
+                                                <xf:label ref="@title"/>                                       
+                                                <xf:value ref="@id"/>
+                                            </xf:itemset>
+                                        </xf:select>
+                                    </xf:group>                         
+                               </xf:group>
+                           </xf:repeat>
+                        case "download" return 
+                           <xf:group model="m-feature" ref="instance('i-feature-params')/parameter" appearance="bf:verticalTable">
+                               <xf:output bind="b-param-values"/>
+                               <xf:group appearance="bf:horizontalTable">
+                                    <xf:select model="m-feature" ref="@value" appearance="minimal" incremental="true">
+                                        <xf:alert>invalid: emtpy or duplicate parameters</xf:alert>
+                                        <xf:hint>parameters should be unique</xf:hint>   
+                                        <xf:itemset nodeset="instance('i-downtypes')/downloadType">
+                                            <xf:label ref="@description"/>                                       
+                                            <xf:value ref="@name"/>
+                                        </xf:itemset>
+                                    </xf:select>
+                                </xf:group>                         
+                           </xf:group>                     
+                        default return
+                            ()
+                   }
+                   <xf:group appearance="bf:horizontalTable">
                        <xf:trigger appearance="triggerMiddleColumn">
                            <xf:label>apply changes</xf:label>
                            <xf:hint>Click apply to update the parameters</xf:hint>
                            <xf:send submission="s-update-master"/>
                        </xf:trigger>
+                       <xf:trigger appearance="compact" class="close">
+                            <xf:label>Cancel&#160;</xf:label>
+                            <xf:hint>click to go the feature workflow</xf:hint>
+                            <xf:action ev:event="DOMActivate">
+                                <!--xf:setvalue ref="instance('URL-container')" value="#"/-->
+                                <xf:load ref="instance('URL-container')"/>
+                            </xf:action>
+                            <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
+                        </xf:trigger>                        
                    </xf:group>
                 </xf:group>
             </div>                 

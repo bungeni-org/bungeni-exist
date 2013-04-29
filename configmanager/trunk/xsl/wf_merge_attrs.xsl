@@ -38,7 +38,6 @@
             <xsl:call-template name="merge_tags">
                 <xsl:with-param name="elemOriginAttr" select="./permActions"/>
             </xsl:call-template>
-            <xsl:apply-templates select="feature"/>
             
             <!-- special handler to render global facet to global permissions using group_by voodoo -->
             <!-- !+NOTE using allow|deny is superfluous because has been entirely removed, if a permission is not 
@@ -78,7 +77,6 @@
                     </xsl:for-each>
                 </facet>
             </xsl:for-each-group>
-            <xsl:apply-templates select="*[name() ne 'feature']"/>
         </workflow>
     </xsl:template>
     
@@ -139,14 +137,6 @@
             </xsl:if>
             <xsl:apply-templates/>
         </xsl:element>
-    </xsl:template>
-    <xsl:template match="parameter">
-        <parameter>
-            <xsl:copy-of select="@*[not(. = '')]"/>
-            <xsl:call-template name="merge_tags">
-                <xsl:with-param name="elemOriginAttr" select="./values"/>
-            </xsl:call-template>
-        </parameter>
     </xsl:template>
     <xsl:template match="         permActions[@originAttr] |          roles[@originAttr]  |          sources[@originAttr] |          destinations[@originAttr] |          tags[@originAttr] |          actions[@originAttr]         "/>
     <xsl:template match="@permissions_from_state">

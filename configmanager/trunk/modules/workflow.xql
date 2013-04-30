@@ -772,7 +772,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
     let $NODENAME := if($NODE eq 'new') then $RETRIEVED-NAME else $NODE
     let $no-existing-facets := count(local:get-facets(false()))
     return
-    	<div>
+    	<div>    	
             <div style="display:none">
                  <xf:model id="master">
                     <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
@@ -985,9 +985,37 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 </div>
                                 <hr/>
                                 <br/>
-                                <h1>Manage Permissions</h1>
+                                <h1>Manage Permissions
+                                    <xf:select1 id="permissions-roller" appearance="minimal" incremental="true">
+                                        <xf:hint>manage feature permissions</xf:hint>
+                                        <xf:alert>invalid</xf:alert>
+                                        <xf:item>
+                                            <xf:label>State</xf:label>
+                                            <xf:value>state</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Event</xf:label>
+                                            <xf:value>event</xf:value>
+                                        </xf:item>     
+                                        <xf:item>
+                                            <xf:label>Attachment</xf:label>
+                                            <xf:value>attachment</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Signatory</xf:label>
+                                            <xf:value>signatory</xf:value>
+                                        </xf:item>    
+
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:message level="ephemeral">loading feature permissions</xf:message>
+                                            <xf:load show="embed" targetid="permissions-grid">
+                                                <xf:resource value="'permissions-subform.html?doc=test'"/>
+                                            </xf:load>                                          
+                                        </xf:action>                                        
+                                    </xf:select1>                                    
+                                </h1>
                                 <div style="width:100%;" class="clearfix">
-                                    <div style="float:left;width:50%;">
+                                    <div style="float:left;width:50%;" id="permissions-grid">
                                         <xf:group>
                                             <xf:label>State permissions</xf:label>
                                             <table class="listingTable">
@@ -1060,38 +1088,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                                 </xf:action>                                
                                             </xf:trigger>
                                         </xf:group>                                 
-                                    </div>  
-                                    
-                                    <div style="float:left;width:40%;margin-left:10px;">
-                                        <xf:group ref="./state[{$ATTR}]">
-                                            <xf:label>Feature Permissions</xf:label>
-                                            <span class="warning">&#160;These are workflowed features</span>
-                                            <xf:repeat id="r-featurefacets" nodeset="./facet[not(starts-with(./@ref,'.'))]" appearance="compact">
-                                                <xf:select1 ref="@ref" appearance="minimal" incremental="true">
-                                                    <xf:hint>a Hint for this control</xf:hint>
-                                                    <xf:alert>invalid: emtpy or non-unique feature-facet</xf:alert>
-                                                    <xf:itemset nodeset="instance('i-feature-facets')/facet">
-                                                        <xf:label ref="@name"></xf:label>                                       
-                                                        <xf:value ref="@name"></xf:value>
-                                                    </xf:itemset>                                                  
-                                                </xf:select1>
-                                                &#160;
-                                                <xf:trigger src="resources/images/delete.png">
-                                                    <xf:label>X</xf:label>
-                                                    <xf:action>
-                                                        <xf:delete at="index('r-featurefacets')[position()]"></xf:delete>                                 
-                                                    </xf:action>
-                                                </xf:trigger>                                  
-                                            </xf:repeat>   
-                                            <xf:trigger>
-                                                <xf:label>facet +</xf:label>
-                                                <xf:action>
-                                                    <xf:insert ev:event="DOMActivate" nodeset="./facet" at="last()" position="after" origin="instance('i-facet')/facet"/>
-                                                </xf:action>
-                                            </xf:trigger>
-                                            <hr/>                                           
-                                        </xf:group>                                 
-                                    </div>                                    
+                                    </div>                                   
                                 </div>                                                                
                             </div>                       
                         </div>
@@ -1836,13 +1833,13 @@ function workflow:feature-subform($node as node(), $model as map(*)) {
                                             <xf:value ref="@id"/>
                                         </xf:itemset>
                                     </xf:select>
-                                    <xf:input model="m-feature" id="min-signatories" bind="b-min-signatories" incremental="true" class="xsmallWidth">
+                                    <xf:input model="m-feature" id="min-signatories" bind="b-min-signatories" incremental="true">
                                         <xf:label>min signatories:</xf:label>
                                         <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
                                         <xf:help>Enter an integer between 1 and 100 </xf:help>
                                         <xf:hint>minimum no. of signatories required</xf:hint>
                                     </xf:input> 
-                                    <xf:input model="m-feature" id="max-signatories" bind="b-max-signatories" incremental="true" class="xsmallWidth">
+                                    <xf:input model="m-feature" id="max-signatories" bind="b-max-signatories" incremental="true">
                                         <xf:label>max signatories:</xf:label>
                                         <xf:alert>Invalid value. Between 1 &#8596; 100</xf:alert>
                                         <xf:help>Enter an integer between 1 and 100 </xf:help>

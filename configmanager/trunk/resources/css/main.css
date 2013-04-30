@@ -842,3 +842,8 @@ div.ulisting a.greyed {
   margin: 8px 0;
   padding-bottom: 8px;
 }
+
+#permissions-roller.xfControl {
+    width: auto !important;
+    margin-bottom:-9px !important;
+}

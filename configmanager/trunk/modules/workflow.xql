@@ -53,6 +53,16 @@ declare function local:workflow-states($doctype) as node() * {
             }
 };
 
+(: returns all the event types :)
+declare function local:event-types() as node()* {
+    for $event in doc($appconfig:TYPES-XML)/types/event
+    return
+        element eventType { 
+            attribute name { data($event/@name) },        
+            attribute workflow { data($event/@workflow) }
+        }
+};
+
 (: creates the output for all document facets :)
 declare function local:facets($doctype) as node() * {
     let $facets := local:get-workflow($doctype)/facet
@@ -562,7 +572,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                                                                 <!--xf:setvalue ref="instance('URL-container')" value="#"/>
                                                                 <xf:load ref="instance('URL-container')"/-->
                                                                 <xf:load show="embed" targetid="embeddedForm">
-                                                                    <xf:resource value="'feature-subform.html?index={$pos}&amp;feature={data($feature/@name)}'"/>
+                                                                    <xf:resource value="'feature-subform.html?doc={$docname}&amp;index={$pos}&amp;feature={data($feature/@name)}'"/>
                                                                 </xf:load>
                                                             </xf:action>
                                                             <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
@@ -594,7 +604,7 @@ function workflow:edit($node as node(), $model as map(*)) {
                                                             <xf:hint>click to go the feature workflow</xf:hint>
                                                             <xf:action ev:event="DOMActivate">
                                                                 <xf:load show="embed" targetid="embeddedForm">
-                                                                    <xf:resource value="'feature-subform.html?index={$pos}&amp;feature={data($feature/@name)}'"/>
+                                                                    <xf:resource value="'feature-subform.html?doc={$docname}&amp;index={$pos}&amp;feature={data($feature/@name)}'"/>
                                                                 </xf:load>
                                                             </xf:action>
                                                             <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
@@ -1738,6 +1748,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
 declare
 function workflow:feature-subform($node as node(), $model as map(*)) {
 
+    let $docname := xs:string(request:get-parameter("doc",""))
     let $index := xs:integer(request:get-parameter("index",6))
     let $feature-name := xs:string(request:get-parameter("feature",""))
     return 
@@ -1759,9 +1770,16 @@ function workflow:feature-subform($node as node(), $model as map(*)) {
                     
                     <xf:instance id="i-features-schema" src="{$workflow:REST-XML-RESOURCES}/features.xml"/>
                     
+                    <xf:instance xmlns="" id="i-eventtypes">
+                        <eventTypes>
+                            <eventType name="event" workflow="event"/>
+                            {local:event-types()}
+                        </eventTypes>
+                    </xf:instance>                    
+                    
                     <xf:instance xmlns="" id="i-states">
                         <states>
-                            {local:workflow-states('assembly_bill')}
+                            {local:workflow-states($docname)}
                         </states>
                     </xf:instance>
                     
@@ -1775,6 +1793,11 @@ function workflow:feature-subform($node as node(), $model as map(*)) {
                    </xf:submission>
                    <xf:submission id="s-update-master" resource="model:master#instance('i-workflow')/workflow/feature[{$index}]" replace="none" method="post">
                        <xf:message ev:event="xforms-submit-done" level="ephemeral">feature's parameters saved</xf:message>
+                       <xf:action ev:event="xforms-submit-done">
+                            <script type="text/javascript">
+                                deselect();
+                            </script>
+                       </xf:action>                       
                        <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
                    </xf:submission>
                    <xf:send ev:event="xforms-ready" submission="s-load-from-master"/>
@@ -1784,10 +1807,10 @@ function workflow:feature-subform($node as node(), $model as map(*)) {
                             <xf:insert nodeset="instance()/child::*" context="instance()" at="1" position="after" origin="instance('i-features-schema')/feature[@name = '{$feature-name}']/parameter" />
                         </xf:action>
                        <xf:action if="'{$feature-name}' = 'signatory'">
-                           <xf:action if="not(contains(instance()/parameter/@name,'min_signatories'))">
+                           <xf:action if="not(contains(string-join(instance('i-feature-params')/parameter/@name,'\s'),'min_signatories'))">
                                 <xf:insert nodeset="instance()/child::*" context="instance()" at="1" position="after" origin="instance('i-features-schema')/feature[@name = '{$feature-name}']/parameter[@name = 'min_signatories']" />
                             </xf:action>  
-                           <xf:action if="not(contains(instance()/parameter/@name,'max_signatories'))">
+                           <xf:action if="not(contains(string-join(instance('i-feature-params')/parameter/@name,'\s'),'max_signatories'))">
                                 <xf:insert nodeset="instance()/child::*" context="instance()" at="1" position="after" origin="instance('i-features-schema')/feature[@name = '{$feature-name}']/parameter[@name = 'max_signatories']" />
                             </xf:action>                            
                         </xf:action>                        
@@ -1828,7 +1851,19 @@ function workflow:feature-subform($node as node(), $model as map(*)) {
                                 </xf:group>                         
                            </xf:group>  
                         case "event" return 
-                            ()                       
+                           <xf:group model="m-feature" ref="instance('i-feature-params')/parameter" appearance="bf:verticalTable">
+                               <xf:output bind="b-param-values"/>
+                               <xf:group appearance="bf:horizontalTable">
+                                    <xf:select model="m-feature" ref="@value" appearance="minimal" incremental="true">
+                                        <xf:alert>invalid: emtpy or duplicate parameters</xf:alert>
+                                        <xf:hint>parameters should be unique</xf:hint>   
+                                        <xf:itemset nodeset="instance('i-eventtypes')/eventType">
+                                            <xf:label ref="@name"/>                                       
+                                            <xf:value ref="@name"/>
+                                        </xf:itemset>
+                                    </xf:select>
+                                </xf:group>                         
+                           </xf:group>                     
                         case "schedule" return
                            <xf:repeat id="r-parameters" model="m-feature" nodeset="instance('i-feature-params')/parameter">
                                <xf:group ref="." appearance="bf:verticalTable">

@@ -10,17 +10,20 @@ $(document).ready(function(){
     }
     
     // POPUP to load subform --BEGIN
-    function deselect() {
+    window.deselect = function() {
         $(".pop").slideFadeToggle(function() { 
-            $("#contact").removeClass("selected");
+            //$("#itemto").removeClass("selected");
         });    
     }
     $(function() {
         $(".event a, .signatory a, .schedule a, .download a").live('click', function(event) {
+            $('.pop div').empty();
+            $('.pop div').html('loading...');
+                
             if($(this).hasClass("selected")) {
-                deselect();               
+                deselect();                         
             } else {
-                $(this).addClass("selected");
+                $(this).addClass("selected");               
                 
                 $(".pop").slideFadeToggle(function() { 
                     //$("#itemto").focus();

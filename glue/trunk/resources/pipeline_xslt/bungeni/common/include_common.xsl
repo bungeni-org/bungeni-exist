@@ -134,12 +134,21 @@
         </permissions>
     </xsl:template>
     
+    <xsl:template match="permissions[parent::sitting]">
+        <permissions id="sittingPermissions">
+            <xsl:apply-templates />
+        </permissions>
+    </xsl:template>    
+    
     <xsl:template match="permission">
         <xsl:variable name="bungeni-content-type" >
             <xsl:choose>
                 <xsl:when test="parent::permissions[parent::document]">
                     <xsl:value-of select="data(//custom/bungeni_doc_type)" />     
                 </xsl:when>
+                <xsl:when test="parent::permissions[parent::sitting]">
+                    <xsl:value-of select="data(//custom/bungeni_doc_type)" />     
+                </xsl:when>                
                 <xsl:when test="parent::permissions[parent::signatory]">
                     <xsl:value-of select="string('signatory')" />
                 </xsl:when>
@@ -149,7 +158,9 @@
                 <xsl:when test="parent::permissions[parent::item_signatorie]">
                     <xsl:value-of select="string('signatory')" />
                 </xsl:when>
-                
+                <xsl:when test="parent::permissions[parent::attachment]">
+                    <xsl:value-of select="string('attachment')"/>
+                </xsl:when>                
                 <xsl:when test="parent::permissions[parent::sa_event]">
                     <xsl:value-of select="parent::permissions/parent::sa_event/field[@name='type']"/>
                 </xsl:when>

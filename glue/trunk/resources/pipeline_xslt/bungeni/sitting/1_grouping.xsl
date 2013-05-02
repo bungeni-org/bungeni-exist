@@ -40,7 +40,7 @@
         <xsl:variable name="group-type" select="group/field[@name='type']" />
         <xsl:variable name="group-type-uri-name" select="bctype:get_content_type_uri_name($group-type, $type-mappings)" />
         
-        <xsl:variable name="group-identifier" select="group/field[@name='identifier']" />
+        <xsl:variable name="group-identifier" select="group/field[@name='principal_name']" />
         <xsl:variable name="group-uri">
             <xsl:choose>
                 <xsl:when test="$group-type eq 'parliament'">
@@ -152,6 +152,7 @@
                     @name='meeting_type' or 
                     @name='convocation_type' or 
                     @name='activity_type' or 
+                    @name='status_date' or 
                     @name='status' or 
                     @name='election_date' ] | 
                     group_addresses | 

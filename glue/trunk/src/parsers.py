@@ -311,10 +311,10 @@ class ParliamentInfoParams:
         parl_map["type"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("sub_type")
             ).getText()
+        # !+DEPRECATED r10981 in Bungeni displayAs attribute not present on sub_type
         parl_map["type_display"] = parliament_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("sub_type")
-            ).attribute("displayAs").value
-            
+            self.__cache_file_prefix__() + self._xpath_info_field("full_name")
+            ).getText()
             
         return parl_map
 

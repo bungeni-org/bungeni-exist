@@ -42,7 +42,7 @@
         select="concat($uri-base, $legislature-uri)" /> 
     
     <xsl:variable name="origin-parliament">
-        <xsl:value-of select="/contenttype/field[@name='origin_parliament']" />    
+        <xsl:value-of select="/contenttype/field[@name='origin_chamber']" />    
     </xsl:variable>
     
     <xsl:variable name="current-parliament" 

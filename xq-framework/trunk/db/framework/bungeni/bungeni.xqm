@@ -3132,7 +3132,7 @@ declare function bun:get-parliament($parts as node(), $chamber-id as xs:string?)
                         where multiple parliament info are present. Pending support for closing and opening
                         parliaments.
                     :)
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Parliament']/preceding-sibling::bu:origin[bu:identifier eq $chamber-id]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Chamber']/preceding-sibling::bu:origin[bu:identifier eq $chamber-id]/ancestor::bu:ontology
                     return
                         $match  
                 }</doc>   

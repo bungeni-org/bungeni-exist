@@ -190,7 +190,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
     def does_parliament_exists_in_cache(self, parliament_id):
         cache_doc = self.__doc_cache_file()
         found_parl_node = cache_doc.selectSingleNode(
-            "/cachedTypes/contenttype[@name='parliament']/field[@name='parliament_id'][. = '%s']" % parliament_id
+            "/cachedTypes/contenttype[@name='chamber']/field[@name='principal_id'][. = '%s']" % parliament_id
             )
         if found_parl_node is not None:
             # parliament already cached !
@@ -204,7 +204,7 @@ class ParliamentInfoWalker(GenericDirWalkerXML):
         new_doc = reader.read(
             File(input_file)
         )
-        parl_node = new_doc.selectSingleNode("/contenttype[@name='parliament']/field[@name='parliament_id']")
+        parl_node = new_doc.selectSingleNode("/contenttype[@name='chamber']/field[@name='principal_id']")
         parliament_id = parl_node.getText()
         if not self.does_parliament_exists_in_cache(parliament_id):
             element_to_import = new_doc.getRootElement()

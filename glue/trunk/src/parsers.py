@@ -208,7 +208,7 @@ class ParseBungeniXML(ParseXML):
         """
         Gets fields in a parliament object
         """
-        return self.__global_path__ + "contenttype[@name='parliament']/field[@name='"+name+"']"
+        return self.__global_path__ + "contenttype[@name='chamber']/field[@name='"+name+"']"
         
     def xpath_get_attr_val(self,name):
 
@@ -276,7 +276,7 @@ class ParliamentInfoParams:
         return "/" + self.CONTENT_TYPE
     
     def _xpath_parliament_info_field(self, name):
-        return  self._xpath_content_type() + "[@name='parliament']/" + self._xpath_info_field(name)
+        return  self._xpath_content_type() + "[@name='chamber']/" + self._xpath_info_field(name)
     
     def _xpath_info_field(self, name):
         return (self.FIELD_NAME % name)
@@ -292,11 +292,12 @@ class ParliamentInfoParams:
         parl_map["country-code"] = cc
         #print "XXXXX  ROOT ELEMENT", parliament_doc.getRootElement()
         parl_map["parliament-id"] = parliament_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("parliament_id")
+            self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
             ).getText()
-        parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("election_date")
-            ).getText()
+        # !+DEPRECATED r10981 in Bungeni
+        #parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
+        #    self.__cache_file_prefix__() + self._xpath_info_field("election_date")
+        #    ).getText()
         parl_map["for-parliament"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("type")
             ).getText()
@@ -308,10 +309,10 @@ class ParliamentInfoParams:
         # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
         # bicameral legislatures 
         parl_map["type"] = parliament_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("parliament_type")
+            self.__cache_file_prefix__() + self._xpath_info_field("sub_type")
             ).getText()
         parl_map["type_display"] = parliament_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("parliament_type")
+            self.__cache_file_prefix__() + self._xpath_info_field("sub_type")
             ).attribute("displayAs").value
             
             
@@ -331,7 +332,7 @@ class ParseParliamentInfoXML(ParseXML):
         if parliament_doc is None:
             #print "XXXX FOUND DOC NULL XXXX"
             return None
-        if parliament_doc.getText() == "parliament" :
+        if parliament_doc.getText() == "chamber" :
             parl_params.append(
                 pinfo._get_parl_params(cc, self.xmldoc)
             )

@@ -843,7 +843,7 @@ div.ulisting a.greyed {
   padding-bottom: 8px;
 }
 
-#permissions-roller.xfControl {
+.inline-control.xfControl {
     width: auto !important;
     margin-bottom:-9px !important;
 }

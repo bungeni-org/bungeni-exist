@@ -51,7 +51,11 @@ declare
 function role:roles($node as node(), $model as map(*)) { 
         <div>
             <div class="ulisting">
-                <h2>custom roles</h2>
+                <div class="commit-holder">
+                    <h2>custom roles</h2>
+                    <a class="commit" href="/exist/restxq/system/commit/roles" title="save this file back to the filesystem">commit roles</a>
+                </div>
+                <div class="clear"/>
                 <ul class="clearfix">
                     {
                         for $role in local:get-custom-roles()/role

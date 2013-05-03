@@ -680,7 +680,10 @@ function type:types($node as node(), $model as map(*)) {
     let $pos := request:get-parameter("pos", "none")
     return
         <div class="allTypes">
-            <h1>arche-types</h1>
+            <div class="commit-holder">
+                <h1>arche-types</h1>
+                <a class="commit" href="/exist/restxq/system/commit/types" title="save this file back to the filesystem">commit types</a>
+            </div>        
             {local:get-types()}
             <br/>
             <div style="clear:both;"/>

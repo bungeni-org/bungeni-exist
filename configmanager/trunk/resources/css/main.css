@@ -12,6 +12,10 @@ br {
    content: " ";
 }
 
+.clear {
+    clear:both;
+}
+
 #header{
     width:100%;
     background:white;
@@ -564,9 +568,13 @@ a.ext-links {
 }
 
 .commit-holder {
-    width:97.5%;
+    width:97.5% !important;
     height:30px;
     position:relative;
+}
+.commit-holder h1,
+.commit-holder h2 {
+    float:left;
 }
 .commit {
     float:right;

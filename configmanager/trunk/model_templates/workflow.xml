@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workflow xmlns:ce="http://bungeni.org/configeditor" title="" description="">
+<workflow title="" description="">
     <permActions originAttr="permission_actions">
         <permAction>.View</permAction>
         <permAction>.Edit</permAction>

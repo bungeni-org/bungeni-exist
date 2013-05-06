@@ -97,8 +97,13 @@ br {
 }
 .listingTable th,
 .listingTable td{
-    padding:5px;
     border:thin solid #35b3e9;
+}
+.listingTable th{
+    padding:5px;
+}
+.listingTable td{
+    padding:0 5px;
 }
 .listingTable th{
     background:#2b92be;

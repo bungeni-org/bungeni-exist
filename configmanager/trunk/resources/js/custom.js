@@ -190,7 +190,7 @@ $(document).ready(function(){
                         function(Toaster, registry, parser, on, dom) {
                         parser.parse();
                         registry.byId('betterformMessageToaster').positionDirection = 'br-down';
-                        registry.byId('betterformMessageToaster').setContent('The document + types.xml saved successfully!', 'error');
+                        registry.byId('betterformMessageToaster').setContent('The document saved successfully!', 'error');
                         registry.byId('betterformMessageToaster').show();
                     });
                 }

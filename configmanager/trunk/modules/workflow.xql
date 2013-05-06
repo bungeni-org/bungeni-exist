@@ -1006,7 +1006,7 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <hr/>
                                 <br/>
                                 <h1>Manage Permissions
-                                    <xf:select1 ref="instance('i-vars')/value" id="permissions-roller" class="inline-control" incremental="true">
+                                    <xf:select1 ref="instance('i-vars')/value" id="permissions-roller" class="inline-control xmediumWidth" incremental="true">
                                         <xf:hint>manage feature permissions</xf:hint>
                                         <xf:alert>invalid</xf:alert>
                                         <xf:itemset nodeset="instance('i-permissions-manager')/manager">
@@ -1518,7 +1518,7 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                         <xf:bind id="b-title" nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
                         <xf:bind id="b-order" nodeset="@order" type="xf:integer" required="true()" constraint="((. &lt; 100) and (. &gt; 0)) or (. = 0)" />
                         <xf:bind id="b-destination" nodeset="destinations/destination" type="xf:string" required="true()" constraint="xs:string(.) ne '{$NODENAME}'" />
-                        <xf:bind nodeset="roles/role" type="xf:string" required="true()" constraint="count(instance()/transition[{$NODEPOS}]/roles/role) eq count(distinct-values(instance()/transition[{$NODEPOS}]/roles/role))" />
+                        <xf:bind nodeset="roles/role" type="xf:string" required="false()" constraint="count(instance()/transition[{$NODEPOS}]/roles/role[. ne '']) eq count(distinct-values(instance()/transition[{$NODEPOS}]/roles/role[. ne '']))" />
                         <xf:bind nodeset="@trigger" type="xf:string" required="true()" />
                         <xf:bind nodeset="@require_confirmation" type="xf:boolean" required="true()" />
                     </xf:bind>
@@ -1634,7 +1634,12 @@ function workflow:transition-edit($node as node(), $model as map(*)) {
                                 <xf:hint>transition name</xf:hint>
                                 <xf:help>... and no spaces in between words</xf:help>
                                 <xf:alert>enter more than 3 characters...</xf:alert>
-                            </xf:input>                       
+                            </xf:input>   
+                            <xf:textarea id="transition-note" ref="@note" incremental="true">
+                                <xf:label>Transition Note</xf:label>
+                                <xf:hint>add a note...</xf:hint>
+                                <xf:alert>invalid</xf:alert>
+                            </xf:textarea>                             
                             <xf:output bind="b-order">
                                 <xf:label>Order</xf:label>                                
                             </xf:output>                             

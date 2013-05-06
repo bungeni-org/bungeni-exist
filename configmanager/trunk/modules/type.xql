@@ -601,6 +601,10 @@ function type:add($node as node(), $model as map(*)) {
                         <xf:label>name:</xf:label>
                         <xf:hint>Unique / no spaces / lower-case alphabets only</xf:hint>
                         <xf:alert>invalid name - duplicate / empty space(s) disallowded</xf:alert>
+                        <xf:action ev:event="xforms-valid">
+                            <xf:setvalue ref="instance()/doc[last()]/@descriptor" value="instance()/doc[last()]/@name"/>
+                            <xf:setvalue ref="instance()/doc[last()]/@workflow" value="instance()/doc[last()]/@name"/>
+                        </xf:action>
                     </xf:input>   
                     <xf:input bind="typelabel" id="type-label" incremental="true">
                         <xf:label>label:</xf:label>

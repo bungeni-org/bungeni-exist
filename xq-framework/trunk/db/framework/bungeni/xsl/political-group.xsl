@@ -38,16 +38,9 @@
                 <div id="doc-main-section">
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
-                            <xsl:variable name="img_hash" select="bu:ontology/bu:group/bu:logoData/bu:imageHash"/>
+                            <xsl:variable name="img_hash" select="bu:ontology/bu:group/bu:logo_data/bu:imageHash"/>
                             <p class="imgonlywrap">
-                                <xsl:choose>
-                                    <xsl:when test="bu:ontology/bu:group/bu:logoData and doc-available(concat('../../../bungeni-atts/',$img_hash))">
-                                        <img src="../../bungeni-atts/{$img_hash}" alt="Group Logo" align="left"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <img src="assets/images/group.png" alt="Place Holder for Group Logo" align="left"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <img src="image?hash={$img_hash}&amp;name={bu:ontology/bu:group/bu:groupIdentifier}" alt="Photo of M.P" align="left"/>
                             </p>
                         </div>
                         <div class="mem-top-right">

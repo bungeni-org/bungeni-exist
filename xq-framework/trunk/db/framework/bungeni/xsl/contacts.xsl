@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -49,7 +49,7 @@
         <xsl:variable name="contact-name">
             <xsl:choose>
                 <xsl:when test="$address_type eq 'MemberOfParliament'">
-                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName, ' (',bu:ontology/bu:membership/bu:title,')')"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName, ' (',bu:ontology/bu:membership/bu:referenceToUser/bu:title,')')"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
@@ -59,7 +59,7 @@
         <xsl:variable name="contact-name-title">
             <xsl:choose>
                 <xsl:when test="$address_type eq 'MemberOfParliament'">
-                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:salutation,', ',bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:salutation,', ',bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
@@ -71,7 +71,7 @@
                 <h1 class="title">
                     <xsl:choose>
                         <xsl:when test="$address_type eq 'MemberOfParliament'">
-                            <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                            <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName)"/>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
@@ -112,13 +112,13 @@
                         </div>
                     </div>
                     <ul id="list-toggle" class="ls-row clear">
-                        <xsl:for-each select="ref/bu:ontology">
-                            <xsl:sort select="bu:address/bu:logicalAddressType" order="descending"/>
+                        <xsl:for-each select="ref/bu:ontology/child::node()/bu:addresses/bu:address">
+                            <xsl:sort select="bu:logicalAddressType" order="descending"/>
                             <li>
-                                <xsl:value-of select="bu:address/bu:logicalAddressType"/>
+                                <xsl:value-of select="bu:logicalAddressType"/>
                                 <span class="tgl-pad-right">▼</span>
                                 <div class="doc-toggle">
-                                    <div id="{bu:address/bu:postalAddressType}{bu:address/bu:addressId}" class="toggle address-info" style="min-height:100px">
+                                    <div id="{bu:postalAddressType}{bu:address/bu:addressId}" class="toggle address-info" style="min-height:100px">
                                         <div class="address-block">
                                             <address>
                                                 <strong>
@@ -127,18 +127,18 @@
                                                 <br/>
                                                 <i18n:text key="Address">address(nt)</i18n:text>, room <bu:groupId type="xs:integer">4</bu:groupId>
                                                 <br/>
-                                                <xsl:value-of select="bu:address/bu:city"/>, <xsl:value-of select="bu:address/bu:countryId"/>&#160;<span title="i18n(Zip Code, Zip Code (nt))">
-                                                    <xsl:value-of select="bu:address/bu:zipCode"/>
+                                                <xsl:value-of select="bu:city"/>, <xsl:value-of select="bu:country/bu:countryName"/>&#160;<span title="i18n(Zip Code, Zip Code (nt))">
+                                                    <xsl:value-of select="bu:zipCode"/>
                                                 </span>
-                                                &#160;<xsl:value-of select="bu:address/bu:postalAddressType/@showAs"/>&#160;<bu:addressId type="xs:integer">4</bu:addressId>
+                                                &#160;<xsl:value-of select="bu:postalAddressType/@showAs"/>&#160;<bu:addressId type="xs:integer">4</bu:addressId>
                                                 <br/>
                                                 <abbr title="i18n(Phone Number(s), phone (nt))">
                                                     <i18n:text key="Phone Number(s)">Phone (nt)</i18n:text>:</abbr>
-                                                <xsl:value-of select="bu:address/bu:phone"/>
+                                                <xsl:value-of select="bu:phone"/>
                                                 <br/>
                                                 <abbr title="i18n(Fax Number(s), fax (nt))">
                                                     <i18n:text key="Fax Number(s)">Fax (nt)</i18n:text>:</abbr>
-                                                <xsl:value-of select="bu:address/bu:fax"/>
+                                                <xsl:value-of select="bu:fax"/>
                                             </address>
                                             <address>
                                                 <strong>
@@ -146,7 +146,7 @@
                                                 </strong>
                                                 <br/>
                                                 <a href="mailto:#">
-                                                    <xsl:value-of select="bu:address/bu:email"/>
+                                                    <xsl:value-of select="bu:email"/>
                                                 </a>
                                             </address>
                                         </div>

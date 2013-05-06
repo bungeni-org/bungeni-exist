@@ -281,7 +281,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	else if ($EXIST-RESOURCE eq "akn") then
             (: AkomaNtoso XML :)        	
                 rou:get-akn($CONTROLLER-DOC)
-        	else if ($CHAMBER-REL-PATH eq "/membership/xcard") then
+        	else if ($CHAMBER-REL-PATH eq "/memberofparliament/xcard") then
             (: xCard XML :)        	
                 rou:get-xcard($CONTROLLER-DOC)    									 
         	else if ($CHAMBER-REL-PATH eq "/politicalgroup-members" ) then 

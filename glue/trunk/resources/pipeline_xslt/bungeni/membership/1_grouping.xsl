@@ -43,7 +43,7 @@
             <xsl:variable name="group-uri">
                 <xsl:variable name="group-type" select="group/field[@name='type']" />
                 <xsl:variable name="group-type-uri-name" select="bctype:get_content_type_uri_name($group-type, $type-mappings)" />
-                <xsl:variable name="group-identifier" select="group/field[@name='identifier']" />
+                <xsl:variable name="group-identifier" select="group/field[@name='principal_name']" />
                 <xsl:value-of select="concat('/', $group-type-uri-name, '/', $group-identifier)" />                
             </xsl:variable>
             

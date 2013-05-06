@@ -2145,9 +2145,7 @@ declare function bun:get-xcard-xml($docid as xs:string)
                 <membership>{
                     collection(cmn:get-lex-db())/bu:ontology/bu:membership/bu:referenceToUser[bu:refersTo/@href=$docid][1]/ancestor::bu:ontology             
                 }</membership>
-                <ref>{
-                    collection(cmn:get-lex-db())//bu:ontology[@for='address']/bu:address/bu:assignedTo[@uri eq $docid]/ancestor::bu:ontology
-                }</ref>
+                <ref/>
                 </doc> 
     let $server-path := "http://" || $template:SERVER-NAME || ":" || $template:SERVER-PORT || "/exist/apps/"
     let $transformed := transform:transform($doc,$stylesheet,   <parameters>
@@ -3437,16 +3435,8 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                     $focal as xs:string,
                     $parts as node(),
                     $parliament as node()?) {
-    let $stylesheet := cmn:get-xslt($parts/xsl), 
-        $acl-filter := cmn:get-acl-permission-as-attr($acl),
-        $build-qry  := fn:concat("collection('",cmn:get-lex-db() ,"')",
-                            "/bu:ontology[@for='address']",
-                            "/bu:address/bu:assignedTo[@uri eq '",$focal,"']",
-                            (: !+NOTE (ao, 16 Mar 2012) Commented permissions check below since currently
-                             : we only have public permissions which dont apply in this case 
-                             :)
-                            (:"/following-sibling::bu:permissions/bu:permission[",$acl-filter,"]",:)
-                            "/ancestor::bu:ontology")
+    let $stylesheet := cmn:get-xslt($parts/xsl)
+    let $acl-filter := cmn:get-acl-permission-as-attr($acl)
     let $doc := <doc>
                     document {
                             if($address-type eq 'Group') then 
@@ -3456,7 +3446,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
                         }
                     <ref>
                         {
-                            util:eval($build-qry)
+                            collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$focal][1]/ancestor::bu:ontology
                         }
                     </ref>
                 </doc>     
@@ -3668,7 +3658,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3691,7 +3681,7 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:membershipType[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>

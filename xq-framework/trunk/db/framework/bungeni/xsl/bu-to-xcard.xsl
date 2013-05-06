@@ -42,11 +42,18 @@
                         <xsl:value-of select="concat($server-path,'bungeni-atts/',$img_hash)"/>
                     </uri>
                 </photo>
-                <xsl:for-each select="ref/bu:ontology/bu:address">
+                <xsl:for-each select="bu:ontology/bu:user/bu:addresses/bu:address">
                     <tel>
                         <parameters>
                             <type>
-                                <xsl:value-of select="data(bu:logicalAddressType/@showAs)"/>
+                                <xsl:choose>
+                                    <xsl:when test="bu:logicalAddressType/@showAs">
+                                        <xsl:value-of select="data(bu:logicalAddressType/@showAs)"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="data(bu:logicalAddressType/bu:value)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </type>
                             <type>voice</type>
                         </parameters>
@@ -54,17 +61,33 @@
                         </uri>
                     </tel>
                 </xsl:for-each>
-                <xsl:for-each select="ref/bu:ontology/bu:address">
+                <xsl:for-each select="bu:ontology/bu:user/bu:addresses/bu:address">
                     <adr>
                         <parameters>
                             <type>
-                                <xsl:value-of select="data(bu:logicalAddressType/@showAs)"/>
+                                <xsl:choose>
+                                    <xsl:when test="bu:logicalAddressType/@showAs">
+                                        <xsl:value-of select="data(bu:logicalAddressType/@showAs)"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="data(bu:logicalAddressType/bu:value)"/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </type>
                             <label>
                                 <xsl:value-of select="concat(bu:street,', ', bu:city, ' ',bu:zipCode,' ',bu:countryId/bu:value)"/>
                             </label>
                         </parameters>
-                        <pobox/>
+                        <pobox>
+                            <xsl:choose>
+                                <xsl:when test="bu:postalAddressType/@showAs">
+                                    <xsl:value-of select="data(bu:postalAddressType/@showAs)"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="data(bu:postalAddressType/bu:value)"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </pobox>
                         <ext/>
                         <street>
                             <xsl:value-of select="bu:street"/>
@@ -85,12 +108,12 @@
                 </xsl:for-each>
                 <email>
                     <text>
-                        <xsl:value-of select="ref/bu:ontology/bu:address[1]/bu:email"/>
+                        <xsl:value-of select="bu:ontology/bu:user/bu:addresses/bu:address[1]/bu:email"/>
                     </text>
                 </email>
                 <rev>
                     <timestamp>
-                        <xsl:value-of select="ref/bu:ontology/bu:address[1]/bu:statusDate"/>
+                        <xsl:value-of select="bu:ontology/bu:user/bu:addresses/bu:address[1]/bu:statusDate"/>
                     </timestamp>
                 </rev>
             </vcard>

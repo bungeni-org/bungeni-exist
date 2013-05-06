@@ -20,7 +20,7 @@
         <div id="main-wrapper">
             <div id="title-holder">
                 <h1 class="title">
-                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName,', ',ref/bu:ontology/bu:user/bu:title)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,', ',ref/bu:ontology/bu:user/bu:title)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -70,7 +70,7 @@
                             <div class="mem-photo mem-top-left">
                                 <p class="imgonlywrap">
                                     <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
-                                    <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:lastName,'_', bu:ontology/bu:membership/bu:firstName)}" alt="Photo of M.P" align="left"/>
+                                    <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,'_', bu:ontology/bu:membership/bu:referenceToUser/bu:firstName)}" alt="Photo of M.P" align="left"/>
                                 </p>
                             </div>
                             <div class="mem-top-right">
@@ -114,7 +114,14 @@
                                         <td class="labels fbottom">
                                             <i18n:text key="Political Party">Political Party</i18n:text>:</td>
                                         <td class="fbt">
-                                            <xsl:value-of select="bu:ontology/bu:membership/bu:party/@showAs"/>
+                                            <xsl:choose>
+                                                <xsl:when test="bu:ontology/bu:membership/bu:party/@showAs">
+                                                    <xsl:value-of select="bu:ontology/bu:membership/bu:party/@showAs"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="bu:ontology/bu:membership/bu:party"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
                                         </td>
                                     </tr>
                                 </table>

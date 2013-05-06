@@ -19,7 +19,7 @@
         <div id="main-wrapper">
             <div id="title-holder">
                 <h1 class="title">
-                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:firstName,' ', bu:ontology/bu:membership/bu:lastName)"/>
+                    <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName)"/>
                 </h1>
             </div>
             <xsl:call-template name="mem-tabs">
@@ -50,7 +50,7 @@
                         <xsl:for-each select="ref/bu:office">
                             <li>
                                 <xsl:value-of select="bu:fullName"/>
-                                <div class="struct-ib">&#160;/ <xsl:value-of select="bu:member/bu:membershipType/bu:value"/>
+                                <div class="struct-ib">&#160;/ <xsl:value-of select="bu:member/bu:type/bu:value"/>
                                 </div>
                                 <span class="tgl-pad-right">▼</span>
                                 <div class="doc-toggle">

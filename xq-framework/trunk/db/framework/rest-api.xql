@@ -65,7 +65,7 @@ declare
                 let $roles :=   for $arole at $pos in $token-roles
                                 let $counter := count($token-roles)
                                 return (
-                                    fn:concat("bu:control[",cmn:get-acl-permission-as-attr-for-role($arole),"]"),
+                                    fn:concat("bu:control[",cmn:get-attr-for-role($arole),"]"),
                                     if($pos lt $counter) then "and" else () )
                 
                 let $roles-string := fn:string-join($roles," ")
@@ -189,10 +189,10 @@ declare
                 let $roles :=   for $arole at $pos in $token-roles
                                 let $counter := count($token-roles)
                                 return (
-                                    fn:concat("bu:control[",cmn:get-acl-permission-as-attr-for-role($arole),"]"),
+                                    fn:concat("bu:permission[",cmn:get-attr-for-role($arole),"]"),
                                     if($pos lt $counter) then "and" else () )
                 
-                let $roles-string := fn:string-join($roles," ")
+                let $roles-string := fn:string-join($roles," ")              
                   
                 let $coll := bun:get-all-by-role($roles-string)            
             

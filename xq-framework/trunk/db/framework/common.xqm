@@ -494,6 +494,16 @@ declare function cmn:get-acl-permission-as-attr-for-role($role-name as xs:string
 };
 
 (:~
+: Returns the input filters as attribute(s) condition string given the @role(s) only
+: Used by the RESTXQ search API to return documents by specified roles(s)
+:)
+declare function cmn:get-attr-for-role($role-name as xs:string) {
+    let $perm := cmn:get-acl-permissions("role-view")
+    return 
+        fn:concat("@role='", $role-name, "' and ", "@setting='",$perm/@setting, "'")
+};
+
+(:~
 : Returns the node permissions node condition string given the @role
 :)
 declare function cmn:get-acl-permission-as-node-for-role($role-name as xs:string) {

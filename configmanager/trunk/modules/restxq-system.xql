@@ -17,7 +17,7 @@ declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 declare variable $ce:data := $config:app-root || "/config_editor/bungeni_custom/workflows";
 :)
 
-(: COMMIT roles file to the filesystem :)
+(: COMMIT either types/roles.xml files which are at the root on the bungeni_custom folder to the filesystem :)
 declare 
     (: 
         !+NOTE (ao, 26th Mar 2013) Using GET instead of POST/PUT because both seem unstable on the
@@ -27,11 +27,12 @@ declare
     :)
     %rest:GET
     %rest:path("/system/commit/{$name}")
-function cmwfrest:commit-roles($name as xs:string) {
+function cmwfrest:commit-single-root($name as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    let $node := doc($appconfig:CONFIGS-FOLDER || "/" || $name || ".xml")/child::node()
     
-    let $status := file:serialize($types,$appconfig:FS-PATH || "/" || $name || ".xml" ,
+    let $status := file:serialize($node,$appconfig:FS-PATH || "/" || $name || ".xml" ,
                                                 "media-type=application/xml method=xml")
     return 
         $status

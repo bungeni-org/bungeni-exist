@@ -130,6 +130,7 @@
                     @name='group_continuity' or 
                     @name='sub_type' or 
                     @name='start_date' or 
+                    @name='status_date' or 
                     @name='end_date' or 
                     @name='status' or 
                     @name='election_date' ]"/>

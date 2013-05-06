@@ -59,6 +59,7 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:for-each-group>
+            <xsl:apply-templates select="feature"/>
             
             <!-- handle all other facets -->
             <xsl:for-each-group select="facet[parent::workflow and not(starts-with(@name, 'global_'))]" group-by="@original-name">
@@ -77,8 +78,18 @@
                     </xsl:for-each>
                 </facet>
             </xsl:for-each-group>
+            <xsl:apply-templates select="state|transition"/>
         </workflow>
     </xsl:template>
+    <xsl:template match="@workflow[parent::feature]">
+        <!-- do nothing -->
+    </xsl:template>
+    <xsl:template match="@params[parent::feature]">
+        <!-- do nothing -->
+    </xsl:template>
+    <xsl:template match="@type[parent::parameter]">
+        <!-- do nothing -->
+    </xsl:template>     
     
     <!-- we dont want the default template matcher to handle the global facet, so add a dummy matcher, 
         this is handled by the for_each in the workflow template -->

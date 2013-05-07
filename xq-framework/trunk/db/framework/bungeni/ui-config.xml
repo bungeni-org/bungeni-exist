@@ -56,17 +56,17 @@
             <navigation>/higher_house/members</navigation>
             <action>rou:member</action>
         </route>
-        <route href="/lower_house/member-officesheld">
+        <route href="/lower_house/member-biographical">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-officesheld</action>
+            <action>rou:member-biographical</action>
         </route>
-        <route href="/higher_house/member-officesheld">
+        <route href="/higher_house/member-biographical">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>current</subnavigation>
-            <action>rou:member-officesheld</action>
+            <action>rou:member-biographical</action>
         </route>
         <route href="/lower_house/member-parlactivities">
             <title>Business | Member of Parliament</title>
@@ -1261,13 +1261,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view check-for="[bu:versions/child::node()]" id="versions" path="bill-versions" tag="tab">
-                <title>
-                    <i18n:text key="versions">versions(nt)</i18n:text>
-                </title>
-                <template>xml/bill.xml</template>
-                <xsl>xsl/version.xsl</xsl>
-            </view>
             <view check-for="[bu:workflowEvents/child::node()]" id="events" path="bill-events" tag="tab">
                 <title>
                     <i18n:text key="tab-events">events(nt)</i18n:text>
@@ -1295,6 +1288,13 @@
                 </title>
                 <template>xml/bill.xml</template>
                 <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="bill-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/version.xsl</xsl>
             </view>
             <view path="bill-attachment">
                 <template>xml/documents.xml</template>
@@ -1590,12 +1590,12 @@
                 <template>xml/member.xml</template>
                 <xsl>xsl/member.xsl</xsl>
             </view>
-            <view id="offices" path="member-officesheld" tag="tab">
+            <view id="offices" path="member-biographical" tag="tab">
                 <title>
-                    <i18n:text key="tab-offices">offices held(nt)</i18n:text>
+                    <i18n:text key="tab-info">bio information(nt)</i18n:text>
                 </title>
                 <template>xml/member.xml</template>
-                <xsl>xsl/offices-held.xsl</xsl>
+                <xsl>xsl/biographical.xsl</xsl>
             </view>
             <view id="activities" path="member-parlactivities" tag="tab">
                 <title>

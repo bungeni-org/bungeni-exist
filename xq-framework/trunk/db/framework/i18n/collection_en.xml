@@ -126,14 +126,14 @@
     <msg key="tab-contacts">contacts</msg>
     <msg key="tab-member">member</msg>
     <msg key="tab-offices">offices held</msg>
-    <msg key="tab-info">infomation</msg>
+    <msg key="tab-info">biographical data</msg>
     <msg key="tab-parlacts">parliament activities</msg>
     <msg key="tab-text">text</msg>
     <msg key="tab-history">history</msg>
     <msg key="tab-events">events</msg>
     <msg key="tab-details">details</msg>
     <msg key="tab-assigned">assigned groups</msg>
-    <msg key="tab-documents">documents</msg>
+    <msg key="tab-documents">associated documents</msg>
     <msg key="tab-metadata">metadata</msg>
     <msg key="tab-type">type</msg>
     <msg key="tab-desc">description</msg>
@@ -154,8 +154,8 @@
     <msg key="expand">expand all</msg>
     <msg key="collapse-membership">membership information</msg>
     <msg key="expand-membership">membership information</msg>
-    <msg key="collapse-personal">personal information</msg>
-    <msg key="expand-personal">personal information</msg>
+    <msg key="collapse-offices">offices held</msg>
+    <msg key="expand-offices">offices held</msg>
     <msg key="ph-searchall">Search all Bungeni documents...</msg>
     <msg key="ph-searchlisting">search this listing</msg>
     <msg key="download">download</msg>

@@ -54,10 +54,10 @@
                     <i18n:text key="expand-membership"> membership information(nt)</i18n:text>
                 </span>
                 <span id="p-collapse">
-                    <i18n:text key="collapse-personal"> personal information(nt)</i18n:text>
+                    <i18n:text key="collapse-offices"> offices held(nt)</i18n:text>
                 </span>
                 <span id="p-expand">
-                    <i18n:text key="expand-personal"> personal information(nt)</i18n:text>
+                    <i18n:text key="expand-offices"> offices held(nt)</i18n:text>
                 </span>
             </div>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
@@ -134,71 +134,46 @@
                     </div>
                     <div class="clear"/>
                     <a id="pTag" href="#" class="togglers" onClick="toggleAndChangeText('personal-info',this.id,'p-');return false;">
-                        ►&#160;<i18n:text key="collapse-personal">&#160; personal information(nt)</i18n:text>
+                        ►&#160;<i18n:text key="collapse-offices">&#160; offices held(nt)</i18n:text>
                     </a>
                     <div id="personal-info" class="toggle" style="display:none;">
-                        <div class="mem-profile">
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Name">Name(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="concat(ref/bu:ontology/bu:user/bu:title,' ',ref/bu:ontology/bu:user/bu:firstName,' ', ref/bu:ontology/bu:user/bu:lastName)"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Salutation">salutation(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="bu:ontology/bu:membership/bu:salutation"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Gender">Gender(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="if (bu:ontology/bu:membership/bu:gender/@showAs) then                                             data(bu:ontology/bu:membership/bu:gender/@showAs) else                                              bu:ontology/bu:membership/bu:gender"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Country of Birth">birth country(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthCountry"/>
-                            </div>
-                            <xsl:if test="ref/bu:ontology/bu:user/bu:maritalStatus/@showAs">
-                                <div class="list-block">
-                                    <div class="block-label">
-                                        <i18n:text key="Marital Status">Marital Status(nt):</i18n:text>:
+                        <ul id="list-toggle" class="ls-timeline clear">
+                            <xsl:for-each select="ref/bu:office">
+                                <li>
+                                    <xsl:value-of select="bu:fullName"/>
+                                    <div class="struct-ib">&#160;/ <xsl:value-of select="bu:member/bu:type/bu:value"/>
                                     </div>
-                                    <xsl:value-of select="ref/bu:ontology/bu:user/bu:maritalStatus/@showAs"/>
-                                </div>
-                            </xsl:if>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Date of Birth">date of birth(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Nationality at Birth">Nationality at Birth(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthNationality"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="Current Nationality">Current Nationality(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:currentNationality"/>
-                            </div>
-                            <div class="list-block">
-                                <div class="block-label">
-                                    <i18n:text key="National Id">National Id(nt):</i18n:text>:
-                                </div>
-                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:nationalId"/>
-                            </div>
-                        </div>
-                        <div class="clear"/>
-                        <div class="mem-desc">
-                            <xsl:copy-of select="ref/bu:ontology/bu:user/bu:description/child::node()" copy-namespaces="no"/>
-                        </div>
+                                    <div class="doc-toggle">
+                                        <div style="min-height:60px;">
+                                            <div class="block">
+                                                <span class="labels">
+                                                    <i18n:text key="Title">title(nt)</i18n:text>:</span>
+                                                <span>
+                                                    <xsl:value-of select="bu:member/bu:designations/bu:designation/bu:titleName"/>
+                                                </span>
+                                            </div>
+                                            <div class="block">
+                                                <span class="labels">
+                                                    <i18n:text key="Start Date">start date(nt)</i18n:text>:</span>
+                                                <span>
+                                                    <xsl:value-of select="format-date(xs:date(bu:member/bu:startDate),$date-format,'en',(),())"/>
+                                                </span>
+                                            </div>
+                                            <xsl:if test="bu:member/bu:endDate">
+                                                <div class="block">
+                                                    <span class="labels">
+                                                        <i18n:text key="End Date">end date(nt)</i18n:text>:</span>
+                                                    <span>
+                                                        <xsl:value-of select="format-date(xs:date(bu:member/bu:endDate),$date-format,'en',(),())"/>
+                                                    </span>
+                                                </div>
+                                            </xsl:if>
+                                        </div>
+                                        <div class="clear"/>
+                                    </div>
+                                </li>
+                            </xsl:for-each>
+                        </ul>
                     </div>
                 </div>
             </div>

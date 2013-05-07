@@ -2984,6 +2984,10 @@ declare function bun:get-parl-doc($acl as xs:string,
             $doc-uri as xs:string, 
             $parts as node(),
             $parliament as node()?) as element()* {
+            
+    let $parent-uri := xps:substring-before($doc-uri, "@") (: extract the main URI :)
+    let $version-uri := if($parent-uri) then false() else true()
+    let $uri := if($version-uri) then $doc-uri else $parent-uri
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -2993,11 +2997,7 @@ declare function bun:get-parl-doc($acl as xs:string,
     :)
     
     let $doc := document {
-            (:Returs a AN Document :)
-            (:  !+ACL_NEW_API - changed call to use new ACL API , 
-            :   the root is an ontology document now not a legislativeItem
-            :)
-            let $match := bun:documentitem-full-acl($acl, $doc-uri)
+            let $match := bun:documentitem-full-acl($acl, $uri)
             return
                 (: $parts/parent::node() returns all tabs of this doctype :)
                 bun:get-ref-assigned-grps($match, $parts/parent::node())
@@ -3006,7 +3006,9 @@ declare function bun:get-parl-doc($acl as xs:string,
         transform:transform($doc, $stylesheet,
             <parameters>
                 <param name="chamber" value="{$parliament/type/text()}" />
-                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />   
+                <param name="version" value="{$version-uri}" />
+                <param name="version-uri" value="{$doc-uri}" /> 
             </parameters>
         )
 };
@@ -3540,22 +3542,22 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
     let $foundevent := if($match) then true() else false()
     
     let $doc-node := if(not($foundevent)) then (
-                        bun:documentitem-full-acl('public-view', $eventid) 
+                        bun:documentitem-full-acl('public-view', $eventid)/child::* 
                      )
                      else (
                         let $acl-filter := cmn:get-acl-permission-as-node('Event','public-view')
                         return bun:treewalker-acl($acl-filter, $match)
                      )
-    let $docitem := document {  $doc-node }                
-    let $latest := if(not($foundevent)) then max($docitem/bu:ontology/bu:document//bu:workflowEvents/bu:workflowEvent/bu:docId) else ()             
-    let $currenturi := if(not($foundevent)) then data($docitem/bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:docId = $latest]/@href) else $eventid
+    let $docitem := document { $doc-node }                
+    let $latest := if(not($foundevent)) then max($docitem/bu:document/bu:workflowEvents/bu:workflowEvent/bu:docId) else ()             
+    let $currenturi := if(not($foundevent)) then data($docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:docId = $latest]/@href) else $eventid
           
     let $doc := <doc>      
                     { $docitem }
                     <ref/>
                     <event>{$currenturi}</event>
-                    {bun:get-excludes($doc-node, $parts/parent::node())}
-                </doc>  
+                    {bun:get-excludes($docitem, $parts/parent::node())}
+                </doc>                
     
     return
         transform:transform($doc, 
@@ -3664,7 +3666,16 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
     let $doc := <doc>
                     {$member-doc}
                     <ref>
-                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology}
+                    {
+                      collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology,
+                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
+                      let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
+                      order by $doc/bu:designations/bu:designation/bu:sortOrder ascending 
+                      return 
+                            element bu:office {
+                                ($doc, $group-name)
+                            }                    
+                    }
                     </ref>
                 </doc>
     
@@ -3677,7 +3688,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
         )
 };
 
-declare function bun:get-member-officesheld($memberid as xs:string?, $parts as node()*, $parliament as node()?) as element()* {
+declare function bun:get-member-biographical($memberid as xs:string?, $parts as node()*, $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -3687,15 +3698,7 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
     let $doc := <doc>
                     {$member-doc}
                     <ref>
-                    {
-                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
-                      let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
-                      order by $doc/bu:designations/bu:designation/bu:sortOrder ascending 
-                      return 
-                            element bu:office {
-                                ($doc, $group-name)
-                            }
-                    }
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology}
                     </ref>
                 </doc>
     

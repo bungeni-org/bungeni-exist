@@ -15,15 +15,15 @@
     <xsl:param name="no-of-events"/>
     <xsl:template match="doc">
         <xsl:variable name="event-uri" select="event"/>
-        <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
-        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
+        <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="chamber" select="bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
-                <xsl:when test="bu:ontology/bu:document/@uri">
-                    <xsl:value-of select="bu:ontology/bu:document/@uri"/>
+                <xsl:when test="bu:document/@uri">
+                    <xsl:value-of select="bu:document/@uri"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                    <xsl:value-of select="bu:document/@internal-uri"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -31,8 +31,8 @@
         <div id="main-wrapper">
             <div id="title-holder">
                 <h1 class="title">
-                    <xsl:if test="bu:ontology/bu:document/bu:progressiveNumber">#<xsl:value-of select="bu:ontology/bu:document/bu:progressiveNumber"/>:</xsl:if>
-                    <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
+                    <xsl:if test="bu:document/bu:progressiveNumber">#<xsl:value-of select="bu:document/bu:progressiveNumber"/>:</xsl:if>
+                    <xsl:value-of select="bu:document/bu:title"/>
                 </h1>
             </div>
             <!-- 
@@ -55,7 +55,7 @@
                         <xsl:with-param name="doc-uri" select="$doc-uri"/>
                         <xsl:with-param name="chamber" select="$chamber"/>
                     </xsl:call-template>
-                    <xsl:variable name="render-doc" select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[@href=$event-uri]"/>
+                    <xsl:variable name="render-doc" select="bu:document/bu:workflowEvents/bu:workflowEvent[@href=$event-uri]"/>
                     <h3 id="doc-heading" class="doc-headers">
                         <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
                     </h3>
@@ -97,7 +97,7 @@
         <xsl:param name="doc-type"/>
         <xsl:param name="doc-uri"/>
         <xsl:param name="chamber"/>
-        <xsl:variable name="total_events" select="count(bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent)"/>
+        <xsl:variable name="total_events" select="count(bu:document/bu:workflowEvents/bu:workflowEvent)"/>
         <div class="doc-views-section">
             <form onsubmit="redirectTo();">
                 <label for="eventText" class="inline">
@@ -105,7 +105,7 @@
                 </label>
                 <div class="inline">
                     <select name="uri" id="eventText">
-                        <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent">
+                        <xsl:for-each select="bu:document/bu:workflowEvents/bu:workflowEvent">
                             <xsl:sort select="bu:statusDate" order="descending"/>
                             <xsl:variable name="cur_pos" select="($total_events - position())+1"/>
                             <option value="{@href}">

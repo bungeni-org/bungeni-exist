@@ -37,36 +37,36 @@
                                 <xsl:for-each select="ref/bu:ontology">
                                     <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
                                     <li>
-                                        <xsl:value-of select="format-dateTime(bu:document/bu:statusDate,$date-format,'en',(),())"/> /
+                                        <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
+                                        <xsl:variable name="doc-uri">
+                                            <xsl:choose>
+                                                <xsl:when test="bu:document/@uri">
+                                                    <xsl:value-of select="bu:document/@uri"/>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="bu:document/@internal-uri"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
+                                        <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
+                                        <xsl:choose>
+                                            <xsl:when test="$doc-type = 'Event'">
+                                                <xsl:variable name="event-href" select="bu:document/@uri"/>
+                                                <a href="{$chamber}/{lower-case($eventOf)}-event?uri={$event-href}">
+                                                    <xsl:value-of select="bu:document/bu:title"/>
+                                                </a>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <a href="{$chamber}/{lower-case($doc-type)}-text?uri={$doc-uri}">
+                                                    <xsl:value-of select="bu:document/bu:title"/>
+                                                </a>
+                                            </xsl:otherwise>
+                                        </xsl:choose> /
                                         <xsl:value-of select="if (data(bu:document/bu:status/@showAs)) then data(bu:document/bu:status/@showAs) else bu:document/bu:status/bu:value"/> /
                                         <i18n:text key="doc-{lower-case(bu:document/bu:docType/bu:value)}">
                                             <xsl:value-of select="bu:document/bu:docType/bu:value"/>(nt)</i18n:text>
                                         <div class="struct-ib">&#160;/ 
-                                            <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
-                                            <xsl:variable name="doc-uri">
-                                                <xsl:choose>
-                                                    <xsl:when test="bu:document/@uri">
-                                                        <xsl:value-of select="bu:document/@uri"/>
-                                                    </xsl:when>
-                                                    <xsl:otherwise>
-                                                        <xsl:value-of select="bu:document/@internal-uri"/>
-                                                    </xsl:otherwise>
-                                                </xsl:choose>
-                                            </xsl:variable>
-                                            <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
-                                            <xsl:choose>
-                                                <xsl:when test="$doc-type = 'Event'">
-                                                    <xsl:variable name="event-href" select="bu:document/@uri"/>
-                                                    <a href="{$chamber}/{lower-case($eventOf)}-event?uri={$event-href}">
-                                                        <xsl:value-of select="bu:document/bu:title"/>
-                                                    </a>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <a href="{$chamber}/{lower-case($doc-type)}-text?uri={$doc-uri}">
-                                                        <xsl:value-of select="bu:document/bu:title"/>
-                                                    </a>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
+                                            <xsl:value-of select="format-dateTime(bu:document/bu:statusDate,$date-format,'en',(),())"/>
                                         </div>
                                         <!--xsl:choose>
                                             <xsl:when test="$doc-uri = data(bu:document/bu:owner/bu:person/@href)">

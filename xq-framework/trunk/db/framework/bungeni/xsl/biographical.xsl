@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -35,62 +35,74 @@
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <div class="mem-profile">
-                        <div class="list-block">
-                            <div class="block-label">
+                        <div class="list-inline">
+                            <div class="inline-label">
                                 <i18n:text key="Name">Name(nt):</i18n:text>:
                             </div>
                             <xsl:value-of select="concat(ref/bu:ontology/bu:user/bu:title,' ',ref/bu:ontology/bu:user/bu:firstName,' ', ref/bu:ontology/bu:user/bu:lastName)"/>
                         </div>
-                        <div class="list-block">
-                            <div class="block-label">
-                                <i18n:text key="Salutation">salutation(nt):</i18n:text>:
+                        <xsl:if test="ref/bu:ontology/bu:user/bu:salutation">
+                            <div class="list-inline">
+                                <div class="inline-label">
+                                    <i18n:text key="Salutation">salutation(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:salutation"/>
                             </div>
-                            <xsl:value-of select="bu:ontology/bu:membership/bu:salutation"/>
-                        </div>
-                        <div class="list-block">
-                            <div class="block-label">
-                                <i18n:text key="Gender">Gender(nt):</i18n:text>:
+                        </xsl:if>
+                        <xsl:if test="ref/bu:ontology/bu:user/bu:gender">
+                            <div class="list-inline">
+                                <div class="inline-label">
+                                    <i18n:text key="Gender">Gender(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="if (ref/bu:ontology/bu:user/bu:gender/@showAs) then                                             data(ref/bu:ontology/bu:user/bu:gender/@showAs) else                                              ref/bu:ontology/bu:user/bu:gender"/>
                             </div>
-                            <xsl:value-of select="if (bu:ontology/bu:membership/bu:gender/@showAs) then                                             data(bu:ontology/bu:membership/bu:gender/@showAs) else                                              bu:ontology/bu:membership/bu:gender"/>
-                        </div>
-                        <div class="list-block">
-                            <div class="block-label">
+                        </xsl:if>
+                        <div class="list-inline">
+                            <div class="inline-label">
                                 <i18n:text key="Country of Birth">birth country(nt):</i18n:text>:
                             </div>
                             <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthCountry"/>
                         </div>
                         <xsl:if test="ref/bu:ontology/bu:user/bu:maritalStatus/@showAs">
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="Marital Status">Marital Status(nt):</i18n:text>:
                                 </div>
                                 <xsl:value-of select="ref/bu:ontology/bu:user/bu:maritalStatus/@showAs"/>
                             </div>
                         </xsl:if>
-                        <div class="list-block">
-                            <div class="block-label">
-                                <i18n:text key="Date of Birth">date of birth(nt):</i18n:text>:
+                        <xsl:if test="ref/bu:ontology/bu:user/bu:dateOfBirth">
+                            <div class="list-inline">
+                                <div class="inline-label">
+                                    <i18n:text key="Date of Birth">date of birth(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="format-date(xs:date(ref/bu:ontology/bu:user/bu:dateOfBirth),$date-format,'en',(),())"/>
                             </div>
-                            <xsl:value-of select="format-date(xs:date(bu:ontology/bu:membership/bu:dateOfBirth),$date-format,'en',(),())"/>
-                        </div>
-                        <div class="list-block">
-                            <div class="block-label">
-                                <i18n:text key="Nationality at Birth">Nationality at Birth(nt):</i18n:text>:
+                        </xsl:if>
+                        <xsl:if test="ref/bu:ontology/bu:user/bu:birthNationality">
+                            <div class="list-inline">
+                                <div class="inline-label">
+                                    <i18n:text key="Nationality at Birth">Nationality at Birth(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthNationality"/>
                             </div>
-                            <xsl:value-of select="ref/bu:ontology/bu:user/bu:birthNationality"/>
-                        </div>
-                        <div class="list-block">
-                            <div class="block-label">
-                                <i18n:text key="Current Nationality">Current Nationality(nt):</i18n:text>:
+                        </xsl:if>
+                        <xsl:if test="ref/bu:ontology/bu:user/bu:currentNationality">
+                            <div class="list-inline">
+                                <div class="inline-label">
+                                    <i18n:text key="Current Nationality">Current Nationality(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:currentNationality"/>
                             </div>
-                            <xsl:value-of select="ref/bu:ontology/bu:user/bu:currentNationality"/>
-                        </div>
-                        <div class="list-block">
-                            <div class="block-label">
-                                <i18n:text key="National Id">National Id(nt):</i18n:text>:
+                        </xsl:if>
+                        <xsl:if test="ref/bu:ontology/bu:user/bu:nationalId">
+                            <div class="list-inline">
+                                <div class="inline-label">
+                                    <i18n:text key="National Id">National Id(nt):</i18n:text>:
+                                </div>
+                                <xsl:value-of select="ref/bu:ontology/bu:user/bu:nationalId"/>
                             </div>
-                            <xsl:value-of select="ref/bu:ontology/bu:user/bu:nationalId"/>
-                        </div>
+                        </xsl:if>
                     </div>
                     <div class="clear"/>
                     <div class="mem-desc">

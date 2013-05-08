@@ -398,6 +398,18 @@ p.inline-centered {
 .list-block div.doc-toggle {
     width:90%;
 }
+/* div inlines */
+.list-inline {
+    width:90%;
+    margin:0 auto;
+    padding-bottom:10px;
+}
+.list-inline .inline-label {
+    min-width:120px;
+    width:auto;
+    font-weight:bold;
+    display:inline;
+}
 
 /* Versions, Event View feature this on the top-right section of the document */
 .hanging-menu {

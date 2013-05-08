@@ -2840,9 +2840,9 @@ declare function bun:get-reference($docitem as node()) {
 :)
 declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
     fn:concat(
-        "(for $i in collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri='", $uri,
+        "collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri='", $uri,
         "') else (@internal-uri='", $uri,
-        "')] return $i)[1]")
+        "')][1]")
 };        
 
 declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
@@ -3534,7 +3534,9 @@ declare function bun:get-doc-attachment($acl as xs:string,
                             
 };
 
-declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as element()* {
+declare function bun:get-doc-event($eventid as xs:string, 
+            $seq-id as xs:integer,
+            $parts as node()) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -3566,6 +3568,7 @@ declare function bun:get-doc-event($eventid as xs:string, $parts as node()) as e
                             <parameters>
                                 <param name="version" value="true" />
                                 <param name="event-uri" value="$currenturi" />
+                                <param name="sequence-id" value="{xs:integer($seq-id)}" />
                             </parameters>)
 };
 

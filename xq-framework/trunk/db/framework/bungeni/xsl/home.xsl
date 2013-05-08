@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     
     <!-- Generic templates applied to document views -->
     <xsl:import href="tmpl-grp-generic.xsl"/>
@@ -39,38 +39,38 @@
                 <div id="region-content" class="rounded-eigh tab_container" role="main">
                     <div id="doc-main-section">
                         <div id="doc-main-section">
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="parl-fullname">full name(nt)</i18n:text>:
                                 </div>
                                 <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                             </div>
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="language">language(nt)</i18n:text>:
                                 </div>
                                 <xsl:value-of select="bu:ontology/bu:group/@xml:lang"/>
                             </div>
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="status">status(nt)</i18n:text>:
                                 </div>
                                 <xsl:value-of select="bu:ontology/bu:group/bu:status"/>
                             </div>
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="parl-shortname">short name(nt)</i18n:text>:
                                 </div>
                                 <xsl:value-of select="bu:ontology/bu:group/bu:shortName"/>
                             </div>
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="parl-start-date">election date(nt)</i18n:text>:
                                 </div>
                                 <xsl:value-of select="format-date(bu:ontology/bu:legislature/bu:electionDate/@select,'[D1o] [MNn,*-3], [Y]', 'en', (),())"/>
                             </div>
-                            <div class="list-block">
-                                <div class="block-label">
+                            <div class="list-inline">
+                                <div class="inline-label">
                                     <i18n:text key="parl-power-date">in power from(nt)</i18n:text>:
                                 </div>
                                 <!--xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,$date-format, 'en', (),())"/-->

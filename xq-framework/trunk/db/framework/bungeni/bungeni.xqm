@@ -3272,6 +3272,7 @@ declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node(
                 $match   
         }
         </ref>
+        {bun:get-excludes($docitem, $docviews)}
     </doc>     
 };
 

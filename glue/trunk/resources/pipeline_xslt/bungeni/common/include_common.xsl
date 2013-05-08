@@ -12,7 +12,15 @@
             <xsl:with-param name="elementName">language</xsl:with-param>
         </xsl:call-template>
     </xsl:template>  
-    
+ 
+    <xsl:template match="field[@name='source_language']">
+        <sourceLanguage isA="TLCTerm">
+            <xsl:if test="@displayAs">
+                <xsl:attribute name="showAs" select="@displayAs"/>
+            </xsl:if>
+            <value type="xs:string"><xsl:value-of select="." /></value>
+        </sourceLanguage>
+    </xsl:template>      
     
     <xsl:template match="field[@name='parliament_id']">
         <xsl:call-template name="renderIntegerElement">
@@ -25,6 +33,18 @@
             <xsl:with-param name="elementName">title</xsl:with-param>
         </xsl:call-template>
     </xsl:template>  
+    
+    <xsl:template match="field[@name='sub_title']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">subTitle</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>   
+    
+    <xsl:template match="field[@name='summary']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">summary</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>     
     
     <xsl:template match="field[@name='user_id']">
         <xsl:call-template name="renderIntegerElement">

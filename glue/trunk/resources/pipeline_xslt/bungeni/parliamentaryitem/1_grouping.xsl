@@ -162,6 +162,8 @@
                     @name='status' or 
                     @name='mimetype' or 
                     @name='title' or 
+                    @name='sub_title' or 
+                    @name='summary' or 
                     @name='long_title' or 
                     @name='body' or 
                     @name='language'  or 

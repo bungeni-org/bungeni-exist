@@ -638,11 +638,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         </fo:block>
     </xsl:template>
     <!-- For all other <p/> that are not in header of document -->
-    <xsl:template match="html:p[@class != 'inline-centered']">
+    <!--xsl:template match="html:p[@class != 'inline-centered']">
         <fo:block xsl:use-attribute-sets="p">
             <xsl:call-template name="process-common-attributes-and-children"/>
         </fo:block>
-    </xsl:template>
+    </xsl:template-->
 
   <!-- initial paragraph, preceded by h1..6 or div -->
     <xsl:template match="html:p[@class != 'inline-centered'][preceding-sibling::*[1][                        self::html:h1 or self::html:h2 or self::html:h3 or                        self::html:h4 or self::html:h5 or self::html:h6 or                        self::html:div]]">

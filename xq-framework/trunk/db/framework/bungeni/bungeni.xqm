@@ -358,25 +358,56 @@ declare function bun:gen-member-pdf($controller as node()?,$memberid as xs:strin
     let $lang := template:set-lang()    
     let $orientation := local:get-orientation($lang)
 
-    let $doc := <doc>        
-            {
-                collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
-            }
-        </doc>
-    let $title := $doc/bu:ontology/bu:membership/bu:title
-    let $doc-type := $doc/bu:ontologoy/bu:membership/bu:docType/bu:value
-    let $views := cmn:get-views-for-type($doc-type)    
-    
-    let $transformed := transform:transform($doc,$stylesheet,())
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[@uri=$memberid]/ancestor::bu:ontology
+        
+    let $title := $member-doc/bu:membership/bu:title
+    let $doc-type := $member-doc/bu:membership/bu:docType/bu:value/text() 
+    let $user-uri := data($member-doc/bu:membership/bu:referenceToUser/bu:refersTo/@href)
+    let $views := cmn:get-views-for-type($doc-type)
+
+    let $doc := <doc>
+                    {$member-doc}
+                    <ref>
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$user-uri][1]/ancestor::bu:ontology}
+                    </ref>
+                </doc>
+                
+    let $pages := <div>{
+        for $view in $views/view[@tag eq 'tab']
+            return
+                if (data($view/@id) eq 'member') then (
+                    <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
+                        transform:transform($doc, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                    <param name="chamber" value="{$controller/parliament/type/text()}" />
+                                                    <param name="chamber-id" value="{$controller/parliament/identifier/text()}" />
+                                                </parameters>)
+                     }</div>
+                 )
+                else if (data($view/@id) eq 'biographical') then (
+                    <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
+                        transform:transform($doc, cmn:get-xslt($view/xsl), 
+                                                <parameters>
+                                                    <param name="epub" value="true" />
+                                                    <param name="chamber" value="{$controller/parliament/type/text()}" />
+                                                    <param name="chamber-id" value="{$controller/parliament/identifier/text()}" />
+                                                </parameters>)
+                     }</div>
+                 )                 
+                 else ()
+         }</div>
+     
+    let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)
     
     let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="{$lang}">
                     <head>
                         <title>{$title}</title>
                     </head>
                     <body>    
-                        {$transformed}
+                        {$pages-i18n}
                     </body>
-                  </html>  
+                  </html>
     
     let $transformed := transform:transform($xhtml,$stylesheet, <parameters>
                                                                     <param name="base-url" value="{$server-path}"/>
@@ -2089,10 +2120,12 @@ declare function bun:get-sittings-feed($controller as node()?, $acl as xs:string
 declare function bun:get-raw-xml($docid as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
-    functx:remove-elements-deep(
-        collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]],
-        ('bu:versions', 'bu:permissions', 'bu:changes','bu:description')
-    )
+    let $doc := functx:remove-elements-deep(collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]],
+                ('bu:versions', 'bu:permissions', 'bu:changes','bu:description'))
+    let $output := concat(replace(substring-after($docid, '/'),'/','-'),"-",".xml")
+    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",$output)) 
+    return 
+        $doc
 };
 
 (:~
@@ -2985,9 +3018,9 @@ declare function bun:get-parl-doc($acl as xs:string,
             $parts as node(),
             $parliament as node()?) as element()* {
             
-    let $parent-uri := xps:substring-before($doc-uri, "@") (: extract the main URI :)
-    let $version-uri := if($parent-uri) then false() else true()
-    let $uri := if($version-uri) then $doc-uri else $parent-uri
+    let $parent-uri := xps:substring-before($doc-uri, "@") (: extract parent-uri @ exists :)
+    let $version := if(string-length($parent-uri) > 2) then true() else false()
+    let $uri := if($version) then $parent-uri else $doc-uri
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
@@ -3007,7 +3040,7 @@ declare function bun:get-parl-doc($acl as xs:string,
             <parameters>
                 <param name="chamber" value="{$parliament/type/text()}" />
                 <param name="chamber-id" value="{$parliament/identifier/text()}" />   
-                <param name="version" value="{$version-uri}" />
+                <param name="version" value="{$version}" />
                 <param name="version-uri" value="{$doc-uri}" /> 
             </parameters>
         )
@@ -3670,16 +3703,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
     let $doc := <doc>
                     {$member-doc}
                     <ref>
-                    {
-                      collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology,
-                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
-                      let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
-                      order by $doc/bu:designations/bu:designation/bu:sortOrder ascending 
-                      return 
-                            element bu:office {
-                                ($doc, $group-name)
-                            }                    
-                    }
+                    {collection(cmn:get-lex-db())/bu:ontology/bu:user[@uri=$memberid][1]/ancestor::bu:ontology}
                     </ref>
                 </doc>
     

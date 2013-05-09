@@ -118,7 +118,7 @@
                                 <xsl:value-of select="bu:logicalAddressType"/>
                                 <span class="tgl-pad-right">▼</span>
                                 <div class="doc-toggle">
-                                    <div id="{bu:postalAddressType}{bu:address/bu:addressId}" class="toggle address-info" style="min-height:100px">
+                                    <div id="{bu:postalAddressType}{bu:addressId}" class="toggle address-info" style="min-height:100px">
                                         <div class="address-block">
                                             <address>
                                                 <strong>
@@ -145,7 +145,7 @@
                                                     <xsl:value-of select="$contact-name-title"/>
                                                 </strong>
                                                 <br/>
-                                                <a href="mailto:#">
+                                                <a href="mailto:{$contact-name}&#160;&lt;{bu:email}&gt;">
                                                     <xsl:value-of select="bu:email"/>
                                                 </a>
                                             </address>

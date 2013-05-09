@@ -59,49 +59,41 @@
         <route href="/lower_house/member-officesheld">
             <title>Business | Offices Held</title>
             <navigation>/lower_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-officesheld</action>
         </route>
         <route href="/higher_house/member-officesheld">
             <title>Business | Offices Held</title>
             <navigation>/higher_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-officesheld</action>
         </route>
         <route href="/lower_house/member-biographical">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-biographical</action>
         </route>
         <route href="/higher_house/member-biographical">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-biographical</action>
         </route>
         <route href="/lower_house/member-parlactivities">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-parlactivities</action>
         </route>
         <route href="/higher_house/member-parlactivities">
             <title>Business | Member of Parliament</title>
             <navigation>/higher_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-parlactivities</action>
         </route>
         <route href="/lower_house/member-contacts">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
-            <subnavigation>current</subnavigation>
             <action>rou:member-contacts</action>
         </route>
         <route href="/higher_house/member-contacts">
             <title>Business | Member of Parliament</title>
-            <navigation>/lower_house/members</navigation>
-            <subnavigation>current</subnavigation>
+            <navigation>/higher_house/members</navigation>
             <action>rou:member-contacts</action>
         </route>
         <route href="/lower_house/committees">

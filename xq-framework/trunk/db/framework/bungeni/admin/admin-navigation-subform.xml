@@ -18,10 +18,10 @@
         <xf:bind id="b-nav-name" nodeset="xhtml:a/@name" type="xs:string"/>
         <xf:bind id="b-nav-i18nkey" nodeset="xhtml:a/i18n:text/@key" type="xs:string"/>
         <xf:bind id="b-nav-i18ntitle" nodeset="xhtml:a/i18n:text" type="xs:string"/>
-        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[index('navgroups')+1]/xhtml:div/xhtml:ul" replace="instance" method="get">
+        <xf:submission id="s-load-from-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[index('navgroups')]/xhtml:ul/xhtml:li/xhtml:ul" replace="instance" method="get">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Sub-navigation editor loaded</xf:message>
         </xf:submission>
-        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[index('navgroups')+1]/xhtml:div/xhtml:ul" replace="none" method="post">
+        <xf:submission id="s-update-master" resource="model:master#instance('ui-config')/ui/menugroups/menu[index('navgroups')]/xhtml:ul/xhtml:li/xhtml:ul" replace="none" method="post">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">Navigation saved</xf:message>
             <xf:message ev:event="xforms-submit-error" level="ephemeral">Sorry - your update failed.</xf:message>
         </xf:submission>

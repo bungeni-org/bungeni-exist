@@ -109,7 +109,7 @@ class TransformerConfig(Config):
         return str(self.__legislature__()["identifier"])
     
     def get_parliament_type_name(self):
-        return str(self.__legislature__()["parliament_type_name"])
+        return self.get("general", "parliament_type_name")
 
     def get_input_folder(self):
         return self.get("general", "bungeni_docs_folder")

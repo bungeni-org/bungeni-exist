@@ -155,19 +155,6 @@
                 <xsl:with-param name="type" select="$parliament-type" />
                 <xsl:with-param name="type-display" select="$parliament-type-display" />
             </xsl:call-template>
-            <!--
-            <chamber isA="TLCConcept" href="{$parliament-full-uri}">
-                <electionDate type="xs:date" select="{$parliament-election-date}"></electionDate> 
-                <xsl:copy-of select="field[  
-                    @name='parliament_id' or 
-                    @name='type' or 
-                    @name='election_date' or 
-                    @name='dissolution_date' or 
-                    @name='results_date' or 
-                    @name='proportional_representation' or 
-                    @name='status_date' ] | agenda_items" 
-                />                 
-            </chamber> -->
             <bungeni id="bungeniMeta" showAs="Bungeni Specific info" isA="TLCObject">
                 <xsl:copy-of select="tags" />
                 <xsl:copy-of select="field[@name='timestamp']" />

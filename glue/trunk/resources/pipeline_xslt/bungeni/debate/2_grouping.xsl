@@ -149,7 +149,7 @@
         </groupId>
     </xsl:template>      
     
-    <xsl:template match="field[@name='parliament_id']">
+    <xsl:template match="field[@name='chamber_id']">
         <parliamentId type="xs:integer">
             <xsl:value-of select="." />
         </parliamentId>

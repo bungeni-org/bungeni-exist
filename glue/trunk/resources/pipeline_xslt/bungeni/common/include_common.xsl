@@ -22,7 +22,7 @@
         </sourceLanguage>
     </xsl:template>      
     
-    <xsl:template match="field[@name='parliament_id']">
+    <xsl:template match="field[@name='chamber_id']">
         <xsl:call-template name="renderIntegerElement">
             <xsl:with-param name="elementName">parliamentId</xsl:with-param>
         </xsl:call-template>

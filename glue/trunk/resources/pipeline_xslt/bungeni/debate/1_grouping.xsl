@@ -107,7 +107,7 @@
                 <xsl:copy-of
                     select="field[  
                     @name='short_name' or 
-                    @name='parliament_id' or 
+                    @name='chamber_id' or 
                     @name='type' or 
                     @name='dissolution_date' or 
                     @name='results_date' or 

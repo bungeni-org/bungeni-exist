@@ -155,7 +155,11 @@ def _walk_get_parl_info(piw, cfg):
     # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
     # instead return the extract from the cached parliament_info.xml document 
     # !+FIXED
-    piw.walk(cfg.get_input_folder())
+    # !+UPDATE(ah,  restrict path to xml_db/chamber - earlier this would sweep the entire
+    # XML db folder
+    piw.walk( 
+         os.path.join(cfg.get_input_folder(), cfg.get_parliament_type_name()) 
+    )
     if piw.is_cache_full():
         return piw.get_from_cache()
     else:

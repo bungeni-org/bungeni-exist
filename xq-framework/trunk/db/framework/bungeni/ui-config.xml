@@ -56,6 +56,18 @@
             <navigation>/higher_house/members</navigation>
             <action>rou:member</action>
         </route>
+        <route href="/lower_house/member-officesheld">
+            <title>Business | Offices Held</title>
+            <navigation>/lower_house/members</navigation>
+            <subnavigation>current</subnavigation>
+            <action>rou:member-officesheld</action>
+        </route>
+        <route href="/higher_house/member-officesheld">
+            <title>Business | Offices Held</title>
+            <navigation>/higher_house/members</navigation>
+            <subnavigation>current</subnavigation>
+            <action>rou:member-officesheld</action>
+        </route>
         <route href="/lower_house/member-biographical">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
@@ -1538,7 +1550,7 @@
                     <i18n:text key="tab-events">events(nt)</i18n:text>
                 </title>
                 <template>xml/changes.xml</template>
-                <xsl>xsl/event.xsl</xsl>
+                <xsl>xsl/events.xsl</xsl>
             </view>
             <view check-for="[parent::bu:attachments/child::node()]" id="attachments" path="tableddocument-documents" tag="tab">
                 <title>
@@ -1564,6 +1576,10 @@
             <view path="tableddocument-attachment">
                 <template>xml/documents.xml</template>
                 <xsl>xsl/attachment.xsl</xsl>
+            </view>
+            <view path="tableddocument-event">
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/event.xsl</xsl>
             </view>
         </views>
         <views name="AgendaItem">
@@ -1625,6 +1641,10 @@
                 <template>xml/documents.xml</template>
                 <xsl>xsl/attachment.xsl</xsl>
             </view>
+            <view path="agendaitem-event">
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
         </views>
         <views name="Report">
             <view id="listing" path="publications" tag="listing">
@@ -1662,12 +1682,19 @@
                 <template>xml/member.xml</template>
                 <xsl>xsl/member.xsl</xsl>
             </view>
-            <view id="offices" path="member-biographical" tag="tab">
+            <view id="biographical" path="member-biographical" tag="tab">
                 <title>
                     <i18n:text key="tab-info">bio information(nt)</i18n:text>
                 </title>
                 <template>xml/member.xml</template>
                 <xsl>xsl/biographical.xsl</xsl>
+            </view>
+            <view id="offices" path="member-officesheld" tag="tab">
+                <title>
+                    <i18n:text key="tab-offices">offices held(nt)</i18n:text>
+                </title>
+                <template>xml/member.xml</template>
+                <xsl>xsl/offices-held.xsl</xsl>
             </view>
             <view id="activities" path="member-parlactivities" tag="tab">
                 <title>

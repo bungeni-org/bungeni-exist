@@ -3692,6 +3692,37 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
         )
 };
 
+declare function bun:get-member-officesheld($memberid as xs:string?, $parts as node()*, $parliament as node()?) as element()* {
+
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+
+    (: return AN Member document as singleton :)
+    let $doc := <doc>
+                    {$member-doc}
+                    <ref>
+                    {
+                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
+                      let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
+                      order by $doc/bu:designations/bu:designation/bu:sortOrder ascending 
+                      return 
+                            element bu:office {
+                                ($doc, $group-name)
+                            }
+                    }
+                    </ref>
+                </doc>
+    
+    return
+        transform:transform($doc, $stylesheet, 
+            <parameters>
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />               
+            </parameters>        
+        )
+};
+
 declare function bun:get-member-biographical($memberid as xs:string?, $parts as node()*, $parliament as node()?) as element()* {
 
     (: stylesheet to transform :)

@@ -196,6 +196,28 @@ declare function rou:member($CONTROLLER-DOC as node()) {
         )
 };
 
+declare function rou:member-officesheld($CONTROLLER-DOC as node()) {
+
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))   
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-member-officesheld($docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-repl:= document {
+    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    					 } 
+    return 
+        template:process-tmpl(
+    	   $CONTROLLER-DOC/rel-path, 
+    	   $CONTROLLER-DOC/exist-cont, 
+    	   $config:DEFAULT-TEMPLATE,
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+        )
+};
+
 declare function rou:member-biographical($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))   

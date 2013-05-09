@@ -28,7 +28,7 @@
    <pipeline for="government" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
    <pipeline for="ministry" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
    <pipeline for="minister" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
-   <pipeline for="parliament" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
+   <pipeline for="chamber" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
    <pipeline for="member_of_parliament" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
    <pipeline for="address" pipeline="configfiles/configs/config_bungeni_address.xml" archetype="address" basetype="" />
    <pipeline for="sitting" pipeline="configfiles/configs/config_bungeni_sitting.xml" archetype="sitting" basetype="" />

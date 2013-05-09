@@ -23,7 +23,7 @@
    <map from="joint_committee" uri-name="JointCommittee" element-name="jointCommittee" />
    <map from="government" uri-name="Government" element-name="government" />
    <map from="ministry" uri-name="Ministry" element-name="ministry" />
-   <map from="parliament" uri-name="Parliament" element-name="parliament" />
+   <map from="chamber" uri-name="Chamber" element-name="chamber" />
    <map from="office_member" uri-name="OfficeMember" element-name="officeMember" />
    <map from="political_group_member" uri-name="PoliticalGroupMember" element-name="politicalGroupMember" />
    <map from="committee_member" uri-name="CommitteeMember" element-name="committeeMember" />

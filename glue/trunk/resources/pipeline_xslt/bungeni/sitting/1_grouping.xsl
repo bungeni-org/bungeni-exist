@@ -43,7 +43,7 @@
         <xsl:variable name="group-identifier" select="group/field[@name='principal_name']" />
         <xsl:variable name="group-uri">
             <xsl:choose>
-                <xsl:when test="$group-type eq 'parliament'">
+                <xsl:when test="$group-type eq 'chamber'">
                     <xsl:value-of select="$parliament-full-uri" />
                 </xsl:when>
                 <xsl:otherwise>
@@ -92,7 +92,7 @@
                 
                 <xsl:attribute name="unique-id">
                     <xsl:choose>
-                        <xsl:when test="$group-type eq 'parliament'">
+                        <xsl:when test="$group-type eq 'chamber'">
                             <xsl:value-of select="concat(
                                 $legislature-type-name, '.', $legislature-identifier, 
                                 '-', 

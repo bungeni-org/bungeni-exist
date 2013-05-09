@@ -54,7 +54,7 @@
         
                 <xsl:attribute name="uri" >
                     <xsl:choose>
-                        <xsl:when test="$group-element-name eq 'parliament'">
+                        <xsl:when test="$group-element-name eq 'chamber'">
                             <xsl:value-of select="$parliament-full-uri" />
                         </xsl:when>
                         <xsl:otherwise>
@@ -70,7 +70,7 @@
                     <xsl:choose>
                         <xsl:when test="$origin-parliament ne 'None'">
                             <xsl:choose>
-                                <xsl:when test="$group-element-name eq 'parliament'">
+                                <xsl:when test="$group-element-name eq 'chamber'">
                                     <xsl:value-of select="concat(
                                         $legislature-type-name, '.', $legislature-identifier, 
                                         '-', 

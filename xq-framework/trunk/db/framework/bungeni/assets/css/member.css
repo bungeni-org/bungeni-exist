@@ -10,7 +10,6 @@
 }
 .mem-top-right {
     float:right;
-    text-align:center;
     width:73%;    
     overflow: auto;
     min-height:250px;    
@@ -53,12 +52,12 @@ p.imgonlywrap img {
     padding: 4px;
   }  
   
-table.mem-tbl-details {
+.mem-details {
     width:97%;
     margin:10px 25px 0 auto;
     float:right;
 }
-table.mem-tbl-details tr td.labels {
+.mem-details .inline-labels {
     vertical-align:top;
     width:160px;
     height:25px;

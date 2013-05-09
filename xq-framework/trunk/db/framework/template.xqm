@@ -250,7 +250,7 @@ declare function template:make-relative-uri($request-rel-path as xs:string, $uri
 };
 
 declare function template:adjust-absolute-paths($exist-controller as xs:string, $attr as attribute()) as attribute() {
-    if(fn:local-name($attr) = ("src", "href", "action") and not(starts-with($attr, "/") or starts-with($attr, "http://") or starts-with($attr, "https://") or starts-with($attr, "#")))then
+    if(fn:local-name($attr) = ("src", "href", "action") and not(starts-with($attr, "mailto:") or starts-with($attr, "/") or starts-with($attr, "http://") or starts-with($attr, "https://") or starts-with($attr, "#")))then
             attribute {node-name($attr)} { 
                 template:make-absolute-uri($exist-controller, $attr)
             }           

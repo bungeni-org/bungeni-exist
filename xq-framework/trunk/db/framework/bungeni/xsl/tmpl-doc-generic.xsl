@@ -23,7 +23,16 @@
     <xsl:template name="doc-item" match="doc">
         <xsl:variable name="ver-uri" select="version"/>
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
-        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
+        <xsl:variable name="chamber">
+            <xsl:choose>
+                <xsl:when test="$epub eq 'true'">
+                    <xsl:text>/</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="concat(bu:ontology/bu:chamber/bu:type/bu:value,'/')"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="versions">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/bu:versions/bu:version">
@@ -59,14 +68,14 @@
                     <xsl:with-param name="tab-group" select="$doc-type"/>
                     <xsl:with-param name="uri" select="$doc-uri"/>
                     <xsl:with-param name="tab-path">text</xsl:with-param>
-                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
+                    <xsl:with-param name="chamber" select="$chamber"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
                 </xsl:call-template>
                 <!-- Renders the document download types -->
                 <xsl:call-template name="doc-formats">
                     <xsl:with-param name="render-group">parl-doc</xsl:with-param>
                     <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
-                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
+                    <xsl:with-param name="chamber" select="$chamber"/>
                     <xsl:with-param name="uri" select="$doc-uri"/>
                 </xsl:call-template>
             </xsl:if>
@@ -157,7 +166,7 @@
         <xsl:param name="chamber"/>
         <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
             <i18n:text key="pri-sponsor">primary sponsor(nt)</i18n:text>: <i>
-                <a href="{$chamber}/member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
+                <a href="{$chamber}member?uri={bu:ontology/bu:document/bu:owner/bu:person/@href}">
                     <xsl:value-of select="bu:ontology/bu:document/bu:owner/bu:person/@showAs"/>
                 </a>
             </i>
@@ -174,7 +183,7 @@
                 <xsl:when test="bu:ontology/bu:signatories">
                     <xsl:for-each select="bu:ontology/bu:signatories/bu:signatory[bu:status/bu:value eq 'consented'][bu:person/@href ne ancestor::bu:ontology/bu:document/bu:owner/bu:person/@href]">
                         <i>
-                            <a href="{$chamber}/member?uri={bu:person/@href}" title="{bu:status/@showAs}">
+                            <a href="{$chamber}member?uri={bu:person/@href}" title="{bu:status/@showAs}">
                                 <xsl:value-of select="bu:person/@showAs"/>
                             </a>
                         </i>
@@ -195,7 +204,7 @@
     <xsl:template name="doc-item-body">
         <xsl:param name="ver-uri"/>
         <xsl:variable name="ref-audit" select="substring-after(bu:ontology/bu:document/bu:versions/bu:version[@uri=$ver-uri]/bu:refersToAudit/@href,'#')"/>
-        <xsl:variable name="render-doc" select="if($version = 'true') then bu:ontology/bu:document else bu:ontology/bu:document/bu:versions/bu:version[@uri=$version-uri]"/>
+        <xsl:variable name="render-doc" select="if($version = 'true') then bu:ontology/bu:document/bu:versions/bu:version[@uri=$version-uri] else bu:ontology/bu:document"/>
         <p class="inline-centered">
             <span>
                 <b>
@@ -218,9 +227,6 @@
         <div id="doc-content-area">
             <div>
                 <xsl:choose>
-                    <xsl:when test="$render-doc/bu:description">
-                        <xsl:copy-of select="$render-doc/bu:description/child::node()"/>
-                    </xsl:when>
                     <xsl:when test="matches($render-doc/bu:body/text(),'&lt;')">
                         <xsl:copy-of select="fringe"/>
                     </xsl:when>

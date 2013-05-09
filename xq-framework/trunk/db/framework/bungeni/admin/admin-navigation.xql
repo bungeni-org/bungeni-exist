@@ -78,8 +78,8 @@ declare option exist:serialize "method=xhtml media-type=text/html indent=no";
                         </xf:trigger>
                     </xf:group>
         
-                    <xf:repeat id="navgroups" nodeset="/ui/menugroups/menu[@name='mainnav']/xhtml:div/xhtml:ul/xhtml:li" appearance="full" class="itemgroups">
-                        <xf:output ref="xhtml:a/@name"/>
+                    <xf:repeat id="navgroups" nodeset="/ui/menugroups/menu[@name='mainnav']/xhtml:ul/xhtml:li" appearance="full" class="itemgroups">
+                        <xf:output ref="xhtml:a/@href"/>
                     </xf:repeat>
                     
                     <xf:group appearance="minimal" class="configsTriggerGroup">            

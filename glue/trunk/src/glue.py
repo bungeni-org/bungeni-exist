@@ -157,11 +157,15 @@ def _walk_get_parl_info(piw, cfg):
     # !+FIXED
     # !+UPDATE(ah,  restrict path to xml_db/chamber - earlier this would sweep the entire
     # XML db folder
-    piw.walk( 
-         os.path.join(cfg.get_input_folder(), cfg.get_parliament_type_name()) 
-    )
-    if piw.is_cache_full():
-        return piw.get_from_cache()
+    parl_info_path = os.path.join(cfg.get_input_folder(), cfg.get_parliament_type_name())
+    if os.path.exists(parl_info_path):
+        piw.walk( 
+             os.path.join(cfg.get_input_folder(), cfg.get_parliament_type_name()) 
+        )
+        if piw.is_cache_full():
+            return piw.get_from_cache()
+        else:
+            return None
     else:
         return None
 

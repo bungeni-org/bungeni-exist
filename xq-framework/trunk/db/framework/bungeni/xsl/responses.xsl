@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Oct 31, 2011</xd:p>
+                <xd:b>Created on:</xd:b> May 10, 2013</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill attachments from Bungeni</xd:p>
+            <xd:p> Event responses</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -46,7 +46,7 @@
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
-                <xsl:with-param name="tab-path">events</xsl:with-param>
+                <xsl:with-param name="tab-path">responses</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
@@ -60,10 +60,10 @@
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <ul id="list-toggle" class="ls-timeline clear">
-                        <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:type/bu:value eq 'event']">
+                        <xsl:for-each select="bu:ontology/bu:document/bu:workflowEvents/bu:workflowEvent[bu:type/bu:value eq 'event_response']">
                             <xsl:sort select="bu:statusDate" order="descending"/>
                             <li>
-                                <a href="{$chamber}/{lower-case($doc-type)}-event?uri={@href}">
+                                <a href="{$chamber}/{lower-case($doc-type)}-eventresponse?uri={@href}">
                                     <xsl:value-of select="bu:title"/>
                                 </a>&#160; :  
                                 <xsl:value-of select="bu:subTitle"/>

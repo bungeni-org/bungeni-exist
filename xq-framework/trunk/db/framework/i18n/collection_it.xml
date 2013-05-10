@@ -124,6 +124,7 @@
     <msg key="cate-address">indirizzo</msg>
     <msg key="cate-report">riferire</msg>    
     <!-- TABS -->
+    <msg key="tab-responses">risposte</msg>
     <msg key="tab-profile">profilo</msg>
     <msg key="tab-members">membri</msg>
     <msg key="tab-sittings">Seduta</msg>

@@ -422,6 +422,18 @@
             <subnavigation>questions</subnavigation>
             <action>rou:document-events</action>
         </route>
+        <route href="/lower_house/question-responses">
+            <title>Business | Question Response events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/higher_house/question-responses">
+            <title>Business | Question Response events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-events</action>
+        </route>
         <route href="/lower_house/question-event">
             <title>Business | Question Event</title>
             <navigation>/lower_house/business</navigation>
@@ -433,6 +445,18 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
             <action>rou:document-event</action>
+        </route>
+        <route href="/lower_house/question-eventresponse">
+            <title>Business | Question Response</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-response</action>
+        </route>
+        <route href="/higher_house/question-eventresponse">
+            <title>Business | Question Response</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-response</action>
         </route>
         <route href="/lower_house/question-versions">
             <title>Business | Question Versions</title>
@@ -1406,7 +1430,7 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/events.xsl</xsl>
             </view>
-            <view check-for="[parent::bu:attachments/child::node()]" id="attachments" path="question-documents" tag="tab">
+            <view check-for="[parent::bu:attachments/child::node()[bu:type/bu:value eq 'event']]" id="attachments" path="question-documents" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
                 </title>
@@ -1419,6 +1443,13 @@
                 </title>
                 <template>xml/question.xml</template>
                 <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()[bu:type/bu:value eq 'event_response']]" id="responses" path="question-responses" tag="tab">
+                <title>
+                    <i18n:text key="tab-responses">responses(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/responses.xsl</xsl>
             </view>
             <view id="metadata" path="question-metadata" tag="tab">
                 <title>
@@ -1434,6 +1465,10 @@
             <view path="question-event">
                 <template>xml/question.xml</template>
                 <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="question-eventresponse">
+                <template>xml/question.xml</template>
+                <xsl>xsl/response.xsl</xsl>
             </view>
         </views>
         <views name="Motion">

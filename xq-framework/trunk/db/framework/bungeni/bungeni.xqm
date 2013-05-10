@@ -3403,7 +3403,7 @@ declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews 
                 (:
                 : !+FIX_THIS (ao, 8th Aug 2012) workflowEvents dont have permissions with them...
                 : currently using 'internal' to hide them from anonymous :)
-                let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent[bu:status/bu:value/text() ne 'internal'] return element timeline { attribute href { $event/@href }, element bu:chronoTime { $event/bu:statusDate/text() }, $event/child::*}
+                let $wfevents := for $event in $docitem/bu:document/bu:workflowEvents/bu:workflowEvent return element timeline { attribute href { $event/@href }, element bu:chronoTime { $event/bu:statusDate/text() }, $event/child::*}
                 let $audits := for $audit in $docitem/bu:document/bu:audits/child::*[bu:auditAction/bu:value eq 'workflow'] return element timeline { attribute id {$audit/@id }, element bu:chronoTime { $audit/bu:statusDate/text() }, $audit/child::*}
                 let $versions := for $version in $docitem/bu:document/bu:versions/child::* return element timeline { attribute id {$version/@id }, attribute uri { $version/@uri }, element bu:chronoTime { $version/bu:statusDate/text() }, $version/child::*}
                 
@@ -3612,7 +3612,7 @@ declare function bun:get-doc-event-popout($eventid as xs:string, $parts as node(
     
     let $doc := <doc>       
             {
-                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event']/parent::bu:document[@internal-uri eq $eventid]/ancestor::bu:ontology
+                collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq 'Event' or bu:value eq 'EventResponse']/parent::bu:document[@internal-uri eq $eventid]/ancestor::bu:ontology
             }            
             <event>{$eventid}</event>
         </doc>

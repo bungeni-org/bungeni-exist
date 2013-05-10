@@ -398,6 +398,29 @@ declare function rou:document-event($CONTROLLER-DOC as node()) {
         )
 };
 
+declare function rou:document-response($CONTROLLER-DOC as node()) {
+
+    let $eventuri := xs:string(request:get-parameter("uri",''))
+    let $sequence-id := xs:integer(request:get-parameter("id",0))
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-doc-event($eventuri,$sequence-id,$parts)
+    let $act-entries-repl := document {
+    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    					 } 
+    return 
+        template:process-tmpl(
+    	   $CONTROLLER-DOC/rel-path, 
+    	   $CONTROLLER-DOC/exist-cont, 
+    	   $config:DEFAULT-TEMPLATE,
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>,
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+        )
+};
+
 declare function rou:document-attachment($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))  

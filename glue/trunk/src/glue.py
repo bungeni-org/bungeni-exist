@@ -632,6 +632,9 @@ def main_transform(config_file):
     if pc_info == None:
         print COLOR.FAIL, "PARLINFO is NULL"
         sys.exit()
+    if pc_info.parl_info is None:
+        print COLOR.FAIL, "PARL_INFO is NULL"
+        sys.exit()
     if len(pc_info.parl_info) == 0:
         print COLOR.FAIL, "PARLINFO is EMPTY"
         sys.exit()

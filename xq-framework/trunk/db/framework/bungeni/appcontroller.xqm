@@ -86,7 +86,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     i18n:process($act-entries-tmpl, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
         	else if ($EXIST-PATH eq "/image" ) then 
             (: FOR IMAGES :)
-                let $hash := xs:string(request:get-parameter("hash",'none')), 
+                let $hash := xs:string(request:get-parameter("hash",'')), 
                     $name := xs:string(request:get-parameter("name",'unnamed')), 
                     $act-entries-tmpl :=  bun:get-image($hash,$name)
                 return $act-entries-tmpl
@@ -268,7 +268,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	else if ($CHAMBER-REL-PATH eq "/member/pdf") then 
         	(: !+FIX-THIS (ao, 11th April 2013 this should be harmonized to use same get-pdf 
         	   method as the other documents, not its own separate one :)
-        	    let $views := cmn:get-views-for-type("MemberOfParliament") 
+        	    let $views := cmn:get-views-for-type("Member") 
                 let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO))
                 let $act-entries-tmpl :=  bun:gen-member-pdf($CONTROLLER-DOC,$memid)
                 return $act-entries-tmpl                
@@ -281,7 +281,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	else if ($EXIST-RESOURCE eq "akn") then
             (: AkomaNtoso XML :)        	
                 rou:get-akn($CONTROLLER-DOC)
-        	else if ($CHAMBER-REL-PATH eq "/memberofparliament/xcard") then
+        	else if ($CHAMBER-REL-PATH eq "/member/xcard") then
             (: xCard XML :)        	
                 rou:get-xcard($CONTROLLER-DOC)    									 
         	else if ($CHAMBER-REL-PATH eq "/politicalgroup-members" ) then 
@@ -344,26 +344,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                                                 {$PARLIAMENT}
                                             </route-override>, 
         								   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
-        								 )   									
-        	else if ($CHAMBER-REL-PATH eq "/sitting" ) then 
-            (: SITTINGS :)
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/sitting.xsl",$PARLIAMENT),
-        	        $act-entries-repl:= document {
-        								template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/sitting.xml")/xh:div, $act-entries-tmpl)
-        							 } 
-        							 return 
-        								template:process-tmpl(
-        								   $REL-PATH, 
-        								   $EXIST-CONTROLLER, 
-        								   $config:DEFAULT-TEMPLATE, 
-        								   cmn:get-route($EXIST-PATH),
-                                            <route-override>
-                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                {$PARLIAMENT}
-                                            </route-override>, 
-        								   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
         								 )
         	else if ($CHAMBER-REL-PATH eq "/get-sittings-xml" ) then 
             (: Utilities - Called from root path and meant to be generic calls :)        	
@@ -372,7 +352,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	else if ($CHAMBER-REL-PATH eq "/calendar") then  
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,"xsl/calendar.xsl",$PARLIAMENT),
+                    $act-entries-tmpl :=  bun:get-calendar("public-view",$docnumber,"xsl/calendar.xsl",$PARLIAMENT),
         	        $act-entries-repl:= document {
         								template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/calendar.xml")/xh:div, $act-entries-tmpl)
         							 } 

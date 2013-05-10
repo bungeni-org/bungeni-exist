@@ -96,6 +96,36 @@
             <navigation>/higher_house/members</navigation>
             <action>rou:member-contacts</action>
         </route>
+        <route href="/lower_house/sitting">
+            <title>Business | Sitting</title>
+            <navigation>/lower_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
+        <route href="/higher_house/sitting">
+            <title>Business | Sitting</title>
+            <navigation>/higher_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
+        <route href="/lower_house/sitting-attendance">
+            <title>Business | Sitting attendance</title>
+            <navigation>/lower_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
+        <route href="/higher_house/sitting-attendance">
+            <title>Business | Sitting attendance</title>
+            <navigation>/higher_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
+        <route href="/lower_house/sitting-reports">
+            <title>Business | Sitting reports</title>
+            <navigation>/lower_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
+        <route href="/higher_house/sitting-reports">
+            <title>Business | Sitting reports</title>
+            <navigation>/higher_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
         <route href="/lower_house/committees">
             <title>Business | Committees </title>
             <navigation>/lower_house/business</navigation>
@@ -932,16 +962,6 @@
             <navigation>/higher_house/business</navigation>
             <subnavigation>calendar</subnavigation>
         </route>
-        <route href="/lower_house/sitting">
-            <title>Business | Sitting Session</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>calendar</subnavigation>
-        </route>
-        <route href="/higher_house/sitting">
-            <title>Business | Sitting Session</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>calendar</subnavigation>
-        </route>
         <route href="/lower_house/sittings/rss">
             <title>Business | Sittings RSS</title>
             <action>rou:sitting-rss</action>
@@ -1676,7 +1696,7 @@
         <views name="Report">
             <view id="listing" path="publications" tag="listing">
                 <template>xml/legislativeitem-generic.xml</template>
-                <xsl>xsl/reports.xsl</xsl>
+                <xsl>xsl/publications.xsl</xsl>
             </view>
             <view id="rss" path="publications/rss" tag="listing">
                 <template/>
@@ -1697,7 +1717,7 @@
                 <xsl>xsl/changes.xsl</xsl>
             </view>
         </views>
-        <views name="MemberOfParliament">
+        <views name="Member">
             <view id="listing" path="members" tag="listing">
                 <template>xml/members.xml</template>
                 <xsl>xsl/members.xsl</xsl>
@@ -1736,6 +1756,29 @@
                 </title>
                 <template>xml/member.xml</template>
                 <xsl>xsl/contacts.xsl</xsl>
+            </view>
+        </views>
+        <views name="Sitting">
+            <view id="sitting" path="sitting" tag="tab">
+                <title>
+                    <i18n:text key="Sitting">sitting(nt)</i18n:text>
+                </title>
+                <template>xml/sitting.xml</template>
+                <xsl>xsl/sitting.xsl</xsl>
+            </view>
+            <view id="attendance" path="sitting-attendance" tag="tab">
+                <title>
+                    <i18n:text key="Attendance">attendance(nt)</i18n:text>
+                </title>
+                <template>xml/sitting.xml</template>
+                <xsl>xsl/attendance.xsl</xsl>
+            </view>
+            <view id="reports" path="sitting-reports" tag="tab">
+                <title>
+                    <i18n:text key="Sitting Reports">reports(nt)</i18n:text>
+                </title>
+                <template>xml/sitting.xml</template>
+                <xsl>xsl/reports.xsl</xsl>
             </view>
         </views>
         <views name="Popout">
@@ -1949,7 +1992,7 @@
                 <listingfilter id="schedule" name="scheduled items">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
             </listingfilters>
         </doctype>
-        <doctype category="membership" name="MemberOfParliament">
+        <doctype category="membership" name="Member">
             <orderbys>
                 <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last
                     name [ascending]</orderby>

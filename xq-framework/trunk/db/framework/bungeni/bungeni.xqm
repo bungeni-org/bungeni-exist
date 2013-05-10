@@ -295,15 +295,15 @@ declare function bun:get-image($hash as xs:string, $name as xs:string) {
     let $imgpath := cmn:get-att-db() || "/" || $hash
     let $placeholder := $config:fw-root || "/bungeni/assets/images/placeholder.jpg"
     return
-        if($hash ne 'none') then (
-            response:stream-binary(util:binary-doc($imgpath) cast as xs:base64Binary, "media-type=image/jpeg"),
-            response:set-header("Content-Disposition" , concat("inline; filename=",  $name)),
-            <xml/>
+        if($hash eq 'none') then (
+            response:stream-binary(util:binary-doc($placeholder) cast as xs:base64Binary, "media-type=image/jpeg"),
+            response:set-header("Content-Disposition" , concat("inline; filename=",  "placeholder.jpg")),
+            <xml/>        
         )
         else
         (
-            response:stream-binary(util:binary-doc($placeholder) cast as xs:base64Binary, "media-type=image/jpeg"),
-            response:set-header("Content-Disposition" , concat("inline; filename=",  "placeholder.jpg")),
+            response:stream-binary(util:binary-doc($imgpath) cast as xs:base64Binary, "media-type=image/jpeg"),
+            response:set-header("Content-Disposition" , concat("inline; filename=",  $name)),
             <xml/>
         )
 };
@@ -537,7 +537,7 @@ declare function bun:xqy-search-group() {
 declare function bun:xqy-list-membership($type as xs:string) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology/bu:membership/bu:docType[bu:value eq 'MemberOfParliament']",
+                "/bu:ontology/bu:membership/bu:docType[bu:value eq 'Member']",
                 "/ancestor::bu:ontology")
 };
 
@@ -546,7 +546,7 @@ declare function bun:xqy-list-membership-with-tabs($chamber as xs:string?, $type
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
                 "/bu:ontology/bu:membership[bu:origin/bu:identifier eq '",$chamber,"' and ",$status,"]",
-                "/bu:docType[bu:value eq 'MemberOfParliament']",
+                "/bu:docType[bu:value eq 'Member']",
                 "/ancestor::bu:ontology")
 };
 
@@ -741,25 +741,26 @@ declare function bun:get-documentitems(
     (: input ONxml document in request :)
     let $doc := <docs> 
         <paginator>
-        (: Count the total number of documents | active-tab count if the view is tabbed :)
-        <count>{
-                count($coll)
-         }</count>
-        <tags>
-        {
-            for $listing in $listings-filter
-                return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($parliament/identifier/text(), $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
-         }
-         </tags>    
-         <currentView>{$parts/current-view}</currentView>
-        <documentType>{$type}</documentType>
-        <listingUrlPrefix>{$parts/default-view}</listingUrlPrefix>
-        <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
-        <i18nlabel>{$type}</i18nlabel>
-        <offset>{$offset}</offset>
-        <limit>{$limit}</limit>
-        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+            (: Count the total number of documents | active-tab count if the view is tabbed :)
+            <count>{
+                    count($coll)
+             }</count>
+            <tags>
+            {
+                for $listing in $listings-filter
+                    return 
+                        <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($parliament/identifier/text(), $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
+             }
+             </tags>    
+            <chamber>{$parliament/type/text()}</chamber>
+            <currentView>{$parts/current-view}</currentView>
+            <documentType>{$type}</documentType>
+            <listingUrlPrefix>{$parts/default-view}</listingUrlPrefix>
+            <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
+            <i18nlabel>{$type}</i18nlabel>
+            <offset>{$offset}</offset>
+            <limit>{$limit}</limit>
+            <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
         </paginator>
         <alisting>
         {
@@ -1052,7 +1053,7 @@ declare function bun:advanced-search($chamber as xs:string,
                     $subset_rs
                   )
              }</count>
-             <currentView>search-adv</currentView>
+            <currentView>search-adv</currentView>
             <documentType>question</documentType>
             <qryAll>{$qryall}</qryAll>
             <qryExact>{$qryexact}</qryExact>
@@ -2645,6 +2646,27 @@ declare function bun:get-whatson(
            )
 };
 
+declare function bun:get-sitting($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $parts as node(), 
+            $parliament as node()?) as element()* {
+            
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl)
+
+    let $identifier := $parliament/identifier/text()
+    let $doc := 
+            (:Returs a Sittings Document :)
+            let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
+                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
+                                            bun:xqy-docitem-perms($acl)))
+            
+            return
+                local:get-sitting-items($match/ancestor::bu:ontology)   
+    return
+        transform:transform($doc, $stylesheet, ())
+ };
+
 (:~
 :   Retieves all group documents of type sittings
 : @param acl
@@ -2653,11 +2675,11 @@ declare function bun:get-whatson(
 : @return 
 :   A listing of documents of group type sittings
 :)
-declare function bun:get-sitting($acl as xs:string, 
+declare function bun:get-calendar($acl as xs:string, 
             $doc-uri as xs:string, 
             $_tmpl as xs:string,
             $parliament as node()?) as element()* {
-
+            
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($_tmpl) 
 
@@ -3697,7 +3719,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3720,14 +3742,14 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
                     {$member-doc}
                     <ref>
                     {
-                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:group/following-sibling::bu:members/bu:member[bu:person/@href eq $memberid]
+                      for $doc in collection(cmn:get-lex-db())/bu:ontology/bu:members/bu:member[bu:person/@href eq $memberid]
                       let $group-name := $doc/ancestor::bu:ontology/bu:group/bu:fullName 
                       order by $doc/bu:designations/bu:designation/bu:sortOrder ascending 
                       return 
@@ -3751,7 +3773,7 @@ declare function bun:get-member-biographical($memberid as xs:string?, $parts as 
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member_of_parliament']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3776,7 +3798,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
    
     (: return AN Member document with his/her activities :)
     let $doc := <doc>
-        { collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'MemberOfParliament']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology }
+        { collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'Member']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology }
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          

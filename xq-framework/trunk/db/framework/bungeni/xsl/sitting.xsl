@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -10,17 +10,20 @@
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
-    <xsl:include href="context_downloads.xsl"/> 
+    <xsl:include href="context_tabs.xsl"/>
+    <xsl:include href="context_downloads.xsl"/>
+    <xsl:param name="epub"/>
     <!-- Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
     <xsl:template match="doc">
-        <xsl:variable name="doc-type" select="bu:ontology/@type"/>
-        <xsl:variable name="doc_uri" select="bu:ontology/bu:sitting/@uri"/>
+        <xsl:variable name="doc-type" select="bu:ontology/bu:sitting/bu:docType/bu:value"/>
+        <xsl:variable name="doc-uri" select="bu:ontology/bu:sitting/@uri"/>
+        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="mover_uri" select="bu:ontology/bu:legislativeItem/bu:owner/@href"/>
         <xsl:variable name="j-obj" select="json"/>
         <div id="main-wrapper">
             <div id="uri" class="hide">
-                <xsl:value-of select="$doc_uri"/>
+                <xsl:value-of select="$doc-uri"/>
             </div>
             <div id="title-holder">
                 <h1 class="title">
@@ -30,6 +33,18 @@
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
             </div>
+            <xsl:if test="$epub ne 'true'">
+                <xsl:call-template name="doc-tabs">
+                    <xsl:with-param name="tab-group">
+                        <xsl:value-of select="$doc-type"/>
+                    </xsl:with-param>
+                    <xsl:with-param name="tab-path">sitting</xsl:with-param>
+                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
+                    <xsl:with-param name="uri" select="$doc-uri"/>
+                    <xsl:with-param name="excludes" select="exclude/tab"/>
+                </xsl:call-template>
+                <div id="doc-downloads"/>
+            </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <h3 id="doc-heading" class="doc-headers">
@@ -94,7 +109,7 @@
                                                         </a>
                                                     </xsl:when>
                                                     <xsl:otherwise>
-                                                        <a href="{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                                        <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
                                                             <xsl:value-of select="bu:document/bu:title"/>
                                                         </a>
                                                     </xsl:otherwise>

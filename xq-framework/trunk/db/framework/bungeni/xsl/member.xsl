@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -54,7 +54,16 @@
                     <div class="mem-profile">
                         <div class="mem-photo mem-top-left">
                             <p class="imgonlywrap">
-                                <xsl:variable name="img_hash" select="ref/bu:ontology/bu:image/bu:imageHash"/>
+                                <xsl:variable name="img_hash">
+                                    <xsl:choose>
+                                        <xsl:when test="ref/bu:ontology/bu:image/bu:imageHash">
+                                            <xsl:value-of select="ref/bu:ontology/bu:image/bu:imageHash"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>none</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
                                 <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,'_', bu:ontology/bu:membership/bu:referenceToUser/bu:firstName)}" alt="Photo of M.P" align="left"/>
                             </p>
                         </div>

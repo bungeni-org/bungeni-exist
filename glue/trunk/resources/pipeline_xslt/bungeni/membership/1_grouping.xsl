@@ -60,12 +60,22 @@
                 </xsl:attribute>                  
                 <!-- !+URI_REWORK(ah, 11-04-2012) -->
                 
+                <xsl:variable name="user-uri-suffix">
+                    <xsl:choose>
+                        <xsl:when test="user/field[@name='date_of_birth']">
+                            <xsl:value-of select="concat(user/field[@name='date_of_birth'], '.', field[@name='user_id'])" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="user/field[@name='login']" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                
                 <xsl:variable name="full-user-identifier"
                     select="translate(concat($country-code, '.',
                     user/field[@name='last_name'], '.', 
                     user/field[@name='first_name'], '.', 
-                    user/field[@name='date_of_birth'], '.', 
-                    field[@name='user_id']),' ','')" />
+                    $user-uri-suffix),' ','')" />
                 
                 <!-- 
                     generates group-membership prefices based on membership_type

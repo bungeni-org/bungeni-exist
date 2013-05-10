@@ -12,7 +12,13 @@
                 <xsl:text>acronym</xsl:text>
             </xsl:with-param>
         </xsl:call-template> 
-    </xsl:template>      
+    </xsl:template> 
+    
+    <xsl:template match="field[@name='leave_reason']">
+        <xsl:call-template name="renderTLCTermString">
+            <xsl:with-param name="elementName">leaveReason</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>     
     
     <xsl:template match="field[@name='quorum']">
         <xsl:call-template name="renderIntegerElement">
@@ -148,13 +154,13 @@
         </address> -->
     </xsl:template>      
     
-    <xsl:template match="members">
+    <xsl:template match="group_members">
         <members id="groupMembers">
             <xsl:apply-templates />
         </members>
     </xsl:template>
     
-    <xsl:template match="member[parent::members]">
+    <xsl:template match="group_member[parent::group_members]">
         <member isA="TLCObject">
             <xsl:apply-templates />
         </member>

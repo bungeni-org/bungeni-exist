@@ -168,7 +168,7 @@
                 </xsl:element>
             -->
             
-            <xsl:copy-of select="members"/>
+            <xsl:copy-of select="group_members"/>
             <xsl:copy-of select="titletypes"/>
             <xsl:copy-of select="committee_type"></xsl:copy-of>  
             

@@ -6,7 +6,7 @@
                 <xd:b>Created on:</xd:b> May 10, 2013</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Sitting Reports</xd:p>
+            <xd:p> Attendance Records</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -37,7 +37,7 @@
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
-                <xsl:with-param name="tab-path">reports</xsl:with-param>
+                <xsl:with-param name="tab-path">attendance</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
@@ -45,10 +45,21 @@
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <ul id="list-toggle" class="ls-timeline clear">
-                        <xsl:for-each select="bu:ontology/bu:sitting/bu:reports/bu:report">
+                        <xsl:for-each select="bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord">
                             <xsl:sort select="bu:statusDate" order="descending"/>
                             <li>
                                 <div class="struct-ib truncate">
+                                    <span class="timeline-action">
+                                        <xsl:choose>
+                                            <xsl:when test="bu:attendanceType/@showAs">
+                                                <xsl:value-of select="bu:attendanceType/@showAs"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="bu:attendanceType/bu:value"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>:</span>
+                                    <xsl:value-of select="concat(bu:member/bu:firstName,' ', bu:member/bu:lastName,', ',bu:member/bu:title)"/>
+                                    &#160;                                 
                                     <xsl:variable name="status">
                                         <xsl:choose>
                                             <xsl:when test="bu:status/@showAs">
@@ -59,12 +70,9 @@
                                             </xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:variable>
-                                    <span title="{$status}" class="timeline-action">
-                                        <xsl:value-of select="bu:docId"/>:</span>
-                                    <xsl:value-of select="bu:title"/>
                                     &#160;
                                     <div class="struct-ib">
-                                        <cite>
+                                        <cite title="{$status}">
                                             <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </cite>
                                     </div>

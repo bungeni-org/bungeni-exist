@@ -142,7 +142,7 @@ declare function rou:get-members($CONTROLLER-DOC as node()) {
     let $sty := xs:string(request:get-parameter("s",$bun:SORT-BY))
     let $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET))
     let $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT))
-    let $parts := cmn:get-view-listing-parts('MemberOfParliament', 'member')
+    let $parts := cmn:get-view-listing-parts('Member', 'member')
     let $act-entries-tmpl :=  bun:get-members($CONTROLLER-DOC/exist-res,$CONTROLLER-DOC/parliament,$offset,$limit,$parts,$qry,$sty)
     let $act-entries-repl:= document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
@@ -194,6 +194,28 @@ declare function rou:member($CONTROLLER-DOC as node()) {
             </route-override>, 
            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
         )
+};
+
+declare function rou:sitting($CONTROLLER-DOC as node()) {
+    
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-repl:= document {
+        					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+        				 } 
+    return 
+        template:process-tmpl(
+    	   $CONTROLLER-DOC/rel-path, 
+    	   $CONTROLLER-DOC/exist-cont, 
+    	   $config:DEFAULT-TEMPLATE,
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+        )         
 };
 
 declare function rou:member-officesheld($CONTROLLER-DOC as node()) {
@@ -266,7 +288,7 @@ declare function rou:member-contacts($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))           
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","MemberOfParliament",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-contacts-by-uri("public-view","Member",$docnumber,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl := document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     					 } 
@@ -528,42 +550,40 @@ declare function rou:get-parliament($CONTROLLER-DOC as node()) {
 (:
 Generic Listing API
 :)
-declare function rou:listing-documentitem($CONTROLLER-DOC as node(), 
-                             $doc-type as xs:string) {
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $tab := xs:string(request:get-parameter("tab",'uc')),
-                    $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $parts := cmn:get-view-listing-parts($doc-type, 'text'),
-                    $acl := "public-view",
-                    $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC/exist-res, $CONTROLLER-DOC/parliament,$acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
-    		        $act-entries-repl:= document {
-    									template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
-    								 } 
-    								 return 
-    								    template:process-tmpl(
-    								        $CONTROLLER-DOC/rel-path, 
-    								        $CONTROLLER-DOC/exist-cont, 
-    								        $config:DEFAULT-TEMPLATE,
-    								        cmn:get-route($CONTROLLER-DOC/exist-path),
-                                                <route-override>
-                                                    {$CONTROLLER-DOC/parliament}
-                                                </route-override>, 
-    									    (cmn:build-nav-node(
-    									       $CONTROLLER-DOC,
-    									       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 
-    									           bun:get-listing-search-context(
-    									               $CONTROLLER-DOC,
-    									               "xml/listing-search-form.xml",
-    									               $doc-type
-    									               )
-    									           )
-    									       )
-    									       )
-    									     )
-    								    )                             
+declare function rou:listing-documentitem($CONTROLLER-DOC as node(), $doc-type as xs:string) {
+    let $qry := xs:string(request:get-parameter("q",'')),
+        $tab := xs:string(request:get-parameter("tab",'uc')),
+        $sortby := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+        $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+        $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+        $parts := cmn:get-view-listing-parts($doc-type, 'text'),
+        $acl := "public-view",
+        $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC/exist-res, $CONTROLLER-DOC/parliament,$acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
+        $act-entries-repl:= document {
+    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
+    					 } 
+    					 return 
+    					    template:process-tmpl(
+    					        $CONTROLLER-DOC/rel-path, 
+    					        $CONTROLLER-DOC/exist-cont, 
+    					        $config:DEFAULT-TEMPLATE,
+    					        cmn:get-route($CONTROLLER-DOC/exist-path),
+                                    <route-override>
+                                        {$CONTROLLER-DOC/parliament}
+                                    </route-override>, 
+    						    (cmn:build-nav-node(
+    						       $CONTROLLER-DOC,
+    						       (template:merge($CONTROLLER-DOC/exist-cont, $act-entries-repl, 
+    						           bun:get-listing-search-context(
+    						               $CONTROLLER-DOC,
+    						               "xml/listing-search-form.xml",
+    						               $doc-type
+    						               )
+    						           )
+    						       )
+    						       )
+    						     )
+    					    )                             
 };
 
 declare function rou:get-bills($CONTROLLER-DOC as node()) {

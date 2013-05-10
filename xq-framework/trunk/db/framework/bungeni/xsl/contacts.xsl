@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -18,7 +18,7 @@
     <xsl:template match="doc">
         <xsl:variable name="onto-type">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'MemberOfParliament'">
+                <xsl:when test="$address_type eq 'Member'">
                     <xsl:value-of select="bu:ontology/bu:membership/bu:docType/bu:value"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -28,7 +28,7 @@
         </xsl:variable>
         <xsl:variable name="doc-type">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'MemberOfParliament'">
+                <xsl:when test="$address_type eq 'Member'">
                     <xsl:value-of select="$address_type"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -38,7 +38,7 @@
         </xsl:variable>
         <xsl:variable name="doc-uri">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'MemberOfParliament'">
+                <xsl:when test="$address_type eq 'Member'">
                     <xsl:value-of select="bu:ontology/bu:membership/bu:referenceToUser/bu:refersTo/@href"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -48,7 +48,7 @@
         </xsl:variable>
         <xsl:variable name="contact-name">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'MemberOfParliament'">
+                <xsl:when test="$address_type eq 'Member'">
                     <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName, ' (',bu:ontology/bu:membership/bu:referenceToUser/bu:title,')')"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -58,7 +58,7 @@
         </xsl:variable>
         <xsl:variable name="contact-name-title">
             <xsl:choose>
-                <xsl:when test="$address_type eq 'MemberOfParliament'">
+                <xsl:when test="$address_type eq 'Member'">
                     <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:salutation,', ',bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName)"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -70,7 +70,7 @@
             <div id="title-holder">
                 <h1 class="title">
                     <xsl:choose>
-                        <xsl:when test="$address_type eq 'MemberOfParliament'">
+                        <xsl:when test="$address_type eq 'Member'">
                             <xsl:value-of select="concat(bu:ontology/bu:membership/bu:referenceToUser/bu:firstName,' ', bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,', ',bu:ontology/bu:membership/bu:referenceToUser/bu:title)"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -89,7 +89,7 @@
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
-            <xsl:if test="$doc-type eq 'MemberOfParliament'">
+            <xsl:if test="$doc-type eq 'Member'">
                 <xsl:call-template name="doc-formats">
                     <xsl:with-param name="render-group">contacts</xsl:with-param>
                     <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>

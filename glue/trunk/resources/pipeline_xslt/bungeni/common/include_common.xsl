@@ -95,7 +95,7 @@
                 </xsl:call-template>                
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template> 
+    </xsl:template>
     
     <xsl:template match="field[@name='tag']">
         <xsl:call-template name="renderTLCTermString">

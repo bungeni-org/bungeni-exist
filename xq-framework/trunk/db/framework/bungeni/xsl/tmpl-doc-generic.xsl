@@ -53,6 +53,16 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="uriParameter">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:text>uri</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>internal-uri</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="mover-uri" select="bu:ontology/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <!-- Document Title -->
@@ -67,6 +77,7 @@
                 <xsl:call-template name="doc-tabs">
                     <xsl:with-param name="tab-group" select="$doc-type"/>
                     <xsl:with-param name="uri" select="$doc-uri"/>
+                    <xsl:with-param name="uri-type" select="$uriParameter"/>
                     <xsl:with-param name="tab-path">text</xsl:with-param>
                     <xsl:with-param name="chamber" select="$chamber"/>
                     <xsl:with-param name="excludes" select="exclude/tab"/>
@@ -144,10 +155,12 @@
             <xsl:with-param name="chamber" select="$chamber"/>
         </xsl:call-template>
         
-        <!-- Call secondary sponsors where applicable -->
-        <xsl:call-template name="doc-item-sponsors">
-            <xsl:with-param name="chamber" select="$chamber"/>
-        </xsl:call-template>
+        <!-- Call secondary sponsors -->
+        <xsl:if test="bu:ontology/bu:signatories/bu:signatory">
+            <xsl:call-template name="doc-item-sponsors">
+                <xsl:with-param name="chamber" select="$chamber"/>
+            </xsl:call-template>
+        </xsl:if>
     </xsl:template>
     
     <!-- DOC-ITEM-NUMBER -->
@@ -253,7 +266,7 @@
                 <div class="inline">
                     <select name="uri" id="eventText">
                         <option value="{$doc-uri}">
-                            -- <i18n:text key="doc-{$doc-type}">main document(nt)</i18n:text> --
+                            -- <i18n:text key="list-tab-cur">current(nt)</i18n:text> --
                         </option>
                         <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
                             <xsl:sort select="bu:statusDate" order="descending"/>

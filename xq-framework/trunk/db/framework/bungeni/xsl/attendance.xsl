@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -44,42 +44,49 @@
             <div id="doc-downloads"/>
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <ul id="list-toggle" class="ls-timeline clear">
-                        <xsl:for-each select="bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord">
-                            <xsl:sort select="bu:statusDate" order="descending"/>
-                            <li>
-                                <div class="struct-ib truncate">
-                                    <span class="timeline-action">
-                                        <xsl:choose>
-                                            <xsl:when test="bu:attendanceType/@showAs">
-                                                <xsl:value-of select="bu:attendanceType/@showAs"/>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:value-of select="bu:attendanceType/bu:value"/>
-                                            </xsl:otherwise>
-                                        </xsl:choose>:</span>
-                                    <xsl:value-of select="concat(bu:member/bu:firstName,' ', bu:member/bu:lastName,', ',bu:member/bu:title)"/>
-                                    &#160;                                 
-                                    <xsl:variable name="status">
-                                        <xsl:choose>
-                                            <xsl:when test="bu:status/@showAs">
-                                                <xsl:value-of select="bu:status/@showAs"/>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:value-of select="bu:status/bu:value"/>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:variable>
-                                    &#160;
-                                    <div class="struct-ib">
-                                        <cite title="{$status}">
-                                            <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                        </cite>
-                                    </div>
-                                </div>
-                            </li>
-                        </xsl:for-each>
-                    </ul>
+                    <xsl:choose>
+                        <xsl:when test="bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord">
+                            <ul id="list-toggle" class="ls-timeline clear">
+                                <xsl:for-each select="bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord">
+                                    <xsl:sort select="bu:statusDate" order="descending"/>
+                                    <li>
+                                        <div class="struct-ib truncate">
+                                            <span class="timeline-action">
+                                                <xsl:choose>
+                                                    <xsl:when test="bu:attendanceType/@showAs">
+                                                        <xsl:value-of select="bu:attendanceType/@showAs"/>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <xsl:value-of select="bu:attendanceType/bu:value"/>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>:</span>
+                                            <xsl:value-of select="concat(bu:member/bu:firstName,' ', bu:member/bu:lastName,', ',bu:member/bu:title)"/>
+                                            &#160;                                 
+                                            <xsl:variable name="status">
+                                                <xsl:choose>
+                                                    <xsl:when test="bu:status/@showAs">
+                                                        <xsl:value-of select="bu:status/@showAs"/>
+                                                    </xsl:when>
+                                                    <xsl:otherwise>
+                                                        <xsl:value-of select="bu:status/bu:value"/>
+                                                    </xsl:otherwise>
+                                                </xsl:choose>
+                                            </xsl:variable>
+                                            &#160;
+                                            <div class="struct-ib">
+                                                <cite title="{$status}">
+                                                    <xsl:value-of select="format-dateTime(./bu:statusDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
+                                                </cite>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </xsl:for-each>
+                            </ul>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <i18n:text key="No items found">no attendance record(nt)</i18n:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </div>
             </div>
         </div>

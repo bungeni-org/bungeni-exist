@@ -76,13 +76,13 @@
                     <ul id="list-toggle" class="ls-row clear">
                         <xsl:choose>
                             <xsl:when test="$mem-status = 'current'">
-                                <xsl:for-each select="bu:ontology/bu:members/bu:member[bu:type/bu:value eq 'committee_member']">
+                                <xsl:for-each select="bu:ontology/bu:members/bu:member[bu:type/bu:value eq 'committee_member' and empty(bu:endDate)]">
                                     <xsl:sort select="bu:designations/bu:designation/bu:sortOrder" order="ascending" data-type="number"/>
                                     <xsl:call-template name="mem-list-details"/>
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:for-each select="bu:ontology/bu:members/bu:member[bu:type/bu:value eq 'committee_member']">
+                                <xsl:for-each select="bu:ontology/bu:members/bu:member[bu:type/bu:value eq 'committee_member' and not(empty(bu:endDate))]">
                                     <xsl:sort select="bu:designations/bu:designation/bu:sortOrder" order="ascending" data-type="number"/>
                                     <xsl:call-template name="mem-list-details"/>
                                 </xsl:for-each>
@@ -108,28 +108,25 @@
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
                 <div style="min-height:110px;">
-                    <div class="block">
-                        <span class="labels">
-                            <i18n:text key="date-start">start date(nt)</i18n:text>:</span>
-                        <span>
-                            <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
-                        </span>
+                    <div class="list-inline">
+                        <div class="inline-label">
+                            <i18n:text key="date-start">start date(nt)</i18n:text>:
+                        </div>
+                        <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
                     </div>
                     <xsl:if test="bu:endDate">
-                        <div class="block">
-                            <span class="labels">
-                                <i18n:text key="End Date">end date(nt)</i18n:text>:</span>
-                            <span>
-                                <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
-                            </span>
+                        <div class="list-inline">
+                            <div class="inline-label">
+                                <i18n:text key="End Date">end date(nt)</i18n:text>:
+                            </div>
+                            <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
                         </div>
                     </xsl:if>
-                    <div class="block">
-                        <span class="labels">
-                            <i18n:text key="notes">notes(nt)</i18n:text>:</span>
-                        <span>
-                            <xsl:value-of select="substring(bu:notes,0,360)"/>...
-                        </span>
+                    <div class="list-inline">
+                        <div class="inline-label">
+                            <i18n:text key="notes">notes(nt)</i18n:text>:
+                        </div>
+                        <xsl:value-of select="substring(bu:notes,0,360)"/>...
                     </div>
                 </div>
                 <div class="clear"/>

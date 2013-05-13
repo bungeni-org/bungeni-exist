@@ -275,8 +275,13 @@
                 <a href="{$chamber}/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </a>
+                <xsl:if test="bu:shortName">
+                    <span class="timeline-action">
+                        <i18n:text key="Sitting Agenda">sitting agenda(nt)</i18n:text> -</span>
+                </xsl:if>
                 <p class="truncate">
-                    <xsl:value-of select="bu:scheduleItem/bu:title"/>
+                    <xsl:value-of select="bu:shortName"/>
+                    <!--xsl:value-of select="bu:scheduleItem/bu:title"/-->
                 </p>
             </div>
             <div class="clear"/>
@@ -312,6 +317,7 @@
                                 </xsl:if>
                             </li>
                             <xsl:for-each select="bu:scheduleItem">
+                                <xsl:sort select="bu:realOrder" order="ascending"/>
                                 <xsl:variable name="subDocIdentifier" select="bu:sourceItem/bu:refersTo/@href"/>
                                 <xsl:choose>
                                     <xsl:when test="bu:sourceItem/bu:refersTo/bu:type/bu:value eq 'NOT_FOUND'">
@@ -325,7 +331,7 @@
                                         <li>
                                             <xsl:variable name="doc-type" select="bu:sourceItem/bu:refersTo/bu:type/bu:value"/>
                                             <xsl:variable name="eventOf" select="bu:sourceItem/bu:eventOf/bu:type/bu:value"/>
-                                            <a class="truncate" href="{$chamber}/{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                            <a class="truncate" href="{$chamber}/{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
                                                 <xsl:value-of select="bu:title"/>
                                             </a>
                                         </li>

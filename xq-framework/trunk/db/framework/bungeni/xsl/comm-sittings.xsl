@@ -63,26 +63,23 @@
                                 <span class="tgl-pad-right">▼</span>
                                 <div class="doc-toggle">
                                     <div style="min-height:80px;">
-                                        <div class="block">
-                                            <span class="labels">
-                                                <i18n:text key="Start Date">start date(nt)</i18n:text>:</span>
-                                            <span>
-                                                <xsl:value-of select="format-dateTime(bu:sitting/bu:startDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                            </span>
+                                        <div class="list-inline">
+                                            <div class="inline-label">
+                                                <i18n:text key="Start Date">start date(nt)</i18n:text>:
+                                            </div>
+                                            <xsl:value-of select="format-dateTime(bu:sitting/bu:startDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </div>
-                                        <div class="block">
-                                            <span class="labels">
-                                                <i18n:text key="End Date">end date(nt)</i18n:text>:</span>
-                                            <span>
-                                                <xsl:value-of select="format-dateTime(bu:sitting/bu:endDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                            </span>
+                                        <div class="list-inline">
+                                            <div class="inline-label">
+                                                <i18n:text key="End Date">end date(nt)</i18n:text>:
+                                            </div>
+                                            <xsl:value-of select="format-dateTime(bu:sitting/bu:endDate,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
                                         </div>
-                                        <div class="block">
-                                            <span class="labels">
-                                                <i18n:text key="Convocation Type">convocation type(nt)</i18n:text>:</span>
-                                            <span>
-                                                <xsl:value-of select="bu:sitting/bu:convocationType/@showAs"/>
-                                            </span>
+                                        <div class="list-inline">
+                                            <div class="inline-label">
+                                                <i18n:text key="Convocation Type">convocation type(nt)</i18n:text>:
+                                            </div>
+                                            <xsl:value-of select="bu:sitting/bu:convocationType/@showAs"/>
                                         </div>
                                     </div>
                                     <div class="clear"/>

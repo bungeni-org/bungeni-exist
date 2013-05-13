@@ -309,9 +309,10 @@ declare function rou:member-contacts($CONTROLLER-DOC as node()) {
 
 declare function rou:document-text($CONTROLLER-DOC as node()) {
 
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))  
+    let $uri := xs:string(request:get-parameter("uri",$bun:DOCNO))  
+    let $internal-uri := xs:string(request:get-parameter("internal-uri",$bun:DOCNO)) 
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$uri,$internal-uri,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl := document {
     						      template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
                             } 
@@ -332,9 +333,10 @@ declare function rou:document-text($CONTROLLER-DOC as node()) {
 
 declare function rou:document-timeline($CONTROLLER-DOC as node()) {
 
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))   
+    let $uri := xs:string(request:get-parameter("uri",$bun:DOCNO))   
+    let $internal-uri := xs:string(request:get-parameter("internal-uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl := bun:get-parl-doc-timeline("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl := bun:get-parl-doc-timeline("public-view",$uri,$internal-uri,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl := document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     					 } 
@@ -355,9 +357,10 @@ declare function rou:document-timeline($CONTROLLER-DOC as node()) {
 
 declare function rou:document-documents($CONTROLLER-DOC as node()) {
 
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)) 
+    let $uri := xs:string(request:get-parameter("uri",$bun:DOCNO)) 
+    let $internal-uri := xs:string(request:get-parameter("internal-uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$uri,$internal-uri,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl:= document {
         					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
         				 } 
@@ -377,9 +380,10 @@ declare function rou:document-documents($CONTROLLER-DOC as node()) {
 
 declare function rou:document-events($CONTROLLER-DOC as node()) {
 
-    let $docnumber := xs:string(request:get-parameter("uri",''))  
+    let $uri := xs:string(request:get-parameter("uri",''))  
+    let $internal-uri := xs:string(request:get-parameter("internal-uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$uri,$internal-uri,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl := document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     					 } 
@@ -492,9 +496,10 @@ declare function rou:document-minutes($CONTROLLER-DOC as node()) {
 
 declare function rou:version-text($CONTROLLER-DOC as node()) {
 
-    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))       
+    let $uri := xs:string(request:get-parameter("uri",$bun:DOCNO))    
+    let $internal-uri := xs:string(request:get-parameter("internal-uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-doc-version("public-view", $docnumber,$parts)
+    let $act-entries-tmpl :=  bun:get-doc-version("public-view", $uri, $internal-uri,$parts)
     let $act-entries-repl:= document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     					 } 

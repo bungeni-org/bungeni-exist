@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:nav="http://www.bungeni/org/eXistPortal" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs nav" version="2.0">
+<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:nav="http://www.bungeni/org/eXistPortal" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs nav" version="2.0">
     <xsl:import href="config.xsl"/>
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -16,12 +16,14 @@
         <xsl:param name="tab-path"/>
         <xsl:param name="chamber"/>
         <xsl:param name="uri"/>
+        <xsl:param name="uri-type">uri</xsl:param>
         <xsl:param name="excludes"/>
         <xsl:call-template name="tab-generator">
             <xsl:with-param name="group" select="$tab-group"/>
             <xsl:with-param name="tab" select="$tab-path"/>
             <xsl:with-param name="chamber" select="$chamber"/>
             <xsl:with-param name="uri" select="$uri"/>
+            <xsl:with-param name="uri-type" select="$uri-type"/>
             <xsl:with-param name="exc" select="$excludes"/>
         </xsl:call-template>
     </xsl:template>
@@ -30,12 +32,14 @@
         <xsl:param name="tab-path"/>
         <xsl:param name="chamber"/>
         <xsl:param name="uri"/>
+        <xsl:param name="uri-type"/>
         <xsl:param name="excludes"/>
         <xsl:call-template name="tab-generator">
             <xsl:with-param name="group" select="$tab-group"/>
             <xsl:with-param name="tab" select="$tab-path"/>
             <xsl:with-param name="chamber" select="$chamber"/>
             <xsl:with-param name="uri" select="$uri"/>
+            <xsl:with-param name="uri-type">uri</xsl:with-param>
             <xsl:with-param name="exc" select="$excludes"/>
         </xsl:call-template>
     </xsl:template>
@@ -44,6 +48,7 @@
         <xsl:param name="tab"/>
         <xsl:param name="chamber"/>
         <xsl:param name="uri"/>
+        <xsl:param name="uri-type" select="uri"/>
         <xsl:param name="exc"/>
         <div id="tab-menu" class="ls-tabs">
             <ul class="tabbernav">
@@ -57,7 +62,7 @@
                                 <xsl:if test="@id eq $tab">
                                     <xsl:attribute name="class">active</xsl:attribute>
                                 </xsl:if>
-                                <a href="{$chamber}{@path}?uri={$uri}">
+                                <a href="{$chamber}{@path}?{$uri-type}={$uri}">
                                     <xsl:element name="i18n:text">
                                         <xsl:attribute name="key" select="./title/i18n:text/@key"/>
                                         <xsl:value-of select="./title/i18n:text/text()"/>

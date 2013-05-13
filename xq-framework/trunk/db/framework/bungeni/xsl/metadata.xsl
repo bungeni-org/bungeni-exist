@@ -30,6 +30,16 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="uriParameter">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:text>uri</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>internal-uri</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <div id="main-wrapper">
             <!--
                 !+NOTES see popout.xsl why this is disabled for now
@@ -46,6 +56,7 @@
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="uri-type" select="$uriParameter"/>
                 <xsl:with-param name="tab-path">metadata</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
@@ -61,12 +72,14 @@
                 <div id="doc-main-section">
                     <div class="blocks">
                         <div id="profile-info" class="toggle">
-                            <div class="list-inline">
-                                <div class="inline-label">
-                                    <i18n:text key="docid">Registry #(nt)</i18n:text>:
+                            <xsl:if test="bu:ontology/bu:document/bu:registryNumber">
+                                <div class="list-inline">
+                                    <div class="inline-label">
+                                        <i18n:text key="docid">Registry #(nt)</i18n:text>:
+                                    </div>
+                                    <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>&#160;
                                 </div>
-                                <xsl:value-of select="bu:ontology/bu:document/bu:registryNumber"/>&#160;
-                            </div>
+                            </xsl:if>
                             <div class="list-inline">
                                 <div class="inline-label">
                                     <i18n:text key="progressiveno">progressive #(nt)</i18n:text>:
@@ -90,12 +103,6 @@
                                     <i18n:text key="session-yr">session year(nt)</i18n:text>:
                                 </div>
                                 <xsl:value-of select="substring-before(bu:ontology/bu:legislature/bu:electionDate/@select,'-')"/>
-                            </div>
-                            <div class="list-inline">
-                                <div class="inline-label">
-                                    <i18n:text key="session-no">session number(nt)</i18n:text>:
-                                </div>
-                                <xsl:value-of select="bu:ontology/bu:legislature/bu:parliamentId/@select"/>
                             </div>
                             <div class="list-inline">
                                 <div class="inline-label">

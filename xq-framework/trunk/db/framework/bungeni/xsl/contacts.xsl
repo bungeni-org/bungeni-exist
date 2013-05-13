@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -122,7 +122,7 @@
                                         <div class="address-block">
                                             <address>
                                                 <strong>
-                                                    <xsl:value-of select="$contact-name"/>
+                                                    <xsl:value-of select="$contact-name-title"/>
                                                 </strong>
                                                 <br/>
                                                 <i18n:text key="Address">address(nt)</i18n:text>, room <bu:groupId type="xs:integer">4</bu:groupId>
@@ -142,7 +142,7 @@
                                             </address>
                                             <address>
                                                 <strong>
-                                                    <xsl:value-of select="$contact-name-title"/>
+                                                    <xsl:value-of select="$contact-name"/>
                                                 </strong>
                                                 <br/>
                                                 <a href="mailto:{$contact-name}&#160;&lt;{bu:email}&gt;">

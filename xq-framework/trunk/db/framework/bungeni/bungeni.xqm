@@ -39,7 +39,7 @@ declare variable $bun:SERVER-URL := "http://" || $template:SERVER-NAME || ":" ||
 declare variable $bun:OFF-SET := 0;
 declare variable $bun:LIMIT := cmn:get-listings-config-limit();
 declare variable $bun:VISIBLEPAGES := cmn:get-listings-config-visiblepages();
-declare variable $bun:DOCNO := 1;
+declare variable $bun:DOCNO := "NULL";
 
 (:
 declare function bun:translate($node as node(), $params as element(parameters)?, $model as item()*) {
@@ -273,7 +273,7 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
     
     (: get the document through acl as validation :)
     let $acl-permissions := cmn:get-acl-permissions($acl)
-    let $att-acl := bun:documentitem-full-acl($acl, $uri)   
+    let $att-acl := bun:documentitem-full-acl($acl, $uri,"NULL")   
 
     (: get the attachment with the given file id :)
     for $attachedfile in $att-acl/bu:attachments/bu:attachment
@@ -2308,7 +2308,7 @@ declare function bun:get-sittings(
                 for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'],$offset,$limit)
                 order by $match/bu:sitting/bu:statusDate descending
                 return 
-                    local:get-sitting-items($match)
+                    local:get-sitting-items($match,())
         } 
         </alisting>
     </docs>
@@ -2412,12 +2412,13 @@ declare function local:validate-custom-date($from as xs:date, $to as xs:date) {
 
 declare function local:get-sitting-subset($sittings) {
     for $sitting in $sittings
-        return 
+    order by $sitting/bu:statusDate ascending
+    return 
         if ($sitting/bu:sitting/bu:scheduleItems/bu:scheduleItem) then (
             let $uri := <uri>{data($sitting/bu:sitting/@uri)}</uri>
             let $startdate := $sitting/bu:sitting/bu:startDate
             let $venue := $sitting/bu:sitting/bu:venue/bu:shortName/text()
-            let $title := $sitting/bu:chamber/bu:shortName
+            let $title := $sitting/bu:sitting/bu:shortName
             return 
                 <ref sitting="{$uri}">
                     {   $startdate, 
@@ -2662,7 +2663,7 @@ declare function bun:get-sitting($acl as xs:string,
                                             bun:xqy-docitem-perms($acl)))
             
             return
-                local:get-sitting-items($match/ancestor::bu:ontology)   
+                local:get-sitting-items($match/ancestor::bu:ontology,$parts)   
     return
         transform:transform($doc, $stylesheet, ())
  };
@@ -2691,7 +2692,7 @@ declare function bun:get-calendar($acl as xs:string,
                                             bun:xqy-docitem-perms($acl)))
             
             return
-                local:get-sitting-items($match/ancestor::bu:ontology)   
+                local:get-sitting-items($match/ancestor::bu:ontology,())   
     return
         transform:transform($doc, $stylesheet, ())
  };
@@ -2742,7 +2743,7 @@ declare function bun:strip-namespace($e as node()) {
   }
 };
 
-declare function local:get-sitting-items($sittingdoc as node()?) {
+declare function local:get-sitting-items($sittingdoc as node()?, $parts as node()?) {
     <doc>
         {if ($sittingdoc) then $sittingdoc else $sittingdoc}
         <ref>
@@ -2752,6 +2753,7 @@ declare function local:get-sitting-items($sittingdoc as node()?) {
                     collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq data($eachitem/bu:sourceItem/bu:refersTo/@href)]/ancestor::bu:ontology
             }
         </ref>
+        {bun:get-excludes($sittingdoc, $parts/parent::node())}
     </doc>     
 };
 
@@ -2893,11 +2895,11 @@ declare function bun:get-reference($docitem as node()) {
 : It supports applying of ACLs
 :
 :)
-declare function bun:xqy-docitem-uri($uri as xs:string) as xs:string{
-    fn:concat(
-        "collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri='", $uri,
-        "') else (@internal-uri='", $uri,
-        "')][1]")
+declare function bun:xqy-docitem-uri($uri as xs:string, $internal-uri as xs:string?) as xs:string {
+    if ($internal-uri eq "NULL") then 
+        fn:concat("collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri='", $uri,"'][1]")  
+    else
+        fn:concat("collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri='", $internal-uri,"'][1]")  
 };        
 
 declare function bun:xqy-docitem-perms($acl as xs:string) as xs:string{
@@ -2931,9 +2933,9 @@ declare function bun:xqy-docitem-ancestor-root() as xs:string{
     xs:string("ancestor::bu:ontology")
 };
 
-declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) as xs:string {
+declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string, $internal-uri as xs:string?) as xs:string {
     fn:concat(
-        bun:xqy-docitem-uri($uri), 
+        bun:xqy-docitem-uri($uri,$internal-uri), 
         "/", 
         bun:xqy-docitem-perms($acl),
         "/",
@@ -2941,13 +2943,13 @@ declare function bun:xqy-docitem-acl-uri($acl as xs:string, $uri as xs:string) a
         )
 };
 
-declare function bun:documentitem-full-acl($acl as xs:string, $uri as xs:string) {
+declare function bun:documentitem-full-acl($acl as xs:string, $uri as xs:string, $internal-uri as xs:string?) {
     let $acl-permissions := cmn:get-acl-permissions($acl)
 
     (: authenticate access to document itself first :)
     let $match := 
         document {
-            util:eval(bun:xqy-docitem-acl-uri($acl, $uri))
+            util:eval(bun:xqy-docitem-acl-uri($acl, $uri, $internal-uri))
         }
 
     return 
@@ -3037,6 +3039,7 @@ declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $
 :)
 declare function bun:get-parl-doc($acl as xs:string, 
             $doc-uri as xs:string, 
+            $doc-internal-uri as xs:string?,
             $parts as node(),
             $parliament as node()?) as element()* {
             
@@ -3052,7 +3055,7 @@ declare function bun:get-parl-doc($acl as xs:string,
     :)
     
     let $doc := document {
-            let $match := bun:documentitem-full-acl($acl, $uri)
+            let $match := bun:documentitem-full-acl($acl, $uri, $doc-internal-uri)
             return
                 (: $parts/parent::node() returns all tabs of this doctype :)
                 bun:get-ref-assigned-grps($match, $parts/parent::node())
@@ -3094,7 +3097,7 @@ declare function bun:get-parl-doc-with-events($acl as xs:string,
             (:  !+ACL_NEW_API - changed call to use new ACL API , 
             :   the root is an ontology document now not a legislativeItem
             :)
-            let $match := bun:documentitem-full-acl($acl, $doc-uri)
+            let $match := bun:documentitem-full-acl($acl, $doc-uri,"NULL")
             return
                 (: $parts/parent::node() returns all tabs of this doctype :)
                 bun:get-ref-events($match, $parts/parent::node())
@@ -3117,13 +3120,14 @@ declare function bun:get-parl-doc-with-events($acl as xs:string,
 :)
 declare function bun:get-parl-doc-timeline($acl as xs:string, 
             $doc-uri as xs:string, 
+            $internal-uri as xs:string?,
             $parts as node(),
             $parliament as node()) as element()* {
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
-    let $doc := let $match := bun:documentitem-full-acl($acl, $doc-uri)
+    let $doc := let $match := bun:documentitem-full-acl($acl, $doc-uri,$internal-uri)
                 return
                     (: $parts/parent::node() returns all tabs of this doctype :)
                     bun:get-ref-timeline-activities($match, $parts/parent::node())
@@ -3145,7 +3149,7 @@ declare function bun:get-parl-doc-minutes(  $acl as xs:string,
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     let $identifier := $parliament/identifier/text()
     
-    let $match := bun:documentitem-full-acl($acl, $doc-uri)
+    let $match := bun:documentitem-full-acl($acl, $doc-uri,"NULL")
     let $doc-internal-uri := data($match/bu:document/@internal-uri)
     
     let $sitting := util:eval(concat("collection('",cmn:get-lex-db(),"')/",
@@ -3320,11 +3324,11 @@ declare function bun:get-ref-comm-sitting($docitem as node(), $docviews as node(
         {$docitem}
         <ref>
         {
-            for $match in collection(cmn:get-lex-db())/bu:ontology[@for='sitting']
-            where data($match/bu:sitting/bu:sittingOf/bu:refersTo/@href) eq data($docitem/bu:group/@uri)
-            order by $match/bu:sitting/bu:statusDate descending
+            for $match in collection(cmn:get-lex-db())/bu:ontology/bu:sitting
+            where data($match/bu:sittingOf/bu:refersTo/@href) eq data($docitem/bu:group/@uri)
+            order by $match/bu:statusDate descending
             return 
-                $match   
+                $match/ancestor::bu:ontology 
         }
         </ref>
         {bun:get-excludes($docitem, $docviews)}
@@ -3537,7 +3541,7 @@ declare function bun:get-contacts-by-uri($acl as xs:string,
 :
 : @stylesheet [document-type]/version/text e.g question/version/text
 :)
-declare function bun:get-doc-version($acl as xs:string, $uri as xs:string, $parts as node()) as element()* {
+declare function bun:get-doc-version($acl as xs:string, $uri as xs:string, $internal-uri as xs:string?, $parts as node()) as element()* {
     
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl)    
@@ -3546,7 +3550,7 @@ declare function bun:get-doc-version($acl as xs:string, $uri as xs:string, $part
     let $foundversions := if($parent-uri) then true() else false()
     let $doc-uri := if($foundversions) then $parent-uri else $uri
     
-    let $docitem := bun:documentitem-full-acl($acl, $doc-uri)
+    let $docitem := bun:documentitem-full-acl($acl, $doc-uri,$internal-uri)
     
     let $latest := if(not($foundversions)) then max($docitem/bu:document/bu:versions/bu:version/bu:auditId) else ()
     let $currenturi := if(not($foundversions)) then data($docitem/bu:document/bu:versions/bu:version[bu:auditId = $latest]/@uri) else $uri
@@ -3575,7 +3579,7 @@ declare function bun:get-doc-attachment($acl as xs:string,
 
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     
-    let $docitem := bun:documentitem-full-acl($acl, $doc-uri)
+    let $docitem := bun:documentitem-full-acl($acl, $doc-uri,"NULL")
     
     let $doc := <doc>{$docitem}</doc>  
 
@@ -3600,7 +3604,7 @@ declare function bun:get-doc-event($eventid as xs:string,
     let $foundevent := if($match) then true() else false()
     
     let $doc-node := if(not($foundevent)) then (
-                        bun:documentitem-full-acl('public-view', $eventid)/child::* 
+                        bun:documentitem-full-acl('public-view', $eventid, "NULL")/child::* 
                      )
                      else (
                         let $acl-filter := cmn:get-acl-permission-as-node('Event','public-view')
@@ -3678,7 +3682,8 @@ declare function bun:get-members(
                     <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($parliament/identifier/text(), $parts/doctype, $listing/text(), $sortby)) }">{data($listing/@name)}</tag>
                     
         }
-        </tags>          
+        </tags>     
+        <chamber>{$parliament/type/text()}</chamber>
         <currentView>{$parts/current-view}</currentView>
         <documentType>{$parts/doctype}</documentType>
         <listingUrlPrefix>{$parts/default-view}</listingUrlPrefix>
@@ -3719,7 +3724,7 @@ declare function bun:get-member($memberid as xs:string, $parts as node(), $parli
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:docType[bu:value eq 'Member']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3742,7 +3747,7 @@ declare function bun:get-member-officesheld($memberid as xs:string?, $parts as n
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:docType[bu:value eq 'Member']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>
@@ -3773,7 +3778,7 @@ declare function bun:get-member-biographical($memberid as xs:string?, $parts as 
 
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl) 
-    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:type[bu:value eq 'member']][1]/ancestor::bu:ontology
+    let $member-doc := collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:referenceToUser[bu:refersTo/@href=$memberid]][bu:docType[bu:value eq 'Member']][1]/ancestor::bu:ontology
 
     (: return AN Member document as singleton :)
     let $doc := <doc>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -25,6 +25,16 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="uriParameter">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:text>uri</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>internal-uri</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="moevent-uri" select="bu:ontology/bu:document/bu:owner/bu:person/@href"/>
         <div id="main-wrapper">
             <div id="title-holder">
@@ -40,6 +50,7 @@
             <xsl:call-template name="doc-tabs">
                 <xsl:with-param name="tab-group" select="$doc-type"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="uri-type" select="$uriParameter"/>
                 <xsl:with-param name="tab-path">versions</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
@@ -51,6 +62,7 @@
                         <xsl:with-param name="version-uri" select="$version-uri"/>
                         <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
                         <xsl:with-param name="doc-uri" select="$doc-uri"/>
+                        <xsl:with-param name="uriParameter" select="$uriParameter"/>
                         <xsl:with-param name="chamber" select="$chamber"/>
                     </xsl:call-template>
                     <xsl:variable name="render-doc" select="bu:ontology/bu:document/bu:versions/bu:version[@uri=$version-uri]"/>
@@ -95,6 +107,7 @@
         <xsl:param name="doc-type"/>
         <xsl:param name="doc-uri"/>
         <xsl:param name="chamber"/>
+        <xsl:param name="uriParameter"/>
         <xsl:variable name="total_versions" select="count(bu:ontology/bu:document/bu:versions/bu:version)"/>
         <div class="doc-views-section">
             <form onsubmit="redirectTo();">
@@ -102,7 +115,7 @@
                     There are <xsl:value-of select="$total_versions"/> versions:
                 </label>
                 <div class="inline">
-                    <select name="uri" id="eventText">
+                    <select name="{$uriParameter}" id="eventText">
                         <xsl:for-each select="bu:ontology/bu:document/bu:versions/bu:version">
                             <xsl:sort select="bu:statusDate" order="descending"/>
                             <xsl:variable name="cur_pos" select="($total_versions - position())+1"/>
@@ -117,7 +130,7 @@
                     </select>
                 </div>
                 <div class="inline">
-                    <input type="submit" name="submit" id="submit" value="Go"/>
+                    <input type="submit" id="submit" value="Go"/>
                 </div>
             </form>
         </div>

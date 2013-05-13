@@ -1,10 +1,6 @@
 .mem-profile {
     margin-top:20px;
 }
-.mem-desc {
-    width:96%;
-    margin:10px auto;
-}
 .mem-top-left {
     float:left;
 }
@@ -54,7 +50,7 @@ p.imgonlywrap img {
   
 .mem-details {
     width:97%;
-    margin:10px 25px 0 auto;
+    margin:10px 5px 0 auto;
     float:right;
 }
 .mem-details .inline-labels {

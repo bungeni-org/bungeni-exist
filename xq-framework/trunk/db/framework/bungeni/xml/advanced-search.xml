@@ -6,7 +6,7 @@
                 <i18n:text key="adv-search">Advanced Search(nt)</i18n:text>
             </h1>
         </div>
-        <div id="region-content" class="rounded-eigh tab_container" role="main">
+        <div id="region-content" class="rounded-eigh" role="main">
             <div id="adv-search-wrapper">
                 <form method="GET" action="search-adv" id="ui_search" name="search_sort">
                     <input type="hidden" id="exist_path" name="exist_path" value="/search-adv"/>
@@ -94,6 +94,7 @@
                                 <div class="b-right">
                                     <input class="button" id="adv-search-btn" value="i18n(btn-search,search)" type="submit"/>
                                 </div>
+                                <div style="clear:both"/>
                             </div>
                         </div>
                         <div class="spacer">
@@ -101,6 +102,7 @@
                         </div>
                     </fieldset>
                 </form>
+                <div style="clear:both"/>
             </div>
         </div>
     </div>

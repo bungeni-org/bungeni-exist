@@ -70,7 +70,7 @@ ul.ls-timeline {
     margin:0 auto;
     margin-top:10px;
     display:block;
-    width:96% !important;
+    width:94% !important;
     list-style-type: square;
 }
 ul.ls-timeline li {
@@ -214,7 +214,6 @@ div#content-wrapper {
 .tab_container {
 	overflow: hidden;
 	clear: both;
-	background: #fff;
 }
 .tab_content {
 	padding-left: 10px;

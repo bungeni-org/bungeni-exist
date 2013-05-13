@@ -26,7 +26,14 @@
             current chamber context 
         -->
         <xsl:variable name="chamber">
-            <xsl:value-of select="./chamber"/>
+            <xsl:choose>
+                <xsl:when test="./chamber">
+                    <xsl:value-of select="concat(./chamber,'/')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>         
         
         <!-- 
@@ -112,7 +119,7 @@
                     <xsl:otherwise>
                         <a title="Beginning">
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat($chamber,'/',$currentView)"/>
+                                <xsl:value-of select="concat($chamber,$currentView)"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -136,7 +143,7 @@
                     <xsl:otherwise>
                         <a title="Previous Page">
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat($chamber,'/',$currentView)"/>
+                                <xsl:value-of select="concat($chamber,$currentView)"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -205,7 +212,7 @@
                     <xsl:otherwise>
                         <a title="Next Page">
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat($chamber,'/',$currentView)"/>
+                                <xsl:value-of select="concat($chamber,$currentView)"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -228,7 +235,7 @@
                     <xsl:otherwise>
                         <a title="Last Page">
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat($chamber,'/',$currentView)"/>
+                                <xsl:value-of select="concat($chamber,$currentView)"/>
                                 <xsl:text>?</xsl:text>
                                 <xsl:value-of select="$qry_vars"/>
                                 <xsl:text>&amp;offset=</xsl:text>
@@ -281,7 +288,7 @@
                 <xsl:otherwise>
                     <a title="Page {$i}" accesskey="{$i}">
                         <xsl:attribute name="href">
-                            <xsl:value-of select="concat($chamber,'/',$currentView)"/>
+                            <xsl:value-of select="concat($chamber,$currentView)"/>
                             <xsl:text>?</xsl:text>
                             <xsl:value-of select="$qry_vars"/>
                             <xsl:text>&amp;offset=</xsl:text>

@@ -119,10 +119,12 @@ div#region-content {
     min-height:500px;
     margin:0px auto 20px auto;
     padding:10px 0;
+	background: #fff;    
 }
 
 div#region-content > div {
     margin: 0 auto;
+    padding:0 10px;
 }
 div.doc-table-wrapper {
     width:90%;
@@ -267,7 +269,7 @@ div#doc-downloads {
 .truncate {
     padding:0;
     margin:0;
-	width: 70%;
+	width: 100%;
 	display:inline;
 	white-space: nowrap;
 	overflow: hidden;
@@ -295,7 +297,8 @@ img.parl-emblem {
 }
 
 .struct-ib {
-    display:inline-block;
+    /* this was necessary in order to use ellipsis at the end of the line*/
+    display:inline;
 }
 .struct-i {
     display:inline;
@@ -400,15 +403,16 @@ p.inline-centered {
 }
 /* div inlines */
 .list-inline {
-    width:90%;
-    margin:0 auto;
+    width:60%;
+    margin:0;
     padding-bottom:10px;
+    display: table;
+    table-layout: fixed;
 }
 .list-inline .inline-label {
-    min-width:120px;
-    width:auto;
+    min-width:160px !important;
     font-weight:bold;
-    display:inline;
+    display: table-cell;
 }
 
 /* Versions, Event View feature this on the top-right section of the document */
@@ -457,7 +461,6 @@ div.category-block {
 div.row {
     float:left;
     width:860px;
-    height:30px;
     padding-top: 5px;  
  }
 
@@ -537,7 +540,7 @@ div.row div.b-right input.button {
 #adv-search-wrapper {
     margin:0 auto;
     width:96%;
-    height:75%;
+    height:100%;
     padding:5px;
 }
 

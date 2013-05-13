@@ -1436,13 +1436,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view check-for="[bu:versions/child::node()]" id="versions" path="question-versions" tag="tab">
-                <title>
-                    <i18n:text key="versions">versions(nt)</i18n:text>
-                </title>
-                <template>xml/question.xml</template>
-                <xsl>xsl/version.xsl</xsl>
-            </view>
             <view check-for="[bu:workflowEvents/child::node()]" id="events" path="question-events" tag="tab">
                 <title>
                     <i18n:text key="tab-events">events(nt)</i18n:text>
@@ -1477,6 +1470,13 @@
                 </title>
                 <template>xml/question.xml</template>
                 <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="question-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/version.xsl</xsl>
             </view>
             <view path="question-attachment">
                 <template>xml/documents.xml</template>
@@ -1514,13 +1514,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view check-for="[bu:versions/child::node()]" id="versions" path="motion-versions" tag="tab">
-                <title>
-                    <i18n:text key="versions">versions(nt)</i18n:text>
-                </title>
-                <template>xml/motion.xml</template>
-                <xsl>xsl/version.xsl</xsl>
-            </view>
             <view check-for="[bu:workflowEvents/child::node()]" id="events" path="motion-events" tag="tab">
                 <title>
                     <i18n:text key="tab-events">events(nt)</i18n:text>
@@ -1552,6 +1545,13 @@
                 </title>
                 <template>xml/motion.xml</template>
                 <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="motion-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/motion.xml</template>
+                <xsl>xsl/version.xsl</xsl>
             </view>
             <view path="motion-attachment">
                 <template>xml/documents.xml</template>
@@ -1585,13 +1585,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view check-for="[bu:versions/child::node()]" id="versions" path="tableddocument-versions" tag="tab">
-                <title>
-                    <i18n:text key="versions">versions(nt)</i18n:text>
-                </title>
-                <template>xml/tableddocument.xml</template>
-                <xsl>xsl/version.xsl</xsl>
-            </view>
             <view check-for="[bu:workflowEvents/child::node()]" id="events" path="tableddocument-events" tag="tab">
                 <title>
                     <i18n:text key="tab-events">events(nt)</i18n:text>
@@ -1619,6 +1612,13 @@
                 </title>
                 <template>xml/tableddocument.xml</template>
                 <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="tableddocument-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/version.xsl</xsl>
             </view>
             <view path="tableddocument-attachment">
                 <template>xml/documents.xml</template>
@@ -1652,13 +1652,6 @@
                 <template>xml/changes.xml</template>
                 <xsl>xsl/changes.xsl</xsl>
             </view>
-            <view check-for="[bu:versions/child::node()]" id="versions" path="agendaitem-versions" tag="tab">
-                <title>
-                    <i18n:text key="versions">versions(nt)</i18n:text>
-                </title>
-                <template>xml/agendaitem.xml</template>
-                <xsl>xsl/version.xsl</xsl>
-            </view>
             <view check-for="[parent::bu:attachments/child::node()]" id="attachments" path="agendaitem-documents" tag="tab">
                 <title>
                     <i18n:text key="tab-documents">documents(nt)</i18n:text>
@@ -1679,6 +1672,13 @@
                 </title>
                 <template>xml/agendaitem.xml</template>
                 <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="agendaitem-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/version.xsl</xsl>
             </view>
             <view path="agendaitem-event">
                 <template>xml/documents.xml</template>
@@ -1766,14 +1766,14 @@
                 <template>xml/sitting.xml</template>
                 <xsl>xsl/sitting.xsl</xsl>
             </view>
-            <view id="attendance" path="sitting-attendance" tag="tab">
+            <view check-for="[bu:attendanceRecords/child::node()]" id="attendance" path="sitting-attendance" tag="tab">
                 <title>
                     <i18n:text key="Attendance">attendance(nt)</i18n:text>
                 </title>
                 <template>xml/sitting.xml</template>
                 <xsl>xsl/attendance.xsl</xsl>
             </view>
-            <view id="reports" path="sitting-reports" tag="tab">
+            <view check-for="[bu:reports/child::node()]" id="reports" path="sitting-reports" tag="tab">
                 <title>
                     <i18n:text key="Sitting Reports">reports(nt)</i18n:text>
                 </title>

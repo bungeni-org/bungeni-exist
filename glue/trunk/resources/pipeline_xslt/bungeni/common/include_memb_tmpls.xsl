@@ -102,17 +102,17 @@
     </xsl:template>    
     
     
-    <xsl:template match="representation">
+    <xsl:template match="representation_geo">
         <representations id="memberRepresentation">
             <xsl:apply-templates />
         </representations>
     </xsl:template>
     
-    <xsl:template match="field[@name='representation']">
+    <xsl:template match="field[@name='representation_geo'][parent::representation_geo]">
         <xsl:call-template name="renderTLCTermString">
             <xsl:with-param name="elementName">representation</xsl:with-param>
         </xsl:call-template>
-    </xsl:template>
+    </xsl:template>    
 
     <!--
     

@@ -69,6 +69,7 @@
     <msg key="date-due">due date</msg>
     <msg key="registry-no">registry number</msg>
     <msg key="summary">summary</msg>
+    <msg key="no summary">hay resumen</msg>
     <msg key="ministry">ministry</msg>
     <msg key="assignedto">assigned to</msg>
     <msg key="gender">gender</msg>

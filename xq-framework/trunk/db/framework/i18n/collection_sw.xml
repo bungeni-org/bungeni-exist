@@ -70,6 +70,7 @@
     <msg key="date-due">kutokana na tarehe</msg>
     <msg key="registry-no">Msajili idadi</msg>
     <msg key="summary">muhtasari</msg>
+    <msg key="no summary">hakuna muhtasari</msg>
     <msg key="ministry">wizara</msg>
     <msg key="assignedto">kwa ajili ya</msg>
     <msg key="gender">jinsia</msg>

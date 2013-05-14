@@ -76,14 +76,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
             else if ($EXIST-PATH eq "" ) then
                 fw:redirect(fn:concat(request:get-uri(), "/")) 
             else  if($EXIST-PATH eq "/" or $EXIST-PATH eq "/xml/index.xml") then 
-                rou:get-home($CONTROLLER-DOC)                
-            else if ($EXIST-PATH eq "/popout" ) then 
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),  
-                    $parts := cmn:get-view-parts($EXIST-PATH),
-                    $act-entries-tmpl :=  bun:get-doc-event-popout($docnumber,$parts)
-                return
-                    i18n:process($act-entries-tmpl, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)
+                rou:get-home($CONTROLLER-DOC)
         	else if ($EXIST-PATH eq "/image" ) then 
             (: FOR IMAGES :)
                 let $hash := xs:string(request:get-parameter("hash",'')), 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <!-- IMPORTS -->
     <xsl:import href="config.xsl"/>
     <xsl:import href="paginator.xsl"/>
@@ -129,24 +129,24 @@
                         </xsl:variable>
                         <img src="image?hash={$img_hash}&amp;name={concat(bu:ontology/bu:membership/bu:referenceToUser/bu:lastName,'_', bu:ontology/bu:membership/bu:referenceToUser/bu:firstName)}" alt="Photo of M.P" align="left"/>
                     </p>
-                    <div class="block">
-                        <span class="labels">id:</span>
-                        <span>
+                    <div class="list-inline">
+                        <div class="inline-label">id:</div>
+                        <div class="truncate">
                             <xsl:value-of select="$docIdentifier"/>
-                        </span>
+                        </div>
                     </div>
-                    <div class="block">
-                        <span class="labels">elected/nominated:</span>
-                        <span>
+                    <div class="list-inline">
+                        <div class="inline-label">elected/nominated:</div>
+                        <div class="truncate">
                             <xsl:value-of select="if (bu:ontology/bu:membership/bu:memberElectionType/@showAs) then                                 data(bu:ontology/bu:membership/bu:memberElectionType/@showAs) else                                  bu:ontology/bu:membership/bu:memberElectionType/bu:value"/>
-                        </span>
+                        </div>
                     </div>
-                    <div class="block">
-                        <span class="labels">
-                            <i18n:text key="date-start">start date(nt)</i18n:text>:</span>
-                        <span>
+                    <div class="list-inline">
+                        <div class="inline-label">
+                            <i18n:text key="date-start">start date(nt)</i18n:text>:</div>
+                        <div class="truncate">
                             <xsl:value-of select="format-date(bu:ontology/bu:membership/bu:startDate,$date-format,'en',(),())"/>
-                        </span>
+                        </div>
                     </div>
                     <div class="block">
                         <xsl:choose>

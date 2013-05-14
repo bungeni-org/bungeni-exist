@@ -90,8 +90,14 @@
                         <div>
                             <xsl:choose>
                                 <xsl:when test="xs:integer($sequence-id) = 0">
-                                    <h2>summary</h2>
-                                    <xsl:copy-of select="$render-doc/bu:summary"/>
+                                    <xsl:if test="$render-doc/bu:summary">
+                                        <h2>summary</h2>
+                                        <xsl:copy-of select="$render-doc/bu:summary"/>
+                                    </xsl:if>
+                                    <xsl:if test="$render-doc/bu:description">
+                                        <h1>description</h1>
+                                        <xsl:copy-of select="$render-doc/bu:description"/>
+                                    </xsl:if>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:copy-of select="$render-doc/bu:body"/>

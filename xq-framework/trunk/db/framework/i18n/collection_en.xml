@@ -70,6 +70,7 @@
     <msg key="date-due">due date</msg>
     <msg key="registry-no">registry number</msg>
     <msg key="summary">summary</msg>
+    <msg key="no summary">no summary</msg>
     <msg key="ministry">ministry</msg>
     <msg key="assignedto">assigned to</msg>
     <msg key="gender">gender</msg>
@@ -164,7 +165,7 @@
     <msg key="acronym">acronym</msg>
     <msg key="none">none</msg>
     <msg key="number">number</msg>
-    <msg key="from-popout">view as document</msg>
+    <msg key="from-popout">view document</msg>
     <msg key="close">close</msg>
     <msg key="sittings">sittings</msg>
     <msg key="schedule">scheduled documents</msg>

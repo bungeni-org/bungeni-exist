@@ -39,31 +39,44 @@
         <div id="popout-wrapper">
             <div id="popout-content" role="main">
                 <div id="doc-main-section">
-                    <h3 id="doc-heading" class="doc-headers">
-                        <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>
-                    </h3>
                     <h1 class="title">
-                        <xsl:value-of select="bu:ontology/bu:documents/bu:shortTitle"/>
+                        <b>
+                            <i18n:text key="acronym">acronym(nt)</i18n:text>:&#160;</b>
+                        <xsl:value-of select="bu:ontology/bu:document/bu:acronym/bu:value"/>
                     </h1>
                     <div class="doc-status">
                         <span>
                             <b>
                                 <i18n:text key="last-event">Last Event(nt)</i18n:text>:</b>
                         </span>
+                        &#160;
                         <span>
                             <xsl:value-of select="bu:ontology/bu:document/bu:status/bu:value"/>
                         </span>
+                        &#160;
                         <span>
                             <b>
-                                <i18n:text key="status">Status(nt)</i18n:text>
-                                &#160;<i18n:text key="date-on">Date(nt)</i18n:text>:</b>
+                                <i18n:text key="status">Status(nt)</i18n:text>&#160;<i18n:text key="date-on">Date(nt)</i18n:text>:</b>
                         </span>
+                        &#160;
                         <span>
                             <xsl:value-of select="format-dateTime(bu:ontology/bu:document/bu:statusDate,$datetime-format,'en',(),())"/>
                         </span>
                     </div>
                     <div id="doc-content-area">
-                        <xsl:copy-of select="bu:ontology/bu:document/bu:body/child::node()"/>
+                        <xsl:choose>
+                            <xsl:when test="bu:ontology/bu:document/bu:summary">
+                                <h2>summary</h2>
+                                <xsl:copy-of select="bu:ontology/bu:document/bu:summary/child::node()"/>
+                            </xsl:when>
+                            <xsl:when test="bu:ontology/bu:document/bu:description">
+                                <h2>description</h2>
+                                <xsl:copy-of select="bu:ontology/bu:document/bu:description/child::node()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <i18n:text key="no summary">no summary(nt)</i18n:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </div>
                     <div class="full-width txt-right">
                         <a class="link-external" href="{lower-case($eventof)}-{lower-case($doc-type)}?uri={$doc-uri}">

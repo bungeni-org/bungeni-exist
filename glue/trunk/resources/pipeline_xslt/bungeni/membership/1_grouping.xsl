@@ -166,7 +166,8 @@
                 <xsl:copy-of select="field[  
                     @name='status' or 
                     @name='membership_type' or  
-                    @name='member_election_type' or 
+                    @name='election_type' or 
+                    @name='election_date' or 
                     @name='status' or 
                     @name='election_nomination_date' or 
                     @name='start_date' or 
@@ -187,7 +188,7 @@
                 </referenceToUser>
                 
                 <xsl:copy-of select="contained_groups" />
-                <xsl:copy-of select="representation" />  
+                <xsl:copy-of select="representation_geo" />  
                 <xsl:copy-of select="changes | member_titles | titletypes"/>
                 <xsl:copy-of select="group" />
                 <xsl:copy-of select="tags" />

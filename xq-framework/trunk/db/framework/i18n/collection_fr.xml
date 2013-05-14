@@ -70,6 +70,7 @@
     <msg key="date-due">date d&amp;#39;échéance</msg>
     <msg key="registry-no">numéro d&amp;#39;enregistrement</msg>
     <msg key="summary">résumé</msg>
+    <msg key="no summary">aucun résumé</msg>
     <msg key="ministry">ministère</msg>
     <msg key="assignedto">attribué à</msg>
     <msg key="gender">sexe</msg>

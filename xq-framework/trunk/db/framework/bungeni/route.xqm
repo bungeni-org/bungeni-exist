@@ -12,6 +12,7 @@ Framework Imports
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
+import module namespace i18n = "http://exist-db.org/xquery/i18n" at "../i18n.xql";
 
 (:~
 Application imports
@@ -516,6 +517,17 @@ declare function rou:version-text($CONTROLLER-DOC as node()) {
     	   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
     	)
 
+};
+
+declare function rou:show-event-popout($CONTROLLER-DOC as node()) {
+    
+    let $log := util:log('debug',$CONTROLLER-DOC)
+    let $log := util:log('debug','++++++++++++++++++++++++++++++++++')
+    let $uri := xs:string(request:get-parameter("uri",$bun:DOCNO)) 
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-doc-event-popout($uri,$parts)
+    return
+        i18n:process($act-entries-tmpl, template:set-lang(), $config:I18N-MESSAGES, $config:DEFAULT-LANG)    
 };
 
 declare function rou:get-politicalgroups($CONTROLLER-DOC as node()) {

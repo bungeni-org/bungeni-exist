@@ -73,6 +73,7 @@
     <msg key="date-due">scadenza</msg>
     <msg key="registry-no">numero di registro</msg>
     <msg key="summary">riassunto</msg>
+    <msg key="no summary">riassunto non</msg>
     <msg key="ministry">ministero</msg>
     <msg key="assignedto">gruppi assegnati</msg>
     <msg key="gender">genere</msg>

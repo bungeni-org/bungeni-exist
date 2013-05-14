@@ -1051,6 +1051,16 @@
             <navigation>/higher_house/business</navigation>
             <title>Search</title>
         </route>
+        <route href="/lower_house/popout">
+            <title>Popout</title>
+            <navigation>/lower_house/popout</navigation>
+            <action>rou:show-event-popout</action>
+        </route>
+        <route href="/higher_house/popout">
+            <title>Popout</title>
+            <navigation>/higher_house/popout</navigation>
+            <action>rou:show-event-popout</action>
+        </route>
     </routes>
     <menugroups>
         <menu for="/" name="mainnav">

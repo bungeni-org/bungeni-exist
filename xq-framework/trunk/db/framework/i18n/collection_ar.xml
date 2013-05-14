@@ -70,6 +70,7 @@
     <msg key="date-due">بسبب تاريخ</msg>
     <msg key="registry-no">عدد التسجيل</msg>
     <msg key="summary">ملخص</msg>
+    <msg key="no summary">لا موجزة</msg>
     <msg key="ministry">وزارة</msg>
     <msg key="assignedto">تعيين</msg>
     <msg key="gender">جنس</msg>

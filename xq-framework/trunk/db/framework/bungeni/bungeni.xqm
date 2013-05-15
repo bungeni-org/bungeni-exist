@@ -2444,6 +2444,7 @@ declare function local:get-sitting-subset($sittings) {
 (: !+EXIST_20_UPG :)
 declare function local:grouped-sitting-items-by-itemtype($sittings) {
     for $item in local:get-sitting-subset($sittings)/bu:scheduleItem
+    where $item/bu:sourceItem/bu:refersTo/bu:type/bu:value/text() ne 'NOT_FOUND'
     group by $key := $item/bu:sourceItem/bu:refersTo/bu:type/bu:value
     return 
         <doc title="{$key}">

@@ -161,15 +161,44 @@
     <xsl:template match="field[@name='active']">
         <active type="xs:boolean">
             <xsl:choose>
-                <xsl:when test=". eq 'True'">
-                    true
-                </xsl:when>
-                <xsl:otherwise>
-                    false
-                </xsl:otherwise>
+                <xsl:when test=". eq 'True'">true</xsl:when>
+                <xsl:otherwise>false</xsl:otherwise>
             </xsl:choose>
         </active>
     </xsl:template>
+    
+    <xsl:template match="field[@name='type_document']">
+        <typeDocument type="xs:boolean">
+            <xsl:choose>
+                <xsl:when test=". eq 'True'">true</xsl:when>
+                <xsl:otherwise>false</xsl:otherwise>
+            </xsl:choose>
+        </typeDocument>
+    </xsl:template>    
+    
+    <xsl:template match="field[@name='type_heading']">
+        <typeHeading type="xs:boolean">
+            <xsl:choose>
+                <xsl:when test=". eq 'True'">true</xsl:when>
+                <xsl:otherwise>false</xsl:otherwise>
+            </xsl:choose>
+        </typeHeading>
+    </xsl:template>   
+    
+    <xsl:template match="field[@name='is_type_text_record']">
+        <isTypeTextRecord type="xs:boolean">
+            <xsl:choose>
+                <xsl:when test=". eq 'True'">true</xsl:when>
+                <xsl:otherwise>false</xsl:otherwise>
+            </xsl:choose>
+        </isTypeTextRecord>
+    </xsl:template>      
+    
+    <xsl:template match="field[@name='real_item_type']">
+        <xsl:call-template name="renderUriElement">
+            <xsl:with-param name="elementName">realItemType</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>    
     
     <xsl:template match="field[@name='item_uri']">
         <xsl:call-template name="renderUriElement">

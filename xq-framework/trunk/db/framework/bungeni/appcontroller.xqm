@@ -341,26 +341,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	else if ($CHAMBER-REL-PATH eq "/get-sittings-xml" ) then 
             (: Utilities - Called from root path and meant to be generic calls :)        	
                 let $act-entries-tmpl :=  bun:get-sittings-xml("public-view",$PARLIAMENT)
-                return $act-entries-tmpl   
-        	else if ($CHAMBER-REL-PATH eq "/calendar") then  
-                let 
-                    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
-                    $act-entries-tmpl :=  bun:get-calendar("public-view",$docnumber,"xsl/calendar.xsl",$PARLIAMENT),
-        	        $act-entries-repl:= document {
-        								template:copy-and-replace($EXIST-PATH, fw:app-tmpl("xml/calendar.xml")/xh:div, $act-entries-tmpl)
-        							 } 
-        							 return 
-        								template:process-tmpl(
-        								   $REL-PATH, 
-        								   $EXIST-CONTROLLER, 
-        								   $config:DEFAULT-TEMPLATE, 
-        								   cmn:get-route($EXIST-PATH),
-                                            <route-override>
-                                                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
-                                                {$PARLIAMENT}
-                                            </route-override>, 
-        								   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
-        								 )	       
+                return $act-entries-tmpl       
             else if ($EXIST-PATH eq "/admin") then 
             (:~ UNMAPPED :)
                template:process-tmpl(

@@ -3140,7 +3140,7 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
         )
 };
 
-declare function bun:get-parl-doc-minutes(  $acl as xs:string, 
+declare function bun:get-parl-doc-scheduleItem(  $acl as xs:string, 
                                             $doc-uri as xs:string, 
                                             $parts as node(),
                                             $parliament as node()) as element()* {
@@ -3153,8 +3153,7 @@ declare function bun:get-parl-doc-minutes(  $acl as xs:string,
     let $doc-internal-uri := data($match/bu:document/@internal-uri)
     
     let $sitting := util:eval(concat("collection('",cmn:get-lex-db(),"')/",
-                                "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and bu:scheduleItems/bu:scheduleItem/bu:sourceItem/bu:refersTo/@href eq '",$doc-internal-uri,"']/",
-                                bun:xqy-docitem-perms($acl),"/ancestor::bu:sitting/bu:scheduleItems/bu:scheduleItem/bu:discussions"))
+                                "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"'][",bun:xqy-docitem-perms($acl),"]/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo/@href eq '",$doc-internal-uri,"']"))
                                 
     let $doc := <doc>
                     {$match}
@@ -3454,7 +3453,7 @@ declare function bun:get-ref-timeline-activities($docitem as node()?, $docviews 
 :       <tab/> ++
 :   </exclude>
 :)
-declare function bun:get-excludes($docitem as node()?, $docviews as node()) {
+declare function bun:get-excludes($docitem as node()?, $docviews as node()?) {
     <exclude>
         {
             let $collection-api := fn:concat("collection('",cmn:get-lex-db() ,"')")

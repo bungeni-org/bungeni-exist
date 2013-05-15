@@ -6,20 +6,17 @@ div#header {
     background-color:#434343;
     padding-top:0;
 }
-.lower_house div#sub-header {
+div#sub-header {
     clear:none;
     width:100%;
     margin:0;
     margin-top:-3px;
     height:20px;
+}
+.lower_house div#sub-header {
     background-color:#f69e0d;
 }
 .higher_house div#sub-header {
-    clear:none;
-    width:100%;
-    margin:0;
-    margin-top:-3px;
-    height:20px;
     background-color:#b22b14;
 }
 
@@ -369,6 +366,19 @@ img.parl-emblem {
     font-style: italic;
     color:#888;
     padding-right:3px;
+}
+.vote-outcome {
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    padding:2px 4px;
+    margin:0 4px;
+}
+.rejected {
+    background:#e65854;
+    color:#fff;
+}
+.passed {
+    background:#5dbb5d;
+    color:#fff;
 }
 .camel-txt {
     text-transform:capitalize;

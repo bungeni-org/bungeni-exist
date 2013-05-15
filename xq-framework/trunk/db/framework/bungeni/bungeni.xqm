@@ -3141,7 +3141,8 @@ declare function bun:get-parl-doc-timeline($acl as xs:string,
 };
 
 declare function bun:get-parl-doc-scheduleItem(  $acl as xs:string, 
-                                            $doc-uri as xs:string, 
+                                            $uri as xs:string, 
+                                            $internal-uri as xs:string?,
                                             $parts as node(),
                                             $parliament as node()) as element()* {
 
@@ -3149,11 +3150,21 @@ declare function bun:get-parl-doc-scheduleItem(  $acl as xs:string,
     let $stylesheet := cmn:get-xslt($parts/xsl) 
     let $identifier := $parliament/identifier/text()
     
-    let $match := bun:documentitem-full-acl($acl, $doc-uri,"NULL")
+    let $match := bun:documentitem-full-acl($acl, $uri,$internal-uri)
     let $doc-internal-uri := data($match/bu:document/@internal-uri)
     
-    let $sitting := util:eval(concat("collection('",cmn:get-lex-db(),"')/",
+    let $sitting := for $item in util:eval(concat("collection('",cmn:get-lex-db(),"')/",
                                 "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"'][",bun:xqy-docitem-perms($acl),"]/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo/@href eq '",$doc-internal-uri,"']"))
+                    let $sitting := $item/ancestor::bu:sitting                         
+                    return
+                        element item { 
+                                        element bu:sitting {
+                                            $sitting/(@*)
+                                        },
+                                        $sitting/bu:shortName,
+                                        $sitting/bu:statusDate,
+                                        $item 
+                                     }
                                 
     let $doc := <doc>
                     {$match}

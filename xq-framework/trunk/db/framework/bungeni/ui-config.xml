@@ -364,13 +364,25 @@
             <title>Business | Bill Minutes</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/higher_house/bill-minutes">
             <title>Business | Bill Minutes</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>bills</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/bill-votes">
+            <title>Business | Bill Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/bill-votes">
+            <title>Business | Bill Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>bills</subnavigation>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/lower_house/bill-attachment">
             <title>Business | Bill Attachment</title>
@@ -516,13 +528,25 @@
             <title>Business | Question Minutes</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/higher_house/question-minutes">
             <title>Business | Question Minutes</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>questions</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/question-votes">
+            <title>Business | Question Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/question-votes">
+            <title>Business | Question Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>questions</subnavigation>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/lower_house/question-attachment">
             <title>Business | Question Attachment</title>
@@ -644,13 +668,25 @@
             <title>Business | Motion Minutes</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/higher_house/motion-minutes">
             <title>Business | Motion Minutes</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>motions</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/motion-votes">
+            <title>Business | Motion Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/motion-votes">
+            <title>Business | Motion Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>motions</subnavigation>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/lower_house/motion-attachment">
             <title>Business | Motion Attachment</title>
@@ -772,13 +808,25 @@
             <title>Business | Tabled document Minutes</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/higher_house/tableddocument-minutes">
             <title>Business | Tabled document Minutes</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>tableddocuments</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/tableddocument-votes">
+            <title>Business | Tabled document Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/tableddocument-votes">
+            <title>Business | Tabled document Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>tableddocuments</subnavigation>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/lower_house/tableddocument-attachment">
             <title>Business | Tabled Document Attachment</title>
@@ -864,13 +912,25 @@
             <title>Business | Agendaitem Minutes</title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/higher_house/agendaitem-minutes">
             <title>Business | Agendaitem Minutes</title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>agendaitems</subnavigation>
-            <action>rou:document-minutes</action>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/agendaitem-votes">
+            <title>Business | Agendaitem Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/agendaitem-votes">
+            <title>Business | Agendaitem Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>agendaitems</subnavigation>
+            <action>rou:document-scheduleItem</action>
         </route>
         <route href="/lower_house/agendaitem-events">
             <title>Business | Agenda item Events</title>
@@ -956,11 +1016,13 @@
             <title>Business | Sittings </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>calendar</subnavigation>
+            <action>rou:calendar</action>
         </route>
         <route href="/higher_house/calendar">
             <title>Business | Sittings </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>calendar</subnavigation>
+            <action>rou:calendar</action>
         </route>
         <route href="/lower_house/sittings/rss">
             <title>Business | Sittings RSS</title>
@@ -1400,6 +1462,13 @@
                 <template>xml/bill.xml</template>
                 <xsl>xsl/minutes.xsl</xsl>
             </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="bill-votes" tag="tab">
+                <title>
+                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
+            </view>
             <view id="metadata" path="bill-metadata" tag="tab">
                 <title>
                     <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
@@ -1466,6 +1535,13 @@
                 </title>
                 <template>xml/question.xml</template>
                 <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="question-votes" tag="tab">
+                <title>
+                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
             </view>
             <view check-for="[bu:workflowEvents/child::node()[bu:type/bu:value eq 'event_response']]" id="responses" path="question-responses" tag="tab">
                 <title>
@@ -1549,6 +1625,13 @@
                 <template>xml/motion.xml</template>
                 <xsl>xsl/minutes.xsl</xsl>
             </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="motion-votes" tag="tab">
+                <title>
+                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                </title>
+                <template>xml/motion.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
+            </view>
             <view id="metadata" path="motion-metadata" tag="tab">
                 <title>
                     <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
@@ -1616,6 +1699,13 @@
                 <template>xml/tableddocument.xml</template>
                 <xsl>xsl/minutes.xsl</xsl>
             </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="tableddocument-votes" tag="tab">
+                <title>
+                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                </title>
+                <template>xml/tableddocument.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
+            </view>
             <view id="metadata" path="tableddocument-metadata" tag="tab">
                 <title>
                     <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
@@ -1675,6 +1765,13 @@
                 </title>
                 <template>xml/agendaitem.xml</template>
                 <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="agendaitem-votes" tag="tab">
+                <title>
+                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                </title>
+                <template>xml/agendaitem.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
             </view>
             <view id="metadata" path="agendaitem-metadata" tag="tab">
                 <title>

@@ -3,10 +3,10 @@
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
-                <xd:b>Created on:</xd:b> Oct 31, 2011</xd:p>
+                <xd:b>Created on:</xd:b> May 15, 2013</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> anthony</xd:p>
-            <xd:p> Bill changes from Bungeni</xd:p>
+            <xd:p> Votes and proceedings</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:output method="xml"/>
@@ -46,7 +46,7 @@
                 <xsl:with-param name="tab-group">
                     <xsl:value-of select="$doc-type"/>
                 </xsl:with-param>
-                <xsl:with-param name="tab-path">minutes</xsl:with-param>
+                <xsl:with-param name="tab-path">votes</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
@@ -61,25 +61,41 @@
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <ul id="list-toggle" class="ls-timeline clear">
-                        <xsl:for-each select="ref/bu:scheduleItem/bu:discussions/bu:discussion">
+                        <xsl:for-each select="ref/bu:scheduleItem/bu:votes/bu:vote">
                             <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
                             <li>
-                                <xsl:variable name="timeline-type">
+                                <div class="struct-ib truncate">
+                                    <span class="vote-outcome {bu:outcome/bu:value}">
+                                        <xsl:choose>
+                                            <xsl:when test="bu:outcome/@showAs">
+                                                <xsl:value-of select="bu:outcome/@showAs"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="bu:outcome/bu:value"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </span>
+                                    <xsl:value-of select="bu:issueItem"/> /  
+                                    <b>
+                                        <xsl:choose>
+                                            <xsl:when test="bu:voteType/@showAs">
+                                                <xsl:value-of select="bu:voteType/@showAs"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="bu:voteType/bu:value"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </b> on 
                                     <xsl:choose>
-                                        <xsl:when test="bu:auditFor/bu:value">
-                                            <i18n:text key="cate-document">document</i18n:text>
-                                        </xsl:when>
-                                        <xsl:when test="bu:auditAction/bu:value">
-                                            <xsl:value-of select="bu:auditAction/bu:value"/>
+                                        <xsl:when test="bu:majorityType/@showAs">
+                                            <xsl:value-of select="bu:majorityType/@showAs"/>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:value-of select="bu:type/bu:value"/>
+                                            <xsl:value-of select="bu:majorityType/bu:value"/>
                                         </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:variable>
-                                <xsl:value-of select="format-dateTime(bu:chronoTime,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                <div class="struct-ib">
-                                    <xsl:copy-of select="bu:body/child::node()"/>
+                                    </xsl:choose>                                    
+                                    &#160;/ 
+                                    <xsl:value-of select="bu:time"/>
                                 </div>
                             </li>
                         </xsl:for-each>

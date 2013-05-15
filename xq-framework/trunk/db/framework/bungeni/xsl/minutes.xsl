@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -20,6 +20,7 @@
     <xsl:param name="chamber-id"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
+        <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
         <xsl:variable name="doc-uri">
             <xsl:choose>
                 <xsl:when test="bu:ontology/bu:document/@uri">
@@ -27,6 +28,16 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="bu:ontology/bu:document/@internal-uri"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="uriParameter">
+            <xsl:choose>
+                <xsl:when test="bu:ontology/bu:document/@uri">
+                    <xsl:text>uri</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>internal-uri</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -49,6 +60,7 @@
                 <xsl:with-param name="tab-path">minutes</xsl:with-param>
                 <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
                 <xsl:with-param name="uri" select="$doc-uri"/>
+                <xsl:with-param name="uri-type" select="$uriParameter"/>
                 <xsl:with-param name="excludes" select="exclude/tab"/>
             </xsl:call-template>
             <!-- Renders the document download types -->
@@ -61,26 +73,22 @@
             <div id="region-content" class="has-popout rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
                     <ul id="list-toggle" class="ls-timeline clear">
-                        <xsl:for-each select="ref/bu:scheduleItem/bu:discussions/bu:discussion">
-                            <xsl:sort select="bu:document/bu:statusDate" order="descending"/>
+                        <xsl:for-each select="ref/item">
+                            <xsl:sort select="bu:statusDate" order="descending"/>
                             <li>
-                                <xsl:variable name="timeline-type">
-                                    <xsl:choose>
-                                        <xsl:when test="bu:auditFor/bu:value">
-                                            <i18n:text key="cate-document">document</i18n:text>
-                                        </xsl:when>
-                                        <xsl:when test="bu:auditAction/bu:value">
-                                            <xsl:value-of select="bu:auditAction/bu:value"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="bu:type/bu:value"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:variable>
-                                <xsl:value-of select="format-dateTime(bu:chronoTime,'[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]','en',(),())"/>
-                                <div class="struct-ib">
-                                    <xsl:copy-of select="bu:body/child::node()"/>
-                                </div>
+                                <a href="{$chamber}/sitting?uri={bu:sitting/@uri}">
+                                    <xsl:value-of select="bu:shortName"/>
+                                </a>
+                                <ul>
+                                    <xsl:for-each select="bu:scheduleItem/bu:discussions/bu:discussion">
+                                        <xsl:sort select="bu:scheduleId" order="ascending"/>
+                                        <li>
+                                            <div class="struct-ib">
+                                                <xsl:copy-of select="bu:body/child::node()"/>
+                                            </div>
+                                        </li>
+                                    </xsl:for-each>
+                                </ul>
                             </li>
                         </xsl:for-each>
                     </ul>

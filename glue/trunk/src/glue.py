@@ -726,6 +726,62 @@ def webdav_reset_folder(wd_cfg, folder):
             webdaver.shutdown()
     
 
+def post_process_action(config_file, afile):
+    '''
+    Post processes the files after it has been successfully serialized
+    '''
+    # get the archive action
+    cfg = TransformerConfig(config_file)
+    pp_action = cfg.get_postprocess_action()
+    if pp_action == "delete":
+        delete_file_from_fs(afile)
+    elif pp_action == "archive":
+        move_file_to_archive(cfg, afile)
+    else:
+        pass
+    
+
+def delete_file_from_fs(afile):
+    print "Attempting to remove ", afile
+    if os.path.isfile(afile):
+        try:
+            os.remove(afile)
+        except Exception:
+            print "Error while attempting to delete file !!", afile
+        except IOError:
+            print "Error while attempting to delete file !!", afile    
+
+
+def __create_archive_folder(archive_folder):
+    if os.path.exists(archive_folder):
+        if os.path.isdir(archive_folder):
+            pass
+    else:
+        try:
+            os.makedirs(archive_folder)
+        except Exception:
+            print "Error while attempting to create archive folder !"
+        except IOError:
+            print "Error while attempting to create archive folder !"
+
+    
+def move_file_to_archive(cfg, afile):
+    print "Attempting to move file to archive", afile
+    if os.path.isfile(afile):
+        # attempting to move file here
+        archive_folder = cfg.get_postprocess_archive()
+        __create_archive_folder(archive_folder)
+        if os.path.isdir(archive_folder):
+            dir_path = os.path.dirname(afile)
+            __create_archive_folder(dir_path)
+            if os.path.isdir(dir_path):
+                import shutil
+                shutil.copy2(afile, dir_path)
+                delete_file_from_fs(afile)
+    else:
+        print "Error cannot archive as it is not a file !", afile
+            
+      
 def main_queue(config_file, afile, parliament_cache_info):
     """
     

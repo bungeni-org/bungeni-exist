@@ -79,6 +79,10 @@
             description="item notes"
             param="//bu:ontology//bu:body" />        
         
+        <process name="unescapehtml"
+            description="document title - heading - editorial notes"
+            param="//bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem/bu:title" />        
+        
     </processgroup>
     
 </config>

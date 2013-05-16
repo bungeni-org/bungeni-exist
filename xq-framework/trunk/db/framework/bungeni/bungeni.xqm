@@ -2123,7 +2123,7 @@ declare function bun:get-raw-xml($docid as xs:string) as element() {
 
     let $doc := functx:remove-elements-deep(collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]],
                 ('bu:versions', 'bu:permissions', 'bu:changes','bu:description'))
-    let $output := concat(replace(substring-after($docid, '/'),'/','-'),"-",".xml")
+    let $output := concat(replace(substring-after($docid, '/'),'/','-'),".xml")
     let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",$output)) 
     return 
         $doc
@@ -2144,14 +2144,12 @@ declare function bun:get-akn-xml($docid as xs:string)
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt('xsl/bu-to-akn.xsl') 
     
-    let $doc := document        
-            {
-                collection(cmn:get-lex-db())/bu:ontology[@for='document'][child::bu:document[@uri eq $docid, @internal-uri eq $docid]]
-            }    
-        
-    let $transformed := transform:transform($doc,$stylesheet,())
-    
-    return $transformed 
+    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[@uri eq $docid, @internal-uri eq $docid]/ancestor::bu:ontology
+    let $akn := transform:transform($doc,$stylesheet,())
+    let $output := concat('akn-',replace(substring-after($docid, '/'),'/','-'),".xml")
+    let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",$output))
+
+    return $akn 
     
 };
 
@@ -2466,10 +2464,12 @@ declare function local:grouped-sitting-items-by-date($sittings) {
 declare function local:grouped-sitting-meeting-type($chamber-id as xs:string?, $dates-range as node(),$mtype as xs:string) {
     if ($mtype eq 'any') then (
         for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[bu:origin/bu:identifier eq $chamber-id][xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
+        order by $sittings/bu:sitting/bu:startDate ascending
         return $sittings
     ) else (
        for $sittings in collection(cmn:get-lex-db())/bu:ontology/bu:sitting[bu:origin/bu:identifier eq $chamber-id][xs:dateTime(bu:startDate) gt xs:dateTime($dates-range/start)][xs:dateTime(bu:startDate) lt xs:dateTime($dates-range/end)]/ancestor::bu:ontology
        where $sittings/bu:sitting/bu:meetingType[bu:value eq $mtype] 
+       order by $sittings/bu:sitting/bu:startDate ascending
        return $sittings    
     )
 };

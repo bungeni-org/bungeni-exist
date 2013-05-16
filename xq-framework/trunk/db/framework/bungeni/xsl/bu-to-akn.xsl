@@ -48,7 +48,7 @@
                 </identification>
                 <publication id="publication" date="{$contenturidate}" showAs="Bungeni Gazette" name="BG" number="{./bu:registryNumber}"/>
                 <classification source="#main">
-                    <keyword value="{bu:status/bu:value}" showAs="{upper-case(bu:status/bu:value)}" dictionary="/path/path/path/path"/>
+                    <keyword value="{bu:status/bu:value}" showAs="{bu:status/@showAs}" dictionary="/localVocab/localVocab/localVocab/localVocab"/>
                 </classification>
                 <lifecycle source="#bungeni">
                     <eventRef date="{xs:date($contenturidate)}" id="e1" source="#ro1" type="generation"/>
@@ -114,13 +114,13 @@
             <xsl:choose>
                 <xsl:when test="$for-reference eq 'true'">
                     <xsl:for-each select="bu:attachment">
-                        <hasAttachment id="{concat(bu:type/bu:value,bu:headId)}" href="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:fileHash)}" showAs="{bu:mimetype/bu:value}"/>
+                        <hasAttachment id="{concat(bu:type/bu:value,bu:headId)}" href="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:attachmentHash)}" showAs="{bu:mimetype/bu:value}"/>
                     </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>
                     <attachments>
                         <xsl:for-each select="bu:attachment">
-                            <componentRef id="{concat(bu:type/bu:value,bu:headId)}" src="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:fileHash)}" showAs="{bu:mimetype/bu:value}"/>
+                            <componentRef id="{concat(bu:type/bu:value,bu:headId)}" src="{concat('http://localhost:8088/exist/rest/bungeni-atts/',bu:attachmentHash)}" showAs="{bu:mimetype/bu:value}"/>
                         </xsl:for-each>
                     </attachments>
                 </xsl:otherwise>

@@ -1056,18 +1056,6 @@
             <subnavigation>publications</subnavigation>
             <action>rou:document-text</action>
         </route>
-        <route href="/lower_house/report-timeline">
-            <title>Business | Publication Report Timeline</title>
-            <navigation>/lower_house/business</navigation>
-            <subnavigation>publications</subnavigation>
-            <action>rou:document-timeline</action>
-        </route>
-        <route href="/higher_house/report-timeline">
-            <title>Business | Publication Report Timeline</title>
-            <navigation>/higher_house/business</navigation>
-            <subnavigation>publications</subnavigation>
-            <action>rou:document-timeline</action>
-        </route>
         <route href="/lower_house/politicalgroups">
             <title>Business | Political Groups </title>
             <navigation>/lower_house/members</navigation>
@@ -1815,13 +1803,6 @@
                 </title>
                 <template>xml/report.xml</template>
                 <xsl>xsl/report.xsl</xsl>
-            </view>
-            <view check-for="[bu:changes/child::node()]" id="timeline" path="report-timeline" tag="tab">
-                <title>
-                    <i18n:text key="tab-history">timeline(nt)</i18n:text>
-                </title>
-                <template>xml/changes.xml</template>
-                <xsl>xsl/changes.xsl</xsl>
             </view>
         </views>
         <views name="Member">

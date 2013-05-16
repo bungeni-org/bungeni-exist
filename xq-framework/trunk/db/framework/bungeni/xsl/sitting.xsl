@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -94,6 +94,16 @@
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </xsl:variable>
+                                        <xsl:variable name="uriParameter">
+                                            <xsl:choose>
+                                                <xsl:when test="bu:ontology/bu:document/@uri">
+                                                    <xsl:text>uri</xsl:text>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:text>internal-uri</xsl:text>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
                                         <tr>
                                             <td>
                                                 <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
@@ -109,7 +119,7 @@
                                                         </a>
                                                     </xsl:when>
                                                     <xsl:otherwise>
-                                                        <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?uri={$subDocIdentifier}">
+                                                        <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?{$uriParameter}={$subDocIdentifier}">
                                                             <xsl:value-of select="bu:document/bu:title"/>
                                                         </a>
                                                     </xsl:otherwise>

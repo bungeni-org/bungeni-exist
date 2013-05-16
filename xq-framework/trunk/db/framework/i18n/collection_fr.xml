@@ -137,6 +137,7 @@
     <msg key="tab-assigned">groupes assignés</msg>
     <msg key="tab-documents">documents associés</msg>
     <msg key="tab-metadata">métadonnées</msg>
+    <msg key="tab-votes">votes</msg>
     <msg key="tab-type">type</msg>
     <msg key="tab-desc">description</msg>
     <msg key="tab-date">date</msg>

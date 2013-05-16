@@ -8,6 +8,8 @@
     <xsl:import href="include_tmpls.xsl"/>
     <xsl:include href="func_content_types.xsl" />    
     
+    <xsl:variable name="parliament-full-uri" select="//custom/parliament-full-uri" />
+    <xsl:variable name="type-mappings" select="//custom/value" />  
     
     <xsl:template match="item_schedule[parent::item_schedule]">
         <scheduleItem>
@@ -15,8 +17,6 @@
                 <xsl:variable name="schedule_id" select="field[@name='schedule_id']" />
                 <xsl:value-of select="concat('schedule-',$schedule_id)" />
             </xsl:attribute>
-            <xsl:variable name="parliament-full-uri" select="//custom/parliament-full-uri" />
-            <xsl:variable name="type-mappings" select="//custom/value" />
             <xsl:variable name="item-type">
                 <xsl:variable name="item_type" select="field[@name='item_type']" />
                 <xsl:value-of select="bctype:get_content_type_uri_name($item_type, $type-mappings)" />
@@ -321,6 +321,11 @@
             <xsl:attribute name="id">
                 <xsl:value-of select="concat('report-', parent::report/field[@name='report_id'])" />
             </xsl:attribute>
+            <xsl:attribute name="href" select="concat(
+                $parliament-full-uri, '/',
+                bctype:get_content_type_uri_name(field[@name='type'], $type-mappings), '/',
+                field[@name='doc_id']
+                )" />
             <xsl:apply-templates select="parent::report/field[@name='report_id']" />
             <xsl:apply-templates />
         </report>

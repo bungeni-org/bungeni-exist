@@ -144,6 +144,12 @@ class TransformerConfig(Config):
                 self.dict_pipes[type_name] = pipe
         return self.dict_pipes
     
+    def get_postprocess_action(self):
+        return self.get("postprocess", "action")
+    
+    def get_postprocess_archive(self):
+        return self.get("postprocess", "archive_folder")
+    
     '''
     def get_pipelines(self):
         # list of key,values pairs as tuples 

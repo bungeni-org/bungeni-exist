@@ -35,7 +35,8 @@ from glue import (
     publish_parliament_info,
     publish_languages_info_xml,
     is_exist_running,
-    types_all_config
+    types_all_config,
+    post_process_action
     )
 
 
@@ -96,7 +97,8 @@ class RabbitMQClient:
                     delivery = self.consumer.nextDelivery()
                     message = str(String(delivery.getBody()))
                     obj_data = json.loads(message)
-                    file_status = main_queue(__config_file__, str(obj_data['location']), parliament_cache_info)
+                    file_to_process = str(obj_data["location"])
+                    file_status = main_queue(__config_file__, file_to_process, parliament_cache_info)
                     count = count + 1
                     if file_status is None:
                         print "No Parliament Information could be gathered"
@@ -104,6 +106,8 @@ class RabbitMQClient:
                     elif file_status is True:
                         # Acknowledgements to RabbitMQ the successfully, processed files
                         self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
+                        # post process the file : archive / delete / noaction
+                        post_process_action(__config_file__, file_to_process)
                     else:
                         # Reject file, requeue for investigation or future attempts
                         self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)

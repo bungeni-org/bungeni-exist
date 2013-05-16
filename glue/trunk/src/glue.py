@@ -773,10 +773,12 @@ def move_file_to_archive(cfg, afile):
         __create_archive_folder(archive_folder)
         if os.path.isdir(archive_folder):
             dir_path = os.path.dirname(afile)
-            __create_archive_folder(dir_path)
-            if os.path.isdir(dir_path):
-                import shutil
-                shutil.copy2(afile, dir_path)
+            import ntpath
+            dir_name = ntpath.basename(dir_path)
+            archive_dir_path = os.path.join(archive_folder, dir_name)
+            __create_archive_folder(archive_dir_path)
+            if os.path.isdir(archive_dir_path):
+                shutil.copy2(afile, archive_dir_path)
                 delete_file_from_fs(afile)
     else:
         print "Error cannot archive as it is not a file !", afile

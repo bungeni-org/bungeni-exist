@@ -122,7 +122,9 @@ def __setup_cache_dirs__(cfg):
         mkdir_p(cfg.get_cache_file_folder())
     else:
         ### clear the cache file during every run of the consumer
-        __empty_output_dir__(cfg.get_cache_file_folder())
+        # !!! DO NOT DO THIS 
+        #__empty_output_dir__(cfg.get_cache_file_folder())
+        pass
     
 
 def __setup_output_dirs__(cfg):

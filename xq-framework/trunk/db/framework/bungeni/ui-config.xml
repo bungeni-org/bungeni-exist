@@ -1464,7 +1464,7 @@
             </view>
             <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="bill-votes" tag="tab">
                 <title>
-                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
                 </title>
                 <template>xml/bill.xml</template>
                 <xsl>xsl/votes.xsl</xsl>
@@ -1538,7 +1538,7 @@
             </view>
             <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="question-votes" tag="tab">
                 <title>
-                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
                 </title>
                 <template>xml/question.xml</template>
                 <xsl>xsl/votes.xsl</xsl>
@@ -1627,7 +1627,7 @@
             </view>
             <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="motion-votes" tag="tab">
                 <title>
-                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
                 </title>
                 <template>xml/motion.xml</template>
                 <xsl>xsl/votes.xsl</xsl>
@@ -1701,7 +1701,7 @@
             </view>
             <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="tableddocument-votes" tag="tab">
                 <title>
-                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
                 </title>
                 <template>xml/tableddocument.xml</template>
                 <xsl>xsl/votes.xsl</xsl>
@@ -1768,7 +1768,7 @@
             </view>
             <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="agendaitem-votes" tag="tab">
                 <title>
-                    <i18n:text key="Sitting Votes and Proceedings">votes(nt)</i18n:text>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
                 </title>
                 <template>xml/agendaitem.xml</template>
                 <xsl>xsl/votes.xsl</xsl>

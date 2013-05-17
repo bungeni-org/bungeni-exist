@@ -29,7 +29,7 @@
                 <h1 class="title">
                     <i18n:text key="Sitting">Sitting(nt)</i18n:text>:&#160;                  
                     <xsl:value-of select="bu:ontology/bu:sitting/bu:shortName"/>
-                    -&#160;<xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/@showAs) then                          data(bu:ontology/bu:sitting/bu:activityType/@showAs) else                          bu:ontology/bu:sitting/bu:activityType/bu:value"/>                      
+                    &#160;<xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/@showAs) then                          concat(' - ',data(bu:ontology/bu:sitting/bu:activityType/@showAs)) else                          bu:ontology/bu:sitting/bu:activityType/bu:value"/>                      
                     <!-- If its a version and not a main document... add version title below main title -->
                 </h1>
             </div>
@@ -81,53 +81,42 @@
                     </div>
                     <div id="doc-content-area">
                         <xsl:choose>
-                            <xsl:when test="ref/bu:ontology">
-                                <table class="doc-tbl-details">
-                                    <xsl:for-each select="ref/bu:ontology">
-                                        <xsl:variable name="subDocIdentifier">
+                            <xsl:when test="bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem">
+                                <ul class="scheduling">
+                                    <xsl:for-each select="bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem">
+                                        <xsl:variable name="subDocIdentifier" select="bu:sourceItem/bu:refersTo/@href"/>
+                                        <xsl:variable name="doc-type" select="bu:sourceItem/bu:refersTo/bu:type/bu:value"/>
+                                        <li>
+                                            <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
                                             <xsl:choose>
-                                                <xsl:when test="bu:document/@uri">
-                                                    <xsl:value-of select="bu:document/@uri"/>
+                                                <xsl:when test="$doc-type eq 'NOT_FOUND'">
+                                                    <xsl:value-of select="bu:title/child::node()"/>
+                                                </xsl:when>
+                                                <xsl:when test="$doc-type = 'Event'">
+                                                    <xsl:variable name="event-href" select="bu:document/@uri"/>
+                                                    <a href="{lower-case($eventOf)}-event?uri={$event-href}">
+                                                        <xsl:value-of select="bu:title/child::node()"/>
+                                                    </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <xsl:value-of select="bu:document/@internal-uri"/>
+                                                    <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
+                                                        <xsl:value-of select="bu:title/child::node()"/>
+                                                    </a>
+                                                    <xsl:choose>
+                                                        <xsl:when test="bu:votes/bu:vote"> 
+                                                            ( <i>
+                                                                <a class="timeline-action" href="{concat($chamber,'/')}{lower-case($doc-type)}-votes?internal-uri={$subDocIdentifier}">
+                                                                    <xsl:value-of select="count(bu:votes/bu:vote)"/>&#160;<i18n:text key="tab-votes">votes</i18n:text>
+                                                                </a>
+                                                            </i>)                                               
+                                                        </xsl:when>
+                                                        <xsl:otherwise/>
+                                                    </xsl:choose>
                                                 </xsl:otherwise>
                                             </xsl:choose>
-                                        </xsl:variable>
-                                        <xsl:variable name="uriParameter">
-                                            <xsl:choose>
-                                                <xsl:when test="bu:ontology/bu:document/@uri">
-                                                    <xsl:text>uri</xsl:text>
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:text>internal-uri</xsl:text>
-                                                </xsl:otherwise>
-                                            </xsl:choose>
-                                        </xsl:variable>
-                                        <tr>
-                                            <td>
-                                                <xsl:variable name="doc-type" select="bu:document/bu:docType/bu:value"/>
-                                                <xsl:variable name="eventOf" select="bu:document/bu:eventOf/bu:type/bu:value"/>
-                                                <xsl:choose>
-                                                    <xsl:when test="$doc-type eq 'Heading'">
-                                                        <xsl:value-of select="bu:document/bu:title"/>
-                                                    </xsl:when>
-                                                    <xsl:when test="$doc-type = 'Event'">
-                                                        <xsl:variable name="event-href" select="bu:document/@uri"/>
-                                                        <a href="{lower-case($eventOf)}-event?uri={$event-href}">
-                                                            <xsl:value-of select="bu:document/bu:title"/>
-                                                        </a>
-                                                    </xsl:when>
-                                                    <xsl:otherwise>
-                                                        <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?{$uriParameter}={$subDocIdentifier}">
-                                                            <xsl:value-of select="bu:document/bu:title"/>
-                                                        </a>
-                                                    </xsl:otherwise>
-                                                </xsl:choose>
-                                            </td>
-                                        </tr>
+                                        </li>
                                     </xsl:for-each>
-                                </table>
+                                </ul>
                             </xsl:when>
                             <xsl:otherwise>
                                 <div class="txt-center">

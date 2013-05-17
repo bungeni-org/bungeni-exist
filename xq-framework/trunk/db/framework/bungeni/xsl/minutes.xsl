@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -77,7 +77,7 @@
                             <xsl:sort select="bu:statusDate" order="descending"/>
                             <li>
                                 <a href="{$chamber}/sitting?uri={bu:sitting/@uri}">
-                                    <xsl:value-of select="bu:shortName"/>
+                                    <xsl:value-of select="format-dateTime(bu:startDate,'[F], [D1o] [MNn,*-3], [Y]','en',(),())"/> - <xsl:value-of select="bu:venue/bu:shortName"/>
                                 </a>
                                 <ul>
                                     <xsl:for-each select="bu:scheduleItem/bu:discussions/bu:discussion">

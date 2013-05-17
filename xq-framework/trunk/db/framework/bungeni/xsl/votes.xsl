@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -75,13 +75,20 @@
                             <xsl:sort select="bu:statussDate" order="descending"/>
                             <li>
                                 <a href="{$chamber}/sitting?uri={bu:sitting/@uri}">
-                                    <xsl:value-of select="bu:shortName"/>
+                                    <xsl:value-of select="format-dateTime(bu:startDate,'[F], [D1o] [MNn,*-3], [Y]','en',(),())"/> - <xsl:value-of select="bu:venue/bu:shortName"/>
                                 </a>
                                 <ul id="list-toggle" class="ls-timeline clear">
                                     <xsl:for-each select="bu:scheduleItem/bu:votes/bu:vote">
                                         <xsl:sort select="bu:voteId" order="ascending"/>
                                         <li>
                                             <div class="struct-ib truncate">
+                                                <xsl:if test="bu:question">
+                                                    <span class="vote-question">
+                                                        <span class="timeline-action">
+                                                            <i18n:text key="Question">question</i18n:text>: </span>
+                                                        <xsl:value-of select="bu:question"/>
+                                                    </span>
+                                                </xsl:if>
                                                 <span class="vote-outcome {bu:outcome/bu:value}">
                                                     <xsl:choose>
                                                         <xsl:when test="bu:outcome/@showAs">
@@ -93,7 +100,7 @@
                                                     </xsl:choose>
                                                 </span>
                                                 <xsl:value-of select="bu:issueItem"/> /  
-                                                <b>
+                                                <i>
                                                     <xsl:choose>
                                                         <xsl:when test="bu:voteType/@showAs">
                                                             <xsl:value-of select="bu:voteType/@showAs"/>
@@ -102,7 +109,7 @@
                                                             <xsl:value-of select="bu:voteType/bu:value"/>
                                                         </xsl:otherwise>
                                                     </xsl:choose>
-                                                </b> on 
+                                                </i> on 
                                                 <xsl:choose>
                                                     <xsl:when test="bu:majorityType/@showAs">
                                                         <xsl:value-of select="bu:majorityType/@showAs"/>

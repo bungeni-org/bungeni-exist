@@ -3164,6 +3164,8 @@ declare function bun:get-parl-doc-scheduleItem(  $acl as xs:string,
                                         },
                                         $sitting/bu:shortName,
                                         $sitting/bu:statusDate,
+                                        $sitting/bu:startDate,
+                                        $sitting/bu:venue,
                                         $item 
                                      }
                                 

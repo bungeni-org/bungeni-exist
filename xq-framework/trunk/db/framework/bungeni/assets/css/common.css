@@ -364,8 +364,14 @@ img.parl-emblem {
 /*reusables*/
 .timeline-action {
     font-style: italic;
+    font-weight: normal;
     color:#888;
     padding-right:3px;
+}
+.vote-question {
+    font-weight:bold;
+    padding:2px 0;
+    margin:0 4px;
 }
 .vote-outcome {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);

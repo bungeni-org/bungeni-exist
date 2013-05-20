@@ -621,6 +621,15 @@ a.van-light {
     text-decoration:none !important;
 }
 
+/* DHTMLX Calendar
+-------------------------------------------------------------- */
+.dhx_cal_navline {
+    top:40px;
+}
+.dhx_cal_title {
+    top:-10px !important;
+}
+
 /* Tables
 -------------------------------------------------------------- */
 table.listing,

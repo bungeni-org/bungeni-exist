@@ -116,6 +116,16 @@
             <navigation>/higher_house/business</navigation>
             <action>rou:sitting</action>
         </route>
+        <route href="/lower_house/sitting-votes">
+            <title>Business | Sitting votes</title>
+            <navigation>/lower_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
+        <route href="/higher_house/sitting-votes">
+            <title>Business | Sitting votes</title>
+            <navigation>/higher_house/business</navigation>
+            <action>rou:sitting</action>
+        </route>
         <route href="/lower_house/sitting-reports">
             <title>Business | Sitting reports</title>
             <navigation>/lower_house/business</navigation>
@@ -1303,6 +1313,10 @@
             <format href="null" type="epub">Download ePUB format</format>
             <format href="null" type="akn">Download AkomaNtoso format</format>
         </rendergroup>
+        <rendergroup name="group-doc">
+            <format href="null" type="pdf">Download PDF format</format>
+            <format href="null" type="xml">Download XML format</format>
+        </rendergroup>
         <rendergroup name="contacts">
             <format href="null" type="xcard">Download xCard format</format>
         </rendergroup>
@@ -1861,6 +1875,13 @@
                 <template>xml/sitting.xml</template>
                 <xsl>xsl/attendance.xsl</xsl>
             </view>
+            <view check-for="[bu:scheduleItems/bu:scheduleItem/bu:votes/child::node()]" id="votes" path="sitting-votes" tag="tab">
+                <title>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
+                </title>
+                <template>xml/sitting.xml</template>
+                <xsl>xsl/sitting-votes.xsl</xsl>
+            </view>
             <view check-for="[bu:reports/child::node()]" id="reports" path="sitting-reports" tag="tab">
                 <title>
                     <i18n:text key="Sitting Reports">reports(nt)</i18n:text>
@@ -2082,19 +2103,19 @@
         </doctype>
         <doctype category="membership" name="Member">
             <orderbys>
-                <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last
+                <orderby field="bu:membership/bu:referenceToUser/bu:lastName" order="ascending" value="ln_asc">last
                     name [ascending]</orderby>
-                <orderby default="true" field="bu:membership/bu:lastName" order="descending" value="ln_desc">last name [descending]</orderby>
-                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first
+                <orderby default="true" field="bu:membership/bu:referenceToUser/bu:lastName" order="descending" value="ln_desc">last name [descending]</orderby>
+                <orderby field="bu:membership/bu:referenceToUser/bu:firstName" order="ascending" value="fn_asc">first
                     name [ascending]</orderby>
-                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first
+                <orderby field="bu:membership/bu:referenceToUser/bu:firstName" order="descending" value="fn_desc">first
                     name [descending]</orderby>
             </orderbys>
             <searchins>
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
-                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First Name</searchin>
-                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last Name</searchin>
-                <searchin field="bu:membership/bu:description" name="ds" value="desc">Description</searchin>
+                <searchin field="bu:membership/bu:referenceToUser/bu:firstName" name="fn" value="fstname">First Name</searchin>
+                <searchin field="bu:membership/bu:referenceToUser/bu:lastName" name="ln" value="lsname">Last Name</searchin>
+                <searchin field="bu:membership/bu:referenceToUser/bu:description" name="ds" value="desc">Description</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="current" name="current">empty(bu:endDate)</listingfilter>
@@ -2103,19 +2124,19 @@
         </doctype>
         <doctype category="membership" name="Membership">
             <orderbys>
-                <orderby field="bu:membership/bu:lastName" order="ascending" value="ln_asc">last
+                <orderby field="bu:membership/bu:referenceToUser/bu:lastName" order="ascending" value="ln_asc">last
                     name [ascending]</orderby>
-                <orderby default="true" field="bu:membership/bu:lastName" order="descending" value="ln_desc">last name [descending]</orderby>
-                <orderby field="bu:membership/bu:firstName" order="ascending" value="fn_asc">first
+                <orderby default="true" field="bu:membership/bu:referenceToUser/bu:lastName" order="descending" value="ln_desc">last name [descending]</orderby>
+                <orderby field="bu:membership/bu:referenceToUser/bu:firstName" order="ascending" value="fn_asc">first
                     name [ascending]</orderby>
-                <orderby field="bu:membership/bu:firstName" order="descending" value="fn_desc">first
+                <orderby field="bu:membership/bu:referenceToUser/bu:firstName" order="descending" value="fn_desc">first
                     name [descending]</orderby>
             </orderbys>
             <searchins>
                 <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
-                <searchin field="bu:membership/bu:firstName" name="fn" value="fstname">First Name</searchin>
-                <searchin field="bu:membership/bu:lastName" name="ln" value="lsname">Last Name</searchin>
-                <searchin field="bu:membership/bu:description" name="ds" value="desc">Description</searchin>
+                <searchin field="bu:membership/bu:referenceToUser/bu:firstName" name="fn" value="fstname">First Name</searchin>
+                <searchin field="bu:membership/bu:referenceToUser/bu:lastName" name="ln" value="lsname">Last Name</searchin>
+                <searchin field="bu:membership/bu:referenceToUser/bu:description" name="ds" value="desc">Description</searchin>
             </searchins>
             <listingfilters>
                 <listingfilter id="current" name="current">empty(bu:endDate)</listingfilter>

@@ -30,11 +30,11 @@
             <text match="//bu:group/bu:description"/>
             <text match="//bu:legislature/bu:description"/>
             <!-- User / Members Documents -->
-            <text match="//bu:membership/bu:firstName"/>
-            <text match="//bu:membership/bu:lastName"/>
+            <text match="//bu:membership/bu:referenceToUser/bu:firstName"/>
+            <text match="//bu:membership/bu:referenceToUser/bu:lastName"/>
             <text match="//bu:membership/bu:description"/>
-            <text match="//bu:membership/bu:email"/>
-            <text match="//bu:membership/bu:active"/>
+            <text match="//bu:membership/bu:referenceToUser/bu:email"/>
+            <text match="//bu:membership/bu:referenceToUser/bu:activeStatus/bu:value"/>
         </lucene>
         <!-- Range Indexes by qname -->
         <create qname="@uri" type="xs:string"/>

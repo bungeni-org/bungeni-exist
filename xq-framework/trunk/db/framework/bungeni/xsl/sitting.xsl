@@ -53,24 +53,30 @@
                     <h4 id="doc-item-desc" class="doc-headers">
                         <xsl:value-of select="bu:ontology/bu:sitting/bu:shortName"/>
                     </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
-                        <i18n:text key="sitting-activity">sitting activity(nt)</i18n:text>: <i>
-                            <xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/@showAs) then                                  data(bu:ontology/bu:sitting/bu:activityType/@showAs) else                                  bu:ontology/bu:sitting/bu:activityType/bu:value"/>
-                        </i>
-                    </h4>
-                    <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
-                        <i18n:text key="sitting-convocation">sitting convocation(nt)</i18n:text>: <i>
-                            <xsl:value-of select="if (bu:ontology/bu:sitting/bu:convocationType/@showAs) then                                  data(bu:ontology/bu:sitting/bu:convocationType/@showAs) else                                  bu:ontology/bu:sitting/bu:convocationType/bu:value"/>
-                        </i>
-                    </h4>
+                    <xsl:if test="bu:ontology/bu:sitting/bu:activityType">
+                        <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+                            <i18n:text key="sitting-activity">sitting activity(nt)</i18n:text>: <i>
+                                <xsl:value-of select="if (bu:ontology/bu:sitting/bu:activityType/@showAs) then                                  data(bu:ontology/bu:sitting/bu:activityType/@showAs) else                                  bu:ontology/bu:sitting/bu:activityType/bu:value"/>
+                            </i>
+                        </h4>
+                    </xsl:if>
+                    <xsl:if test="bu:ontology/bu:sitting/bu:convocationType">
+                        <h4 id="doc-item-desc2" class="doc-headers-darkgrey">
+                            <i18n:text key="sitting-convocation">sitting convocation(nt)</i18n:text>: <i>
+                                <xsl:value-of select="if (bu:ontology/bu:sitting/bu:convocationType/@showAs) then                                  data(bu:ontology/bu:sitting/bu:convocationType/@showAs) else                                  bu:ontology/bu:sitting/bu:convocationType/bu:value"/>
+                            </i>
+                        </h4>
+                    </xsl:if>
                     <div class="txt-center">
-                        <span>
-                            <b class="camel-txt">
-                                <i18n:text key="sitting-venue">Venue(nt)</i18n:text>:</b>&#160;
-                        </span>
-                        <span>
-                            <xsl:value-of select="bu:ontology/bu:sitting/bu:venue/bu:shortName"/>
-                        </span>
+                        <xsl:if test="bu:ontology/bu:sitting/bu:venue/bu:shortName">
+                            <span>
+                                <b class="camel-txt">
+                                    <i18n:text key="sitting-venue">Venue(nt)</i18n:text>:</b>&#160;
+                            </span>
+                            <span>
+                                <xsl:value-of select="bu:ontology/bu:sitting/bu:venue/bu:shortName"/>
+                            </span>
+                        </xsl:if>
                         <span>
                             &#160;<b class="camel-txt">
                                 <i18n:text key="date-on">Type(nt)</i18n:text>:</b>&#160;
@@ -102,16 +108,6 @@
                                                     <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
                                                         <xsl:value-of select="bu:title/child::node()"/>
                                                     </a>
-                                                    <xsl:choose>
-                                                        <xsl:when test="bu:votes/bu:vote"> 
-                                                            ( <i>
-                                                                <a class="timeline-action" href="{concat($chamber,'/')}{lower-case($doc-type)}-votes?internal-uri={$subDocIdentifier}">
-                                                                    <xsl:value-of select="count(bu:votes/bu:vote)"/>&#160;<i18n:text key="tab-votes">votes</i18n:text>
-                                                                </a>
-                                                            </i>)                                               
-                                                        </xsl:when>
-                                                        <xsl:otherwise/>
-                                                    </xsl:choose>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </li>

@@ -122,15 +122,15 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string)
     let $font-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/assets/fonts/"
     let $fop-config :=  local:fop-config($base, $font-path)
 
-    let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
-    let $title := $doc/bu:document/bu:title  
-    let $doc-type := $doc/bu:document/bu:docType/bu:value
+    let $doc := collection(cmn:get-lex-db())/bu:ontology/child::*[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
+    let $title := $doc/child::*/bu:title  
+    let $doc-type := $doc/child::*/bu:docType/bu:value
     let $views := cmn:get-views-for-type($doc-type)    
     
     let $lang := template:set-lang()    
     let $orientation := local:get-orientation($lang)
 
-    let $pages := local:generate-pages($doc,$views,$lang,$orientation/xh/text())
+    let $pages := local:generate-pages($doc,$views,$lang,$orientation/xh/text())   
     
     let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="{$lang}">
                     <head>
@@ -190,11 +190,12 @@ declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:stri
     
     let $authors := <creators>
                         <creator role="aut">{data($doc/bu:document/bu:owner/bu:person/@showAs)}</creator>
-            {
-                for $signatory in $doc/bu:signatories/bu:signatory
-                    return 
-                        <creator role="edt">{data($signatory/bu:person/@showAs)}</creator>
-            }</creators>    
+                        {
+                            for $signatory in $doc/bu:signatories/bu:signatory
+                            return 
+                                <creator role="edt">{data($signatory/bu:person/@showAs)}</creator>
+                        }
+                    </creators>    
                 
     let $pages-abs-links := template:re-write-paths($exist-cont,$pages)
     let $book := scriba:create-book($lang,$orientation/xh/text(),$title,$authors,$pages-abs-links)
@@ -534,10 +535,11 @@ declare function bun:xqy-search-group() {
     fn:concat("collection('",cmn:get-lex-db() ,"')","/bu:ontology[@for='group']")
 };
 
-declare function bun:xqy-list-membership($type as xs:string) {
+declare function bun:xqy-list-membership($type as xs:string,$chamber as xs:string?) {
 
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology/bu:membership/bu:docType[bu:value eq 'Member']",
+                "/bu:ontology/bu:membership[bu:origin/bu:identifier eq '",$chamber,"']",    
+                "/bu:docType[bu:value eq 'Member']",
                 "/ancestor::bu:ontology")
 };
 
@@ -555,31 +557,31 @@ declare function bun:list-membership($eval-query as xs:string, $sortby as xs:str
         if ($sortby = 'ln_desc') then (
         
             for $match in util:eval($eval-query)
-            order by $match/bu:membership/bu:lastName descending
+            order by $match/bu:membership/bu:referenceToUser/bu:lastName descending
             return 
                 $match    
         )
         else if ($sortby = 'ln_asc') then (
             for $match in util:eval($eval-query)
-            order by $match/bu:membership/bu:lastName ascending
+            order by $match/bu:membership/bu:referenceToUser/bu:lastName ascending
             return 
                 $match        
         )                 
         else if ($sortby = 'fn_desc') then (
             for $match in util:eval($eval-query)
-            order by $match/bu:membership/bu:firstName descending
+            order by $match/bu:membership/bu:referenceToUser/bu:firstName descending
             return 
                 $match       
         )  
         else if ($sortby = 'fn_asc') then (
             for $match in util:eval($eval-query)
-            order by $match/bu:membership/bu:firstName ascending
+            order by $match/bu:membership/bu:referenceToUser/bu:firstName ascending
             return 
                 $match       
         )                 
         else  (
             for $match in util:eval($eval-query)
-            order by $match/bu:membership/bu:lastName descending
+            order by $match/bu:membership/bu:referenceToUser/bu:lastName ascending
             return 
                 $match        
         )
@@ -594,31 +596,31 @@ declare function bun:list-membership-with-tabs($chamber as xs:string?, $type as 
     if ($sortby = 'ln_desc') then (
     
         for $match in util:eval($eval-query)
-        order by $match/bu:membership/bu:lastName descending
+        order by $match/bu:membership/bu:referenceToUser/bu:lastName descending
         return 
             $match    
     )
     else if ($sortby = 'ln_asc') then (
         for $match in util:eval($eval-query)
-        order by $match/bu:membership/bu:lastName ascending
+        order by $match/bu:membership/bu:referenceToUser/bu:lastName ascending
         return 
             $match        
     )                 
     else if ($sortby = 'fn_desc') then (
         for $match in util:eval($eval-query)
-        order by $match/bu:membership/bu:firstName descending
+        order by $match/bu:membership/bu:referenceToUser/bu:firstName descending
         return 
             $match       
     )  
     else if ($sortby = 'fn_asc') then (
         for $match in util:eval($eval-query)
-        order by $match/bu:membership/bu:firstName ascending
+        order by $match/bu:membership/bu:referenceToUser/bu:firstName ascending
         return 
             $match       
     )                 
     else  (
         for $match in util:eval($eval-query)
-        order by $match/bu:membership/bu:lastName ascending
+        order by $match/bu:membership/bu:referenceToUser/bu:lastName ascending
         return 
             $match        
     )
@@ -627,7 +629,7 @@ declare function bun:list-membership-with-tabs($chamber as xs:string?, $type as 
 
 declare function bun:xqy-search-membership() {
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-            "/bu:ontology/bu:membership/bu:docType[bu:value eq 'Membership']",
+            "/bu:ontology/bu:membership/bu:docType[bu:value eq 'Member']",
             "/ancestor::bu:ontology")
 };
 
@@ -1318,7 +1320,7 @@ declare function bun:search-membership(
     :)
     let $query-offset := if ($offset eq 0 ) then 1 else $offset
     
-    let $xqy-coll-rs := bun:xqy-list-membership($type)  
+    let $xqy-coll-rs := bun:xqy-list-membership($type,$controller/parliament/identifier/text())  
     let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
     let $eval-query := "subsequence(" || $coll-ft-search || ",$query-offset,$limit)"
         
@@ -1333,7 +1335,8 @@ declare function bun:search-membership(
                             bun:list-membership($xqy-coll-rs, $sortby)
                 )
              }</count>
-             <currentView>search</currentView>
+             <chamber>{$controller/parliament/type/text()}</chamber>
+            <currentView>search</currentView>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>

@@ -14,6 +14,7 @@
     <xsl:include href="context_downloads.xsl"/>
     <xsl:param name="chamber"/>
     <xsl:param name="chamber-id"/>
+    <xsl:param name="epub"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:group/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:group/@uri"/>
@@ -25,38 +26,44 @@
                     <xsl:value-of select="bu:ontology/bu:group/bu:fullName"/>
                 </h1>
             </div>
-            <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group">
-                    <xsl:value-of select="$doc-type"/>
-                </xsl:with-param>
-                <xsl:with-param name="uri">
-                    <xsl:value-of select="$doc-uri"/>
-                </xsl:with-param>
-                <xsl:with-param name="tab-path">contacts</xsl:with-param>
-                <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
-                <xsl:with-param name="excludes" select="exclude/tab"/>
-            </xsl:call-template>
-            <div id="doc-downloads"/>
+            <xsl:if test="$epub ne 'true'">
+                <xsl:call-template name="doc-tabs">
+                    <xsl:with-param name="tab-group">
+                        <xsl:value-of select="$doc-type"/>
+                    </xsl:with-param>
+                    <xsl:with-param name="uri">
+                        <xsl:value-of select="$doc-uri"/>
+                    </xsl:with-param>
+                    <xsl:with-param name="tab-path">contacts</xsl:with-param>
+                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
+                    <xsl:with-param name="excludes" select="exclude/tab"/>
+                </xsl:call-template>
+                <div id="doc-downloads"/>
+            </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <div id="toggle-wrapper" class="clear toggle-wrapper">
-                        <div id="toggle-i18n" class="hide">
-                            <span id="i-compress">
-                                <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
-                            </span>
-                            <span id="i-expand">
-                                <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
-                            </span>
+                    <xsl:if test="$epub ne 'true'">
+                        <div id="toggle-wrapper" class="clear toggle-wrapper">
+                            <div id="toggle-i18n" class="hide">
+                                <span id="i-compress">
+                                    <i18n:text key="compress">▼&#160;compress all(nt)</i18n:text>
+                                </span>
+                                <span id="i-expand">
+                                    <i18n:text key="expand">►&#160;expand all(nt)</i18n:text>
+                                </span>
+                            </div>
+                            <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
+                            </div>
                         </div>
-                        <div class="toggler-list" id="expand-all">▼&#160;<i18n:text key="compress">compress all(nt)</i18n:text>
-                        </div>
-                    </div>
+                    </xsl:if>
                     <ul id="list-toggle" class="ls-row clear">
                         <xsl:for-each select="bu:ontology/bu:group/bu:addresses/bu:address">
                             <xsl:sort select="bu:statusDate" order="descending"/>
                             <li>
                                 <xsl:value-of select="bu:logicalAddressType"/>
-                                <span class="tgl-pad-right">▼</span>
+                                <xsl:if test="$epub ne 'true'">
+                                    <span class="tgl-pad-right">▼</span>
+                                </xsl:if>
                                 <div class="doc-toggle">
                                     <div id="{bu:postalAddressType}{bu:addressId}" class="toggle address-info" style="min-height:100px">
                                         <div class="address-block">
@@ -83,7 +90,7 @@
                                                     <xsl:value-of select="$short-name"/>
                                                 </strong>
                                                 <br/>
-                                                <a href="mailto:#">
+                                                <a href="mailto:{$full-name}&#160;&lt;{bu:email}&gt;">
                                                     <xsl:value-of select="bu:email"/>
                                                 </a>
                                             </address>

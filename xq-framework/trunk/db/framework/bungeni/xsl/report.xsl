@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="xs" version="2.0">
     
     <!-- Generic templates applied to document views -->
     <xsl:import href="tmpl-doc-generic.xsl"/>
@@ -74,7 +74,7 @@
                 <xsl:value-of select="format-dateTime($render-doc/bu:statusDate,$datetime-format,'en',(),())"/>
             </span>
             <div>
-                <xsl:copy-of select="$render-doc/bu:body/div/child::*"/>
+                <xsl:copy-of select="$render-doc/bu:body"/>
             </div>
         </div>
     </xsl:template>

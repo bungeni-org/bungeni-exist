@@ -586,6 +586,7 @@ def webdav_upload(cfg, wd_cfg):
         # upload xmls at this juncture
         rsu = RepoSyncUploader({"main_config":cfg, "webdav_config" : wd_cfg})
         rsu.upload_files()
+        rsu = None
         print COLOR.OKGREEN + "Commencing ATTACHMENT files upload to eXist via WebDav..." + COLOR.ENDC
         """ now uploading found attachments """
         # first reset attachments folder
@@ -913,6 +914,7 @@ def main_queue(config_file, afile, parliament_cache_info):
     Do sync step
     """
     print "[checkpoint] entering sync"
+    
     sxw = SyncXmlFilesWalker(cfgs)
     if not os.path.isdir(cfg.get_temp_files_folder()):
         mkdir_p(cfg.get_temp_files_folder())
@@ -920,6 +922,8 @@ def main_queue(config_file, afile, parliament_cache_info):
     # reaching here means there is a successfull file
     sync_stat_obj = sxw.sync_file(info_object[0])
     sxw.close_sync_file()
+    sxw = None
+
     print "[checkpoint] exiting sync"
     if sync_stat_obj[0] == True and sync_stat_obj[1] == None:
         # ignore upload -remove from queue
@@ -947,7 +951,9 @@ def main_queue(config_file, afile, parliament_cache_info):
     print "[checkpoint] uploading XML file"
     if in_queue == True:
         upload_stat = rsu.upload_file(info_object[0])
+        rsu = None
     else:
+        rsu = None
         in_queue = False
         return in_queue
 
@@ -961,9 +967,12 @@ def main_queue(config_file, afile, parliament_cache_info):
     # upload attachments at this juncture
     pafw = ProcessedAttsFilesWalker({"main_config":cfg, "webdav_config" : wd_cfg})
     info_obj = pafw.process_atts(cfg.get_attachments_output_folder())
+    
     if info_obj == True:
+        pafw = None
         in_queue = True
     else:
+        pafw = None
         return False
     print COLOR.OKGREEN + "Completed upload to eXist!" + COLOR.ENDC
     # do post-transform

@@ -11,6 +11,7 @@ import ConfigParser
 
 from parsers import ParsePipelineXML
 from gen_utils import get_module_dir
+from java.lang import Integer
 
 # system file
 __pipeline_configs__ = "pipeline_config.xml"
@@ -159,6 +160,30 @@ class TransformerConfig(Config):
                 self.dict_pipes[l_pipe[0]] = l_pipe[1]
         return self.dict_pipes
     '''
+
+class RabbitMqConfig(Config):
+    
+    def __init__(self, config_file):
+        Config.__init__(self, config_file)
+        self.dict_queue = {}
+    
+    def get_vhost(self):
+        return self.get("rabbitmq", "vhost")
+    
+    def get_username(self):
+        return self.get("rabbitmq", "username")
+    
+    def get_password(self):
+        return self.get("rabbitmq", "password")
+    
+    def get_hostname(self):
+        return self.get("rabbitmq", "hostname")
+    
+    def get_port(self):
+        return Integer.parseInt(
+                self.get("rabbitmq", "port")
+                )
+
 
 class WebDavConfig(Config):
     """

@@ -36,7 +36,8 @@ from glue import (
     publish_languages_info_xml,
     is_exist_running,
     types_all_config,
-    post_process_action
+    post_process_action,
+    rabbitmq_config
     )
 
 
@@ -63,7 +64,7 @@ class Logger(object):
 
 class RabbitMQClient:
 
-    def __init__(self):
+    def __init__(self, config_file):
         """
         Connections and other settings here should match those set in publisher script
         """
@@ -72,7 +73,15 @@ class RabbitMQClient:
         self.queueName = "bungeni_serialization_output_queue"
         self.factory = ConnectionFactory()
         # !+HARCODED host
-        self.factory.setHost("localhost")
+        self.config_file = config_file
+        self.config = rabbitmq_config(config_file)
+        
+        self.factory.setHost(self.config.get_hostname())
+        self.factory.setUsername(self.config.get_username())
+        self.factory.setPassword(self.config.get_password())
+        self.factory.setVirtualHost(self.config.get_vhost())
+        self.factory.setPort(self.config.get_port())
+        
         self.conn = self.factory.newConnection()
         self.channel = self.conn.createChannel()
         self.channel.exchangeDeclare(self.exchangeName,"direct",False)
@@ -98,7 +107,7 @@ class RabbitMQClient:
                     message = str(String(delivery.getBody()))
                     obj_data = json.loads(message)
                     file_to_process = str(obj_data["location"])
-                    file_status = main_queue(__config_file__, file_to_process, parliament_cache_info)
+                    file_status = main_queue(self.config_file, file_to_process, parliament_cache_info)
                     count = count + 1
                     if file_status is None:
                         print "No Parliament Information could be gathered"
@@ -107,7 +116,7 @@ class RabbitMQClient:
                         # Acknowledgements to RabbitMQ the successfully, processed files
                         self.channel.basicAck(delivery.getEnvelope().getDeliveryTag(), False)
                         # post process the file : archive / delete / noaction
-                        post_process_action(__config_file__, file_to_process)
+                        post_process_action(self.config_file, file_to_process)
                     else:
                         # Reject file, requeue for investigation or future attempts
                         self.channel.basicReject(delivery.getEnvelope().getDeliveryTag(), True)
@@ -127,14 +136,15 @@ class RabbitMQClient:
 
 class LangInfoPublish(Thread):
     
-    def __init__(self, cd_latch):
+    def __init__(self, cd_latch, config_file):
         self.latch = cd_latch
+        self.config_file = config_file
         self.publish_state = False
         
     def run(self):
         try:
             self.publish_state = publish_languages_info_xml(
-                __config_file__
+                self.config_file
                 )        
         except Exception, e:
             print "There was an exception getting the language info", e
@@ -151,13 +161,14 @@ class ParlInfoGather(Thread):
     During batch serialization this is not used.
     """
     
-    def __init__(self, cd_latch):
+    def __init__(self, cd_latch, config_file):
         self.latch = cd_latch
         self.parl_info = None
+        self.config_file = config_file
         
     def run(self):
         try:
-            self.parl_info = get_parl_info(__config_file__)
+            self.parl_info = get_parl_info(self.config_file)
         except Exception, e:
             print "There was an exception getting the parliament info", e
         finally:
@@ -169,14 +180,15 @@ class ParlInfoPublish(Thread):
     This thread publishes the parliament info to bungeni
     """
     
-    def __init__(self, cd_latch, parl_info):
+    def __init__(self, cd_latch, config_file, parl_info):
         self.latch = cd_latch
+        self.config_file = config_file
         self.parliament_cache_info = parl_info
         self.publish_state = False
         
     def run(self):
         try:
-            self.publish_state = publish_parliament_info(__config_file__, self.parliament_cache_info)
+            self.publish_state = publish_parliament_info(self.config_file, self.parliament_cache_info)
         except Exception, e:
             print "There was an exception getting the parliament info", e
         finally:
@@ -188,14 +200,15 @@ class QueueRunner(Thread):
     This thread processes all the documents
     """
     
-    def __init__(self, cd_latch, pc_info):
+    def __init__(self, cd_latch, config_file, pc_info):
         self.latch = cd_latch
+        self.config_file = config_file
         self.parliament_cache_info = pc_info
 
     def run(self):
         rmq = None
         try:
-            rmq = RabbitMQClient()
+            rmq = RabbitMQClient(self.config_file)
             rmq.consume_msgs(self.parliament_cache_info)
         except Exception, e:
             print "There was an exception processing the queue", e
@@ -204,11 +217,11 @@ class QueueRunner(Thread):
             self.latch.countDown()
 
 
-def language_info_publish():
+def language_info_publish(config_file):
     language_info_continue = True
     while language_info_continue:
         latch = CountDownLatch(1)
-        p_thread = LangInfoPublish(latch)
+        p_thread = LangInfoPublish(latch, config_file)
         p_thread.start()
         try:
             latch.await()
@@ -218,14 +231,14 @@ def language_info_publish():
             print "Language info publication thread was interrupted", e
 
 
-def parliament_info_gather():
+def parliament_info_gather(config_file):
     pc_info = None
     parl_info_continue = True
     print "Parliament Info Gather Thread : Start"
     while parl_info_continue:
         time.sleep(int(__time_int__))
         parl_latch = CountDownLatch(1)
-        p_thread = ParlInfoGather(parl_latch)
+        p_thread = ParlInfoGather(parl_latch, config_file)
         p_thread.start()
         try:
             parl_latch.await()
@@ -249,14 +262,14 @@ def parliament_info_gather():
     return pc_info
                     
 
-def parliament_info_publish(parliament_cache_info):
+def parliament_info_publish(config_file, parliament_cache_info):
     parl_push_continue = True
     success = False
     print "Parliament Info Publish Thread : Start"
     while parl_push_continue:
         time.sleep(int(__time_int__))
         parl_latch = CountDownLatch(1)
-        p_thread = ParlInfoPublish(parl_latch, parliament_cache_info)
+        p_thread = ParlInfoPublish(parl_latch, config_file, parliament_cache_info)
         p_thread.start()
         try:
             parl_latch.await()
@@ -272,12 +285,12 @@ def parliament_info_publish(parliament_cache_info):
     return success
 
 
-def consume_documents(parliament_cache_info):
+def consume_documents(config_file, parliament_cache_info):
     print "Document consumer thread: Start"
     while True:
         time.sleep(int(__time_int__))
         cd_latch = CountDownLatch(1)
-        qr_thread = QueueRunner(cd_latch, parliament_cache_info)
+        qr_thread = QueueRunner(cd_latch, config_file, parliament_cache_info)
         qr_thread.start()
         try:
             cd_latch.await()
@@ -289,13 +302,13 @@ def consume_documents(parliament_cache_info):
     print "Document consumer thread: Exit"
         
 
-def exist_running():
+def exist_running(config_file):
     print "Checking if exist is running ... "
     exist_running = False
     while exist_running == False:
         try:
             print "Attempting to connect to exist ... "
-            exist_running = is_exist_running(__config_file__)
+            exist_running = is_exist_running(config_file)
             print "exist connection returned ... ", exist_running
         except Exception, e:
             exist_running = False
@@ -319,17 +332,17 @@ setup_consumer_directories(
     )
 
 # wait until exist starts
-exist_running()
+exist_running(__config_file__)
 # generate the type mappings
 if types_all_config(__config_file__):
     # get language info
-    language_info_publish()
+    language_info_publish(__config_file__)
     # get chamber information
-    cache_info = parliament_info_gather()
+    cache_info = parliament_info_gather(__config_file__)
     # publish chamber information to exist
-    if parliament_info_publish(cache_info):
+    if parliament_info_publish(__config_file__, cache_info):
         # publish other documents to exist
-        consume_documents(cache_info)
+        consume_documents(__config_file__, cache_info)
 else:
     print "ERROR !!!! : unable to generate type_mappings from bungeni_custom , ABORTING !"
     sys.exit()

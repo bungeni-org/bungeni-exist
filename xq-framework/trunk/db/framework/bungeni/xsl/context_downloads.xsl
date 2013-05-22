@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:nav="http://www.bungeni/org/eXistPortal" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs nav" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xqcfg="http://bungeni.org/xquery/config" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:nav="http://www.bungeni/org/eXistPortal" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs nav" version="2.0">
     <xsl:import href="config.xsl"/>
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
@@ -34,7 +34,7 @@
                     <xsl:choose>
                         <xsl:when test="$uri eq 'null'">
                             <li>
-                                <a href="{$chamber}{$doc-type}s/{@type}" class="{@type}" title="{text()}">
+                                <a target="{@target}" href="{$chamber}{$doc-type}s/{@type}" class="{@type}" title="{text()}">
                                     <em>
                                         <xsl:value-of select="upper-case(@type)"/>
                                     </em>
@@ -43,7 +43,7 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <li>
-                                <a href="{$chamber}{$doc-type}/{@type}?uri={$uri}" class="{@type}" title="{text()}">
+                                <a target="{@target}" href="{$chamber}{$doc-type}/{@type}?uri={$uri}" class="{@type}" title="{text()}">
                                     <em>
                                         <xsl:value-of select="upper-case(@type)"/>
                                     </em>

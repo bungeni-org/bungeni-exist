@@ -104,6 +104,45 @@ declare function bun:check-update($uri as xs:string, $statusdate as xs:string) {
 };
 
 (:~
+:  Applys print.css to the output
+    @param controller contains context and parliament information
+    @param docid
+    @param views used to acculute all the tabs of this document
+:   The URI of the document
+:
+: @return
+:   A printable version on the documents
+:)
+declare function bun:gen-print-output($controller as node()?, $docid as xs:string)
+{
+    let $server-path := $bun:SERVER-URL || $controller/exist-cont/text() || "/" || $controller/parliament/type/text()
+
+    let $doc := collection(cmn:get-lex-db())/bu:ontology/child::*[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
+    let $title := $doc/child::*/bu:title/text()
+    let $doc-type := $doc/child::*/bu:docType/bu:value
+    let $views := cmn:get-views-for-type($doc-type)    
+    
+    let $lang := template:set-lang()    
+    let $orientation := local:get-orientation($lang)
+    let $exclude-lot := bun:get-excludes($doc, $views)
+
+    let $pages := local:generate-pages($doc,$views,$exclude-lot,$lang,$orientation/xh/text(),'true')  
+    let $pages-abs-links := template:re-write-paths($controller/exist-cont/text(),$pages)
+    
+    let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="{$lang}">
+                    <head>
+                        <title>{$title}</title>
+                        <link rel="stylesheet" href="../../assets/css/print.css" type="text/css"/>
+                    </head>
+                    <body onload="window.print()">    
+                        {$pages-abs-links}
+                    </body>
+                  </html>
+    return 
+        $xhtml
+};
+
+(:~
 :  Renders PDF output for parliamentary document using xslfo module
     @param controller contains context and parliament information
     @param docid
@@ -123,14 +162,15 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string)
     let $fop-config :=  local:fop-config($base, $font-path)
 
     let $doc := collection(cmn:get-lex-db())/bu:ontology/child::*[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
-    let $title := $doc/child::*/bu:title  
+    let $title := $doc/child::*/bu:title/text()
     let $doc-type := $doc/child::*/bu:docType/bu:value
     let $views := cmn:get-views-for-type($doc-type)    
     
     let $lang := template:set-lang()    
     let $orientation := local:get-orientation($lang)
+    let $exclude-lot := bun:get-excludes($doc, $views)    
 
-    let $pages := local:generate-pages($doc,$views,$lang,$orientation/xh/text())   
+    let $pages := local:generate-pages($doc,$views,$exclude-lot,$lang,$orientation/xh/text(),'false')   
     
     let $xhtml := <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://exist-db.org/xquery/i18n" xml:lang="{$lang}">
                     <head>
@@ -175,14 +215,15 @@ declare function bun:gen-pdf-output($controller as node()?, $docid as xs:string)
 declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:string)
 {
     let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$docid) else (@internal-uri=$docid)]/ancestor::bu:ontology
-    let $title := $doc/bu:document/bu:title
+    let $title := $doc/bu:document/bu:title/text()
     let $doc-type := $doc/bu:document/bu:docType/bu:value
     let $views := cmn:get-views-for-type($doc-type)
     
     let $lang := template:set-lang()
     let $orientation := local:get-orientation($lang)
+    let $exclude-lot := bun:get-excludes($doc, $views)    
     
-    let $pages := local:generate-pages($doc,$views,$lang,$orientation/xh/text())
+    let $pages := local:generate-pages($doc,$views,$exclude-lot,$lang,$orientation/xh/text(),'false')
     
     (: creating unique output filename based on URI and active LANGUAGE :)    
     let $output-nolang := functx:substring-before-last($docid, '/')
@@ -208,33 +249,40 @@ declare function bun:gen-epub-output($exist-cont as xs:string, $docid as xs:stri
 };
 
 
-declare function local:generate-pages($doc as node()?, 
+declare function local:generate-pages($doc as node()?,
                             $views as node(), 
+                            $exclude-lot as node()?,                            
                             $lang as xs:string,
-                            $orientation as xs:string) {
+                            $orientation as xs:string,
+                            $print as xs:string) {
     
     (: for timeline :)
     let $timeline-doc := bun:get-ref-timeline-activities($doc,<doc/>)
     (: iterate the views with @tab and create all the html views to be rendered :)
     let $pages := <div>{
         for $view in $views/view[@tag eq 'tab']
-            return
-                if (data($view/@id) eq 'timeline') then (
-                    <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
-                        transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
-                                                <parameters>
-                                                    <param name="epub" value="true" />
-                                                </parameters>)
-                     }</div>
-                 )
-                 else (
+        return
+            if (data($view/@id) eq 'timeline') then (
+                <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
+                    transform:transform($timeline-doc, cmn:get-xslt($view/xsl), 
+                                            <parameters>
+                                                <param name="epub" value="true" />
+                                                <param name="print" value="{$print}" />
+                                            </parameters>)
+                 }</div>
+             ) 
+             else if (not(contains($exclude-lot,$view/@id))) then
+             (: only include the tabes that have content :) 
+                (
                     <div dir="{$orientation}" id="i18n({$view/title/i18n:text/@key},chapter)">{
                         transform:transform(<doc>{$doc}</doc>, cmn:get-xslt($view/xsl), 
                                                 <parameters>
                                                     <param name="epub" value="true" />
+                                                    <param name="print" value="{$print}" />
                                                 </parameters>)
                      }</div>                 
-                 )
+                )
+             else ()
          }</div>
          
       let $pages-i18n := i18n:process($pages, $lang, $config:I18N-MESSAGES, $config:DEFAULT-LANG)

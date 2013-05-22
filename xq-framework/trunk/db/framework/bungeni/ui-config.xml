@@ -1308,22 +1308,23 @@
             <format href="null" type="rss">Subscribe to Atom RSS feed</format>
         </rendergroup>
         <rendergroup name="parl-doc">
-            <format href="null" type="pdf">Download PDF format</format>
-            <format href="null" type="xml">Download XML format</format>
-            <format href="null" type="epub">Download ePUB format</format>
-            <format href="null" type="akn">Download AkomaNtoso format</format>
+            <format href="null" target="_self" type="pdf">Download PDF format</format>
+            <format href="null" target="_self" type="xml">Download XML format</format>
+            <format href="null" target="_self" type="epub">Download ePUB format</format>
+            <format href="null" target="_self" type="akn">Download AkomaNtoso format</format>
+            <format href="null" target="_blank" type="print">Print all</format>
         </rendergroup>
         <rendergroup name="group-doc">
-            <format href="null" type="pdf">Download PDF format</format>
-            <format href="null" type="xml">Download XML format</format>
+            <format href="null" target="_self" type="pdf">Download PDF format</format>
+            <format href="null" target="_self" type="xml">Download XML format</format>
         </rendergroup>
         <rendergroup name="contacts">
-            <format href="null" type="xcard">Download xCard format</format>
+            <format href="null" target="_self" type="xcard">Download xCard format</format>
         </rendergroup>
         <rendergroup name="members">
-            <format href="build" type="edit">Edit document. Will need to login to eXist</format>
-            <format href="null" type="pdf">Download PDF format</format>
-            <format href="null" type="xml">Download XML format</format>
+            <format href="build" target="_self" type="edit">Edit document. Will need to login to eXist</format>
+            <format href="null" target="_self" type="pdf">Download PDF format</format>
+            <format href="null" target="_self" type="xml">Download XML format</format>
         </rendergroup>
     </downloadgroups>
     <viewgroups>

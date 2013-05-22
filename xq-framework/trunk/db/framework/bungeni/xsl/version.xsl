@@ -12,6 +12,7 @@
     <xsl:output method="xml"/>
     <xsl:include href="context_tabs.xsl"/>
     <xsl:param name="version-uri"/>
+    <xsl:param name="epub"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
         <xsl:variable name="chamber" select="bu:ontology/bu:chamber/bu:type/bu:value"/>
@@ -43,28 +44,32 @@
                     <xsl:value-of select="bu:ontology/bu:document/bu:title"/>
                 </h1>
             </div>
-            <!-- 
-                !+FIX_THIS (ao, 7th-May-2012) This can be enabled if we decide to have events on 
-                their own tab.
-            -->
-            <xsl:call-template name="doc-tabs">
-                <xsl:with-param name="tab-group" select="$doc-type"/>
-                <xsl:with-param name="uri" select="$doc-uri"/>
-                <xsl:with-param name="uri-type" select="$uriParameter"/>
-                <xsl:with-param name="tab-path">versions</xsl:with-param>
-                <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
-                <xsl:with-param name="excludes" select="exclude/tab"/>
-            </xsl:call-template>
-            <div id="doc-downloads"/>
+            <xsl:if test="$epub ne 'true'">
+                <!-- 
+                    !+FIX_THIS (ao, 7th-May-2012) This can be enabled if we decide to have events on 
+                    their own tab.
+                -->
+                <xsl:call-template name="doc-tabs">
+                    <xsl:with-param name="tab-group" select="$doc-type"/>
+                    <xsl:with-param name="uri" select="$doc-uri"/>
+                    <xsl:with-param name="uri-type" select="$uriParameter"/>
+                    <xsl:with-param name="tab-path">versions</xsl:with-param>
+                    <xsl:with-param name="chamber" select="concat($chamber,'/')"/>
+                    <xsl:with-param name="excludes" select="exclude/tab"/>
+                </xsl:call-template>
+                <div id="doc-downloads"/>
+            </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <xsl:call-template name="doc-versions">
-                        <xsl:with-param name="version-uri" select="$version-uri"/>
-                        <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
-                        <xsl:with-param name="doc-uri" select="$doc-uri"/>
-                        <xsl:with-param name="uriParameter" select="$uriParameter"/>
-                        <xsl:with-param name="chamber" select="$chamber"/>
-                    </xsl:call-template>
+                    <xsl:if test="$epub ne 'true'">
+                        <xsl:call-template name="doc-versions">
+                            <xsl:with-param name="version-uri" select="$version-uri"/>
+                            <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
+                            <xsl:with-param name="doc-uri" select="$doc-uri"/>
+                            <xsl:with-param name="uriParameter" select="$uriParameter"/>
+                            <xsl:with-param name="chamber" select="$chamber"/>
+                        </xsl:call-template>
+                    </xsl:if>
                     <xsl:variable name="render-doc" select="bu:ontology/bu:document/bu:versions/bu:version[@uri=$version-uri]"/>
                     <h3 id="doc-heading" class="doc-headers">
                         <xsl:value-of select="bu:ontology/bu:chamber/bu:type/@showAs"/>

@@ -1,0 +1,38 @@
+/* Remove unwanted elements */
+.doc-views-section, 
+#tab-menu, 
+#doc-downloads,
+.noprint
+{
+    display: none;
+}
+
+/* Ensure the content spans the full width */
+#container, #container2, #content
+{
+    width: 100%; margin: 0; float: none;
+}
+
+/* Change text colour to black (useful for light text on a dark background) */
+.lighttext
+{
+    color: #000 
+}
+
+a:visited
+{
+    color: #781351
+}
+
+h1.title,
+#doc-heading, 
+#doc-item-desc,
+#doc-item-desc2,
+.inline-centered {
+    text-align:center;
+}
+img.parl-emblem {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}

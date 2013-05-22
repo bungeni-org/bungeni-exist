@@ -264,7 +264,10 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	    let $views := cmn:get-views-for-type("Member") 
                 let $memid := xs:string(request:get-parameter("uri",$bun:DOCNO))
                 let $act-entries-tmpl :=  bun:gen-member-pdf($CONTROLLER-DOC,$memid)
-                return $act-entries-tmpl                
+                return $act-entries-tmpl  
+        	else if ($EXIST-RESOURCE eq "print") then
+            (: PRINT OUT :)        	
+                rou:get-print($CONTROLLER-DOC)                
         	else if ($EXIST-RESOURCE eq "pdf") then
             (: PDF FO GENERATORS :)        	
                 rou:get-pdf($CONTROLLER-DOC)

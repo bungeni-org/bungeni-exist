@@ -58,7 +58,8 @@ from configs import (
     __pipelines_file,
     TransformerConfig,
     WebDavConfig,
-    PoTranslationsConfig
+    PoTranslationsConfig,
+    RabbitMqConfig
     )
 
 from gen_utils import (
@@ -725,6 +726,12 @@ def webdav_reset_folder(wd_cfg, folder):
     finally:
         if webdaver is not None:
             webdaver.shutdown()
+
+
+def rabbitmq_config(config_file):
+    cfg = RabbitMqConfig(config_file)
+    return cfg
+    
     
 
 def post_process_action(config_file, afile):
@@ -765,7 +772,7 @@ def __create_archive_folder(archive_folder):
         except IOError:
             print "Error while attempting to create archive folder !"
 
-    
+
 def move_file_to_archive(cfg, afile):
     print "Attempting to move file to archive", afile
     if os.path.isfile(afile):

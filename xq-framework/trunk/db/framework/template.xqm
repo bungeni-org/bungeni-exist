@@ -182,7 +182,7 @@ declare function template:copy-and-replace($request-rel-path as xs:string, $elem
 };
 
 (:~
-: Identinty transform to rewrite src, href and action attribute URIs
+: Identity transform to rewrite src, href and action attribute URIs
 : Used by ePUB bun:gen-epub to makes links absolute.
 :
 : @param request-rel-path

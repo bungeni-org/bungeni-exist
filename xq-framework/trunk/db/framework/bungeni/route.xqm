@@ -682,6 +682,14 @@ declare function rou:get-pdf($CONTROLLER-DOC as node()) {
         $act-entries-tmpl                                  
 };
 
+declare function rou:get-print($CONTROLLER-DOC as node()) {
+      
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
+    let $act-entries-tmpl :=  bun:gen-print-output($CONTROLLER-DOC,$docnumber)
+    return 
+        $act-entries-tmpl                                  
+};
+
 declare function rou:get-xml($CONTROLLER-DOC as node()) {
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
         $act-entries-tmpl :=  bun:get-raw-xml($docnumber)

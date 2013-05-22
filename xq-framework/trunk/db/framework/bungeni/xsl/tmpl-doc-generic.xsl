@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:an="http://www.akomantoso.org/1.0" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bu="http://portal.bungeni.org/1.0/" exclude-result-prefixes="xs" version="2.0">
     <xd:doc xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
         <xd:desc>
             <xd:p>
@@ -17,6 +17,7 @@
         Parameter from Bungeni.xqm denoting this as version of a parliamentary 
         document as opposed to main document. -->
     <xsl:param name="epub"/>
+    <xsl:param name="print"/>
     <xsl:param name="chamber-id"/>
     <xsl:param name="version"/>
     <xsl:param name="version-uri"/>
@@ -25,6 +26,9 @@
         <xsl:variable name="doc-type" select="bu:ontology/bu:document/bu:docType/bu:value"/>
         <xsl:variable name="chamber">
             <xsl:choose>
+                <xsl:when test="$print eq 'true'">
+                    <xsl:value-of select="concat(bu:ontology/bu:chamber/bu:type/bu:value,'/')"/>
+                </xsl:when>
                 <xsl:when test="$epub eq 'true'">
                     <xsl:text>/</xsl:text>
                 </xsl:when>
@@ -92,14 +96,16 @@
             </xsl:if>
             <div id="region-content" class="rounded-eigh tab_container" role="main">
                 <div id="doc-main-section">
-                    <!-- doc-versions -->
-                    <xsl:if test="$versions = true()">
-                        <xsl:call-template name="doc-versions">
-                            <xsl:with-param name="version-uri" select="$version-uri"/>
-                            <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
-                            <xsl:with-param name="doc-uri" select="$doc-uri"/>
-                            <xsl:with-param name="chamber" select="$chamber"/>
-                        </xsl:call-template>
+                    <xsl:if test="$epub ne 'true'">
+                        <!-- doc-versions -->
+                        <xsl:if test="$versions = true()">
+                            <xsl:call-template name="doc-versions">
+                                <xsl:with-param name="version-uri" select="$version-uri"/>
+                                <xsl:with-param name="doc-type" select="lower-case($doc-type)"/>
+                                <xsl:with-param name="doc-uri" select="$doc-uri"/>
+                                <xsl:with-param name="chamber" select="$chamber"/>
+                            </xsl:call-template>
+                        </xsl:if>
                     </xsl:if>
                     <!-- Document Emblem -->
                     <xsl:call-template name="doc-item-emblem"/>                    

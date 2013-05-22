@@ -124,14 +124,6 @@ class RabbitMQClient:
                     LOG.error("Error while closing connection", ex)
 
 
-class PipelineMappingGenerate(Thread):
-    
-    def __init__(self, cd_latch):
-        self.latch = cd_latch
-        self.pipeline_generated = False
-
-    def run(self):
-        pass
 
 class LangInfoPublish(Thread):
     
@@ -201,12 +193,14 @@ class QueueRunner(Thread):
         self.parliament_cache_info = pc_info
 
     def run(self):
+        rmq = None
         try:
             rmq = RabbitMQClient()
             rmq.consume_msgs(self.parliament_cache_info)
         except Exception, e:
             print "There was an exception processing the queue", e
         finally:
+            rmq = None
             self.latch.countDown()
 
 
@@ -248,7 +242,9 @@ def parliament_info_gather():
             #   print "XXX parl_info cache not satisfied, continuing", pc_info
         except InterruptedException, e:
             print "ParlInfoRunner was interrupted !", e
-    
+        finally:
+            p_thread = None
+            parl_latch = None
     print "Parliament Info Gather Thread : Stop"
     return pc_info
                     
@@ -269,7 +265,9 @@ def parliament_info_publish(parliament_cache_info):
                 success = True
         except InterruptedException, e:
             print "ParlInfoRunner was interrupted !", e
-    
+        finally:
+            p_thread = None
+            parl_latch = None
     print "Parliament Info Publish Thread : Stop"
     return success
 
@@ -285,6 +283,9 @@ def consume_documents(parliament_cache_info):
             cd_latch.await()
         except InterruptedException, e:
             print "QueueRunner thread was interrupted !", e
+        finally:
+            qr_thread = None
+            cd_latch = None
     print "Document consumer thread: Exit"
         
 

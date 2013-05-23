@@ -17,6 +17,7 @@
    <map from="report" uri-name="Report" element-name="report" />
    <map from="bicameral_document" uri-name="BicameralDocument" element-name="bicameralDocument" />
    <map from="event_response" uri-name="EventResponse" element-name="eventResponse" />
+   <map from="event_editor" uri-name="EventEditor" element-name="eventEditor" />
    <map from="office" uri-name="Office" element-name="office" />
    <map from="political_group" uri-name="PoliticalGroup" element-name="politicalGroup" />
    <map from="committee" uri-name="Committee" element-name="committee" />
@@ -29,7 +30,7 @@
    <map from="committee_member" uri-name="CommitteeMember" element-name="committeeMember" />
    <map from="committee_staff" uri-name="CommitteeStaff" element-name="committeeStaff" />
    <map from="minister" uri-name="Minister" element-name="minister" />
-   <map from="member_of_parliament" uri-name="MemberOfParliament" element-name="memberOfParliament" />
+   <map from="member" uri-name="Member" element-name="member" />
    <map from="address" uri-name="Address" element-name="address" />
    <map from="sitting" uri-name="Sitting" element-name="sitting" />
    <map from="user" uri-name="User" element-name="user" />

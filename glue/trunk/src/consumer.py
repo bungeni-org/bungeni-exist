@@ -75,12 +75,13 @@ class RabbitMQClient:
         # !+HARCODED host
         self.config_file = config_file
         self.config = rabbitmq_config(config_file)
-        
+        print "CONFIG FILE " , self.config        
         self.factory.setHost(self.config.get_hostname())
         self.factory.setUsername(self.config.get_username())
         self.factory.setPassword(self.config.get_password())
-        self.factory.setVirtualHost(self.config.get_vhost())
-        self.factory.setPort(self.config.get_port())
+        # !+HARDCODED the following need to be fixed
+        #self.factory.setVirtualHost(self.config.get_vhost())
+        #self.factory.setPort(self.config.get_port())
         
         self.conn = self.factory.newConnection()
         self.channel = self.conn.createChannel()

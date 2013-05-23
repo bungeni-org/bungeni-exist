@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Edit configuration for framework admin -->
+<xmlui-config app-name="framework-config">
+    <name>Bungeni XML-UI framework adminitrator</name>
+    <application>bungeni</application>
+    <bu-xml-collection>bungeni-xml</bu-xml-collection>
+    <configs config="ui-config.xml" legislature="legislature_info.xml" lang="lang_info.xml" templates="xsl" catalogues="i18n"/>
+</xmlui-config>

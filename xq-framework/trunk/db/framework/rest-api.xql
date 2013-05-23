@@ -190,7 +190,7 @@ declare
                                 let $counter := count($token-roles)
                                 return (
                                     fn:concat("bu:permission[",cmn:get-attr-for-role($arole),"]"),
-                                    if($pos lt $counter) then "and" else () )
+                                    if($pos lt $counter) then "or" else () )
                 
                 let $roles-string := fn:string-join($roles," ")              
                   

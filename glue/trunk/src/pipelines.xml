@@ -17,6 +17,7 @@
    <pipeline for="report" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="bicameral_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="event_response" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
+   <pipeline for="event_editor" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
    <pipeline for="office" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
    <pipeline for="office_member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
    <pipeline for="political_group" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
@@ -29,7 +30,7 @@
    <pipeline for="ministry" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
    <pipeline for="minister" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
    <pipeline for="chamber" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />
-   <pipeline for="member_of_parliament" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
+   <pipeline for="member" pipeline="configfiles/configs/config_bungeni_membership.xml" archetype="" basetype="member" />
    <pipeline for="address" pipeline="configfiles/configs/config_bungeni_address.xml" archetype="address" basetype="" />
    <pipeline for="sitting" pipeline="configfiles/configs/config_bungeni_sitting.xml" archetype="sitting" basetype="" />
    <pipeline for="user" pipeline="configfiles/configs/config_bungeni_user.xml" archetype="user" basetype="" />

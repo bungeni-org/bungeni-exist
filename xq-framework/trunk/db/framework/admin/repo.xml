@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>XML-UI for Bungeni Parliamentary Information System</description>
+    <author>undesa</author>
+    <website>http://www.bungeni.org</website>
+    <status>alpha</status>
+    <license>GNU-LGPL</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>framework/admin</target>
+    <prepare>pre-install.xql</prepare>
+    <finish>post-install.xql</finish>
+    <permissions user="bungeni" password="bungeni" group="bungeni" mode="rw-rw-r--"/>
+    <deployed>2013-05-23T10:33:00.657+03:00</deployed>
+</meta>

@@ -53,14 +53,13 @@ body { color: #222; background: url(../images/body.gif) repeat 50% 100%; }
 #content { 
     min-height: 600px;
 }
+#content a { color: #0083cb; text-decoration: none;  }
 
     #left-content {
-        width:10%;
         float:left;
     }
     
     #right-content {
-        width:88%;
         min-height:500px;
         float:right;
         margin:0;

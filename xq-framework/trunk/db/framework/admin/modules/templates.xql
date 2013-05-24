@@ -11,6 +11,11 @@ module namespace templates="http://exist-db.org/xquery/templates";
 import module namespace inspect="http://exist-db.org/xquery/inspection" at "java:org.exist.xquery.functions.inspect.InspectionModule";
 
 declare namespace expath="http://expath.org/ns/pkg";
+declare namespace bf="http://betterform.sourceforge.net/xforms";
+declare namespace xf="http://www.w3.org/2002/xforms";
+declare namespace ev="http://www.w3.org/2001/xml-events" ;
+declare namespace bu="http://portal.bungeni.org/1.0/";
+declare namespace i18n="http://exist-db.org/xquery/i18n";
 
 declare variable $templates:CONFIG_STOP_ON_ERROR := "stop-on-error";
 declare variable $templates:CONFIG_APP_ROOT := "app-root";
@@ -424,7 +429,7 @@ declare function templates:load-source($node as node(), $model as map(*)) as nod
  :)
 declare function templates:link-to-app($uri as xs:string, $relLink as xs:string?) as xs:string {
     let $app := templates:resolve($uri)
-    let $path := string-join((request:get-attribute("$exist:prefix"), $app, $relLink), "/")
+    let $path := string-join(("/exist",request:get-attribute("$exist:prefix"), $app, $relLink), "/")
     return
         replace($path, "/+", "/")
 };

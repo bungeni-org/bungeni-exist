@@ -13,8 +13,10 @@ import module namespace templates="http://exist-db.org/xquery/templates" at "tem
  :)
 import module namespace config="http://exist-db.org/apps/frameworkadmin/config" at "config.xqm";
 import module namespace app="http://exist-db.org/apps/frameworkadmin/templates" at "app.xql";
+import module namespace viewgrps="http://exist.bungeni.org/viewgroups" at "viewgroups.xql";
 
-declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";
+(:declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";:)
+declare option exist:serialize "method=html5 media-type=text/html";
 
 let $config := map {
     $templates:CONFIG_APP_ROOT := $config:app-root,
@@ -39,4 +41,7 @@ let $lookup := function($functionName as xs:string, $arity as xs:int) {
  :)
 let $content := request:get-data()
 return
-    templates:apply($content, $lookup, (), $config)
+    templates:apply($content, $lookup, (), $config),
+    (: !+NOTE (ao, 5th Feb 2013) added this to show updated pages on the HTML views :)
+    response:set-header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate"),
+    response:set-header("Expires", "0")    

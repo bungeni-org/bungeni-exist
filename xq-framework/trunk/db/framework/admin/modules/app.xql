@@ -17,9 +17,10 @@ declare variable $app:CXT := request:get-context-path();
 declare variable $app:REST-CXT-APP :=  $app:CXT || $appconfig:REST-APP-ROOT;
 declare variable $app:REST-FW-ROOT :=  $app:CXT || $appconfig:REST-FRAMEWORK-ROOT;
 
-
+declare variable $app:MENU := xs:string(request:get-parameter("menu","views"));
+declare variable $app:VIEWS := xs:string(request:get-parameter("views",""));
+declare variable $app:VIEWID := xs:string(request:get-parameter("viewid",""));
 declare variable $app:CHAMBER-TYPE := xs:string(request:get-parameter("type","lower_house"));
-
 declare variable $app:MAINNAV := xs:string(request:get-parameter("mainnav","business"));
 declare variable $app:SUBMENU := xs:string(request:get-parameter("submenu",""));
 
@@ -51,25 +52,54 @@ declare function app:get-legislature($node as node(), $model as map(*)) {
     </ul>
 };
 
-
 declare 
     %templates:default("level", "0") 
 function app:path-title($node as node(), $model as map(*), $level as xs:string?) {
 
-    <xhtml:h1>
-        <a href="chamber.html?type={$app:CHAMBER-TYPE}">{data(doc($appconfig:LEGISLATURE-FILE)/parliaments/parliament/type[. eq $app:CHAMBER-TYPE]/@displayAs)}</a>
-        
-        {   
-            switch($level) 
-            case "1" return 
-                (" / ", <a href="mainnav.html?type={$app:CHAMBER-TYPE}&amp;mainnav={$app:MAINNAV}">{$app:MAINNAV}</a>)
-            case "2" return 
-                (" / ", <a href="mainnav.html?type={$app:CHAMBER-TYPE}&amp;mainnav={$app:MAINNAV}">{$app:MAINNAV}</a>,
-                 " / ", <a href="{$app:SUBMENU}.html?type={$app:CHAMBER-TYPE}&amp;mainnav={$app:SUBMENU}">{$app:SUBMENU}</a>)                
-            default return     
-                ()
-        }
-    </xhtml:h1>
+    switch($app:MENU)
+    case "views" return
+        <xhtml:h1>
+            <a href="viewgroups.html">Views</a>
+            
+            {   
+                switch($level) 
+                case "1" return 
+                    (" / ", <a href="views.html?menu={$app:MENU}&amp;views={$app:VIEWS}">{$app:VIEWS}</a>)
+                case "2" return 
+                    (" / ", <a href="views.html?menu={$app:MENU}&amp;views={$app:VIEWS}">{$app:VIEWS}</a>,
+                     " / ", <a href="view.html?menu={$app:MENU}&amp;views={$app:VIEWS}&amp;viewid={$app:VIEWID}">{$app:VIEWID}</a>)                
+                default return     
+                    ()
+            }
+        </xhtml:h1>    
+    case "nav" return
+        <xhtml:h1>
+            <a href="chamber.html?type={$app:CHAMBER-TYPE}">{data(doc($appconfig:LEGISLATURE-FILE)/parliaments/parliament/type[. eq $app:CHAMBER-TYPE]/@displayAs)}</a>
+            
+            {   
+                switch($level) 
+                case "1" return 
+                    (" / ", <a href="mainnav.html?type={$app:CHAMBER-TYPE}&amp;mainnav={$app:MAINNAV}">{$app:MAINNAV}</a>)
+                case "2" return 
+                    (" / ", <a href="mainnav.html?type={$app:CHAMBER-TYPE}&amp;mainnav={$app:MAINNAV}">{$app:MAINNAV}</a>,
+                     " / ", <a href="{$app:SUBMENU}.html?type={$app:CHAMBER-TYPE}&amp;mainnav={$app:SUBMENU}">{$app:SUBMENU}</a>)                
+                default return     
+                    ()
+            }
+        </xhtml:h1>
+    default return
+        ()
+};
+
+declare function app:view-groups($node as node(), $model as map(*)) {
+
+    <ul>
+    {
+        for $views in doc($appconfig:CONFIG-FILE)/ui/viewgroups/views
+        return
+            <li><a href="views.html?menu=views&amp;views={data($views/@name)}">{data($views/@name)}</a></li>                
+    }
+    </ul>    
 };
 
 

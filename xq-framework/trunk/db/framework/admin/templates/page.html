@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:i18n="http://exist-db.org/xquery/i18n" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:bu="http://portal.bungeni.org/1.0/">
     <head>
         <title class="config:app-title">Demo App</title>
         <meta class="config:app-meta"/>
@@ -15,13 +15,24 @@
                     <!--/header-->
                     <div id="navigation">
                         <ul id="nav" class="dropdown dropdown-horizontal">
-                            <li id="about">
+                            <li class="barren" id="home">
+                                <a href="index.html">
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                            <li class="show" id="views">
+                                <a href="viewgroups.html">
+                                    <span>Views</span>
+                                </a>
+                                <div class="app:view-groups"/>
+                            </li>
+                            <li class="show" id="about">
                                 <a href="index.html">
                                     <span>Navigation</span>
                                 </a>
                                 <div class="app:get-legislature"/>
                             </li>
-                            <li class="dir" id="catalogues">
+                            <li class="show dir" id="catalogues">
                                 <span>i18n Catalogues</span>
                                 <div class="app:get-catalogues"/>
                             </li>

@@ -70,6 +70,10 @@ ul.dropdown li {
  background: url(../images/bgmenu.gif) no-repeat;
 }
 
+ul.dropdown li.barren {
+ background: url(../images/bgmenu-barren.gif) no-repeat;
+}
+
 ul.dropdown li span {
     padding: 18px 0;
     width: 100%;
@@ -79,7 +83,7 @@ ul.dropdown li span {
     font-weight: bold;
 }
 
-ul.dropdown li:hover {
+ul.dropdown li.show:hover {
     color: #ffcb05;
     position: relative;
     z-index: 599;

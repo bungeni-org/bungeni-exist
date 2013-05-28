@@ -89,7 +89,7 @@
         </xsl:variable>
         <xsl:copy>
             <xsl:attribute name="id" select="concat('document-version-',$version-xml-id)" />
-            <xsl:attribute name="uri" select="concat($uri, '@', data(activeDate))" />
+            <xsl:attribute name="uri" select="concat($uri, '@', data(auditDate))" />
             <refersToAudit>
                 <xsl:attribute name="href"
                     select="concat('#document-audit-', $version-xml-id)" />

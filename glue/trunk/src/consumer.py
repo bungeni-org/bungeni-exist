@@ -75,7 +75,6 @@ class RabbitMQClient:
         # !+HARCODED host
         self.config_file = config_file
         self.config = rabbitmq_config(config_file)
-        print "CONFIG FILE " , self.config        
         self.factory.setHost(self.config.get_hostname())
         self.factory.setUsername(self.config.get_username())
         self.factory.setPassword(self.config.get_password())

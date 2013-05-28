@@ -274,7 +274,7 @@
     </xsl:template>
     
     
-    <xsl:template match="item_signatorie">
+    <xsl:template match="item_signatory">
        <signatory>
            <xsl:attribute name="id">
                <xsl:variable name="signatory_id" select="field[@name='signatory_id']" />

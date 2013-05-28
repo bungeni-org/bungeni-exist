@@ -5,14 +5,57 @@
         <meta class="config:app-meta"/>
         <link rel="shortcut icon" href="resources/images/favicon.ico"/>
         <link rel="stylesheet" type="text/css" href="resources/css/exist.css"/>
+        <link id="themeStyles" rel="stylesheet" href="../bfResources/scripts/dijit/themes/nihilo/nihilo.css"/>
+        <link rel="stylesheet" href="../bfResources/scripts/dojox/grid/resources/nihiloGrid.css"/>
         <script type="text/javascript" src="$shared/resources/scripts/jquery/jquery-1.7.1.min.js"/>
-        <script type="text/javascript" src="$shared/resources/scripts/loadsource.js"/>
+        <script type="text/javascript" src="resources/scripts/jquery.ui.widget.js"/>
+        <script type="text/javascript" src="$shared/resources/scripts/loadsource.js"/>  
+        <!-- Dojo Plugins -->
+        <script type="text/javascript">
+            var dojoConfig = {
+                async: true,
+                parseOnLoad: true,
+                packages: [
+                    // set location for plugin modules
+                    { name: "plugins", location: location.pathname.replace(/\/[^/]+$/, '') + "/plugins" }
+                ]
+            };
+        </script>
+        <script type="text/javascript" src="../bfResources/scripts/dojo/dojo.js"/>
+        <script type="text/javascript" src="resources/scripts/dashboard-1.7.js"/>
     </head>
-    <body id="body">
+    <body id="body" class="nihilo">
         <div id="grey-top">
             <div id="grey-bot">
                 <div id="container">
                     <!--/header-->
+                    <div id="user" data-dojo-type="dijit.form.DropDownButton">
+                        <span id="username" class="app:user">Not logged in</span>
+                        <div id="login-dialog" data-dojo-type="dijit.TooltipDialog">
+                            <div id="login-dialog-form">
+                                <form id="login-form" action="" data-dojo-type="dijit.form.Form">
+                                    <div class="form-control">
+                                        <label for="user">User:</label>
+                                        <input name="user" type="text" placeholder="User" data-dojo-type="dijit.form.ValidationTextBox"/>
+                                    </div>
+                                    <div class="form-control">
+                                        <label for="password">Password:</label>
+                                        <input name="password" type="password" placeholder="Password" data-dojo-type="dijit.form.ValidationTextBox"/>
+                                    </div>
+                                    <div class="form-control">
+                                        <input type="checkbox" name="duration" value="P14D"/> Remember me
+                                    </div>
+                                    <div class="form-control">
+                                        <button type="submit" data-dojo-type="dijit.form.Button">Login</button>
+                                    </div>
+                                    <div id="login-message"/>
+                                </form>
+                            </div>
+                            <div id="login-dialog-logout" style="display: none;">
+                                <a href="#" id="logout">Logout</a>
+                            </div>
+                        </div>
+                    </div>
                     <div id="navigation">
                         <ul id="nav" class="dropdown dropdown-horizontal">
                             <li class="barren" id="home">

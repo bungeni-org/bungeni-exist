@@ -1,6 +1,7 @@
 require(["dijit/registry",
     "dojo/aspect",
     "dojo/on",
+    "dojo/query",
     "dojo/keys",
     "dojo/dom-construct",
     "dojo/dom",
@@ -17,13 +18,14 @@ require(["dijit/registry",
     "dojo/fx",
     "dojo/dnd/Source",
     "dojo/ready",
+    "dojo/domReady!",
     "dijit/popup",
     "dijit/form/Form",
     "dijit/form/ValidationTextBox",
     "dijit/form/DropDownButton",
     "dojo/NodeList-manipulate",
     "dojo/NodeList-fx"],
-    function (registry, aspect, on, keys, domConstruct, dom, domStyle, topic, query, domClass, event, baseFx, dialog, tooltip, flip, easing, fx, source, ready, popup, form) {
+    function (registry, aspect, on, query, keys, domConstruct, dom, domStyle, topic, query, domClass, event, baseFx, dialog, tooltip, flip, easing, fx, source, ready, domReady, popup, form) {
 
         var openPlugin = null;
         var openPopup = null;
@@ -111,60 +113,6 @@ require(["dijit/registry",
 
         }
 
-        function updateInstalledApps() {
-            if (updating)
-                return;
-            updating = true;
-            status("Retrieving list of installed apps ...");
-            var appListElement = dom.byId("appList");
-            var anim = query("li.package", appListElement).fadeOut({duration: 200});
-            aspect.after(anim, "onEnd", function() {
-                query("li", appListElement).remove(".package");
-
-                dojo.xhrGet({
-                    url: "plugins/packageManager/packages/?plugins=true&format=all&type=local",
-                    handleAs: "text",
-                    load: function(data) {
-                        var last = query("li:last", appListElement);
-                        domConstruct.place(data, appListElement, "last");
-                        query("#appList li").forEach(function (app) {
-                            initTooltips(app);
-                        });
-                        var anim = query("#appList li").fadeIn();
-                        anim.play();
-                        hideStatus();
-
-                        //attach click handler to application buttons
-                        query("#appList li > button").on("click",function(ev) {
-                            ev.preventDefault();
-                            //todo: handle the opening of the app
-                            var link = this.getAttribute("data-exist-appurl");
-                            if (link.lastIndexOf("plugin:", 0) == 0) {
-                                // inline app
-                                link = link.substring(7);
-                                var login = this.getAttribute("data-exist-requirelogin");
-                                if (login == "true") {
-                                    requireLogin(function() {
-                                        openInline(link);
-                                    });
-                                } else {
-                                    openInline(link);
-                                }
-                            } else {
-                                window.open(link);
-                            }
-                        });
-                        updating = false;
-                    },
-                    error: function(error, ioargs) {
-                        updating = false;
-                        status("Error while retrieving package list");
-                    }
-                });
-            });
-            anim.play();
-        }
-
         /**
          * Initialize the tooltips showing app details and
          * providing access to install/remove actions.
@@ -245,16 +193,6 @@ require(["dijit/registry",
 
         }
 
-        function status(message) {
-            var status = dom.byId("status");
-            domStyle.set(status, "display", "block");
-            status.innerHTML = message;
-        }
-
-        function hideStatus() {
-            domStyle.set("status", "display", "none");
-        }
-
         function upload() {
             if (openPopup)
                 popup.close(openPopup);
@@ -292,6 +230,12 @@ require(["dijit/registry",
             console.log("Login %s", login);
             if (login == "Not logged in") {
                 login = null;
+                domClass.add("navigation", "nav-disabled");
+                /*on(query("li"), "click", function(e) {
+                    e.preventDefault();                    
+                });*/                
+            } else {
+                domClass.remove("navigation", "nav-disabled");
             }
             if (login) {
                 domStyle.set("login-dialog-form", "display", "none");
@@ -308,8 +252,8 @@ require(["dijit/registry",
                     handleAs: "json",
                     load: function(data) {
                         if (data.user) {
+                            domClass.remove("navigation", "nav-disabled");
                             domConstruct.empty("login-message");
-                            hideStatus();
                             registry.byId("user").set("label", login);
                             registry.byId("user").closeDropDown(false);
                             domStyle.set("login-dialog-form", "display", "none");
@@ -342,9 +286,11 @@ require(["dijit/registry",
                         registry.byId("user").set("label", "Not logged in");
                         popup.close(registry.byId("login-dialog"));
                         form.reset();
+                        domClass.add("navigation", "nav-disabled");
                     },
                     error: function(error) {
                         status("Logout failed");
+                        domClass.add("navigation", "nav-disabled");
                     }
                 });
             });
@@ -360,11 +306,13 @@ require(["dijit/registry",
                                 registry.byId("user").set("label", login);
                                 domStyle.set("login-dialog-form", "display", "none");
                                 domStyle.set("login-dialog-logout", "display", "block");
+                                domClass.remove("navigation", "nav-disabled");
                             } else {
                                 domStyle.set("login-dialog-form", "display", "block");
                                 domStyle.set("login-dialog-logout", "display", "none");
                                 registry.byId("user").set("label", "Not logged in");
                                 login = null;
+                                domClass.add("navigation", "nav-disabled");
                             }
                         }
                     });
@@ -374,17 +322,6 @@ require(["dijit/registry",
             
             on(window, "blur", function(e) {
                 hasFocus = false;
-            });
-            
-            // listen to changes of installed packages
-            topic.subscribe("packages-changed", updateInstalledApps);
-            
-            // display installed apps
-            updateInstalledApps();
-
-            // handler for closing inline app
-            on(dom.byId("inlineClose"), "click", function(e) {
-                closeApp();
             });
 
             //global esc key handler to close plugin
@@ -399,15 +336,7 @@ require(["dijit/registry",
                         // console.debug("default behavior e.charOrCode:",charCode, " dojo.keys.ESCAPE:",dojo.keys.ESCAPE);
                 }
             });
-
-            // hide the splash screen
-            var splash = dom.byId("splash");
-            dojo.fadeOut({
-                node:splash,
-                onEnd: function(){
-                    domStyle.set(splash, "display", "none");
-                }
-            }).play();
+            
 
         });
     });

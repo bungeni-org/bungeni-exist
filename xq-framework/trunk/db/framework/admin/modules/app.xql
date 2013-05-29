@@ -45,6 +45,15 @@ declare %templates:wrap function app:user($node as node(), $model as map(*)) {
             "Not logged in"
 };
 
+declare function app:user-status($node as node(), $model as map(*)) as xs:boolean {
+    let $user := request:get-attribute("org.exist.login.user")
+    return
+        if ($user) then
+            true()
+        else
+            false()
+};
+
 (:~
  : This returns the legislature information / chambers in teh current parliament
  : 

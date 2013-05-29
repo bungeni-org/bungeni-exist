@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns:i18n="http://exist-db.org/xquery/i18n">
+    <view check-for="" id="" path="" tag="">
+        <title>
+            <i18n:text key=""/>
+        </title>
+        <template/>
+        <xsl/>
+    </view>
+</data>

@@ -14,6 +14,8 @@ declare variable $appconfig:FRAMEWORK-ROOT := $config:db-root-collection || "/ap
 
 declare variable $appconfig:BUNGENI-ROOT := $appconfig:FRAMEWORK-ROOT || "/bungeni";
 
+declare variable $appconfig:I18N-ROOT := $appconfig:FRAMEWORK-ROOT || "/i18n";
+
 declare variable $appconfig:BUNGENI-XML-ROOT := $config:db-root-collection || "/" || data($appconfig:doc/xmlui-config/bu-xml-collection);
 
 declare variable $appconfig:i18n-catalogues := $appconfig:FRAMEWORK-ROOT || "/i18n";
@@ -21,6 +23,8 @@ declare variable $appconfig:i18n-catalogues := $appconfig:FRAMEWORK-ROOT || "/i1
 declare variable $appconfig:CONFIG-FILE := $appconfig:FRAMEWORK-ROOT || "/bungeni/" || data($appconfig:doc/xmlui-config/configs/@config) ;
 
 declare variable $appconfig:LEGISLATURE-FILE := $appconfig:BUNGENI-XML-ROOT || "/" || data($appconfig:doc/xmlui-config/configs/@legislature) ;
+
+declare variable $appconfig:LANG-FILE := $appconfig:BUNGENI-XML-ROOT || "/" || data($appconfig:doc/xmlui-config/configs/@lang) ;
 
 (: app/framework/bungeni :)
 declare variable $appconfig:APPLICATION-COLLECTION := $appconfig:doc/xmlui-config/application/text() ;
@@ -39,6 +43,8 @@ declare variable $appconfig:IMAGES := $appconfig:ROOT || "/resources/images";
 
 (: REST Paths :)
 declare variable $appconfig:REST-FRAMEWORK-ROOT :=  "/rest" || $appconfig:FRAMEWORK-ROOT ;
+
+declare variable $appconfig:REST-I18N :=  $appconfig:REST-FRAMEWORK-ROOT || "/i18n" ;
 
 declare variable $appconfig:REST-UI-CONFIG :=  $appconfig:REST-FRAMEWORK-ROOT || "/bungeni/ui-config.xml" ;
 

@@ -60,6 +60,38 @@ body { color: #222; background: url(../images/body.gif) repeat 50% 100%; }
 
 #main { }
 
+.viewTitle {
+
+}
+
+/* ---------------------------------------- XFORMS LAYOUT ---------------------------------------- */
+.spacedHorizontal {
+    width:100%; 
+    height:100%;
+}
+.spacedHorizontal .bfHorizontalTableValue {
+    padding:0 30px;
+}
+.formWrapper .form-withheld,
+.formWrapper form {
+    background-color:#ffffff;
+    margin:-18px 0 0 0;
+    padding:10px;
+}
+
+.choiceInput .dijitTextBox {
+    border: 0 none !important;
+}
+.choiceInput .dijitArrowButtonInner {
+    border-top: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    border-left: 0 none;
+}
+.choiceInput .dijitInputContainer {
+    border-right: 1px solid #CCC;
+}
+
 /* ---------------------------------------- INDEX ---------------------------------------- */
 
 
@@ -80,7 +112,8 @@ body { color: #222; background: url(../images/body.gif) repeat 50% 100%; }
         padding-left:5px;        
         border-left:1px solid #e4e4e4;
     } 
- 
+#content .label-success a,
+#content .label-important a,
 #content .label-info a {
     color:#ffffff;
 }
@@ -151,8 +184,6 @@ blockquote p { padding: 0 0 10px; }
 .code { font: 13px/20px bold "Courier New", Courier, monospace; }
 
 /* ---------------------------------------- Local styles ----------------------------------- */
-form { margin: 20px 0; }
-
 .inputrow {
     margin-top: 8px;
 }

@@ -500,8 +500,7 @@ declare function bun:xqy-all-documentitems-with-acl($acl as xs:string) {
     make it work - not query on the parent axis i.e./bu:ontology[....] is also broken - so we have to use the ancestor axis :)
   return  
     fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology[@for='document']",
-                "/bu:document/(bu:permissions except bu:versions)",
+                "/bu:ontology/bu:document/(bu:permissions except bu:versions)",
                 "/bu:control[",$acl-filter,"]",
                 "/ancestor::bu:ontology")
 };
@@ -1013,14 +1012,16 @@ declare function bun:advanced-search($chamber as xs:string,
     let $getqrystr := xs:string(request:get-query-string())    
     let $search-filter := cmn:get-doctypes()
     
+    let $filtered-acl := util:eval(bun:xqy-all-documentitems-with-acl("public-view"))
+    
     let $subset-chambers-coll :=    if($chamber ne "") then (
                                         (:  if chamber is filled then we need to acknowledge that this is a bicameral 
                                             setup and provide the collection subset filtered by the option chosen :)
                                         if ($chamber eq "both") then (
-                                            collection(cmn:get-lex-db())/bu:ontology
+                                            $filtered-acl
                                         ) 
                                         else 
-                                            collection(cmn:get-lex-db())/bu:ontology/child::*[1]/bu:origin[bu:identifier eq $chamber]/ancestor::bu:ontology
+                                            $filtered-acl/child::*[1]/bu:origin[bu:identifier eq $chamber]/ancestor::bu:ontology
                                     )
                                     else 
                                         collection(cmn:get-lex-db())/bu:ontology

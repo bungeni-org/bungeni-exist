@@ -8,7 +8,7 @@
     <xsl:output indent="yes" omit-xml-declaration="no"/>
     <xsl:template match="node()|@*">
         <xsl:copy>
-            <xsl:apply-templates select="node()|@*"/>
+            <xsl:apply-templates select="node()|@*[. ne '']"/>
         </xsl:copy>
     </xsl:template>
     <xsl:function name="custom:__get_modes_from_group">
@@ -55,13 +55,15 @@
                 </show>
             </xsl:for-each-group>
             <xsl:for-each-group select="./*[@show='false']" group-by="./roles/text()">
-                <hide>
-                    <xsl:attribute name="modes" select="custom:get_modes_from_group(current-group())"/>
-                    <xsl:variable name="roles-for-mode" select="custom:get_roles_from_group(current-group())"/>
-                    <xsl:if test="$roles-for-mode ne 'ALL'">
-                        <xsl:attribute name="roles" select="custom:get_roles_from_group(current-group())"/>
-                    </xsl:if>
-                </hide>
+                <xsl:if test="not(parent::node()//@derived)">
+                    <hide>
+                        <xsl:attribute name="modes" select="custom:get_modes_from_group(current-group())"/>
+                        <xsl:variable name="roles-for-mode" select="custom:get_roles_from_group(current-group())"/>
+                        <xsl:if test="$roles-for-mode ne 'ALL'">
+                            <xsl:attribute name="roles" select="custom:get_roles_from_group(current-group())"/>
+                        </xsl:if>
+                    </hide>
+                </xsl:if>
             </xsl:for-each-group>
         </xsl:copy>
     </xsl:template>

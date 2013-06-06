@@ -602,6 +602,16 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             else
                                                 <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
                                                     <xf:label>{data($feature/@name)} </xf:label>
+                                                    <!-- !+NOTE (ao, June 6th 2013) Hardcoded enforcing of feature dependencies as it is not exported 
+                                                        at the moment in order to determine all the known dependecies -->
+                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'version'">
+                                                        <xf:setvalue ref="instance()/feature[@name = 'attachment']/@enabled" value="instance()/feature[@name = 'version']/@enabled"/>
+                                                        <xf:message level="ephemeral">Enabled dependent feature attachment</xf:message>
+                                                    </xf:action> 
+                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'attachment'">
+                                                        <xf:setvalue ref="instance()/feature[@name = 'version']/@enabled" value="instance()/feature[@name = 'attachment']/@enabled"/>
+                                                        <xf:message level="ephemeral">Enabled dependent feature version</xf:message>
+                                                    </xf:action>                                                     
                                                 </xf:input>                                    
                                     )
                                     else
@@ -629,11 +639,21 @@ function workflow:edit($node as node(), $model as map(*)) {
                                                             <xf:message level="ephemeral">Loading feature parameters. Hold on...</xf:message>
                                                         </xf:trigger>                                            
                                                     </xf:label>
-                                                    <xf:hint>click to enable this feature</xf:hint>
+                                                    <xf:hint>click to enable this feature</xf:hint>                                                  
                                                 </xf:input>
                                             else
                                                 <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
                                                     <xf:label>{data($feature/@name)} </xf:label>
+                                                    <!-- !+NOTE (ao, June 6th 2013) Hardcoded enforcing of feature dependencies as it is not exported 
+                                                        at the moment in order to determine all the known dependecies -->
+                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'version'">
+                                                        <xf:setvalue ref="instance()/feature[@name = 'attachment']/@enabled" value="instance()/feature[@name = 'version']/@enabled"/>
+                                                        <xf:message level="ephemeral">Enabled dependent feature attachment</xf:message>
+                                                    </xf:action> 
+                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'attachment'">
+                                                        <xf:setvalue ref="instance()/feature[@name = 'version']/@enabled" value="instance()/feature[@name = 'attachment']/@enabled"/>
+                                                        <xf:message level="ephemeral">Enabled dependent feature version</xf:message>
+                                                    </xf:action>                                                     
                                                 </xf:input>
                                         )
                                     else
@@ -1278,7 +1298,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                         <xf:action if="count(instance()/state) = 1">
                                             <xf:setvalue ref="instance()/transition/destinations/destination" value="instance()/state[last()]/@id"/>
                                             <xf:setvalue ref="instance()/transition/@trigger" value="'automatic'"/>
-                                            <xf:setvalue ref="instance()/transition/@title" value="'from none'"/>
+                                            <xf:setvalue ref="instance()/transition/@title" value="'Create {$DOCNAME}'"/>
                                             <xf:setvalue ref="instance()/transition/@note" value="'initial transition from none'"/>
                                             <xf:delete nodeset="instance()/transition/roles"/>
                                             <xf:delete nodeset="instance()/transition/@condition"/>

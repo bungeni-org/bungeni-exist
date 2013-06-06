@@ -42,7 +42,7 @@
             <!-- special handler to render global facet to global permissions using group_by voodoo -->
             <!-- !+NOTE using allow|deny is superfluous because has been entirely removed, if a permission is not 
                 declared as allow it is by default deny -->
-            <xsl:for-each-group select="facet[starts-with(@name, 'global_')]" group-by="(allow|deny)/@permission">
+            <xsl:for-each-group select="facet[starts-with(@name, 'global_')]" group-by="(allow|deny)[normalize-space(roles/role) ne '']/@permission">
                 <xsl:variable name="current-perm" select="current-grouping-key()"/>
                 <xsl:element name="allow">
                     <xsl:attribute name="permission" select="$current-perm"/>
@@ -145,6 +145,11 @@
                 <xsl:call-template name="merge_tags">
                     <xsl:with-param name="elemOriginAttr" select="./roles"/>
                 </xsl:call-template>
+            </xsl:if>
+            <!-- !+NOTE (ao, June 6th 2013) Transitions could have blank title. Its a required attribute in the validation process
+                done when bungeni boots -->
+            <xsl:if test="@title eq ''">
+                <xsl:attribute name="title"/>
             </xsl:if>
             <xsl:apply-templates/>
         </xsl:element>

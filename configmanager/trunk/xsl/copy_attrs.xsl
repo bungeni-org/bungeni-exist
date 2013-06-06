@@ -3,5 +3,6 @@
     <xsl:template name="copy-attrs">
         <!-- exclude empty attributes -->
         <xsl:copy-of select="@*[. ne '']"/>
+        <xsl:copy-of select="@title"/>
     </xsl:template>
 </xsl:stylesheet>

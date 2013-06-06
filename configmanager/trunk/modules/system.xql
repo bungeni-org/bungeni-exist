@@ -63,8 +63,13 @@ declare function local:reverse-transform-configs() {
     let $xslworkflow := appconfig:get-xslt("wf_merge_attrs.xsl")
     
     let $filename := functx:substring-after-last($path, '/')
+    let $mkdirs := if(file:is-directory($appconfig:FS-PATH || "/forms")) then () else file:mkdirs($appconfig:FS-PATH || "/forms")    
+    let $mkdirs := if(file:is-directory($appconfig:FS-PATH || "/workflows")) then () else file:mkdirs($appconfig:FS-PATH || "/workflows")
     return
-            if (contains($path,"/forms/") and not(contains($path,"/.auto/"))) then (
+            (: !+BUG (ao, June 6th 2013) we are singling-out the items below because they have other special global grants than
+                the default .Add .Edit .View .Delete that we handle at the moment :)
+            if (contains($path,"/sitting.xml") or contains($path,"/user.xml") or contains($path,"/signatory.xml")) then ()     
+            else if (contains($path,"/forms/") and not(contains($path,"/.auto/"))) then (
                 $filename || " written? " || file:serialize(transform:transform(
                                                 transform:transform($doc, $step1forms,()), $step2forms,()), 
                                                 $appconfig:FS-PATH || "/forms/" || $filename,
@@ -76,7 +81,7 @@ declare function local:reverse-transform-configs() {
                                                 $appconfig:FS-PATH || "/workflows/" || $filename,
                                                 "media-type=application/xml method=xml")
             )
-            else if (contains($path,"types.xml")) then (
+            else if (contains($path,"/types.xml")) then (
                $filename || " written? " || file:serialize($doc,
                                                 $appconfig:FS-PATH || "/" || $filename,
                                                 "media-type=application/xml method=xml")

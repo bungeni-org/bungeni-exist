@@ -5,7 +5,7 @@
         14 Nov 2012
         Serializes Bungeni Workspace XML to a more usable XML format
     -->
-    <xsl:import href="split_attr_roles.xsl"/>
+    <xsl:include href="split_attr_roles.xsl"/>
     <xsl:output indent="yes"/>
     <xsl:template match="*">
         <xsl:copy>
@@ -26,9 +26,10 @@
     <!-- 
         We need to process the attributes while preserving them at the same time
     -->
-    <xsl:template mode="preserve" match="@roles"/>
+    <xsl:template mode="preserve" match="@roles"/> 
     <xsl:template mode="preserve" match="@*">
         <xsl:copy/>
     </xsl:template>
     <xsl:template match="@*"/>
+    
 </xsl:stylesheet>

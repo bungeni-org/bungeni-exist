@@ -13,6 +13,11 @@
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
     </xsl:template>
+    <!-- 
+        remove empty workspace states 
+        http://stackoverflow.com/questions/11539910/remove-parent-node-if-a-child-node-is-empty
+    -->
+    <xsl:template match="state[not(tab[not(@roles = '')])]"/>
     <xsl:template match="tab">
         <tab>
             <xsl:apply-templates select="@*|node()"/>
@@ -20,7 +25,9 @@
                 <xsl:with-param name="elemOriginAttr" select="./roles"/>
             </xsl:call-template>
         </tab>
-    </xsl:template>
+    </xsl:template> 
+    <!-- remove empty workspace tabs -->
+    <xsl:template match="tab[normalize-space(@roles) = '']"/>
     <xsl:template match="*[@originAttr]"/>
     <xsl:template match="workspace/@name"/>
 </xsl:stylesheet>

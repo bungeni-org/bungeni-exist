@@ -43,6 +43,21 @@ declare function local:external-facet($feature-name as xs:string) {
         <facet for="{$feature-name}" name="{$feature-name}.{$facet/@name}"/>
 };
 
+(: returns all the tabs proper with roles attribute appended :)
+declare function local:workspace-tabs() as node() * {
+    let $tabs := doc($appconfig:WS-FOLDER || "/tabs.xml")/tabs
+    return
+        element tabs {
+            $tabs/@*,
+            for $tab at $pos in $tabs/tab
+                return
+                element tab { 
+                    attribute id { data($tab/@id) },
+                    attribute roles { "" }
+                }
+        }
+};
+
 (: returns all the states nodes :)
 declare function local:workflow-states($doctype) as node() * {
     let $states := local:get-workflow($doctype)/state
@@ -172,6 +187,14 @@ declare function local:workflow() {
 
     let $docname := xs:string(request:get-parameter("doc","none"))
     let $doc := doc($appconfig:WF-FOLDER || "/" || $docname || ".xml")/workflow
+    return 
+        $doc
+};
+
+declare function local:workspace() {
+
+    let $docname := xs:string(request:get-parameter("doc","none"))
+    let $doc := doc($appconfig:WS-FOLDER || "/" || $docname || ".xml")/workspace
     return 
         $doc
 };
@@ -347,7 +370,7 @@ declare function local:all-feature() {
         let $features-xml := $appconfig:XML-RESOURCES || "/features.xml" 
         let $features-schema := doc($features-xml)
         let $featurename :=if (doc-available($wf-doc) and $type ne 'doc') then $docname else $type
-        let $feats-tmpl := doc($appconfig:CONFIGS-FOLDER || "/workflows/.auto/" || "_features.xml")//features[@for eq $featurename]
+        let $feats-tmpl := doc($appconfig:CONFIGS-FOLDER || "/workflows/.auto/" || "_features_by_type.xml")//features[@for eq $featurename]
         let $feats-wf := doc($appconfig:CONFIGS-FOLDER || "/workflows/" || $docname || ".xml")//feature   
         for $feature in $feats-tmpl/feature 
         let $name := $features-schema/feature/@name
@@ -815,18 +838,38 @@ function workflow:state-edit($node as node(), $model as map(*)) {
             <div style="display:none">
                  <xf:model id="master">
                     <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
+                    
+                    <xf:instance id="i-workspace" src="{$workflow:REST-BC-LIVE}/workspace/{$DOCNAME}.xml"/>
 
                     <xf:instance id="i-alltags" src="{$workflow:REST-CXT-MODELTMPL}/_tags.xml"/>
+                    
+                    <xf:instance id="i-tabs" xmlns="">
+                        {local:workspace-tabs()}
+                    </xf:instance>
+                    
+                    <xf:instance id="i-allroles" xmlns="">
+                        {appconfig:roles()}
+                    </xf:instance>
+
+                    <xf:instance id="i-role" xmlns="">
+                        <data>
+                            <role name=""/>
+                        </data>
+                    </xf:instance>
                     
                     <xf:instance id="i-actions" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_actions.xml"/>
 
                     <xf:instance id="i-actions-node" src="{$workflow:REST-CXT-MODELTMPL}/actions.xml"/>
                     
-                    <xf:bind nodeset="./state[{$ATTR}]">
+                    <xf:bind nodeset="instance()/state[{$ATTR}]">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                    
                         <xf:bind nodeset="@id" type="xf:string" required="true()" readonly="boolean-from-string('true')" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$')" />
                         <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />                
-                    </xf:bind>           
+                    </xf:bind>   
+                    
+                    <xf:bind nodeset="instance('i-workspace')/state[{$ATTR}]">
+                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                
+                    </xf:bind>                    
                     
                     <xf:instance xmlns="" id="i-permissions-manager">
                         <data>
@@ -894,8 +937,44 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                             <xf:message level="modal">The workflow information have not been filled in correctly</xf:message>
                         </xf:action>
                     </xf:submission>
+                    
+                    <xf:submission id="s-add-workspace"
+                                   method="put"
+                                   replace="none"
+                                   ref="instance('i-workspace')">
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workspace/{$DOCNAME}.xml'"/>
+    
+                        <xf:header>
+                            <xf:name>username</xf:name>
+                            <xf:value>{$appconfig:admin-username}</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>password</xf:name>
+                            <xf:value>{$appconfig:admin-password}</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>realm</xf:name>
+                            <xf:value>exist</xf:value>
+                        </xf:header>
+    
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Workspace tabs updated successfully</xf:message>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                            <xf:message level="modal">The workspace tabs have not been selected sufficiently</xf:message>
+                        </xf:action>
+                    </xf:submission>                    
 
-                    <xf:action ev:event="xforms-ready" >    
+                    <xf:action ev:event="xforms-ready" >
+                        <!-- add an empty <role/> node for workspace tabs -->
+                        <xf:insert nodeset="instance('i-allroles')/role" at="last()" position="after" origin="instance('i-role')/role" />
+                        
                         <xf:action if="not(exists(instance()/state[{$ATTR}]/actions))">
                             <xf:message level="ephemeral">inserted a &lt;xmp&gt;&lt;actions&gt;&lt;/xmp&gt; node</xf:message>
                             <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" context="instance()/state[{$ATTR}]" at="last()" position="after" origin="instance('i-actions-node')/actions" />
@@ -918,221 +997,297 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                                 <xf:insert nodeset="instance()/facet[@original-name eq {$NODENAME}]" at="last()" position="after" origin="instance('i-facets')/facet" />                                 
                             else
                                 ()
-                        }                         
+                        }      
+                        
+                        {
+                            (: if <tab/>'s don't exist, add them :)
+                            for $tab at $pos in doc($appconfig:WS-FOLDER || "/tabs.xml")/tabs/tab
+                            return                            
+                                if(empty(local:workspace()/state[@id eq $NODENAME]/tab[@id eq data($tab/@id)])) then 
+                                    <xf:insert nodeset="instance('i-workspace')/state[@id eq '{$NODENAME}']/child::*" context="instance('i-workspace')/state[@id eq '{$NODENAME}']" at="last()" position="after" origin="instance('i-tabs')/tab[@id eq '{data($tab/@id)}']" />                                
+                                else
+                                    ()                            
+                        }
                     </xf:action>
             </xf:model>
             
             </div>    	
-            <div style="width: 100%; height: 100%;">
-                <div class="commit-holder">
-                    <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}#tabstates">
-                        <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
-                    </a>
-                    <a class="commit" href="/exist/restxq/workflow/commit/{$DOCNAME}" title="save this file back to the filesystem">commit workflow</a>
-                </div>                  
-                <br/>              
-                <h1>state | <xf:output value="./state[{$ATTR}]/@id" class="transition-inline"/></h1>
-                <br/>                
-                <div style="width: 100%;">
-                    <br/>
+            
+            <div class="commit-holder">
+                <a href="workflow.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}#tabstates">
+                    <img src="resources/images/back_arrow.png" title="back to workflow states" alt="back to workflow states"/>
+                </a>
+            </div>   
+            
+            <div id="tabs_container">
+                <ul id="tabs">
+                    <li id="tabworkflow" class="active"><a href="#workflow">Properties</a></li>
+                    <li id="tabworkspace"><a href="#workspace">Workspace</a></li>
+                </ul>
+            </div>            
+
+            <div id="tabs_content_container">          
+                <div id="workflow" class="tab_content" style="display: block;">
+                    <div class="commit-holder">
+                        <h1><xf:output value="./state[{$ATTR}]/@id" class="transition-inline"/> state | workflow</h1>
+                        <a class="commit" href="/exist/restxq/workflow/commit/{$DOCNAME}" title="save this file back to the filesystem">commit workflow</a>
+                    </div>
+                    <br style="clear:both"/>                
                     <div style="width: 100%;">
-                        <div style="width:90%;">
-                            <div style="width:100%;">
-                                <xf:group ref="./state[{$ATTR}]" appearance="bf:horizontalTable"> 
-                                    <xf:group appearance="bf:verticalTable">
-                                        <xf:label>properties</xf:label>
-                                        <xf:input id="state-id" ref="@id" incremental="true">
-                                            <xf:label>ID</xf:label>
-                                            <xf:hint>edit id of the workflow</xf:hint>
-                                            <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
-                                            <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
-                                        </xf:input>                                         
-                                        <xf:input id="state-title" ref="@title" incremental="true">
-                                            <xf:label>Title</xf:label>
-                                            <xf:hint>edit title of the workflow</xf:hint>
-                                            <xf:help>... and no spaces in between words</xf:help>
-                                            <xf:alert>enter more than 3 characters...</xf:alert>
-                                        </xf:input>                                                                         
-                                        <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
-                                            <xf:label>Permission from state</xf:label>
-                                           <xf:hint>where to derive permissions for state</xf:hint>
-                                           <xf:help>select one</xf:help>
-                                            <xf:itemset nodeset="instance()/state[data(@id) ne '{$NODENAME}']/@id">
-                                                <xf:label ref="."></xf:label>
-                                                <xf:value ref="."></xf:value>
-                                            </xf:itemset>
-                                        </xf:select1> 
-                                    </xf:group>
-                                    <xf:group appearance="bf:verticalTable">
-                                        <xf:label>actions</xf:label>
-                                        <xf:repeat id="r-stateactions" nodeset="./actions/action[position() != last()]" appearance="compact">
-                                            <xf:select1 ref="." appearance="minimal" incremental="true">
-                                                <xf:alert>invalid: emtpy or non-unique tags</xf:alert>
-                                                <xf:hint>actions should be unique</xf:hint>   
-                                                <xf:itemset nodeset="instance('i-actions')/action">
-                                                    <xf:label ref="."></xf:label>                                       
-                                                    <xf:value ref="@name"></xf:value>
-                                                </xf:itemset>
-                                            </xf:select1>
-                                            &#160;
-                                            <xf:trigger src="resources/images/delete.png">
-                                                <xf:label>X</xf:label>
-                                                <xf:action>
-                                                    <xf:delete at="index('r-stateactions')[position()]"></xf:delete>                                 
-                                                </xf:action>
-                                            </xf:trigger>                                  
-                                        </xf:repeat>                                       
-                                        <xf:trigger>
-                                            <xf:label>add action</xf:label>
-                                            <xf:action>
-                                                <xf:insert ev:event="DOMActivate" nodeset="./actions/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions/action"/>
-                                            </xf:action>
-                                        </xf:trigger>
-                                    </xf:group>
-                                    
+                        <br/>
+                        <div style="width: 100%;">
+                            <xf:group ref="./state[{$ATTR}]" appearance="bf:horizontalTable"> 
+                                <xf:group appearance="bf:verticalTable">
+                                    <xf:label>properties</xf:label>
+                                    <xf:input id="state-id" ref="@id" incremental="true">
+                                        <xf:label>ID</xf:label>
+                                        <xf:hint>edit id of the workflow</xf:hint>
+                                        <xf:help>Use A-z with the underscore character to avoid spaces</xf:help>
+                                        <xf:alert>invalid: must be 3+ characters and A-z and _ allowed</xf:alert>
+                                    </xf:input>                                         
+                                    <xf:input id="state-title" ref="@title" incremental="true">
+                                        <xf:label>Title</xf:label>
+                                        <xf:hint>edit title of the workflow</xf:hint>
+                                        <xf:help>... and no spaces in between words</xf:help>
+                                        <xf:alert>enter more than 3 characters...</xf:alert>
+                                    </xf:input>                                                                         
+                                    <xf:select1 ref="@permissions_from_state" appearance="minimal" incremental="true">
+                                        <xf:label>Permission from state</xf:label>
+                                       <xf:hint>where to derive permissions for state</xf:hint>
+                                       <xf:help>select one</xf:help>
+                                        <xf:itemset nodeset="instance()/state[data(@id) ne '{$NODENAME}']/@id">
+                                            <xf:label ref="."></xf:label>
+                                            <xf:value ref="."></xf:value>
+                                        </xf:itemset>
+                                    </xf:select1> 
                                 </xf:group>
-                                <hr/>
-                                <br/>
-                                <h1>Manage Transitions</h1>
-                                <div style="width:100%;" class="clearfix">
-                                    <div style="float:left;width:60%;">
-                                        <h4 style="text-align:right;">&#8592;</h4>
-                                        <table class="listingTable" style="width:100%;">
+                                <xf:group appearance="bf:verticalTable">
+                                    <xf:label>actions</xf:label>
+                                    <xf:repeat id="r-stateactions" nodeset="./actions/action[position() != last()]" appearance="compact">
+                                        <xf:select1 ref="." appearance="minimal" incremental="true">
+                                            <xf:alert>invalid: emtpy or non-unique tags</xf:alert>
+                                            <xf:hint>actions should be unique</xf:hint>   
+                                            <xf:itemset nodeset="instance('i-actions')/action">
+                                                <xf:label ref="."></xf:label>                                       
+                                                <xf:value ref="@name"></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        &#160;
+                                        <xf:trigger src="resources/images/delete.png">
+                                            <xf:label>X</xf:label>
+                                            <xf:action>
+                                                <xf:delete at="index('r-stateactions')[position()]"></xf:delete>                                 
+                                            </xf:action>
+                                        </xf:trigger>                                  
+                                    </xf:repeat>                                       
+                                    <xf:trigger>
+                                        <xf:label>add action</xf:label>
+                                        <xf:action>
+                                            <xf:insert ev:event="DOMActivate" nodeset="./actions/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions/action"/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </xf:group>
+                                
+                            </xf:group>
+                            <hr/>
+                            <br/>
+                            <h1>Manage Transitions</h1>
+                            <div style="width:100%;" class="clearfix">
+                                <div style="float:left;width:60%;">
+                                    <h4 style="text-align:right;">&#8592;</h4>
+                                    <table class="listingTable" style="width:100%;">
+                                        <tr>                      			 
+                                            <th style="width:40%">transition title</th>
+                                            <th>source state</th>
+                                        </tr>
+                                        {local:transition-dest($DOCNAME, $NODENAME, true())}
+                                    </table> 
+                                    <div style="margin-top:15px;"/>
+                                    <h4 style="text-align:right;">&#8594;</h4>   
+                                    <table id="transitionSources" class="listingTable" style="width:100%;">
+                                        <thead>
                                             <tr>                      			 
                                                 <th style="width:40%">transition title</th>
-                                                <th>source state</th>
+                                                <th>destinations state</th>
+                                                <th style="width:8%">order</th>
                                             </tr>
-                                            {local:transition-dest($DOCNAME, $NODENAME, true())}
-                                        </table> 
-                                        <div style="margin-top:15px;"/>
-                                        <h4 style="text-align:right;">&#8594;</h4>   
-                                        <table id="transitionSources" class="listingTable" style="width:100%;">
+                                        </thead>
+                                        {local:transition-src($DOCNAME, $NODENAME, true())}
+                                    </table>                                         
+                                    <div id="popup" style="display:none;">
+                                        <div id="popupcontent" class="popupcontent"></div>
+                                    </div>                                           
+                                    <div style="margin-top:15px;"/>                                           
+                                    <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}">add transition</a>                                 
+                                </div>                                   
+                            </div>
+                            <hr/>
+                            <br/>
+                            <h1>Manage Permissions
+                                <xf:select1 ref="instance('i-vars')/value" id="permissions-roller" class="inline-control xmediumWidth" incremental="true">
+                                    <xf:hint>manage feature permissions</xf:hint>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-permissions-manager')/manager">
+                                        <xf:label ref="@id"></xf:label>
+                                        <xf:value ref="@id"></xf:value>
+                                    </xf:itemset>                                      
+                                </xf:select1>   
+                                <xf:trigger appearance="compact" class="inline-control">
+                                    <xf:label>LOAD&#160;</xf:label>
+                                    <xf:hint>click to go the feature workflow</xf:hint>
+                                    <!-- For this state permissions update -->
+                                    <xf:action if="instance('i-vars')/value eq 'state'" ev:event="DOMActivate">
+                                        <xf:load show="embed" targetid="permissions-grid">
+                                            <xf:resource value="concat('permissions-subform.html?doc={$DOCNAME}&amp;state={$ATTR}&amp;facet={$NODENAME}&amp;attr={$ATTR}&amp;node={$NODENAME}&amp;feature=',instance('i-vars')/value)"/>
+                                        </xf:load>
+                                    </xf:action>         
+                                    <!-- For feature permissions update -->
+                                    <xf:action if="instance('i-vars')/value ne 'state'" ev:event="DOMActivate">
+                                        <xf:load show="embed" targetid="permissions-grid">
+                                            <xf:resource value="concat('permissions-subform.html?doc={$DOCNAME}&amp;state={$ATTR}&amp;facet={concat('ext_',$DOCNAME,'_',$NODE)}&amp;feature=ext_',instance('i-vars')/value)"/>
+                                        </xf:load>
+                                    </xf:action>
+                                    <xf:message level="ephemeral">Loading this permissions. Hold on...</xf:message>
+                                </xf:trigger>                                     
+                            </h1>
+                            <div style="width:100%;" class="clearfix">
+                                <div style="float:left;width:50%;" id="permissions-grid">
+                                    <xf:group>
+                                        <xf:label>state</xf:label>
+                                        <table class="listingTable">
                                             <thead>
-                                                <tr>                      			 
-                                                    <th style="width:40%">transition title</th>
-                                                    <th>destinations state</th>
-                                                    <th style="width:8%">order</th>
+                                                <tr>
+                                                    <th>Roles</th>        
+                                                    <th>View</th>
+                                                    <th>Edit</th>
+                                                    <th>Add</th>
+                                                    <th>Delete</th>
                                                 </tr>
                                             </thead>
-                                            {local:transition-src($DOCNAME, $NODENAME, true())}
-                                        </table>                                         
-                                        <div id="popup" style="display:none;">
-                                            <div id="popupcontent" class="popupcontent"></div>
-                                        </div>                                           
-                                        <div style="margin-top:15px;"/>                                           
-                                        <a class="button-link popup" href="transition-add.html?type={$TYPE}&amp;doc={$DOCNAME}&amp;pos={$DOCPOS}&amp;attr={$ATTR}&amp;from={$NODENAME}">add transition</a>                                 
-                                    </div>                                   
-                                </div>
-                                <hr/>
-                                <br/>
-                                <h1>Manage Permissions
-                                    <xf:select1 ref="instance('i-vars')/value" id="permissions-roller" class="inline-control xmediumWidth" incremental="true">
-                                        <xf:hint>manage feature permissions</xf:hint>
-                                        <xf:alert>invalid</xf:alert>
-                                        <xf:itemset nodeset="instance('i-permissions-manager')/manager">
-                                            <xf:label ref="@id"></xf:label>
-                                            <xf:value ref="@id"></xf:value>
-                                        </xf:itemset>                                      
-                                    </xf:select1>   
-                                    <xf:trigger appearance="compact" class="inline-control">
-                                        <xf:label>LOAD&#160;</xf:label>
-                                        <xf:hint>click to go the feature workflow</xf:hint>
-                                        <!-- For this state permissions update -->
-                                        <xf:action if="instance('i-vars')/value eq 'state'" ev:event="DOMActivate">
-                                            <xf:load show="embed" targetid="permissions-grid">
-                                                <xf:resource value="concat('permissions-subform.html?doc={$DOCNAME}&amp;state={$ATTR}&amp;facet={$NODENAME}&amp;attr={$ATTR}&amp;node={$NODENAME}&amp;feature=',instance('i-vars')/value)"/>
-                                            </xf:load>
-                                        </xf:action>         
-                                        <!-- For feature permissions update -->
-                                        <xf:action if="instance('i-vars')/value ne 'state'" ev:event="DOMActivate">
-                                            <xf:load show="embed" targetid="permissions-grid">
-                                                <xf:resource value="concat('permissions-subform.html?doc={$DOCNAME}&amp;state={$ATTR}&amp;facet={concat('ext_',$DOCNAME,'_',$NODE)}&amp;feature=ext_',instance('i-vars')/value)"/>
-                                            </xf:load>
-                                        </xf:action>
-                                        <xf:message level="ephemeral">Loading this permissions. Hold on...</xf:message>
-                                    </xf:trigger>                                     
-                                </h1>
-                                <div style="width:100%;" class="clearfix">
-                                    <div style="float:left;width:50%;" id="permissions-grid">
-                                        <xf:group>
-                                            <xf:label>state</xf:label>
-                                            <table class="listingTable">
-                                                <thead>
+                                            <tbody>
+                                            {
+                                                let $facets :=  if(not(empty(local:workflow()/facet[@original-name eq $NODENAME]))) then 
+                                                                    (local:get-facets($DOCNAME,false()),local:new-facets($DOCNAME,local:gen-facets($DOCNAME,false()),false()))
+                                                                else
+                                                                    local:gen-facets($DOCNAME,false())
+                                                for $facet at $pos in $facets
+                                                let $allow := $facet/allow
+                                                order by $facet/@name ascending
+                                                return
                                                     <tr>
-                                                        <th>Roles</th>        
-                                                        <th>View</th>
-                                                        <th>Edit</th>
-                                                        <th>Add</th>
-                                                        <th>Delete</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                {
-                                                    let $facets :=  if(not(empty(local:workflow()/facet[@original-name eq $NODENAME]))) then 
-                                                                        (local:get-facets($DOCNAME,false()),local:new-facets($DOCNAME,local:gen-facets($DOCNAME,false()),false()))
-                                                                    else
-                                                                        local:gen-facets($DOCNAME,false())
-                                                    for $facet at $pos in $facets
-                                                    let $allow := $facet/allow
-                                                    order by $facet/@name ascending
-                                                    return
-                                                        <tr>
-                                                            <td class="one">
-                                                                {data($facet/@role)}
-                                                            </td>
-                                                            <td class="permView">
-                                                                <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
-                                                                    <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
-                                                                    </xf:item>                                                            
-                                                                </xf:select>
-                                                            </td>
-                                                            <td>
-                                                                <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
-                                                                    <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
-                                                                    </xf:item>                                                            
-                                                                </xf:select>
-                                                            </td>
-                                                            <td>
-                                                                <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
-                                                                    <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
-                                                                    </xf:item>                                                            
-                                                                </xf:select>
-                                                            </td>                                                        
-                                                            <td>
-                                                                <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
-                                                                    <xf:item>
-                                                                        <xf:value>{data($facet/@role)}</xf:value>
-                                                                    </xf:item>                                                            
-                                                                </xf:select>
-                                                            </td>
-                                                        </tr>                                                          
-                                                }                                                                                                                                             
-                                                </tbody>
-                                            
-                                            </table> 
-                                            <div style="margin-top:15px;"/>                                           
-                                            <xf:trigger>
-                                                <xf:label>Save state permissions</xf:label>
-                                                <xf:action>
-                                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
-                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/actions/action[last() > 1]" at="last()" />
-                                                    <!-- remove the actions node if there is jus the template action we insert -->
-                                                    <xf:delete nodeset="instance()/state[{$ATTR}]/actions[string-length(action/text()) &lt; 2]" />
-                                                    <xf:send submission="s-add"/>
-                                                    <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions" />
-                                                </xf:action>                                
-                                            </xf:trigger>
-                                        </xf:group>                                 
-                                    </div>                                   
-                                </div>                                                                
-                            </div>                       
+                                                        <td class="one">
+                                                            {data($facet/@role)}
+                                                        </td>
+                                                        <td class="permView">
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.View']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
+                                                        </td>
+                                                        <td>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Edit']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
+                                                        </td>
+                                                        <td>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Add']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
+                                                        </td>                                                        
+                                                        <td>
+                                                            <xf:select ref="instance()/facet[@name eq '{data($facet/@name)}']/allow[@permission eq '.Delete']/roles/role" appearance="full" incremental="true">
+                                                                <xf:item>
+                                                                    <xf:value>{data($facet/@role)}</xf:value>
+                                                                </xf:item>                                                            
+                                                            </xf:select>
+                                                        </td>
+                                                    </tr>                                                          
+                                            }                                                                                                                                             
+                                            </tbody>
+                                        
+                                        </table> 
+                                        <div style="margin-top:15px;"/>                                           
+                                        <xf:trigger>
+                                            <xf:label>Save state permissions</xf:label>
+                                            <xf:action>
+                                                <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                                <xf:delete nodeset="instance()/state[{$ATTR}]/actions/action[last() > 1]" at="last()" />
+                                                <!-- remove the actions node if there is jus the template action we insert -->
+                                                <xf:delete nodeset="instance()/state[{$ATTR}]/actions[string-length(action/text()) &lt; 2]" />
+                                                <xf:send submission="s-add"/>
+                                                <xf:insert nodeset="instance()/state[{$ATTR}]/child::*" at="last()" position="after" origin="instance('i-actions-node')/actions" />
+                                            </xf:action>                                
+                                        </xf:trigger>
+                                    </xf:group>                                 
+                                </div>                                   
+                            </div>
                         </div>
+                    </div>              
+                </div>
+                <div id="workspace" class="tab_content">
+                    <div class="commit-holder">
+                        <h1><xf:output value="./state[{$ATTR}]/@id" class="transition-inline"/> state | workspace</h1>
+                        <a class="commit" href="/exist/restxq/workspace/commit/{$DOCNAME}" title="save this file back to the filesystem">commit workspace</a>
                     </div>
-                </div>              
-            </div>                    
+                    <br style="clear:both"/> 
+                    <div style="width:100%;">
+                        <hr/>
+                        <div  style="width:100%;">
+                            <span class="warning">– NB: <b>press and hold CTRL key while clicking on a role to select multiple roles</b> –</span>
+                            <h2>Workspace tabs</h2>
+                            <table class="listingTable">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">Tabs</th>        
+                                        <th>Roles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    for $tab at $pos in local:workspace-tabs()/tab 
+                                    return
+                                        <tr>
+                                            <td class="one">
+                                                {data($tab/@id)}
+                                            </td>
+                                            <td class="wsRoles">
+                                                <xf:output ref="instance('i-workspace')/state[@id eq '{$NODENAME}']/tab[@id eq '{data($tab/@id)}']/@roles" incremental="true">
+                                                    <xf:label>selected:</xf:label>
+                                                    <xf:hint>shows the currently selected roles</xf:hint>
+                                                    <xf:help>hold ctrl key as you select the roles you want to allow access</xf:help>                                                    
+                                                </xf:output>
+                                                <xf:select ref="instance('i-workspace')/state[@id eq '{$NODENAME}']/tab[@id eq '{data($tab/@id)}']/@roles" appearance="minimal" incremental="true">
+                                                    <xf:alert>invalid selection</xf:alert>
+                                                    <xf:hint>hold ctrl + click the roles you want to </xf:hint>   
+                                                    <xf:itemset nodeset="instance('i-allroles')/role">
+                                                        <xf:label ref="@name"/>                                       
+                                                        <xf:value ref="@name"/>
+                                                    </xf:itemset>
+                                                </xf:select>
+                                            </td>
+                                        </tr>                                                          
+                                }                                                                                                                                             
+                                </tbody>
+                            </table>                                                   
+                        </div>
+                        <hr/>
+                        <xf:group appearance="bf:horizontalTable">
+                            <xf:trigger>
+                                <xf:label>Update</xf:label>
+                                <xf:action>
+                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'true'"/>
+                                    <xf:send submission="s-add-workspace"/>
+                                </xf:action>                                
+                            </xf:trigger>
+                        </xf:group>
+                    </div>
+                </div>
+            </div>
         </div>        
 };
 
@@ -1153,6 +1308,16 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         else
                             <xf:instance id="i-workflow" src="{$workflow:REST-CXT-MODELTMPL}/workflow.xml"/>
                     }
+                    
+                    {
+                        (: if its a new workflow meaning the workspace too does not exist. :)
+                        if(doc-available($appconfig:CONFIGS-FOLDER || "/workspace/" || $DOCNAME || ".xml")) then
+                            <xf:instance id="i-workspace" src="{$workflow:REST-BC-LIVE}/workspace/{$DOCNAME}.xml"/>
+                        else
+                            <xf:instance id="i-workspace" src="{$workflow:REST-CXT-MODELTMPL}/workspace.xml"/>
+                    }      
+                    
+                    <xf:instance id="i-workspace-state" src="{$workflow:REST-CXT-MODELTMPL}/workspace-state.xml"/>
                     
                     <xf:instance id="i-actions" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_actions.xml"/>
 
@@ -1205,7 +1370,46 @@ function workflow:state-add($node as node(), $model as map(*)) {
                         </xf:action>
                     </xf:submission>
 
+                    <xf:submission id="s-add-workspace"
+                                   method="put"
+                                   replace="none"
+                                   ref="instance('i-workspace')">
+                        <xf:resource value="'{$workflow:REST-BC-LIVE}/workspace/{$DOCNAME}.xml'"/>
+    
+                        <xf:header>
+                            <xf:name>username</xf:name>
+                            <xf:value>{$appconfig:admin-username}</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>password</xf:name>
+                            <xf:value>{$appconfig:admin-password}</xf:value>
+                        </xf:header>
+                        <xf:header>
+                            <xf:name>realm</xf:name>
+                            <xf:value>exist</xf:value>
+                        </xf:header>
+    
+                        <xf:action ev:event="xforms-submit-done">
+                            <xf:message level="ephemeral">Workspace state added successfully...</xf:message>                           
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
+                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
+                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
+                        </xf:action>
+    
+                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
+                            <xf:message level="modal">The workspace information have not auto-filled correctly</xf:message>
+                        </xf:action>
+                    </xf:submission>
+
                     <xf:action ev:event="xforms-ready">  
+                        <!-- Add a workspace ID if its not there [new workflow / first-state] -->
+                        <xf:action if="data(instance('i-workspace')/@id) = ''">
+                            <xf:setvalue ref="instance('i-workspace')/@id" value="'{$DOCNAME}'"/>
+                        </xf:action>
+                        <xf:insert nodeset="instance('i-workspace')/child::*" context="instance('i-workspace')" at="last()" position="after" origin="instance('i-workspace-state')" />                       
+                        
                         <xf:action if="exists(instance()/state)">
                             <!-- subsequent states - this blank state routine is applied -->
                             <xf:insert nodeset="instance()/state" at="last()" position="after" origin="instance('i-state')/state" />
@@ -1245,6 +1449,9 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                             <xf:hint>enter id of the new state</xf:hint>
                                             <xf:help>... and no spaces in between words or non-alphabets other than _</xf:help>
                                             <xf:alert>unique / not too short / lower-case a-z / use underscore to avoid spaces</xf:alert>
+                                            <xf:action ev:event="xforms-valid">
+                                                <xf:setvalue ref="instance('i-workspace')/state[last()]/@id" value="instance()/state[last()]/@id"/>                                           
+                                            </xf:action>                                             
                                         </xf:input>                                      
                                         <xf:input id="state-title" ref="@title" incremental="true">
                                             <xf:label>Title</xf:label>
@@ -1307,6 +1514,7 @@ function workflow:state-add($node as node(), $model as map(*)) {
                                             <!-- remove the actions node if there is jus the template action we insert -->
                                             <xf:delete nodeset="instance()/state[last()]/actions[string-length(action/text()) &lt; 2]" />                                            
                                         </xf:action>
+                                        <xf:send submission="s-add-workspace"/>
                                         <xf:send submission="s-add"/>
                                     </xf:action>                                
                                 </xf:trigger>   
@@ -1318,7 +1526,6 @@ function workflow:state-add($node as node(), $model as map(*)) {
             </div>                    
         </div>        
 };
-
 
 declare
 function workflow:transition-add($node as node(), $model as map(*)) {

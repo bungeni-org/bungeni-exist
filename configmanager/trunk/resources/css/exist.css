@@ -366,11 +366,12 @@ h1 {
 	margin-top:-27px !important;
 	margin-left:-5px !important;
 }
-
-.xfLabel{
+/*
+.xfLabel {
     padding-top:6px;
     display:block;
 }
+*/
 
 .xfControl {
 	width:100%;

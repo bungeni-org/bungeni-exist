@@ -152,6 +152,41 @@ function sysmanager:upload-form($node as node(), $model as map(*)) {
 
 };
 
+declare
+function sysmanager:existing-imports($node as node(), $model as map(*)) {
+
+    let $stamp := current-time()
+    return 
+        (: Element to pop up :)
+        <div>
+            <h3>eXisting imports</h3>
+            <ol reversed="reversed">{
+                for $coll at $pos in xmldb:get-child-collections($appconfig:CONFIGS-COLLECTION)
+                (:import_2013-06-14T17-42-53:)
+                let $pseudo-dateTime := substring-after($coll,"_")
+                (:2013-06-14T17-42-53:)
+                let $proper-date := substring-before($pseudo-dateTime,"T")
+                (:2013-06-14:)
+                let $pseudo-time := substring-after($pseudo-dateTime,"T")
+                (:17-42-53:)
+                let $proper-time := replace($pseudo-time,"-",":")
+                (:17:42:53:)
+                let $proper-dateTime := $proper-date || "T" || $proper-time
+                where starts-with($coll,"import")
+                order by $proper-dateTime descending
+                return 
+                    if ($pos = 1) then
+                        <li>{format-dateTime(xs:dateTime($proper-dateTime),"[D1o] [MNn,*-3], [Y] at [h]:[m]:[s] [P,2-2]")}
+                            <span class="label label-success">LIVE</span>
+                        </li>
+                    else
+                        <li>{format-dateTime(xs:dateTime($proper-dateTime),"[D1o] [MNn,*-3], [Y] at [h]:[m]:[s] [P,2-2]")}</li>
+                
+            }</ol>
+        </div>
+
+};
+
 (:
     Storing bungeni_custom from file-system
 :)
@@ -175,14 +210,17 @@ function sysmanager:store($node as node(), $model as map(*)) {
                     +-bungeni_custom 
                     
     live - is the folder that editor edits
-    import - is a backup of the folder imported from the file system
+    import - is a backup of the folder imported from the file system as is. Its not even transformed.
+            
     :)
     
     (: Creating the root collection for bungeni configurations :)
     let $created_configs_coll := if (xmldb:collection-available($appconfig:CONFIGS-COLLECTION)) then () else xmldb:create-collection($config:db-root-collection,$appconfig:CONFIGS-COLLECTION-NAME)
     
+    (: every import have a timestamp :)
+    let $timestamp := "_" || substring-before(replace(current-dateTime(),":","-"),".")
     (: Creating both import and live sub-collections within the the root bungeni configurations create above :)
-    let $created_import_subcoll := if (xmldb:collection-available($appconfig:CONFIGS-ROOT-IMPORT)) then () else xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'import')
+    let $created_import_subcoll := xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'import' || $timestamp)
     let $created_live_subcoll := if (xmldb:collection-available($appconfig:CONFIGS-ROOT-LIVE)) then () else xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'live')        
     
     (: check if the live configs-collections folder exists, if not, create it :)
@@ -217,7 +255,7 @@ function sysmanager:store($node as node(), $model as map(*)) {
     (: make a copy of the live folder into import :)
     let $store-new-original := xmldb:copy(
         $appconfig:CONFIGS-FOLDER,
-        $appconfig:CONFIGS-ROOT-IMPORT
+        $appconfig:CONFIGS-ROOT-IMPORT || $timestamp
         )
     (: transform the files in live folder :)
     let $transform-working-copy := local:transform-configs($storing)    

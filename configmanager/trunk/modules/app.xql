@@ -44,7 +44,7 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
             <li class="barren"><a href="roles.html"><span>roles</span></a></li>            
             <li class="barren"><a href="types.html"><span>types</span></a></li>
             <li class="barren"><a href="vocabularies.html"><span>vocabularies</span></a></li>
-            <li class="show"><a href="#config"><span>upload/save</span></a>
+            <li class="show"><a href="#config"><span>upload/commit</span></a>
                 <ul class="dropdown">
                     <li><a id="show-popup" href="upload.html?t={$timestamp}">upload</a></li>
                     <li class="last"><a class="confirm-delete" title="commit all your changes back to bungeni" href="save.html?t={$timestamp}">commit</a></li>

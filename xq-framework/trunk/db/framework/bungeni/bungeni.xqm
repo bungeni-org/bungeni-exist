@@ -338,6 +338,17 @@ declare function bun:get-attachment($acl as xs:string, $uri as xs:string, $attid
         else () 
 };
 
+declare function bun:get-votes($votes as xs:string) {
+    
+    let $votespath := doc(cmn:get-att-db() || '/' || $votes)
+    return 
+        (
+            response:stream($votespath, "media-type=application/xml"),
+            response:set-header("Content-Disposition" , concat("attachment; filename=",$votes)),
+            <xml/>
+        )
+};
+
 declare function bun:get-image($hash as xs:string, $name as xs:string) {
 
     (: get the image with the given hash from the bungeni-atts folder :)
@@ -2173,7 +2184,7 @@ declare function bun:get-sittings-feed($controller as node()?, $acl as xs:string
 declare function bun:get-raw-xml($docid as xs:string) as element() {
     util:declare-option("exist:serialize", "media-type=application/xml method=xml"),
 
-    let $doc := functx:remove-elements-deep(collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]],
+    let $doc := functx:remove-elements-deep(collection(cmn:get-lex-db())/bu:ontology[child::*[@uri eq $docid, @internal-uri eq $docid]][1],
                 ('bu:versions', 'bu:permissions', 'bu:changes','bu:description'))
     let $output := concat(replace(substring-after($docid, '/'),'/','-'),".xml")
     let $header := response:set-header("Content-Disposition" , concat("attachment; filename=",$output)) 

@@ -77,6 +77,11 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                 fw:redirect(fn:concat(request:get-uri(), "/")) 
             else  if($EXIST-PATH eq "/" or $EXIST-PATH eq "/xml/index.xml") then 
                 rou:get-home($CONTROLLER-DOC)
+        	else if ($EXIST-PATH eq "/votes" ) then 
+            (: FOR VOTES :)
+                let $file-name := xs:string(request:get-parameter("file",'')), 
+                    $act-entries-tmpl :=  bun:get-votes($file-name)
+                return $act-entries-tmpl                
         	else if ($EXIST-PATH eq "/image" ) then 
             (: FOR IMAGES :)
                 let $hash := xs:string(request:get-parameter("hash",'')), 

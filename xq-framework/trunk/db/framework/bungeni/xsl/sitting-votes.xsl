@@ -100,6 +100,10 @@
                                                             &#160;/ 
                                                             <xsl:value-of select="bu:time"/>
                                                         </xsl:if>
+                                                        &#160;
+                                                        <xsl:if test="bu:rollCall/bu:votesHashFile">
+                                                            [<a target="_self" href="votes?file={bu:rollCall/bu:votesHashFile}" title="Votes XML">XML</a>]                                                            
+                                                        </xsl:if>
                                                     </div>
                                                 </li>
                                             </xsl:for-each>

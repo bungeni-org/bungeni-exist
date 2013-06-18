@@ -126,6 +126,17 @@
         </xsl:call-template>   
     </xsl:template>
     
+    <xsl:template match="field[@name='votes_hash']">
+        <xsl:call-template name="renderStringElement">
+            <xsl:with-param name="elementName">votesHashFile</xsl:with-param>
+        </xsl:call-template>   
+    </xsl:template>    
+    
+    <xsl:template match="roll_call">
+        <rollCall>
+            <xsl:apply-templates/>
+        </rollCall>   
+    </xsl:template>     
     
     <xsl:template match="field[@name='doc_type']">
         <docSubType isA="TLCTerm">

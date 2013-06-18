@@ -306,8 +306,6 @@ declare function local:gen-facets($docname as xs:string?,$global as xs:boolean) 
                     $new-docname
                 else    
                     data($WF-DOC/state[$ATTR]/@id)
-    let $log := util:log('debug',$new-docname)
-    let $log := util:log('debug',"+++++++++++++++++++::::::::::::::::++++++++++++++++++")
                     
     let $original-name := if(starts-with($docname,'ext_')) then $workflow:FEATURE-FACET else $name
                     

@@ -6,6 +6,7 @@ xquery version "3.0";
 module namespace cmwfrest = "http://exist-db.org/apps/configmanager/rest";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
+import module namespace sysmanager = "http://exist.bungeni.org/systemfunctions" at "system.xql";
 (: external dependency to be installed :)
 import module namespace gv = "http://kitwallace.co.uk/ns/graphviz" at "xmldb:exist:///db/apps/graphviz/lib/graphviz.xqm";
 import module namespace functx = "http://www.functx.com" at "functx.xqm";
@@ -36,4 +37,38 @@ function cmwfrest:commit-single-root($name as xs:string) {
                                                 "media-type=application/xml method=xml")
     return 
         $status
+};
+
+(: ACTIVATE a configuration in bungeni-configuration collections :)
+declare 
+    %rest:GET
+    %rest:path("/system/activate/{$name}")
+function cmwfrest:activate-single($name as xs:string) {
+
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    (: copy import_... to live :)
+    let $copy-to-live := xmldb:copy($appconfig:CONFIGS-COLLECTION || "/" || $name || "/" || $appconfig:CONFIGS-FOLDER-NAME, $appconfig:CONFIGS-ROOT-LIVE)
+    (: transform the files in live folder :)
+    let $storing := for $item in collection($copy-to-live) return fn:base-uri($item)
+    let $transform-working-copy := sysmanager:transform-configs($storing)    
+    (: update the config.xml with the new active import_... :)
+    let $update-fs-live := update replace $appconfig:doc/ce-config/configs/fs-live/text() with $name
+
+    return 
+        <done>{$name}</done>
+};
+
+(: DELETE imported configuration in bungeni-configuration collections :)
+declare 
+    %rest:DELETE
+    %rest:path("/system/delete/{$name}")
+function cmwfrest:delete-single($name as xs:string) {
+
+    let $active-name := $appconfig:doc/ce-config/configs/fs-live/text()
+    let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
+    return 
+        if($active-name ne $name) then 
+            xmldb:remove($appconfig:CONFIGS-COLLECTION || "/" || $name)
+        else
+            "could not delete"
 };

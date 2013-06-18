@@ -370,6 +370,41 @@ class SeekBindAttachmentsWalker(GenericDirWalkerXML):
         else:
             LOG.debug("In attachments_seek_rename " + inputdoc.xmlfile + " NO attachments")
 
+    def votes_seek_rename(self, inputdoc, dir_name, abs_path = False):
+        """
+        Votes are zipped by Bungeni like any other attachment. We therefore link it to parent and 
+        rename the votes document (XML) to be uploaded into bungeni-xml collection.
+        """
+        # get the folder where the attachments are written to
+        self.atts_folder = self.input_params["main_config"].get_attachments_output_folder()
+        # get the attached_files node in the document
+        item_schedules = inputdoc.get_votes_file()
+        if (item_schedules is not None):
+            LOG.debug("In votes_seek_rename " + inputdoc.xmlfile + " HAS vote(s) ")
+            # get the roll_call nodes within item_schedule
+            nodes = item_schedules.selectNodes("//item_schedule/itemvotes/itemvote/roll_call")
+            document_updated = False
+            for node in nodes:
+                # for each attached_file
+                saved_file_node = node.selectSingleNode(self.xpath_get_saved_file())
+                if saved_file_node is not None:
+                    # get the name of the saved file node
+                    original_name = saved_file_node.getText()
+                    # first get the current directory name 
+                    current_dir = os.path.dirname(inputdoc.xmlfile)
+                    # rename file with md5sum
+                    new_name = "votes_" + __md5_file(current_dir + "/" + original_name) + ".xml"
+                    # move file to attachments folder and use derived uuid as new name for the file
+                    shutil.move(current_dir + "/" + original_name, self.atts_folder + new_name)
+                    # add new node on document with uuid
+                    node.addElement("field").addText(new_name).addAttribute("name","votes_hash")
+                    document_updated = True
+            if document_updated:
+                inputdoc.write_to_disk()
+            
+        else:
+            LOG.debug("In votes_seek_rename " + inputdoc.xmlfile + " NO votes")
+
     def image_seek_rename(self, inputdoc, dir_name, abs_path = False):
         """
         User images arrive from bungeni in zip files and use a non-random filename,

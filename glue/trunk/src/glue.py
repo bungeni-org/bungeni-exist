@@ -861,11 +861,17 @@ def main_queue(config_file, afile, parliament_cache_info):
                 print "[checkpoint] unzipped file parsed"
                 sba = SeekBindAttachmentsWalker(cfgs)
                 image_node = bunparse.get_image_file()
+                votes_node = bunparse.get_votes_file()
                 if (image_node is not None):
                     print "[checkpoint] entered user/group doc path"
                     local_dir = os.path.dirname(afile)
                     print "[checkpoint] processing image/log_data file"
                     origi_name = sba.image_seek_rename(bunparse, temp_dir, True)
+                elif (votes_node is not None):
+                    print "[checkpoint] we have votes"
+                    local_dir = os.path.dirname(afile)
+                    print "[checkpoint] processing file with roll_call node"
+                    origi_name = sba.votes_seek_rename(bunparse, temp_dir, True)
                 else:
                     print "[checkpoint] entered attachments doc path"
                     sba.attachments_seek_rename(bunparse)

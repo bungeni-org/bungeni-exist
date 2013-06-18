@@ -226,6 +226,10 @@ class ParseBungeniXML(ParseXML):
         
         return self.__global_path__ + "attachments"
 
+    def xpath_get_item_schedules(self):
+
+        return self.__global_path__ + "item_schedule[child::item_schedule]"
+
     def xpath_get_image(self):
 
         return self.__global_path__ + "image"
@@ -239,6 +243,18 @@ class ParseBungeniXML(ParseXML):
         Gets the attached_files node for a document
         """
         return self.xmldoc.selectSingleNode(self.xpath_get_attachments())
+
+    def get_votes_file(self):
+        """
+        Gets the roll_call node contained in sitting/document/MP
+        """
+        # get from default <roll_call/> node...
+        item_schedules_node = self.xmldoc.selectSingleNode(self.xpath_get_item_schedules())
+        if item_schedules_node is not None:
+            return item_schedules_node
+        else:
+            print "[checkpoint] couldn't find item_schedules node"
+            return None
 
     def get_image_file(self):
         """

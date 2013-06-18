@@ -169,11 +169,56 @@ $(document).ready(function(){
                     }
                 });        
             }        
-        }  
-        
+        }        
         return false;
-        
-    });   
+    }); 
+    
+    // deleting an import_
+    $(".delete-import").live('click', function() {
+        var href = $(this).attr('href');
+        var tr = $(this).closest('tr');          
+
+        if ($(this).is(".delete-import")) {   
+            if (confirm('Are you sure to proceed with DELETE?\r\n It is non-reversible')) {
+                $.ajax({
+                    type: "DELETE",
+                    url: href,
+                    data: "nothing",
+                    success: function(data) {  
+                        tr.fadeOut('slow', function() { tr.remove(); });
+                    },
+                    error: function (request, status, throwerror) {
+                        tr.find("div.btn-group").removeClass("open");
+                    }
+                });        
+            }        
+        }        
+        return false;
+    }); 
+    
+    // change-of-configuration 
+    $(".activate-import").live('click', function() {
+        var href = $(this).attr('href');
+        var tr = $(this).closest('tr');          
+
+        if ($(this).is(".activate-import")) {   
+            tr.find(".import-progress > div").show();
+            tr.find("div.btn-group").removeClass("open");
+            $.ajax({
+                type: "GET",
+                url: href,
+                success: function(data) {   
+                    tr.siblings().find(".btn").removeClass("btn-success");
+                    tr.find(".btn").addClass("btn-success");
+                    tr.find(".import-progress > div").hide();
+                },
+                error: function (request, status, throwerror) {
+                    tr.find(".import-progress > div").hide();
+                }
+            });        
+        }        
+        return false;
+    });    
     
     // commit
     $(".commit").live('click', function() {

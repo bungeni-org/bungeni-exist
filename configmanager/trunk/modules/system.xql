@@ -28,11 +28,12 @@ declare function local:update-fs-path($fs-bu-custom-path as xs:string) {
 };
 
 
-declare function local:transform-configs($file-paths) {
+declare function sysmanager:transform-configs($file-paths) {
     for $store in $file-paths    
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $resource := functx:substring-after-last($store, '/')
-    let $collection := functx:substring-before-last($store, '/')   
+    let $collection := functx:substring-before-last($store, '/')
+    where not(contains($store,"/.auto/")) 
     return
         if (contains($store,"/forms/")) then (
             xmldb:store($collection, $resource, local:split-form($store), "application/xml")            
@@ -55,7 +56,6 @@ declare function local:reverse-transform-configs() {
     for $doc in collection($appconfig:CONFIGS-FOLDER)
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $path := document-uri($doc)
-    let $log := util:log("INFO",$path)
     (: form XSLTs:)
     let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
     let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")
@@ -92,7 +92,6 @@ declare function local:reverse-transform-configs() {
 };
 
 declare function local:split-form($form-path as xs:string) {
-    let $here := util:log('info', appconfig:get-xslt("forms_split_step1.xsl")) 
     let $input_doc := doc($form-path)    
     let $step1 := appconfig:get-xslt("forms_split_step1.xsl")
     let $step2 := appconfig:get-xslt("forms_split_step2.xsl")
@@ -131,16 +130,14 @@ function sysmanager:upload-form($node as node(), $model as map(*)) {
                 <table>
                     <tr>
                         <td style="width: 90px;"><label for="name">Absolute Path: </label></td>
-                        <td><input type="text" style="width:90%;" id="fs_path" name="fs_path" value="{$appconfig:FS-PATH}" /></td>
+                        <td><input type="text" style="width:50%;" id="fs_path" name="fs_path" value="{$appconfig:FS-PATH}" /></td>
                     </tr>                    			
                     <tr>
                         <td colspan="2">
-                            e.g. <i>/home/undesa/bungeni_apps/bungeni/src/bungeni_custom</i>
+                            e.g. <i>/home/user/bungeni_apps/bungeni/src/bungeni_custom</i>
                             <br />
                             <br />
-                            NOTE: This action will overwrite existing bungeni_custom. Unless the<br/>
-                            structure of the configuration files has changed, this process is prefererably<br />
-                            done once.<br/>
+                            <p><span class="label label-warning">NB</span> This action will overwrite existing bungeni_custom. Unless the structure of the configuration files has changed, this process is prefererably done once.</p>
                         </td>
                     </tr>
                 </table>
@@ -158,9 +155,10 @@ function sysmanager:existing-imports($node as node(), $model as map(*)) {
     let $stamp := current-time()
     return 
         (: Element to pop up :)
-        <div>
+        <div style="width:57%">
             <h3>eXisting imports</h3>
-            <ol reversed="reversed">{
+            <table class="table">{
+                let $fs-live := $appconfig:doc/ce-config/configs/fs-live/text()
                 for $coll at $pos in xmldb:get-child-collections($appconfig:CONFIGS-COLLECTION)
                 (:import_2013-06-14T17-42-53:)
                 let $pseudo-dateTime := substring-after($coll,"_")
@@ -175,14 +173,27 @@ function sysmanager:existing-imports($node as node(), $model as map(*)) {
                 where starts-with($coll,"import")
                 order by $proper-dateTime descending
                 return 
-                    if ($pos = 1) then
-                        <li>{format-dateTime(xs:dateTime($proper-dateTime),"[D1o] [MNn,*-3], [Y] at [h]:[m]:[s] [P,2-2]")}
-                            <span class="label label-success">LIVE</span>
-                        </li>
-                    else
-                        <li>{format-dateTime(xs:dateTime($proper-dateTime),"[D1o] [MNn,*-3], [Y] at [h]:[m]:[s] [P,2-2]")}</li>
-                
-            }</ol>
+                    <tr>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn {if ($fs-live = $coll) then 'btn-success' else () }">{format-dateTime(xs:dateTime($proper-dateTime),"[D1o] [MNn,*-3], [Y] at [h]:[m]:[s] [P,2-2]")}</button>
+                                <button class="btn {if ($fs-live = $coll) then 'btn-success' else () } dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="activate-import" href="/exist/restxq/system/activate/{$coll}">set as active</a></li>
+                                    <li><a class="delete-import" href="/exist/restxq/system/delete/{$coll}">delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td class="import-progress">
+                            <div class="hide progress progress-success progress-striped active">
+                              <div class="bar" style="width: 100%;">activating...</div>
+                            </div>  
+                        </td>
+                    </tr>
+            }</table>
+            <p><span class="label label-info">NB</span> Click on the dropdown icon to activate a different set</p>
+            <p><span class="label label-warning">NB</span> You cannot delete an active import (denoted by color green). You have to set another as active to that</p>
+            <p><span class="label label-important">NB</span> Setting a configuration as active will overwrite current active and all changes made will be lost</p>
         </div>
 
 };
@@ -219,8 +230,9 @@ function sysmanager:store($node as node(), $model as map(*)) {
     
     (: every import have a timestamp :)
     let $timestamp := "_" || substring-before(replace(current-dateTime(),":","-"),".")
+    let $import-timestamp := 'import' || $timestamp
     (: Creating both import and live sub-collections within the the root bungeni configurations create above :)
-    let $created_import_subcoll := xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'import' || $timestamp)
+    let $created_import_subcoll := xmldb:create-collection($appconfig:CONFIGS-COLLECTION,$import-timestamp)
     let $created_live_subcoll := if (xmldb:collection-available($appconfig:CONFIGS-ROOT-LIVE)) then () else xmldb:create-collection($appconfig:CONFIGS-COLLECTION,'live')        
     
     (: check if the live configs-collections folder exists, if not, create it :)
@@ -258,8 +270,11 @@ function sysmanager:store($node as node(), $model as map(*)) {
         $appconfig:CONFIGS-ROOT-IMPORT || $timestamp
         )
     (: transform the files in live folder :)
-    let $transform-working-copy := local:transform-configs($storing)    
+    let $transform-working-copy := sysmanager:transform-configs($storing)    
     
+    (: update the config.xml with the live import :)
+    let $update-fs-live := update replace $appconfig:doc/ce-config/configs/fs-live/text() with $import-timestamp
+
     return
         <div style="font-size:0.8em;">
              {

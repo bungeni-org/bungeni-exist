@@ -50,6 +50,7 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
                     <li class="last"><a class="confirm-delete" title="commit all your changes back to bungeni" href="save.html?t={$timestamp}">commit</a></li>
                 </ul>
             </li>
+            <li class="barren help"><a href="help.html"><span>help</span></a></li>
         </ul>
     </div>
 };

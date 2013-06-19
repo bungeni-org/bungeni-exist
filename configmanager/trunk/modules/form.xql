@@ -857,9 +857,9 @@ function form:field-add($node as node(), $model as map(*)) {
     
                         <xf:action ev:event="xforms-submit-done">
                             <xf:message level="ephemeral">field '{$fieldid}' saved successfully</xf:message>
-                            <script type="text/javascript" if="instance('tmp')/wantsToClose">
-                                console.log("done");
-                            </script>
+                            <script type="text/javascript" if="instance('tmp')/wantsToClose = 'false'">
+                                document.location.href = 'field-add.html?type={$type}&#38;amp;doc={$docname}&#38;amp;pos={$pos}&#38;amp;node={$node}&#38;amp;after=';
+                            </script>                          
                         </xf:action>
     
                         <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
@@ -1117,7 +1117,21 @@ function form:field-add($node as node(), $model as map(*)) {
                                     <xf:setvalue ref="instance()/field[last()]/listing[@show eq '']/@show" value="boolean-from-string('false')"/>
                                     <xf:send submission="s-add"/>
                                 </xf:action>                              
-                            </xf:trigger>                  
+                            </xf:trigger>
+                            <xf:trigger>
+                                <xf:label>Save &amp; Add again</xf:label>
+                                <xf:hint>Saves and reloads this page to add a new field</xf:hint>
+                                <xf:help>Saves and reloads this page to add a new field</xf:help>
+                                <xf:action>
+                                    <xf:setvalue ref="instance('tmp')/wantsToClose" value="'false'"/>
+                                    <!-- set a default false() if the modes haven't been set -->
+                                    <xf:setvalue ref="instance()/field[last()]/view[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:setvalue ref="instance()/field[last()]/edit[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:setvalue ref="instance()/field[last()]/add[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:setvalue ref="instance()/field[last()]/listing[@show eq '']/@show" value="boolean-from-string('false')"/>
+                                    <xf:send submission="s-add"/>
+                                </xf:action>                              
+                            </xf:trigger>                            
                         </xf:group>   
                         
                         <xf:output mediatype="text/html" ref="instance('i-controller')/error" id="errorReport"/>                      

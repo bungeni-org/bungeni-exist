@@ -424,6 +424,8 @@ function workflow:edit($node as node(), $model as map(*)) {
                        <URL/>
                     </xf:instance>  
                     
+                    <xf:instance id="i-feature-dependencies" src="{$workflow:REST-BC-LIVE}/workflows/.auto/_features.xml"/> 
+                    
                     <xf:instance id="i-facets">
                         <data xmlns="">
                             { 
@@ -623,16 +625,19 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             else
                                                 <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
                                                     <xf:label>{data($feature/@name)} </xf:label>
-                                                    <!-- !+NOTE (ao, June 6th 2013) Hardcoded enforcing of feature dependencies as it is not exported 
-                                                        at the moment in order to determine all the known dependecies -->
-                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'version'">
-                                                        <xf:setvalue ref="instance()/feature[@name = 'attachment']/@enabled" value="instance()/feature[@name = 'version']/@enabled"/>
-                                                        <xf:message level="ephemeral">Enabled dependent feature attachment</xf:message>
-                                                    </xf:action> 
-                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'attachment'">
-                                                        <xf:setvalue ref="instance()/feature[@name = 'version']/@enabled" value="instance()/feature[@name = 'attachment']/@enabled"/>
-                                                        <xf:message level="ephemeral">Enabled dependent feature version</xf:message>
-                                                    </xf:action>                                                     
+                                                    {
+                                                        for $feat in doc($appconfig:WF-FOLDER || "/.auto/_features.xml")/features/feature[@name eq data($feature/@name)]
+                                                        where not(empty($feat/depends/depend))
+                                                        return
+                                                            <xf:action ev:event="xforms-value-changed">
+                                                                {
+                                                                    for $depend in $feat/depends/depend
+                                                                    return 
+                                                                        <xf:setvalue ref="instance()/feature[@name = '{$depend/text()}']/@enabled" value="instance()/feature[@name = '{data($feature/@name)}']/@enabled"/>
+                                                                }
+                                                                <xf:message level="ephemeral">Enabled/Disabled dependent feature(s)</xf:message>
+                                                            </xf:action>                                                        
+                                                    }                                                                                                      
                                                 </xf:input>                                    
                                     )
                                     else
@@ -665,16 +670,19 @@ function workflow:edit($node as node(), $model as map(*)) {
                                             else
                                                 <xf:input ref="feature[@name eq '{$feature/@name}']/@enabled">
                                                     <xf:label>{data($feature/@name)} </xf:label>
-                                                    <!-- !+NOTE (ao, June 6th 2013) Hardcoded enforcing of feature dependencies as it is not exported 
-                                                        at the moment in order to determine all the known dependecies -->
-                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'version'">
-                                                        <xf:setvalue ref="instance()/feature[@name = 'attachment']/@enabled" value="instance()/feature[@name = 'version']/@enabled"/>
-                                                        <xf:message level="ephemeral">Enabled dependent feature attachment</xf:message>
-                                                    </xf:action> 
-                                                    <xf:action ev:event="xforms-value-changed" if="'{data($feature/@name)}' eq 'attachment'">
-                                                        <xf:setvalue ref="instance()/feature[@name = 'version']/@enabled" value="instance()/feature[@name = 'attachment']/@enabled"/>
-                                                        <xf:message level="ephemeral">Enabled dependent feature version</xf:message>
-                                                    </xf:action>                                                     
+                                                    {
+                                                        for $feat in doc($appconfig:WF-FOLDER || "/.auto/_features.xml")/features/feature[@name eq data($feature/@name)]
+                                                        where not(empty($feat/depends/depend))
+                                                        return
+                                                            <xf:action ev:event="xforms-value-changed">
+                                                                {
+                                                                    for $depend in $feat/depends/depend
+                                                                    return 
+                                                                        <xf:setvalue ref="instance()/feature[@name = '{$depend/text()}']/@enabled" value="instance()/feature[@name = '{data($feature/@name)}']/@enabled"/>
+                                                                }
+                                                                <xf:message level="ephemeral">Enabled/Disabled dependent feature(s)</xf:message>
+                                                            </xf:action>                                                        
+                                                    }                                                     
                                                 </xf:input>
                                         )
                                     else

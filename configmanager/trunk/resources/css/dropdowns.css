@@ -57,7 +57,7 @@ ul.dropdown {
     position: relative;
     z-index: 597;
     float: left; 
-    width: 940px;
+    width: 960px;
 }
 
 ul.dropdown li {
@@ -68,6 +68,13 @@ ul.dropdown li {
  vertical-align: middle; 
  zoom: 1;
  background: url(../images/bgmenu.gif) no-repeat;
+}
+
+ul.dropdown li.help a {
+    color: #888;
+}
+ul.dropdown li.help a:hover {
+    color:#ffcb05;
 }
 
 ul.dropdown li.barren {

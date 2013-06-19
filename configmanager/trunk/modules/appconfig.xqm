@@ -20,7 +20,7 @@ declare variable $appconfig:CONFIGS-ROOT-IMPORT := $appconfig:CONFIGS-COLLECTION
 
 declare variable $appconfig:CONFIGS-ROOT-LIVE := $appconfig:CONFIGS-COLLECTION || "/live" ; 
 
-(: app/bungeni-configuration/import/bungeni_custom :)
+(: app/bungeni-configuration/import_*/bungeni_custom :)
 declare variable $appconfig:CONFIGS-IMPORT := $appconfig:CONFIGS-ROOT-IMPORT || "/" || $appconfig:CONFIGS-FOLDER-NAME ;
 
 (: app/bungeni-configuration/live/bungeni_custom :)

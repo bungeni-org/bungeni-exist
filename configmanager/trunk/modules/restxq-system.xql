@@ -48,8 +48,8 @@ function cmwfrest:activate-single($name as xs:string) {
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     (: copy import_... to live :)
     let $copy-to-live := xmldb:copy($appconfig:CONFIGS-COLLECTION || "/" || $name || "/" || $appconfig:CONFIGS-FOLDER-NAME, $appconfig:CONFIGS-ROOT-LIVE)
-    (: transform the files in live folder :)
-    let $storing := for $item in collection($copy-to-live) return fn:base-uri($item)
+    (: now transform the live folder files :)
+    let $storing := for $item in collection($appconfig:CONFIGS-ROOT-LIVE || "/" || $appconfig:CONFIGS-FOLDER-NAME) return fn:base-uri($item)
     let $transform-working-copy := sysmanager:transform-configs($storing)    
     (: update the config.xml with the new active import_... :)
     let $update-fs-live := update replace $appconfig:doc/ce-config/configs/fs-live/text() with $name

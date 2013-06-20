@@ -83,10 +83,6 @@
             </div>
         </div>
     </xsl:template>
-
-    
-    <!-- Include the paginator generator -->
-    <xsl:include href="paginator.xsl"/>
     <xsl:template match="alisting">
         <ul id="list-toggle" class="ls-row clear">
             <xsl:apply-templates mode="renderui"/>

@@ -253,7 +253,7 @@ function role:edit($node as node(), $model as map(*)) {
                     <div style="width:100%;">
                         <xf:group appearance="bf:horizontalTable">
                             <xf:repeat id="r-subroles" nodeset="subrole" appearance="compact">
-                                <xf:input ref="@name" incremental="true">
+                                <xf:input ref="@id" incremental="true" class="xmediumXWidth">
                                     <xf:label>id:</xf:label>
                                     <xf:hint>{$name}.</xf:hint>
                                     <xf:help>should be attached to role is using a dot</xf:help>
@@ -335,9 +335,12 @@ function role:edit($node as node(), $model as map(*)) {
                         <div class="ulisting">
                             {
                                 if(local:occurrences()) then 
-                                    <span class="warning">&#8211; NB: <b>deleting this role will only be possible once the facets / states and forms it features in below are removed first</b> &#8211;</span>
+                                    <div class="alert alert-info">
+                                      <button type="button" class="close" data-dismiss="alert">×</button>
+                                      <strong>NB &#8211;</strong> deleting this role will only be possible once the facets / states and forms it features in below are removed first.
+                                    </div>                                  
                                 else  
-                                    "none - can be safely deleted"
+                                    "none - can be deleted safely"
                             }
                             <ul class="clearfix ulfields">
                                 {local:occurrences()}

@@ -82,7 +82,7 @@ function cmrest:delete-field($doc as xs:string,$field as xs:string) {
 };
 
 (:~
- : COMMIT a form to the filesystem. Every form is committed in the company of types.xml
+ : COMMIT a form to the filesystem. Every form is committed in the company of types.xml and roles.xml
  :)
 declare 
     %rest:GET
@@ -91,11 +91,14 @@ function cmrest:commit-form($name as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:FORM-FOLDER || "/" || $name || ".xml")/descriptor
+    let $roles := doc($appconfig:ROLES-XML)/roles    
     let $types := doc($appconfig:TYPES-XML)/types
     (: form XSLTs:)
     let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
     let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")  
     
+    let $null := file:serialize($roles,$appconfig:FS-PATH || "/roles.xml" ,
+                                                "media-type=application/xml method=xml")    
     let $null := file:serialize($types,$appconfig:FS-PATH || "/types.xml" ,
                                                 "media-type=application/xml method=xml")
     let $status :=  file:serialize(transform:transform(

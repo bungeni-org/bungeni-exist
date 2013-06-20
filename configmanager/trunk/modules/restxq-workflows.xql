@@ -141,7 +141,7 @@ function cmwfrest:graphviz-workflow($name as xs:string) {
         $svg
 };
 
-(: COMMIT a workflow to the filesystem. Every workflow is committed in company of types.xml :)
+(: COMMIT a workflow to the filesystem. Every workflow is committed in company of types.xml and roles.xml :)
 declare 
     (: 
         !+NOTE (ao, 26th Mar 2013) Using GET instead of POST/PUT because both seem unstable on the
@@ -155,10 +155,13 @@ function cmwfrest:commit-workflow($name as xs:string) {
 
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $doc := doc($appconfig:WF-FOLDER || "/" || $name || ".xml")/workflow
+    let $roles := doc($appconfig:ROLES-XML)/roles
     let $types := doc($appconfig:TYPES-XML)/types
     (: workflow XSLT:)
     let $xslworkflow := appconfig:get-xslt("wf_merge_attrs.xsl")   
     
+    let $null := file:serialize($roles,$appconfig:FS-PATH || "/roles.xml" ,
+                                                "media-type=application/xml method=xml")    
     let $null := file:serialize($types,$appconfig:FS-PATH || "/types.xml" ,
                                                 "media-type=application/xml method=xml")
     let $status := file:serialize(transform:transform($doc, $xslworkflow, ()),

@@ -38,6 +38,8 @@ declare variable $appconfig:VOCABS-FOLDER := $appconfig:CONFIGS-FOLDER || "/" ||
 
 declare variable $appconfig:NOTIF-FOLDER := $appconfig:CONFIGS-FOLDER || "/" || data($appconfig:doc/ce-config/configs/@notif);
 
+declare variable $appconfig:ROLES-XML := $appconfig:CONFIGS-FOLDER || "/roles.xml";
+
 declare variable $appconfig:TYPES-XML := $appconfig:CONFIGS-FOLDER || "/types.xml";
 
 declare variable $appconfig:UI-XML := $appconfig:FORM-FOLDER || "/ui.xml";

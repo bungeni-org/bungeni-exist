@@ -17,6 +17,7 @@ import module namespace type="http://exist.bungeni.org/types" at "type.xql";
 import module namespace sysmanager="http://exist.bungeni.org/systemfunctions" at "system.xql";
 import module namespace form="http://exist.bungeni.org/formfunctions" at "form.xql";
 import module namespace workflow="http://exist.bungeni.org/workflowfunctions" at "workflow.xql";
+import module namespace notif="http://exist.bungeni.org/notificationfunctions" at "notification.xql";
 import module namespace vocab="http://exist.bungeni.org/vocalularies" at "vocabularies.xql";
 import module namespace role="http://exist.bungeni.org/rolefunctions" at "role.xql";
 

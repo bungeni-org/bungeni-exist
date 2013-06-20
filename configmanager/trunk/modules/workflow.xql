@@ -845,7 +845,13 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                  <xf:model id="master">
                     <xf:instance id="i-workflow" src="{$workflow:REST-BC-LIVE}/workflows/{$DOCNAME}.xml"/>
                     
-                    <xf:instance id="i-workspace" src="{$workflow:REST-BC-LIVE}/workspace/{$DOCNAME}.xml"/>
+                    {
+                        (: event types don't have workspace :)
+                        if($TYPE != 'event') then 
+                            <xf:instance id="i-workspace" src="{$workflow:REST-BC-LIVE}/workspace/{$DOCNAME}.xml"/>
+                        else
+                            ()
+                    }
 
                     <xf:instance id="i-alltags" src="{$workflow:REST-CXT-MODELTMPL}/_tags.xml"/>
                     
@@ -873,9 +879,15 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         <xf:bind nodeset="actions/action" type="xf:string" required="true()" constraint="count(instance()/state[{$ATTR}]/actions/action) eq count(distinct-values(instance()/state[{$ATTR}]/actions/action))" />                
                     </xf:bind>   
                     
-                    <xf:bind nodeset="instance('i-workspace')/state[{$ATTR}]">
-                        <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                
-                    </xf:bind>                    
+                    {
+                        (: event types don't have workspace :)
+                        if($TYPE != 'event') then 
+                            <xf:bind nodeset="instance('i-workspace')/state[{$ATTR}]">
+                                <xf:bind nodeset="@id" type="xf:string" required="true()" constraint="string-length(.) &gt; 2" />                
+                            </xf:bind>  
+                        else
+                            ()
+                    }                  
                     
                     <xf:instance xmlns="" id="i-permissions-manager">
                         <data>
@@ -1028,7 +1040,13 @@ function workflow:state-edit($node as node(), $model as map(*)) {
             <div id="tabs_container">
                 <ul id="tabs">
                     <li id="tabworkflow" class="active"><a href="#workflow">Properties</a></li>
-                    <li id="tabworkspace"><a href="#workspace">Workspace</a></li>
+                    {
+                        (: event types don't have workspace :)
+                        if($TYPE != 'event') then 
+                            <li id="tabworkspace"><a href="#workspace">Workspace</a></li>  
+                        else
+                            ()
+                    }
                 </ul>
             </div>            
 
@@ -1244,7 +1262,10 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                     <div style="width:100%;">
                         <hr/>
                         <div  style="width:100%;">
-                            <span class="warning">– NB: <b>press and hold CTRL key while clicking on a role to select multiple roles</b> –</span>
+                            <div class="alert alert-info">
+                              <button type="button" class="close" data-dismiss="alert">×</button>
+                              <strong>Heads Up!</strong> press and hold CTRL key while clicking on a role to select multiple roles.
+                            </div>
                             <h2>Workspace tabs</h2>
                             <table class="listingTable">
                                 <thead>

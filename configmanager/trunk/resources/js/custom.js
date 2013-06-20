@@ -186,6 +186,7 @@ $(document).ready(function(){
                     data: "nothing",
                     success: function(data) {  
                         tr.fadeOut('slow', function() { tr.remove(); });
+                        //tr.animate({ backgroundColor: "#fbc7c7" }, "slow").animate({ opacity: "hide" }, "slow");
                     },
                     error: function (request, status, throwerror) {
                         tr.find("div.btn-group").removeClass("open");
@@ -208,8 +209,10 @@ $(document).ready(function(){
                 type: "GET",
                 url: href,
                 success: function(data) {   
+                    tr.siblings().find(".btn").removeClass("disabled");
                     tr.siblings().find(".btn").removeClass("btn-success");
                     tr.find(".btn").addClass("btn-success");
+                    tr.find(".btn").next().addClass("disabled");
                     tr.find(".import-progress > div").hide();
                 },
                 error: function (request, status, throwerror) {

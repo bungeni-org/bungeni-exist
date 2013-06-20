@@ -2298,6 +2298,7 @@ declare function bun:get-committees(
          }
          </tags>    
         <currentView>{$parts/current-view}</currentView>
+        <chamber>{$parliament/type/text()}</chamber>
         <documentType>committee</documentType>
         <listingUrlPrefix>committee/text</listingUrlPrefix>
         <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>        
@@ -2868,6 +2869,7 @@ declare function bun:get-politicalgroups(
          }
          </tags>         
         <currentView>{$parts/current-view}</currentView>
+        <chamber>{$parliament/type/text()}</chamber>
         <documentType>political-group</documentType>
         <listingUrlPrefix>political-group/text</listingUrlPrefix>      
         <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>

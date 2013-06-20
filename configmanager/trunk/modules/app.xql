@@ -39,7 +39,7 @@ function app:get-main-nav($node as node(), $model as map(*), $active as xs:strin
     <div id="navigation">
         <ul class="dropdown dropdown-horizontal">
             <li class="barren">
-                <span>&#160;&#187;&#187;&#160;&#187;&#187;</span>
+                <span style="color:#555555">&#160;&#187;&#187;&#160;&#187;&#187;</span>
             </li>
             <li class="barren"><a href="roles.html"><span>roles</span></a></li>            
             <li class="barren"><a href="types.html"><span>types</span></a></li>
@@ -136,14 +136,14 @@ function app:get-type-parts($node as node(), $model as map(*), $active as xs:str
                                 <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
                             else
                                 <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>
+                    :)                                
                     case 'notification' return 
                         let $doc-path := $appconfig:CONFIGS-FOLDER || "/notifications/" || $name || ".xml"
                         return 
                             if (doc-available($doc-path) or $active eq $part) then 
                                 <li><a class="sec-active" href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}"><i class="icon-edit add"></i>&#160;{$part}</a></li>
                             else 
-                                <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>                         
-                   :)
+                                <li><a href="{$part}.html?type={$type}&amp;doc={$name}&amp;pos={$pos}&amp;init=true"><i class="icon-plus add"></i> add {$part}</a></li>
                    default return ()
                    
             }

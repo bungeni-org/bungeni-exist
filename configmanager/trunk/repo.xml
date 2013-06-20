@@ -9,6 +9,6 @@
     <type>application</type>
     <target>configmanager</target>
     <prepare>pre-install.xql</prepare>
-    <finish/>
-    <deployed>2013-01-11T15:34:00.307+03:00</deployed>
+    <finish>post-install.xql</finish>
+    <deployed>2013-06-13T11:42:54.862+03:00</deployed>
 </meta>

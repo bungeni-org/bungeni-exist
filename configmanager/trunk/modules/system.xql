@@ -183,7 +183,7 @@ function sysmanager:existing-imports($node as node(), $model as map(*)) {
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn {if ($fs-live = $coll) then 'btn-success' else () }">{format-dateTime(xs:dateTime($proper-dateTime),"[D1o] [MNn,*-3], [Y] at [h]:[m]:[s] [P,2-2]")}</button>
-                                        <button class="btn {if ($fs-live = $coll) then 'btn-success' else () } dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                        <button class="btn {if ($fs-live = $coll) then 'btn-success disabled' else () } dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li><a class="activate-import" href="/exist/restxq/system/activate/{$coll}">set as active</a></li>
                                             <li><a class="delete-import" href="/exist/restxq/system/delete/{$coll}">delete</a></li>
@@ -208,13 +208,45 @@ function sysmanager:existing-imports($node as node(), $model as map(*)) {
 };
 
 (:
+    Can show the status of the upload if supplied by the query-parameter
+:)
+declare 
+function sysmanager:status($node as node(), $model as map(*)) {
+
+    let $status := xs:string(request:get-parameter("status",""))    
+    return
+        <div style="font-size:0.8em;">
+             {
+                if($status = 'yeas') then 
+                    <div class="alert alert-success" style="width:52%;">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <p>
+                            <strong>Upload was successful!</strong>
+                            Activate the newly imported configuration below and start editing the configuration
+                        </p> 
+                    </div>
+                else if ($status = 'nay') then 
+                    <div class="alert alert-error" style="width:52%;">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <p>
+                            <strong>Upload was Unsuccessful!</strong>
+                            Ensure you put the correct absolute-path to the <i>bungeni_custom</i> folder of your Bungeni application
+                        </p>                         
+                    </div>              
+                else
+                    ()
+            }
+        </div>
+};
+
+(:
     Storing bungeni_custom from file-system
 :)
 declare 
 function sysmanager:store($node as node(), $model as map(*)) {
 
     let $contextPath := request:get-context-path()
-    
+    let $stamp := current-time()
     let $FS-BU-CUSTOM := xs:string(request:get-parameter("fs_path",""))
     let $EX-BU-CUSTOM := $appconfig:CONFIGS-FOLDER-NAME
     let $EX-WORKING-COPY := $appconfig:CONFIGS-FOLDER
@@ -229,8 +261,8 @@ function sysmanager:store($node as node(), $model as map(*)) {
                 +--import
                     +-bungeni_custom 
                     
-    live - is the folder that editor edits
-    import - is a backup of the folder imported from the file system as is. Its not even transformed.
+    live - is the folder that configmanager edits
+    import_* - are backup of the folder imported from the file system as is. Its not even transformed.
             
     :)
     
@@ -283,38 +315,18 @@ function sysmanager:store($node as node(), $model as map(*)) {
     (:let $transform-working-copy := sysmanager:transform-configs($storing):)
 
     return
-        <div style="font-size:0.8em;">
-             {
-                switch($uploadstate)
-        
-                case true() return
-                    <div>
-                        <h2>Upload was successful!</h2>
-                        <br/>
-                        <!--div style="float:left">
-                            <h1>uploaded</h1>
-                            <ol>{
-                            for $one in $storing    
-                                return <li>{$one}</li>
-                             }</ol>   
-                        </div>
-                        <div style="float:right">
-                            <h1>transformed</h1>
-                            <ol>{for $entry in $transform-working-copy
-                            return <li>{$entry}</li> }</ol>
-                        </div-->                               
-                    </div>
-                case false() return
-                    <div>
-                        <h2>Upload was unsuccessful</h2>
-                        <span>
-                            Ensure you put the correct absolute-path to the <i>bungeni_custom</i> folder of your Bungeni application
-                        </span>                            
-                    </div>
-                default return
-                    ()
-            }
-        </div>
+        switch($uploadstate)
+
+        case true() return
+            <script type="text/javascript">
+                document.location.href = 'upload-commit.html?status=yeas&#38;amp;timestamp={$stamp}';
+            </script>
+        case false() return
+            <script type="text/javascript">
+                document.location.href = 'upload-commit.html?status=nay&#38;amp;timestamp={$stamp}';
+            </script>
+        default return
+            ()
 };
 
 (:

@@ -38,9 +38,10 @@ declare function sysmanager:transform-configs($file-paths) {
         if (contains($store,"/forms/")) then (
             xmldb:store($collection, $resource, local:split-form($store), "application/xml")            
         ) 
-        else if (contains($store,"/workflows/")) then (
-            xmldb:store($collection, $resource, local:split-workflow($store), "application/xml")  
-        )
+
+        else if (contains($store,"/notifications/")) then (
+            xmldb:store($collection, $resource, local:split-notification($store), "application/xml")  
+        )        
         else if (contains($store,"types.xml")) then (
             xmldb:store($collection, $resource, local:import-typesxml($store), "application/xml")
         )          
@@ -110,6 +111,12 @@ declare function local:split-workflow($wf-path as xs:string) {
                                <param name="docname" value="{util:document-name($doc)}" />
                             </parameters>)      
     return transform:transform($step1_doc, $step2, ())        
+};
+
+declare function local:split-notification($notif-path as xs:string) {
+    let $splitter := appconfig:get-xslt("notif_split.xsl")
+    let $doc := doc($notif-path)    
+    return transform:transform($doc, $splitter, ())        
 };
 
 declare function local:import-typesxml($typesxml-path as xs:string) {

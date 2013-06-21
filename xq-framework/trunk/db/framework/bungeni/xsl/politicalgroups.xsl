@@ -37,7 +37,7 @@
                             <xsl:if test="@id eq $listing-tab">
                                 <xsl:attribute name="class">active</xsl:attribute>
                             </xsl:if>
-                            <a href="{$item-listing-rel-base}?tab={@id}">
+                            <a href="{$chamber}/{$item-listing-rel-base}?tab={@id}">
                                 <i18n:translate>
                                     <i18n:text key="{@id}">nt({1})</i18n:text>
                                     <i18n:param>

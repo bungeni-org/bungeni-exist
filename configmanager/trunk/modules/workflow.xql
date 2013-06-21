@@ -824,8 +824,6 @@ function workflow:edit($node as node(), $model as map(*)) {
         </div>
 };
 
-
-
 declare
 function workflow:state-edit($node as node(), $model as map(*)) {
     let $TYPE := xs:string(request:get-parameter("type",""))

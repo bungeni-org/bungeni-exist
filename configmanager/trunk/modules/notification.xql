@@ -30,14 +30,23 @@ declare variable $notif:FEATURE-FACET := xs:string(request:get-parameter("facet"
 declare variable $notif:ATTR-ID := xs:integer(request:get-parameter("attr",0));
 declare variable $notif:DOCPOS := xs:integer(request:get-parameter("pos",0));
 
-declare function local:get-workflow($doctype) as node() * {
-    let $notif := doc($appconfig:WF-FOLDER || "/" || $doctype || ".xml")/workflow
-    return $notif
+declare function local:notifications() {
+
+    let $doc := doc($appconfig:NOTIF-FOLDER || "/" || $notif:DOCNAME || ".xml")/notifications
+    return 
+        $doc
+};
+
+declare function local:workflow() {
+
+    let $doc := doc($appconfig:WF-FOLDER || "/" || $notif:DOCNAME || ".xml")/workflow
+    return 
+        $doc
 };
 
 (: returns all the states nodes :)
 declare function local:workflow-states($doctype) as node() * {
-    let $states := local:get-workflow($doctype)/state
+    let $states := local:workflow()/state
     for $state at $pos in $states
         return
             element state { 
@@ -46,12 +55,26 @@ declare function local:workflow-states($doctype) as node() * {
             }
 };
 
-declare function local:workflow() {
+declare function local:notifs() {
 
-    let $docname := xs:string(request:get-parameter("doc","none"))
-    let $doc := doc($appconfig:WF-FOLDER || "/" || $docname || ".xml")/workflow
-    return 
-        $doc
+    <notifications>{
+    let $roles := appconfig:roles()/role
+    let $notifs := local:notifications()/notify
+    for $role in $roles
+    return
+        if (some $notif in $notifs satisfies ($notif/@roles = $role/@name)) then 
+            <notify 
+                roles="{$role/@name}" 
+                onstate="{$notifs[@roles = data($role/@name)]/@onstate}" 
+                afterstate="{$notifs[@roles = data($role/@name)]/@afterstate}" 
+                time="{$notifs[@roles = data($role/@name)]/@time}"/>
+        else 
+            <notify 
+                roles="{$role/@name}" 
+                onstate="" 
+                afterstate="" 
+                time=""/>
+    }</notifications>
 };
 
 declare
@@ -73,10 +96,12 @@ function notif:edit($node as node(), $model as map(*)) {
                     {
                         (: if adding a new workflow is true :)
                         if($init eq "true") then 
-                            <xf:instance id="i-notification" src="{$notif:REST-CXT-MODELTMPL}/notification.xml"/>
+                            <xf:instance id="i-notification" src="{$notif:REST-CXT-MODELTMPL}/notification.xml"/>                           
                         else
-                            <xf:instance id="i-notification" src="{$notif:REST-BC-LIVE}/notifications/{$docname}.xml"/> 
-                    }
+                            <xf:instance xmlns="" id="i-notification">
+                                {local:notifs()}
+                            </xf:instance>  
+                    }                     
                     
                     <xf:instance xmlns="" id="i-states">
                         <states>
@@ -125,40 +150,7 @@ function notif:edit($node as node(), $model as map(*)) {
                             <xf:message level="modal">Error updating notifications</xf:message>
                         </xf:action>
                     </xf:submission>
-                    
-                    <xf:submission id="s-delete" method="delete" replace="none" ref="instance()">
-                        <xf:resource value="'{$notif:REST-BC-LIVE}/notifications/{$docname}.xml'"/>
-                        
-                        <xf:header>
-                            <xf:name>username</xf:name>
-                            <xf:value>{$appconfig:admin-username}</xf:value>
-                        </xf:header>
-                        <xf:header>
-                            <xf:name>password</xf:name>
-                            <xf:value>{$appconfig:admin-password}</xf:value>
-                        </xf:header>
-                        <xf:header>
-                            <xf:name>realm</xf:name>
-                            <xf:value>exist</xf:value>
-                        </xf:header>
-                        
-                        <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">Deleted successfully</xf:message>
-                            <script type="text/javascript">
-                                document.location.href = 'notifications.html?type={$type}&#38;amp;doc={$docname}&#38;amp;pos={$pos}';
-                            </script> 
-                        </xf:action>
-                        
-                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
-                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
-                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
-                        </xf:action>
-                        
-                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>Go uncheck notifications on the workflow in-order delete it.</xf:message>
-                        </xf:action>
-                    </xf:submission>                    
-                    
+
                     <xf:action ev:event="xforms-ready" >
                         <xf:insert nodeset="instance()/permActions" at="1" position="after" origin="instance('i-features')/feature" />                        
                     </xf:action>
@@ -175,13 +167,20 @@ function notif:edit($node as node(), $model as map(*)) {
             </div>   
                 
             <div id="notif" class="tab_content" style="display: block;">
-                <h2>Notifications</h2>           
-                <xf:group ref="." appearance="bf:horizontalTable">
-                
-                    <xf:repeat id="r-notifs" nodeset="./notify[@roles]" appearance="compact">
-                            <xf:output ref="@roles">
-                                <xf:label>Roles</xf:label>
-                            </xf:output>                  
+                <h2>Notifications</h2>    
+                <div class="alert alert-info" style="width:67%;">
+                  <strong>Heads Up!</strong> press and hold CTRL key while clicking on a role to select multiple roles.
+                </div>                
+                <xf:group ref="." appearance="bf:verticalTable">
+                    <xf:repeat id="r-notifs" nodeset="./notify" appearance="bf:horizontalTable">                    
+                        <h3><xf:output ref="@roles"/></h3>
+                        <xf:group ref="." appearance="bf:verticalTable">
+                            
+                            <xf:output ref="@onstate" incremental="true" class="alert alert-success">
+                                <xf:label><b>onstate:</b>&#160;&#160;&#160;&#160;&#160;&#160;</xf:label>
+                                <xf:hint>shows the currently selected states</xf:hint>
+                                <xf:help>hold ctrl key as you select the roles you want to allow access</xf:help>                                                    
+                            </xf:output>                                 
                             <xf:select ref="@onstate" appearance="minimal" incremental="true">
                                 <xf:alert>invalid selection</xf:alert>
                                 <xf:hint>hold ctrl + click the roles you want to </xf:hint>   
@@ -189,7 +188,14 @@ function notif:edit($node as node(), $model as map(*)) {
                                     <xf:label ref="@title"/>                                       
                                     <xf:value ref="@id"/>
                                 </xf:itemset>
-                            </xf:select>
+                            </xf:select>                           
+                        </xf:group>
+                        <xf:group ref="." appearance="bf:verticalTable">
+                            <xf:output ref="@afterstate" incremental="true" class="alert alert-success">
+                                <xf:label><b>after state:</b>&#160;</xf:label>                            
+                                <xf:hint>shows the currently selected states</xf:hint>
+                                <xf:help>hold ctrl key as you select the roles you want to allow access</xf:help>                                                    
+                            </xf:output>                                 
                             <xf:select ref="@afterstate" appearance="minimal" incremental="true">
                                 <xf:alert>invalid selection</xf:alert>
                                 <xf:hint>hold ctrl + click the roles you want to </xf:hint>   
@@ -198,6 +204,13 @@ function notif:edit($node as node(), $model as map(*)) {
                                     <xf:value ref="@id"/>
                                 </xf:itemset>
                             </xf:select>
+                            <xf:input ref="@time" class="xmediumWidth">
+                                <xf:label><b>time:</b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</xf:label>
+                                <xf:help>at time:</xf:help>
+                                <xf:hint>time afterstate e.g. 3w5d is 3 weeks and 5 days after passing that state</xf:hint>
+                            </xf:input>                    
+                        </xf:group>
+                        <hr/>
                     </xf:repeat>
                 </xf:group>
                 <hr/>

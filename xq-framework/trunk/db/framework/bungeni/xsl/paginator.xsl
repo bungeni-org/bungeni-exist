@@ -204,7 +204,7 @@
                    on the last page.
                -->
                 <xsl:choose>
-                    <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
+                    <xsl:when test="$pages &lt;= 1 or ($offset+$limit) &gt;= $count">
                         <a title="Next Page" href="#" class="disabled">
                             <xsl:text>›</xsl:text>
                         </a>
@@ -227,7 +227,7 @@
                    Show the 'Last' page link based on similar conditions as 'Next' above.
                -->
                 <xsl:choose>
-                    <xsl:when test="$pages &lt;= 2 or ($offset+$limit) &gt;= $count">
+                    <xsl:when test="$pages &lt;= 1 or ($offset+$limit) &gt;= $count">
                         <a title="Last Page" href="#" class="disabled">
                             <xsl:text>»</xsl:text>
                         </a>

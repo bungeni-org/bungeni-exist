@@ -174,7 +174,7 @@ The node parameter is the "cooked" page as a node
 :)
 declare function cmn:build-nav-node($controller-data as node(), $node as node()) as node()+ {
     let $main-menu := cmn:get-menu("mainnav")
-    let $main-nav := cmn:get-chambers-menu($main-menu,$controller-data/bicameral/text())   
+    let $main-nav := cmn:get-chambers-menu($main-menu,$controller-data)   
     let $sub-nav := cmn:get-menu-from-route($controller-data/exist-path/text())      
     let $crumb := <crumb>
                         <div id="portal-breadcrumbs" xmlns="http://www.w3.org/1999/xhtml">
@@ -200,7 +200,7 @@ declare function cmn:build-nav-node($controller-data as node(), $node as node())
             </ul>
         </menu>
 :)
-declare function cmn:get-chambers-menu($main-menu as node(), $bicameral as xs:boolean) {
+declare function cmn:get-chambers-menu($main-menu as node(), $controller as node()) {
     
     let $main-ul := $main-menu
     return 
@@ -208,11 +208,12 @@ declare function cmn:get-chambers-menu($main-menu as node(), $bicameral as xs:bo
             $main-ul/@*,
             element {node-name($main-ul/xh:ul)} {
             $main-ul/xh:ul/@*,
-                for $li in $main-ul/xh:ul/xh:li
+                for $li at $pos in $main-ul/xh:ul/xh:li
+                let $type := cmn:get-parl-config()/parliaments/parliament[status = 'active'][1]/type/text()              
                 order by $li/@data-order ascending
                 return 
-                    if(not($bicameral)) then 
-                        $li[@id='lower-hse']
+                    if(not(xs:boolean($controller/bicameral/text()))) then 
+                        $li[data(xh:a/@href) eq $type]
                     else
                         $li
             }

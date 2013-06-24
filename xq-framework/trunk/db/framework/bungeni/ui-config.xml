@@ -13,17 +13,17 @@
     <routes>
         <route href="/">
             <title>Home</title>
-            <navigation>home</navigation>
+            <navigation/>
             <action>rou:get-home</action>
         </route>
         <route href="/lower_house">
             <title>Home</title>
-            <navigation>home</navigation>
+            <navigation/>
             <action>rou:get-home</action>
         </route>
         <route href="/higher_house">
             <title>Home</title>
-            <navigation>home</navigation>
+            <navigation/>
             <action>rou:get-home</action>
         </route>
         <route href="/lower_house/business">

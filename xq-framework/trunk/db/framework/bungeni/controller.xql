@@ -50,7 +50,7 @@ declare variable $REL-PATH := fn:concat($exist:root, '/', $exist:controller);
 
 let $CHAMBER-REL-PATH := "/" || substring-after(functx:replace-first($exist:path,"/",""),"/")
 let $TYPE := substring-before(functx:replace-first($exist:path,"/",""),"/")
-let $BICAMERAL := if(count(cmn:get-parl-config()/parliaments/parliament) > 1) then true() else false()
+let $BICAMERAL := if(count(cmn:get-parl-config()/parliaments/parliament[status/text() = 'active']) > 1) then true() else false()
 let $PARLIAMENT := if($CHAMBER-REL-PATH eq "/") then 
                         cmn:get-parl-config()/parliaments/parliament[type/text() eq $exist:resource][1] 
                    else

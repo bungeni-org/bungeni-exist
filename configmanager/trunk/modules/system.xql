@@ -183,7 +183,7 @@ function sysmanager:existing-imports($node as node(), $model as map(*)) {
                         let $proper-time := replace($pseudo-time,"-",":")
                         (:17:42:53:)
                         let $proper-dateTime := $proper-date || "T" || $proper-time
-                        where starts-with($coll,"import")
+                        where starts-with($coll,"import_")
                         order by $proper-dateTime descending
                         return 
                             <tr>

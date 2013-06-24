@@ -796,7 +796,7 @@ declare function bun:get-documentitems(
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -925,14 +925,15 @@ declare function bun:search-documentitems(
     let $chamber-id := $controller/parliament/identifier/text()
     let $getqrystr := xs:string(request:get-query-string())
     (: Escape all invalid characters :)
-    let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`') 
+
+    let $escaped := replace($querystr,"[&amp;&quot;-*;~!@#$%^*()_+-=\[\]\{\}\|';:/.,?(:]","")
 
     (: 
         Logical offset is set to Zero but since there is no document Zero
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to  alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
     
     let $xqy-coll-rs := bun:xqy-list-documentitems-with-acl($chamber-id,$acl, $type)  
     let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
@@ -949,7 +950,8 @@ declare function bun:search-documentitems(
                             bun:list-documentitems-with-acl($chamber-id,$acl, $type)
                 )
              }</count>
-             <currentView>search</currentView>
+            <currentView>search</currentView>
+            <chamber>{$controller/parliament/type/text()}</chamber>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
@@ -1019,7 +1021,7 @@ declare function bun:advanced-search($chamber as xs:string,
             $sortby as xs:string) as element()* {
       
     let $stylesheet := xs:string($parts/xsl)  
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
     let $getqrystr := xs:string(request:get-query-string())    
     let $search-filter := cmn:get-doctypes()
     
@@ -1304,7 +1306,7 @@ declare function bun:search-groupitems(
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to  alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -1316,6 +1318,7 @@ declare function bun:search-groupitems(
                   )
              }</count>
             <currentView>search</currentView>
+            <chamber>{$controller/parliament/type/text()}</chamber>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
             <listingUrlPrefix>{$url-prefix}</listingUrlPrefix>
@@ -1371,14 +1374,14 @@ declare function bun:search-membership(
     let $stylesheet := cmn:get-xslt($stylesheet)
     let $getqrystr := xs:string(request:get-query-string())
     (: Escape all invalid characters :)
-    let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`') 
+    let $escaped := replace($querystr,"[&amp;&quot;-*;~!@#$%^*()_+-=\[\]\{\}\|';:/.,?(:]","")
 
     (: 
         Logical offset is set to Zero but since there is no document Zero
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to  alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
     
     let $xqy-coll-rs := bun:xqy-list-membership($type,$controller/parliament/identifier/text())  
     let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
@@ -1395,7 +1398,7 @@ declare function bun:search-membership(
                             bun:list-membership($xqy-coll-rs, $sortby)
                 )
              }</count>
-             <chamber>{$controller/parliament/type/text()}</chamber>
+            <chamber>{$controller/parliament/type/text()}</chamber>
             <currentView>search</currentView>
             <documentType>{$type}</documentType>
             <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
@@ -1464,7 +1467,7 @@ declare function bun:ft-search(
             http://www.addedbytes.com/cheat-sheets/regular-expressions-cheat-sheet/
         :)
 
-        let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`'),
+        let $escaped := replace($querystr,"[&amp;&quot;-*;~!@#$%^*()_+-=\[\]\{\}\|';:/.,?(:]",""),
             $ultimate-path := local:build-search-objects($type),
             $eval-query := concat($coll-query,"[ft:query((",$ultimate-path,"), '",$escaped,"*')]")
             
@@ -1508,9 +1511,12 @@ declare function bun:search-global(
             $querystr as xs:string, 
             $scope as xs:string,
             $sortby as xs:string) as element() {
-            
+    
+    (: Escape all invalid characters :)
+    let $escaped := replace($querystr,"[&amp;&quot;-*;~!@#$%^*()_+-=\[\]\{\}\|';:/.,?(:]","")
+    
     (: convinience variables :)
-    let $qry-available := if($querystr ne "") then true() else false() 
+    let $qry-available := if($escaped ne "") then true() else false() 
     
     (: stylesheet to transform: ephemeral or paginated :)
     let $stylesheet := if ($scope eq "global" ) then 
@@ -1521,15 +1527,12 @@ declare function bun:search-global(
     let $getqrystr := xs:string(request:get-query-string())
 
     (: toggle summary and categorized :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
     let $query-limit := if ($scope eq "global" ) then 3 else $limit
     
     let $coll-legis := bun:xqy-search-legis-with-acl($acl),
         $coll-groups := bun:xqy-search-group(),
-        $coll-members := bun:xqy-search-membership()
-    
-    (: Escape all invalid characters :)
-    let $escaped := replace($querystr,'^[*|?]|(:)|(\+)|(\()|(!)|(\{)|(\})|(\[)|(\])','\$`')       
+        $coll-members := bun:xqy-search-membership()     
       
     let $count :=   if($scope eq "legis") then (
                         count(util:eval(concat($coll-legis,"[ft:query(., '",$escaped,"')]")))
@@ -2282,7 +2285,7 @@ declare function bun:get-committees(
     let $coll := bun:list-groupitems-with-tabs($parliament/identifier/text(), $parts/doctype, $tab)
     
     (: The line below is documented in bun:get-documentitems() :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset    
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -2352,7 +2355,7 @@ declare function bun:get-sittings(
     (: 
         The line below is documented in bun:get-documentitems()
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset    
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1 
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -2367,7 +2370,7 @@ declare function bun:get-sittings(
         </paginator>
         <alisting>
         {
-                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'],$offset,$limit)
+                for $match in subsequence(collection(cmn:get-lex-db())/bu:ontology[@for='sitting'],$query-offset,$limit)
                 order by $match/bu:sitting/bu:statusDate descending
                 return 
                     local:get-sitting-items($match,())
@@ -2853,7 +2856,7 @@ declare function bun:get-politicalgroups(
     (: 
         The line below is documented in bun:get-documentitems()
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset      
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1   
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -2882,31 +2885,31 @@ declare function bun:get-politicalgroups(
             switch ($sortby)
             
             case 'start_dt_oldest' return 
-                for $match in subsequence($coll,$offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:group/bu:startDate ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>  
                 
             case 'start_dt_newest' return 
-                for $match in subsequence($coll,$offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:group/bu:startDate descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>     
 
             case 'fN_asc' return
-                for $match in subsequence($coll,$offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:legislature/bu:fullName ascending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>      
   
             case 'fN_desc' return 
-                for $match in subsequence($coll,$offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:legislature/bu:fullName descending
                 return 
                     <doc>{$match/ancestor::bu:ontology}</doc>        
              
             default return 
-                for $match in subsequence($coll,$offset,$limit)
+                for $match in subsequence($coll,$query-offset,$limit)
                 order by $match/bu:legislature/bu:statusDate descending
                 return 
                     <doc>{$match}</doc>
@@ -3746,7 +3749,7 @@ declare function bun:get-members(
     let $coll := bun:list-membership-with-tabs($parliament/identifier/text(), $parts/doctype, $listings-filter[@id eq $tab]/text(), $sortby)    
     
     (: The line below is documented in bun:get-documentitems() :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset       
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1  
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -3772,7 +3775,7 @@ declare function bun:get-members(
         </paginator>
         <alisting>
         {
-            for $match in subsequence($coll,$offset,$limit)                
+            for $match in subsequence($coll,$query-offset,$limit)                
             return 
                 <doc>
                     {$match}

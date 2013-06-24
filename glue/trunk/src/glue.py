@@ -198,15 +198,17 @@ def param_parl_info(cfg, params):
     for param in params:
         li_parl_params.append(
              ('<parliament id="%(parl_id)s">'
-             " <electionDate>%(election_date)s</electionDate>"
+             " <startDate>%(start_date)s</startDate>"
              " <forParliament>%(for_parl)s</forParliament>"
              " <identifier>%(identifier)s</identifier>"
              '<type displayAs="%(type_display)s">%(type)s</type>'
+             '<status>%(status)s</status>'
              "</parliament>") %  
              {
               "parl_id" : param["parliament-id"],
-              "election_date": param["parliament-election-date"],
+              "start_date": param["chamber-start-date"],
               "identifier": param["identifier"],
+              "status": param["status"],
               "for_parl": param["for-parliament"],
               "type": param["type"],
               "type_display": param["type_display"]

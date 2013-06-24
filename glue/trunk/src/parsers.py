@@ -310,10 +310,9 @@ class ParliamentInfoParams:
         parl_map["parliament-id"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
             ).getText()
-        # !+DEPRECATED r10981 in Bungeni
-        #parl_map["parliament-election-date"] = parliament_doc.selectSingleNode(
-        #    self.__cache_file_prefix__() + self._xpath_info_field("election_date")
-        #    ).getText()
+        parl_map["chamber-start-date"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("start_date")
+            ).getText()
         parl_map["for-parliament"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("type")
             ).getText()
@@ -321,6 +320,10 @@ class ParliamentInfoParams:
         #    "identifier" field was renamed to "principal_name"
         parl_map["identifier"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("principal_name")
+            ).getText()
+        #    "status" field "
+        parl_map["status"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("status")
             ).getText()
         # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
         # bicameral legislatures 

@@ -38,7 +38,9 @@ declare function sysmanager:transform-configs($file-paths) {
         if (contains($store,"/forms/")) then (
             xmldb:store($collection, $resource, local:split-form($store), "application/xml")            
         ) 
-
+        else if (contains($store,"/workflows/")) then (
+            xmldb:store($collection, $resource, local:split-workflow($store), "application/xml")  
+        ) 
         else if (contains($store,"/notifications/")) then (
             xmldb:store($collection, $resource, local:split-notification($store), "application/xml")  
         )        
@@ -60,8 +62,10 @@ declare function local:reverse-transform-configs() {
     (: form XSLTs:)
     let $step1forms := appconfig:get-xslt("forms_merge_step1.xsl")
     let $step2forms := appconfig:get-xslt("forms_merge_step2.xsl")
-    (: workflow XSLTs:)
+    (: workflow XSLT:)
     let $xslworkflow := appconfig:get-xslt("wf_merge_attrs.xsl")
+    (: notification XSLT:)
+    let $xslnotif := appconfig:get-xslt("notif_merge.xsl") 
     
     let $filename := functx:substring-after-last($path, '/')
     let $mkdirs := if(file:is-directory($appconfig:FS-PATH || "/forms")) then () else file:mkdirs($appconfig:FS-PATH || "/forms")    
@@ -72,19 +76,25 @@ declare function local:reverse-transform-configs() {
                 the default .Add .Edit .View .Delete that we handle at the moment :)
             if (contains($path,"/sitting.xml") or contains($path,"/user.xml") or contains($path,"/signatory.xml")) then ()     
             else if (contains($path,"/forms/") and not(contains($path,"/.auto/"))) then (
-                $filename || " written? " || file:serialize(transform:transform(
+                $appconfig:FS-PATH || "/forms/" || $filename || " written? " || file:serialize(transform:transform(
                                                 transform:transform($doc, $step1forms,()), $step2forms,()), 
                                                 $appconfig:FS-PATH || "/forms/" || $filename,
                                                 "media-type=application/xml method=xml")         
             ) 
             else if (contains($path,"/workflows/") and not(contains($path,"/.auto/"))) then (
-               $filename || " written? " || file:serialize(transform:transform(
+               $appconfig:FS-PATH || "/workflows/" || $filename || " written? " || file:serialize(transform:transform(
                                                 $doc, $xslworkflow, ()),
                                                 $appconfig:FS-PATH || "/workflows/" || $filename,
                                                 "media-type=application/xml method=xml")
             )
+            else if (contains($path,"/notifications/") and not(contains($path,"/.auto/"))) then (
+               $appconfig:FS-PATH || "/notifications/" || $filename || " written? " || file:serialize(transform:transform(
+                                                $doc, $xslnotif, ()),
+                                                $appconfig:FS-PATH || "/notifications/" || $filename,
+                                                "media-type=application/xml method=xml")
+            )            
             else if (contains($path,"/types.xml")) then (
-               $filename || " written? " || file:serialize($doc,
+               $appconfig:FS-PATH || "/notifications/" || $filename || " written? " || file:serialize($doc,
                                                 $appconfig:FS-PATH || "/" || $filename,
                                                 "media-type=application/xml method=xml")
             )            

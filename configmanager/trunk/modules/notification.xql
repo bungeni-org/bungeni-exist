@@ -32,9 +32,12 @@ declare variable $notif:DOCPOS := xs:integer(request:get-parameter("pos",0));
 
 declare function local:notifications() {
 
-    let $doc := doc($appconfig:NOTIF-FOLDER || "/" || $notif:DOCNAME || ".xml")/notifications
+    let $notif-doc := $appconfig:NOTIF-FOLDER || "/" || $notif:DOCNAME || ".xml"
     return 
-        $doc
+        if(doc-available($notif-doc)) then 
+            doc($notif-doc)/notifications
+        else
+            doc($appconfig:MODEL-TEMPLATES || "/notification.xml")/notifications
 };
 
 declare function local:workflow() {
@@ -93,21 +96,21 @@ function notif:edit($node as node(), $model as map(*)) {
     	<div>
             <div style="display:none">
                 <xf:model id="master">
-                    {
-                        (: if adding a new workflow is true :)
-                        if($init eq "true") then 
-                            <xf:instance id="i-notification" src="{$notif:REST-CXT-MODELTMPL}/notification.xml"/>                           
-                        else
-                            <xf:instance xmlns="" id="i-notification">
-                                {local:notifs()}
-                            </xf:instance>  
-                    }                     
+                    <xf:instance xmlns="" id="i-notification">
+                        {local:notifs()}
+                    </xf:instance>
                     
                     <xf:instance xmlns="" id="i-states">
                         <states>
                             {local:workflow-states($docname)}
                         </states>
-                    </xf:instance>                    
+                    </xf:instance>    
+                    
+                    <xf:instance xmlns="" id="i-roles">
+                        <roles>
+                            {appconfig:roles()/role}
+                        </roles>
+                    </xf:instance>
 
                     <xf:bind nodeset=".">
                         <xf:bind nodeset="@title" type="xf:string" required="true()" constraint="string-length(.) &gt; 3" />
@@ -151,10 +154,7 @@ function notif:edit($node as node(), $model as map(*)) {
                         </xf:action>
                     </xf:submission>
 
-                    <xf:action ev:event="xforms-ready" >
-                        <xf:insert nodeset="instance()/permActions" at="1" position="after" origin="instance('i-features')/feature" />                        
-                    </xf:action>
-
+                    <xf:action ev:event="xforms-ready"/>
             </xf:model>
             
             </div>

@@ -218,8 +218,8 @@ function sysmanager:existing-imports($node as node(), $model as map(*)) {
                     <p>None</p>
             }
             <p><span class="label label-info">NB</span> Click on the dropdown icon to activate a different set</p>
-            <p><span class="label label-warning">NB</span> You cannot delete an active import (denoted by color green). You have to set another as active to that</p>
-            <p><span class="label label-important">NB</span> Setting a configuration as active will overwrite current active and all changes made will be lost</p>
+            <p><span class="label label-warning">NB</span> You cannot delete an active import (denoted by color green)</p>
+            <p><span class="label label-important">NB</span> Activating a configuration will overwrite current active and all uncommitted changes will be lost</p>
         </div>
 
 };
@@ -360,7 +360,7 @@ function sysmanager:save($node as node(), $model as map(*)) {
     let $uploadstate := if (contains($storing,"ui.xml")) then true() else false()
     
     return
-        <div style="font-size:0.8em;">
+        <div>
             {
                 switch($uploadstate)
         

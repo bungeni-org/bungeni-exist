@@ -68,7 +68,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <!-- suppress empty vocabulary attributes -->
+    <!-- suppress empty vocabulary, sort_on and derived attributes -->
     <xsl:template match="@vocabulary">
         <xsl:if test="normalize-space(.)">
             <xsl:attribute name="vocabulary" select="."/>
@@ -77,6 +77,11 @@
     <xsl:template match="@sort_on">
         <xsl:if test="normalize-space(.)">
             <xsl:attribute name="sort_on" select="."/>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="@derived">
+        <xsl:if test="normalize-space(.)">
+            <xsl:attribute name="derived" select="."/>
         </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

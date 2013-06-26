@@ -1261,44 +1261,30 @@ function workflow:state-edit($node as node(), $model as map(*)) {
                         <hr/>
                         <div  style="width:100%;">
                             <div class="alert alert-info">
-                              <button type="button" class="close" data-dismiss="alert">×</button>
                               <strong>Heads Up!</strong> press and hold CTRL key while clicking on a role to select multiple roles.
                             </div>
                             <h2>Workspace tabs</h2>
-                            <table class="listingTable">
-                                <thead>
-                                    <tr>
-                                        <th width="10%">Tabs</th>        
-                                        <th>Roles</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    for $tab at $pos in local:workspace-tabs()/tab 
-                                    return
-                                        <tr>
-                                            <td class="one">
-                                                {data($tab/@id)}
-                                            </td>
-                                            <td class="wsRoles">
-                                                <xf:output ref="instance('i-workspace')/state[@id eq '{$NODENAME}']/tab[@id eq '{data($tab/@id)}']/@roles" incremental="true">
-                                                    <xf:label>selected:</xf:label>
-                                                    <xf:hint>shows the currently selected roles</xf:hint>
-                                                    <xf:help>hold ctrl key as you select the roles you want to allow access</xf:help>                                                    
-                                                </xf:output>
-                                                <xf:select ref="instance('i-workspace')/state[@id eq '{$NODENAME}']/tab[@id eq '{data($tab/@id)}']/@roles" appearance="minimal" incremental="true">
-                                                    <xf:alert>invalid selection</xf:alert>
-                                                    <xf:hint>hold ctrl + click the roles you want to </xf:hint>   
-                                                    <xf:itemset nodeset="instance('i-allroles')/role">
-                                                        <xf:label ref="@name"/>                                       
-                                                        <xf:value ref="@name"/>
-                                                    </xf:itemset>
-                                                </xf:select>
-                                            </td>
-                                        </tr>                                                          
-                                }                                                                                                                                             
-                                </tbody>
-                            </table>                                                   
+                            <xf:group ref="." appearance="bf:verticalTable">
+                            {
+                                for $tab at $pos in local:workspace-tabs()/tab 
+                                return 
+                                    <xf:group ref="." appearance="bf:horizontalTable">
+                                        <h3 style="width:100px;">{data($tab/@id)}</h3>                              
+                                        <xf:select ref="instance('i-workspace')/state[@id eq '{$NODENAME}']/tab[@id eq '{data($tab/@id)}']/@roles" appearance="minimal" incremental="true">
+                                            <xf:alert>invalid selection</xf:alert>
+                                            <xf:hint>hold ctrl + click the roles you want to </xf:hint>   
+                                            <xf:itemset nodeset="instance('i-allroles')/role">
+                                                <xf:label ref="@name"/>                                       
+                                                <xf:value ref="@name"/>
+                                            </xf:itemset>
+                                        </xf:select>
+                                        <xf:output ref="instance('i-workspace')/state[@id eq '{$NODENAME}']/tab[@id eq '{data($tab/@id)}']/@roles" incremental="true" class="alert alert-success">
+                                            <xf:hint>shows the currently selected roles</xf:hint>
+                                            <xf:help>hold ctrl key as you select the roles you want to allow access</xf:help>                                                    
+                                        </xf:output>
+                                    </xf:group>
+                            }
+                            </xf:group>                                                  
                         </div>
                         <hr/>
                         <xf:group appearance="bf:horizontalTable">

@@ -155,9 +155,7 @@ declare
     %templates:default("active", "")
 function app:get-action-state($node as node(), $model as map(*), $active as xs:string) {
     
-    <div id="secondary-menu">
-        default
-    </div>
+    <div id="secondary-menu"/>
 };
 
 

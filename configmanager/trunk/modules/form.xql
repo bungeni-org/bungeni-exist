@@ -444,6 +444,8 @@ function form:field-edit($node as node(), $model as map(*)) {
                     <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/.auto/_rendertypes.xml"/>
 
                     <xf:instance id="i-vocabularies" src="{$form:REST-BC-LIVE}/forms/.auto/_vocabularies.xml"/>
+                    
+                    <xf:instance id="i-derived" src="{$form:REST-BC-LIVE}/forms/.auto/_derived.xml"/> 
 
                     <xf:bind nodeset="./field[@name eq '{$fieldname}']">
                         <xf:bind nodeset="@name" type="xf:string" readonly="boolean-from-string('true')" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
@@ -598,6 +600,22 @@ function form:field-edit($node as node(), $model as map(*)) {
                                     </xf:itemset>
                                 </xf:select1>
                             </xf:group>
+                        
+                            <xf:group appearance="bf:horizontalTable">
+                                <xf:label>Derived from</xf:label>
+                                <xf:select1 ref="@derived" appearance="minimal" incremental="true">
+                                    <xf:hint>computed field from which this field is based on</xf:hint>
+                                    <xf:help>choose from the list below</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-derived')/derivedField">
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="@name"></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <div class="alert">
+                                  <strong>Warning!</strong> Derived field will break Bungeni if '<xf:output class="derivedAlert" ref="@name"/>' above is a basic field.
+                                </div>                                
+                            </xf:group>                         
                         </xf:group>
                         <hr/>
                         <xf:group appearance="compact" class="modesWrapper">
@@ -808,6 +826,8 @@ function form:field-add($node as node(), $model as map(*)) {
                     <xf:instance id="i-valuetypes" src="{$form:REST-BC-LIVE}/forms/.auto/_valuetypes.xml"/> 
                     
                     <xf:instance id="i-rendertypes" src="{$form:REST-BC-LIVE}/forms/.auto/_rendertypes.xml"/>
+                    
+                    <xf:instance id="i-derived" src="{$form:REST-BC-LIVE}/forms/.auto/_derived.xml"/> 
 
                     <xf:bind nodeset="./field[last()]">
                         <xf:bind id="b-fieldname" nodeset="@name" type="xf:string" relevant="true()" required="true()" constraint="string-length(.) &gt; 2 and matches(., '^[A-z_]+$') and (count(instance()/field/@name) eq count(distinct-values(instance()/field/@name)))" />
@@ -815,6 +835,7 @@ function form:field-add($node as node(), $model as map(*)) {
                         <xf:bind id="req-field" nodeset="@required" type="xs:boolean"/>  
                         <xf:bind nodeset="@value_type" type="xs:string" required="true()"/>
                         <xf:bind id="b-rendertype" nodeset="@render_type" type="xs:string" required="true()"/>
+                        <xf:bind id="b-derived" nodeset="@derived" type="xs:string"/>
                         
                         <xf:bind nodeset="view/@show" type="xs:boolean"/>  
                         <xf:bind nodeset="edit/@show" type="xs:boolean"/>
@@ -960,6 +981,22 @@ function form:field-add($node as node(), $model as map(*)) {
                                     </xf:itemset>
                                 </xf:select1>
                             </xf:group>
+                            
+                            <xf:group appearance="bf:horizontalTable">
+                                <xf:label>Derived from</xf:label>
+                                <xf:select1 ref="@derived" appearance="minimal" incremental="true">
+                                    <xf:hint>computed field from which this field is based on</xf:hint>
+                                    <xf:help>choose from the list below</xf:help>
+                                    <xf:alert>invalid</xf:alert>
+                                    <xf:itemset nodeset="instance('i-derived')/derivedField">
+                                        <xf:label ref="."></xf:label>
+                                        <xf:value ref="@name"></xf:value>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <div class="alert">
+                                  <strong>Warning!</strong> Derived field will break Bungeni if '<xf:output class="derivedAlert" ref="@name"/>' above is a basic field.
+                                </div>
+                            </xf:group>                            
                                                     
                         </xf:group>
                         <hr/>

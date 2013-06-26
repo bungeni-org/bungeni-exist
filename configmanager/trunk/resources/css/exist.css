@@ -127,6 +127,13 @@ br {
     color:#35B3E9 !important;
 }
 
+.derivedAlert,
+.derivedAlert * {
+    display:inline !important;
+    font-weight:bold;
+    font-style:italic;
+}
+
 /*listing table (list-items.xql) styles*/
 .listingTable{
     border:none;

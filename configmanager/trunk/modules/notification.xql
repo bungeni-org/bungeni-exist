@@ -175,7 +175,6 @@ function notif:edit($node as node(), $model as map(*)) {
                     <xf:repeat id="r-notifs" nodeset="./notify" appearance="bf:horizontalTable">                    
                         <h3><xf:output ref="@roles"/></h3>
                         <xf:group ref="." appearance="bf:verticalTable">
-                            
                             <xf:output ref="@onstate" incremental="true" class="alert alert-success">
                                 <xf:label><b>onstate:</b>&#160;&#160;&#160;&#160;&#160;&#160;</xf:label>
                                 <xf:hint>shows the currently selected states</xf:hint>

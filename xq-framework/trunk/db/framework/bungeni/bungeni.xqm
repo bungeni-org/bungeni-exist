@@ -539,21 +539,23 @@ declare function bun:xqy-list-documentitems-with-acl($chamber-id as xs:string, $
                 "/ancestor::bu:ontology")
 };
 
-declare function bun:xqy-list-documentitems-with-acl-n-tabs($chamber-id as xs:string?, 
+declare function bun:xqy-list-documentitems-with-acl-n-tabs($controller as node()?, 
                                                             $acl as xs:string, 
                                                             $type as xs:string, 
                                                             $tag as xs:string) {
-    let $acl-filter := cmn:get-acl-permission-as-attr($acl),
-        $list-tabs :=  cmn:get-listings-config($type)[@id eq $tag]/text()
-    
-  return  
-    fn:concat("collection('",cmn:get-lex-db() ,"')",
-                "/bu:ontology/bu:document[bu:origin/bu:identifier eq '",$chamber-id,"']",
-                "/bu:docType[bu:value eq '",$type,"']",
-                "/ancestor::bu:document/(bu:permissions except bu:versions)",
-                "/bu:control[",$acl-filter,"]",
-                "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
-                "/ancestor::bu:ontology")
+    let $chamber-id := $controller/parliament/identifier/text()
+    let $legis-id := $controller/legislature-id/text()
+    let $acl-filter := cmn:get-acl-permission-as-attr($acl)
+    let $list-tabs := cmn:get-listings-config($type)[@id eq $tag]/text()
+
+    return  
+        fn:concat("collection('",cmn:get-lex-db() ,"')",
+            "/bu:ontology/bu:document[bu:origin/bu:identifier eq '",$chamber-id,"']",
+            "/bu:docType[bu:value eq '",$type,"']",
+            "/ancestor::bu:document/(bu:permissions except bu:versions)",
+            "/bu:control[",$acl-filter,"]",
+            "/ancestor::bu:ontology/bu:bungeni[",$list-tabs,"]",
+            "/ancestor::bu:ontology")
 };
 
 declare function bun:xqy-search-legis-with-acl($acl as xs:string) {
@@ -740,11 +742,11 @@ declare function bun:list-documentitems-with-acl($chamber-id as xs:string, $acl 
                             "return $match"))    
 };
 
-declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string?,
+declare function bun:list-documentitems-with-acl-n-tabs($controller as node(),
                                                         $acl as xs:string, 
                                                         $type as xs:string, 
-                                                        $tag as xs:string) {
-    let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($chamber, $acl, $type, $tag)
+                                                        $tag as xs:string) {                                                
+    let $eval-query := bun:xqy-list-documentitems-with-acl-n-tabs($controller, $acl, $type, $tag)
     let $coll :=  util:eval($eval-query)
     let $sortord := xs:string(request:get-parameter("s","none"))
     let $orderby := cmn:get-orderby-config-name($type, $sortord)
@@ -774,8 +776,7 @@ declare function bun:list-documentitems-with-acl-n-tabs($chamber as xs:string?,
 :   Evaluates xquery to return document(s) matching permission that was given
 :)
 declare function bun:get-documentitems(
-            $view-rel-path as xs:string,
-            $parliament as node()?,
+            $controller as node()?,
             $acl as xs:string,
             $type as xs:string,
             $parts as node(),
@@ -787,7 +788,7 @@ declare function bun:get-documentitems(
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     let $tab := xs:string(request:get-parameter("tab",'uc'))    
-    let $coll := bun:list-documentitems-with-acl-n-tabs($parliament/identifier/text(), $acl, $type, $tab)
+    let $coll := bun:list-documentitems-with-acl-n-tabs($controller, $acl, $type, $tab)
     let $listings-filter := cmn:get-listings-config($type)
     let $getqrystr := xs:string(request:get-query-string())    
     
@@ -809,10 +810,10 @@ declare function bun:get-documentitems(
             {
                 for $listing in $listings-filter
                     return 
-                        <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($parliament/identifier/text(), $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
+                        <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(util:eval(bun:xqy-list-documentitems-with-acl-n-tabs($controller, $acl, $type, $listing/@id))) }">{data($listing/@name)}</tag>
              }
              </tags>    
-            <chamber>{$parliament/type/text()}</chamber>
+            <chamber>{$controller/parliament/type/text()}</chamber>
             <currentView>{$parts/current-view}</currentView>
             <documentType>{$type}</documentType>
             <listingUrlPrefix>{$parts/default-view}</listingUrlPrefix>
@@ -840,8 +841,8 @@ declare function bun:get-documentitems(
             <parameters>
                 <param name="sortby" value="{$sortby}" />
                 <param name="listing-tab" value="{$tab}" />
-                <param name="chamber" value="{$parliament/type/text()}" />
-                <param name="item-listing-rel-base" value="{$view-rel-path}" />
+                <param name="chamber" value="{$controller/parliament/type/text()}" />
+                <param name="item-listing-rel-base" value="{$controller/exist-res}" />
             </parameters>
            ) 
        
@@ -3262,17 +3263,20 @@ declare function bun:get-parl-doc-scheduleItem(  $acl as xs:string,
 : @stylesheet 
 :   committee.xsl, home.xsl
 :)
-declare function bun:get-parliament($parts as node(), $chamber-id as xs:string?) as element()* {
+declare function bun:get-parliament($parts as node(), 
+    $controller as node(),
+    $chamber-id as xs:string?) as element()* {
 
     (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $stylesheet := cmn:get-xslt($parts/xsl)
+    let $legis-id := xs:integer($controller/legislature-id/text())
     let $doc := <doc>{
                     (: 
                         !+FIX_THIS (ao, 16th Nov 2012) Temp fix to show one parliament infor in cases
                         where multiple parliament info are present. Pending support for closing and opening
                         parliaments.
                     :)
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group/bu:docType[bu:value eq 'Chamber']/preceding-sibling::bu:origin[bu:identifier eq $chamber-id]/ancestor::bu:ontology
+                    let $match := collection(cmn:get-lex-db())/bu:ontology[bu:group/bu:docType/bu:value eq 'Chamber' and bu:legislature/bu:identifier = $legis-id]/bu:group/bu:origin[bu:identifier/bu:value eq $chamber-id]/ancestor::bu:ontology
                     return
                         $match  
                 }</doc>   

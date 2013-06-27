@@ -26,7 +26,7 @@ return
                 <xf:message level="ephemeral">Error - Loading catalogue</xf:message>
             </xf:action>
         </xf:submission>
-        <xf:submission id="s-save-catalogue" resource="{concat('../../i18n/collection_','en','.xml')}" replace="none" method="put">
+        <xf:submission id="s-save-catalogue" resource="{concat('../../i18n/collection_',$lang,'.xml')}" replace="none" method="put">
             <xf:message ev:event="xforms-submit-done" level="ephemeral">[{$lang}] catalogue saved</xf:message>
             <xf:action ev:event="xforms-submit-error">
                 <xf:message level="ephemeral">Sorry - your update failed.</xf:message>

@@ -84,4 +84,9 @@
             <xsl:attribute name="derived" select="."/>
         </xsl:if>
     </xsl:template>
+    <xsl:template match="@viewlet">
+        <xsl:if test="normalize-space(.) = 'true'">
+            <xsl:attribute name="viewlet" select="."/>
+        </xsl:if>
+    </xsl:template>
 </xsl:stylesheet>

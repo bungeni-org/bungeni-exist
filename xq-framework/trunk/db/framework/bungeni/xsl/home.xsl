@@ -74,6 +74,12 @@
                             </div>
                             <xsl:value-of select="format-date(bu:ontology/bu:group/bu:startDate,$date-format, 'en', (),())"/>
                         </div>
+                        <div class="list-inline">
+                            <div class="inline-label">
+                                <i18n:text key="Parliamentary session">Parliamentary session id(nt)</i18n:text>:
+                            </div>
+                            <xsl:value-of select="bu:ontology/bu:legislature/bu:identifier"/>
+                        </div>
                     </div>
                     <div class="clear"/>
                     <div class="mem-desc">

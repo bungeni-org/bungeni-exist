@@ -39,7 +39,7 @@ declare function rou:get-home($CONTROLLER-DOC as node()) {
     let 
         $parts := cmn:get-view-parts("/home"),
         $parliament := cmn:get-parl-config()/parliaments/parliament[type/text() eq $CONTROLLER-DOC/exist-res][1],
-        $act-entries-tmpl :=  bun:get-parliament($parts,$parliament/identifier/text()),
+        $act-entries-tmpl :=  bun:get-parliament($parts,$CONTROLLER-DOC,$parliament/identifier/text()),
         $act-entries-repl:= document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
     					 } 
@@ -597,7 +597,7 @@ declare function rou:listing-documentitem($CONTROLLER-DOC as node(), $doc-type a
         $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
         $parts := cmn:get-view-listing-parts($doc-type, 'text'),
         $acl := "public-view",
-        $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC/exist-res, $CONTROLLER-DOC/parliament,$acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
+        $act-entries-tmpl := bun:get-documentitems($CONTROLLER-DOC,$acl, $doc-type, $parts, $offset, $limit, $qry, $sortby),
         $act-entries-repl:= document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
     					 } 

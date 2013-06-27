@@ -39,7 +39,9 @@ declare function adm:main-menu($active as xs:string) {
 declare function adm:catalogues() {
     <catalogues>
     {
-        for $lang in data(collection('/db/apps/framework/i18n')/catalogue/@xml:lang)
+        for $catalogue in collection('/db/apps/framework/i18n')/catalogue
+        let $lang := data($catalogue/@xml:lang)
+        where not(starts-with(util:document-name($catalogue),'po_'))
         return 
             <lang label="{$lang}">{$lang}</lang>
     }

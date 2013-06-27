@@ -134,7 +134,7 @@ function type:edit($node as node(), $model as map(*)) {
             <xf:model>
                 <xf:instance id="i-type" src="{$type:REST-BC-LIVE}/types.xml"/>
                   
-                 <xf:instance id="i-boolean" src="{$type:REST-CXT-APP}/model_templates/boolean.xml"/>
+                <xf:instance id="i-boolean" src="{$type:REST-CXT-APP}/model_templates/boolean.xml"/>
                 
                 <xf:instance xmlns="" id="i-typedoc">
                     <data>

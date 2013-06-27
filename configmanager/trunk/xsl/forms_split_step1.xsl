@@ -50,6 +50,9 @@
             <xsl:if test="not(@note)">
                 <xsl:attribute name="note"/>
             </xsl:if>
+            <xsl:if test="not(@viewlet)">
+                <xsl:attribute name="viewlet">false</xsl:attribute>
+            </xsl:if>
         </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

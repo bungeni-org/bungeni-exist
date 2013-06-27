@@ -152,7 +152,9 @@ function form:edit($node as node(), $model as map(*)) {
                             <xf:instance id="i-form" src="{$form:REST-BC-LIVE}/forms/{$docname}.xml"/> 
                     } 
                     
-                     <xf:instance id="i-sortorder" src="{$form:REST-CXT-APP}/model_templates/sortorder.xml"/>
+                    <xf:instance id="i-boolean" src="{$form:REST-CXT-APP}/model_templates/boolean.xml"/>
+                    
+                    <xf:instance id="i-sortorder" src="{$form:REST-CXT-APP}/model_templates/sortorder.xml"/>
                     
                     <xf:instance id="i-constraints" src="{$form:REST-BC-LIVE}/forms/.auto/_constraints.xml"/> 
                     
@@ -374,7 +376,17 @@ function form:edit($node as node(), $model as map(*)) {
                                             <xf:label>notes</xf:label>
                                             <xf:hint>note for this match</xf:hint>
                                             <xf:help>details about this match</xf:help>
-                                        </xf:textarea>                                
+                                        </xf:textarea>   
+                                        <xf:select1 ref="@viewlet" id="c-enabled" appearance="minimal" class="xsmallWidth" incremental="true">
+                                            <xf:label>viewlet</xf:label>
+                                            <xf:hint>declarative container viewlet used in groups</xf:hint>
+                                            <xf:help>modifies custom form descriptor</xf:help>
+                                            <xf:alert>invalid</xf:alert>
+                                            <xf:itemset nodeset="instance('i-boolean')/bool">
+                                                <xf:label ref="."></xf:label>
+                                                <xf:value ref="."></xf:value>
+                                            </xf:itemset>
+                                        </xf:select1>                                        
                                         <xf:trigger src="resources/images/delete.png">
                                            <xf:label>delete</xf:label>
                                            <xf:action>

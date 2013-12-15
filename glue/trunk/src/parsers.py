@@ -292,8 +292,22 @@ class ParliamentInfoParams:
         return "/" + self.CONTENT_TYPE
     
     def _xpath_parliament_info_field(self, name):
-        return  self._xpath_content_type() + "[@name='chamber']/" + self._xpath_info_field(name)
-    
+        # NOTE: !+CHAMBER_ACTIVE(AH, 12-2013) Filter for active 
+        # chamber. This is to fix the bug where draft chambers were being
+        # cached. Now chambers cached only when Activated !
+        # Remember that presently chamber activation is assumed to be non
+        # reversible - to reverse you will need to delete the parliament_info.xml file
+        # in the file system
+        # the other assumption here is of course that the 'chamber' doc type and the 
+        # 'active' state name have not been changed in configuration !
+        # change of those configuration conventions should be strictly discouraged !!!
+        li = [
+            self._xpath_content_type(),
+            "[@name='chamber'][child::field[@name='status'][contains(., 'active')]/",       
+            self._xpath_info_field(name)
+        ]
+        return "".join(li)
+
     def _xpath_info_field(self, name):
         return (self.FIELD_NAME % name)
     

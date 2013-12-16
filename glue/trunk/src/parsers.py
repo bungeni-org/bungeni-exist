@@ -303,7 +303,7 @@ class ParliamentInfoParams:
         # change of those configuration conventions should be strictly discouraged !!!
         li = [
             self._xpath_content_type(),
-            "[@name='chamber'][child::field[@name='status'][contains(., 'active')]/",       
+            "[@name='chamber'][child::field[@name='status'][contains(., 'active')]]/",       
             self._xpath_info_field(name)
         ]
         return "".join(li)

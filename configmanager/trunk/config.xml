@@ -4,7 +4,7 @@
     <name>Bungeni Configuration Editor</name>
     <configs-collection>bungeni-configuration</configs-collection>
     <configs collection="bungeni_custom" form="forms" notif="notifications" sys="sys" vocab="vocabularies" wf="workflows" ws="workspace">
-        <fs-path>/home/undesa/bungeni_apps/bungeni/src/bungeni_custom</fs-path>
+        <fs-path></fs-path>
         <fs-live>import_2013-06-18T15-31-25</fs-live>
     </configs>
 </ce-config>

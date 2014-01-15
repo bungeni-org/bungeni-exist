@@ -151,7 +151,7 @@ function sysmanager:upload-form($node as node(), $model as map(*)) {
                         <td><input type="text" style="width:40%;" id="fs_path" name="fs_path" value="{$appconfig:FS-PATH}" /></td>
                     </tr>                    			
                     <tr>
-                        <td colspan="2"><p>e.g. <i>/home/user/bungeni_apps/bungeni/src/bungeni_custom</i></p></td>
+                        <td colspan="2"><p>e.g. <i>/opt/bungeni/bungeni_apps/bungeni/src/bungeni_custom</i></p></td>
                     </tr>
                 </table>
                 <div>

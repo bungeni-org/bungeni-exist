@@ -8,6 +8,6 @@ import module namespace xdb="http://exist-db.org/xquery/xmldb";
 declare variable $target external;
 
 for $resource in xmldb:get-child-resources($target || "/modules")
-where ends-with($resource,".xql")
+where ends-with($resource,".xql") or ends-with($resource,".xqm")
 return
     sm:chmod(xs:anyURI($target || "/modules/" || $resource), "rwxr-xr-x")

@@ -6,10 +6,10 @@ xquery version "3.0";
 module namespace cmwfrest = "http://exist-db.org/apps/configmanager/rest";
 
 import module namespace appconfig = "http://exist-db.org/apps/configmanager/config" at "appconfig.xqm";
-import module namespace sysmanager = "http://exist.bungeni.org/systemfunctions" at "system.xql";
 (: external dependency to be installed :)
 import module namespace gv = "http://kitwallace.co.uk/ns/graphviz" at "xmldb:exist:///db/apps/graphviz/lib/graphviz.xqm";
 import module namespace functx = "http://www.functx.com" at "functx.xqm";
+import module namespace sysmanager = "http://exist.bungeni.org/systemfunctions" at "system.xqm";
 
 declare namespace rest="http://exquery.org/ns/restxq";
 declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";

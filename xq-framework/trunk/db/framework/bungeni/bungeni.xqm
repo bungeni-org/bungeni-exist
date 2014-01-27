@@ -796,8 +796,10 @@ declare function bun:get-documentitems(
         Logical offset is set to Zero but since there is no document Zero
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to alter the $offset to 1 for the first page limit only.
-    :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
+    
+    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -934,7 +936,9 @@ declare function bun:search-documentitems(
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to  alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     
     let $xqy-coll-rs := bun:xqy-list-documentitems-with-acl($chamber-id,$acl, $type)  
     let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
@@ -1021,8 +1025,10 @@ declare function bun:advanced-search($chamber as xs:string,
             $enddate as xs:string,            
             $sortby as xs:string) as element()* {
       
-    let $stylesheet := xs:string($parts/xsl)  
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
+    let $stylesheet := xs:string($parts/xsl)
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1  
     let $getqrystr := xs:string(request:get-query-string())    
     let $search-filter := cmn:get-doctypes()
     
@@ -1307,7 +1313,10 @@ declare function bun:search-groupitems(
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to  alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
+    
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -1382,7 +1391,10 @@ declare function bun:search-membership(
         in the case of 0,10 which will return 9 records in subsequence instead of expected 10 records.
         Need arises to  alter the $offset to 1 for the first page limit only.
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
+    
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     
     let $xqy-coll-rs := bun:xqy-list-membership($type,$controller/parliament/identifier/text())  
     let $coll-ft-search := $xqy-coll-rs || "[ft:query(., '" || $escaped || "*')]"
@@ -1528,7 +1540,10 @@ declare function bun:search-global(
     let $getqrystr := xs:string(request:get-query-string())
 
     (: toggle summary and categorized :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1
+    
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     let $query-limit := if ($scope eq "global" ) then 3 else $limit
     
     let $coll-legis := bun:xqy-search-legis-with-acl($acl),
@@ -2286,7 +2301,9 @@ declare function bun:get-committees(
     let $coll := bun:list-groupitems-with-tabs($parliament/identifier/text(), $parts/doctype, $tab)
     
     (: The line below is documented in bun:get-documentitems() :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1    
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1    
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -2356,7 +2373,9 @@ declare function bun:get-sittings(
     (: 
         The line below is documented in bun:get-documentitems()
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1 
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -2394,57 +2413,29 @@ declare function bun:get-sittings(
     Given a date, it return start and end dates for the week that 
     date lies in
 :)
+(:
+    Given a date, it return start and end dates for the week that 
+    date lies in
+:)
 declare function local:start-end-of-week($adate as xs:date) {
 
     let $abbr-day := functx:day-of-week-abbrev-en($adate)
-    
+    let $weekday := (functx:day-of-week($adate) + 6) mod 7 
+    let $endDay := ( 6 - $weekday ) mod 7 
+    let $weekStr := 'P' || $weekday || 'D'
+    let $endStr := 'P' || $endDay || 'D'
     return
-        switch($abbr-day)
-
-        case 'Sun' return
             <range>
-                <start>{($adate - xs:dayTimeDuration('P6D')) || "T00:00:00"}</start>
-                <end>{$adate || "T23:59:59"}</end>
+                <start>{fn:dateTime($adate - xs:dayTimeDuration( 'P1D')*$weekday, xs:time("00:00:00") )}</start>
+                <end>{fn:dateTime($adate +xs:dayTimeDuration('P1D')*$endDay, xs:time("23:59:59"))}</end>
             </range>
-        case 'Mon' return
-            <range>
-                <start>{$adate || "T00:00:00"}</start>
-                <end>{($adate + xs:dayTimeDuration('P6D')) || "T23:59:59"}</end>
-            </range>
-        case 'Tues' return 
-            <range>
-                <start>{($adate - xs:dayTimeDuration('P1D')) || "T00:00:00"}</start>
-                <end>{($adate + xs:dayTimeDuration('P5D')) || "T23:59:59"}</end>
-            </range>          
-        case 'Wed' return 
-            <range>
-                <start>{($adate - xs:dayTimeDuration('P2D')) || "T00:00:00"}</start>
-                <end>{($adate + xs:dayTimeDuration('P4D')) || "T23:59:59"}</end>
-            </range>             
-        case 'Thurs' return
-            <range>
-                <start>{($adate - xs:dayTimeDuration('P3D')) || "T00:00:00"}</start>
-                <end>{($adate + xs:dayTimeDuration('P3D')) || "T23:59:59"}</end>
-            </range>             
-        case 'Fri' return
-            <range>
-                <start>{($adate - xs:dayTimeDuration('P4D')) || "T00:00:00"}</start>
-                <end>{($adate + xs:dayTimeDuration('P2D')) || "T23:59:59"}</end>
-            </range>      
-        case 'Sat' return
-            <range>
-                <start>{($adate - xs:dayTimeDuration('P5D')) || "T00:00:00"}</start>
-                <end>{($adate + xs:dayTimeDuration('P1D')) || "T23:59:59"}</end>
-            </range>
-        default return
-            ()
 };
 
 declare function local:old-future-sittings($range as xs:string) {
 
-    let $twk := substring-before(current-date() cast as xs:string,"+") cast as xs:date
-    let $pwk := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
-    let $nwk := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
+    let $twk := current-date()
+    let $pwk := local:start-end-of-week(current-date() - xs:dayTimeDuration('P7D'))
+    let $nwk := local:start-end-of-week(current-date() + xs:dayTimeDuration('P7D'))
     
     return
         switch($range)
@@ -2452,13 +2443,13 @@ declare function local:old-future-sittings($range as xs:string) {
         (: For old and fut sittings, we get 30 days before and after current-date :)
         case 'old' return
             <range>
-                <start>{($twk - xs:dayTimeDuration('P30D')) || "T00:00:00"}</start>
-                <end>{($twk - xs:dayTimeDuration('P1D')) || "T23:59:59"}</end>
+                <start>{($twk - xs:dayTimeDuration('P30D')) + xs:time("00:00:00")}</start>
+                <end>{($twk - xs:dayTimeDuration('P1D')) + xs:time("23:59:59")}</end>
             </range>
         case 'fut' return
             <range>
-                <start>{($twk + xs:dayTimeDuration('P1D')) || "T00:00:00"}</start>
-                <end>{($twk + xs:dayTimeDuration('P30D')) || "T23:59:59"}</end>
+                <start>{($twk + xs:dayTimeDuration('P1D')) + xs:time("00:00:00")}</start>
+                <end>{($twk + xs:dayTimeDuration('P30D')) + xs:time("23:59:59")}</end>
             </range>
         default return
             ()
@@ -2562,8 +2553,8 @@ declare function bun:get-whatson(
     
     (: stylesheet to transform :)  
     let $stylesheet := cmn:get-xslt($parts/xsl)
-    let $f := request:get-parameter("f",substring-before(current-date() cast as xs:string,"+") cast as xs:date)
-    let $t := request:get-parameter("t",substring-before(current-date() cast as xs:string,"+") cast as xs:date)
+    let $f := request:get-parameter("f",current-date())
+    let $t := request:get-parameter("t",current-date())
     let $listings-filter := cmn:get-listings-config('Groupsitting')
     let $chamber-id := $parliament/identifier/text()
     
@@ -2615,7 +2606,7 @@ declare function bun:get-whatson(
                     )
                 
             case 'pwk' return 
-                let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date - xs:dayTimeDuration('P7D'))
+                let $dates-range := local:start-end-of-week(current-date() - xs:dayTimeDuration('P7D'))
                 let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
@@ -2629,7 +2620,7 @@ declare function bun:get-whatson(
 
             case 'twk' return
                 (: !+FIX_THIS (ao, 21-May-2012) Somehow current-date() returns like this 2012-05-21+03:00, we remove the timezone :)
-                let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+"))
+                let $dates-range := local:start-end-of-week(current-date())
                 let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype)              
                 return 
                     if ($tab eq 'sittings') then (
@@ -2642,7 +2633,7 @@ declare function bun:get-whatson(
                     )
   
             case 'nwk' return 
-                let $dates-range := local:start-end-of-week(substring-before(current-date() cast as xs:string,"+") cast as xs:date + xs:dayTimeDuration('P7D'))
+                let $dates-range := local:start-end-of-week(current-date() + xs:dayTimeDuration('P7D'))
                 let $sittings := local:grouped-sitting-meeting-type($chamber-id,$dates-range,$mtype) 
                 return 
                     if ($tab eq 'sittings') then (
@@ -2681,7 +2672,7 @@ declare function bun:get-whatson(
                     )                     
              
             default return           
-                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:date(substring-before(bu:startDate, "T")) eq current-date()]/ancestor::bu:ontology
+                let $sittings := collection(cmn:get-lex-db())/bu:ontology/bu:sitting[xs:date(bu:startDate) eq current-date()]/ancestor::bu:ontology
                 return 
                     if ($tab eq 'sittings') then (
                         <range>
@@ -2857,7 +2848,9 @@ declare function bun:get-politicalgroups(
     (: 
         The line below is documented in bun:get-documentitems()
     :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1   
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
     
     (: input ONxml document in request :)
     let $doc := <docs> 
@@ -3753,7 +3746,9 @@ declare function bun:get-members(
     let $coll := bun:list-membership-with-tabs($parliament/identifier/text(), $parts/doctype, $listings-filter[@id eq $tab]/text(), $sortby)    
     
     (: The line below is documented in bun:get-documentitems() :)
-    let $query-offset := if ($offset eq 0 ) then 1 else $offset+1  
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1 
     
     (: input ONxml document in request :)
     let $doc := <docs> 

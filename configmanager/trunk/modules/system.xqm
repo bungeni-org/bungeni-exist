@@ -22,8 +22,9 @@ declare variable $sysmanager:REST-CXT-APP :=  $sysmanager:CXT || "/rest" || $con
 declare function local:update-fs-path($fs-bu-custom-path as xs:string) {
     
     let $config-doc := doc($appconfig:ROOT || "/config.xml")
+    let $log := util:log('info', $fs-bu-custom-path)
     return 
-        update replace $config-doc//configs/fs-path/text() with $fs-bu-custom-path
+        update replace $config-doc//configs/fs-path with <fs-path>{$fs-bu-custom-path}</fs-path>
 };
 
 
@@ -69,7 +70,6 @@ declare function local:reverse-transform-configs() {
     let $filename := functx:substring-after-last($path, '/')
     let $mkdirs := if(file:is-directory($appconfig:FS-PATH || "/forms")) then () else file:mkdirs($appconfig:FS-PATH || "/forms")    
     let $mkdirs := if(file:is-directory($appconfig:FS-PATH || "/workflows")) then () else file:mkdirs($appconfig:FS-PATH || "/workflows")
-    let $log := util:log('debug',util:document-name($doc))
     return
             (: !+BUG (ao, June 6th 2013) we are singling-out the items below because they have other special global grants than
                 the default .Add .Edit .View .Delete that we handle at the moment :)
@@ -150,7 +150,7 @@ function sysmanager:upload-form($node as node(), $model as map(*)) {
                         <td><input type="text" style="width:40%;" id="fs_path" name="fs_path" value="{$appconfig:FS-PATH}" /></td>
                     </tr>                    			
                     <tr>
-                        <td colspan="2"><p>e.g. <i>/opt/bungeni/bungeni_apps/bungeni/src/bungeni_custom</i></p></td>
+                        <td colspan="2"><p>e.g. <i>/opt/bungeni/bungeni_apps/customizations/bungeni_custom</i></p></td>
                     </tr>
                 </table>
                 <div>
@@ -352,12 +352,12 @@ declare
 function sysmanager:save($node as node(), $model as map(*)) {
 
     let $contextPath := request:get-context-path()
-    
+
     let $login := xmldb:login($appconfig:ROOT, $appconfig:admin-username, $appconfig:admin-password)
     let $storing := local:reverse-transform-configs()
     (: check for something that definitely has to be there in the sequence :)
     let $uploadstate := if (contains($storing,"ui.xml")) then true() else false()
-    
+        
     return
         <div>
             {
@@ -387,3 +387,4 @@ function sysmanager:save($node as node(), $model as map(*)) {
             }
         </div>
 };
+

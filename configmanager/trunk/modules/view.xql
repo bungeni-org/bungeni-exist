@@ -45,8 +45,13 @@ let $lookup := function($functionName as xs:string, $arity as xs:int) {
  : Run it through the templating system and return the result.
  :)
 let $content := request:get-data()
+let $log := util:log('info',$content)
+let $log := util:log('info',"LE START")
+let $log := util:log('info',util:document-name($content))
+let $log := util:log('info',"LE END!")  
 return
     templates:apply($content, $lookup, (), $config),
     (: !+NOTE (ao, 5th Feb 2013) added this to show updated pages on the HTML views :)
     response:set-header( "Cache-Control", 'no-cache, no-store, max-age=0, must-revalidate' ),
     response:set-header( "Expires", "0" )
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <view show="true">
+        <roles>
+            <role>ALL</role>
+        </roles>
+    </view>
+    <edit show="true">
+        <roles>
+            <role>ALL</role>
+        </roles>
+    </edit>
+    <add show="true">
+        <roles>
+            <role>ALL</role>
+        </roles>
+    </add>
+    <listing show="true">
+        <roles>
+            <role>ALL</role>
+        </roles>
+    </listing>
+</data>

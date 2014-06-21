@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:db="http://namespaces.objectrealms.net/rdb" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:zope="http://namespaces.zope.org/zope" xmlns:xf="http://www.w3.org/2002/xforms" class="templates:surround?with=templates/page.html&amp;at=content">
+    
+    <!-- ***** hidden triggers ***** -->
+    <!--div class="app:xforms-declare"/-->
+    <!-- **** end hidden triggers -->
+    <div class="row-fluid">
+        <div id="left-content" class="span4">
+            <div class="app:get-action-state"/>
+        </div>
+        <div id="right-content" class="span8">
+            <div style="width:98%">
+                <div class="accordion" id="accordion2">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Terminology</a>
+                        </div>
+                        <div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+                            <div class="accordion-inner">
+                                <dl>
+                                    <dt>Upload</dt>
+                                    <dd>
+                                        <p>Loading configuration from bungeni (on file-system) onto configuration manager (on eXist-db).  </p>
+                                    </dd>
+                                    <dd>
+                                        <p>These imports will be listed on the <span class="badge">upload</span> sub-menu of <span class="badge">upload/commit</span> top-menu. </p>
+                                    </dd>
+                                    <dd>
+                                        <p> Each import provides options for activating or deleting it. See screenshot below
+                                            <img class="thumbnail" src="resources/images/help-imports.png" width="60%"/>
+                                            <br/>
+                                            The import coloured <span class="badge badge-success">green</span> is the active imported for editing on the configuration manager.
+                                        </p>
+                                    </dd>
+                                    <dt>Commit</dt>
+                                    <dd>
+                                        <p>Writing back changes made on configuration manage (on eXist-db) onto bungeni (on file-system).</p>
+                                    </dd>
+                                    <dd>
+                                        <p>The same location on the file-system where it was imported from.</p>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">How to use the Configuration Manager</a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
+                            <div class="accordion-inner">
+                                Notes on how to use configuration manager 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">Troubleshooting the Configuration Manager</a>
+                        </div>
+                        <div id="collapseThree" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                Bungeni may undergo underlying configuration changes that may not yet be supported by the conguration manager...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

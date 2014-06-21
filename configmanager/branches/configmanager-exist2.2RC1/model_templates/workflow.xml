@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow title="" description="">
+    <permActions originAttr="permission_actions">
+        <permAction>.View</permAction>
+        <permAction>.Edit</permAction>
+        <permAction>.Add</permAction>
+        <permAction>.Delete</permAction>
+    </permActions>
+</workflow>

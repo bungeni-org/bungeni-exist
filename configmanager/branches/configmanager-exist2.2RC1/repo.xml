@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Config Manager</description>
+    <author>undesa</author>
+    <website>http://www.parliaments.info</website>
+    <status>alpha</status>
+    <license>GNU-LGPL</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>configmanager</target>
+    <prepare>pre-install.xql</prepare>
+    <finish>post-install.xql</finish>
+    <deployed>2013-06-13T11:42:54.862+03:00</deployed>
+</meta>

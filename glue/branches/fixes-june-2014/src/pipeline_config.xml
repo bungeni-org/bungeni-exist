@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipelineConfigs>
+    <!-- INTERNAL: these types are implicitly available in bungeni and dont appear in types.xml -->
+    <pipelineConfig for="address" type="internal" pipeline="configfiles/configs/config_bungeni_address.xml" /> 
+    <pipelineConfig for="sitting" type="internal" pipeline="configfiles/configs/config_bungeni_sitting.xml" /> 
+    <pipelineConfig for="user" type="internal" pipeline="configfiles/configs/config_bungeni_user.xml" /> 
+    <!-- these are arcehtype types, custom types extend these types -->
+    <pipelineConfig for="doc" type="archetype" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" />
+    <!-- !+HACK_ALERT(event) see note in code for the code comment tag -->
+    <pipelineConfig for="event" type="sub_archetype" pipeline="configfiles/configs/config_bungeni_event.xml" />
+    <pipelineConfig for="group" type="archetype" pipeline="configfiles/configs/config_bungeni_group.xml" /> 
+    <pipelineConfig for="member" type="archetype" pipeline="configfiles/configs/config_bungeni_membership.xml" />     
+</pipelineConfigs>        

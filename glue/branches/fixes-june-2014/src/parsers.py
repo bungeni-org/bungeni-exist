@@ -269,6 +269,98 @@ class ParseBungeniXML(ParseXML):
             return self.xmldoc.selectSingleNode(self.xpath_get_log_data())
 
 
+class GenInfoParams:
+    
+    def __init__(self, is_cache_file = False):
+        self.CACHED_TYPES = "cachedTypes"
+        self.CONTENT_TYPE = "contenttype"
+        self.FIELD_NAME = "field[@name='%s']"
+        self.cache_file = is_cache_file
+
+    def _xpath_cached_types(self):
+        return "/" + self.CACHED_TYPES
+
+    def _xpath_content_types(self):
+        return self._xpath_cached_types() + self._xpath_content_type()
+    
+    def _xpath_content_type(self):
+        return "/" + self.CONTENT_TYPE
+
+    def _xpath_info_field(self, name):
+        return (self.FIELD_NAME % name)
+    
+    def __cache_file_prefix__(self):
+        if (self.cache_file):
+            return ""
+        else:
+            return "//"
+    
+    
+class LegislatureInfoParams:
+
+    def __init__(self, is_cache_file = False):
+        """
+        is_cache_file indicates whether the file being parsed is a cached file or a content file,
+        the XPath prefixes are adjusted according to which file is being processed 
+        """
+        self.CACHED_TYPES = "cachedTypes"
+        self.CONTENT_TYPE = "contenttype"
+        self.FIELD_NAME = "field[@name='%s']"
+        self.cache_file = is_cache_file
+    
+    def _xpath_form_info_field(self, name):
+        # NOTE: !+CHAMBER_ACTIVE(AH, 12-2013) Filter for active 
+        # chamber. This is to fix the bug where draft chambers were being
+        # cached. Now chambers cached only when Activated !
+        # Remember that presently chamber activation is assumed to be non
+        # reversible - to reverse you will need to delete the parliament_info.xml file
+        # in the file system
+        # the other assumption here is of course that the 'chamber' doc type and the 
+        # 'active' state name have not been changed in configuration !
+        # change of those configuration conventions should be strictly discouraged !!!
+        li = [
+            self._xpath_content_type(),
+            "[@name='legislature'][child::field[@name='status'][contains(., 'active')]]/",       
+            self._xpath_info_field(name)
+        ]
+        return "".join(li)
+
+
+    
+    def _get_parl_params(self, cc, parliament_doc):
+        parl_map = HashMap()
+        parl_map["country-code"] = cc
+        #print "XXXXX  ROOT ELEMENT", parliament_doc.getRootElement()
+        parl_map["parliament-id"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
+            ).getText()
+        parl_map["chamber-start-date"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("start_date")
+            ).getText()
+        parl_map["for-parliament"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("type")
+            ).getText()
+        # Since : http://code.google.com/p/bungeni-portal/source/detail?r=10757
+        #    "identifier" field was renamed to "principal_name"
+        parl_map["identifier"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("principal_name")
+            ).getText()
+        #    "status" field "
+        parl_map["status"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("status")
+            ).getText()
+        # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
+        # bicameral legislatures 
+        parl_map["type"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("sub_type")
+            ).getText()
+        # !+DEPRECATED r10981 in Bungeni displayAs attribute not present on sub_type
+        parl_map["type_display"] = parliament_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("full_name")
+            ).getText()
+            
+        return parl_map
+    
 
 class ParliamentInfoParams:
 
@@ -350,6 +442,30 @@ class ParliamentInfoParams:
             ).getText()
             
         return parl_map
+
+
+
+class ParseLegislatureInfoXML(ParseXML):
+    """
+    Parse legislature information from an incoming document
+    """
+
+    def get_legislature_info(self, cc):
+        # TO_BE_DONE
+        linfo = LegislatureInfoParams(is_cache_file=False)
+        legislature_params = []
+        #print "XXXXXX parliament info ", pinfo._xpath_parliament_info_field("type")
+        legislature_doc = self.xmldoc.selectSingleNode(linfo._xpath_form_info_field("type"))
+        if legislature_doc is None:
+            #print "XXXX FOUND DOC NULL XXXX"
+            return None
+        if legislature_doc.getText() == "legislature" :
+            legislature_params.append(
+                linfo._get_parl_params(cc, self.xmldoc)
+            )
+            return legislature_params
+        else:
+            return None
 
 
 class ParseParliamentInfoXML(ParseXML):

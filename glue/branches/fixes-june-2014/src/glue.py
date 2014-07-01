@@ -104,10 +104,17 @@ from walker_ext import (
 
 LOG = Logger.getLogger("glue")
 
+
 def setup_consumer_directories(config_file):
     cfg = TransformerConfig(config_file)
     __setup_tmp_dir__(cfg)
     __setup_cache_dirs__(cfg)
+
+
+def get_legislature_info(config_file):
+    cfg = TransformerConfig(config_file)
+    liw = LegislatureInfoWalker({"main_config": cfg})
+    
 
 
 def get_parl_info(config_file):

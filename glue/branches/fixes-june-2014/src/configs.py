@@ -62,9 +62,12 @@ class TransformerConfig(Config):
     def using_queue(self):
         return self.get("general", "message_queue")
 
+    """
+    ## legislature changes - june 2014
     def get_country_code(self):
         #return self.get("general", "country_code")
         return self.__legislature__()["country_code"]
+    """
 
     def get_bungeni_custom(self):
         return self.get("general", "bungeni_custom_folder")
@@ -72,12 +75,15 @@ class TransformerConfig(Config):
     def get_types_xml_from_bungeni_custom(self):
         return os.path.join(self.get_bungeni_custom(), "types.xml")
  
+    """
+    ## legislature changes - june 2014
     def get_legislature_start_date(self):
         return self.__legislature__()["start_date"]
  
     def get_legislature_election_date(self):
         return self.__legislature__()["election_date"]
- 
+    """
+
     def __bungeni_custom__(self):
         import imp
         bc = imp.load_source(
@@ -89,10 +95,13 @@ class TransformerConfig(Config):
             )
         return bc        
  
+    """
+    ## legislature changes - june 2014
     def __legislature__(self):
         bc = self.__bungeni_custom__()
         return bc.legislature
-    
+    """
+
     def get_languages_info(self):
         bc = self.__bungeni_custom__()
         lang_info = {
@@ -102,13 +111,16 @@ class TransformerConfig(Config):
         }
         return lang_info
         
+    """
+    ## legislature changes - june 2014
     def get_bicameral(self):
         #return self.get("general", "bicameral")
         return self.__legislature__()["bicameral"]    
 
     def get_legislature_identifier(self):
         return str(self.__legislature__()["identifier"])
-    
+    """
+
     def get_parliament_type_name(self):
         return self.get("general", "parliament_type_name")
 

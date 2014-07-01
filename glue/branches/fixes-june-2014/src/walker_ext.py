@@ -54,6 +54,7 @@ from utils import (
 
 from parsers import (
     ParseBungeniXML,
+    ParseLegislatureInfoXML,
     ParseCachedParliamentInfoXML,
     ParseParliamentInfoXML,
     ParliamentInfoParams
@@ -68,6 +69,105 @@ from walker import (
 LOG = Logger.getLogger("glue")
 
 __parl_info__ = "parliament_info.xml"
+__legislature_info__ = "legislature_info.xml"
+ 
+ 
+ 
+
+
+
+class LegislatureInfoWalker(GenericDirWalker):
+    """
+    Walker that retrieves the info about the legislature
+    This is called from both the queue processor and from the batch processor
+    """
+    def __init__(self, input_params = None):
+        super(LegislatureInfoWalker, self).__init__(input_params)
+        self.cache_file = "%s%s" % (
+            self.input_params["main_config"].get_cache_file_folder(),
+            __legislature_info__
+            )
+        self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
+        self.legislature_info = {}
+    
+    def cache_file_exists(self):
+        return os.path.isfile(self.cache_file)
+
+    def process_xml_file(self, input_file_path):
+        # TO_BE_DONE
+        bunparse = ParseLegislatureInfoXML(input_file_path)
+        if not bunparse.valid_file:
+            ## error while opening file
+            return (False, None)
+        parse_success = bunparse.doc_parse()
+        if not parse_success:
+            ## error while parsing file 
+            return (False, None)
+        # check if its a parliament document
+        the_parl_doc = bunparse.get_parliament_info(
+                self.input_params["main_config"].get_country_code()
+                )
+        if the_parl_doc is not None:
+            """
+            Create a cached copy in tmp folder defined in config.ini for quick access 
+            in the current parliament's future transformation processes
+            """
+            # check if file exists , if it exists there is already a parliament in the
+            # cache 
+            from os import path
+            if path.exists(self.cache_file):
+                #print "XXXX CACHE FILE EXISTS"
+                if self.is_cache_full() == False:
+                    #print "XXXX CACHE IS NOT FULL"
+                    # inject into file after contenttypes node
+                    # check if the parliament info is not already cached
+                    #print "XXXX APPENDING TO CACHE"
+                    self.append_to_cache(input_file_path)
+                    #return (True, the_parl_doc)
+            else:
+                # new document
+                self.new_cache(input_file_path)
+            # Check if the cache is full
+            # if the cache is full , stop processing and return the parl_doc
+            if self.is_cache_full():
+                return (True, the_parl_doc)
+            else:
+                # else continue
+                return (False, None)    
+        else :
+            return (False, None)
+
+   
+    def fn_callback(self, input_file_path):
+        """
+        This is an incoming document 
+        """
+   
+        if input_file_path.endswith(".zip"):
+            # zip file processing
+            zipfile = ZipFile(input_file_path)
+            found_file = None
+            if zipfile.isValidZipFile():
+                files = zipfile.fileHeaders
+                for file in files:
+                    xml_file = file.fileName
+                    if xml_file.endswith(".xml"):
+                        found_file = file
+                        break
+                if found_file is not None:
+                    try:
+                        zipfile.extractFile(found_file, self.tmp_files_folder)
+                        # return
+                        return self.process_xml_file(
+                                os.path.join(self.tmp_files_folder, found_file.fileName)
+                        )
+                    except ZipException, e:
+                        print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
+            return (False, None)
+        elif input_file_path.endswith(".xml"):
+            return self.process_xml_file(input_file_path)
+        else :
+            return (False, None)
 
 
 class ParliamentInfoWalker(GenericDirWalker):

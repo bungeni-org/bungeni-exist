@@ -254,6 +254,27 @@ def language_info_publish(config_file):
             print "Language info publication thread was interrupted", e
 
 
+def legislature_info_gather(config_file):
+    legis_info = None
+    leg_info_continue = True
+    while leg_info_continue:
+        time.sleep(int(__time_int__))
+        legis_latch = CountDownLatch(1)
+        l_thread = LegislatureInfoGather(legis_latch, config_file)
+        l_thread.start()
+        try:
+            legis_latch.await()
+            legis_info = l_thread.legislature_info
+            if legis_info is not None:
+                leg_info_continue = False
+        except InterruptedException, e:
+            print "legislature_info_gather was interrupted !", e
+        finally:
+            l_thread = None
+            legis_latch = None
+    return legis_info
+
+
 def parliament_info_gather(config_file):
     pc_info = None
     parl_info_continue = True
@@ -360,6 +381,8 @@ exist_running(__config_file__)
 if types_all_config(__config_file__):
     # get language info
     language_info_publish(__config_file__)
+    # get legislature information
+    legis_info = legislature_info_gather(__config_file__)
     # get chamber information
     cache_info = parliament_info_gather(__config_file__)
     # publish chamber information to exist

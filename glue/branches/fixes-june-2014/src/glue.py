@@ -94,6 +94,7 @@ from walker import (
     )
 
 from walker_ext import (
+     LegislatureInfo,
      LegislatureInfoWalker,
      ParliamentInfoWalker,
      SeekBindAttachmentsWalker,
@@ -185,6 +186,7 @@ def param_parl_info(cfg, params):
     """
     Converts it to the transformers expected input form
     """
+    linfo = LegislatureInfo(cfg)
     li_parl_params = StringBuilder()
     li_parl_params.append(
         "<parliaments>"
@@ -197,11 +199,10 @@ def param_parl_info(cfg, params):
             "  <electionDate>%(election_date)s</electionDate>" 
             "</legislature>")% 
             {
-            "country_code" : "", #cfg.get_country_code(),
-            "identifier" : "", #cfg.get_legislature_identifier(),
-            "start_date" : "", #cfg.get_legislature_start_date(),
-            "election_date" : "", #cfg.get_legislature_election_date()
-             
+            "country_code" : linfo.get_country_code(),
+            "identifier" : linfo.get_legislature_identifier(),
+            "start_date" : linfo.get_legislature_start_date(),
+            "election_date" : linfo.get_legislature_election_date()
             }
         )
     for param in params:

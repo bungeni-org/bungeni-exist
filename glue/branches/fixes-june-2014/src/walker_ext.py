@@ -111,6 +111,12 @@ class LegislatureInfo(object):
             self.__field_path("election_date")
         ).getText()
         return election_date
+    
+    def get_legislature_identifier(self):
+        identifier = self.xmldoc.selectSingleNode(
+            self.__field_path("identifier")
+        ).getText()
+        return identifier
         
 
 class LegislatureInfoWalker(GenericDirWalker):
@@ -218,9 +224,7 @@ class LegislatureInfoWalker(GenericDirWalker):
             ## error while parsing file 
             return (False, None)
         # check if its a parliament document
-        the_leg_doc = bunparse.get_legislature_info(
-                "cc" #self.input_params["main_config"].get_country_code()
-                )
+        the_leg_doc = bunparse.get_legislature_info()
         if the_leg_doc is not None:
             """
             Create a cached copy in tmp folder defined in config.ini for quick access 
@@ -314,8 +318,8 @@ class ParliamentInfoWalker(GenericDirWalker):
         bunparse.doc_parse()
         # return the parliament information in a list containing a hashmap
         the_parl_doc = bunparse.get_parliament_info(
-                self.input_params["main_config"].get_bicameral(),
-                "cc" #self.input_params["main_config"].get_country_code()
+                self.legislature_info.get_bicameral(),
+                self.legislature_info.get_country_code()
                 )
         return the_parl_doc
         
@@ -456,7 +460,7 @@ class ParliamentInfoWalker(GenericDirWalker):
             return (False, None)
         # check if its a parliament document
         the_parl_doc = bunparse.get_parliament_info(
-                "cc" #self.input_params["main_config"].get_country_code()
+                 self.legislature_info.get_bicameral()
                 )
         if the_parl_doc is not None:
             """

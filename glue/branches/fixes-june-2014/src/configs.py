@@ -112,11 +112,6 @@ class TransformerConfig(Config):
         return lang_info
         
     """
-    ## legislature changes - june 2014
-    def get_bicameral(self):
-        #return self.get("general", "bicameral")
-        return self.__legislature__()["bicameral"]    
-
     def get_legislature_identifier(self):
         return str(self.__legislature__()["identifier"])
     """

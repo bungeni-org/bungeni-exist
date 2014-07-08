@@ -260,18 +260,22 @@ def legislature_info_gather(config_file):
     while leg_info_continue:
         time.sleep(int(__time_int__))
         legis_latch = CountDownLatch(1)
+        print "Entering legislature info Gather !"
         l_thread = LegislatureInfoGather(legis_latch, config_file)
         l_thread.start()
         try:
             legis_latch.await()
             legis_info = l_thread.legislature_info
             if legis_info is not None:
+                print "This is legis_info XXX-YYY-ZZZ" , legis_info
                 leg_info_continue = False
         except InterruptedException, e:
             print "legislature_info_gather was interrupted !", e
         finally:
             l_thread = None
             legis_latch = None
+            print "Exiting legislature info Gather !"
+    print "XXX-YYY-ZZZ : printing legis_info " , legis_info        
     return legis_info
 
 

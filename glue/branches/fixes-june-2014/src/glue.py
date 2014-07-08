@@ -94,6 +94,7 @@ from walker import (
     )
 
 from walker_ext import (
+     LegislatureInfoWalker,
      ParliamentInfoWalker,
      SeekBindAttachmentsWalker,
      ProcessXmlFilesWalker,
@@ -114,7 +115,8 @@ def setup_consumer_directories(config_file):
 def get_legislature_info(config_file):
     cfg = TransformerConfig(config_file)
     liw = LegislatureInfoWalker({"main_config": cfg})
-    
+    liw.walk(cfg.get_input_folder())
+    return liw.object_info
 
 
 def get_parl_info(config_file):
@@ -135,7 +137,7 @@ def get_parl_info(config_file):
     piw = ParliamentInfoWalker({"main_config":cfg})
 
     no_of_parliaments_required = 1
-    if cfg.get_bicameral():
+    if piw.bicameral:
         no_of_parliaments_required = 2
     
     pc_info = ParliamentCacheInfo(no_of_parls = no_of_parliaments_required, p_info = [])
@@ -195,10 +197,10 @@ def param_parl_info(cfg, params):
             "  <electionDate>%(election_date)s</electionDate>" 
             "</legislature>")% 
             {
-            "country_code" : cfg.get_country_code(),
-            "identifier" : cfg.get_legislature_identifier(),
-            "start_date" : cfg.get_legislature_start_date(),
-            "election_date" : cfg.get_legislature_election_date()
+            "country_code" : "", #cfg.get_country_code(),
+            "identifier" : "", #cfg.get_legislature_identifier(),
+            "start_date" : "", #cfg.get_legislature_start_date(),
+            "election_date" : "", #cfg.get_legislature_election_date()
              
             }
         )

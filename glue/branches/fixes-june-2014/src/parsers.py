@@ -308,7 +308,7 @@ class LegislatureInfoParams(GenInfoParams):
         ]
         return "".join(li)
     
-    def _get_params(self, cc, legislature_doc):
+    def _get_params(self, legislature_doc):
         leg_map = HashMap()
         leg_map["country-code"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("country_code")
@@ -416,7 +416,7 @@ class ParseLegislatureInfoXML(ParseXML):
     Parse legislature information from an incoming document
     """
 
-    def get_legislature_info(self, cc):
+    def get_legislature_info(self):
         # TO_BE_DONE
         linfo = LegislatureInfoParams(is_cache_file=False)
         legislature_params = []
@@ -426,7 +426,7 @@ class ParseLegislatureInfoXML(ParseXML):
             print "XXX-YYY-ZZZ , legislature_doc NULL "
             return None
         if legislature_doc.getText() == "legislature" :
-            l_params = linfo._get_params(cc, self.xmldoc)
+            l_params = linfo._get_params(self.xmldoc)
             print "XXX-YYY-ZZZ l_params ", l_params
             legislature_params.append(l_params)
             return legislature_params

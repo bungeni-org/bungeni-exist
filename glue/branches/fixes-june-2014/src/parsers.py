@@ -42,6 +42,8 @@ from gen_utils import (
 
 LOG = Logger.getLogger("glue")
 
+
+
 class ParseXML(object):
     """
     Parses XML output from Bungeni using Xerces
@@ -308,16 +310,27 @@ class LegislatureInfoParams(GenInfoParams):
     
     def _get_params(self, cc, legislature_doc):
         leg_map = HashMap()
-        leg_map["country-code"] = cc
+        leg_map["country-code"] = legislature_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("country_code")
+            ).getText()
         #print "XXXXX  ROOT ELEMENT", parliament_doc.getRootElement()
         leg_map["legislature-id"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
             ).getText()
-        leg_map["chamber-start-date"] = legislature_doc.selectSingleNode(
+        leg_map["legislature-name"]  = legislature_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("principal_name")
+            ).getText()
+        leg_map["start-date"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("start_date")
             ).getText()
-        leg_map["for-parliament"] = legislature_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("type")
+        leg_map["election-date"] = legislature_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("election_date")
+            ).getText()
+        leg_map["bicameral"] = legislature_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("bicameral")
+            ).getText()
+        leg_map["role"] = legislature_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("group_role")
             ).getText()
         # Since : http://code.google.com/p/bungeni-portal/source/detail?r=10757
         #    "identifier" field was renamed to "principal_name"
@@ -330,14 +343,14 @@ class LegislatureInfoParams(GenInfoParams):
             ).getText()
         # !+BICAMERAL(ah,14-02-2013) added a type information for parliament to support
         # bicameral legislatures 
-        leg_map["type"] = legislature_doc.selectSingleNode(
-            self.__cache_file_prefix__() + self._xpath_info_field("sub_type")
-            ).getText()
+        # NOTE - "type" is now "bicameral" True/False
         # !+DEPRECATED r10981 in Bungeni displayAs attribute not present on sub_type
-        leg_map["type_display"] = legislature_doc.selectSingleNode(
+        leg_map["type-display"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("full_name")
             ).getText()
-            
+        leg_map["short-name"] = legislature_doc.selectSingleNode(
+            self.__cache_file_prefix__() + self._xpath_info_field("short_name")
+            ).getText()
         return leg_map
     
 
@@ -407,15 +420,15 @@ class ParseLegislatureInfoXML(ParseXML):
         # TO_BE_DONE
         linfo = LegislatureInfoParams(is_cache_file=False)
         legislature_params = []
-        #print "XXXXXX parliament info ", pinfo._xpath_parliament_info_field("type")
+        
         legislature_doc = self.xmldoc.selectSingleNode(linfo._xpath_form_info_field("type"))
         if legislature_doc is None:
-            #print "XXXX FOUND DOC NULL XXXX"
+            print "XXX-YYY-ZZZ , legislature_doc NULL "
             return None
         if legislature_doc.getText() == "legislature" :
-            legislature_params.append(
-                linfo._get_params(cc, self.xmldoc)
-            )
+            l_params = linfo._get_params(cc, self.xmldoc)
+            print "XXX-YYY-ZZZ l_params ", l_params
+            legislature_params.append(l_params)
             return legislature_params
         else:
             return None

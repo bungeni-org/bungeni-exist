@@ -77,7 +77,9 @@ __legislature_info__ = "legislature_info.xml"
 class LegislatureInfo(object):
     
     def __init__(self, main_config):
-        p_xml = ParseXML(main_config.get_cache_file_folder() )
+        p_xml = ParseXML(
+            os.path.join(main_config.get_cache_file_folder(), __legislature_info__)
+            )
         p_xml.doc_parse()
         self.prefix_path = "/cachedTypes/contenttype[@name='legislature']"
         self.xmldoc = p_xml.doc_dom()
@@ -133,8 +135,6 @@ class LegislatureInfoWalker(GenericDirWalker):
             __legislature_info__
             )
         self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
-        print "XXX-YYY-ZZZ LegislatureInfoWalker cache_file ", self.cache_file
-        print "XXX-YYY-ZZZ LegislatureInfoWalker tmp_files_folder ", self.tmp_files_folder
 
     def new_cache_document(self):
         """
@@ -213,14 +213,11 @@ class LegislatureInfoWalker(GenericDirWalker):
     def process_xml_file(self, input_file_path):
         # TO_BE_DONE
         bunparse = ParseLegislatureInfoXML(input_file_path)
-        print "XXX-YYY-ZZZ calling process_xml_file"
         if not bunparse.valid_file:
             ## error while opening file
-            print "XXX-YYY-ZZZ calling process_xml_file EXITING PARSER BECAUSE OF INVALID FILE"
             return (False, None)
         parse_success = bunparse.doc_parse()
         if not parse_success:
-            print "XXX-YYY-ZZZ calling process_xml_file PARSE_FAILURE"
             ## error while parsing file 
             return (False, None)
         # check if its a parliament document

@@ -127,7 +127,6 @@ def get_parl_info(config_file):
         a list containing 1 or more parliaments
         a variable indicating number of chambers in the legislature
     """
-  
     cfg = TransformerConfig(config_file)
     """
     !+BICAMERAL
@@ -136,7 +135,6 @@ def get_parl_info(config_file):
     and 1 map when its unicameral 
     """
     piw = ParliamentInfoWalker({"main_config":cfg})
-
     no_of_parliaments_required = 1
     if piw.bicameral:
         no_of_parliaments_required = 2

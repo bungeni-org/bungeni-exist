@@ -72,7 +72,10 @@ class ParseXML(object):
         To be called after initializing ParseXML this is to catch any parsing errors and a return boolean. 
         """
         try:
+            print "XXX - YYY -ZZZ opening ParseXML ", self.an_xml
             self.xmldoc = self.sreader.read(self.an_xml)
+            print "XXX - YYY -ZZZ opened ParseXML ", self.xmldoc
+            
             return True
         except DocumentException, fNE:
             print COLOR.FAIL, fNE, '\nERROR: when trying to parse ', self.xmlfile, COLOR.ENDC
@@ -107,10 +110,8 @@ class ParseXML(object):
         finally:
             close_quietly(writer)
             
-
-
 class ParseBungeniTypesXML(ParseXML):
-    
+
     def __init__(self, xml_path):
         super(ParseBungeniTypesXML, self).__init__(xml_path)
         #self.namespaces = {"ce": "http://bungeni.org/config_editor"}
@@ -423,11 +424,9 @@ class ParseLegislatureInfoXML(ParseXML):
         
         legislature_doc = self.xmldoc.selectSingleNode(linfo._xpath_form_info_field("type"))
         if legislature_doc is None:
-            print "XXX-YYY-ZZZ , legislature_doc NULL "
             return None
         if legislature_doc.getText() == "legislature" :
             l_params = linfo._get_params(self.xmldoc)
-            print "XXX-YYY-ZZZ l_params ", l_params
             legislature_params.append(l_params)
             return legislature_params
         else:
@@ -479,7 +478,7 @@ class ParseCachedParliamentInfoXML(ParseXML):
         if bicameral:
             if len(parliament_docs) == 2:
                 for parliament_doc in parliament_docs:
-                    parl_map = pinfo._get_parl_params(cc, parliament_doc)
+                    parl_map = pinfo._get_params(cc, parliament_doc)
                     parl_params.append(parl_map)
                 return parl_params
             else:
@@ -491,7 +490,7 @@ class ParseCachedParliamentInfoXML(ParseXML):
             if parliament_docs.size() == 1:
                 pinfo = ParliamentInfoParams()
                 parl_params.append(
-                    pinfo._get_parl_params(cc, parliament_doc)
+                    pinfo._get_params(cc, parliament_doc)
                 )
             else:
                 LOG.info(

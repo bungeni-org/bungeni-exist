@@ -30,6 +30,7 @@ from java.util.concurrent import (
 
 from glue import (
     main_queue,
+    get_legislature_info,
     get_parl_info,
     setup_consumer_directories,
     publish_parliament_info,
@@ -152,6 +153,28 @@ class LangInfoPublish(Thread):
             self.latch.countDown()
 
 
+class LegislatureInfoGather(Thread):
+
+    """
+    This thread gets the legislature information and is run before ParlInfoGather. 
+    The serialization requires two critical steps to proceed - the definition of the 
+    Legislature and the Definition of the chamber (or chambers if bicameral) . 
+    """
+
+    def __init__(self, cd_latch, config_file):
+        self.latch = cd_latch
+        self.legislature_info = None
+        self.config_file = config_file
+
+    def run(self):
+        try:
+            self.legislature_info = get_legislature_info(self.config_file)
+        except Exception, e:
+            print "There was an exception getting the legislature info", e
+        finally:
+            self.latch.countDown()            
+
+
 class ParlInfoGather(Thread):
     """
     This thread gets the parliament information and is run before the 
@@ -229,6 +252,29 @@ def language_info_publish(config_file):
                 language_info_continue = False
         except InterruptedException, e:
             print "Language info publication thread was interrupted", e
+
+
+def legislature_info_gather(config_file):
+    legis_info = None
+    leg_info_continue = True
+    while leg_info_continue:
+        time.sleep(int(__time_int__))
+        legis_latch = CountDownLatch(1)
+        print "Entering legislature info Gather !"
+        l_thread = LegislatureInfoGather(legis_latch, config_file)
+        l_thread.start()
+        try:
+            legis_latch.await()
+            legis_info = l_thread.legislature_info
+            if legis_info is not None:
+                leg_info_continue = False
+        except InterruptedException, e:
+            print "legislature_info_gather was interrupted !", e
+        finally:
+            l_thread = None
+            legis_latch = None
+            print "Exiting legislature info Gather !"
+    return legis_info
 
 
 def parliament_info_gather(config_file):
@@ -337,6 +383,8 @@ exist_running(__config_file__)
 if types_all_config(__config_file__):
     # get language info
     language_info_publish(__config_file__)
+    # get legislature information
+    legis_info = legislature_info_gather(__config_file__)
     # get chamber information
     cache_info = parliament_info_gather(__config_file__)
     # publish chamber information to exist

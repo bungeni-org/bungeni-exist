@@ -94,6 +94,8 @@ from walker import (
     )
 
 from walker_ext import (
+     LegislatureInfo,
+     LegislatureInfoWalker,
      ParliamentInfoWalker,
      SeekBindAttachmentsWalker,
      ProcessXmlFilesWalker,
@@ -104,10 +106,18 @@ from walker_ext import (
 
 LOG = Logger.getLogger("glue")
 
+
 def setup_consumer_directories(config_file):
     cfg = TransformerConfig(config_file)
     __setup_tmp_dir__(cfg)
     __setup_cache_dirs__(cfg)
+
+
+def get_legislature_info(config_file):
+    cfg = TransformerConfig(config_file)
+    liw = LegislatureInfoWalker({"main_config": cfg})
+    liw.walk(cfg.get_input_folder())
+    return liw.object_info
 
 
 def get_parl_info(config_file):
@@ -117,7 +127,6 @@ def get_parl_info(config_file):
         a list containing 1 or more parliaments
         a variable indicating number of chambers in the legislature
     """
-  
     cfg = TransformerConfig(config_file)
     """
     !+BICAMERAL
@@ -126,9 +135,8 @@ def get_parl_info(config_file):
     and 1 map when its unicameral 
     """
     piw = ParliamentInfoWalker({"main_config":cfg})
-
     no_of_parliaments_required = 1
-    if cfg.get_bicameral():
+    if piw.bicameral:
         no_of_parliaments_required = 2
     
     pc_info = ParliamentCacheInfo(no_of_parls = no_of_parliaments_required, p_info = [])
@@ -176,6 +184,7 @@ def param_parl_info(cfg, params):
     """
     Converts it to the transformers expected input form
     """
+    linfo = LegislatureInfo(cfg)
     li_parl_params = StringBuilder()
     li_parl_params.append(
         "<parliaments>"
@@ -188,11 +197,10 @@ def param_parl_info(cfg, params):
             "  <electionDate>%(election_date)s</electionDate>" 
             "</legislature>")% 
             {
-            "country_code" : cfg.get_country_code(),
-            "identifier" : cfg.get_legislature_identifier(),
-            "start_date" : cfg.get_legislature_start_date(),
-            "election_date" : cfg.get_legislature_election_date()
-             
+            "country_code" : linfo.get_country_code(),
+            "identifier" : linfo.get_legislature_identifier(),
+            "start_date" : linfo.get_legislature_start_date(),
+            "election_date" : linfo.get_legislature_election_date()
             }
         )
     for param in params:

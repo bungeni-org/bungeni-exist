@@ -6,18 +6,19 @@
    <map from="question" uri-name="Question" element-name="question" />
    <map from="tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
    <map from="agenda_item" uri-name="AgendaItem" element-name="agendaItem" />
+   <map from="report" uri-name="Report" element-name="report" />
    <map from="assembly_bill" uri-name="Bill" element-name="bill" />
    <map from="assembly_motion" uri-name="Motion" element-name="motion" />
    <map from="assembly_question" uri-name="Question" element-name="question" />
    <map from="assembly_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
    <map from="senate_bill" uri-name="Bill" element-name="bill" />
-   <map from="senate_motion" uri-name="Motion" element-name="motion" />
-   <map from="senate_question" uri-name="Question" element-name="question" />
-   <map from="senate_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
-   <map from="report" uri-name="Report" element-name="report" />
-   <map from="bicameral_document" uri-name="BicameralDocument" element-name="bicameralDocument" />
-   <map from="event_response" uri-name="EventResponse" element-name="eventResponse" />
-   <map from="event_editor" uri-name="EventEditor" element-name="eventEditor" />
+   <map from="senate_motion" uri-name="SenateMotion" element-name="senateMotion" />
+   <map from="senate_question" uri-name="SenateQuestion" element-name="senateQuestion" />
+   <map from="senate_tabled_document" uri-name="SenateTabledDocument" element-name="senateTabledDocument" />
+   <map from="assembly_event" uri-name="AssemblyEvent" element-name="assemblyEvent" />
+   <map from="assembly_response" uri-name="AssemblyResponse" element-name="assemblyResponse" />
+   <map from="senate_event" uri-name="SenateEvent" element-name="senateEvent" />
+   <map from="senate_response" uri-name="SenateResponse" element-name="senateResponse" />
    <map from="office" uri-name="Office" element-name="office" />
    <map from="political_group" uri-name="PoliticalGroup" element-name="politicalGroup" />
    <map from="committee" uri-name="Committee" element-name="committee" />
@@ -25,10 +26,13 @@
    <map from="government" uri-name="Government" element-name="government" />
    <map from="ministry" uri-name="Ministry" element-name="ministry" />
    <map from="chamber" uri-name="Chamber" element-name="chamber" />
+   <map from="legislature" uri-name="Legislature" element-name="legislature" />
    <map from="office_member" uri-name="OfficeMember" element-name="officeMember" />
    <map from="political_group_member" uri-name="PoliticalGroupMember" element-name="politicalGroupMember" />
    <map from="committee_member" uri-name="CommitteeMember" element-name="committeeMember" />
    <map from="committee_staff" uri-name="CommitteeStaff" element-name="committeeStaff" />
+   <map from="joint_committee_member" uri-name="JointCommitteeMember" element-name="jointCommitteeMember" />
+   <map from="joint_committee_staff" uri-name="JointCommitteeStaff" element-name="jointCommitteeStaff" />
    <map from="minister" uri-name="Minister" element-name="minister" />
    <map from="member" uri-name="Member" element-name="member" />
    <map from="address" uri-name="Address" element-name="address" />

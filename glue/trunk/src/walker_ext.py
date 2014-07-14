@@ -53,10 +53,13 @@ from utils import (
     )
 
 from parsers import (
+    ParseXML,
     ParseBungeniXML,
+    ParseLegislatureInfoXML,
     ParseCachedParliamentInfoXML,
     ParseParliamentInfoXML,
-    ParliamentInfoParams
+    ParliamentInfoParams,
+    LegislatureInfoParams
     )
 
 from walker import (
@@ -68,6 +71,201 @@ from walker import (
 LOG = Logger.getLogger("glue")
 
 __parl_info__ = "parliament_info.xml"
+__legislature_info__ = "legislature_info.xml"
+ 
+
+class LegislatureInfo(object):
+    
+    def __init__(self, main_config):
+        p_xml = ParseXML(
+            os.path.join(main_config.get_cache_file_folder(), __legislature_info__)
+            )
+        p_xml.doc_parse()
+        self.prefix_path = "/cachedTypes/contenttype[@name='legislature']"
+        self.xmldoc = p_xml.doc_dom()
+    
+    def __field_path(self, field_name):
+        return "%s/field[@name='%s']" % (self.prefix_path, field_name)
+    
+    def get_bicameral(self):
+        bicameral_value = self.xmldoc.selectSingleNode(
+            self.__field_path("bicameral")
+        ).getText()
+        if bicameral_value == "True":
+            return True
+        else:
+            return False
+    
+    def get_country_code(self):
+        country_code = self.xmldoc.selectSingleNode(
+            self.__field_path("country_code")
+        ).getText()
+        return country_code
+    
+    def get_legislature_start_date(self):
+        start_date = self.xmldoc.selectSingleNode(
+            self.__field_path("start_date")
+        ).getText()
+        return start_date
+ 
+    def get_legislature_election_date(self):
+        election_date = self.xmldoc.selectSingleNode(
+            self.__field_path("election_date")
+        ).getText()
+        return election_date
+    
+    def get_legislature_identifier(self):
+        identifier = self.xmldoc.selectSingleNode(
+            self.__field_path("identifier")
+        ).getText()
+        return identifier
+        
+
+class LegislatureInfoWalker(GenericDirWalker):
+    """
+    Walker that retrieves the info about the legislature
+    This is called from both the queue processor and from the batch processor
+    """
+    #TO_BE_DONE factor out caching into a separate type and use it here and in parliament info walker
+    #
+    def __init__(self, input_params = None):
+        super(LegislatureInfoWalker, self).__init__(input_params)
+        self.cache_file = "%s%s" % (
+            self.input_params["main_config"].get_cache_file_folder(),
+            __legislature_info__
+            )
+        self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
+
+    def new_cache_document(self):
+        """
+        Creates a new empty cache document and saves it to disk
+        """
+        cache_doc = DocumentHelper.createDocument()
+        pinfo = LegislatureInfoParams()
+        # <cachedTypes />
+        cache_doc.addElement(pinfo.CACHED_TYPES)
+        self.write_cache_doc_to_file(cache_doc)
+        
+
+    def new_cache(self, input_file):
+        """
+        Takes the input file, creates a new empty cache document, 
+        and adds the input file to the cache 
+        """
+        self.new_cache_document()
+        reader = SAXReader()
+        new_doc = reader.read(
+            File(input_file)
+        )
+        element_to_import = new_doc.getRootElement()
+        self.append_element_into_cache_document(element_to_import)
+
+
+    def write_cache_doc_to_file(self, cache_doc):
+        #print "XXXX WRITE CACHE TO FILE ", cache_doc.getRootElement().getDocument().asXML()
+        format = OutputFormat.createPrettyPrint()
+        writer = XMLWriter(
+            FileWriter(self.cache_file),
+            format
+            )
+        try:
+            writer.write(cache_doc)
+            writer.flush()
+        except Exception, e:
+            print "Error WRITE_CACHE_DOC_TO_FILE ", e
+        finally:
+            close_quietly(writer)
+
+        
+    def append_to_cache(self, input_file):
+        reader = SAXReader()
+        new_doc = reader.read(
+            File(input_file)
+        )
+        element_to_import = new_doc.getRootElement()
+        self.append_element_into_cache_document(element_to_import)
+
+
+    def __doc_cache_file(self):
+        reader = SAXReader()
+        cache_doc = reader.read(
+            File(self.cache_file)
+            )
+        return cache_doc
+
+    def append_element_into_cache_document(self, element_to_import):
+        cache_doc = self.__doc_cache_file()
+        # get the child elements
+        list_of_elements = cache_doc.getRootElement().elements()
+        #print "XXXX LIST OF ELEMENTS IN CACHE, ", list_of_elements 
+        # get a deep copy of the element to be imported, this also detaches the node 
+        # from the parent
+        element_to_copy = element_to_import.createCopy()
+        #print "XXXX LIST OF ELEMENTS TO COPY, ", element_to_copy 
+        list_of_elements.add(element_to_copy)
+        #cache_doc.importNode(element_to_import, True)
+        #cache_doc.getRootElement().addElement(
+        ##    element_to_import
+        #    )
+        #print "XXXX LIST OF ELEMENTS AFTER COPY, ", list_of_elements 
+        self.write_cache_doc_to_file(cache_doc)    
+
+    def process_xml_file(self, input_file_path):
+        # TO_BE_DONE
+        bunparse = ParseLegislatureInfoXML(input_file_path)
+        if not bunparse.valid_file:
+            ## error while opening file
+            return (False, None)
+        parse_success = bunparse.doc_parse()
+        if not parse_success:
+            ## error while parsing file 
+            return (False, None)
+        # check if its a parliament document
+        the_leg_doc = bunparse.get_legislature_info()
+        if the_leg_doc is not None:
+            """
+            Create a cached copy in tmp folder defined in config.ini for quick access 
+            in the current parliament's future transformation processes
+            """
+            # check if file exists , if it exists there is already a parliament in the
+            # cache 
+            from os import path
+            self.new_cache(input_file_path)
+            return (True, the_leg_doc)
+        else :
+            return (False, None)
+
+   
+    def fn_callback(self, input_file_path):
+        """
+        This is an incoming document 
+        """
+   
+        if input_file_path.endswith(".zip"):
+            # zip file processing
+            zipfile = ZipFile(input_file_path)
+            found_file = None
+            if zipfile.isValidZipFile():
+                files = zipfile.fileHeaders
+                for file in files:
+                    xml_file = file.fileName
+                    if xml_file.endswith(".xml"):
+                        found_file = file
+                        break
+                if found_file is not None:
+                    try:
+                        zipfile.extractFile(found_file, self.tmp_files_folder)
+                        # return
+                        return self.process_xml_file(
+                                os.path.join(self.tmp_files_folder, found_file.fileName)
+                        )
+                    except ZipException, e:
+                        print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
+            return (False, None)
+        elif input_file_path.endswith(".xml"):
+            return self.process_xml_file(input_file_path)
+        else :
+            return (False, None)
 
 
 class ParliamentInfoWalker(GenericDirWalker):
@@ -77,8 +275,9 @@ class ParliamentInfoWalker(GenericDirWalker):
     """
     def __init__(self, input_params = None):
         super(ParliamentInfoWalker, self).__init__(input_params)
+        self.legislature_info = LegislatureInfo(self.input_params["main_config"])
         # check if the system is setup for unicameral or bicameral 
-        self.bicameral = self.input_params["main_config"].get_bicameral()
+        self.bicameral = self.legislature_info.get_bicameral()
         self.cache_file = "%s%s" % (
             self.input_params["main_config"].get_cache_file_folder(),
             __parl_info__
@@ -116,8 +315,8 @@ class ParliamentInfoWalker(GenericDirWalker):
         bunparse.doc_parse()
         # return the parliament information in a list containing a hashmap
         the_parl_doc = bunparse.get_parliament_info(
-                self.input_params["main_config"].get_bicameral(),
-                self.input_params["main_config"].get_country_code()
+                self.legislature_info.get_bicameral(),
+                self.legislature_info.get_country_code()
                 )
         return the_parl_doc
         
@@ -258,7 +457,7 @@ class ParliamentInfoWalker(GenericDirWalker):
             return (False, None)
         # check if its a parliament document
         the_parl_doc = bunparse.get_parliament_info(
-                self.input_params["main_config"].get_country_code()
+                 self.legislature_info.get_bicameral()
                 )
         if the_parl_doc is not None:
             """

@@ -361,7 +361,6 @@ def types_all_config(config_file):
 def __pipeline_element(type, parse_pipe_configs, map_str):
     # get element name
     base_type = type.name
-    print "archetype_Name XXXX ", base_type
     name = type.attributeValue("name")
     enabled = type.attributeValue("enabled")
     sub_archetype = type.attributeValue("archetype")
@@ -374,8 +373,7 @@ def __pipeline_element(type, parse_pipe_configs, map_str):
         #         pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" /> 
         pipe_config = parse_pipe_configs.get_config_for(base_type)
         # '   <pipeline for="%s" pipeline="%s" archetype="%s" />'
-        print "XXXX  VALS " , name, pipe_config.attributeValue("pipeline"), base_type
-
+        
         return map_str % (
             name, 
             pipe_config.attributeValue("pipeline"),
@@ -444,15 +442,12 @@ def is_exist_running(config_file):
             )
     except Exception, e:
         # silent 
-        print "XXX Exception on connect"
         exist_running = False
     except HttpHostConnectException, e:
-        print "XXX HttpHostConnectException on connect"
         exist_running = False
     finally:
         if webdaver is not None:
             webdaver.shutdown()
-    print "XXX Exist Running", exist_running
     return exist_running
         
     
@@ -655,7 +650,6 @@ def main_transform(config_file):
     do_bind_attachments(cfg)
     print COLOR.OKGREEN + "Done with attachments..." + COLOR.ENDC
     print COLOR.HEADER + "Transforming ...." + COLOR.ENDC      
-    #print "XXXXXX BEFORE CALLING DO TRANSFORM XXXXX !!!! ", parl_info, param_parl_info(cfg, parl_info)
     do_transform(
         cfg,
         {

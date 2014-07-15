@@ -162,7 +162,6 @@ class LegislatureInfoWalker(GenericDirWalker):
 
 
     def write_cache_doc_to_file(self, cache_doc):
-        #print "XXXX WRITE CACHE TO FILE ", cache_doc.getRootElement().getDocument().asXML()
         format = OutputFormat.createPrettyPrint()
         writer = XMLWriter(
             FileWriter(self.cache_file),
@@ -197,17 +196,14 @@ class LegislatureInfoWalker(GenericDirWalker):
         cache_doc = self.__doc_cache_file()
         # get the child elements
         list_of_elements = cache_doc.getRootElement().elements()
-        #print "XXXX LIST OF ELEMENTS IN CACHE, ", list_of_elements 
         # get a deep copy of the element to be imported, this also detaches the node 
         # from the parent
         element_to_copy = element_to_import.createCopy()
-        #print "XXXX LIST OF ELEMENTS TO COPY, ", element_to_copy 
         list_of_elements.add(element_to_copy)
         #cache_doc.importNode(element_to_import, True)
         #cache_doc.getRootElement().addElement(
         ##    element_to_import
         #    )
-        #print "XXXX LIST OF ELEMENTS AFTER COPY, ", list_of_elements 
         self.write_cache_doc_to_file(cache_doc)    
 
     def process_xml_file(self, input_file_path):
@@ -380,7 +376,6 @@ class ParliamentInfoWalker(GenericDirWalker):
 
 
     def write_cache_doc_to_file(self, cache_doc):
-        #print "XXXX WRITE CACHE TO FILE ", cache_doc.getRootElement().getDocument().asXML()
         format = OutputFormat.createPrettyPrint()
         writer = XMLWriter(
             FileWriter(self.cache_file),
@@ -432,17 +427,14 @@ class ParliamentInfoWalker(GenericDirWalker):
         cache_doc = self.__doc_cache_file()
         # get the child elements
         list_of_elements = cache_doc.getRootElement().elements()
-        #print "XXXX LIST OF ELEMENTS IN CACHE, ", list_of_elements 
         # get a deep copy of the element to be imported, this also detaches the node 
         # from the parent
         element_to_copy = element_to_import.createCopy()
-        #print "XXXX LIST OF ELEMENTS TO COPY, ", element_to_copy 
         list_of_elements.add(element_to_copy)
         #cache_doc.importNode(element_to_import, True)
         #cache_doc.getRootElement().addElement(
         ##    element_to_import
         #    )
-        #print "XXXX LIST OF ELEMENTS AFTER COPY, ", list_of_elements 
         self.write_cache_doc_to_file(cache_doc)    
    
    
@@ -468,12 +460,9 @@ class ParliamentInfoWalker(GenericDirWalker):
             # cache 
             from os import path
             if path.exists(self.cache_file):
-                #print "XXXX CACHE FILE EXISTS"
                 if self.is_cache_full() == False:
-                    #print "XXXX CACHE IS NOT FULL"
                     # inject into file after contenttypes node
                     # check if the parliament info is not already cached
-                    #print "XXXX APPENDING TO CACHE"
                     self.append_to_cache(input_file_path)
                     #return (True, the_parl_doc)
             else:
@@ -718,7 +707,6 @@ class ProcessXmlFilesWalker(GenericDirWalkerXML):
                     #truncate to first-3 characters only
                     truncated_prefix = output_file_name_wo_prefix[:3]
                     on_xml_file = truncated_prefix + "_"
-                    #print "XXXXXX OUT_FILE_CALLBACK", on_xml_file
                     out_files = self.input_params["transformer"].run(
                          input_file_path,
                          self.input_params["main_config"].get_xml_output_folder() + on_xml_file ,

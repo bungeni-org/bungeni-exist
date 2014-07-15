@@ -295,10 +295,7 @@ def parliament_info_gather(config_file):
                 first, this thread will continue until the 2 chambers have been created
                 and only then process other documents
                 """
-                #print "XXXX parl_info cache satisfied, exiting ", pc_info
                 parl_info_continue = False
-            #else:
-            #   print "XXX parl_info cache not satisfied, continuing", pc_info
         except InterruptedException, e:
             print "ParlInfoRunner was interrupted !", e
         finally:

@@ -72,10 +72,7 @@ class ParseXML(object):
         To be called after initializing ParseXML this is to catch any parsing errors and a return boolean. 
         """
         try:
-            print "XXX - YYY -ZZZ opening ParseXML ", self.an_xml
             self.xmldoc = self.sreader.read(self.an_xml)
-            print "XXX - YYY -ZZZ opened ParseXML ", self.xmldoc
-            
             return True
         except DocumentException, fNE:
             print COLOR.FAIL, fNE, '\nERROR: when trying to parse ', self.xmlfile, COLOR.ENDC
@@ -98,8 +95,6 @@ class ParseXML(object):
         return self.xmldoc
 
     def write_to_disk(self):
-        #print "XXXX write_to_disk ", self.xmlfile
-        #print "XXXX write_to_disk writing dom ", self.xmldoc.asXML()
         format = OutputFormat.createPrettyPrint()
         writer = XMLWriter(FileWriter(self.xmlfile), format)
         try:
@@ -314,7 +309,6 @@ class LegislatureInfoParams(GenInfoParams):
         leg_map["country-code"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("country_code")
             ).getText()
-        #print "XXXXX  ROOT ELEMENT", parliament_doc.getRootElement()
         leg_map["legislature-id"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
             ).getText()
@@ -379,7 +373,6 @@ class ParliamentInfoParams(GenInfoParams):
     def _get_params(self, cc, parliament_doc):
         parl_map = HashMap()
         parl_map["country-code"] = cc
-        #print "XXXXX  ROOT ELEMENT", parliament_doc.getRootElement()
         parl_map["parliament-id"] = parliament_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
             ).getText()
@@ -441,10 +434,8 @@ class ParseParliamentInfoXML(ParseXML):
     def get_parliament_info(self, cc):
         pinfo = ParliamentInfoParams(is_cache_file=False)
         parl_params = []
-        #print "XXXXXX parliament info ", pinfo._xpath_parliament_info_field("type")
         parliament_doc = self.xmldoc.selectSingleNode(pinfo._xpath_parliament_info_field("type"))
         if parliament_doc is None:
-            #print "XXXX FOUND DOC NULL XXXX"
             return None
         if parliament_doc.getText() == "chamber" :
             parl_params.append(

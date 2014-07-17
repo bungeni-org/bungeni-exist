@@ -213,7 +213,7 @@ class ParlInfoPublish(Thread):
         try:
             self.publish_state = publish_parliament_info(self.config_file, self.parliament_cache_info)
         except Exception, e:
-            print "There was an exception getting the parliament info", e
+            print "There was an exception publishing the parliament info", e
         finally:
             self.latch.countDown()
     

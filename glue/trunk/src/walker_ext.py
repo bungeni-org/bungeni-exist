@@ -116,7 +116,7 @@ class LegislatureInfo(object):
     
     def get_legislature_identifier(self):
         identifier = self.xmldoc.selectSingleNode(
-            self.__field_path("identifier")
+            self.__field_path("conceptual_name")
         ).getText()
         return identifier
         

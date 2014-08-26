@@ -129,6 +129,205 @@ declare function local:mode() as xs:string {
     return $mode
 };
 
+(:
+Returns the commit panel
+:)
+declare
+function form:_edit_commit_holder(
+        $type as xs:string, 
+        $docname as xs:string, 
+        $pos as xs:integer
+) {
+    <div class="commit-holder" xmlns="http://www.w3.org/1999/xhtml" >
+        <a href="type.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}">
+            <img src="resources/images/back_arrow.png" 
+                title="back to form" 
+                alt="back to type" />
+        </a>
+        <a class="commit" 
+            href="/exist/restxq/form/commit/{$docname}" 
+            title="save this file back to the filesystem">
+            commit form
+        </a>
+    </div> 
+};
+
+(:
+Model for form edit page 
+:)
+declare
+function form:_edit_model(
+    $form-doc as xs:string, 
+    $docname as xs:string,
+    $type as xs:string,
+    $init as xs:string
+) {
+
+    <model id="m-form" xmlns="http://www.w3.org/2002/xforms">
+        {
+        (: if adding a new form is true :)
+        if(not(doc-available($form-doc))) then 
+        <instance id="i-form" 
+            src="{$form:REST-CXT-APP}/model_templates/forms.xml" 
+        />
+        else
+        <instance id="i-form" 
+            src="{$form:REST-BC-LIVE}/forms/{$docname}.xml" 
+        /> 
+        } 
+        
+        <instance id="i-boolean" 
+            src="{$form:REST-CXT-APP}/model_templates/boolean.xml" 
+        />
+        
+        <instance id="i-sortorder" 
+            src="{$form:REST-CXT-APP}/model_templates/sortorder.xml" 
+        />
+        
+        <instance id="i-constraints" 
+            src="{$form:REST-BC-LIVE}/forms/.auto/_constraints.xml" 
+        /> 
+        
+        <instance id="i-validations" 
+            src="{$form:REST-BC-LIVE}/forms/.auto/_validations.xml" 
+        />
+        
+        <instance id="i-container" xmlns="">
+            <data>
+                <container match="" name="" note=""/>                  
+            </data>
+        </instance>                    
+        
+        <instance id="i-integrity" xmlns="">
+            <data>
+                <integrity constraints="" validations=""/>                        
+            </data>
+        </instance>
+        
+        <instance id="i-archetypes" xmlns="">
+            <data>
+                <archetypes>
+                    <arche>doc</arche>
+                    <arche>group</arche>                                 
+                    <arche>group_membership</arche>
+                </archetypes>
+            </data>
+        </instance>                        
+        
+        <bind nodeset="instance()">
+            <bind id="order" 
+                nodeset="@order" 
+                type="integer" 
+                required="true()" 
+                constraint="(. &lt; 101) and (. &gt; 0)" />
+            {
+            if($type eq 'group') then
+            <bind id="containermatch" 
+                nodeset="container/@match" 
+                type="string" 
+                required="false()" 
+                constraint="matches(., '^[a-z_.]+[^.]$')" 
+            />
+            else
+            ()
+            }
+        </bind>
+        
+        <instance id="i-controller" 
+            src="{$form:REST-CXT-APP}/model_templates/controller.xml" 
+        />
+        
+        <instance id="tmp">
+            <data xmlns="">
+                <wantsToClose>false</wantsToClose>
+            </data>
+        </instance>
+        
+        <submission id="s-save"
+            method="put"
+            replace="none"
+            ref="instance()">
+            <resource value="'{$form:REST-BC-LIVE}/forms/{$docname}.xml'"/>
+            
+            <header>
+                <name>username</name>
+                <value>admin</value>
+            </header>
+            <header>
+                <name>password</name>
+                <value></value>
+            </header>
+            <header>
+                <name>realm</name>
+                <value>exist</value>
+            </header>
+            
+            <action ev:event="xforms-submit-done">
+                <message level="ephemeral">
+                    FORM details saved successfully
+                </message>
+            </action>
+            
+            <action ev:event="xforms-submit-error" 
+                if="instance('i-controller')/error/@hasError='true'">
+                <setvalue ref="instance('i-controller')/error/@hasError" 
+                    value="'true'" />
+                <setvalue ref="instance('i-controller')/error" 
+                    value="event('response-reason-phrase')" />
+            </action>
+            
+            <action ev:event="xforms-submit-error" 
+                if="instance('i-controller')/error/@hasError='false'">
+                <message>
+                    The form details have not been filled in correctly
+                </message>
+            </action>
+        </submission>
+        
+        <action ev:event="xforms-ready" >
+            <action if="'{$init}' eq 'true'">
+                <setvalue ref="instance()/@name" value="'{$docname}'"/>
+                <message level="ephemeral">loaded new template</message>
+            </action>                        
+            <action if="empty(instance()/integrity)">
+                <message level="ephemeral">
+                    added optional integrity contraints and validations
+                </message>
+                <insert nodeset="instance()/child::*" 
+                    at="last()" 
+                    position="after" 
+                    origin="instance('i-integrity')/integrity" 
+                />
+            </action>
+        </action>
+        
+    </model>
+
+};
+
+declare
+function form:_edit_tabs_container($type as xs:string){
+    <div id="tabs_container"  xmlns="http://www.w3.org/1999/xhtml">
+        <ul id="tabs">
+            <li id="tabdetails" 
+                class="active">
+                <a href="#details">Form details</a>
+            </li>
+            <li id="tabfields" >
+                <a href="#fields">Fields</a>
+            </li>
+            {
+            if($type eq 'group') then
+                <li id="tabcontainers" >
+                    <a href="#containers">Containers</a>
+                </li>
+            else
+                ()
+            }
+        </ul>
+    </div>
+};
+
 declare
 function form:edit($node as node(), $model as map(*)) {
 
@@ -141,134 +340,21 @@ function form:edit($node as node(), $model as map(*)) {
     let $showing := xs:string(request:get-parameter("tab","fields"))
     return 
         (: Element to pop up :)
-    	<div>
+    	<div >
             <div style="display:none">
-                <xf:model id="m-form">
-                    {
-                        (: if adding a new form is true :)
-                        if(not(doc-available($form-doc))) then 
-                            <xf:instance id="i-form" src="{$form:REST-CXT-APP}/model_templates/forms.xml"/>
-                        else
-                            <xf:instance id="i-form" src="{$form:REST-BC-LIVE}/forms/{$docname}.xml"/> 
-                    } 
-                    
-                    <xf:instance id="i-boolean" src="{$form:REST-CXT-APP}/model_templates/boolean.xml"/>
-                    
-                    <xf:instance id="i-sortorder" src="{$form:REST-CXT-APP}/model_templates/sortorder.xml"/>
-                    
-                    <xf:instance id="i-constraints" src="{$form:REST-BC-LIVE}/forms/.auto/_constraints.xml"/> 
-                    
-                    <xf:instance id="i-validations" src="{$form:REST-BC-LIVE}/forms/.auto/_validations.xml"/>
-                    
-                    <xf:instance id="i-container" xmlns="">
-                        <data>
-                            <container match="" name="" note=""/>                  
-                        </data>
-                    </xf:instance>                    
-                    
-                    <xf:instance id="i-integrity" xmlns="">
-                        <data>
-                            <integrity constraints="" validations=""/>                        
-                        </data>
-                    </xf:instance>
-                    
-                    <xf:instance id="i-archetypes" xmlns="">
-                        <data>
-                            <archetypes>
-                               <arche>doc</arche>
-                               <arche>group</arche>                                 
-                               <arche>group_membership</arche>
-                            </archetypes>
-                        </data>
-                    </xf:instance>                        
-
-                    <xf:bind nodeset="instance()">
-                        <xf:bind id="order" nodeset="@order" type="xf:integer" required="true()" constraint="(. &lt; 101) and (. &gt; 0)" />
-                        {
-                            if($type eq 'group') then
-                                <xf:bind id="containermatch" nodeset="container/@match" type="xf:string" required="false()" constraint="matches(., '^[a-z_.]+[^.]$')" />
-                            else
-                                ()
-                        }
-                    </xf:bind>
-
-                    <xf:instance id="i-controller" src="{$form:REST-CXT-APP}/model_templates/controller.xml"/>
-
-                    <xf:instance id="tmp">
-                        <data xmlns="">
-                            <wantsToClose>false</wantsToClose>
-                        </data>
-                    </xf:instance>
-                    
-                    <xf:submission id="s-save"
-                                   method="put"
-                                   replace="none"
-                                   ref="instance()">
-                        <xf:resource value="'{$form:REST-BC-LIVE}/forms/{$docname}.xml'"/>
-    
-                        <xf:header>
-                            <xf:name>username</xf:name>
-                            <xf:value>admin</xf:value>
-                        </xf:header>
-                        <xf:header>
-                            <xf:name>password</xf:name>
-                            <xf:value></xf:value>
-                        </xf:header>
-                        <xf:header>
-                            <xf:name>realm</xf:name>
-                            <xf:value>exist</xf:value>
-                        </xf:header>
-    
-                        <xf:action ev:event="xforms-submit-done">
-                            <xf:message level="ephemeral">FORM details saved successfully</xf:message>
-                        </xf:action>
-    
-                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='true'">
-                            <xf:setvalue ref="instance('i-controller')/error/@hasError" value="'true'"/>
-                            <xf:setvalue ref="instance('i-controller')/error" value="event('response-reason-phrase')"/>
-                        </xf:action>
-    
-                        <xf:action ev:event="xforms-submit-error" if="instance('i-controller')/error/@hasError='false'">
-                            <xf:message>The form details have not been filled in correctly</xf:message>
-                        </xf:action>
-                    </xf:submission>
-                    
-                    <xf:action ev:event="xforms-ready" >
-                        <xf:action if="'{$init}' eq 'true'">
-                            <xf:setvalue ref="instance()/@name" value="'{$docname}'"/>
-                            <xf:message level="ephemeral">loaded new template</xf:message>
-                        </xf:action>                        
-                        <xf:action if="empty(instance()/integrity)">
-                            <xf:message level="ephemeral">added optional integrity contraints and validations</xf:message>
-                            <xf:insert nodeset="instance()/child::*" at="last()" position="after" origin="instance('i-integrity')/integrity" />
-                        </xf:action>
-                    </xf:action>
-
-            </xf:model>
-            
+            {
+              form:_edit_model($form-doc, $docname, $type, $init)
+            }
             </div>
-            
-            <div class="commit-holder">
-                <a href="type.html?type={$type}&amp;doc={$docname}&amp;pos={$pos}">
-                    <img src="resources/images/back_arrow.png" title="back to form" alt="back to type"/>
-                </a>
-                <a class="commit" href="/exist/restxq/form/commit/{$docname}" title="save this file back to the filesystem">commit form</a>
-            </div>            
-            
-            <div id="tabs_container">
-                <ul id="tabs">
-                    <li id="tabdetails" class="active"><a href="#details">Form details</a></li>
-                    <li id="tabfields" ><a href="#fields">Fields</a></li>
-                    {
-                        if($type eq 'group') then
-                            <li id="tabcontainers" ><a href="#containers">Containers</a></li>
-                        else
-                            ()
-                    }
-                </ul>
-            </div>
-            
-            <div id="tabs_content_container">
+            {   
+                (: div class="commit-holder" :)
+                form:_edit_commit_holder($type, $docname, $pos) 
+            }
+            {
+                (: div id="tabs_container" :)
+                form:_edit_tabs_container($type)
+            }
+                     <div id="tabs_content_container">
                 <div id="details" class="tab_content" style="display: block;">
                     <xf:group ref=".">
                         <xf:group appearance="bf:verticalTable">
@@ -424,7 +510,7 @@ function form:edit($node as node(), $model as map(*)) {
                     else
                         ()
                 }                
-            </div>                 
+            </div>             
         </div>
 };
 

@@ -140,13 +140,30 @@ declare function rou:committee($CONTROLLER-DOC as node()) {
 declare function rou:get-members($CONTROLLER-DOC as node()) {
 
     let $qry := xs:string(request:get-parameter("q",''))
-    let $sty := xs:string(request:get-parameter("s",$bun:SORT-BY))
+    (: 
+    FIX+[27-08-2014, AH, default member list order]
+    default sort order, last name desc
+    Fixed bug: where it was refering to a non-existent sort-order
+    :)
+    let $sty := xs:string(request:get-parameter("s","ln_asc"))
     let $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET))
     let $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT))
     let $parts := cmn:get-view-listing-parts('Member', 'member')
-    let $act-entries-tmpl :=  bun:get-members($CONTROLLER-DOC/exist-res,$CONTROLLER-DOC/parliament,$offset,$limit,$parts,$qry,$sty)
+    
+    let $act-entries-tmpl :=  bun:get-members(
+        $CONTROLLER-DOC/exist-res,$CONTROLLER-DOC/parliament,
+        $offset,
+        $limit,
+        $parts,
+        $qry,
+        $sty
+        )
     let $act-entries-repl:= document {
-    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
+    						template:copy-and-replace(
+    						  $CONTROLLER-DOC/exist-cont, 
+    						  fw:app-tmpl($parts/view/template)/xh:div, 
+    						  $act-entries-tmpl
+    						  )
     					 } 
     return 
         template:process-tmpl(
@@ -172,6 +189,7 @@ declare function rou:get-members($CONTROLLER-DOC as node()) {
                 )
              )
         )
+       
 
 };
 

@@ -20,6 +20,7 @@ Framework Imports
 import module namespace config = "http://bungeni.org/xquery/config" at "../config.xqm";
 import module namespace template = "http://bungeni.org/xquery/template" at "../template.xqm";
 import module namespace fw = "http://bungeni.org/xquery/fw" at "../fw.xqm";
+import module namespace functx = "http://www.functx.com" at "../functx.xqm";
 import module namespace i18n = "http://exist-db.org/xquery/i18n" at "../i18n.xql";
 
 (:~
@@ -160,7 +161,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
             else if ($EXIST-PATH eq "/search-adv") then 
                 let                
                     $chamber := xs:string(request:get-parameter("chamber",'')),                
-                
+                    
                     $qryall := xs:string(request:get-parameter("qa",'')),
                     $qryexact := xs:string(request:get-parameter("qe",'')),
                     $qryhas := xs:string(request:get-parameter("qh",'')),
@@ -208,57 +209,69 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                         </route-override>,
                        cmn:build-nav-node($CONTROLLER-DOC,$act-entries-repl)
                 )              
-            else if ($CHAMBER-REL-PATH eq "/search") then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    (: 
-                        $scope is either global or listing - Let's us know which search form 
-                        has been called to action.
-                    :)
-                    $scope := xs:string(request:get-parameter("scope",'listing')),
-                    $type := xs:string(request:get-parameter("type",'bill')),
-                    (:
-                      override_path : For the search we want to override the automatic 
-                      navigation rendering based on routes. So the search form, embeds 
-                      a navigation context as a hidden input field. The hidden input 
-                      field captures the origin search context e.g. if the search is being
-                      done from a listing for a question. 
-                      
-                      So we use override_path instead of EXIST-PATH only in the context
-                      of rendering the navigation correctly, and not in other cases e.g 
-                      copy-and-replace or process-tmpl where the EXIST-PATH is used for 
-                      rendering the correct template.
-                      
-                      Hence we use override_path only for build-nav-node() and get-route()
-                      to re-route the navigation.
-                    :)
-                    $override_path := xs:string(request:get-parameter("exist_path","/search")),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $acl := "public-view",
-                    $log := util:log('debug',$CONTROLLER-DOC),
-                    $log1 := util:log('debug',"++++++++++++++SEARCH RES++++++++++++++"),                  
-                    $act-entries-tmpl :=  bun:search-criteria($CONTROLLER-DOC,$acl,$offset,$limit,$qry,$sty,$type),
-        	        $act-entries-repl:= document {
-        								template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
-        							 } 
-                return 
-                    template:process-tmpl(
-                           $REL-PATH, 
-                           $EXIST-CONTROLLER,
-                           $config:DEFAULT-TEMPLATE,
-                           cmn:get-route($override_path),
-                            <route-override>
-                                {$PARLIAMENT}
-                            </route-override>,
-                           (cmn:build-nav-node($CONTROLLER-DOC,
-                               (template:merge($EXIST-CONTROLLER, 
-                                   $act-entries-repl, 
-                                   bun:get-listing-search-context($CONTROLLER-DOC, 
-                                       "xml/listing-search-form.xml",
-                                       $type))))
-                         )
+            else if ($CHAMBER-REL-PATH eq "/search" ) then 
+                     (: FIX+[AH, Fix sort order issues + search listings not getting images] :)
+                     (: if the search query is blank, we just redirect to the listing query
+                        and pass in the sort order instead of attempting a search :)
+                     if (request:get-parameter("q",'') eq "") then 
+                        <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+                            <redirect url="{functx:substring-after-last(request:get-parameter('exist_path',''), '/')}?s={request:get-parameter('s', '')}">
+                              <add-parameter name="q" value=""/>
+                              <add-parameter name="s" value="request:get-parameter('s', '')" />
+                            </redirect>
+                         </dispatch>
+                         (:fw:redirect-rel($EXIST-PATH, '/lower_house/members') :)
+                     else
+                        let 
+                            $qry := xs:string(request:get-parameter("q",'')),
+                            (: 
+                                $scope is either global or listing - Let's us know which search form 
+                                has been called to action.
+                            :)
+                            $scope := xs:string(request:get-parameter("scope",'listing')),
+                            $type := xs:string(request:get-parameter("type",'bill')),
+                            (:
+                              override_path : For the search we want to override the automatic 
+                              navigation rendering based on routes. So the search form, embeds 
+                              a navigation context as a hidden input field. The hidden input 
+                              field captures the origin search context e.g. if the search is being
+                              done from a listing for a question. 
+                              
+                              So we use override_path instead of EXIST-PATH only in the context
+                              of rendering the navigation correctly, and not in other cases e.g 
+                              copy-and-replace or process-tmpl where the EXIST-PATH is used for 
+                              rendering the correct template.
+                              
+                              Hence we use override_path only for build-nav-node() and get-route()
+                              to re-route the navigation.
+                            :)
+                            $override_path := xs:string(request:get-parameter("exist_path","/search")),
+                            $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+                            $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+                            $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+                            $acl := "public-view",
+                            $log := util:log('debug',$CONTROLLER-DOC),
+                            $log1 := util:log('debug',"++++++++++++++SEARCH RES++++++++++++++"),                  
+                            $act-entries-tmpl :=  bun:search-criteria($CONTROLLER-DOC,$acl,$offset,$limit,$qry,$sty,$type),
+                	        $act-entries-repl:= document {
+                								template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl("xml/questions.xml")/xh:div, $act-entries-tmpl)
+                							 } 
+                        return 
+                            template:process-tmpl(
+                                   $REL-PATH, 
+                                   $EXIST-CONTROLLER,
+                                   $config:DEFAULT-TEMPLATE,
+                                   cmn:get-route($override_path),
+                                    <route-override>
+                                        {$PARLIAMENT}
+                                    </route-override>,
+                                   (cmn:build-nav-node($CONTROLLER-DOC,
+                                       (template:merge($EXIST-CONTROLLER, 
+                                           $act-entries-repl, 
+                                           bun:get-listing-search-context($CONTROLLER-DOC, 
+                                               "xml/listing-search-form.xml",
+                                               $type))))
+                                 )
                     )
         	else if ($EXIST-RESOURCE eq "epub") then
             (: ePUB RENDERER :)        	

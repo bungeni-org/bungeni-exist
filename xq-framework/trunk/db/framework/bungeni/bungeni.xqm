@@ -3759,7 +3759,11 @@ declare function bun:get-members(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-membership-with-tabs($parliament/identifier/text(), $parts/doctype, $listing/text(), $sortby)) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" 
+                        name="{$listing/@name}" 
+                        count="{ count(bun:list-membership-with-tabs($parliament/identifier/text(), $parts/doctype, $listing/text(), $sortby)) }">
+                        {data($listing/@name)}
+                    </tag>
                     
         }
         </tags>     

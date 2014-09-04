@@ -26,7 +26,7 @@ declare namespace an='http://www.akomantoso.org/2.0';
 
 declare
     %rest:path("/ontology_bungeni")
-    %rest:POST("{$body}")    
+    %rest:GET("{$body}")    
     %rest:form-param("role", "{$role}", "bungeni.Anonymous")     
     %rest:form-param("group", "{$group}", "*")    
     %rest:form-param("type", "{$type}", "*")
@@ -149,7 +149,7 @@ declare
 
 declare
     %rest:path("/ontology")
-    %rest:POST("{$body}")    
+    %rest:GET("{$body}")    
     %rest:form-param("role", "{$role}", "bungeni.Anonymous")     
     %rest:form-param("group", "{$group}", "*")    
     %rest:form-param("type", "{$type}", "*")

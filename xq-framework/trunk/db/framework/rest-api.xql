@@ -46,7 +46,8 @@ declare
         $limit as xs:int*,
         $search as xs:string*,
         $status as xs:string*,
-        $daterange as xs:string*) {
+        $daterange as xs:string*
+    ) {
         <docs>
             <role>{$role}</role>         
             <group>{$group}</group>           
@@ -75,6 +76,13 @@ declare
                                         cmn:get-attr-for-role($arole),
                                         "]"
                                     ),
+                                    (: 
+                                     !+BUG(ah, 11-9-2014) 
+                                     This was set to "and" below - not sure why - 
+                                     if a document has been assigned to anonymous and the 
+                                     clerk, it is essentially a public document since assigned
+                                     roles are inclusive - so and does not make sense here, 
+                                     the "or" is much more suitable :)
                                     if($pos lt $counter) then "or" else () 
                                 )
                 
@@ -150,7 +158,7 @@ declare
                     ('bu:bungeni','bu:legislature','bu:versions', 
                      'bu:permissions','bu:audits', 'bu:attachments', 
                      'bu:signatories','bu:changes', 'bu:workflowEvents',
-                     'bu:owner', 'bu:ownerId')
+                     'bu:ownerId','bu:role', 'bu:body')
                     )
                                                       
                 return 
@@ -176,7 +184,6 @@ declare
     %rest:form-param("status", "{$status}", "*")
     %rest:form-param("daterange", "{$daterange}", "*")
     %output:method("json")
-    
     (: Cascading collection based on parameters given, default apply when not given explicitly by client :)
     function local:documents(
         $body as xs:string*,
@@ -187,7 +194,8 @@ declare
         $limit as xs:int*,
         $search as xs:string*,
         $status as xs:string*,
-        $daterange as xs:string*) {
+        $daterange as xs:string*
+     ) {
         <docs>
             <role>{$role}</role>         
             <group>{$group}</group>           
@@ -290,8 +298,10 @@ declare
 declare
     %rest:GET
     %rest:path("/{$country-code}/{$type}")
-    
-    function local:documents($country-code as xs:string, $type as xs:string) {
+    function local:documents(
+        $country-code as xs:string, 
+        $type as xs:string
+        ) {
         <docs>
             {
                 collection(cmn:get-lex-db())/bu:ontology/bu:document/bu:docType[bu:value eq $type]/parent::node()
@@ -302,8 +312,11 @@ declare
 declare
     %rest:GET
     %rest:path("/{$country-code}/{$type}/{$docid}")
-    
-    function local:documents($country-code as xs:string, $type as xs:string, $docid as xs:int) {
+    function local:documents(
+        $country-code as xs:string, 
+        $type as xs:string, 
+        $docid as xs:int
+        ) {
         <docs>
             {
                 collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docType/bu:value eq $type][bu:docId = $docid]/parent::node()
@@ -346,7 +359,11 @@ declare function local:get-matched-attachments($match as xs:string) as node(){
     [bu:name[matches(., $match, 'i')]]
 };
 
-declare function local:get-matched-attachments-by-name($match as xs:string, $docType as xs:string, $status as xs:string){
+declare function local:get-matched-attachments-by-name(
+    $match as xs:string, 
+    $docType as xs:string, 
+    $status as xs:string
+    ){
     
     collection('/db/bungeni-xml')/bu:ontology[@for='document']
     [bu:document[bu:docType[bu:value[. = $docType]]][bu:status[.=$status]]]
@@ -357,7 +374,9 @@ declare function local:get-matched-attachments-by-name($match as xs:string, $doc
  : DEPRECATED
  : Retrieve an attachment by name
  :  :)
-declare function local:get-attachment-hash-by-name($name as xs:string){
+declare function local:get-attachment-hash-by-name(
+    $name as xs:string
+    ){
     
     collection('/db/bungeni-xml')/bu:ontology[@for='document']
     [bu:document[bu:docType[bu:value[. = 'Bill']]][bu:status[bu:value[. = 'received']]]]
@@ -365,12 +384,22 @@ declare function local:get-attachment-hash-by-name($name as xs:string){
     [bu:name[.=$name]]/bu:attachmentHash/string()
 };
 
-declare function local:get-attachment-hash($name as xs:string, $docType as xs:string, $status as xs:string){
+declare function local:get-attachment-hash(
+    $name as xs:string, 
+    $docType as xs:string, 
+    $status as xs:string
+    ){
     
-    collection('/db/bungeni-xml')/bu:ontology[@for='document']
-    [bu:document[bu:docType[bu:value[. = $docType]]][bu:status[.=$status]]]
-    /bu:attachments/bu:attachment[bu:type[bu:value[. = 'main-xml']]][bu:name[.=$name]]
-    /bu:attachmentHash/string()
+    collection('/db/bungeni-xml')/bu:ontology[@for='document'][
+        bu:document[bu:docType[bu:value[. = $docType]]][
+                bu:status[.=$status]
+        ]
+     ]/bu:attachments/bu:attachment[
+                bu:type[
+                    bu:value[. = 'main-xml']
+                ]
+             ][bu:name[.=$name]]
+             /bu:attachmentHash/string()
 };
 
 
@@ -387,21 +416,35 @@ declare
     %rest:form-param("docType", "{$docType}", "Bill") 
     %rest:form-param("status", "{$status}", "submitted") 
     %output:method("xml")
-    function local:search-for-attachments($search as xs:string*, $page as xs:string*, $perPage as xs:string*, $docType as xs:string*, $status as xs:string*){
-        
+    function local:search-for-attachments(
+        $search as xs:string*, 
+        $page as xs:string*, 
+        $perPage as xs:string*, 
+        $docType as xs:string*, 
+        $status as xs:string*
+    ){
         try{
             let $startItem := if (xs:integer($page) eq 1) then
                                     xs:integer(1)
                                 else
                                     ((xs:integer($page)-1)*xs:integer($perPage))+1
                     
-            let $allResultsMatched := local:get-matched-attachments-by-name($search, $docType, $status)
+            let $allResultsMatched := local:get-matched-attachments-by-name(
+                $search, 
+                $docType, 
+                $status
+             )
             let $page := if(count($allResultsMatched) eq 1) then
                             xs:integer(1)
                         else
                             $page
                         
-            let $pagedResult := for $i in subsequence($allResultsMatched, xs:integer($startItem), xs:integer($perPage))
+            let $pagedResult := 
+                    for $i in subsequence(
+                        $allResultsMatched, 
+                        xs:integer($startItem), 
+                        xs:integer($perPage)
+                    )
                     return 
                         <attachment>
                             <hash>{$i/bu:attachmentHash/string()}</hash>
@@ -411,7 +454,12 @@ declare
                                 <descr>{$i/bu:description/string()}</descr>
                             else
                                 <descr>None</descr>}
-                            <statusDate>{datetime:format-dateTime(xs:dateTime($i/bu:statusDate/string()),"EEE, d MMM yyyy HH:mm:ss Z")}</statusDate>
+                            <statusDate>{
+                                datetime:format-dateTime(
+                                    xs:dateTime($i/bu:statusDate/string()),
+                                    "EEE, d MMM yyyy HH:mm:ss Z"
+                                )
+                            }</statusDate>
                         </attachment>
             
             return 
@@ -426,13 +474,19 @@ declare
                 }</attachments>
         }
         catch *{
-            
             <attachments>
                 <totalCount>0</totalCount>
                 <error>
                     <errorCode>{$err:code}</errorCode>
                     <errorDescr>{$err:description}</errorDescr>
-                    <errorMod>{$err:module, "(", $err:line-number, ",", $err:column-number, ")"}</errorMod>
+                    <errorMod>{
+                        $err:module, 
+                        "(", 
+                        $err:line-number, 
+                        ",", 
+                        $err:column-number, 
+                        ")"
+                    }</errorMod>
                 </error>
             </attachments>    
         }
@@ -450,9 +504,20 @@ declare
     %rest:form-param("docType", "{$docType}","Bill") 
     %rest:form-param("status", "{$status}","submitted") 
     %output:method("xml")
-    function local:expose-get-search-attachmemnts($search as xs:string*, $page as xs:string*, $perPage as xs:string*, $docType as xs:string*, $status as xs:string*){
-      
-       local:search-for-attachments($search, $page, $perPage, $docType, $status)   
+    function local:expose-get-search-attachments(
+        $search as xs:string*, 
+        $page as xs:string*, 
+        $perPage as xs:string*, 
+        $docType as xs:string*, 
+        $status as xs:string*
+    ){
+       local:search-for-attachments(
+        $search, 
+        $page, 
+        $perPage, 
+        $docType, 
+        $status
+       )   
 };
 
 (: 
@@ -466,9 +531,25 @@ declare
     %rest:form-param("docType", "{$docType}","Bill") 
     %rest:form-param("status", "{$status}","submitted") 
     %output:method("xml")
-    function local:get-attachment($name as xs:string*, $docType as xs:string*, $status as xs:string*){
-        
-      util:parse(util:binary-to-string(util:binary-doc(concat("/db/bungeni-atts/", local:get-attachment-hash($name, $docType, $status)))))
+    function local:get-attachment(
+        $name as xs:string*, 
+        $docType as xs:string*, 
+        $status as xs:string*
+    ){
+      util:parse(
+        util:binary-to-string(
+            util:binary-doc(
+                concat(
+                    "/db/bungeni-atts/", 
+                    local:get-attachment-hash(
+                        $name, 
+                        $docType, 
+                        $status
+                    )
+                )
+            )
+        )
+      )
 };
 
 

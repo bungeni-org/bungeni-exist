@@ -3048,16 +3048,25 @@ declare function bun:treewalker-acl($acl-permissions as node(), $doc) {
                          $c/text(),
                          bun:treewalker-acl($acl-permissions, $c)
                       }
+            (: !+BUG(ah, 11-09-2014) - Not sure why the else-if and the
+             else was required since - the node has a permissions child 
+             node or it does not have one so having the non conditional 
+             else does not make any sense :)
             (: 'c' has no bu:permissions node, add to tree :)
+            (:
             else if (not($c/bu:permissions/bu:control)) then
                     element {name($c)}{
                          $c/@*,
                          $c/text(),
                          bun:treewalker-acl($acl-permissions, $c)
-                      }
+                      }:)
             (: fails above two checks, omit from tree :)
             else   
-                 ()
+                  element {name($c)}{
+                         $c/@*,
+                         $c/text(),
+                         bun:treewalker-acl($acl-permissions, $c)
+                      }
 };
 
 (:~ 
@@ -3100,11 +3109,13 @@ declare function bun:documentitem-changes-with-acl($acl-permissions as node(), $
 : @param tab
 :   The corresponding transform template passed by the calling funcction
 :)
-declare function bun:get-parl-doc($acl as xs:string, 
+declare function bun:get-parl-doc(
+            $acl as xs:string, 
             $doc-uri as xs:string, 
             $doc-internal-uri as xs:string?,
             $parts as node(),
-            $parliament as node()?) as element()* {
+            $parliament as node()?
+            ) as element()* {
             
     let $parent-uri := xps:substring-before($doc-uri, "@") (: extract parent-uri @ exists :)
     let $version := if(string-length($parent-uri) > 2) then true() else false()
@@ -3121,7 +3132,10 @@ declare function bun:get-parl-doc($acl as xs:string,
             let $match := bun:documentitem-full-acl($acl, $uri, $doc-internal-uri)
             return
                 (: $parts/parent::node() returns all tabs of this doctype :)
-                bun:get-ref-assigned-grps($match, $parts/parent::node())
+                bun:get-ref-assigned-grps(
+                    $match, 
+                    $parts/parent::node()
+                    )
         }
     return
         transform:transform($doc, $stylesheet,

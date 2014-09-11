@@ -1103,6 +1103,10 @@
             <navigation>home</navigation>
             <title>Search Settings</title>
         </route>
+        <route href="/lower_house/listing-search">
+            <navigation>/lower_house/business</navigation>
+            <title>Listing</title>
+        </route>
         <route href="/lower_house/search">
             <navigation>/lower_house/business</navigation>
             <title>Search</title>

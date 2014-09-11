@@ -58,15 +58,25 @@ declare
             <status>{$status}</status>
             <daterange>{$daterange}</daterange>
             {
-                let $acl-filter-attr := cmn:get-acl-permission-as-attr-for-role($role)
-                let $acl-filter-node := cmn:get-acl-permission-as-node-for-role($role)
+                (:let $acl-filter-attr := cmn:get-acl-permission-as-attr-for-role(
+                    $role
+                    )
+                    :)
+                let $acl-filter-node := cmn:get-acl-permission-as-node-for-role(
+                    $role
+                    )
                 
                 let $token-roles := tokenize($role,",")
                 let $roles :=   for $arole at $pos in $token-roles
                                 let $counter := count($token-roles)
                                 return (
-                                    fn:concat("bu:control[",cmn:get-attr-for-role($arole),"]"),
-                                    if($pos lt $counter) then "and" else () )
+                                    fn:concat(
+                                        "bu:control[",
+                                        cmn:get-attr-for-role($arole),
+                                        "]"
+                                    ),
+                                    if($pos lt $counter) then "or" else () 
+                                )
                 
                 let $roles-string := fn:string-join($roles," ")
                   
@@ -129,12 +139,19 @@ declare
                   
                 (: strip nodes with failing permissions recursively to all nodes :)
                 let $ontology_strip_deep := for $doc in $ontology_rs
-                                            return bun:treewalker-acl($acl-filter-node,document{$doc})                                 
+                                               return bun:treewalker-acl(
+                                                    $acl-filter-node,
+                                                    document{$doc}
+                                               )                                 
                         
                 (: strip classified nodes :)
-                let $ontology_strip := functx:remove-elements-deep($ontology_strip_deep,
-                                    ('bu:bungeni','bu:legislature','bu:versions', 'bu:permissions', 
-                                    'bu:audits', 'bu:attachments', 'bu:signatories','bu:changes', 'bu:workflowEvents'))
+                let $ontology_strip := functx:remove-elements-deep(
+                    $ontology_strip_deep,
+                    ('bu:bungeni','bu:legislature','bu:versions', 
+                     'bu:permissions','bu:audits', 'bu:attachments', 
+                     'bu:signatories','bu:changes', 'bu:workflowEvents',
+                     'bu:owner', 'bu:ownerId')
+                    )
                                                       
                 return 
                     (   <total>{count($ontology_rs)}</total>,

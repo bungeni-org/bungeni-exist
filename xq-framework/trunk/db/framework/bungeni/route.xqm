@@ -423,9 +423,19 @@ declare function rou:document-events($CONTROLLER-DOC as node()) {
     let $uri := xs:string(request:get-parameter("uri",''))  
     let $internal-uri := xs:string(request:get-parameter("internal-uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-parl-doc("public-view",$uri,$internal-uri,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-parl-doc(
+        "public-view",
+        $uri,
+        $internal-uri,
+        $parts,
+        $CONTROLLER-DOC/parliament
+        )
     let $act-entries-repl := document {
-    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    						template:copy-and-replace(
+    						  $CONTROLLER-DOC/exist-cont, 
+    						  fw:app-tmpl($parts/template)/xh:div, 
+    						  $act-entries-tmpl
+    						  )
     					 } 
     return 
         template:process-tmpl(

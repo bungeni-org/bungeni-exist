@@ -61,19 +61,19 @@ class TransformerConfig(Config):
 
     def using_queue(self):
         return self.get("general", "message_queue")
-
-    def get_bungeni_custom(self):
+ 
+    def bungeni_custom(self):
         return self.get("general", "bungeni_custom_folder")
     
-    def get_types_xml_from_bungeni_custom(self):
-        return os.path.join(self.get_bungeni_custom(), "types.xml")
+    def types_xml_from_bungeni_custom(self):
+        return os.path.join(self.bungeni_custom(), "types.xml")
  
     def __bungeni_custom__(self):
         import imp
         bc = imp.load_source(
                 "bungeni_custom", 
                 os.path.join(
-                    self.get_bungeni_custom(), 
+                    self.bungeni_custom(), 
                     "__init__.py"
                 )
             )
@@ -86,7 +86,7 @@ class TransformerConfig(Config):
         return bc.legislature
     """
 
-    def get_languages_info(self):
+    def languages_info(self):
         bc = self.__bungeni_custom__()
         lang_info = {
             "allowed_languages": bc.zope_i18n_allowed_languages,
@@ -95,13 +95,16 @@ class TransformerConfig(Config):
         }
         return lang_info
         
-    def get_parliament_type_name(self):
-        return self.get("general", "parliament_type_name")
-
-    def get_input_folder(self):
+    def chamber_type_name(self):
+        return self.get("legislature_config", "chamber_type")
+    
+    def legislature_type_name(self):
+        return self.get("legislature_config", "legislature_type")
+    
+    def input_folder(self):
         return self.get("general", "bungeni_docs_folder")
 
-    def get_transformer_resources_folder(self):
+    def transformer_resources_folder(self):
         return self.get("general", "transformer_resources_folder")
 
     def get_xml_output_folder(self):

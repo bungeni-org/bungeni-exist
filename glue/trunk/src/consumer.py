@@ -52,6 +52,10 @@ __status__ = "Development"
 
 LOG = ApacheLogger.getLogger("consumer")
 
+### GLOBAL INPUTS ####
+__config_file__ = "/opt/bungeni/bungeni_apps/config/glue.ini"
+__time_int__ = 5
+
 
 class Logger(object):
     def __init__(self):
@@ -256,51 +260,57 @@ def language_info_publish(config_file):
 
 def legislature_info_gather(config_file):
     legis_info = None
-    leg_info_continue = True
-    while leg_info_continue:
-        time.sleep(int(__time_int__))
-        legis_latch = CountDownLatch(1)
-        print "Entering legislature info Gather !"
-        l_thread = LegislatureInfoGather(legis_latch, config_file)
-        l_thread.start()
-        try:
-            legis_latch.await()
-            legis_info = l_thread.legislature_info
-            if legis_info is not None:
-                leg_info_continue = False
-        except InterruptedException, e:
-            print "legislature_info_gather was interrupted !", e
-        finally:
-            l_thread = None
-            legis_latch = None
-            print "Exiting legislature info Gather !"
+    if not __is_tty__:
+        legis_info = get_legislature_info(config_file)
+    else:
+        leg_info_continue = True
+        while leg_info_continue:
+            time.sleep(int(__time_int__))
+            legis_latch = CountDownLatch(1)
+            print "Entering legislature info Gather !"
+            l_thread = LegislatureInfoGather(legis_latch, config_file)
+            l_thread.start()
+            try:
+                legis_latch.await()
+                legis_info = l_thread.legislature_info
+                if legis_info is not None:
+                    leg_info_continue = False
+            except InterruptedException, e:
+                print "legislature_info_gather was interrupted !", e
+            finally:
+                l_thread = None
+                legis_latch = None
+                print "Exiting legislature info Gather !"
     return legis_info
 
 
 def parliament_info_gather(config_file):
     pc_info = None
-    parl_info_continue = True
-    print "Parliament Info Gather Thread : Start"
-    while parl_info_continue:
-        time.sleep(int(__time_int__))
-        parl_latch = CountDownLatch(1)
-        p_thread = ParlInfoGather(parl_latch, config_file)
-        p_thread.start()
-        try:
-            parl_latch.await()
-            pc_info = p_thread.parl_info
-            if pc_info.is_cache_satisfied():
-                """
-                If its a bicameral legislature, the 2 chambers need to be created
-                first, this thread will continue until the 2 chambers have been created
-                and only then process other documents
-                """
-                parl_info_continue = False
-        except InterruptedException, e:
-            print "ParlInfoRunner was interrupted !", e
-        finally:
-            p_thread = None
-            parl_latch = None
+    if not __is_tty__:
+        pc_info = get_parl_info(config_file)
+    else:    
+        parl_info_continue = True
+        print "Parliament Info Gather Thread : Start"
+        while parl_info_continue:
+            time.sleep(int(__time_int__))
+            parl_latch = CountDownLatch(1)
+            p_thread = ParlInfoGather(parl_latch, config_file)
+            p_thread.start()
+            try:
+                parl_latch.await()
+                pc_info = p_thread.parl_info
+                if pc_info.is_cache_satisfied():
+                    """
+                    If its a bicameral legislature, the 2 chambers need to be created
+                    first, this thread will continue until the 2 chambers have been created
+                    and only then process other documents
+                    """
+                    parl_info_continue = False
+            except InterruptedException, e:
+                print "ParlInfoRunner was interrupted !", e
+            finally:
+                p_thread = None
+                parl_latch = None
     print "Parliament Info Gather Thread : Stop"
     return pc_info
                     
@@ -360,26 +370,35 @@ def exist_running(config_file):
             time.sleep(int(__time_int__))
     return exist_running
 
-if (len(sys.argv) >= 2):
-    # process input command line options
-    options, params = getopt.getopt(sys.argv[1:], "c:i:")
-    __config_file__ = options[0][1]
-    __time_int__ = options[1][1]
+
+
+__is_tty__ = sys.stdin.isatty()
+ 
+if __is_tty__:
+    # running interactively
+    if (len(sys.argv) >= 2):
+        # process input command line options
+        options, params = getopt.getopt(sys.argv[1:], "c:i:")
+        __config_file__ = options[0][1]
+        __time_int__ = options[1][1]
+    else:
+        print " config.ini file and time interval must be input parameters."
+        sys.exit()
 else:
-    print " config.ini file and time interval must be input parameters."
-    sys.exit()
+    print "running within eclipse will use defaults for config"
 
 # setup directories
 setup_consumer_directories(
     __config_file__
     )
-
-# wait until exist starts
-exist_running(__config_file__)
+if __is_tty__:
+    # wait until exist starts
+    exist_running(__config_file__)
 # generate the type mappings
 if types_all_config(__config_file__):
     # get language info
-    language_info_publish(__config_file__)
+    if __is_tty__:
+        language_info_publish(__config_file__)
     # get legislature information
     legis_info = legislature_info_gather(__config_file__)
     # get chamber information

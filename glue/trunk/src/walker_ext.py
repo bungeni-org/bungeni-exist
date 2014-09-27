@@ -59,7 +59,8 @@ from parsers import (
     ParseCachedParliamentInfoXML,
     ParseParliamentInfoXML,
     ParliamentInfoParams,
-    LegislatureInfoParams
+    LegislatureInfoParams,
+    READ_PARLIAMENT_INFO_PARAMS
     )
 
 from walker import (
@@ -121,20 +122,16 @@ class LegislatureInfo(object):
         return identifier
         
 
-class LegislatureInfoWalker(GenericDirWalker):
-    """
-    Walker that retrieves the info about the legislature
-    This is called from both the queue processor and from the batch processor
-    """
-    #TO_BE_DONE factor out caching into a separate type and use it here and in parliament info walker
-    #
-    def __init__(self, input_params = None):
-        super(LegislatureInfoWalker, self).__init__(input_params)
+class LegislatureInfoProcess():
+    
+    def __init__(self, input_params):
+        self.input_params = input_params
         self.cache_file = "%s%s" % (
             self.input_params["main_config"].get_cache_file_folder(),
             __legislature_info__
-            )
+        )
         self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
+    
 
     def new_cache_document(self):
         """
@@ -175,17 +172,7 @@ class LegislatureInfoWalker(GenericDirWalker):
         finally:
             close_quietly(writer)
 
-        
-    def append_to_cache(self, input_file):
-        reader = SAXReader()
-        new_doc = reader.read(
-            File(input_file)
-        )
-        element_to_import = new_doc.getRootElement()
-        self.append_element_into_cache_document(element_to_import)
-
-
-    def __doc_cache_file(self):
+    def doc_cache_file(self):
         reader = SAXReader()
         cache_doc = reader.read(
             File(self.cache_file)
@@ -193,19 +180,23 @@ class LegislatureInfoWalker(GenericDirWalker):
         return cache_doc
 
     def append_element_into_cache_document(self, element_to_import):
-        cache_doc = self.__doc_cache_file()
+        cache_doc = self.doc_cache_file()
         # get the child elements
         list_of_elements = cache_doc.getRootElement().elements()
         # get a deep copy of the element to be imported, this also detaches the node 
         # from the parent
         element_to_copy = element_to_import.createCopy()
         list_of_elements.add(element_to_copy)
-        #cache_doc.importNode(element_to_import, True)
-        #cache_doc.getRootElement().addElement(
-        ##    element_to_import
-        #    )
         self.write_cache_doc_to_file(cache_doc)    
 
+
+    def process_file(self, input_file_path):
+        if input_file_path.endswith(".xml"):
+            return self.process_xml_file(input_file_path)
+        elif input_file_path.endswith(".zip"):
+            return self.process_zip_file(input_file_path)
+        
+            
     def process_xml_file(self, input_file_path):
         # TO_BE_DONE
         bunparse = ParseLegislatureInfoXML(input_file_path)
@@ -225,70 +216,169 @@ class LegislatureInfoWalker(GenericDirWalker):
             """
             # check if file exists , if it exists there is already a parliament in the
             # cache 
-            from os import path
             self.new_cache(input_file_path)
             return (True, the_leg_doc)
         else :
             return (False, None)
 
-   
-    def fn_callback(self, input_file_path):
-        """
-        This is an incoming document 
-        """
-   
-        if input_file_path.endswith(".zip"):
-            # zip file processing
-            zipfile = ZipFile(input_file_path)
-            found_file = None
-            if zipfile.isValidZipFile():
-                files = zipfile.fileHeaders
-                for file in files:
-                    xml_file = file.fileName
-                    if xml_file.endswith(".xml"):
-                        found_file = file
-                        break
-                if found_file is not None:
-                    try:
-                        zipfile.extractFile(found_file, self.tmp_files_folder)
-                        # return
-                        return self.process_xml_file(
-                                os.path.join(self.tmp_files_folder, found_file.fileName)
-                        )
-                    except ZipException, e:
-                        print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
-            return (False, None)
-        elif input_file_path.endswith(".xml"):
-            return self.process_xml_file(input_file_path)
-        else :
-            return (False, None)
+    def process_zip_file(self, input_file_path):
+        # zip file processing
+        zipfile = ZipFile(input_file_path)
+        found_file = None
+        if zipfile.isValidZipFile():
+            files = zipfile.fileHeaders
+            for f in files:
+                xml_file = f.fileName
+                if xml_file.endswith(".xml"):
+                    found_file = f
+                    break
+            if found_file is not None:
+                try:
+                    zipfile.extractFile(found_file, self.tmp_files_folder)
+                    # return
+                    return self.process_xml_file(
+                            os.path.join(self.tmp_files_folder, found_file.fileName)
+                    )
+                except ZipException, e:
+                    print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
+        return (False, None)
 
 
-class ParliamentInfoWalker(GenericDirWalker):
-    """
-    Walker that retrieves the info about the parliament
-    This is called from both the queue processor and from the batch processor
-    """
-    def __init__(self, input_params = None):
-        super(ParliamentInfoWalker, self).__init__(input_params)
-        self.legislature_info = LegislatureInfo(self.input_params["main_config"])
-        # check if the system is setup for unicameral or bicameral 
+class BaseCache:
+    
+    def __init__(self, input_params, cache_file):
+        self.legislature_info = LegislatureInfo(input_params["main_config"])
         self.bicameral = self.legislature_info.get_bicameral()
-        self.cache_file = "%s%s" % (
-            self.input_params["main_config"].get_cache_file_folder(),
-            __parl_info__
-            )
-        self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
-        self.parliament_info = {}
-    
+        self.cache_file = cache_file
+        self.tmp_files_folder = input_params["main_config"].get_temp_files_folder()
+        if self.bicameral:
+            self.chambers_required = 2
+        else:
+            self.chambers_required = 1
+
     def cache_file_exists(self):
-        return os.path.isfile(self.cache_file)
+        return os.path.isfile(self.cache_file)        
+
+    def is_cache_full(self):
+        """
+        Check if cache has more than one document
+        """
+        if os.path.exists(self.cache_file):
+            reader = SAXReader()
+            cache_doc = reader.read(
+                File(self.cache_file)            
+            )
+            #pinfo = ParliamentInfoParams()
+            list_of_cached_nodes = cache_doc.selectNodes(
+                self.axis_to_check_cache_full()
+            )
+            if len(list_of_cached_nodes) == self.chambers_required:
+                return True
+            else:
+                return False
+        return False 
     
-    """
-    The system can have 2 parliaments, so the assumption is if bicameral is = True
-    There can be 2 chambers.
+    def new_cache_document(self, pinfo):
+        """
+        Creates a new empty cache document and saves it to disk
+        """
+        cache_doc = DocumentHelper.createDocument()
+        #pinfo = ParliamentInfoParams()
+        # <cachedTypes />
+        cache_doc.addElement(pinfo.CACHED_TYPES)
+        self.write_cache_doc_to_file(cache_doc)
+
+
+    def new_cache(self, input_file):
+        """
+        Takes the input file, creates a new empty cache document, 
+        and adds the input file to the cache 
+        """
+        self.new_cache_document(ParliamentInfoParams())
+        reader = SAXReader()
+        new_doc = reader.read(
+            File(input_file)
+        )
+        element_to_import = new_doc.getRootElement()
+        self.append_element_into_cache_document(element_to_import)
+
+    def write_cache_doc_to_file(self, cache_doc):
+        format = OutputFormat.createPrettyPrint()
+        writer = XMLWriter(
+            FileWriter(self.cache_file),
+            format
+            )
+        try:
+            writer.write(cache_doc)
+            writer.flush()
+        except Exception, e:
+            print "Error WRITE_CACHE_DOC_TO_FILE ", e
+        finally:
+            close_quietly(writer)
+
+    def doc_cache_file(self):
+        reader = SAXReader()
+        cache_doc = reader.read(
+            File(self.cache_file)
+            )
+        return cache_doc
+
+    def append_element_into_cache_document(self, element_to_import):
+        cache_doc = self.doc_cache_file()
+        # get the child elements
+        list_of_elements = cache_doc.getRootElement().elements()
+        # get a deep copy of the element to be imported, this also detaches the node 
+        # from the parent
+        element_to_copy = element_to_import.createCopy()
+        list_of_elements.add(element_to_copy)
+        self.write_cache_doc_to_file(cache_doc)
+
+        
+    def append_to_cache(self, input_file, search_node):
+        reader = SAXReader()
+        new_doc = reader.read(
+            File(input_file)
+        )
+        found_node = new_doc.selectSingleNode(search_node)
+        found_id = found_node.getText()
+        if not self.does_item_exist_in_cache(found_id):
+            element_to_import = new_doc.getRootElement()
+            self.append_element_into_cache_document(element_to_import)
+        else:
+            LOG.info(found_id + " already exists in cache")        
+
+    def does_item_exist_in_cache(self, item_id):
+        return False
+     
+    def axis_to_check_cache_full(self):
+        return "" 
+        
+class ParliamentInfo(BaseCache):
     
-    """
+    def __init__(self, input_params):
+        cache_file = "%s%s" % (
+            input_params["main_config"].get_cache_file_folder(),
+            __parl_info__
+        )
+        BaseCache.__init__(
+            self,
+            input_params,
+            cache_file
+        )
+        #self.legislature_info = LegislatureInfo(input_params["main_config"])
+        #self.bicameral = self.legislature_info.get_bicameral()
+        #self.cache_file = "%s%s" % (
+        #    self.input_params["main_config"].get_cache_file_folder(),
+        #    __parl_info__
+        #    )
+        #self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
+        #if self.bicameral:
+        #    self.chambers_required = 3
+        #else:
+        #    self.chambers_required = 2
+    
+    def axis_to_check_cache_full(self):
+        return READ_PARLIAMENT_INFO_PARAMS._xpath_content_types()         
 
     def get_from_cache(self):
         """
@@ -315,130 +405,31 @@ class ParliamentInfoWalker(GenericDirWalker):
                 self.legislature_info.get_country_code()
                 )
         return the_parl_doc
-        
 
-    def is_cache_full(self):
-        """
-        Check if cache has more than one document
-        """
-        if os.path.exists(self.cache_file):
-            reader = SAXReader()
-            cache_doc = reader.read(
-                File(self.cache_file)            
-            )
-            pinfo = ParliamentInfoParams()
-            list_of_cached_nodes = cache_doc.selectNodes(
-                pinfo._xpath_content_types()
-            )
-            if not self.bicameral:
-                """
-                If its unicameral
-                """
-                if len(list_of_cached_nodes) == 1:
-                    return True
-                else:
-                    return False
-            else:
-                """
-                If its bicameral
-                """
-                if len(list_of_cached_nodes) == 2:
-                    return True
-                else:
-                    return False
-        return False 
-                
-        
+    def process_zip_file(self, input_file_path):
+        # zip file processing
+        zipfile = ZipFile(input_file_path)
+        found_file = None
+        if zipfile.isValidZipFile():
+            files = zipfile.fileHeaders
+            for f in files:
+                xml_file = f.fileName
+                if xml_file.endswith(".xml"):
+                    found_file = f
+                    break
+            if found_file is not None:
+                try:
+                    zipfile.extractFile(found_file, self.tmp_files_folder)
+                    # return
+                    return self.process_xml_file(
+                            os.path.join(self.tmp_files_folder, found_file.fileName)
+                    )
+                except ZipException, e:
+                    print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
+        return (False, None)        
 
-    def new_cache_document(self):
-        """
-        Creates a new empty cache document and saves it to disk
-        """
-        cache_doc = DocumentHelper.createDocument()
-        pinfo = ParliamentInfoParams()
-        # <cachedTypes />
-        cache_doc.addElement(pinfo.CACHED_TYPES)
-        self.write_cache_doc_to_file(cache_doc)
-        
-
-    def new_cache(self, input_file):
-        """
-        Takes the input file, creates a new empty cache document, 
-        and adds the input file to the cache 
-        """
-        self.new_cache_document()
-        reader = SAXReader()
-        new_doc = reader.read(
-            File(input_file)
-        )
-        element_to_import = new_doc.getRootElement()
-        self.append_element_into_cache_document(element_to_import)
-
-
-    def write_cache_doc_to_file(self, cache_doc):
-        format = OutputFormat.createPrettyPrint()
-        writer = XMLWriter(
-            FileWriter(self.cache_file),
-            format
-            )
-        try:
-            writer.write(cache_doc)
-            writer.flush()
-        except Exception, e:
-            print "Error WRITE_CACHE_DOC_TO_FILE ", e
-        finally:
-            close_quietly(writer)
-
-    
-    def does_parliament_exists_in_cache(self, parliament_id):
-        cache_doc = self.__doc_cache_file()
-        found_parl_node = cache_doc.selectSingleNode(
-            "/cachedTypes/contenttype[@name='chamber']/field[@name='principal_id'][. = '%s']" % parliament_id
-            )
-        if found_parl_node is not None:
-            # parliament already cached !
-            return True
-        else:
-            return False
-
-        
-    def append_to_cache(self, input_file):
-        reader = SAXReader()
-        new_doc = reader.read(
-            File(input_file)
-        )
-        parl_node = new_doc.selectSingleNode("/contenttype[@name='chamber']/field[@name='principal_id']")
-        parliament_id = parl_node.getText()
-        if not self.does_parliament_exists_in_cache(parliament_id):
-            element_to_import = new_doc.getRootElement()
-            self.append_element_into_cache_document(element_to_import)
-        else:
-            LOG.info(parliament_id + " already exists in cache")
-
-
-    def __doc_cache_file(self):
-        reader = SAXReader()
-        cache_doc = reader.read(
-            File(self.cache_file)
-            )
-        return cache_doc
-
-    def append_element_into_cache_document(self, element_to_import):
-        cache_doc = self.__doc_cache_file()
-        # get the child elements
-        list_of_elements = cache_doc.getRootElement().elements()
-        # get a deep copy of the element to be imported, this also detaches the node 
-        # from the parent
-        element_to_copy = element_to_import.createCopy()
-        list_of_elements.add(element_to_copy)
-        #cache_doc.importNode(element_to_import, True)
-        #cache_doc.getRootElement().addElement(
-        ##    element_to_import
-        #    )
-        self.write_cache_doc_to_file(cache_doc)    
-   
-   
     def process_xml_file(self, input_file_path):
+        search_axis = "/contenttype[@name='chamber']/field[@name='principal_id']"
         bunparse = ParseParliamentInfoXML(input_file_path)
         if not bunparse.valid_file:
             ## error while opening file
@@ -449,7 +440,7 @@ class ParliamentInfoWalker(GenericDirWalker):
             return (False, None)
         # check if its a parliament document
         the_parl_doc = bunparse.get_parliament_info(
-                 self.legislature_info.get_bicameral()
+                 self.bicameral
                 )
         if the_parl_doc is not None:
             """
@@ -463,7 +454,7 @@ class ParliamentInfoWalker(GenericDirWalker):
                 if self.is_cache_full() == False:
                     # inject into file after contenttypes node
                     # check if the parliament info is not already cached
-                    self.append_to_cache(input_file_path)
+                    self.append_to_cache(input_file_path, search_axis)
                     #return (True, the_parl_doc)
             else:
                 # new document
@@ -478,38 +469,18 @@ class ParliamentInfoWalker(GenericDirWalker):
         else :
             return (False, None)
 
-   
-    def fn_callback(self, input_file_path):
-        """
-        This is an incoming document 
-        """
-   
-        if input_file_path.endswith(".zip"):
-            # zip file processing
-            zipfile = ZipFile(input_file_path)
-            found_file = None
-            if zipfile.isValidZipFile():
-                files = zipfile.fileHeaders
-                for file in files:
-                    xml_file = file.fileName
-                    if xml_file.endswith(".xml"):
-                        found_file = file
-                        break
-                if found_file is not None:
-                    try:
-                        zipfile.extractFile(found_file, self.tmp_files_folder)
-                        # return
-                        return self.process_xml_file(
-                                os.path.join(self.tmp_files_folder, found_file.fileName)
-                        )
-                    except ZipException, e:
-                        print COLOR.FAIL, e.printStackTrace(), COLOR.ENDC
-            return (False, None)
-        elif input_file_path.endswith(".xml"):
-            return self.process_xml_file(input_file_path)
-        else :
-            return (False, None)
-         
+    
+    def does_item_exist_in_cache(self, parliament_id):
+        cache_doc = self.doc_cache_file()
+        found_parl_node = cache_doc.selectSingleNode(
+            "/cachedTypes/contenttype[@name='chamber']/field[@name='principal_id'][. = '%s']" % parliament_id
+            )
+        if found_parl_node is not None:
+            # parliament already cached !
+            return True
+        else:
+            return False
+
 
 class SeekBindAttachmentsWalker(GenericDirWalkerXML):
     """

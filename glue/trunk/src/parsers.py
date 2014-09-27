@@ -368,8 +368,7 @@ class ParliamentInfoParams(GenInfoParams):
             self._xpath_info_field(name)
         ]
         return "".join(li)
-
-    
+   
     def _get_params(self, cc, parliament_doc):
         parl_map = HashMap()
         parl_map["country-code"] = cc
@@ -403,7 +402,7 @@ class ParliamentInfoParams(GenInfoParams):
             
         return parl_map
 
-
+READ_PARLIAMENT_INFO_PARAMS = ParliamentInfoParams()
 
 class ParseLegislatureInfoXML(ParseXML):
     """

@@ -86,7 +86,8 @@ from utils import (
 from parsers import (
     ParseBungeniTypesXML,
     ParsePipelineConfigsXML,
-    ParseBungeniXML
+    ParseBungeniXML,
+    READ_PARLIAMENT_INFO_PARAMS
     )
 
 from walker import (
@@ -95,8 +96,8 @@ from walker import (
 
 from walker_ext import (
      LegislatureInfo,
-     LegislatureInfoWalker,
-     ParliamentInfoWalker,
+     LegislatureInfoProcess,
+     ParliamentInfo,
      SeekBindAttachmentsWalker,
      ProcessXmlFilesWalker,
      ProcessedAttsFilesWalker,
@@ -113,12 +114,46 @@ def setup_consumer_directories(config_file):
     __setup_cache_dirs__(cfg)
 
 
+
+def __files_by_date(in_folder, file_type_wc):
+    import glob
+    searchedfile = glob.glob(os.path.join(in_folder, file_type_wc))
+    files = sorted(
+        searchedfile, 
+        key = lambda a_file: os.path.getctime(a_file)
+    )
+    return files
+
+    
+def __most_recent_file(in_folder, file_type_wc):
+    files = __files_by_date(in_folder, file_type_wc)
+    if len(files) > 0:
+        return files[len(files) - 1]
+    else:
+        return None
+    
+
 def get_legislature_info(config_file):
     cfg = TransformerConfig(config_file)
+    leg_name = cfg.legislature_type_name()
+    print "Legislature type name = ", leg_name
+    path_to_legislature_folder = os.path.join(cfg.input_folder(), leg_name)
+    print "path to legislature  = ", path_to_legislature_folder
+    legislature_file = __most_recent_file(path_to_legislature_folder, "*.*")
+    print "legislature file = ", legislature_file
+    if legislature_file is not None:
+        liw = LegislatureInfoProcess(
+               input_params = {"main_config": cfg}
+            )
+        return liw.process_file(legislature_file)
+    else:
+        return (None, None)
+    """
+    liw = cfg.
     liw = LegislatureInfoWalker({"main_config": cfg})
-    liw.walk(cfg.get_input_folder())
+    liw.walk(cfg.input_folder)
     return liw.object_info
-
+    """
 
 def get_parl_info(config_file):
     """
@@ -134,42 +169,91 @@ def get_parl_info(config_file):
     This list will have 2 maps in bicameral parliaments
     and 1 map when its unicameral 
     """
-    piw = ParliamentInfoWalker({"main_config":cfg})
-    no_of_parliaments_required = 1
-    if piw.bicameral:
-        no_of_parliaments_required = 2
+    pi = ParliamentInfo(input_params = {"main_config": cfg})
     
-    pc_info = ParliamentCacheInfo(no_of_parls = no_of_parliaments_required, p_info = [])
+    
+    #piw = ParliamentInfoWalker({"main_config":cfg})
+    #no_of_parliaments_required = 2
+    #if piw.bicameral:
+    #    no_of_parliaments_required = 3
+    # 
+    
+    pc_info = ParliamentCacheInfo(
+        no_of_parls = pi.chambers_required, 
+        p_info = []
+    )
     #parl_info = []
     """
     Check first if we have a cached copy
     """
-    if piw.cache_file_exists():
+    if pi.cache_file_exists():
         print "INFO: CACHED PARLIAMENT INFO  FILE EXISTS !"
         # if the cache file exists
         # get the parliament info from cache
-        if piw.is_cache_full():
-            pc_info.parl_info = piw.get_from_cache()
+        if pi.is_cache_full():
+            pc_info.parl_info = pi.get_from_cache()
             print "INFO: GETTING PARLIAMENT INFO  FROM CACHE", pc_info
         else:
-            pc_info.parl_info = _walk_get_parl_info(piw, cfg)
-            print "INFO: PARLIAMENT INFO CACHE IS NOT FULL", pc_info
+            process_parliament(pi, cfg)
+            if pi.is_cache_full():
+                pc_info.parl_info = pi.get_from_cache()
+            else:
+                print "INFO: PARLIAMENT INFO CACHE IS NOT FULL"
+                pc_info.parl_info = None
+            #pc_info.parl_info = process_parliament(pi, cfg)
+            #print "INFO: PARLIAMENT INFO CACHE IS NOT FULL", pc_info
             # walk some more
     else:
         print "INFO: CACHED FILE DOES NOT EXIST, SEEKING INFO"
-        pc_info.parl_info = _walk_get_parl_info(piw, cfg)
+        pc_info.parl_info = process_parliament(pi, cfg)
     return pc_info
 
+def process_parliament(pi, cfg):
+    chambers = find_chambers(pi, cfg)
+    for key in chambers.keys():
+        file_name = chambers[key]
+        if file_name.endswith(".xml"):
+            pi.process_xml_file(file_name)
+        elif file_name.endswith(".zip"):
+            pi.process_zip_file(file_name)
+    if pi.is_cache_full():
+        return pi.get_from_cache()
+    else:
+        return None    
+    
+def find_chambers(pi, cfg):
+    """
+    Find the 2/3 most recent chamber files required
+    """
+    import re, ntpath
+    pattern = "obj-([0-9]*)-.*\.[xz][mi][lp]$"
+    match_parl = re.compile(pattern)
+    chamber_type = cfg.chamber_type_name()
+    path_to_chamber_folder = os.path.join(cfg.input_folder(), chamber_type)
+    chamber_files = __files_by_date(path_to_chamber_folder, "*.*")
+    found_chambers = {}
+    for f in reversed(chamber_files):
+        chamber_file_name = ntpath.basename(f)
+        fmatch = match_parl.match(chamber_file_name)
+        if fmatch is not None:
+            chamber_key = fmatch.groups()[0]
+            if chamber_key not in found_chambers:
+                found_chambers[chamber_key] = f
+            else:
+                continue
+    return found_chambers
+    
+""""
 def _walk_get_parl_info(piw, cfg):
     # !+BICAMERAL !+FIX_THIS returns a contenttype document, but should
     # instead return the extract from the cached parliament_info.xml document 
     # !+FIXED
     # !+UPDATE(ah,  restrict path to xml_db/chamber - earlier this would sweep the entire
     # XML db folder
-    parl_info_path = os.path.join(cfg.get_input_folder(), cfg.get_parliament_type_name())
+    parl_info_path = os.path.join(cfg.input_folder(), cfg.chamber_type_name())
     if os.path.exists(parl_info_path):
         piw.walk( 
-             os.path.join(cfg.get_input_folder(), cfg.get_parliament_type_name()) 
+             os.path.join(cfg.input_folder(), cfg.chamber_type_name()) 
         )
         if piw.is_cache_full():
             return piw.get_from_cache()
@@ -177,7 +261,7 @@ def _walk_get_parl_info(piw, cfg):
             return None
     else:
         return None
-
+"""
 
 
 def param_parl_info(cfg, params):
@@ -345,7 +429,7 @@ def write_type_mappings(config, parser_bungeni_types, parser_pipe_configs):
 def types_all_config(config_file):
     cfg = TransformerConfig(config_file)
     # parse the bungeni types.xml file to get all the bungeni types
-    parser_bungeni_types = ParseBungeniTypesXML(cfg.get_types_xml_from_bungeni_custom())
+    parser_bungeni_types = ParseBungeniTypesXML(cfg.types_xml_from_bungeni_custom())
     parser_bungeni_types.doc_parse()
     # parse the pipeline configs file
     parser_pipe_configs = ParsePipelineConfigsXML(__pipeline_configs_file())
@@ -454,7 +538,7 @@ def is_exist_running(config_file):
 
 
 def languages_info_xml(cfg):
-    lang_map = cfg.get_languages_info()
+    lang_map = cfg.languages_info()
     from babel import Locale
     allowed_languages = lang_map["allowed_languages"].split(" ")
     li_langs = None
@@ -535,12 +619,12 @@ def do_bind_attachments(cfg):
     # first we unzip the attachments using the GenericDirWalkerUNZIP 
     # so we get xml + attachments in a sub-folder
     unzipwalker = GenericDirWalkerUNZIP()
-    unzipwalker.walk(cfg.get_input_folder())
+    unzipwalker.walk(cfg.input_folder())
     # Now the files are unzipped in sub-folders - so we process the XML 
     # for the attachments, the attachments are renamed to a unique id
     # and the reference reset in the source document
     sba = SeekBindAttachmentsWalker({"main_config":cfg})
-    sba.walk(cfg.get_input_folder())
+    sba.walk(cfg.input_folder())
     if sba.object_info is not None:
         print COLOR.OKBLUE,"ATT: Found attachment ", COLOR.ENDC
     else:
@@ -564,7 +648,7 @@ def do_transform(cfg, params):
     transformer.set_params(params)
     print COLOR.OKGREEN + "Commencing transformations..." + COLOR.ENDC
     pxf = ProcessXmlFilesWalker({"main_config":cfg, "transformer":transformer})
-    pxf.walk(cfg.get_input_folder())
+    pxf.walk(cfg.input_folder())
     print COLOR.OKGREEN + "Completed transformations !" + COLOR.ENDC
 
 def do_sync(cfg, wd_cfg):
@@ -677,7 +761,7 @@ def update_refs(config_file):
     pt = PostTransform({"webdav_config": wd_cfg})
     pt.update()
 
-
+"""
 def list_uniqifier(seq):
     #http://www.peterbe.com/plog/uniqifiers-benchmark
     # wary or RabbitMQ producer giving us duplicates in cases of overwriting a file 
@@ -685,7 +769,7 @@ def list_uniqifier(seq):
     seen = set()
     seen_add = seen.add
     return [ x for x in seq if x not in seen and not seen_add(x)]
-
+"""
 
 def publish_parliament_info(config_file, parliament_cache_info):
     cfg = TransformerConfig(config_file)
@@ -1055,6 +1139,12 @@ def __parse_options(options, look_for=()):
     return input_arg
 
 if __name__ == "__main__":
+    l = get_legislature_info("/opt/bungeni/bungeni_apps/config/glue.ini")
+    p = get_parl_info("/opt/bungeni/bungeni_apps/config/glue.ini")
+    print p
+
+
+if __name__ == "__main2__":
     """
     Five command line parameters are supported
     

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- AUTO GENERATED type mappings from bungeni to glue types -->
 <value>
+   <map from="legislature" uri-name="Legislature" element-name="legislature" />
+   <map from="chamber" uri-name="Chamber" element-name="chamber" />
    <map from="agenda_item" uri-name="AgendaItem" element-name="agendaItem" />
    <map from="bill" uri-name="Bill" element-name="bill" />
    <map from="motion" uri-name="Motion" element-name="motion" />
@@ -29,16 +31,6 @@
    <map from="joint_committee" uri-name="JointCommittee" element-name="jointCommittee" />
    <map from="government" uri-name="Government" element-name="government" />
    <map from="ministry" uri-name="Ministry" element-name="ministry" />
-   <map from="chamber" uri-name="Chamber" element-name="chamber" />
-   <map from="legislature" uri-name="Chamber" element-name="chamber" />
-   <map from="office_member" uri-name="OfficeMember" element-name="officeMember" />
-   <map from="political_group_member" uri-name="PoliticalGroupMember" element-name="politicalGroupMember" />
-   <map from="committee_member" uri-name="CommitteeMember" element-name="committeeMember" />
-   <map from="committee_staff" uri-name="CommitteeStaff" element-name="committeeStaff" />
-   <map from="joint_committee_member" uri-name="JointCommitteeMember" element-name="jointCommitteeMember" />
-   <map from="joint_committee_staff" uri-name="JointCommitteeStaff" element-name="jointCommitteeStaff" />
-   <map from="minister" uri-name="Minister" element-name="minister" />
-   <map from="member" uri-name="Member" element-name="member" />
    <map from="address" uri-name="Address" element-name="address" />
    <map from="sitting" uri-name="Sitting" element-name="sitting" />
    <map from="user" uri-name="User" element-name="user" />

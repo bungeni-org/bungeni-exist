@@ -54,46 +54,59 @@
         
                 <xsl:attribute name="uri" >
                     <xsl:choose>
+                        <xsl:when test="$group-element-name eq 'legislature'">
+                            <xsl:value-of select="$legislature-full-uri" />
+                        </xsl:when>
                         <xsl:when test="$group-element-name eq 'chamber'">
                             <xsl:value-of select="$parliament-full-uri" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="concat($parliament-full-uri, '/', $content-type-uri-name, '/', $group_identifier)" /> 
+                            <xsl:value-of select="concat(
+                                $parliament-full-uri, '/', 
+                                $content-type-uri-name, '/', 
+                                $group_identifier
+                                )" /> 
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
                                 
                 
                 <xsl:attribute name="unique-id">
-                    <!-- this attribute uniquely identifies the document in the system -->
+                    <!-- this attribute uniquely identifies the 
+                     document in the 
+                     system -->
+                    <xsl:variable name="legislature-uid" select="concat(
+                        $legislature-type-name, '.', $legislature-identifier
+                        )" />
+                    <xsl:variable name="chamber-uid" select="concat(
+                        $legislature-uid, '-', 
+                        $parliament-type-name, '.',$parliament-identifier
+                        )" />
                     
                     <xsl:choose>
-                        <xsl:when test="$origin-parliament ne 'None'">
+                        <xsl:when test="$group-element-name eq 'legislature'">
+                            <xsl:value-of select="$legislature-uid" />    
+                        </xsl:when>
+                        <xsl:when test="$group-element-name eq 'chamber'">
+                            <xsl:value-of select="$chamber-uid" />
+                        </xsl:when>
+                        <xsl:otherwise>
                             <xsl:choose>
-                                <xsl:when test="$group-element-name eq 'chamber'">
+                                <xsl:when test="$origin-parliament ne 'None'">
                                     <xsl:value-of select="concat(
-                                        $legislature-type-name, '.', $legislature-identifier, 
-                                        '-', 
-                                        $parliament-type-name, '.', $parliament-id 
-                                        )" />                                    
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="concat(
-                                        $legislature-type-name, '.', $legislature-identifier, 
-                                        '-', 
-                                        $parliament-type-name, '.', $parliament-id, 
+                                        $chamber-uid,
                                         '-',
                                         $group-element-name, '.', $group_id
                                         )" />
-                                </xsl:otherwise>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="concat(
+                                        $legislature-uid, 
+                                        '-',
+                                        $group-element-name, '.', $group_id
+                                        )" />
+                                </xsl:otherwise>  
                             </xsl:choose>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="concat(
-                                $legislature-type-name, '.', $legislature-identifier, 
-                                '-',
-                                $group-element-name, '.', $group_id
-                                )" />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>

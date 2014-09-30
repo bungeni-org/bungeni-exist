@@ -112,7 +112,9 @@ class ParseBungeniTypesXML(ParseXML):
         #self.namespaces = {"ce": "http://bungeni.org/config_editor"}
    
     def xpath_nonbase_archetypes(self):
-        return self.__global_path__ + "*[@archetype != 'doc' and @archetype != 'event']"
+        return self.__global_path__ + ("*[@archetype != 'doc' and "   
+                                      " @archetype != 'event' and " 
+                                      " @archetype != 'chamber']")
    
     """
     def qname(self, prefix, name):
@@ -129,10 +131,16 @@ class ParseBungeniTypesXML(ParseXML):
         return self.__global_path__ + "doc"
     
     def xpath_group_archetypes(self):
-        return self.__global_path__ + "group"
+        return self.__global_path__ + "group[@name != 'legislature' and @name != 'chamber']"
+   
+    def xpath_group_legislature(self):
+        return self.__global_path__ + "group[@name = 'legislature']"
+
+    def xpath_group_chambers(self):
+        return self.__global_path__ + "group[@name = 'chamber']"
 
     def xpath_member_archetypes(self):
-        return self.__global_path__ + "member"
+        return self.__global_path__ + "groupmember"
     
     def xpath_event_archetypes(self):
         return self.__global_path__ + "event"
@@ -155,6 +163,12 @@ class ParseBungeniTypesXML(ParseXML):
     
     def get_groups(self):
         return self.doc_dom().selectNodes(self.xpath_group_archetypes())
+
+    def get_legislature(self):
+        return self.doc_dom().selectNodes(self.xpath_group_legislature())
+
+    def get_chambers(self):
+        return self.doc_dom().selectNodes(self.xpath_group_chambers())
     
     def get_members(self):
         return self.doc_dom().selectNodes(self.xpath_member_archetypes())

@@ -206,6 +206,7 @@ def get_parl_info(config_file):
     else:
         print "INFO: CACHED FILE DOES NOT EXIST, SEEKING INFO"
         pc_info.parl_info = process_parliament(pi, cfg)
+    print "INFOINFO: pc_info ", pc_info.parl_info
     return pc_info
 
 def process_parliament(pi, cfg):
@@ -340,12 +341,70 @@ def __type_mapping_element(type, map_str, logical_mappings):
     enabled = type.attributeValue("enabled")
     return __type_mapping_element_impl(name, enabled, map_str, logical_mappings)
 
+__maps_str__ = '   <map from="%s" uri-name="%s" element-name="%s" />'
+def __generate_type_mappings(logical_mappings, types_filter):
+    li_map_doc = []
+    for type_filter in types_filter:
+        type_elem = __type_mapping_element(type_filter,  __maps_str__, logical_mappings)
+        if type_elem is not None:
+            li_map_doc.append(type_elem)
+    return li_map_doc         
+
 def generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_configs):
     li_map_doc = []
     li_map_doc.append('<?xml version="1.0" encoding="UTF-8"?>')
     li_map_doc.append("<!-- AUTO GENERATED type mappings from bungeni to glue types -->")
     li_map_doc.append("<value>")
     map_str = '   <map from="%s" uri-name="%s" element-name="%s" />'
+
+    li_map_doc.extend(
+       __generate_type_mappings(
+           logical_mappings,
+           parser_bungeni_types.get_legislature()
+       )
+    )
+    li_map_doc.extend(
+       __generate_type_mappings(
+           logical_mappings,
+           parser_bungeni_types.get_chambers()
+       )
+    )
+    li_map_doc.extend(
+       __generate_type_mappings(
+           logical_mappings,
+           parser_bungeni_types.get_docs()
+       )
+    )
+    li_map_doc.extend(
+       __generate_type_mappings(
+           logical_mappings,
+           parser_bungeni_types.get_events()
+       )
+    )
+    li_map_doc.extend(
+       __generate_type_mappings(
+           logical_mappings,
+           parser_bungeni_types.get_groups()
+       )
+    )
+    li_map_doc.extend(
+       __generate_type_mappings(
+           logical_mappings,
+           parser_bungeni_types.get_members()
+       )
+    )
+
+    """
+    legislature_type = parser_bungeni_types.get_legislature()
+    for leg_type in legislature_type:
+        map_elem = __type_mapping_element(leg_type, map_str, logical_mappings)
+        if map_elem is not None:
+            li_map_doc.append(map_elem)
+    chamber_types = parser_bungeni_types.get_chambers()
+    for chamber_type in chamber_types:
+        map_elem = __type_mapping_element(chamber_type, map_str, logical_mappings)
+        if map_elem is not None:
+            li_map_doc.append(map_elem)
     doc_types = parser_bungeni_types.get_docs()
     for doc_type in doc_types:
         map_elem = __type_mapping_element(doc_type, map_str, logical_mappings)
@@ -366,13 +425,14 @@ def generate_type_mappings(logical_mappings, parser_bungeni_types, parser_pipe_c
         map_elem = __type_mapping_element(member, map_str, logical_mappings)
         if map_elem is not None:
             li_map_doc.append(map_elem)
+    """
     itype_configs = parser_pipe_configs.get_config_internal()
     for itype in itype_configs:
         name = itype.attributeValue("for")
         enabled = "true"
         map_elem = __type_mapping_element_impl(name, enabled, map_str, logical_mappings) 
         if map_elem is not None:
-            li_map_doc.append(map_elem)           
+            li_map_doc.append(map_elem) 
     #!+HACK_ALERT(event, doc)
     li_map_doc.append(map_str % ("event", "Event", "event"))
     li_map_doc.append("</value>")
@@ -909,6 +969,7 @@ def main_queue(config_file, afile, parliament_cache_info):
         "parliament-info" : param_parl_info(cfg, parliament_cache_info.parl_info),
         "type-mappings" : param_type_mappings()         
         }
+    print "INFOINFO : parliament-info ", input_map["parliament-info"]
     transformer.set_params(input_map)
     cfgs = {
         "main_config":cfg, 

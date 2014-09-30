@@ -3,9 +3,11 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     exclude-result-prefixes="xs"
     version="2.0">
-
     <xsl:param name="parliament-info" />
     <xsl:param name="type-mappings" />
+    
+    <xsl:variable name="bungeni-type" select="/contenttype/field[@name='type']" />
+    <xsl:variable name="principal-name" select="/contenttype/field[@name='principal_name']" />
     
     <xsl:variable name="country-code" >
         <xsl:value-of select="$parliament-info/parliaments/countryCode" />
@@ -49,22 +51,46 @@
         select="$parliament-info/parliaments/parliament[@id eq $origin-parliament]" />
     
     <xsl:variable name="parliament-id">
-        <xsl:value-of select="$current-parliament/@id" />
+        <xsl:choose>
+            <xsl:when test="$bungeni-type eq 'legislature'">
+                <xsl:value-of select="xs:string('NOT_APPLICABLE')" />
+            </xsl:when>
+            <xsl:when test="$bungeni-type eq 'chamber'">
+                <xsl:value-of select="$principal-name" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$current-parliament/@id" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     
     <xsl:variable name="parliament-identifier">
-        <xsl:value-of select="$current-parliament/identifier" />
+        <xsl:choose>
+            <xsl:when test="$bungeni-type eq 'legislature'">
+                <xsl:value-of select="xs:string('NOT_APPLICABLE')" />
+            </xsl:when>
+            <xsl:when test="$bungeni-type eq 'chamber'">
+                <xsl:value-of select="$principal-name" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$current-parliament/identifier" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     
     <xsl:variable name="parliament-uri">
-        <xsl:value-of select="concat('/', $parliament-type-name, '/',$parliament-identifier)" />
+        <xsl:value-of select="concat(
+            '/', $parliament-type-name, 
+            '/',$parliament-identifier
+            )" />
     </xsl:variable>
     
     <xsl:variable name="parliament-full-uri">
-        <xsl:value-of select="concat($legislature-full-uri, $parliament-uri)" />
+        <xsl:value-of select="concat(
+            $legislature-full-uri, 
+            $parliament-uri
+            )" />
     </xsl:variable>
-    
-    
     
     <xsl:variable name="for-parliament">
         <xsl:value-of select="$current-parliament/forParliament" />

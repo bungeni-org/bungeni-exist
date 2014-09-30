@@ -160,7 +160,7 @@ class Transformer(object):
     def __init__(self, cfg):
         # point the transformer to the correct configuration folder
         GlobalConfigurations.setApplicationPathPrefix(
-            cfg.transformer_resources_folder
+            cfg.transformer_resources_folder()
         )
         # initialize the transformer
         self.transformer = OATranslator.getInstance()

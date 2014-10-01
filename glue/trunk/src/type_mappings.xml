@@ -8,14 +8,21 @@
    <map from="motion" uri-name="Motion" element-name="motion" />
    <map from="question" uri-name="Question" element-name="question" />
    <map from="tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
+   <map from="petition" uri-name="Petition" element-name="petition" />
    <map from="other_document" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="communication" uri-name="Communication" element-name="communication" />
    <map from="report" uri-name="Report" element-name="report" />
    <map from="assembly_agenda_item" uri-name="AgendaItem" element-name="agendaItem" />
    <map from="assembly_bill" uri-name="Bill" element-name="bill" />
    <map from="assembly_motion" uri-name="Motion" element-name="motion" />
    <map from="assembly_question" uri-name="Question" element-name="question" />
    <map from="assembly_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
+   <map from="assembly_petition" uri-name="Petition" element-name="petition" />
    <map from="assembly_matter_of_privileges" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="assembly_matter_of_urgency" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="assembly_personal_explanation" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="assembly_message_from_presidency" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="assembly_communication" uri-name="Communication" element-name="communication" />
    <map from="senate_agenda_item" uri-name="AgendaItem" element-name="agendaItem" />
    <map from="senate_bill" uri-name="Bill" element-name="bill" />
    <map from="senate_motion" uri-name="Motion" element-name="motion" />
@@ -31,6 +38,14 @@
    <map from="joint_committee" uri-name="JointCommittee" element-name="jointCommittee" />
    <map from="government" uri-name="Government" element-name="government" />
    <map from="ministry" uri-name="Ministry" element-name="ministry" />
+   <map from="office_member" uri-name="OfficeMember" element-name="officeMember" />
+   <map from="political_group_member" uri-name="PoliticalGroupMember" element-name="politicalGroupMember" />
+   <map from="committee_member" uri-name="CommitteeMember" element-name="committeeMember" />
+   <map from="committee_staff" uri-name="CommitteeStaff" element-name="committeeStaff" />
+   <map from="joint_committee_member" uri-name="JointCommitteeMember" element-name="jointCommitteeMember" />
+   <map from="joint_committee_staff" uri-name="JointCommitteeStaff" element-name="jointCommitteeStaff" />
+   <map from="minister" uri-name="Minister" element-name="minister" />
+   <map from="member" uri-name="Member" element-name="member" />
    <map from="address" uri-name="Address" element-name="address" />
    <map from="sitting" uri-name="Sitting" element-name="sitting" />
    <map from="user" uri-name="User" element-name="user" />

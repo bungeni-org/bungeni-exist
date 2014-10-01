@@ -140,7 +140,7 @@ class ParseBungeniTypesXML(ParseXML):
         return self.__global_path__ + "group[@name = 'chamber']"
 
     def xpath_member_archetypes(self):
-        return self.__global_path__ + "groupmember"
+        return self.__global_path__ + "group/member"
     
     def xpath_event_archetypes(self):
         return self.__global_path__ + "event"

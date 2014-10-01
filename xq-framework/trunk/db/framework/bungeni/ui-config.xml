@@ -1129,9 +1129,21 @@
     <menugroups>
         <menu for="/" name="mainnav">
             <ul xmlns="http://www.w3.org/1999/xhtml" id="portal-globalnav">
-                <li data-order="1" id="lower-hse">
+                <li data-order="1" id="nat-assembly">
+                    <a href="nat_assembly" name="/nat_assembly/">
+                        <i18n:text key="natassemb-home">National Assembly</i18n:text>
+                    </a>
+                    <ul class="hse-list">
+                        <li>
+                            <a href="nat_assembly/whatson" name="/nat_assembly/business">
+                                <i18n:text key="business">business</i18n:text>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li data-order="2" id="lower-hse">
                     <a href="lower_house" name="/lower_house/">
-                        <i18n:text key="assembly-home">National Assembly</i18n:text>
+                        <i18n:text key="lower-home">House</i18n:text>
                     </a>
                     <ul class="hse-list">
                         <li>
@@ -1146,9 +1158,9 @@
                         </li>
                     </ul>
                 </li>
-                <li data-order="2" id="upper-hse">
+                <li data-order="3" id="upper-hse">
                     <a href="higher_house" name="/higher_house/">
-                        <i18n:text key="senate-home">Senate</i18n:text>
+                        <i18n:text key="higher-home">Senate</i18n:text>
                     </a>
                     <ul class="hse-list">
                         <li>
@@ -1212,7 +1224,7 @@
                     </li>
                     <li class="navigation">
                         <a href="lower_house/calendar" name="/lower_house/calendar">
-                            <i18n:text key="calendar">calendar(nt)</i18n:text>
+                            <i18n:text key="calendar-main">calendar(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
@@ -1263,7 +1275,7 @@
                     </li>
                     <li class="navigation">
                         <a href="higher_house/calendar" name="/higher_house/calendar">
-                            <i18n:text key="calendar">calendar(nt)</i18n:text>
+                            <i18n:text key="calendar-main">calendar(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogue xml:lang="en">
+    <msg key="assembly-home">National Assembly</msg>
+    <msg key="lower-home">House of Representatives</msg>
+    <msg key="higher-home">Senate</msg>
     <msg key="welcome">Welcome Home</msg>
     <msg key="bungeni-pub">Bungeni Publication</msg>
     <msg key="adv-search">Advanced Search</msg>
@@ -31,7 +34,7 @@
     <msg key="motions">motions</msg>
     <msg key="tableddocuments">tabled documents</msg>
     <msg key="agendaitems">agenda items</msg>
-    <msg key="calendar">calendar</msg>
+    <msg key="calendar-main">calendar</msg>
     <msg key="publications">publications</msg>
     <msg key="politicalgroups">political groups</msg>
     <msg key="doc-whatson">What's on</msg>
@@ -196,7 +199,7 @@
     <msg key="representation">representation</msg>
     <msg key="elected/nominated">elected / nominated</msg>
     <msg key="senators">senators</msg>
-    <msg key="lower_house">National Assembly</msg>
+    <msg key="lower_house">House of Representatives</msg>
     <msg key="higher_house">Senate</msg>
     <msg key="chamber-filter">Filter by chamber</msg>
     <msg key="chamber-both">Both</msg>

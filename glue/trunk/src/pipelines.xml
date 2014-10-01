@@ -6,14 +6,21 @@
    <pipeline for="motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="petition" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="other_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
+   <pipeline for="communication" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="report" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="" basetype="doc" />
    <pipeline for="assembly_agenda_item" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="agenda_item" basetype="doc" />
    <pipeline for="assembly_bill" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="bill" basetype="doc" />
    <pipeline for="assembly_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="motion" basetype="doc" />
    <pipeline for="assembly_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="question" basetype="doc" />
    <pipeline for="assembly_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="tabled_document" basetype="doc" />
+   <pipeline for="assembly_petition" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="petition" basetype="doc" />
    <pipeline for="assembly_matter_of_privileges" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="assembly_matter_of_urgency" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="assembly_personal_explanation" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="assembly_message_from_presidency" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="assembly_communication" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="communication" basetype="doc" />
    <pipeline for="assembly_event" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
    <pipeline for="assembly_event_response" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
    <pipeline for="senate_agenda_item" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="agenda_item" basetype="doc" />

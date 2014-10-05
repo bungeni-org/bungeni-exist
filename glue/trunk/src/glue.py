@@ -1199,13 +1199,13 @@ def __parse_options(options, look_for=()):
             input_arg = arg
     return input_arg
 
-if __name__ == "__main__":
+if __name__ == "__main_test__":
     l = get_legislature_info("/opt/bungeni/bungeni_apps/config/glue.ini")
     p = get_parl_info("/opt/bungeni/bungeni_apps/config/glue.ini")
     print p
 
 
-if __name__ == "__main2__":
+if __name__ == "__main__":
     """
     Five command line parameters are supported
     

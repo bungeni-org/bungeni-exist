@@ -278,14 +278,14 @@
     </xsl:template>   
     
     
-    <xsl:template match="item_signatories">
+    <xsl:template match="sa_signatories">
        <signatories id="documentSignatories">
         <xsl:apply-templates />
        </signatories>
     </xsl:template>
     
     
-    <xsl:template match="item_signatory">
+    <xsl:template match="sa_signatory">
        <signatory>
            <xsl:attribute name="id">
                <xsl:variable name="signatory_id" select="field[@name='signatory_id']" />
@@ -294,7 +294,16 @@
         <xsl:apply-templates />
        </signatory>
     </xsl:template>
-    
+
+    <xsl:template match="field[@name='owners'][parent::sa_signatory]">
+       <!-- ignored field[@name='owners'] -->
+    </xsl:template>
+
+
+    <xsl:template match="field[@name='signatory_id']">
+       <!-- ignored field[@name='signatory_id'] -->
+    </xsl:template>
+   
     <xsl:template match="attachments">
         <attachments id="documentAttachments">
             <xsl:apply-templates />

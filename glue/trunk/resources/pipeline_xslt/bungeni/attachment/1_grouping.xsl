@@ -261,7 +261,7 @@
             
             <xsl:copy-of select="attachments" />
            
-            <xsl:copy-of select="item_signatories" />        
+            <xsl:copy-of select="sa_signatories" />        
            
             <custom>
                 <xsl:copy-of select="$type-mappings" />
@@ -306,7 +306,7 @@
             <role type="TLCConcept">
                 <value type="xs:string">
                     <xsl:value-of select="bctype:get_content_type_uri_name(
-                        'member_of_parliament',
+                        'member',
                         $type-mappings
                         )" />
                 </value>

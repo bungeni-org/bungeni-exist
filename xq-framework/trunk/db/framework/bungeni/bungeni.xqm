@@ -3900,8 +3900,25 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
     let $stylesheet := cmn:get-xslt($parts/xsl)
    
     (: return AN Member document with his/her activities :)
-    let $doc := <doc>
-        { collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'Member']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology }
+    let $doc := <doc>{
+        collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'Member']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology
+     }
+     <ref>    
+            {
+            (: Get all parliamentary documents the user is either owner or signatory :)          
+            for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
+            where bu:signatories/bu:signatory[bu:person/@href=$memberid][bu:status/bu:value eq 'consented']/ancestor::bu:ontology or 
+                  bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology 
+            return
+                  $match
+            }
+        </ref>  
+     </doc>
+        (:{  :)
+        (: bun:xqy-all-documentitems-with-acl($acl):)
+        (:collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'Member']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology:) 
+         (: } :)
+        (:
         <ref>    
             {
             (: Get all parliamentary documents the user is either owner or signatory :)          
@@ -3911,8 +3928,7 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
             return
                   $match
             }
-        </ref>         
-    </doc> 
+        </ref>   :)      
     
     return
         transform:transform($doc, $stylesheet,())    

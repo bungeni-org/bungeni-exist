@@ -308,7 +308,11 @@ declare function rou:member-parlactivities($CONTROLLER-DOC as node()) {
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
     let $act-entries-tmpl :=  bun:get-parl-activities("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl := document {
-    					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+    					template:copy-and-replace(
+    					   $CONTROLLER-DOC/exist-cont, 
+    					   fw:app-tmpl($parts/template)/xh:div, 
+    					   $act-entries-tmpl
+    					)
     				 }  
     return 
         template:process-tmpl(
@@ -320,7 +324,7 @@ declare function rou:member-parlactivities($CONTROLLER-DOC as node()) {
                 <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
                 {$CONTROLLER-DOC/parliament}
             </route-override>, 
-           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl) 
         )
 };
 

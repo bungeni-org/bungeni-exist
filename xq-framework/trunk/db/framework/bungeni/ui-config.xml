@@ -1141,24 +1141,7 @@
                         </li>
                     </ul>
                 </li>
-                <li data-order="2" id="lower-hse">
-                    <a href="lower_house" name="/lower_house/">
-                        <i18n:text key="lower-home">House</i18n:text>
-                    </a>
-                    <ul class="hse-list">
-                        <li>
-                            <a href="lower_house/whatson" name="/lower_house/business">
-                                <i18n:text key="business">business</i18n:text>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="lower_house/members" name="/lower_house/members">
-                                <i18n:text key="members">members</i18n:text>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li data-order="3" id="upper-hse">
+                <li data-order="2" id="upper-hse">
                     <a href="higher_house" name="/higher_house/">
                         <i18n:text key="higher-home">Senate</i18n:text>
                     </a>
@@ -1171,6 +1154,23 @@
                         <li>
                             <a href="higher_house/members" name="/higher_house/members">
                                 <i18n:text key="senators">senators(nt)</i18n:text>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li data-order="3" id="lower-hse">
+                    <a href="lower_house" name="/lower_house/">
+                        <i18n:text key="lower-home">House</i18n:text>
+                    </a>
+                    <ul class="hse-list">
+                        <li>
+                            <a href="lower_house/whatson" name="/lower_house/business">
+                                <i18n:text key="business">business</i18n:text>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="lower_house/members" name="/lower_house/members">
+                                <i18n:text key="members">members</i18n:text>
                             </a>
                         </li>
                     </ul>

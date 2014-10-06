@@ -198,7 +198,7 @@ ul.tabbernav li.selected {
 #portal-breadcrumbs {
     height: 19px;
     margin: 0 auto;
-    width:960px;
+    width:1200px;
 }
 #portal-breadcrumbs > span:first-child { }
 div#content-wrapper {
@@ -233,7 +233,7 @@ div#content-wrapper {
 }
 
 #global-language {
-    width:960px;
+    width:1200px;
     height:18px;
     margin:0 auto;
     text-align: right;

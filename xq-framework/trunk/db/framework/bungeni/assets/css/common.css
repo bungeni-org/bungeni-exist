@@ -21,14 +21,14 @@ div#sub-header {
 }
 
 div#header-banner {
-    width:960px;
+    width:1200px;
     height:78px;
     margin:0 auto 15px auto;
     background:transparent url(../images/portal_banner.png) no-repeat;
 }
 div.header-nav {
     display:block;
-    width:960px;
+    width:1200px;
     height:auto;
     margin:3px auto 0 auto;
 }
@@ -50,7 +50,7 @@ div.header-nav {
 }
 
 div#main-wrapper {
-    width:960px;
+    width:1200px;
     height:auto;
     margin:0 auto 0 auto;
     margin-top:20px;
@@ -111,7 +111,7 @@ h4 {
 }
 
 div#region-content {
-    width:960px;
+    width:1200px;
     height:auto;
     min-height:500px;
     margin:0px auto 20px auto;
@@ -488,7 +488,7 @@ div.row span.label {
 
 div.row span.formw {
     float: left;
-    width: 320px;
+    width: 395px;
     text-align: left;
 }
 div.row span.formw input {
@@ -711,7 +711,7 @@ nav ul:after {
 	display: block;
 }
 nav > ul > li {
-    width:320px;
+    width:395px;
     display:inline-block;
     white-space:nowrap;
 }

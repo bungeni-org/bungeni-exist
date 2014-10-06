@@ -175,7 +175,7 @@
                 <xsl:when test="parent::permissions[parent::member] | parent::permissions[parent::user] | parent::permissions[parent::owner]">
                     <xsl:value-of select="string('user')" />
                 </xsl:when>
-                <xsl:when test="parent::permissions[parent::item_signatorie]">
+                <xsl:when test="parent::permissions[parent::sa_signatory]">
                     <xsl:value-of select="string('signatory')" />
                 </xsl:when>
                 <xsl:when test="parent::permissions[parent::attachment]">

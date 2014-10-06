@@ -215,7 +215,7 @@
             
             <xsl:copy-of select="attachments" />
            
-            <xsl:copy-of select="item_signatories" />        
+            <xsl:copy-of select="sa_signatories" />        
            
             <custom>
                 <xsl:copy-of select="$type-mappings" />

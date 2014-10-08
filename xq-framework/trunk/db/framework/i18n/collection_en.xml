@@ -212,4 +212,7 @@
     <msg key="chamber-filter">Filter by chamber</msg>
     <msg key="chamber-both">Both</msg>
     <msg key="petitions">petitions</msg>
+    <msg key="nat_committees">committees</msg>
+    <msg key="joint_committees">joint committees</msg>
+    <msg key="nat_gov">committees</msg>
 </catalogue>

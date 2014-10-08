@@ -2966,6 +2966,118 @@ declare function bun:get-politicalgroups(
 };
 
 (:~
+:   Retieves all group documents of type politicalgroups
+: @param offset
+: @param limit
+: @param querystr
+: @param sortby
+: @return 
+:   A listing of documents of group type policicalgroups
+:)
+declare function bun:get-jointcommittees(
+        $view-rel-path as xs:string,
+        $parliament as node()?,
+        $offset as xs:integer, 
+        $limit as xs:integer, 
+        $parts as node(),
+        $querystr as xs:string, 
+        $sortby as xs:string
+        ) as element() {
+    
+    let $getqrystr := xs:string(request:get-query-string())
+    
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/view/xsl)    
+    
+    let $tab := xs:string(request:get-parameter("tab","active")) 
+    let $listings-filter := cmn:get-listings-config("JointCommittees")    
+    let $coll := bun:list-groupitems-with-tabs($parliament/identifier/text(),$parts/doctype, $tab)    
+    
+    (: 
+        The line below is documented in bun:get-documentitems()
+    :)
+    (:let $query-offset := if ($offset eq 0 ) then 1 else $offset+1:)
+    (: The query-offset in the previous line is the same as having always the offset+1, no need for the if clause:)
+    let $query-offset := $offset+1
+    
+    (: input ONxml document in request :)
+    let $doc := <docs> 
+        <paginator>
+        (: Count the total number of groups :)
+        <count>{count($coll)}</count>
+        <tags>
+        {
+            for $listing in $listings-filter
+                return 
+                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-groupitems-with-tabs($parliament/identifier/text(),$parts/doctype, $listing/@id)) }">{data($listing/@name)}</tag>
+                    
+         }
+         </tags>         
+        <currentView>{$parts/current-view}</currentView>
+        <chamber>{$parliament/type/text()}</chamber>
+        <documentType>political-group</documentType>
+        <listingUrlPrefix>political-group/text</listingUrlPrefix>      
+        <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
+        <offset>{$offset}</offset>
+        <limit>{$limit}</limit>
+        <visiblePages>{$bun:VISIBLEPAGES}</visiblePages>
+        </paginator>
+        <alisting>
+        {
+            switch ($sortby)
+            
+            case 'start_dt_oldest' return 
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:group/bu:startDate ascending
+                return 
+                    <doc>{$match/ancestor::bu:ontology}</doc>  
+                
+            case 'start_dt_newest' return 
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:group/bu:startDate descending
+                return 
+                    <doc>{$match/ancestor::bu:ontology}</doc>     
+
+            case 'fN_asc' return
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislature/bu:fullName ascending
+                return 
+                    <doc>{$match/ancestor::bu:ontology}</doc>      
+  
+            case 'fN_desc' return 
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislature/bu:fullName descending
+                return 
+                    <doc>{$match/ancestor::bu:ontology}</doc>        
+             
+            default return 
+                for $match in subsequence($coll,$query-offset,$limit)
+                order by $match/bu:legislature/bu:statusDate descending
+                return 
+                    <doc>{$match}</doc>
+        } 
+        </alisting>
+    </docs>
+    (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
+    the correct sort combo in the transformed output. See corresponding comment in XSLT :)
+    return
+        transform:transform($doc, 
+            $stylesheet, 
+            <parameters>
+                <param name="sortby" value="{$sortby}" />
+                <param name="listing-tab" value="{$tab}" />
+                <param name="item-listing-rel-base" value="{$view-rel-path}" />  
+                <param name="chamber" value="{$parliament/type/text()}" />
+                <param name="chamber-id" value="{$parliament/identifier/text()}" />                   
+            </parameters>
+           )     
+};
+
+
+
+
+
+(:~
 :   This function runs a sub-query to get related information of type="group" and has
 :   has matching URI of the input document-docitem
 : 

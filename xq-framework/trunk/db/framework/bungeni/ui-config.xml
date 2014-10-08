@@ -26,6 +26,22 @@
             <navigation/>
             <action>rou:get-home</action>
         </route>
+        <route href="/nat_assembly">
+            <title>National Assembly Home</title>
+            <navigation/>
+            <action>rou:get-home</action>
+        </route>
+        <route href="/nat_assembly/committees">
+            <title>Committees</title>
+            <navigation>/nat_assembly/committees</navigation>
+            <action>rou:get-home()</action>
+        </route>
+        <route href="/nat_assembly/joint_committees">
+            <title>Joint Committees</title>
+            <navigation>/nat_assembly/committees</navigation>
+            <subnavigation>joint_committees</subnavigation>
+            <action>rou:get-home()</action>
+        </route>
         <route href="/lower_house/business">
             <title>Business</title>
             <navigation>/lower_house/business</navigation>
@@ -224,6 +240,15 @@
             <subnavigation>committees</subnavigation>
             <action>rou:committee</action>
         </route>
+        <!-- !+NASSNIG -->
+        <route href="/nat_assembly/jointcommittee-text">
+            <title>Business | Joint Committee Profile</title>
+            <navigation>/nat_assembly/committees</navigation>
+            <subnavigation>joint_committees</subnavigation>
+            <action>rou:group</action>
+        </route>
+        
+        <!-- !+NASSNIG -->
         <route href="/lower_house/politicalgroup-text">
             <title>Business | Political Group's Profile</title>
             <navigation>/lower_house/members</navigation>
@@ -1630,8 +1655,8 @@
                     </a>
                     <ul class="hse-list">
                         <li>
-                            <a href="nat_assembly/whatson" name="/nat_assembly/business">
-                                <i18n:text key="business">business</i18n:text>
+                            <a href="nat_assembly/committees" name="/nat_assembly/committees">
+                                <i18n:text key="nat_committees">committees</i18n:text>
                             </a>
                         </li>
                     </ul>
@@ -1671,6 +1696,17 @@
                     </ul>
                 </li>
             </ul>
+        </menu>
+        <menu for="/nat_assembly/committees" name="nat_committees">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
+                <ul id="portal-personaltools">
+                    <li>
+                        <a href="nat_assembly/joint_committees" name="nat_jointcommittees">
+                            <i18n:text key="joint_committees">what's on(nt)</i18n:text>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </menu>
         <menu for="home" name="home">
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
@@ -1928,6 +1964,33 @@
                 <xsl>xsl/poli-members.xsl</xsl>
             </view>
             <view id="contacts" path="politicalgroup-contacts" tag="tab">
+                <title>
+                    <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/group-contacts.xsl</xsl>
+            </view>
+        </views>
+        <views name="JointCommittee">
+            <view id="listing" path="joint_committees" tag="listing">
+                <template>xml/committees.xml</template>
+                <xsl>xsl/politicalgroups.xsl</xsl>
+            </view>
+            <view id="profile" path="jointcommittee-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-profile">profile(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/political-group.xsl</xsl>
+            </view>
+            <view id="members" path="jointcommittee-members" tag="tab">
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/poli-members.xsl</xsl>
+            </view>
+            <view id="contacts" path="jointcommittee-contacts" tag="tab">
                 <title>
                     <i18n:text key="tab-contacts">contacts(nt)</i18n:text>
                 </title>

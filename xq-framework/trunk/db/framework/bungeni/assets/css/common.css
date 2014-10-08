@@ -19,6 +19,9 @@ div#sub-header {
 .higher_house div#sub-header {
     background-color:#b22b14;
 }
+.nat_assembly div#sub-header {
+    background-color:#aaa6a6;
+}
 
 div#header-banner {
     width:1200px;

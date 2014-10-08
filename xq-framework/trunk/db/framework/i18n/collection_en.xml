@@ -34,6 +34,8 @@
     <msg key="motions">motions</msg>
     <msg key="tableddocuments">tabled documents</msg>
     <msg key="agendaitems">agenda items</msg>
+    <msg key="otherdocuments">other documents</msg>
+    <msg key="communications">communications</msg>
     <msg key="calendar-main">calendar</msg>
     <msg key="publications">publications</msg>
     <msg key="politicalgroups">political groups</msg>
@@ -50,6 +52,8 @@
     <msg key="list-t-whatson">What's on</msg>
     <msg key="list-t-pubs">Publications</msg>
     <msg key="list-t-members">Members of Parliament</msg>
+    <msg key="list-t-petition">Petitions</msg>
+    <msg key="list-t-otherdocument">Other Documents</msg>
     <msg key="list-t-pts">Political-groups</msg>
     <msg key="uc">under consideration ({1})</msg>
     <msg key="recent">recent ({1})</msg>
@@ -96,6 +100,9 @@
     <msg key="doc-motion">motion</msg>
     <msg key="doc-bill">bill</msg>
     <msg key="doc-tableddocument">tabled document</msg>
+    <msg key="doc-petition">petition</msg>
+    <msg key="doc-otherdocument">other document</msg>
+    <msg key="doc-communication">communication</msg>
     <msg key="doc-agendaitem">agenda item</msg>
     <msg key="doc-committee">committee</msg>
     <msg key="doc-groupsitting">sitting</msg>
@@ -133,6 +140,7 @@
     <msg key="tab-offices">offices held</msg>
     <msg key="tab-info">biographical data</msg>
     <msg key="tab-parlacts">parliament activities</msg>
+    <msg key="tab-communications">communications</msg>
     <msg key="tab-text">text</msg>
     <msg key="tab-history">history</msg>
     <msg key="tab-events">events</msg>
@@ -203,4 +211,5 @@
     <msg key="higher_house">Senate</msg>
     <msg key="chamber-filter">Filter by chamber</msg>
     <msg key="chamber-both">Both</msg>
+    <msg key="petitions">petitions</msg>
 </catalogue>

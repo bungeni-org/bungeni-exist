@@ -14,7 +14,7 @@ div#sub-header {
     height:20px;
 }
 .lower_house div#sub-header {
-    background-color:#f69e0d;
+    background-color:#66c071;
 }
 .higher_house div#sub-header {
     background-color:#b22b14;
@@ -717,10 +717,19 @@ nav > ul > li {
 }
 
 /* Defaults */
+/*
+!+NIGERIA(ah,2014-10-07) changed for nassnig
 nav > ul > li#lower-hse {    
     background: linear-gradient(top, #f79f10 0%, #ee990d 100%);  
     background: -moz-linear-gradient(top, #f79f10 0%, #ee990d 100%); 
     background: -webkit-linear-gradient(top, #f79f10 0%,#ee990d 100%); 		    
+}
+*/
+
+nav > ul > li#lower-hse {    
+    background: linear-gradient(top, #02440a 0%, #66c071 100%);  
+    background: -moz-linear-gradient(top, #02440a 0%, #66c071 100%); 
+    background: -webkit-linear-gradient(top, #02440a 0%,#66c071 100%); 		    
 }
 nav > ul > li#lower-hse > a {
     font-weight:bold;
@@ -739,19 +748,17 @@ nav > ul > li#upper-hse > a {
     font-size:16px;                
 }
 
-/*
-nav > ul > li {
-    width:320px;    
-    background: linear-gradient(top, #585858 0%, #434343 100%);  
-    background: -moz-linear-gradient(top, #585858 0%, #434343 100%); 
-    background: -webkit-linear-gradient(top, #f79f10 0%,#ee990d 100%); 		    
-    }
-nav > ul > li > a {
+nav > ul > li#nat-assembly {    
+    background: linear-gradient(top, #5c5555 0%, #a0a0a0 100%);  
+    background: -moz-linear-gradient(top, #5c5555 0%, #a0a0a0 100%); 
+    background: -webkit-linear-gradient(top, #5c5555 0%,#a0a0a0 100%); 		    
+}
+nav > ul > li#nat-assembly > a {
     font-weight:bold;
     color:#eeeeee;
     font-size:16px;                
 }
- */        
+
 
 nav ul li:hover {
        -webkit-box-shadow: rgba(0,0,0,.2) 2px 4px 4px;

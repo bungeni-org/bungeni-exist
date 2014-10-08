@@ -42,12 +42,12 @@
 
 /* = DATEPICKER
 ----------------------------------------------------------------------------------------------------------------------*/
-.Zebra_DatePicker .dp_daypicker th          { background: #f79f10 }
+.Zebra_DatePicker .dp_daypicker th          { background: #02440a }
 .Zebra_DatePicker td.dp_not_in_month        { background: #F3F3F3; color: #CDCDCD; cursor: default }
 .Zebra_DatePicker td.dp_weekend             { background: #D8D8D8 }
 .Zebra_DatePicker td.dp_weekend_disabled    { color: #CCC; cursor: default }
 .Zebra_DatePicker td.dp_selected            { background: #5A4B4B; color: #FFF }
-.Zebra_DatePicker td.dp_week_number         { background: #f79f10; color: #555; cursor: text; font-style: italic }
+.Zebra_DatePicker td.dp_week_number         { background: #02440a; color: #555; cursor: text; font-style: italic }
 
 /* = MONTHPICKER
 ----------------------------------------------------------------------------------------------------------------------*/

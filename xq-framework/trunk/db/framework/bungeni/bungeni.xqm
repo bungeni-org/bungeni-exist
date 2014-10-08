@@ -2431,6 +2431,10 @@ declare function local:start-end-of-week($adate as xs:date) {
             </range>
 };
 
+
+(: !+FIX_THIS(ah, 2014-10-08) some of the date arithmetic below was not working because
+of the timezone added to the date. This needs to be fixed. Currently temporarily fixed:)
+(:
 declare function local:old-future-sittings($range as xs:string) {
 
     let $twk := current-date()
@@ -2443,8 +2447,8 @@ declare function local:old-future-sittings($range as xs:string) {
         (: For old and fut sittings, we get 30 days before and after current-date :)
         case 'old' return
             <range>
-                <start>{($twk - xs:dayTimeDuration('P30D')) + xs:time("00:00:00")}</start>
-                <end>{($twk - xs:dayTimeDuration('P1D')) + xs:time("23:59:59")}</end>
+                <start>{($twk - xs:dayTimeDuration('P30D')) + xs:dayTimeDuration("PT0H1M")}</start>
+                <end>{($twk - xs:dayTimeDuration('P1D')) + xs:dayTimeDuration("PT23H59M")}</end>
             </range>
         case 'fut' return
             <range>
@@ -2454,6 +2458,40 @@ declare function local:old-future-sittings($range as xs:string) {
         default return
             ()
 };
+:)
+
+declare function local:old-future-sittings($range as xs:string) {
+
+    let $twk := current-date()
+    let $pwk := local:start-end-of-week(current-date() - xs:dayTimeDuration('P7D'))
+    let $nwk := local:start-end-of-week(current-date() + xs:dayTimeDuration('P7D'))
+    
+    return
+        switch($range)
+
+        (: For old and fut sittings, we get 30 days before and after current-date :)
+        case 'old' return
+            <range>
+                 <start>{
+                 (substring(xs:string($twk - xs:dayTimeDuration('P30D')),1,10) || 'T00:00:00')
+                 }</start>
+                <end>{
+                (substring(xs:string($twk - xs:dayTimeDuration('P1D')),1,10) || 'T23:59:00')
+                }</end>
+            </range>
+        case 'fut' return
+            <range>
+                <start>{
+                (substring(xs:string($twk + xs:dayTimeDuration('P1D')), 1, 10) || 'T00:00:00')
+                }</start>
+                <end>{
+                (substring(xs:string($twk + xs:dayTimeDuration('P30D')), 1, 10) || 'T23:59:00')
+                }</end>
+            </range>
+        default return
+            ()
+};
+
 
 declare function local:validate-custom-date($from as xs:date, $to as xs:date) {
     let $calc-max := cmn:whatson-range-limit()
@@ -2530,7 +2568,8 @@ declare function local:grouped-sitting-meeting-type($chamber-id as xs:string?, $
        where $sittings/bu:sitting/bu:meetingType[bu:value eq $mtype] 
        order by $sittings/bu:sitting/bu:startDate ascending
        return $sittings    
-    )
+    ) 
+   
 };
 
 
@@ -2706,6 +2745,7 @@ declare function bun:get-whatson(
             </parameters>
            )
 };
+
 
 declare function bun:get-sitting($acl as xs:string, 
             $doc-uri as xs:string, 
@@ -3905,34 +3945,52 @@ declare function bun:get-parl-activities($acl as xs:string, $memberid as xs:stri
      }
      <ref>    
             {
-            (: Get all parliamentary documents the user is either owner or signatory :)          
-            for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
-            where bu:signatories/bu:signatory[bu:person/@href=$memberid][bu:status/bu:value eq 'consented']/ancestor::bu:ontology or 
-                  bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology 
-            return
-                  $match
+            (: Get all parliamentary documents the user is either owner or signatory :)      
+            (: !+FIX_QUERY(ah,2014-10-07) always set the context for the for !~ :) 
+             for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
+                        where $match/bu:signatories/bu:signatory[bu:person/@href=$memberid][bu:status/bu:value eq 'consented']/ancestor::bu:ontology
+                        or $match/bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
+                        return
+                              $match
+                 
+            (:let $exp1 := for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
+                        where bu:signatories/bu:signatory[bu:person/@href=$memberid][bu:status/bu:value eq 'consented']/ancestor::bu:ontology
+                        return
+                              $match
+            let $exp2 := for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
+                        where bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology 
+                        return
+                              $match
+            return $exp1 union $exp2:)
             }
         </ref>  
      </doc>
-        (:{  :)
-        (: bun:xqy-all-documentitems-with-acl($acl):)
-        (:collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'Member']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology:) 
-         (: } :)
-        (:
-        <ref>    
-            {
-            (: Get all parliamentary documents the user is either owner or signatory :)          
-            for $match in util:eval(bun:xqy-all-documentitems-with-acl($acl))
-            where bu:signatories/bu:signatory[bu:person/@href=$memberid][bu:status/bu:value eq 'consented']/ancestor::bu:ontology or 
-                  bu:document/bu:owner/bu:person[@href=$memberid]/ancestor::bu:ontology
-            return
-                  $match
-            }
-        </ref>   :)      
-    
     return
         transform:transform($doc, $stylesheet,())    
 };
+
+
+declare function bun:get-communications($acl as xs:string, $memberid as xs:string, $parts as node(), $parliament as node()?) as element()* {
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl)
+   
+    (: return AN Member document with his/her activities :)
+    let $doc := <doc>{
+        collection(cmn:get-lex-db())/bu:ontology/bu:membership[bu:docType/bu:value eq 'Member']/bu:referenceToUser[bu:refersTo/@href=$memberid][1]/ancestor::bu:ontology
+     }
+     <ref>    
+            {
+            (: Get all parliamentary documents the user is either owner or signatory :)      
+            (: !+FIX_QUERY(ah,2014-10-07) always set the context for the for !~ :) 
+            let $coll := collection(cmn:get-lex-db())/bu:ontology[bu:document/bu:docType/bu:value eq 'Communication' and bu:document/bu:owner/bu:person[@href=$memberid]]
+            return $coll
+            }
+        </ref>  
+     </doc>
+    return
+        transform:transform($doc, $stylesheet,())    
+};
+
 
 declare function bun:get-assigned-items($committeeid as xs:string, $parts as node()) as element()* {
 

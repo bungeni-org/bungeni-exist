@@ -86,6 +86,16 @@
             <navigation>/higher_house/members</navigation>
             <action>rou:member-parlactivities</action>
         </route>
+        <route href="/lower_house/member-communications">
+            <title>Business | Member of Parliament</title>
+            <navigation>/lower_house/members</navigation>
+            <action>rou:member-communications</action>
+        </route>
+        <route href="/higher_house/member-communications">
+            <title>Business | Member of Parliament</title>
+            <navigation>/higher_house/members</navigation>
+            <action>rou:member-communications</action>
+        </route>
         <route href="/lower_house/member-contacts">
             <title>Business | Member of Parliament</title>
             <navigation>/lower_house/members</navigation>
@@ -426,6 +436,10 @@
             <title>Business | Bill</title>
             <action>rou:atom-rss</action>
         </route>
+        <!--
+            
+            !+NASSNIG(ah, 2014-10-07) questions disabled in nassnig
+            
         <route href="/lower_house/questions">
             <title>Business | Questions </title>
             <navigation>/lower_house/business</navigation>
@@ -590,6 +604,342 @@
             <title>Business | Questions</title>
             <action>rou:atom-rss</action>
         </route>
+        -->
+        <!-- PETITIONS !+NASSNIG -->
+        <route href="/lower_house/petitions">
+            <title>Business | Petitions </title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:get-petitions</action>
+        </route>
+        <route href="/higher_house/petitions">
+            <title>Business | Petitions </title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>puestions</subnavigation>
+            <action>rou:get-petitions</action>
+        </route>
+        <route href="/lower_house/petition-text">
+            <title>Business | Petition Text</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/petition-text">
+            <title>Business | Petition Text</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/lower_house/petition-timeline">
+            <title>Business | Petition Timeline</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/petition-timeline">
+            <title>Business | Petition Timeline</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/lower_house/petition-events">
+            <title>Business | Petition Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/higher_house/petition-events">
+            <title>Business | Petition Events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/lower_house/petition-responses">
+            <title>Business | Petition Response events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/higher_house/petition-responses">
+            <title>Business | Petition Response events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/lower_house/petition-event">
+            <title>Business | Petition Event</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-event</action>
+        </route>
+        <route href="/higher_house/petition-event">
+            <title>Business | Petition Event</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-event</action>
+        </route>
+        <route href="/lower_house/petition-eventresponse">
+            <title>Business | Petition Response</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-response</action>
+        </route>
+        <route href="/higher_house/petition-eventresponse">
+            <title>Business | Petition Response</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-response</action>
+        </route>
+        <route href="/lower_house/petition-versions">
+            <title>Business | Petition Versions</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:version-text</action>
+        </route>
+        <route href="/higher_house/petition-versions">
+            <title>Business | Petition Versions</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:version-text</action>
+        </route>
+        <route href="/lower_house/petition-documents">
+            <title>Business | Attachments</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-documents</action>
+        </route>
+        <route href="/higher_house/petition-documents">
+            <title>Business | Attachments</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-documents</action>
+        </route>
+        <route href="/lower_house/petition-minutes">
+            <title>Business | Petition Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/petition-minutes">
+            <title>Business | Petition Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/petition-votes">
+            <title>Business | Petition Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/petition-votes">
+            <title>Business | Petition Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/petition-attachment">
+            <title>Business | Petition Attachment</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/higher_house/petition-attachment">
+            <title>Business | Petition Attachment</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/petition-metadata">
+            <title>Business | Petition Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/petition-metadata">
+            <title>Business | Petition Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>petitions</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/lower_house/petitions/rss">
+            <title>Business | Petitions</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/petitions/rss">
+            <title>Business | Petitions</title>
+            <action>rou:atom-rss</action>
+        </route>
+        
+        <!-- END PETITIONS NASSNIG -->
+        
+        <!-- COMMUNICATIONS !+NASSNIG -->
+        <route href="/lower_house/communications">
+            <title>Business | Communications </title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:get-communications</action>
+        </route>
+        <route href="/higher_house/communications">
+            <title>Business | Communications </title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>puestions</subnavigation>
+            <action>rou:get-communications</action>
+        </route>
+        <route href="/lower_house/communication-text">
+            <title>Business | Communication Text</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/communication-text">
+            <title>Business | Communication Text</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/lower_house/communication-timeline">
+            <title>Business | Communication Timeline</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/communication-timeline">
+            <title>Business | Communication Timeline</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/lower_house/communication-events">
+            <title>Business | Communication Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/higher_house/communication-events">
+            <title>Business | Communication Events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/lower_house/communication-responses">
+            <title>Business | Communication Response events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/higher_house/communication-responses">
+            <title>Business | Communication Response events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/lower_house/communication-event">
+            <title>Business | Communication Event</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-event</action>
+        </route>
+        <route href="/higher_house/communication-event">
+            <title>Business | Communication Event</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-event</action>
+        </route>
+        <route href="/lower_house/communication-eventresponse">
+            <title>Business | Communication Response</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-response</action>
+        </route>
+        <route href="/higher_house/communication-eventresponse">
+            <title>Business | Communication Response</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-response</action>
+        </route>
+        <route href="/lower_house/communication-versions">
+            <title>Business | Communication Versions</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:version-text</action>
+        </route>
+        <route href="/higher_house/communication-versions">
+            <title>Business | Communication Versions</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:version-text</action>
+        </route>
+        <route href="/lower_house/communication-documents">
+            <title>Business | Attachments</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-documents</action>
+        </route>
+        <route href="/higher_house/communication-documents">
+            <title>Business | Attachments</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-documents</action>
+        </route>
+        <route href="/lower_house/communication-minutes">
+            <title>Business | Communication Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/communication-minutes">
+            <title>Business | Communication Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/communication-votes">
+            <title>Business | Communication Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/communication-votes">
+            <title>Business | Communication Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/communication-attachment">
+            <title>Business | Communication Attachment</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/higher_house/communication-attachment">
+            <title>Business | Communication Attachment</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/communication-metadata">
+            <title>Business | Communication Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/communication-metadata">
+            <title>Business | Communication Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>communications</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/lower_house/communications/rss">
+            <title>Business | Communications</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/communications/rss">
+            <title>Business | Communications</title>
+            <action>rou:atom-rss</action>
+        </route>
+        
+        <!-- END COMMUNICATON NASSNIG -->
         <route href="/lower_house/motions">
             <title>Business | Motions </title>
             <navigation>/lower_house/business</navigation>
@@ -1010,6 +1360,151 @@
             <title>Business | Agenda Items</title>
             <action>rou:atom-rss</action>
         </route>
+        
+        <!-- other documents -->
+        <route href="/lower_house/otherdocuments">
+            <title>Business | Other Documents</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:get-other-documents</action>
+        </route>
+        <route href="/higher_house/otherdocuments">
+            <title>Business | Other Documents</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:get-other-documents</action>
+        </route>
+        <route href="/lower_house/otherdocument-text">
+            <title>Business | Other Document</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/otherdocument-text">
+            <title>Business | Other Document</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/lower_house/otherdocument-timeline">
+            <title>Business | Other Document</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/higher_house/otherdocument-timeline">
+            <title>Business | Other Document</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-timeline</action>
+        </route>
+        <route href="/lower_house/otherdocument-events">
+            <title>Business | Other Document Events</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/higher_house/otherdocument-events">
+            <title>Business | Other Document Events</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-events</action>
+        </route>
+        <route href="/lower_house/otherdocument-event">
+            <title>Business | Other Document Event</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-event</action>
+        </route>
+        <route href="/higher_house/otherdocument-event">
+            <title>Business | Other Document Event</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-event</action>
+        </route>
+        <route href="/lower_house/otherdocument-versions">
+            <title>Business | Other Document Versions</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:version-text</action>
+        </route>
+        <route href="/higher_house/otherdocument-versions">
+            <title>Business | Other Document Versions</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:version-text</action>
+        </route>
+        <route href="/lower_house/otherdocument-documents">
+            <title>Business | Other Document</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-documents</action>
+        </route>
+        <route href="/higher_house/otherdocument-documents">
+            <title>Business | Other Document</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-documents</action>
+        </route>
+        <route href="/lower_house/otherdocument-minutes">
+            <title>Business | Other Document Minutes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/otherdocument-minutes">
+            <title>Business | Other Document Minutes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/otherdocument-votes">
+            <title>Business | Other Document Votes</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/higher_house/otherdocument-votes">
+            <title>Business | Other Document Votes</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-scheduleItem</action>
+        </route>
+        <route href="/lower_house/otherdocument-attachment">
+            <title>Business | Other Document Attachment</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/higher_house/otherdocument-attachment">
+            <title>Business | Other Document Attachment</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-attachment</action>
+        </route>
+        <route href="/lower_house/otherdocument-metadata">
+            <title>Business | Other Document Metadata</title>
+            <navigation>/lower_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/higher_house/otherdocument-metadata">
+            <title>Business | Other Document Metadata</title>
+            <navigation>/higher_house/business</navigation>
+            <subnavigation>otherdocuments</subnavigation>
+            <action>rou:document-text</action>
+        </route>
+        <route href="/lower_house/otherdocuments/rss">
+            <title>Business | Other Document</title>
+            <action>rou:atom-rss</action>
+        </route>
+        <route href="/higher_house/otherdocuments/rss">
+            <title>Business | Other Document</title>
+            <action>rou:atom-rss</action>
+        </route>
+        
+        
+        <!-- end other documents -->
         <route href="/lower_house/whatson">
             <title>Business | What's on </title>
             <navigation>/lower_house/business</navigation>
@@ -1203,10 +1698,17 @@
                         </a>
                     </li>
                     <li class="navigation">
+                        <a href="lower_house/petitions" name="/lower_house/petitions">
+                            <i18n:text key="petitions">petitions(nt)</i18n:text>
+                        </a>
+                    </li> 
+                    <!--
+                    <li class="navigation">
                         <a href="lower_house/questions" name="/lower_house/questions">
                             <i18n:text key="questions">questions(nt)</i18n:text>
                         </a>
-                    </li>
+                    </li> 
+                    -->
                     <li class="navigation">
                         <a href="lower_house/motions" name="/lower_house/motions">
                             <i18n:text key="motions">motions(nt)</i18n:text>
@@ -1217,9 +1719,16 @@
                             <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
                         </a>
                     </li>
+                    <!--
                     <li class="navigation">
                         <a href="lower_house/agendaitems" name="/lower_house/agendaitems">
                             <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
+                        </a>
+                    </li>
+                    -->
+                    <li class="navigation">
+                        <a href="lower_house/otherdocuments" name="/lower_house/otherdocuments">
+                            <i18n:text key="otherdocuments">other documents(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
@@ -1254,10 +1763,17 @@
                         </a>
                     </li>
                     <li class="navigation">
+                        <a href="higher_house/petitions" name="/higher_house/petitions">
+                            <i18n:text key="petitions">petitions(nt)</i18n:text>
+                        </a>
+                    </li> 
+                    <!--
+                    <li class="navigation">
                         <a href="higher_house/questions" name="/higher_house/questions">
                             <i18n:text key="questions">questions(nt)</i18n:text>
                         </a>
-                    </li>
+                    </li> 
+                    -->
                     <li class="navigation">
                         <a href="higher_house/motions" name="/higher_house/motions">
                             <i18n:text key="motions">motions(nt)</i18n:text>
@@ -1268,9 +1784,16 @@
                             <i18n:text key="tableddocuments">tabled documents(nt)</i18n:text>
                         </a>
                     </li>
+                    <!--
                     <li class="navigation">
                         <a href="higher_house/agendaitems" name="/higher_house/agendaitems">
                             <i18n:text key="agendaitems">agenda items(nt)</i18n:text>
+                        </a>
+                    </li>
+                    -->
+                    <li class="navigation">
+                        <a href="higher_house/otherdocuments" name="/higher_house/otherdocuments">
+                            <i18n:text key="otherdocuments">other documents(nt)</i18n:text>
                         </a>
                     </li>
                     <li class="navigation">
@@ -1511,6 +2034,7 @@
                 <xsl>xsl/event.xsl</xsl>
             </view>
         </views>
+        <!--
         <views name="Question">
             <view id="listing" path="questions" tag="listing">
                 <template>xml/questions.xml</template>
@@ -1596,6 +2120,181 @@
                 <xsl>xsl/response.xsl</xsl>
             </view>
         </views>
+        -->
+        <views name="Petition">
+            <view id="listing" path="petitions" tag="listing">
+                <template>xml/questions.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="rss" path="petitions/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
+            <view id="text" path="petition-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/question.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="petition-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="petition-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/events.xsl</xsl>
+            </view>
+            <view check-for="[parent::bu:attachments/child::node()[bu:type/bu:value eq 'event']]" id="attachments" path="petition-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="petition-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="question-votes" tag="tab">
+                <title>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()[bu:type/bu:value eq 'event_response']]" id="responses" path="petition-responses" tag="tab">
+                <title>
+                    <i18n:text key="tab-responses">responses(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/responses.xsl</xsl>
+            </view>
+            <view id="metadata" path="petition-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="petition-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/version.xsl</xsl>
+            </view>
+            <view path="petition-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+            <view path="petition-event">
+                <template>xml/question.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="petition-eventresponse">
+                <template>xml/question.xml</template>
+                <xsl>xsl/response.xsl</xsl>
+            </view>
+        </views>
+        
+        <!-- !+NASSNIG COMMUNICATION -->
+        <views name="Communication">
+            <view id="listing" path="communications" tag="listing">
+                <template>xml/questions.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="rss" path="communications/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
+            <view id="text" path="communication-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/question.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="communication-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="communication-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/events.xsl</xsl>
+            </view>
+            <view check-for="[parent::bu:attachments/child::node()[bu:type/bu:value eq 'event']]" id="attachments" path="communication-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="communication-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="question-votes" tag="tab">
+                <title>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()[bu:type/bu:value eq 'event_response']]" id="responses" path="communication-responses" tag="tab">
+                <title>
+                    <i18n:text key="tab-responses">responses(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/responses.xsl</xsl>
+            </view>
+            <view id="metadata" path="communication-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="communication-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/version.xsl</xsl>
+            </view>
+            <view path="communication-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+            <view path="communication-event">
+                <template>xml/question.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+            <view path="communication-eventresponse">
+                <template>xml/question.xml</template>
+                <xsl>xsl/response.xsl</xsl>
+            </view>
+        </views>
+        
+        <!-- !+NASSNIG END COMMUNICATON -->
         <views name="Motion">
             <view id="listing" path="motions" tag="listing">
                 <template>xml/motions.xml</template>
@@ -1819,6 +2518,80 @@
                 <xsl>xsl/event.xsl</xsl>
             </view>
         </views>
+        <views name="OtherDocument">
+            <view id="listing" path="otherdocuments" tag="listing">
+                <template>xml/bills.xml</template>
+                <xsl>xsl/legislativeitem-listing.xsl</xsl>
+            </view>
+            <view id="rss" path="otherdocuments/rss" tag="listing">
+                <template/>
+                <xsl/>
+            </view>
+            <view id="text" path="otherdocument-text" tag="tab">
+                <title>
+                    <i18n:text key="tab-text">text(nt)</i18n:text>
+                </title>
+                <template>xml/question.xml</template>
+                <xsl>xsl/question.xsl</xsl>
+            </view>
+            <view check-for="[bu:changes/child::node()]" id="timeline" path="otherdocument-timeline" tag="tab">
+                <title>
+                    <i18n:text key="tab-history">history(nt)</i18n:text>
+                </title>
+                <template>xml/changes.xml</template>
+                <xsl>xsl/changes.xsl</xsl>
+            </view>
+            <view check-for="[bu:workflowEvents/child::node()]" id="events" path="otherdocument-events" tag="tab">
+                <title>
+                    <i18n:text key="tab-events">events(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/events.xsl</xsl>
+            </view>
+            <view check-for="[parent::node()/bu:attachments/child::node()]" id="attachments" path="otherdocument-documents" tag="tab">
+                <title>
+                    <i18n:text key="tab-documents">documents(nt)</i18n:text>
+                </title>
+                <template>xml/documents.xml</template>
+                <xsl>xsl/documents.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:discussions/bu:discussion" id="minutes" path="otherdocument-minutes" tag="tab">
+                <title>
+                    <i18n:text key="Minutes">minutes(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/minutes.xsl</xsl>
+            </view>
+            <view check-for="global|let $val := $docitem/bu:document/@internal-uri return @COLLECTION/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[bu:sourceItem/bu:refersTo[@href eq $val]]/bu:votes/bu:vote" id="votes" path="otherdocument-votes" tag="tab">
+                <title>
+                    <i18n:text key="tab-votes">votes(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/votes.xsl</xsl>
+            </view>
+            <view id="metadata" path="otherdocument-metadata" tag="tab">
+                <title>
+                    <i18n:text key="tab-metadata">metadata(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/metadata.xsl</xsl>
+            </view>
+            <view check-for="[bu:versions/child::node()]" id="versions" path="otherdocument-versions" tag="tab">
+                <title>
+                    <i18n:text key="versions">versions(nt)</i18n:text>
+                </title>
+                <template>xml/bill.xml</template>
+                <xsl>xsl/version.xsl</xsl>
+            </view>
+            <view path="otherdocument-attachment">
+                <template>xml/documents.xml</template>
+                <xsl>xsl/attachment.xsl</xsl>
+            </view>
+            <view path="otherdocument-event">
+                <template>xml/bill.xml</template>
+                <xsl>xsl/event.xsl</xsl>
+            </view>
+        </views>
         <views name="Report">
             <view id="listing" path="publications" tag="listing">
                 <template>xml/legislativeitem-generic.xml</template>
@@ -1868,6 +2641,13 @@
                 </title>
                 <template>xml/member.xml</template>
                 <xsl>xsl/parl-activities.xsl</xsl>
+            </view>
+            <view id="communications" path="member-communications" tag="tab">
+                <title>
+                    <i18n:text key="tab-communications">communications(nt)</i18n:text>
+                </title>
+                <template>xml/member.xml</template>
+                <xsl>xsl/communications.xsl</xsl>
             </view>
             <view id="contacts" path="member-contacts" tag="tab">
                 <title>
@@ -1959,6 +2739,50 @@
                 <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
             </acl>
         </doctype>
+        <doctype category="document" name="Petition">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="Communication">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        
+        <!--
         <doctype category="document" name="Question">
             <orderbys>
                 <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
@@ -1980,6 +2804,7 @@
                 <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
             </acl>
         </doctype>
+        -->
         <doctype category="document" name="Motion">
             <orderbys>
                 <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
@@ -2002,6 +2827,27 @@
             </acl>
         </doctype>
         <doctype category="document" name="TabledDocument">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="ascending" value="sub_date_oldest">submission date [oldest]</orderby>
+                <orderby field="bu:document/bu:audits/bu:audit[bu:status/bu:value eq 'submitted'][last()]/bu:statusDate" order="descending" value="sub_date_newest">submission date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin default="true" field="." name="all" value="all">Entire Document</searchin>
+                <searchin field="bu:document/bu:shortTitle" name="f_t" value="title">Title</searchin>
+                <searchin field="bu:document/bu:body" name="f_b" value="body">Body</searchin>
+                <searchin field="bu:document/bu:registryNumber" name="f_d" value="docno">Registry Number</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag/bu:value,'terminal'))</listingfilter>
+                <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag/bu:value,'terminal')</listingfilter>
+            </listingfilters>
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="document" name="OtherDocument">
             <orderbys>
                 <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
                 <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>

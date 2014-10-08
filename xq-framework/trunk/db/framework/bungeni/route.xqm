@@ -57,6 +57,7 @@ declare function rou:get-home($CONTROLLER-DOC as node()) {
     						 )   
 };
 
+
 declare function rou:get-whatson($CONTROLLER-DOC as node()) {
 
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
@@ -91,6 +92,7 @@ declare function rou:get-whatson($CONTROLLER-DOC as node()) {
         )
 
 };
+
 
 declare function rou:group($CONTROLLER-DOC as node()) {
 
@@ -327,6 +329,34 @@ declare function rou:member-parlactivities($CONTROLLER-DOC as node()) {
            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl) 
         )
 };
+
+declare function rou:member-communications($CONTROLLER-DOC as node()) {
+
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)) 
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-communications("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-repl := document {
+    					template:copy-and-replace(
+    					   $CONTROLLER-DOC/exist-cont, 
+    					   fw:app-tmpl($parts/template)/xh:div, 
+    					   $act-entries-tmpl
+    					)
+    				 }  
+    return 
+        template:process-tmpl(
+    	   $CONTROLLER-DOC/rel-path, 
+    	   $CONTROLLER-DOC/exist-cont, 
+    	   $config:DEFAULT-TEMPLATE,
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl) 
+        )
+};
+
+
 
 declare function rou:member-contacts($CONTROLLER-DOC as node()) {
 
@@ -661,9 +691,21 @@ declare function rou:get-bills($CONTROLLER-DOC as node()) {
     rou:listing-documentitem($CONTROLLER-DOC, "Bill")
 };
 
+
+declare function rou:get-petitions($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "Petition")
+};
+
+declare function rou:get-other-documents($CONTROLLER-DOC as node()) {
+    rou:listing-documentitem($CONTROLLER-DOC, "OtherDocument")
+};
+
+
+(:
 declare function rou:get-questions($CONTROLLER-DOC as node()) {
     rou:listing-documentitem($CONTROLLER-DOC, "Question")
 };
+:)
 
 declare function rou:get-motions($CONTROLLER-DOC as node()) {
     rou:listing-documentitem($CONTROLLER-DOC, "Motion")

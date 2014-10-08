@@ -104,7 +104,7 @@
             <a href="{$chamber}/member?uri={bu:person/@href}">
                 <xsl:value-of select="bu:person/@showAs"/>
             </a>
-            <div class="struct-ib">/ <xsl:value-of select="bu:designations/bu:designation/bu:titleName"/>
+            <div class="struct-ib">/ <xsl:value-of select="bu:memberElectionType/bu:value"/>
             </div>
             <div class="struct-ib">/ <i18n:text key="member-status">
                     <xsl:value-of select="bu:activeStatus/bu:value"/>
@@ -112,12 +112,18 @@
             </div>
             <span class="tgl-pad-right">▼</span>
             <div class="doc-toggle">
-                <div style="min-height:110px;">
+                <div style="min-height:60px;">
                     <div class="list-inline">
                         <div class="inline-label">
                             <i18n:text key="date-start">start date(nt)</i18n:text>:
                         </div>
                         <xsl:value-of select="format-date(xs:date(bu:startDate),$date-format,'en',(),())"/>
+                    </div>
+                    <div class="list-inline">
+                        <div class="inline-label">
+                            <i18n:text key="date-elected">elected date(nt)</i18n:text>:
+                        </div>
+                        <xsl:value-of select="format-date(xs:date(bu:electionDate),$date-format,'en',(),())"/>
                     </div>
                     <xsl:if test="bu:endDate">
                         <div class="list-inline">
@@ -127,12 +133,14 @@
                             <xsl:value-of select="format-date(xs:date(bu:endDate),$date-format,'en',(),())"/>
                         </div>
                     </xsl:if>
-                    <div class="list-inline">
-                        <div class="inline-label">
-                            <i18n:text key="notes">notes(nt)</i18n:text>:
+                    <xsl:if test="string-length(bu:notes) != 0">
+                        <div class="list-inline">
+                            <div class="inline-label">
+                                <i18n:text key="notes">notes(nt)</i18n:text>:
                         </div>
-                        <xsl:value-of select="substring(bu:notes,0,360)"/>...
+                            <xsl:value-of select="substring(bu:notes,0,360)"/>...
                     </div>
+                    </xsl:if>
                 </div>
                 <div class="clear"/>
             </div>

@@ -3515,12 +3515,15 @@ declare function bun:get-parl-committee(
     (: !+FIX_THIS , !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
+    
     let $doc := document {
                     let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri)=$docid]/ancestor::bu:ontology
                     return
                         (: $parts/parent::node() returns all tabs of this doctype :)
                         bun:get-ref-comm-members($match, $parts/parent::node())   
                 }     
+    (:let $ret := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri)=$docid]/ancestor::bu:ontology
+    return <xml>{$ret}<parts>{$parts}</parts></xml>:)
     return
         transform:transform($doc, $stylesheet, 
             <parameters>

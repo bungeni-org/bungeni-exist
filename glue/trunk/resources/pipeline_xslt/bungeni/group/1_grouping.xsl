@@ -78,11 +78,20 @@
                     <xsl:variable name="legislature-uid" select="concat(
                         $legislature-type-name, '.', $legislature-identifier
                         )" />
-                    <xsl:variable name="chamber-uid" select="concat(
-                        $legislature-uid, '-', 
-                        $parliament-type-name, '.',$parliament-identifier
-                        )" />
-                    
+                    <xsl:variable name="chamber-uid">
+                        <xsl:choose>
+                            <xsl:when test="$is_in_legislature eq 'true'">
+                                <xsl:value-of select="$legislature-uid" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat(
+                                    $legislature-uid, '-', 
+                                    $parliament-type-name, '.',$parliament-identifier
+                                    )" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                 
                     <xsl:choose>
                         <xsl:when test="$group-element-name eq 'legislature'">
                             <xsl:value-of select="$legislature-uid" />    

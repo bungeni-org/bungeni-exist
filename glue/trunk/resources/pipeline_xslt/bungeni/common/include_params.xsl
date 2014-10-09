@@ -47,6 +47,17 @@
         <xsl:value-of select="/contenttype/field[@name='origin_chamber']" />    
     </xsl:variable>
     
+    <xsl:variable name="is_in_legislature">
+        <xsl:choose>
+            <xsl:when test="/contenttype/parent_group/field[@name='type'][. eq 'legislature']">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>false</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    
     <xsl:variable name="current-parliament" 
         select="$parliament-info/parliaments/parliament[@id eq $origin-parliament]" />
     
@@ -86,10 +97,17 @@
     </xsl:variable>
     
     <xsl:variable name="parliament-full-uri">
-        <xsl:value-of select="concat(
-            $legislature-full-uri, 
-            $parliament-uri
-            )" />
+       <xsl:choose>
+           <xsl:when test="$is_in_legislature eq 'true'">
+               <xsl:value-of select="$legislature-full-uri" />
+           </xsl:when>
+           <xsl:otherwise>
+               <xsl:value-of select="concat(
+                   $legislature-full-uri, 
+                   $parliament-uri
+                   )" />
+           </xsl:otherwise>
+       </xsl:choose> 
     </xsl:variable>
     
     <xsl:variable name="for-parliament">

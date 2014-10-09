@@ -28,6 +28,12 @@
    <pipeline for="senate_motion" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="motion" basetype="doc" />
    <pipeline for="senate_question" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="question" basetype="doc" />
    <pipeline for="senate_tabled_document" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="tabled_document" basetype="doc" />
+   <pipeline for="senate_petition" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="petition" basetype="doc" />
+   <pipeline for="senate_matter_of_privileges" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="senate_matter_of_urgency" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="senate_personal_explanation" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="senate_message_from_presidency" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="other_document" basetype="doc" />
+   <pipeline for="senate_communication" pipeline="configfiles/configs/config_bungeni_parliamentaryitem.xml" archetype="communication" basetype="doc" />
    <pipeline for="senate_event" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
    <pipeline for="senate_event_response" pipeline="configfiles/configs/config_bungeni_event.xml" archetype="event" basetype="event" />
    <pipeline for="office" pipeline="configfiles/configs/config_bungeni_group.xml" archetype="" basetype="group" />

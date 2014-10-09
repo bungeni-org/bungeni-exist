@@ -28,6 +28,12 @@
    <map from="senate_motion" uri-name="Motion" element-name="motion" />
    <map from="senate_question" uri-name="Question" element-name="question" />
    <map from="senate_tabled_document" uri-name="TabledDocument" element-name="tabledDocument" />
+   <map from="senate_petition" uri-name="Petition" element-name="petition" />
+   <map from="senate_matter_of_privileges" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="senate_matter_of_urgency" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="senate_personal_explanation" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="senate_message_from_presidency" uri-name="OtherDocument" element-name="otherDocument" />
+   <map from="senate_communication" uri-name="Communication" element-name="communication" />
    <map from="assembly_event" uri-name="AssemblyEvent" element-name="assemblyEvent" />
    <map from="assembly_event_response" uri-name="AssemblyEventResponse" element-name="assemblyEventResponse" />
    <map from="senate_event" uri-name="SenateEvent" element-name="senateEvent" />

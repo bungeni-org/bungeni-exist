@@ -276,11 +276,12 @@ def param_parl_info(cfg, params):
         )
     li_parl_params.append(
            ("<countryCode>%(country_code)s</countryCode>"  
-            "<legislature>" 
+            "<parliament id=\"0\">" 
             "  <identifier>%(identifier)s</identifier>"
             "  <startDate>%(start_date)s</startDate>" 
             "  <electionDate>%(election_date)s</electionDate>" 
-            "</legislature>")% 
+            "  <type displayAs=\"National Assembly\">nat_assembly</type>"
+            "</parliament>")% 
             {
             "country_code" : linfo.get_country_code(),
             "identifier" : linfo.get_legislature_identifier(),

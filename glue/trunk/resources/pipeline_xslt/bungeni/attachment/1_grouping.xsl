@@ -107,7 +107,7 @@
                     <xsl:value-of select="concat(
                         $legislature-type-name, '.', $legislature-identifier, 
                         '-', 
-                        $parliament-type-name, '.', $parliament-id, 
+                        $parliament-type-name, '.', $parliament-identifier, 
                         '-',
                         $head-type-uri-name, '.', $head-item-internal-id,
                         '-',

@@ -13,7 +13,7 @@
         <xsl:value-of select="$parliament-info/parliaments/countryCode" />
     </xsl:variable>
    
-    <xsl:variable name="legislature" select="$parliament-info/parliaments/legislature" />
+    <xsl:variable name="legislature" select="$parliament-info/parliaments/parliament[@id = '0']" />
     
     <xsl:variable name="legislature-identifier">
         <xsl:value-of select="$legislature/identifier" />
@@ -70,7 +70,7 @@
                 <xsl:value-of select="$principal-name" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$current-parliament/@id" />
+                <xsl:value-of select="$current-parliament/identifier" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>

@@ -74,7 +74,7 @@
                     <xsl:value-of select="concat(
                         $legislature-type-name, '.', $legislature-identifier, 
                         '-', 
-                        $parliament-type-name, '.', $parliament-id, 
+                        $parliament-type-name, '.', $parliament-identifier, 
                         '-',
                         $head-type-uri-name, '.', $head-item-internal-id,
                         '-',
@@ -91,7 +91,7 @@
                 
                 <xsl:call-template name="incl_origin">
                     <xsl:with-param name="parl-id" select="$parliament-id" />
-                    <xsl:with-param name="parl-identifier" select="$parliament-identifier" />
+                    <xsl:with-param name="parl-identifier" select="$parliament-id" />
                 </xsl:call-template>
 
                 <docType isA="TLCTerm">

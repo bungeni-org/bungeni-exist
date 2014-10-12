@@ -34,13 +34,7 @@
         <route href="/nat_assembly/committees">
             <title>Committees</title>
             <navigation>/nat_assembly/committees</navigation>
-            <action>rou:get-home()</action>
-        </route>
-        <route href="/nat_assembly/joint_committees">
-            <title>Joint Committees</title>
-            <navigation>/nat_assembly/committees</navigation>
-            <subnavigation>joint_committees</subnavigation>
-            <action>rou:get-home()</action>
+            <action>rou:get-jointcommittees</action>
         </route>
         <route href="/lower_house/business">
             <title>Business</title>
@@ -166,11 +160,13 @@
             <title>Business | Committees </title>
             <navigation>/lower_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:get-committees</action>
         </route>
         <route href="/higher_house/committees">
             <title>Business | Committees </title>
             <navigation>/higher_house/business</navigation>
             <subnavigation>committees</subnavigation>
+            <action>rou:get-committees</action>
         </route>
         <route href="/lower_house/committee-text">
             <title>Business | Committee's Profile</title>
@@ -247,6 +243,12 @@
             <subnavigation>joint_committees</subnavigation>
             <action>rou:group</action>
         </route>
+        <route href="/nat_assembly/jointcommittee-members">
+            <title>Business | Joint Committee Profile</title>
+            <navigation>/nat_assembly/committees</navigation>
+            <subnavigation>committees</subnavigation>
+            <action>rou:get-jointcommittee-members</action>
+        </route>
         
         <!-- !+NASSNIG -->
         <route href="/lower_house/politicalgroup-text">
@@ -265,21 +267,25 @@
             <title>Business | Political Group's Members</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
+            <action>rou:get-politicalgroup-members</action>
         </route>
         <route href="/higher_house/politicalgroup-members">
             <title>Business | Political Group's Members</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
+            <action>rou:get-politicalgroup-members</action>
         </route>
         <route href="/lower_house/politicalgroup-contacts">
             <title>Business | Political Group's Staff</title>
             <navigation>/lower_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
+            <action>rou:get-politicalgroup-contacts</action>
         </route>
         <route href="/higher_house/politicalgroup-contacts">
             <title>Business | Political Group's Staff</title>
             <navigation>/higher_house/members</navigation>
             <subnavigation>politicalgroups</subnavigation>
+            <action>rou:get-politicalgroup-contacts</action>
         </route>
         <route href="/lower_house/government-text">
             <title>Business | Government's Profile</title>
@@ -1645,6 +1651,11 @@
             <navigation>/higher_house/popout</navigation>
             <action>rou:show-event-popout</action>
         </route>
+        <route href="/member/xcard">
+            <title/>
+            <navigation/>
+            <action>rou:get-xcard</action>
+        </route>
     </routes>
     <menugroups>
         <menu for="/" name="mainnav">
@@ -1701,7 +1712,7 @@
             <div xmlns="http://www.w3.org/1999/xhtml" class="submenu" id="subnav">
                 <ul id="portal-personaltools">
                     <li>
-                        <a href="nat_assembly/joint_committees" name="nat_jointcommittees">
+                        <a href="nat_assembly/committees" name="nat_jointcommittees">
                             <i18n:text key="joint_committees">what's on(nt)</i18n:text>
                         </a>
                     </li>
@@ -1972,23 +1983,32 @@
             </view>
         </views>
         <views name="JointCommittee">
-            <view id="listing" path="joint_committees" tag="listing">
+            <view id="listing" path="committees" tag="listing">
                 <template>xml/committees.xml</template>
-                <xsl>xsl/politicalgroups.xsl</xsl>
+                <xsl>xsl/jointcommittees.xsl</xsl>
             </view>
             <view id="profile" path="jointcommittee-text" tag="tab">
                 <title>
                     <i18n:text key="tab-profile">profile(nt)</i18n:text>
                 </title>
                 <template>xml/committee.xml</template>
-                <xsl>xsl/political-group.xsl</xsl>
+                <xsl>xsl/committee.xsl</xsl>
             </view>
+            <!--
             <view id="members" path="jointcommittee-members" tag="tab">
                 <title>
                     <i18n:text key="tab-members">members(nt)</i18n:text>
                 </title>
                 <template>xml/committee.xml</template>
                 <xsl>xsl/poli-members.xsl</xsl>
+            </view>
+             -->
+            <view id="members" check-for="[bu:member/bu:type[bu:value eq 'joint_committee_member']/child::node()]" path="jointcommittee-members" tag="tab">
+                <title>
+                    <i18n:text key="tab-members">members(nt)</i18n:text>
+                </title>
+                <template>xml/committee.xml</template>
+                <xsl>xsl/jointcommittee-members.xsl</xsl>
             </view>
             <view id="contacts" path="jointcommittee-contacts" tag="tab">
                 <title>
@@ -2958,6 +2978,27 @@
             </acl>
         </doctype>
         <doctype category="document" name="Attachment">
+            <acl name="public-view">
+                <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
+            </acl>
+        </doctype>
+        <doctype category="group" name="JointCommittee">
+            <orderbys>
+                <orderby field="bu:document/bu:statusDate" order="ascending" value="st_date_oldest">status date [oldest]</orderby>
+                <orderby default="true" field="bu:document/bu:statusDate" order="descending" value="st_date_newest">status date [newest]</orderby>
+            </orderbys>
+            <searchins>
+                <searchin field="." name="all" value="all">Entire Document</searchin>
+                <searchin default="true" field="bu:group/bu:fullName" name="fn" value="fname">Full
+                    Name</searchin>
+                <searchin field="bu:group/bu:shortName" name="sn" value="sname">Short
+                    Name</searchin>
+                <searchin field="bu:group/bu:description" name="ds" value="desc">Description</searchin>
+            </searchins>
+            <listingfilters>
+                <listingfilter id="active" name="active">contains(bu:status/bu:value,'active')</listingfilter>
+                <listingfilter id="dissolved" name="dissolved">contains(bu:status/bu:value,'dissolved')</listingfilter>
+            </listingfilters>
             <acl name="public-view">
                 <bu:control name="View" role="bungeni.Anonymous" setting="Allow"/>
             </acl>

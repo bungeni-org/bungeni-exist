@@ -2965,6 +2965,7 @@ declare function bun:get-politicalgroups(
            )     
 };
 
+
 (:~
 :   Retieves all group documents of type politicalgroups
 : @param offset
@@ -2990,8 +2991,13 @@ declare function bun:get-jointcommittees(
     let $stylesheet := cmn:get-xslt($parts/view/xsl)    
     
     let $tab := xs:string(request:get-parameter("tab","active")) 
-    let $listings-filter := cmn:get-listings-config("JointCommittees")    
-    let $coll := bun:list-groupitems-with-tabs($parliament/identifier/text(),$parts/doctype, $tab)    
+    let $listings-filter := cmn:get-listings-config("JointCommittee")    
+    let $coll := bun:list-groupitems-with-tabs(
+        $parliament/identifier/text(),
+        $parts/doctype, 
+        $tab
+    )
+        
     
     (: 
         The line below is documented in bun:get-documentitems()
@@ -3009,14 +3015,19 @@ declare function bun:get-jointcommittees(
         {
             for $listing in $listings-filter
                 return 
-                    <tag id="{$listing/@id}" name="{$listing/@name}" count="{ count(bun:list-groupitems-with-tabs($parliament/identifier/text(),$parts/doctype, $listing/@id)) }">{data($listing/@name)}</tag>
+                    <tag id="{$listing/@id}" 
+                        name="{$listing/@name}" 
+                        count="{ count(bun:list-groupitems-with-tabs($parliament/identifier/text(),$parts/doctype, $listing/@id)) }">
+                        {data($listing/@name)}
+                    </tag>
                     
          }
          </tags>         
         <currentView>{$parts/current-view}</currentView>
         <chamber>{$parliament/type/text()}</chamber>
-        <documentType>political-group</documentType>
-        <listingUrlPrefix>political-group/text</listingUrlPrefix>      
+        <documentType>jointcommittee</documentType>
+        <list>{$listings-filter}</list>
+        <listingUrlPrefix>jointcommittee-text</listingUrlPrefix>      
         <fullQryStr>{local:generate-qry-str($getqrystr)}</fullQryStr>
         <offset>{$offset}</offset>
         <limit>{$limit}</limit>
@@ -3070,7 +3081,7 @@ declare function bun:get-jointcommittees(
                 <param name="chamber" value="{$parliament/type/text()}" />
                 <param name="chamber-id" value="{$parliament/identifier/text()}" />                   
             </parameters>
-           )     
+           )   
 };
 
 
@@ -3515,22 +3526,19 @@ declare function bun:get-parl-committee(
     (: !+FIX_THIS , !+ACL_NEW_API
     let $acl-filter := cmn:get-acl-filter($acl)
     :)
-    
-    let $doc := document {
-                    let $match := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri)=$docid]/ancestor::bu:ontology
-                    return
-                        (: $parts/parent::node() returns all tabs of this doctype :)
-                        bun:get-ref-comm-members($match, $parts/parent::node())   
-                }     
-    (:let $ret := collection(cmn:get-lex-db())/bu:ontology/bu:group[data(@uri)=$docid]/ancestor::bu:ontology
-    return <xml>{$ret}<parts>{$parts}</parts></xml>:)
-    return
+    let $match := collection(cmn:get-lex-db())/
+                            bu:ontology/bu:group[
+                                data(@uri)=$docid
+                            ]/ancestor::bu:ontology
+    let $doc := bun:get-ref-comm-members($match, $parts/parent::node())
+    return 
         transform:transform($doc, $stylesheet, 
             <parameters>
                 <param name="mem-status" value="{$mem-status}" />
                 <param name="chamber" value="{$parliament/type/text()}" />
                 <param name="chamber-id" value="{$parliament/identifier/text()}" />                                                   
             </parameters>)
+
 };
 
 declare function bun:get-ref-comm-members($docitem as node(), $docviews as node()) {

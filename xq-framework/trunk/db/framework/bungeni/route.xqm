@@ -116,6 +116,44 @@ declare function rou:group($CONTROLLER-DOC as node()) {
          )
 };
 
+
+declare function rou:get-jointcommittee-members($CONTROLLER-DOC as node()) {
+
+    let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
+    let $mem-status := xs:string(request:get-parameter("status","current"))
+    let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
+    let $act-entries-tmpl :=  bun:get-parl-committee(
+            "public-view",
+            $docnumber,
+            $mem-status,
+            $parts,
+            $CONTROLLER-DOC/parliament
+            )
+    let $act-entries-repl:= document {
+        					template:copy-and-replace(
+        					   $CONTROLLER-DOC/exist-cont, 
+        					   fw:app-tmpl($parts/template)/xh:div, 
+        					   $act-entries-tmpl
+        					)
+        				 } 
+    return 
+        template:process-tmpl(
+    	   $CONTROLLER-DOC/rel-path, 
+    	   $CONTROLLER-DOC/exist-cont, 
+    	   $config:DEFAULT-TEMPLATE,
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{
+                    data($act-entries-tmpl//xh:div[@id='title-holder'])
+                }</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+        )
+};
+
+
+
 declare function rou:committee($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
@@ -123,7 +161,11 @@ declare function rou:committee($CONTROLLER-DOC as node()) {
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
     let $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$mem-status,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl:= document {
-        					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
+        					template:copy-and-replace(
+        					   $CONTROLLER-DOC/exist-cont, 
+        					   fw:app-tmpl($parts/template)/xh:div, 
+        					   $act-entries-tmpl
+        					 )
         				 } 
     return 
         template:process-tmpl(
@@ -137,6 +179,7 @@ declare function rou:committee($CONTROLLER-DOC as node()) {
             </route-override>, 
            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
         )
+    
 };
 
 declare function rou:get-members($CONTROLLER-DOC as node()) {
@@ -615,16 +658,138 @@ declare function rou:show-event-popout($CONTROLLER-DOC as node()) {
 };
 
 declare function rou:get-politicalgroups($CONTROLLER-DOC as node()) {
+    let $type-info := local:get-type-info(
+        "PoliticalGroup",
+        "profile",
+        "politicalgroup",
+        "xml/listing-search-form.xml",
+        "bun:get-politicalgroups"
+        ),
+        $ret := rou:get-generic-groups(
+            $CONTROLLER-DOC,
+            $type-info
+            )
+    return $ret
+};
+
+declare function rou:get-politicalgroup-members($CONTROLLER-DOC as node()){
+    let 
+        $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+        $mem-status := xs:string(request:get-parameter("status","current")),
+        $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path),
+        $act-entries-tmpl :=  bun:get-group-members(
+                "public-view",
+                $docnumber,
+                $mem-status,
+                $parts,
+                $CONTROLLER-DOC/parliament
+                ),
+        $act-entries-repl:= document {
+        					template:copy-and-replace(
+        					   $CONTROLLER-DOC/exist-cont, 
+        					   fw:app-tmpl($parts/template)/xh:div, 
+        					   $act-entries-tmpl
+        			         )
+        				 } 
+     return 
+        template:process-tmpl(
+           $CONTROLLER-DOC/rel-path, 
+           $CONTROLLER-DOC/exist-cont, 
+           $config:DEFAULT-TEMPLATE, 
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+         )
+};
+
+declare function rou:get-politicalgroup-contacts($CONTROLLER-DOC as node()){
+  let 
+    $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
+    $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path),
+    $act-entries-tmpl := bun:get-contacts-by-uri(
+        "public-view",
+        "Group",
+        $docnumber,
+        $parts, 
+        $CONTROLLER-DOC/parliament
+        ),
+    $act-entries-repl:= document {
+        template:copy-and-replace(
+            $CONTROLLER-DOC/exist-cont, 
+            fw:app-tmpl($parts/template)/xh:div, 
+            $act-entries-tmpl
+         )
+     } 
+    return 
+     template:process-tmpl(
+           $CONTROLLER-DOC/rel-path, 
+           $CONTROLLER-DOC/exist-cont, 
+           $config:DEFAULT-TEMPLATE, 
+           cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>, 
+           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+      )    
+};
+
+
+declare function rou:get-committees($CONTROLLER-DOC as node()) {
+    let $type-info := local:get-type-info(
+        "Committee",
+        "profile",
+        "committee",
+        "xml/listing-search-form.xml",
+        "bun:get-committees"
+        ),
+        $ret := rou:get-generic-groups(
+            $CONTROLLER-DOC,
+            $type-info
+            )
+    return $ret
+};
+
+declare function rou:get-jointcommittees($CONTROLLER-DOC as node()) {
+    let $type-info := local:get-type-info(
+        "JointCommittee",
+        "profile",
+        "committee",
+        "xml/listing-search-form.xml",
+        "bun:get-jointcommittees"
+        ),
+        $ret := rou:get-generic-groups(
+            $CONTROLLER-DOC,
+            $type-info
+            )
+    return $ret
+};
+
+
+(:
+declare function rou:get-politicalgroups($CONTROLLER-DOC as node()) {
 
     let $qry := xs:string(request:get-parameter("q",''))
     let $sty := xs:string(request:get-parameter("s",$bun:SORT-BY))
     let $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET))
     let $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT))
     let $parts := cmn:get-view-listing-parts('PoliticalGroup','profile')
-    let $act-entries-tmpl :=  bun:get-politicalgroups($CONTROLLER-DOC/exist-res,$CONTROLLER-DOC/parliament,$offset,$limit,$parts,$qry,$sty)
+    let $act-entries-tmpl :=  bun:get-politicalgroups(
+         $CONTROLLER-DOC/exist-res,
+         $CONTROLLER-DOC/parliament,
+         $offset,$limit,
+         $parts,$qry,$sty
+         )
     let $act-entries-repl:= document {
-    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
-    					 } 
+    		template:copy-and-replace(
+    		      $CONTROLLER-DOC/exist-cont, 
+    		      fw:app-tmpl($parts/view/template)/xh:div, 
+    		      $act-entries-tmpl
+    		)
+    } 
     return 
         template:process-tmpl(
     	   $CONTROLLER-DOC/rel-path, 
@@ -634,17 +799,159 @@ declare function rou:get-politicalgroups($CONTROLLER-DOC as node()) {
             <route-override>
                 {$CONTROLLER-DOC/parliament}
             </route-override>,
-            (cmn:build-nav-node($CONTROLLER-DOC,
-                                (template:merge($CONTROLLER-DOC/exist-path, 
-                                                $act-entries-repl, 
-                                                bun:get-listing-search-context($CONTROLLER-DOC, "xml/listing-search-form.xml",'politicalgroup'))
-                                                )
-                                 )
-             )
+            (
+                cmn:build-nav-node(
+                    $CONTROLLER-DOC,
+                    (
+                        template:merge(
+                            $CONTROLLER-DOC/exist-path, 
+                            $act-entries-repl, 
+                            bun:get-listing-search-context(
+                                $CONTROLLER-DOC, 
+                                "xml/listing-search-form.xml",
+                                'politicalgroup'
+                            )
+                        )
+                    )
+               )
+            )
         )
 };
 
+:)
 
+
+(:
+Used by generic API to pass non-generic information (parametrized)
+:)
+declare function local:get-type-info(
+        $type-name as xs:string,
+        $listing-part as xs:string,
+        $search-context-name as xs:string,
+        $search-context-template as xs:string,
+        $inner-api as xs:string
+        ){
+        let $ret :=
+                <type name="{$type-name}">
+                   <listing-part>{$listing-part}</listing-part>
+                   <search-context name="{$search-context-name}">
+                        <template>{$search-context-template}</template>
+                   </search-context>
+                   <inner-api>{$inner-api}</inner-api>
+                </type>
+         return $ret
+};
+
+
+(:
+: Replaced by generic API
+:
+declare function rou:get-committees($CONTROLLER-DOC as node()) {
+
+    let 
+        $qry := xs:string(request:get-parameter("q",'')),
+        $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+        $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+        $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+        $parts := cmn:get-view-listing-parts('Committee','profile'),
+        $act-entries-tmpl :=  bun:get-committees(
+            $CONTROLLER-DOC/exist-res,
+            $CONTROLLER-DOC/parliament,
+            $offset,$limit,
+            $parts,$qry,$sty
+            ),
+        $act-entries-repl:= document {
+        					template:copy-and-replace(
+        					   $CONTROLLER-DOC/exist-cont, 
+        					   fw:app-tmpl($parts/view/template)/xh:div, 
+        					   $act-entries-tmpl
+        					)
+        				 } 
+    return 
+        template:process-tmpl(
+            $CONTROLLER-DOC/rel-path, 
+            $CONTROLLER-DOC/exist-cont, 
+            $config:DEFAULT-TEMPLATE,
+            cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>,
+            (
+               cmn:build-nav-node(
+                    $CONTROLLER-DOC,
+                    (
+                        template:merge(
+                            $CONTROLLER-DOC/exist-path, 
+                            $act-entries-repl, 
+                            bun:get-listing-search-context(
+                                $CONTROLLER-DOC,
+                                "xml/listing-search-form.xml",
+                                'committee'
+                                )
+                        )
+                    )
+                )
+            )
+       )
+};
+:)
+
+
+(:
+Generic API for group listings
+:)
+declare function rou:get-generic-groups($CONTROLLER-DOC as node(), $type-info as node()) {
+
+    let 
+        $qry := xs:string(request:get-parameter("q",'')),
+        $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
+        $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
+        $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
+        $parts := cmn:get-view-listing-parts($type-info/@name, $type-info/listing-part),
+        $act-entries-tmpl :=  util:eval($type-info/inner-api || "(" || 
+            '$CONTROLLER-DOC/exist-res,
+            $CONTROLLER-DOC/parliament,
+            $offset,$limit,
+            $parts,$qry,$sty
+            )'),
+        $act-entries-repl:= document {
+        					template:copy-and-replace(
+        					   $CONTROLLER-DOC/exist-cont, 
+        					   fw:app-tmpl($parts/view/template)/xh:div, 
+        					   $act-entries-tmpl
+        					)
+        				 } 
+    return 
+        template:process-tmpl(
+            $CONTROLLER-DOC/rel-path, 
+            $CONTROLLER-DOC/exist-cont, 
+            $config:DEFAULT-TEMPLATE,
+            cmn:get-route($CONTROLLER-DOC/exist-path),
+            <route-override>
+                {$CONTROLLER-DOC/parliament}
+            </route-override>,
+            (
+               cmn:build-nav-node(
+                    $CONTROLLER-DOC,
+                    (
+                        template:merge(
+                            $CONTROLLER-DOC/exist-path, 
+                            $act-entries-repl, 
+                            bun:get-listing-search-context(
+                                $CONTROLLER-DOC,
+                                $type-info/search-context/template,
+                                $type-info/search-context/@name
+                                )
+                        )
+                    )
+                )
+            )
+       )
+
+};
+
+
+(:
 declare function rou:get-jointcommittees($CONTROLLER-DOC as node()) {
 
     let $qry := xs:string(request:get-parameter("q",''))
@@ -652,9 +959,22 @@ declare function rou:get-jointcommittees($CONTROLLER-DOC as node()) {
     let $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET))
     let $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT))
     let $parts := cmn:get-view-listing-parts('JointCommittee','profile')
-    let $act-entries-tmpl :=  bun:get-politicalgroups($CONTROLLER-DOC/exist-res,$CONTROLLER-DOC/parliament,$offset,$limit,$parts,$qry,$sty)
+
+    let $act-entries-tmpl :=  bun:get-jointcommittees(
+                    $CONTROLLER-DOC/exist-res,
+                    $CONTROLLER-DOC/parliament,
+                    $offset,
+                    $limit,
+                    $parts,
+                    $qry,
+                    $sty
+    )
     let $act-entries-repl:= document {
-    						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
+    						template:copy-and-replace(
+    						  $CONTROLLER-DOC/exist-cont, 
+    						  fw:app-tmpl($parts/view/template)/xh:div, 
+    						  $act-entries-tmpl
+    						)
     					 } 
     return 
         template:process-tmpl(
@@ -674,7 +994,7 @@ declare function rou:get-jointcommittees($CONTROLLER-DOC as node()) {
              )
         )
 };
-
+:)
 
 
 declare function rou:get-parliament($CONTROLLER-DOC as node()) {

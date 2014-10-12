@@ -89,27 +89,6 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                     $name := xs:string(request:get-parameter("name",'unnamed')), 
                     $act-entries-tmpl :=  bun:get-image($hash,$name)
                 return $act-entries-tmpl
-        	else if ($CHAMBER-REL-PATH eq "/committees") then 
-                let 
-                    $qry := xs:string(request:get-parameter("q",'')),
-                    $sty := xs:string(request:get-parameter("s",$bun:SORT-BY)),
-                    $offset := xs:integer(request:get-parameter("offset",$bun:OFF-SET)),
-                    $limit := xs:integer(request:get-parameter("limit",$bun:LIMIT)),
-                    $parts := cmn:get-view-listing-parts('Committee','profile'),
-                    $act-entries-tmpl :=  bun:get-committees($CONTROLLER-DOC/exist-res,$PARLIAMENT,$offset,$limit,$parts,$qry,$sty),
-        	        $act-entries-repl:= document {
-        								template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/view/template)/xh:div, $act-entries-tmpl)
-        							 } 
-                return 
-                    template:process-tmpl(
-                        $REL-PATH, 
-                        $EXIST-CONTROLLER, 
-                        $config:DEFAULT-TEMPLATE,
-                        cmn:get-route($EXIST-PATH),
-                        <route-override>
-                            {$PARLIAMENT}
-                        </route-override>,
-                        (cmn:build-nav-node($CONTROLLER-DOC,(template:merge($EXIST-PATH, $act-entries-repl, bun:get-listing-search-context($CONTROLLER-DOC,"xml/listing-search-form.xml",'committee'))))))     
      	    else if ($EXIST-PATH eq "/search-all") then 
             (: ITEMS SEARCH :)     	    
                 let 
@@ -295,15 +274,24 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
         	else if ($EXIST-RESOURCE eq "akn") then
             (: AkomaNtoso XML :)        	
                 rou:get-akn($CONTROLLER-DOC)
-        	else if ($CHAMBER-REL-PATH eq "/member/xcard") then
-            (: xCard XML :)        	
-                rou:get-xcard($CONTROLLER-DOC)    									 
+            (: xCard XML :)
+            (:
+            else if ($CHAMBER-REL-PATH eq "/member/xcard") then
+                rou:get-xcard($CONTROLLER-DOC)
+            :)
+            (:
         	else if ($CHAMBER-REL-PATH eq "/politicalgroup-members" ) then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
                     $mem-status := xs:string(request:get-parameter("status","current")),
                     $parts := cmn:get-view-parts($CHAMBER-REL-PATH),
-                    $act-entries-tmpl :=  bun:get-group-members("public-view",$docnumber,$mem-status,$parts,$PARLIAMENT),
+                    $act-entries-tmpl :=  bun:get-group-members(
+                            "public-view",
+                            $docnumber,
+                            $mem-status,
+                            $parts,
+                            $PARLIAMENT
+                            ),
         	        $act-entries-repl:= document {
         								template:copy-and-replace($EXIST-CONTROLLER, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
         							 } 
@@ -319,6 +307,8 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                         </route-override>, 
         			   cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
         			 )
+            :)
+            (:
         	else if ($CHAMBER-REL-PATH eq "/politicalgroup-contacts" ) then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),
@@ -339,6 +329,7 @@ declare function appcontroller:controller($EXIST-PATH as xs:string,
                         </route-override>, 
                        cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
                      )    
+            :)
         	else if ($CHAMBER-REL-PATH eq "/committee-sittings" ) then 
                 let 
                     $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO)),

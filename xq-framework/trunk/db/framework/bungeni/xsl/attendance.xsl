@@ -17,6 +17,11 @@
     <xsl:param name="serverport"/>
     <xsl:param name="epub"/>
     <xsl:param name="chamber-id"/>
+    <xsl:variable name="root-elem" select="/docmain"/>
+    <xsl:template match="docmain">
+        <xsl:apply-templates/>
+    </xsl:template>
+    <xsl:template match="members"/>
     <xsl:template match="doc">
         <xsl:variable name="doc-type" select="bu:ontology/bu:sitting/bu:docType/bu:value"/>
         <xsl:variable name="doc-uri" select="bu:ontology/bu:sitting/@uri"/>
@@ -47,8 +52,9 @@
                     <xsl:choose>
                         <xsl:when test="bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord">
                             <ul id="list-toggle" class="ls-timeline clear">
+                                <xsl:variable name="membs-var" select="$root-elem/members"/>
                                 <xsl:for-each select="bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord">
-                                    <xsl:sort select="bu:statusDate" order="descending"/>
+                                    <xsl:variable name="member-id" select="bu:memberId"/>
                                     <li>
                                         <div class="struct-ib truncate">
                                             <span class="timeline-action">
@@ -59,8 +65,12 @@
                                                     <xsl:otherwise>
                                                         <xsl:value-of select="bu:attendanceType/bu:value"/>
                                                     </xsl:otherwise>
-                                                </xsl:choose>:</span>
-                                            <xsl:value-of select="concat(bu:member/bu:firstName,' ', bu:member/bu:lastName,', ',bu:member/bu:title)"/>
+                                                </xsl:choose>:&#160;</span>
+                                            <xsl:variable name="membership-match" select="$membs-var/bu:ontology/bu:membership[bu:referenceToUser[bu:userId[. = data($member-id)]]]"/>
+                                            <xsl:variable name="u-match" select="$membership-match/bu:referenceToUser"/>
+                                            <a href="{$chamber}/member?uri={$u-match/bu:refersTo/@href}">
+                                                <xsl:value-of select="concat(                                                   $u-match/bu:firstName,' ',                                                    $u-match/bu:lastName,', ',                                                   $u-match/bu:title, ' (',                                                   $membership-match/bu:party/bu:value, ')'                                                   )"/>
+                                            </a>
                                             &#160;                                 
                                             <xsl:variable name="status">
                                                 <xsl:choose>

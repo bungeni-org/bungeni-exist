@@ -70,7 +70,15 @@
                 <xsl:value-of select="$principal-name" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$current-parliament/identifier" />
+                <xsl:choose>
+                    <xsl:when test="$is_in_legislature eq 'true'">
+                        <!-- this must be in legislature -->
+                        <xsl:value-of select="$parliament-info/parliaments/parliament[@id eq '0']/identifier" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$current-parliament/@id" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -84,10 +92,17 @@
                 <xsl:value-of select="$principal-name" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$current-parliament/identifier" />
+               <xsl:choose>
+                   <xsl:when test="$is_in_legislature eq 'true'">
+                       <xsl:value-of select="$parliament-info/parliaments/parliament[@id eq '0']/identifier" />
+                   </xsl:when>
+                   <xsl:otherwise>
+                       <xsl:value-of select="$current-parliament/identifier" />
+                   </xsl:otherwise>
+               </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:variable>
+    </xsl:variable> 
     
     <xsl:variable name="parliament-uri">
         <xsl:value-of select="concat(

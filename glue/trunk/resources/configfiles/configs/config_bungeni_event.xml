@@ -27,11 +27,11 @@
                 <parameter name="parliament-info" type="xml" />
                 <parameter name="type-mappings" type="xml" />
             </parameters>
-
+		
             <xslt step="1"
                 name="groupingLevel1-common"
                 href="pipeline_xslt/bungeni/event/1_grouping.xsl"/>
-            
+           
             <xslt step="2"
                 name="groupingLevel2-common"
                 href="pipeline_xslt/bungeni/event/2_ontology.xsl"/>
@@ -45,7 +45,7 @@
                 href="pipeline_xslt/bungeni/common/add_bungeniportal_ns.xsl"
                 postproc="#proc-parliamentary-item"
                />
-  
+               
         </input>
 
 

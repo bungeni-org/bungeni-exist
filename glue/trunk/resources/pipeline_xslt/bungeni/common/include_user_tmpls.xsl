@@ -5,18 +5,21 @@
     version="2.0">
     <xsl:import href="include_tmpls.xsl" />
     
-    <xsl:template match="field[@name='active_p'][not(parent::member)]">
+    <xsl:template match="field[@name='active_p']">
         <activeStatus isA="TLCTerm">
             <value type="xs:string">
             <xsl:variable name="field_active" select="." />
             <xsl:choose >
                 <xsl:when test="$field_active eq 'A'">active</xsl:when>
                 <xsl:when test="$field_active eq 'I'">inactive</xsl:when>
-                <xsl:otherwise>deceased</xsl:otherwise>
+                <xsl:when test="$field_active eq 'True'">active</xsl:when>
+                <xsl:otherwise>inactive</xsl:otherwise>
             </xsl:choose>
             </value>
         </activeStatus>
     </xsl:template>
+
+   <!--
 
     <xsl:template match="field[@name='active_p'][parent::member]">
         <activeStatus isA="TLCTerm">
@@ -30,6 +33,8 @@
         </activeStatus>
     </xsl:template>
     
+    -->    
+
     <xsl:template match="field[@name='first_name']">
         <xsl:call-template name="renderStringElement">
             <xsl:with-param name="elementName">

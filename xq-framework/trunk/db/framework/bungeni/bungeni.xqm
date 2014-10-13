@@ -2767,6 +2767,47 @@ declare function bun:get-sitting($acl as xs:string,
     return
         transform:transform($doc, $stylesheet, ())
  };
+ 
+ 
+declare function bun:get-sitting-with-attendance($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $parts as node(), 
+            $parliament as node()?) as element()* {
+    (: stylesheet to transform :)
+    let $stylesheet := cmn:get-xslt($parts/xsl)
+
+    let $identifier := $parliament/identifier/text()
+    let $doc := 
+            (:Returs a Sittings Document :)
+            let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
+                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
+                                            bun:xqy-docitem-perms($acl)))
+            
+            return
+                local:get-sitting-items($match/ancestor::bu:ontology,$parts)   
+     let $members :=
+          <members>
+          {
+          let $origin_id := data($doc/bu:ontology/bu:sitting/bu:origin/bu:identifier/bu:value)
+          for $mem in $doc/bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord
+              return util:eval(
+                         "collection(cmn:get-lex-db())/" ||
+                            "bu:ontology[" ||
+                            "bu:membership[" ||
+                                "bu:origin/bu:identifier/bu:value[ . = $origin_id] and " ||
+                                "bu:referenceToUser/bu:userId[. = data($mem/bu:memberId)]" ||
+                                "]" ||
+                            "]"
+               )     
+           }
+           </members>
+       let $docmain:=
+            <docmain>
+              {$doc}{$members}
+            </docmain>
+        return
+            transform:transform($docmain, $stylesheet, ())            
+};
 
 (:~
 :   Retieves all group documents of type sittings

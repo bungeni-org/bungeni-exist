@@ -159,7 +159,13 @@ declare function rou:committee($CONTROLLER-DOC as node()) {
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
     let $mem-status := xs:string(request:get-parameter("status","current"))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-parl-committee("public-view",$docnumber,$mem-status,$parts,$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-parl-committee(
+        "public-view",
+        $docnumber,
+        $mem-status,
+        $parts,
+        $CONTROLLER-DOC/parliament
+        )
     let $act-entries-repl:= document {
         					template:copy-and-replace(
         					   $CONTROLLER-DOC/exist-cont, 
@@ -174,10 +180,15 @@ declare function rou:committee($CONTROLLER-DOC as node()) {
     	   $config:DEFAULT-TEMPLATE,
            cmn:get-route($CONTROLLER-DOC/exist-path),
             <route-override>
-                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                <xh:title>{
+                    data($act-entries-tmpl//xh:div[@id='title-holder'])
+                }</xh:title>
                 {$CONTROLLER-DOC/parliament}
             </route-override>, 
-           cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
+           cmn:build-nav-node(
+            $CONTROLLER-DOC, 
+            $act-entries-repl
+           )
         )
     
 };
@@ -264,10 +275,29 @@ declare function rou:sitting($CONTROLLER-DOC as node()) {
     
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
-    let $act-entries-tmpl :=  bun:get-sitting("public-view",$docnumber,$parts,$CONTROLLER-DOC/parliament)
+    let $chamber-rel-path := $CONTROLLER-DOC/chamber-rel-path
+    let $act-entries-tmpl :=  
+        if ($chamber-rel-path eq '/sitting-attendance') then 
+            bun:get-sitting-with-attendance(
+             "public-view",
+             $docnumber,
+             $parts,
+             $CONTROLLER-DOC/parliament
+            )
+         else
+            bun:get-sitting(
+             "public-view",
+             $docnumber,
+             $parts,
+             $CONTROLLER-DOC/parliament      
+            )
     let $act-entries-repl:= document {
-        					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
-        				 } 
+        	template:copy-and-replace(
+               	$CONTROLLER-DOC/exist-cont, 
+               	fw:app-tmpl($parts/template)/xh:div, 
+               	$act-entries-tmpl
+            )
+    } 
     return 
         template:process-tmpl(
     	   $CONTROLLER-DOC/rel-path, 
@@ -275,20 +305,32 @@ declare function rou:sitting($CONTROLLER-DOC as node()) {
     	   $config:DEFAULT-TEMPLATE,
            cmn:get-route($CONTROLLER-DOC/exist-path),
             <route-override>
-                <xh:title>{data($act-entries-tmpl//xh:div[@id='title-holder'])}</xh:title>
+                <xh:title>{
+                    data($act-entries-tmpl//xh:div[@id='title-holder'])
+                }</xh:title>
                 {$CONTROLLER-DOC/parliament}
             </route-override>, 
            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
-        )         
+        )     
+    
 };
 
 declare function rou:calendar($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
-    let $act-entries-tmpl :=  bun:get-calendar("public-view",$docnumber,"xsl/calendar.xsl",$CONTROLLER-DOC/parliament)
+    let $act-entries-tmpl :=  bun:get-calendar(
+        "public-view",
+        $docnumber,
+        "xsl/calendar.xsl",
+        $CONTROLLER-DOC/parliament
+    )
     let $act-entries-repl:= document {
-        					template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl("xml/calendar.xml")/xh:div, $act-entries-tmpl)
-        				 } 
+        template:copy-and-replace(
+            $CONTROLLER-DOC/exist-cont, 
+            fw:app-tmpl("xml/calendar.xml")/xh:div, 
+            $act-entries-tmpl
+        )
+    } 
     return 
         template:process-tmpl(
     	   $CONTROLLER-DOC/rel-path, 

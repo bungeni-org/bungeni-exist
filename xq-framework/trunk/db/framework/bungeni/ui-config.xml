@@ -1940,7 +1940,7 @@
                 <template>xml/committee.xml</template>
                 <xsl>xsl/comm-sittings.xsl</xsl>
             </view>
-            <view check-for="[bu:member/bu:type[bu:value eq 'committee_staff']/child::node()]" id="staff" path="committee-staff" tag="tab">
+            <view id="staff" path="committee-staff" check-for="[                     bu:member/bu:type[bu:value eq 'committee_staff']/child::node()                ]" tag="tab">
                 <title>
                     <i18n:text key="tab-staff">staff(nt)</i18n:text>
                 </title>

@@ -31,6 +31,31 @@
             <navigation/>
             <action>rou:get-home</action>
         </route>
+        <route href="/nat_assembly/member">
+            <title>Business | Member of Parliament</title>
+            <navigation>/nat_assembly/members</navigation>
+            <action>rou:member</action>
+        </route>
+        <route href="/nat_assembly/member-officesheld">
+            <title>Business | Offices Held</title>
+            <navigation>/nat_assembly/members</navigation>
+            <action>rou:member-officesheld</action>
+        </route>
+        <route href="/nat_assembly/member-biographical">
+            <title>Business | Member of Parliament</title>
+            <navigation>/nat_assembly/members</navigation>
+            <action>rou:member-biographical</action>
+        </route>
+        <route href="/nat_assembly/member-parlactivities">
+            <title>Business | Member of Parliament</title>
+            <navigation>/nat_assembly/members</navigation>
+            <action>rou:member-parlactivities</action>
+        </route>
+        <route href="/nat_assembly/member-communications">
+            <title>Business | Member of Parliament</title>
+            <navigation>/nat_assembly/members</navigation>
+            <action>rou:member-communications</action>
+        </route>
         <route href="/nat_assembly/committees">
             <title>Committees</title>
             <navigation>/nat_assembly/committees</navigation>
@@ -1651,7 +1676,12 @@
             <navigation>/higher_house/popout</navigation>
             <action>rou:show-event-popout</action>
         </route>
-        <route href="/member/xcard">
+        <route href="/higher_house/member/xcard">
+            <title/>
+            <navigation/>
+            <action>rou:get-xcard</action>
+        </route>
+        <route href="/lower_house/member/xcard">
             <title/>
             <navigation/>
             <action>rou:get-xcard</action>

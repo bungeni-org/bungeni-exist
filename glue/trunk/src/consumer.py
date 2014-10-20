@@ -370,9 +370,7 @@ def exist_running(config_file):
             time.sleep(int(__time_int__))
     return exist_running
 
-
-
-__is_tty__ = sys.stdin.isatty()
+__is_tty__ = True # uncomment when debugging ==> sys.stdin.isatty()
  
 if __is_tty__:
     # running interactively

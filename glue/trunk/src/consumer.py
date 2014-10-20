@@ -274,7 +274,10 @@ def legislature_info_gather(config_file):
                 legis_latch.await()
                 legis_info = l_thread.legislature_info
                 if legis_info is not None:
+                    print "legis_info is not Empty, exiting", legis_info
                     leg_info_continue = False
+                else:
+                    print "legis_info is empty, continuing", legis_info
             except InterruptedException, e:
                 print "legislature_info_gather was interrupted !", e
             finally:

@@ -147,7 +147,7 @@ def get_legislature_info(config_file):
             )
         return liw.process_file(legislature_file)
     else:
-        return (None, None)
+        return None
     """
     liw = cfg.
     liw = LegislatureInfoWalker({"main_config": cfg})

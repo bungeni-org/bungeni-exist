@@ -22,20 +22,26 @@
                 <xsl:value-of select="bctype:get_content_type_uri_name($item_type, $type-mappings)" />
             </xsl:variable>
             <xsl:variable name="item_id" select="field[@name='item_id']" />
-            <sourceItem isA="TLCObject" >
-                <refersTo isA="TLCReference" href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" >
-                    <type isA="TLCTerm">
-                        <value type="xs:string">
-                            <xsl:value-of select="$item-type" />
-                        </value>
-                    </type>
-                </refersTo>
-            </sourceItem>
+            <!-- No source item for heading and editorial note which are text record types -->
+            <xsl:if test="field[@name='is_type_text_record'][. eq 'False']">
+                <sourceItem isA="TLCObject" >
+                    <refersTo isA="TLCReference" 
+                        href="{concat($parliament-full-uri, '/', $item-type, '/', $item_id )}" 
+                        >
+                        <type isA="TLCTerm">
+                            <value type="xs:string">
+                                <xsl:value-of select="$item-type" />
+                            </value>
+                        </type>
+                    </refersTo>
+                </sourceItem>
+            </xsl:if>
             <xsl:apply-templates />
         </scheduleItem>
     </xsl:template>    
     
-    <xsl:template match="itemvotes">
+    <!-- match only if it has child vote elemnts -->
+    <xsl:template match="itemvotes[child::itemvote]">
         <votes>
             <xsl:attribute name="id">
                 <xsl:variable name="schedule_id" select="parent::item_schedule/field[@name='schedule_id']" />
@@ -357,7 +363,7 @@
     </xsl:template>
     
     
-    <xsl:template match="field[@name='sitting_id']">
+    <xsl:template match="field[@name='sitting_id'][not(parent::item_schedule)]">
         <xsl:call-template name="renderIntegerElement">
             <xsl:with-param name="elementName">sittingId</xsl:with-param>
         </xsl:call-template>

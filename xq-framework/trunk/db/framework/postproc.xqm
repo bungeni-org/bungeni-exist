@@ -147,15 +147,19 @@ declare function pproc:update-attachments() {
 declare function pproc:update-sittings() {
 
     try {
-        for $anItem in collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
+      (: process only documents :)
+      for $anItem in collection(cmn:get-lex-db())/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[
+            bu:isTypeTextRecord[. eq 'false']
+        ]
         let $doc-node := collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docId eq $anItem/bu:itemId]
         let $docId := $doc-node/bu:docId
         let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
-        return 
-            if ($anItem/bu:itemType/bu:value ne 'heading' and empty($anItem/bu:document)) then
-                update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]
-             else
-                 ()
+      return 
+        (: check if there is not already a document reference :)
+        if (empty($anItem/bu:document)) then
+            update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]
+         else
+             ()
     }
     catch * {
         <response type="error">
@@ -175,25 +179,27 @@ declare function pproc:update-document($uri as xs:string) {
         (: it's signatories :)    
         let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:document[if (@uri) then (@uri=$uri) else (@internal-uri=$uri)]/ancestor::bu:ontology
         for $signatory in $doc/bu:signatories/bu:signatory
-        let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $signatory/bu:userId][1]
-        let $user-uri := $user/@uri
-        let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
-        let $up-sigs := if (empty($signatory/bu:person)) then update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $signatory else ()
+         let $user := collection(cmn:get-lex-db())/bu:ontology/bu:user[bu:userId eq $signatory/bu:userId][1]
+         let $user-uri := $user/@uri
+         let $user-name := concat($user/bu:lastName,", ",$user/bu:firstName)
+         let $up-sigs := if (empty($signatory/bu:person)) then update insert <bu:person isA="TLCPerson" href="{$user-uri}" showAs="{$user-name}" /> into $signatory else ()
         return 
             (),            
         (: it's sittings :)
-        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[@uri=$uri]/ancestor::bu:ontology
-        for $anItem in $doc/bu:ontology/bu:groupsitting/bu:itemSchedules/bu:itemSchedule
-        let $doc-node := collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docId eq $anItem/bu:itemId]
-        let $docId := $doc-node/bu:docId
-        let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
+        let $doc := collection(cmn:get-lex-db())/bu:ontology/bu:sitting[@uri=$uri]/ancestor::bu:ontology
+        for $anItem in $doc/bu:ontology/bu:sitting/bu:scheduleItems/bu:scheduleItem[
+            bu:isTypeTextRecord[. eq 'false']
+        ]
+            let $doc-node := collection(cmn:get-lex-db())/bu:ontology/bu:document[bu:docId eq $anItem/bu:itemId]
+            let $docId := $doc-node/bu:docId
+            let $docuri := if ($doc-node/@uri) then data($doc-node/@uri) else data($doc-node/@internal-uri)
         return 
-            if ($anItem/bu:itemType/bu:value ne 'heading' and empty($anItem/bu:document)) then
+            if (empty($anItem/bu:document)) then
                 update insert <bu:document isA="TLCReference" href="{$docuri}" id="bungeniDocument" /> into $anItem[bu:itemId eq $docId]
              else
                  (),
             (: Adding sitting's href :)
-        let $sitting := collection(cmn:get-lex-db())/bu:ontology/bu:groupsitting[@uri=$uri]/ancestor::bu:ontology
+        let $sitting := collection(cmn:get-lex-db())/bu:ontology/bu:sitting[@uri=$uri]/ancestor::bu:ontology
         let $group-node := collection(cmn:get-lex-db())/bu:ontology/bu:group[bu:committeeId eq $sitting/bu:legislature/bu:group/bu:groupId]
         let $groupId := $group-node/bu:committeeId
         return 

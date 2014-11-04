@@ -7,6 +7,10 @@ Created on Feb 19, 2013
 
 from org.apache.log4j import Logger
 import os
+from const import (
+    __legislature_info__,
+    __parl_info__
+    )
 
 LOG = Logger.getLogger("glue")
 
@@ -33,6 +37,11 @@ class COLOR(object):
         self.FAIL = ''
         self.ENDC = ''
 
+
+class LegislatureCacheInfo:
+    
+    def __init__(self, l_info = None):
+        self.legislature_info = l_info
 
 class ParliamentCacheInfo:
     

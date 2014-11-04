@@ -320,9 +320,12 @@ class LegislatureInfoParams(GenInfoParams):
     
     def _get_params(self, legislature_doc):
         leg_map = HashMap()
+        print "LEGISLATURE DOC : ", legislature_doc
+        print "LEGISLATURE XPATH : " , self.__cache_file_prefix__() + self._xpath_info_field("country_code")
         leg_map["country-code"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("country_code")
             ).getText()
+        print "LEGISLATURE DOC MAP " , leg_map
         leg_map["legislature-id"] = legislature_doc.selectSingleNode(
             self.__cache_file_prefix__() + self._xpath_info_field("principal_id")
             ).getText()
@@ -458,6 +461,21 @@ class ParseParliamentInfoXML(ParseXML):
         else:
             return None
     
+
+class ParseCachedLegislatureInfoXML(ParseXML):
+
+    def get_legislature_info(self):
+        linfo = LegislatureInfoParams(is_cache_file=True)
+        legislature_doc = self.xmldoc.selectSingleNode(
+            linfo._xpath_content_types()
+        )
+        if legislature_doc is not None:
+           print "LEGISLATURE DOC is not None"
+           leg_map = linfo._get_params(legislature_doc)
+           return leg_map
+        else:
+           return None
+
 
 # !+FIX_THIS implement an overload ParseBungeniXML that supports input node processing
 class ParseCachedParliamentInfoXML(ParseXML):

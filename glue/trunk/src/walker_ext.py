@@ -56,6 +56,7 @@ from parsers import (
     ParseXML,
     ParseBungeniXML,
     ParseLegislatureInfoXML,
+    ParseCachedLegislatureInfoXML,
     ParseCachedParliamentInfoXML,
     ParseParliamentInfoXML,
     ParliamentInfoParams,
@@ -69,11 +70,13 @@ from walker import (
     GenericDirWalkerATTS,
     )
 
+from const import (
+    __parl_info__,
+    __legislature_info__
+    )
+
 LOG = Logger.getLogger("glue")
 
-__parl_info__ = "parliament_info.xml"
-__legislature_info__ = "legislature_info.xml"
- 
 
 class LegislatureInfo(object):
     
@@ -126,12 +129,23 @@ class LegislatureInfoProcess():
     
     def __init__(self, input_params):
         self.input_params = input_params
+        #self.legislature_info = LegislatureInfo(input_params["main_config"])
         self.cache_file = "%s%s" % (
             self.input_params["main_config"].get_cache_file_folder(),
             __legislature_info__
         )
         self.tmp_files_folder = self.input_params["main_config"].get_temp_files_folder()
-    
+   
+    def cache_file_exists(self):
+        return os.path.isfile(self.cache_file) 
+
+    def get_from_cache(self):
+        #!+FIX_THIS implement ParseBungeniXML to take a node as an input
+        bunparse = ParseCachedLegislatureInfoXML(self.cache_file)
+        bunparse.doc_parse()
+        # return the parliament information in a list containing a hashmap
+        the_parl_doc = bunparse.get_legislature_info()
+        return the_parl_doc
 
     def new_cache_document(self):
         """

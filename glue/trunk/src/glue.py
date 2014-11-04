@@ -70,6 +70,7 @@ from gen_utils import (
     __setup_output_dirs__,
     __setup_cache_dirs__,
     get_module_dir,
+    LegislatureCacheInfo,
     ParliamentCacheInfo,
     typename_to_camelcase,
     typename_to_propercase,
@@ -139,15 +140,26 @@ def get_legislature_info(config_file):
     print "Legislature type name = ", leg_name
     path_to_legislature_folder = os.path.join(cfg.input_folder(), leg_name)
     print "path to legislature  = ", path_to_legislature_folder
-    legislature_file = __most_recent_file(path_to_legislature_folder, "*.*")
-    print "legislature file = ", legislature_file
-    if legislature_file is not None:
-        liw = LegislatureInfoProcess(
-               input_params = {"main_config": cfg}
-            )
-        return liw.process_file(legislature_file)
+    l_info = LegislatureCacheInfo()
+    liw = LegislatureInfoProcess(
+        input_params = {"main_config": cfg}
+    )
+    print "legislature cache file : ", liw.cache_file_exists()
+    if liw.cache_file_exists():
+        l_info.legislature_info = liw.get_from_cache()
+        print "legislature info :", l_info.legislature_info
+        return l_info
     else:
-        return None
+        legislature_file = __most_recent_file(path_to_legislature_folder, "*.*")
+        print "legislature file = ", legislature_file
+        if legislature_file is not None:
+            liw = LegislatureInfoProcess(
+                   input_params = {"main_config": cfg}
+                )
+            l_info.legislature_info = liw.process_file(legislature_file)
+        else:
+            l_info.legislature_info = None
+    return l_info
     """
     liw = cfg.
     liw = LegislatureInfoWalker({"main_config": cfg})

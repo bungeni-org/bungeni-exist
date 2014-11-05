@@ -338,10 +338,18 @@
                                     <xsl:otherwise>
                                         <li>
                                             <xsl:variable name="doc-type" select="bu:sourceItem/bu:refersTo/bu:type/bu:value"/>
-                                            <xsl:variable name="eventOf" select="bu:sourceItem/bu:eventOf/bu:type/bu:value"/>
-                                            <a class="truncate" href="{$chamber}/{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
-                                                <xsl:value-of select="bu:title/child::node()"/>
-                                            </a>
+                                            <!-- <xsl:variable name="eventOf" select="bu:sourceItem/bu:eventOf/bu:type/bu:value"/> -->
+                                            <xsl:variable name="doc_ref" select="parent::ref/referencedItems/bu:ontology/bu:document[@internal-uri eq $subDocIdentifier]"/>
+                                            <xsl:choose>
+                                                <xsl:when test="$doc_ref/bu:permissions/bu:control[@role='bungeni.Anonymous' and @setting='Allow']">
+                                                    <a class="truncate" href="{$chamber}/{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
+                                                        <xsl:value-of select="bu:title/child::node()"/>
+                                                    </a>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="bu:title/child::node()"/>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
                                         </li>
                                     </xsl:otherwise>
                                 </xsl:choose>

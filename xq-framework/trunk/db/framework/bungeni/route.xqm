@@ -64,6 +64,7 @@ declare function rou:get-whatson($CONTROLLER-DOC as node()) {
     let $woview := xs:string(request:get-parameter("showing",'twk'))   
     let $tab := xs:string(request:get-parameter("tab",'sittings')) 
     let $mtype := xs:string(request:get-parameter("mtype",'any')) 
+   
     let $act-entries-tmpl :=  bun:get-whatson($woview,$tab,$mtype,$parts,$CONTROLLER-DOC/parliament)
     let $act-entries-repl := document {
     						template:copy-and-replace($CONTROLLER-DOC/exist-cont, fw:app-tmpl($parts/template)/xh:div, $act-entries-tmpl)
@@ -249,6 +250,7 @@ declare function rou:get-members($CONTROLLER-DOC as node()) {
 
 };
 
+
 declare function rou:member($CONTROLLER-DOC as node()) {
 
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))     
@@ -276,6 +278,7 @@ declare function rou:sitting($CONTROLLER-DOC as node()) {
     let $docnumber := xs:string(request:get-parameter("uri",$bun:DOCNO))
     let $parts := cmn:get-view-parts($CONTROLLER-DOC/chamber-rel-path)
     let $chamber-rel-path := $CONTROLLER-DOC/chamber-rel-path
+    
     let $act-entries-tmpl :=  
         if ($chamber-rel-path eq '/sitting-attendance') then 
             bun:get-sitting-with-attendance(
@@ -291,6 +294,7 @@ declare function rou:sitting($CONTROLLER-DOC as node()) {
              $parts,
              $CONTROLLER-DOC/parliament      
             )
+
     let $act-entries-repl:= document {
         	template:copy-and-replace(
                	$CONTROLLER-DOC/exist-cont, 
@@ -311,8 +315,8 @@ declare function rou:sitting($CONTROLLER-DOC as node()) {
                 {$CONTROLLER-DOC/parliament}
             </route-override>, 
            cmn:build-nav-node($CONTROLLER-DOC, $act-entries-repl)
-        )     
-    
+        )  
+
 };
 
 declare function rou:calendar($CONTROLLER-DOC as node()) {

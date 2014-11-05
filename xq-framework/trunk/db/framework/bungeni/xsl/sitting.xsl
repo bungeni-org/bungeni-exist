@@ -105,9 +105,26 @@
                                                     </a>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
-                                                        <xsl:value-of select="bu:title/child::node()"/>
-                                                    </a>
+                                                    <xsl:choose>
+                                                        <xsl:when test="bu:sourceItem/bu:refersTo">
+                                                            <!-- headings, editorial notes dont link to anything -->
+                                                            <!-- then check if we have permission to view the item -->
+                                                            <xsl:variable name="doc_ref" select="/doc/ref/bu:ontology/bu:document[@internal-uri eq $subDocIdentifier]"/>
+                                                            <xsl:choose>
+                                                                <xsl:when test="$doc_ref/bu:permissions/bu:control[@role='bungeni.Anonymous' and @setting='Allow']">
+                                                                    <a href="{concat($chamber,'/')}{lower-case($doc-type)}-text?internal-uri={$subDocIdentifier}">
+                                                                        <xsl:value-of select="bu:title/child::node()"/>
+                                                                    </a>
+                                                                </xsl:when>
+                                                                <xsl:otherwise>
+                                                                    <xsl:value-of select="bu:title/child::node()"/>
+                                                                </xsl:otherwise>
+                                                            </xsl:choose>
+                                                        </xsl:when>
+                                                        <xsl:otherwise>
+                                                            <xsl:value-of select="bu:title/child::node()"/>
+                                                        </xsl:otherwise>
+                                                    </xsl:choose>
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </li>

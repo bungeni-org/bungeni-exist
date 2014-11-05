@@ -2516,11 +2516,17 @@ declare function local:get-sitting-subset($sittings) {
             let $title := $sitting/bu:sitting/bu:shortName
             return 
                 <ref sitting="{$uri}">
-                    {   $startdate, 
+                    {   
+                        $startdate, 
                         for $eachitem in $sitting/bu:sitting/bu:scheduleItems/bu:scheduleItem
-                        return $eachitem, 
+                            return $eachitem, 
                         $title, 
-                        <bu:venue>{$venue}</bu:venue> 
+                        <bu:venue>{$venue}</bu:venue>,
+                        <referencedItems> {
+                        for $refitem in $sitting/bu:sitting/bu:scheduleItems/bu:scheduleItem[child::bu:sourceItem]
+                             return collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq $refitem/bu:sourceItem/bu:refersTo/@href]/ancestor::bu:ontology
+                            }
+                        </referencedItems>
                     }
                 </ref>
         )
@@ -2732,7 +2738,7 @@ declare function bun:get-whatson(
     </docs>
     (: !+SORT_ORDER(ah, nov-2011) - pass the $sortby parameter to the xslt rendering the listing to be able higlight
     the correct sort combo in the transformed output. See corresponding comment in XSLT :)
-    return
+    return 
         transform:transform($doc,
             $stylesheet, 
             <parameters>
@@ -2744,6 +2750,7 @@ declare function bun:get-whatson(
                 <param name="chamber-id" value="{$parliament/identifier/text()}" />                   
             </parameters>
            )
+
 };
 
 
@@ -2751,54 +2758,55 @@ declare function bun:get-sitting($acl as xs:string,
             $doc-uri as xs:string, 
             $parts as node(), 
             $parliament as node()?) as element()* {
+     
+    let $stylesheet := cmn:get-xslt($parts/xsl) 
+    let $doc := local:fetch-sitting($acl, $doc-uri, $parts, $parliament)
+    return transform:transform($doc, $stylesheet, ())
+ };
+ 
+declare function local:fetch-sitting($acl as xs:string, 
+            $doc-uri as xs:string, 
+            $parts as node(), 
+            $parliament as node()?) as element()* {
             
-    (: stylesheet to transform :)
-    let $stylesheet := cmn:get-xslt($parts/xsl)
-
     let $identifier := $parliament/identifier/text()
+
     let $doc := 
-            (:Returs a Sittings Document :)
             let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
                                             "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
                                             bun:xqy-docitem-perms($acl)))
             
             return
-                local:get-sitting-items($match/ancestor::bu:ontology,$parts)   
-    return
-        transform:transform($doc, $stylesheet, ())
+                local:get-sitting-items($match/ancestor::bu:ontology,$parts)  
+    return $doc
  };
- 
- 
+
+
 declare function bun:get-sitting-with-attendance($acl as xs:string, 
             $doc-uri as xs:string, 
             $parts as node(), 
             $parliament as node()?) as element()* {
     (: stylesheet to transform :)
     let $stylesheet := cmn:get-xslt($parts/xsl)
-
-    let $identifier := $parliament/identifier/text()
-    let $doc := 
-            (:Returs a Sittings Document :)
-            let $match := util:eval(concat( "collection('",cmn:get-lex-db(),"')/",
-                                            "bu:ontology/bu:sitting[bu:origin/bu:identifier/bu:value eq '",$identifier,"' and @uri eq '",$doc-uri,"']/",
-                                            bun:xqy-docitem-perms($acl)))
-            
-            return
-                local:get-sitting-items($match/ancestor::bu:ontology,$parts)   
-     let $members :=
+    let $doc := local:fetch-sitting($acl, $doc-uri, $parts, $parliament)
+    let $members :=
           <members>
           {
           let $origin_id := data($doc/bu:ontology/bu:sitting/bu:origin/bu:identifier/bu:value)
           for $mem in $doc/bu:ontology/bu:sitting/bu:attendanceRecords/bu:attendanceRecord
-              return util:eval(
+              return 
+              
+              util:eval(
                          "collection(cmn:get-lex-db())/" ||
                             "bu:ontology[" ||
                             "bu:membership[" ||
-                                "bu:origin/bu:identifier/bu:value[ . = $origin_id] and " ||
-                                "bu:referenceToUser/bu:userId[. = data($mem/bu:memberId)]" ||
+                                "bu:origin/bu:identifier/bu:value[ . = '" || $origin_id || "'] and " ||
+                                "bu:referenceToUser/bu:userId[. = '" || data($mem/bu:memberId) || "' ] and " ||
+                                "bu:docType/bu:value[. = 'Member'] " ||
                                 "]" ||
                             "]"
-               )     
+               )   
+                
            }
            </members>
        let $docmain:=
@@ -2806,7 +2814,8 @@ declare function bun:get-sitting-with-attendance($acl as xs:string,
               {$doc}{$members}
             </docmain>
         return
-            transform:transform($docmain, $stylesheet, ())            
+            transform:transform($docmain, $stylesheet, ())       
+        
 };
 
 (:~
@@ -2887,14 +2896,17 @@ declare function bun:strip-namespace($e as node()) {
 declare function local:get-sitting-items($sittingdoc as node()?, $parts as node()?) {
     <doc>
         {if ($sittingdoc) then $sittingdoc else $sittingdoc}
+        
         <ref>
             {
-                for $eachitem in $sittingdoc/bu:sitting/bu:scheduleItems/bu:scheduleItem
-                return 
-                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq data($eachitem/bu:sourceItem/bu:refersTo/@href)]/ancestor::bu:ontology
+                for $eachitem in $sittingdoc/bu:sitting/bu:scheduleItems/bu:scheduleItem[child::bu:sourceItem]
+                return
+                    collection(cmn:get-lex-db())/bu:ontology/bu:document[@internal-uri eq $eachitem/bu:sourceItem/bu:refersTo/@href]/ancestor::bu:ontology
+                    
             }
         </ref>
         {bun:get-excludes($sittingdoc, $parts/parent::node())}
+        
     </doc>     
 };
 

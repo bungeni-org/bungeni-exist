@@ -1,0 +1,454 @@
+
+
+# Introduction #
+
+The Bungeni XQ framework is a XQuery web framework. It makes use of eXist's controller XML support (see http://exist-db.org/urlrewrite.html ).  The Bungeni XQ framework is an adaption of the seewhatithink.com application (see http://sourceforge.net/projects/seewhatithink/ ).
+
+# Setup #
+
+Checkout the framework from svn :
+
+```
+svn co http://bungeni-exist.googlecode.com/svn/xq-framework/trunk/db/framework/ fw 
+```
+
+This will checkout the framework as a eXist db backup.
+
+Import the framework into your eXist installation. It will get imported as the `/db/framework` folder into eXist.
+
+# Framework Configuration #
+
+The framework allows creation of applications - the application must reside in a sub-folder within the framework.
+
+The application is configured via a configuration file in the framework root. Within the `/db/framework/config.xml`, the following configuration needs to be done - e.g. for an application called 'bungeni' residing within a collection called `bungeni` within the `framework` collection :
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Switch default application of framework by switching the default-app attribute -->
+<fw-config default-app="bungeni">
+    <apps>
+        <app name="lexapp">
+            <default-tmpl>template.xhtml</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/kenyalex</xml-collection>
+        </app>
+        <app name="bungeni">
+            <default-tmpl>portal.html</default-tmpl>
+            <ui-config>ui-config.xml</ui-config>
+            <xml-collection>/db/bungeni-xml</xml-collection>
+        </app>
+    </apps>
+</fw-config>
+```
+
+  * fwconfig/@default-app - specifies the active application for the framework
+  * apps/app - the configuration for a specific application
+  * apps/app/@name - the name of the application, this is also the name of the collection housing the application
+  * app/default-tmpl - the default main template for the application
+  * app/ui-config - the ui configuration file for the specific application. this is a path relative to the application folder.
+  * app/xml-collection - the path to the xml document collection queries by the framework app.
+
+Note: For XForms to render correctly in the framework you may need to go into webapps/WEB-INF/web.xml in the eXist installation and change the filter mapping for the XForms servlet.
+
+From :
+```
+    <filter-mapping>
+      <filter-name>XFormsFilter</filter-name>
+      <url-pattern>/rest/db/*</url-pattern>
+   </filter-mapping>
+```
+
+To :
+```
+    <filter-mapping>
+      <filter-name>XFormsFilter</filter-name>
+      <url-pattern>/apps/*</url-pattern>
+   </filter-mapping>
+```
+
+# i18n Configuration #
+
+The framework supports internationalization by adding translation messages in the language catalogues.
+
+The catalogues are stored in the i18n directory within the root framework directory.
+
+## Structure of translation catalogues ##
+
+A translation catalogue contains `msg` nodes with an attribute `key` for rendering the translation message. A `lang` attribute must be specified with 2-character ISO language codes as seen in the examples below.
+
+a translation catalogue for english: `/db/framework/i18n/collection_en.xml`
+```
+<catalogue xml:lang="en">
+    <msg key="welcome">Welcome</msg>
+    <msg key="adv-search">Advanced Search</msg>
+    ...
+</catalogue>
+```
+
+a translation catalogue for italian: `/db/framework/i18n/collection_it.xml`
+```
+<catalogue xml:lang="it">
+    <msg key="welcome">Benvenuto</msg>
+    <msg key="adv-search">Ricerca Avanzata</msg>
+    ...
+</catalogue>
+```
+
+## i18n Usage ##
+
+All template and transformation stylesheets with translatable messages will contain a node in the structure below:
+
+```
+<i18n:text key="welcome">Welcome(nt)</i18n:text>
+```
+
+The `Welcome(nt)` is the default text, rendered in-case no corresponding message is found in the active catalogue with the `key` provided.
+
+For more on i18n module and other usage scenarios. Please check the eXist-db example pages and module documentation (see http://demo.exist-db.org/exist/extensions.xml#i18n ).
+
+# Application Configuration #
+
+Applications developed in the framework are configured via ui-config file.  The ui-config file is specified in the `app/ui-config` parameter in the framework configuration.
+
+The ui-config file allows configuring different aspects of the application
+
+## Date and time formats ##
+
+Custom date and time formats can be specified using the format configuration (date and time formats specified in the XSLT 2.0 date time format specification ) :
+
+```
+    <format type="datetime">[D1o] [MNn,*-3], [Y] - [h]:[m]:[s] [P,2-2]</format>
+    <format type="date">[D1o] [MNn,*-3], [Y]</format>
+```
+
+## Routes ##
+
+A route map describes the navigation for a URL.
+
+In a route you specify :
+  * route/@href - the format of the route url
+  * title - the default title for the route url
+  * navigation - the main navigator the url falls under
+  * subnavigation - the sub navigator the url falls under
+
+The framework supports 2 levels of menu navigators
+
+```
+  <routes>
+        <!--
+            href - the incoming url, this is used to load the main menu
+            navigation - specifies the active navigation level 1
+            subnavigation - specifies te active navigation level 2
+            -->
+        <route href="/">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        <route href="/home">
+            <navigation>home</navigation>
+            <title>Home</title>
+        </route>
+        ...
+        <route href="/member/personal-info">
+            <title>Business | Member of Parliament</title>
+            <navigation>members</navigation>
+            <subnavigation>current</subnavigation>
+        </route>
+        ...
+```
+
+## Menus ##
+
+The route navigation always resolves to a menu - the menus are defined in `<menugroups>`
+
+A defined menu in the system must provide the following :
+  * menu/@name - a unique name
+  * menu/@for - this the name of a navigator defined in the route map. This is used to associate a menu with a navigator.
+
+The menus are defined in xhtml format
+
+```
+<menugroups>
+...
+ <menu ... />
+....
+ <menu name="business" for="business">
+            <div xmlns="http://www.w3.org/1999/xhtml" id="subnav" class="submenu">
+                <ul class="theme-lev-1">
+                    <li>
+                        <a name="committees" href="committees">committees</a>
+                    </li>
+                    <li>
+                        <a name="bills" href="bills">bills</a>
+                    </li>
+                    <li>
+                        <a name="questions" href="questions">questions</a>
+                    </li>
+                    <li>
+                        <a name="motions" href="motions">motions</a>
+                    </li>
+....
+```
+
+## Download Formats ##
+
+Various download and document view formats available such as PDF, RSS Feed, XML, ODT...
+
+The rendergroups currently defined for listings, parliamentary document and member pages.
+
+The defined `<rendergroup>` nodes must provide the following :
+  * format/@type - the actual format type. NB: Also class name used in CSS sprite on mouse-over
+  * `format/text()` - Title description of the format as shown when on mouse-over.
+
+The download groups are defined in xml format:
+
+```
+<downloadgroups>
+        <rendergroup name="listings">
+            <format type="rss">Subscribe to Atom RSS feed</format>   
+            <format type="print">Print this listing</format>   
+        </rendergroup>
+        <rendergroup name="parl-doc">
+            <format type="edit">Edit document. Will need to login to eXist</format>
+            <format type="pdf">Download PDF format</format>   
+            <format type="xml">Download XML format</format>            
+        </rendergroup> 
+        ...       
+</downloadgroups>
+```
+
+## Content Views ##
+
+The menus link to listings - and the listings resolve to a view of the document.
+
+The framework allows segregating the view of a document across "views" - for example, the text of the document may be shown on one tab and links to different versions of the document may be shown on a different tab. "Views" are essentially a subsidiary navigation within either a "navigation" or a "subnavigation"
+
+The "views" are mapped to routes.
+
+The "views" are defined with the following rules :
+  * "views" are used to group individual "view" definitions
+  * "viewgroups" is a container for multiple "views" configuration.
+  * "views" support a @name attribute - this must correspond to the type of the document. For examples, if you are defining the views for the "bill" document type, the @name attribute for the "views" element should be **bills**
+  * A "view" can have a @tag attribute to denote that it is displayed only as a "tab" view in the User-Interface(UI).
+
+
+The individual "view" is configured as follows :
+  * `view/@path` - this attribute specifies a url route for the tab i.e. a route/@href configuration
+  * `view/@id` - a unique identifier for the view (within the context of a "views" element)
+  * `view/@tag` - an attribute with value "tab" that marks that view as a tab for UI display
+  * `view/@check-for` - By default all view's marked with tag wil value "tab" will be rendered. Though if `@check-for` has a value,it will be evaluated as a predicate that must be satisfied for that tab to be visible
+  * `view/title` - the title of the view if it is tagged as a tab view
+  * `view/template` - name of template file which content will be rendered on
+  * `view/xsl` - name of the xsl file that transforms content + templates for UI.
+
+
+```
+   <viewgroups>
+        <!-- 
+            Viewgroups are like navigation but they describe navigation relative to content 
+            The name is always that of a content type
+        -->
+
+        <views name="bill">
+            <view path="bill/text" id="text" tag="tab">
+                <title>text</title>
+                <template>bill.xml</template>
+                <xsl>bill.xsl</xsl>
+            </view>
+            <view path="bill/timeline" id="timeline" tag="tab" check-for="(bu:changes/child::node())">
+                <title>history</title>
+                <template>changes.xml</template>
+                <xsl>changes.xsl</xsl>
+            </view>
+            <view path="bill/details" id="related" tag="tab">
+                <title>details</title>
+                <template>details.xml</template>
+                <xsl>details.xsl</xsl>
+            </view>
+            <view path="bill/assigned-groups" id="assigned" tag="tab" check-for="(bu:item_assignments/child::node())">
+                <title>assigned groups</title>
+                <template>assigned-groups.xml</template>
+                <xsl>assigned-groups.xsl</xsl>
+            </view>
+            <view path="bill/documents" id="attachments" tag="tab">
+                <title>documents</title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </view>
+            <view path="bill/event">
+                <template>documents.xml</template>
+                <xsl>event.xsl</xsl>
+            </view>
+        </views>
+
+        <views name="bill-ver">
+            <view path="bill/version/text" id="text" tag="tab">
+                <title>text</title>
+                <template>bill.xml</template>
+                <xsl>bill.xsl</xsl>
+            </view>
+            <view path="bill/version/documents" id="attachments" tag="tab">
+                <title>documents</title>
+                <template>documents.xml</template>
+                <xsl>documents.xsl</xsl>
+            </view>
+        </views>
+
+        ...
+   </viewgroups>
+```
+
+## ACL Groups ##
+
+This defines the permission levels for all the documents in the XML database. Denoted by the `<aclgroups>` node. The permissions are concatenated with every XQuery code that retrieve document(s) from eXist database.
+
+The defined `<acl>` nodes must provide the following :
+  * acl/@name - a unique name for the acl
+  * acl/@axis - Xpath/XQuery string that selects the permissions  nodes in a document
+  * acl/@condition - XQuery string that effectively applies that permission.
+
+The permissions are defined in xml format:
+
+```
+<acl-groups>
+   <acl name="public-view" axis="bu:document[@type=$$TYPE] and bu:legislativeItem/(bu:permissions except bu:versions)/bu:permission" condition="@name='zope.View' and @role='bungeni.Anonymous' and @setting='Allow'"/>
+   <acl name="authenticated-view" axis="following-sibling::bu:permisssions/bu:permission" condition="@name='zope.View' and @role='bungeni.Authenticated' and @setting='Allow'"/>
+</acl-groups>
+```
+
+## Order-by, Search-in & Listings Filters ##
+
+These filters contain configuration used by the document types and all options that are made available on legislative-item listings. Both search-in filter and order-by parameters used in sorting results are defined in `<doctypes>`. Absence of this configuration implies no search options, order options or tabbed-view filters for the particular listing.
+
+The `<doctype>` must provide the following attributes :
+  * `doctype/@category` - pre-defined type in reposited documents that defines a generic group-type of each document. For example, bills, questions, events belong to a generic type `document` while political-groups, and committes belong to generic type `group`
+  * `doctype/@name` - has the specific name of the document type. For example, `bill` or `committee`.
+
+Each defined `<doctype>` optionally provides the following :
+  * `<orderbys/>` - contains parameters for sort field
+  * `<searchins/>` - contains parameters for all the search options that can be used to filter
+  * `<listingfilters/>` - contains titles and a predicate to be evaluated to group listed documents based on predefined tags.
+
+The filters and options are defined in xml format:
+
+```
+<doctypes>
+   <doctype category="document" name="bill">
+     <orderbys/>
+     <searchins/>
+     <listingfilters/>
+   </doctypes>
+   <doctype category="group" name="political-group">
+     <orderbys/>
+     <searchins/>
+     <listingfilters/>
+   </doctypes>
+   ...
+</doctypes>
+```
+
+### Order-by ###
+
+These are rendered as the "sort by:" options in all documents-listing.
+  * orderby/@value - a unique name
+  * orderby/@order - either `asc` or `desc`.
+
+The options are defined in xml format:
+
+```
+<orderbys>
+   <orderby value="st_date_oldest" order="asc">status date [oldest]</orderby>
+   <orderby value="st_date_newest" order="desc">status date [newest]</orderby>
+</orderbys>
+```
+
+### Search-in ###
+
+These are filter options that can be applied to a search term options in all documents-listing.
+  * searchin/@name - a unique name to be assigned to the xhtml form input element e.g questions?**f\_t**=title
+  * searchin/@value - the value of the input element as passed in query string e.g questions?f\_t=**title**
+  * searchin/@field - the actual indexed node or attribute in the Lucene collection index e.g. `bu:shortName`
+  * searchin/@default - this denotes the default field to search into.
+
+The filters are defined in xml format:
+
+```
+<searchins>
+   <searchin name="all" value="all" field=".">Entire Document</searchin>
+   <searchin name="f_t" value="title" field="bu:shortName" default="true">Title</searchin>
+   <searchin name="f_b" value="body" field="bu:body">Body</searchin>
+   <searchin name="f_d" value="docno" field="bu:registryNumber">Doc No.</searchin>
+</searchins>
+```
+
+### Listing-filter ###
+
+These are rendered as tabs on a documents-listing.
+  * listingfilter/@id - a unique name for applying filter
+  * listingfilter/@name - will appear as title of the tabs
+  * listingfilter - contains the predicates to be evaluated on listing documents and create the different tabbed-listings.
+
+The options are defined in xml format:
+
+```
+<listingfilters>
+   <listingfilter id="uc" name="under consideration">not(contains(bu:tags/bu:tag,'terminal'))</listingfilter>
+   <listingfilter id="archive" name="archived">contains(bu:tags/bu:tag,'terminal')</listingfilter>
+</listingfilters>
+```
+
+
+# Application structure #
+
+The application must define a "Application Controller" module - this must use the following pattern :
+
+```
+
+xquery version "1.0";
+
+
+module namespace appcontroller = "http://bungeni.org/xquery/appcontroller";
+(:~
+: All applications using the XQ-framework must implement application controllers on the below pattern.
+: The controller must always be in the http://bungeni.org/exist/appcontroller namespace, and implement
+: a controller function with the parameters specified.
+:
+: @param EXIST-PATH
+:   The last part of the request URI after the section leading to the controller. If the resource example.xml 
+:   resides within the same directory as the controller query, $EXIST-PATH will be /example.xml.
+: @param EXIST-ROOT
+:   The root of the current controller hierarchy. This may either point to the file system or to a collection 
+:   in the database. Use this variable to locate resources relative to the root of the application.
+: @param EXIST-CONTROLLER
+:   The part of the URI leading to the current controller script. For example, if the request path is 
+:   /xquery/test.xql and the controller is in the xquery directory, $exist:controller would contain /xquery.
+: @param EXIST-RESOURCE
+:   The section of the URI after the last /, usually pointing to a resource, e.g. example.xml.
+: @param REL-PATH
+:   This EXIST-ROOT & EXIST-CONTROLLER concatenated by a /
+:
+:)
+  declare function appcontroller:controller($EXIST-PATH as xs:string, 
+                                $EXIST-ROOT as xs:string, 
+                                $EXIST-CONTROLLER as xs:string, 
+                                $EXIST-RESOURCE as xs:string, 
+                                $REL-PATH as xs:string) {
+     (: Your code :)
+  }
+
+```
+
+This application controller is then specified via an import in the framework's `controller.xql`
+
+```
+import module namespace appcontroller = "http://bungeni.org/xquery/appcontroller" at "lexapp/appcontroller.xqm";
+
+....
+```
+
+For an example of how the appcontroller module see the appcontroller.xqm of the `lexapp` application :
+> [appcontroller.xqm](http://bungeni-exist.googlecode.com/svn/xq-framework/trunk/db/framework/lexapp/appcontroller.xqm)
+
+# Templating #
+
+TO DO
